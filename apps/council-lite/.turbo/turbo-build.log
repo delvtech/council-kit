@@ -1,0 +1,5 @@
+$ tsc && vite build
+src/index.tsx(1,28): error TS7016: Could not find a declaration file for module 'react-dom/client'. '/Users/cashd/workspace/delve/delve-monorepo/node_modules/react-dom/client.js' implicitly has an 'any' type.
+  If the 'react-dom' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom'
+error Command failed with exit code 2.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
