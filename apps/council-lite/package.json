@@ -1,60 +1,30 @@
 {
   "name": "council-lite",
-  "description": "This is a React + vite boilerplate to be used with Tailwindcss.",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
-  "author": {
-    "name": "João Paulo Moraes",
-    "email": "joaopaulomoraes@outlook.com",
-    "url": "https://github.com/joaopaulomoraes"
-  },
-  "bugs": {
-    "url": "https://github.com/joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate/issues",
-    "email": "joaopaulomoraes@outlook.com"
-  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview",
-    "test": "jest",
-    "lint": "eslint src --max-warnings=0",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^0.7.3",
-    "@types/react-dom": "^18.0.7",
+    "@rainbow-me/rainbowkit": "^0.7.4",
     "ethers": "^5.7.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "wagmi": "^0.7.5"
+    "next": "12.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "ui": "*",
+    "wagmi": "^0.7.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.3",
-    "@babel/preset-env": "^7.19.4",
-    "@babel/preset-react": "^7.18.6",
-    "@babel/preset-typescript": "^7.18.6",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@types/jest": "^29.2.0",
-    "@types/node": "^18.11.2",
-    "@typescript-eslint/eslint-plugin": "^5.40.1",
-    "@typescript-eslint/parser": "^5.40.1",
-    "@vitejs/plugin-react": "^2.1.0",
-    "autoprefixer": "^10.4.12",
-    "babel-jest": "^29.2.1",
-    "eslint": "^8.25.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.31.10",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-tailwindcss": "^3.6.2",
-    "jest": "^29.2.1",
-    "jest-environment-jsdom": "^29.2.1",
-    "postcss": "^8.4.18",
-    "prettier": "2.7.1",
-    "tailwindcss": "^3.2.0",
-    "typescript": "^4.8.4",
-    "vite": "^3.1.8",
-    "vite-tsconfig-paths": "^3.5.1"
+    "@babel/core": "^7.0.0",
+    "@types/node": "^17.0.12",
+    "@types/react": "18.0.17",
+    "eslint": "7.32.0",
+    "eslint-config-custom": "*",
+    "next-transpile-modules": "9.0.0",
+    "tsconfig": "*",
+    "typescript": "^4.5.3"
   }
 }
