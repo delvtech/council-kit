@@ -13,7 +13,7 @@ export default function Web() {
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
         <div>
-          <h1>Web</h1>
+          <h1 className="font-bold">Web</h1>
           <Button />
           <ConnectButton />
         </div>
