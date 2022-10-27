@@ -16,6 +16,7 @@ export default function Web() {
           <h1 className="font-bold">Web</h1>
           <Button />
           <ConnectButton />
+          <button className="btn btn-primary">Button</button>
         </div>
       </RainbowKitProvider>
     </WagmiConfig>
