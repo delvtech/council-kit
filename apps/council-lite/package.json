@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier:w": "prettier --write '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'",
+    "prettier:check": "prettier --check '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^0.7.4",
@@ -19,6 +21,7 @@
     "wagmi": "^0.7.7"
   },
   "devDependencies": {
+    "@elementfi/prettier-config": "*",
     "@babel/core": "^7.0.0",
     "@types/node": "^17.0.12",
     "@types/react": "18.0.17",

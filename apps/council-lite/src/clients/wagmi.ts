@@ -1,6 +1,6 @@
-import { createClient } from "wagmi";
-import { connectors } from "src/wallet/connectors";
 import { provider } from "src/provider";
+import { connectors } from "src/wallet/connectors";
+import { createClient } from "wagmi";
 
 export const wagmiClient = createClient({
   autoConnect: true,

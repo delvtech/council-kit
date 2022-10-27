@@ -22,5 +22,5 @@ export const { chains, provider } = configureChains(
         http: LOCAL_RPC_HOST,
       }),
     }),
-  ]
+  ],
 );

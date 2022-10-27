@@ -1,12 +1,8 @@
-import { Button } from "ui";
-
+import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
-
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { WagmiConfig } from "wagmi";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { wagmiClient } from "src/clients/wagmi";
 import { chains } from "src/provider";
+import { WagmiConfig } from "wagmi";
 
 export default function Web() {
   return (

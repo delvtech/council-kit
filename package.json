@@ -15,6 +15,7 @@
   "devDependencies": {
     "eslint-config-custom": "*",
     "prettier": "latest",
+    "prettier-plugin-organize-imports": "^3.1.1",
     "turbo": "latest"
   },
   "engines": {
