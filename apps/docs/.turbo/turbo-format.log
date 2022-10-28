@@ -1,0 +1,9 @@
+$ prettier --write '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'
+.eslintrc.js 112ms
+.prettierrc.js 44ms
+next-env.d.ts 165ms
+next.config.js 52ms
+package.json 3ms
+pages/index.tsx 64ms
+README.md 43ms
+tsconfig.json 2ms

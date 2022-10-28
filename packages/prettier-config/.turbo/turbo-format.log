@@ -1,0 +1,4 @@
+$ prettier --write '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'
+.prettierrc.js 37ms
+index.js 6ms
+package.json 3ms
