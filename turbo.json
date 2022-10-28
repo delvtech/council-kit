@@ -5,6 +5,11 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"]
     },
+    "council-lite#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**"],
+      "env": ["NEXT_PUBLIC_MAINNET_ALCHEMY_ID", "NEXT_PUBLIC_GOERLI_ALCHEMY_ID"]
+    },
     "lint": {
       "outputs": []
     },

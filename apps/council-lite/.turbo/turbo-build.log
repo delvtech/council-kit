@@ -1,0 +1,24 @@
+$ next build
+info  - Loaded env from /Users/cashd/workspace/delve/delve-monorepo/apps/council-lite/.env
+info  - Linting and checking validity of types...
+info  - Creating an optimized production build...
+info  - Compiled successfully
+info  - Collecting page data...
+info  - Generating static pages (0/3)
+info  - Generating static pages (3/3)
+info  - Finalizing page optimization...
+
+Route (pages)                              Size     First Load JS
+┌ ○ /                                      221 kB          294 kB
+├   └ css/7e3de7acac199e75.css             4.39 kB
+├   /_app                                  0 B            73.6 kB
+└ ○ /404                                   183 B          73.8 kB
++ First Load JS shared by all              81.2 kB
+  ├ chunks/framework-758272ccc956d330.js   45.4 kB
+  ├ chunks/main-b0bebcb5f599329f.js        25.8 kB
+  ├ chunks/pages/_app-efc32b25bb4c2778.js  289 B
+  ├ chunks/webpack-8b15f44e54c638a9.js     2.12 kB
+  └ css/9d32ff8179c5c125.css               7.6 kB
+
+○  (Static)  automatically rendered as static HTML (uses no initial props)
+
