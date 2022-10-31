@@ -1,3 +1,0 @@
-$ prettier --check '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'
-Checking formatting...
-All matched files use Prettier code style!
