@@ -8,10 +8,13 @@ export default function Web() {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <div className="navbar bg-base-100">
-          <div className="navbar-start">
-            <div className="dropdown">
-              <label tabIndex={0} className="btn btn-ghost lg:hidden">
+        <div className="daisy-navbar bg-base-100">
+          <div className="daisy-navbar-start">
+            <div className="daisy-dropdown">
+              <label
+                tabIndex={0}
+                className="daisy-btn daisy-btn-ghost lg:hidden"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -29,7 +32,7 @@ export default function Web() {
               </label>
               <ul
                 tabIndex={0}
-                className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+                className="daisy-menu daisy-menu-compact daisy-dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
                   <a>proposals</a>
@@ -45,10 +48,12 @@ export default function Web() {
                 </li>
               </ul>
             </div>
-            <a className="btn btn-ghost normal-case text-xl">council-lite</a>
+            <a className="daisy-btn daisy-btn-ghost normal-case text-xl">
+              council-lite
+            </a>
           </div>
-          <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal p-0">
+          <div className="daisy-navbar-center hidden lg:flex">
+            <ul className="daisy-menu daisy-menu-horizontal p-0">
               <li>
                 <a>proposals</a>
               </li>
@@ -63,7 +68,7 @@ export default function Web() {
               </li>
             </ul>
           </div>
-          <div className="navbar-end">
+          <div className="daisy-navbar-end">
             <ConnectButton />
           </div>
         </div>
