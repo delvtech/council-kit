@@ -1,0 +1,21 @@
+{
+  "name": "@delve/council-sdk",
+  "version": "0.0.0",
+  "source": "src/index.js",
+  "alias": {
+    "src": "./src"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@delve/prettier-config": "*",
+    "@delve/eslint-config": "*",
+    "@delve/tsconfig": "*"
+
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

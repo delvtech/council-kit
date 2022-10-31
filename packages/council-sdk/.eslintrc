@@ -1,0 +1,3 @@
+{
+  "extends": ["@delve/eslint-config"]
+}
