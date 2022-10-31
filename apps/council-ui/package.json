@@ -20,17 +20,17 @@
     "wagmi": "^0.7.7"
   },
   "devDependencies": {
-    "prettier-config": "*",
+    "@delve/prettier-config": "*",
     "@babel/core": "^7.0.0",
     "@types/node": "^17.0.12",
     "@types/react": "18.0.17",
     "autoprefixer": "^10.4.13",
     "eslint": "7.32.0",
-    "eslint-config": "*",
+    "@delve/eslint-config": "*",
     "next-transpile-modules": "9.0.0",
     "postcss": "^8.4.18",
     "tailwindcss": "^3.2.1",
-    "tsconfig": "*",
+    "@delve/tsconfig": "*",
     "typescript": "^4.5.3"
   }
 }

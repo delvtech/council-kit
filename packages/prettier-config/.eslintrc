@@ -1,5 +1,3 @@
 {
-  "extends": [
-    // "@elementfi/eslint-config"
-  ]
+  "extends": ["@delve/eslint-config"]
 }
