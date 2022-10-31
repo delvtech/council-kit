@@ -1,3 +1,3 @@
-export function Voters() {
+export default function Voters() {
   return <>voters</>;
 }

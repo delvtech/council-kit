@@ -1,3 +1,3 @@
-export function Proposals() {
+export default function Proposals() {
   return <>proposals</>;
 }

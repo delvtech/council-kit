@@ -1,3 +1,3 @@
-export function Vaults() {
+export default function Vaults() {
   return <>Vaults</>;
 }

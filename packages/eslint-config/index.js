@@ -8,7 +8,7 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     // "plugin:jest-dom/recommended",
-    "plugin:jsx-a11y/recommended",
+    // "plugin:jsx-a11y/recommended",
 
     /**
      * Prettier must be the last extension in the list.
