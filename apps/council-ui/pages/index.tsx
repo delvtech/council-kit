@@ -17,7 +17,7 @@ export default function Web() {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="w-5 h-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -32,7 +32,7 @@ export default function Web() {
               </label>
               <ul
                 tabIndex={0}
-                className="daisy-menu daisy-menu-compact daisy-dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+                className="p-2 mt-3 shadow daisy-menu daisy-menu-compact daisy-dropdown-content bg-base-100 rounded-box w-52"
               >
                 <li>
                   <a>proposals</a>
@@ -48,12 +48,12 @@ export default function Web() {
                 </li>
               </ul>
             </div>
-            <a className="daisy-btn daisy-btn-ghost normal-case text-xl">
-              council-lite
+            <a className="text-xl normal-case daisy-btn daisy-btn-ghost">
+              council-ui
             </a>
           </div>
-          <div className="daisy-navbar-center hidden lg:flex">
-            <ul className="daisy-menu daisy-menu-horizontal p-0">
+          <div className="hidden daisy-navbar-center lg:flex">
+            <ul className="p-0 daisy-menu daisy-menu-horizontal">
               <li>
                 <a>proposals</a>
               </li>
