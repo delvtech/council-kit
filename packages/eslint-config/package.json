@@ -6,14 +6,14 @@
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.36.0",
-    "eslint": "^7.23.0",
-    "eslint-config-next": "^12.0.8",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-config-turbo": "latest",
-    "eslint-plugin-react": "7.31.8"
+    "eslint-config-turbo": "latest"
   },
   "devDependencies": {
     "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "eslint": "^7.23.0"
   },
   "publishConfig": {
     "access": "public"
