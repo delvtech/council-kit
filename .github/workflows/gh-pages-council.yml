@@ -30,7 +30,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Detect package manager
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
