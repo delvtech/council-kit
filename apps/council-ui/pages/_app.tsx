@@ -5,7 +5,7 @@ import { ReactElement } from "react";
 import { wagmiClient } from "src/clients/wagmi";
 import { chains } from "src/provider";
 import { WagmiConfig } from "wagmi";
-import "../styles/globals.css";
+import "src/styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   return (
