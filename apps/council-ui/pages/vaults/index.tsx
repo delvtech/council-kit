@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ReactElement } from "react";
 
 export default function Vaults(): ReactElement {
@@ -28,7 +29,7 @@ export default function Vaults(): ReactElement {
               <td>50,000</td>
               <th>
                 <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                  ▹
+                  <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
             </tr>
@@ -39,7 +40,7 @@ export default function Vaults(): ReactElement {
               <td>50,000</td>
               <th>
                 <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                  ▹
+                  <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
             </tr>
@@ -50,7 +51,7 @@ export default function Vaults(): ReactElement {
               <td>50,000</td>
               <th>
                 <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                  ▹
+                  <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
             </tr>
@@ -61,7 +62,7 @@ export default function Vaults(): ReactElement {
               <td>50,000</td>
               <th>
                 <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                  ▹
+                  <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
             </tr>
@@ -72,7 +73,7 @@ export default function Vaults(): ReactElement {
               <td>50,000</td>
               <th>
                 <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                  ▹
+                  <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
             </tr>
@@ -83,7 +84,7 @@ export default function Vaults(): ReactElement {
               <td>50,000</td>
               <th>
                 <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                  ▹
+                  <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
             </tr>
