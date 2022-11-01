@@ -1,3 +1,5 @@
-export default function Voters() {
+import { ReactElement } from "react";
+
+export default function Voters(): ReactElement {
   return <>voters</>;
 }

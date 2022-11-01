@@ -1,10 +1,11 @@
 import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
+import { ReactElement } from "react";
 import { wagmiClient } from "src/clients/wagmi";
 import { chains } from "src/provider";
 import { WagmiConfig } from "wagmi";
 
-export default function Web() {
+export default function Web(): ReactElement {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>

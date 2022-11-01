@@ -1,7 +1,5 @@
 module.exports = {
   extends: [
-    // Default with turbo repo
-    "next",
     "turbo",
 
     // Custom plugins
@@ -20,22 +18,40 @@ module.exports = {
     "prettier",
   ],
   rules: {
-    "@next/next/no-html-link-for-pages": "off",
-    "react/jsx-key": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "error", // exported functions must have return types
+    "@typescript-eslint/no-empty-function": "off", // empty arrow functions are fine for noops when passed to components
+    "@typescript-eslint/no-empty-interface": "off", // empty interfaces for component props should be allowed
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        argsIgnorePattern: "^unused",
+        varsIgnorePattern: "^unused",
+      },
+    ],
+    "import/no-unused-modules": "error",
+    curly: "error",
+    "no-console": [
+      "warn",
+      {
+        allow: ["warn", "error", "info", "assert"],
+      },
+    ],
+    "no-new-func": "error", // const func = new Function()
+    "no-restricted-imports": [
+      "error",
+      {
+        patterns: ["\\.\\./*"],
+      },
+    ],
+    "prefer-template": "error",
   },
-  // Custom overrides
-  // TODO @cashd: review
-  overrides: [
-    {
-      files: ["**/*.ts", "**/*.tsx"],
-      rules: {
-        "no-undef": ["off"],
-        "react-hooks/exhaustive-deps": "error",
+  settings: {
+    "import/resolver": {
+      // always try to resolve types under `<root>@types` directory even it doesn't contain any
+      // source code, like `@types/unist`
+      "eslint-import-resolver-typescript": {
+        alwaysTryTypes: true,
       },
     },
-    // {
-    //   // files: ["**/*.test.ts", "**/*.test.tsx"],
-    //   // extends: ["plugin:testing-library/react"],
-    // },
-  ],
+  },
 };
