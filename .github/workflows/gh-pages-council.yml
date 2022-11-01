@@ -56,7 +56,7 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
-        run: yarn turbo run build --filter=council-ui
+        run: npx turbo run build --filter=council-ui
       - name: Static HTML export with Next.js
         run: yarn workspace council-ui run export
       - name: Upload artifact
