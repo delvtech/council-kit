@@ -54,7 +54,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        run: yarn
       - name: Build with Next.js
         run: npx turbo run build --filter=council-ui
       - name: Static HTML export with Next.js
