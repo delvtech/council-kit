@@ -1,3 +1,5 @@
-export default function Proposals() {
+import { ReactElement } from "react";
+
+export default function Proposals(): ReactElement {
   return <>proposals</>;
 }
