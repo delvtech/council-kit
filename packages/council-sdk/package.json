@@ -10,7 +10,6 @@
     "@delve/prettier-config": "*",
     "@delve/eslint-config": "*",
     "@delve/tsconfig": "*"
-
   },
   "devDependencies": {
     "typescript": "^4.7.4"
