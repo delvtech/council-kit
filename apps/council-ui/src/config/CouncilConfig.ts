@@ -10,6 +10,7 @@ export interface CouncilConfig {
 
 
 
+
   /**
    * The chain id where the contracts are deployed
    */
