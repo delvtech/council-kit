@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "eslint-config-custom": "*",
+    "husky": "^8.0.1",
     "prettier": "latest",
     "prettier-plugin-organize-imports": "^3.1.1",
     "turbo": "latest"
