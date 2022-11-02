@@ -66,13 +66,13 @@ async function getMainnetCouncilConfig(): Promise<CouncilConfig> {
     },
 
     gscVoting: {
-      address: "",
+      address: "0x40309f197e7f94B555904DF0f788a3F48cF326aB",
       abi: {},
       descriptionURL: "https://moreinfo.com",
       vaults: [
         {
           name: "GSCVault",
-          address: "0xGSCVault",
+          address: "0xcA870E8aa4FCEa85b5f0c6F4209C8CBA9265B940",
           type: "GSCVault",
           abi: {},
           descriptionURL: "https://moreinfo.com",

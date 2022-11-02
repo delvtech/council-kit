@@ -3,14 +3,6 @@ export interface CouncilConfig {
    * The version of the council config object
    */
   version: string;
- 
-  
-
-
-
-
-
-
 
   /**
    * The chain id where the contracts are deployed
