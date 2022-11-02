@@ -1,4 +1,4 @@
-import { configureChains, allChains } from "wagmi";
+import { configureChains, chain } from "wagmi";
 import { ChainProviderFn } from "@wagmi/core";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -28,7 +28,7 @@ if (localRpcUrl) {
  * See: https://wagmi.sh/docs/providers/configuring-chains
  */
 export const { provider, chains } = configureChains(
-  allChains,
+  [chain.mainnet, chain.goerli],
   // If a provider does not support a chain, it will fall back onto the next one
   // in the array.
   configuredProviders,
