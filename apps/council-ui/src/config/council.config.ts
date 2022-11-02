@@ -1,4 +1,33 @@
-export default async function config() {
+import { CouncilConfig } from "src/config/CouncilConfig";
+
+/**
+ * Gets the contract and proposal information for a given chain id.
+ *
+ * NOTE: This returns a Promise so it remains flexible in cases where the
+ * information is fetched from an external source.
+ *
+ * @param chainId - The chain id to get the config for
+ * @returns Promise<CouncilConfig>
+ */
+export default async function councilConfig(
+  chainId: number,
+): Promise<CouncilConfig> {
+  switch (chainId) {
+    case 1: // mainnet
+      return getMainnetCouncilConfig();
+    default:
+      console.error(
+        `Config not found for chain: ${chainId}, falling back to mainnet.`,
+      );
+      return getMainnetCouncilConfig();
+  }
+}
+
+/**
+ * 
+ * @returns Promise<CouncilConfig>
+ */
+async function getMainnetCouncilConfig(): Promise<CouncilConfig> {
   return {
     version: "",
     chainId: 1,
@@ -7,13 +36,13 @@ export default async function config() {
       abi: {},
     },
     coreVoting: {
-      address: "",
+      address: "0xEaCD577C3F6c44C3ffA398baaD97aE12CDCFed4a",
       abi: {},
       descriptionURL: "https://moreinfo.com",
       vaults: [
         {
           name: "CoreVotingLockingVault",
-          address: "0xCoreVotingLockingVault",
+          address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD",
           type: "LockingVault",
           abi: {},
           descriptionURL: "https://moreinfo.com",
