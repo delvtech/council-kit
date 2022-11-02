@@ -8,7 +8,11 @@
     "council-ui#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**"],
-      "env": ["NEXT_PUBLIC_MAINNET_ALCHEMY_ID", "NEXT_PUBLIC_GOERLI_ALCHEMY_ID"]
+      "env": [
+        "NEXT_PUBLIC_ALCHEMY_ID",
+        "NEXT_PUBLIC_CHAIN_ID",
+        "NEXT_PUBLIC_LOCAL_RPC_URL"
+      ]
     },
     "lint": {
       "outputs": []

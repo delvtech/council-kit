@@ -10,17 +10,20 @@ import "src/styles/globals.css";
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider
+        chains={chains}
+        initialChain={+(process.env.NEXT_PUBLIC_CHAIN_ID || 1)}
+      >
         <div className="daisy-navbar bg-base-100">
           <div className="daisy-navbar-start">
             <div className="daisy-dropdown">
               <label
                 tabIndex={0}
-                className="daisy-btn daisy-btn-ghost lg:hidden"
+                className="daisy-btn-ghost daisy-btn lg:hidden"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5"
+                  className="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -35,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               </label>
               <ul
                 tabIndex={0}
-                className="p-2 mt-3 shadow daisy-menu daisy-menu-compact daisy-dropdown-content bg-base-100 rounded-box w-52"
+                className="daisy-dropdown-content daisy-menu rounded-box daisy-menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
               >
                 <li>
                   <a>proposals</a>
@@ -51,12 +54,12 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 </li>
               </ul>
             </div>
-            <a className="text-xl normal-case daisy-btn daisy-btn-ghost">
+            <a className="daisy-btn-ghost daisy-btn text-xl normal-case">
               council-ui
             </a>
           </div>
-          <div className="hidden daisy-navbar-center lg:flex">
-            <ul className="p-0 daisy-menu daisy-menu-horizontal">
+          <div className="daisy-navbar-center hidden lg:flex">
+            <ul className="daisy-menu daisy-menu-horizontal p-0">
               <li>
                 <a>proposals</a>
               </li>
