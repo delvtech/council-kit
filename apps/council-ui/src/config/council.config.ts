@@ -45,7 +45,7 @@ async function getMainnetCouncilConfig(): Promise<CouncilConfig> {
         },
         {
           name: "VestingVault",
-          address: "0xVestingVault",
+          address: "0x6De73946eab234F1EE61256F10067D713aF0e37A",
           type: "LockingVault",
           abi: {},
           descriptionURL: "https://moreinfo.com",
