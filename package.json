@@ -11,14 +11,22 @@
     "dev": "turbo run dev --parallel --filter=./apps/*",
     "lint": "turbo run lint --filter=./apps/*",
     "format": "turbo run format",
-    "format:check": "turbo run format:check"
+    "format:check": "turbo run format:check",
+    "postinstall": "husky install"
   },
   "devDependencies": {
     "eslint-config-custom": "*",
     "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "prettier": "latest",
     "prettier-plugin-organize-imports": "^3.1.1",
     "turbo": "latest"
+  },
+  "lint-staged": {
+    "**/*.{gql,graphql,js,jsx,ts,tsx,json,md}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "engines": {
     "node": ">=14.0.0"

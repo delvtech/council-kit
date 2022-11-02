@@ -9,22 +9,22 @@ import { CouncilConfig } from "src/config/CouncilConfig";
  * @param chainId - The chain id to get the config for
  * @returns Promise<CouncilConfig>
  */
-export default async function councilConfig(
-  chainId: number,
-): Promise<CouncilConfig> {
-  switch (chainId) {
-    case 1: // mainnet
+async function getCouncilConfig(): Promise<CouncilConfig> {
+  switch (process.env.NEXT_PUBLIC_CHAIN_ID) {
+    case "1": // mainnet
       return getMainnetCouncilConfig();
     default:
       console.error(
-        `Config not found for chain: ${chainId}, falling back to mainnet.`,
+        `Config not found for chain: ${process.env.NEXT_PUBLIC_CHAIN_ID}, falling back to mainnet.`,
       );
       return getMainnetCouncilConfig();
   }
 }
 
+export default getCouncilConfig();
+
 /**
- * 
+ *
  * @returns Promise<CouncilConfig>
  */
 async function getMainnetCouncilConfig(): Promise<CouncilConfig> {
