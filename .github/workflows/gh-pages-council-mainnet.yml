@@ -67,8 +67,11 @@ jobs:
   # Deployment job
   deploy:
     environment:
-      name: github-pages
+      name: github-pages mainnet
       url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
+      NEXT_PUBLIC_CHAIN_ID: 1
     runs-on: ubuntu-latest
     needs: build
     steps:
