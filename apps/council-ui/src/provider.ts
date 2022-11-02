@@ -4,9 +4,9 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 const configuredProviders: ChainProviderFn[] = [];
-if (process.env.NEXT_PUBLIC_ALCHEMY_ID) {
+if (process.env.NEXT_PUBLIC_ALCHEMY_KEY) {
   configuredProviders.push(
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID }),
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY }),
   );
 }
 
