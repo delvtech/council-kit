@@ -23,6 +23,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+env:
+  NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
+  NEXT_PUBLIC_CHAIN_ID: 5
+
 jobs:
   # Build job
   build:
@@ -55,49 +59,23 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: yarn
-
-  # Deployment job
-  deploy-mainnet:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    env:
-      NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
-      NEXT_PUBLIC_CHAIN_ID: 1
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Build with Next.js
         run: npx turbo run build --filter=council-ui
       - name: Static HTML export with Next.js
-        run: yarn workspace council-ui run export:ghpages-mainnet
+        run: yarn workspace council-ui run export:gh-pages-goerli
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./apps/council-ui/ghpages
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          path: ./apps/council-ui/gh-pages
 
   # Deployment job
-  deploy-goerli:
+  deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    env:
-      NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
-      NEXT_PUBLIC_CHAIN_ID: 5
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Build with Next.js
-        run: npx turbo run build --filter=council-ui
-      - name: Static HTML export with Next.js
-        run: yarn workspace council-ui run export:ghpages-goerli
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./apps/council-ui/ghpages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
