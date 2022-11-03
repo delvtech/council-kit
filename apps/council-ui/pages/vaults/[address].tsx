@@ -1,11 +1,7 @@
 import Statistic from "components/Statistic";
-import { useRouter } from "next/router";
 import { ReactElement } from "react";
 
 export default function Vault(): ReactElement {
-  const router = useRouter();
-  const { address } = router.query;
-
   return (
     <div className="max-w-4xl m-auto">
       <div className="flex flex-col items-start px-8 mt-16 space-y-6">
@@ -13,7 +9,7 @@ export default function Vault(): ReactElement {
         <div className="w-full text-3xl text-left text-white underline">
           Vault Name
         </div>
-        <div className="w-full text-left text-white text-md">
+        <div className="w-full text-left text-white">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris

@@ -4,14 +4,14 @@ import { ReactElement } from "react";
 export default function Vaults(): ReactElement {
   return (
     <div className="max-w-5xl m-auto">
-      <div className="flex flex-col items-center pl-16 pr-16 mt-16 space-y-6">
+      <div className="flex flex-col items-center px-16 mt-16 space-y-6">
         <div className="w-full text-2xl text-left text-white">Vaults</div>
-        <div className="w-full text-left text-white text-md">
+        <div className="w-full text-left text-white">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris
         </div>
-        <table className="w-full daisy-table daisy-table-zebra min-w-fit">
+        <table className="w-full daisy-table-zebra daisy-table min-w-fit">
           <thead>
             <tr>
               <th>Address</th>
@@ -28,7 +28,7 @@ export default function Vaults(): ReactElement {
               <td>1,000,000</td>
               <td>50,000</td>
               <th>
-                <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                   <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
@@ -39,7 +39,7 @@ export default function Vaults(): ReactElement {
               <td>1,000,000</td>
               <td>50,000</td>
               <th>
-                <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                   <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
@@ -50,7 +50,7 @@ export default function Vaults(): ReactElement {
               <td>1,000,000</td>
               <td>50,000</td>
               <th>
-                <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                   <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
@@ -61,7 +61,7 @@ export default function Vaults(): ReactElement {
               <td>1,000,000</td>
               <td>50,000</td>
               <th>
-                <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                   <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
@@ -72,7 +72,7 @@ export default function Vaults(): ReactElement {
               <td>1,000,000</td>
               <td>50,000</td>
               <th>
-                <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                   <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
@@ -83,7 +83,7 @@ export default function Vaults(): ReactElement {
               <td>1,000,000</td>
               <td>50,000</td>
               <th>
-                <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                   <Link href="/vaults/0x0000000">▹</Link>
                 </button>
               </th>
