@@ -62,11 +62,11 @@ jobs:
       - name: Build with Next.js
         run: npx turbo run build --filter=council-ui
       - name: Static HTML export with Next.js
-        run: yarn workspace council-ui run export
+        run: yarn workspace council-ui run export:ghpages-mainnet
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./apps/council-ui/out
+          path: ./apps/council-ui/ghpages
 
   # Deployment job
   deploy:

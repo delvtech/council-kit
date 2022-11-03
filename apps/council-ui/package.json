@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
+    "export:ghpages-mainnet": "next export -o ghpages/council-mainnet",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'",
