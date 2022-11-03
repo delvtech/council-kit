@@ -8,6 +8,7 @@ import { WagmiConfig } from "wagmi";
 import "src/styles/globals.css";
 import Image from "next/image";
 import Link from "next/link";
+import CouncilLogo from "src/static/council-logo.svg";
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   return (
@@ -57,12 +58,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               </ul>
             </div>
             <Link href="/">
-              <Image
-                alt="Council"
-                src="/council-logo.svg"
-                width={200}
-                height={52}
-              />
+              <Image alt="Council" src={CouncilLogo} width={200} height={52} />
             </Link>
           </div>
           <div className="daisy-navbar-center hidden lg:flex">
