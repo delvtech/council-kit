@@ -2,7 +2,7 @@
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started
 #
-name: Deploy Council UI to GH Pages
+name: Deploy Council UI to GH Pages Mainnet
 
 on:
   # Runs on pushes targeting the default branch
@@ -20,7 +20,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: "pages-mainnet"
   cancel-in-progress: true
 
 env:
