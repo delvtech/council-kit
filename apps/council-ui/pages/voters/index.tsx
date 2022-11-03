@@ -5,7 +5,7 @@ export default function Voters(): ReactElement {
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-6 px-16">
       <div className="flex w-full items-center gap-x-2">
-        <div className="w-full text-3xl text-white">Voters</div>
+        <h1 className="w-full text-3xl text-white">Voters</h1>
         <input
           type="text"
           placeholder="Search"
