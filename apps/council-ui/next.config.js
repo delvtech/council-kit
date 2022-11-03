@@ -7,7 +7,7 @@ module.exports = {
   // pages can resolve them.
   assetPrefix: "./",
   images: {
-    loader: "akamai",
-    path: "",
-  },
+    loader: 'akamai',
+    path: './'
+  }
 };
