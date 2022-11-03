@@ -6,6 +6,8 @@ import { wagmiClient } from "src/clients/wagmi";
 import { chains } from "src/provider";
 import { WagmiConfig } from "wagmi";
 import "src/styles/globals.css";
+import Image from "next/image";
+import Link from "next/link";
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   return (
@@ -21,20 +23,14 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 tabIndex={0}
                 className="daisy-btn-ghost daisy-btn lg:hidden"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h8m-8 6h16"
+                <Link href="/">
+                  <Image
+                    alt="Council"
+                    src="/council-logo.svg"
+                    width={200}
+                    height={52}
                   />
-                </svg>
+                </Link>
               </label>
               <ul
                 tabIndex={0}
@@ -54,9 +50,14 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 </li>
               </ul>
             </div>
-            <a className="daisy-btn-ghost daisy-btn text-xl normal-case">
-              council-ui
-            </a>
+            <Link href="/">
+              <Image
+                alt="Council"
+                src="/council-logo.svg"
+                width={200}
+                height={52}
+              />
+            </Link>
           </div>
           <div className="daisy-navbar-center hidden lg:flex">
             <ul className="daisy-menu daisy-menu-horizontal p-0">
