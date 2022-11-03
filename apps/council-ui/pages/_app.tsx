@@ -6,6 +6,8 @@ import { wagmiClient } from "src/clients/wagmi";
 import { chains } from "src/provider";
 import { WagmiConfig } from "wagmi";
 import "src/styles/globals.css";
+import Image from "next/image";
+import Link from "next/link";
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   return (
@@ -54,9 +56,14 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 </li>
               </ul>
             </div>
-            <a className="daisy-btn-ghost daisy-btn text-xl normal-case">
-              council-ui
-            </a>
+            <Link href="/">
+              <Image
+                alt="Council"
+                src="/council-logo.svg"
+                width={200}
+                height={52}
+              />
+            </Link>
           </div>
           <div className="daisy-navbar-center hidden lg:flex">
             <ul className="daisy-menu daisy-menu-horizontal p-0">
