@@ -1,25 +1,15 @@
+import Statistic from "components/Statistic";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
-
-interface StatisticProps {
-  label: string;
-  value: string;
-}
-function Statistic({ label, value }: StatisticProps) {
-  return (
-    <div className="px-4 py-2 bg-gray-200 rounded-md shrink-0">
-      <div className="text-gray-500">{label}</div>
-      <div className="text-black">{value}</div>
-    </div>
-  );
-}
 
 export default function Vault(): ReactElement {
   const router = useRouter();
   const { address } = router.query;
+
   return (
-    <div className="max-w-5xl m-auto">
-      <div className="flex flex-col items-start pl-16 pr-16 mt-16 space-y-6">
+    <div className="max-w-4xl m-auto">
+      <div className="flex flex-col items-start px-8 mt-16 space-y-6">
+        {/* Header */}
         <div className="w-full text-3xl text-left text-white underline">
           Vault Name
         </div>
@@ -29,7 +19,8 @@ export default function Vault(): ReactElement {
           minim veniam, quis nostrud exercitation ullamco laboris
         </div>
 
-        <div className="flex flex-row flex-wrap space-x-4">
+        {/* Statistics Row */}
+        <div className="flex flex-row flex-wrap gap-4">
           <Statistic label="active proposals" value="6" />
           <Statistic label="your voting power" value="1,500" />
           <Statistic label="% of total tvp" value="1.4%" />
@@ -37,7 +28,8 @@ export default function Vault(): ReactElement {
           <Statistic label="participates" value="2,114" />
         </div>
 
-        <div className="grid w-full h-48 grid-cols-2 grid-rows-1 gap-x-4">
+        <div className="grid w-full h-48 gap-y-4 sm:grid-cols-2 sm:grid-rows-1 sm:gap-y-0 sm:gap-x-4">
+          {/* Deposit/Withdraw Column */}
           <div className="flex flex-col space-y-4">
             <div className="flex flex-row">
               <div className="mr-4 text-2xl font-bold text-white">Deposit</div>
@@ -47,7 +39,7 @@ export default function Vault(): ReactElement {
               <div className="w-full max-w-xs mr-2 daisy-form-control">
                 <input
                   type="text"
-                  placeholder="Type here"
+                  placeholder="Amount"
                   className="w-full max-w-xs daisy-input-bordered daisy-input"
                 />
                 <label className="daisy-label">
@@ -58,11 +50,10 @@ export default function Vault(): ReactElement {
               </div>
               <button className="daisy-btn-outline daisy-btn">Max</button>
             </div>
-
-            <button className="daisy-btn-primary daisy-btn-sm daisy-btn">
-              Deposit
-            </button>
+            <button className="daisy-btn-primary daisy-btn">Deposit</button>
           </div>
+
+          {/* Change Delegate Column */}
           <div className="flex flex-col space-y-4">
             <div className="text-2xl font-bold text-white">Change Delegate</div>
 
@@ -70,7 +61,7 @@ export default function Vault(): ReactElement {
               <div className="w-full max-w-xs mr-2 daisy-form-control">
                 <input
                   type="text"
-                  placeholder="Type here"
+                  placeholder="Address or ENS"
                   className="w-full max-w-xs daisy-input-bordered daisy-input"
                 />
                 <label className="daisy-label">
@@ -81,9 +72,7 @@ export default function Vault(): ReactElement {
               </div>
               <button className="daisy-btn-outline daisy-btn">Max</button>
             </div>
-            <button className="daisy-btn-primary daisy-btn-sm daisy-btn">
-              Delegate
-            </button>
+            <button className="daisy-btn-primary daisy-btn">Delegate</button>
           </div>
         </div>
       </div>
