@@ -2,12 +2,12 @@
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started
 #
-name: Deploy Council UI to GH Pages Goerli
+name: Deploy Council UI to GH Pages Mainnet
 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ['main']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,12 +20,8 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages-goerli"
+  group: 'pages-mainnet'
   cancel-in-progress: true
-
-env:
-  NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
-  NEXT_PUBLIC_CHAIN_ID: 5
 
 jobs:
   # Build job
@@ -37,8 +33,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
-          cache: "yarn"
+          node-version: '16'
+          cache: 'yarn'
       - name: Setup Pages
         uses: actions/configure-pages@v2
         with:
@@ -59,9 +55,19 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: yarn
-      - name: Build with Next.js
+      - name: Build Mainnet with Next.js
+        env:
+          NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
+          NEXT_PUBLIC_CHAIN_ID: 1
         run: npx turbo run build --filter=council-ui
-      - name: Static HTML export with Next.js
+      - name: Static HTML export of Mainnet with Next.js
+        run: yarn workspace council-ui run export:gh-pages-mainnet
+      - name: Build Goerli with Next.js
+        env:
+          NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
+          NEXT_PUBLIC_CHAIN_ID: 5
+        run: npx turbo run build --filter=council-ui
+      - name: Static HTML export of Goerli with Next.js
         run: yarn workspace council-ui run export:gh-pages-goerli
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
