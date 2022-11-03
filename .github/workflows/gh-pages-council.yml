@@ -7,7 +7,7 @@ name: Deploy Council UI to GH Pages Mainnet
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ['main']
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,7 +20,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: 'pages-mainnet'
+  group: "pages-mainnet"
   cancel-in-progress: true
 
 jobs:
@@ -33,8 +33,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          cache: 'yarn'
+          node-version: "16"
+          cache: "yarn"
       - name: Setup Pages
         uses: actions/configure-pages@v2
         with:
@@ -49,10 +49,10 @@ jobs:
           path: |
             apps/council-ui/.next/cache
           # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          # If source files changed but packages didn't, rebuild from a prior cache.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles("**/package-lock.json", "**/yarn.lock") }}-${{ hashFiles("**.[jt]s", "**.[jt]sx") }}
+          # If source files changed but packages didn"t, rebuild from a prior cache.
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles("**/package-lock.json", "**/yarn.lock") }}-
       - name: Install dependencies
         run: yarn
       - name: Build Mainnet with Next.js
