@@ -1,6 +1,11 @@
+import { getDefaultProvider, providers } from "ethers";
 import { DataSource } from "./datasources/DataSource";
 
-export interface CouncilContextOptions {}
+export interface CouncilContextOptions {
+  chainId?: number;
+  provider?: providers.Provider;
+  dataSources?: DataSource[];
+}
 
 /**
  * The CouncilContext stores information about the context in which models are
@@ -9,9 +14,24 @@ export interface CouncilContextOptions {}
  * data sources.
  */
 export class CouncilContext {
-  dataSources: DataSource[] = [];
+  chainId: number;
+  provider: providers.Provider;
+  dataSources: DataSource[];
 
-  constructor(options: CouncilContextOptions) {}
+  constructor({
+    chainId = 1,
+    provider,
+    dataSources = [],
+  }: CouncilContextOptions) {
+    this.chainId = chainId;
+    if (!provider) {
+      console.warn(
+        "You are using the default provider, subject to rate limiting.",
+      );
+    }
+    this.provider = provider ?? getDefaultProvider(chainId);
+    this.dataSources = dataSources;
+  }
 
   /**
    * Get a shared `DataSource` who's properties match a given filter object.

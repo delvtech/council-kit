@@ -14,6 +14,9 @@
         "NEXT_PUBLIC_LOCAL_RPC_URL"
       ]
     },
+    "@delve/council-ui#build": {
+      "env": ["PROVIDER_URI"]
+    },
     "lint": {
       "outputs": []
     },

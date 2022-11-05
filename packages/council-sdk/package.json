@@ -6,13 +6,27 @@
     "src": "./src"
   },
   "license": "MIT",
+  "scripts": {
+    "example": "ts-node -r dotenv/config -r tsconfig-paths/register src/example/index.ts",
+    "watch:example": "nodemon -r dotenv/config -r tsconfig-paths/register src/example/index.ts"
+  },
   "dependencies": {
-    "@delve/prettier-config": "*",
-    "@delve/eslint-config": "*",
-    "@delve/tsconfig": "*"
+    "lodash.uniqby": "^4.7.0"
   },
   "devDependencies": {
+    "@delve/eslint-config": "*",
+    "@delve/prettier-config": "*",
+    "@delve/tsconfig": "*",
+    "@types/lodash.uniqby": "^4.7.7",
+    "dotenv": "^16.0.3",
+    "ethers": "^5.7.2",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
     "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "ethers": ">=5.6"
   },
   "publishConfig": {
     "access": "public"
