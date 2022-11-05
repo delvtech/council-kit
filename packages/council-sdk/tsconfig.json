@@ -1,5 +1,5 @@
 {
-  "extends": "@delve/tsconfig/base.json",
+  "extends": "@council/tsconfig/base.json",
   "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {

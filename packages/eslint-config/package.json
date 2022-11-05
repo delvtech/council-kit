@@ -1,7 +1,7 @@
 {
-  "name": "@delve/eslint-config",
+  "name": "@council/eslint-config",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": ".eslintrc.js",
   "license": "MIT",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^5.31.0",

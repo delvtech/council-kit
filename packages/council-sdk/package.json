@@ -1,5 +1,5 @@
 {
-  "name": "@delve/council-sdk",
+  "name": "@council/sdk",
   "version": "0.0.0",
   "source": "src/index.js",
   "alias": {
@@ -14,9 +14,9 @@
     "lodash.uniqby": "^4.7.0"
   },
   "devDependencies": {
-    "@delve/eslint-config": "*",
-    "@delve/prettier-config": "*",
-    "@delve/tsconfig": "*",
+    "@council/eslint-config": "*",
+    "@council/prettier-config": "*",
+    "@council/tsconfig": "*",
     "@types/lodash.uniqby": "^4.7.7",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
