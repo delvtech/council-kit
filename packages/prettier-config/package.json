@@ -1,5 +1,5 @@
 {
-  "name": "@delve/prettier-config",
+  "name": "@council/prettier-config",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

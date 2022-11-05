@@ -24,9 +24,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
-    "@delve/eslint-config": "*",
-    "@delve/prettier-config": "*",
-    "@delve/tsconfig": "*",
+    "@council/eslint-config": "*",
+    "@council/prettier-config": "*",
+    "@council/tsconfig": "*",
     "@types/node": "^17.0.12",
     "@types/react": "18.0.17",
     "autoprefixer": "^10.4.13",

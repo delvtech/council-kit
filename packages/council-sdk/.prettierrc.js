@@ -1,3 +1,3 @@
 module.exports = {
-  ...require("@delve/prettier-config"),
+  ...require("@council/prettier-config"),
 };
