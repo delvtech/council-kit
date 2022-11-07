@@ -5,8 +5,10 @@ export default function Voters(): ReactElement {
     <div className="m-auto mt-16 flex max-w-6xl flex-col items-start gap-y-10 px-4">
       {/* Header */}
       <div>
-        <div className="w-full text-3xl text-white">Vitalik.eth</div>
-        <div className="w-full text-white underline">0x000...000</div>
+        <div className="w-full text-3xl text-primary-content">Vitalik.eth</div>
+        <div className="w-full text-secondary-content underline">
+          0x000...000
+        </div>
       </div>
 
       {/* Statistics Row */}
@@ -95,11 +97,11 @@ export default function Voters(): ReactElement {
               </svg>
             </div>
             <p className="text-green-500">YES</p>
-            <p className="text-white ">100,000</p>
+            <p className="text-primary-content ">100,000</p>
           </div>
 
           <div className="grid grid-cols-5 items-center">
-            <p className="whitespace-nowrap text-white underline">
+            <p className="whitespace-nowrap text-primary-content underline">
               Proposal #3
             </p>
             <div className="col-span-2 pr-4">
@@ -116,11 +118,11 @@ export default function Voters(): ReactElement {
               </svg>
             </div>
             <p className="text-green-500">YES</p>
-            <p className="text-white ">100,000</p>
+            <p className="text-primary-content ">100,000</p>
           </div>
 
           <div className="grid grid-cols-5 items-center">
-            <p className="whitespace-nowrap text-white underline">
+            <p className="whitespace-nowrap text-primary-content underline">
               Proposal #3
             </p>
             <div className="col-span-2 pr-4">
@@ -137,11 +139,11 @@ export default function Voters(): ReactElement {
               </svg>
             </div>
             <p className="text-green-500">YES</p>
-            <p className="text-white ">100,000</p>
+            <p className="text-primary-content ">100,000</p>
           </div>
 
           <div className="grid grid-cols-5 items-center">
-            <p className="whitespace-nowrap text-white underline">
+            <p className="whitespace-nowrap text-primary-content underline">
               Proposal #3
             </p>
             <div className="col-span-2 pr-4">
@@ -158,13 +160,15 @@ export default function Voters(): ReactElement {
               </svg>
             </div>
             <p className="text-green-500">YES</p>
-            <p className="text-white ">100,000</p>
+            <p className="text-primary-content ">100,000</p>
           </div>
         </div>
 
         {/* Voting Vault Column */}
         <div className="flex basis-[35%] flex-col gap-y-4">
-          <div className="text-2xl font-bold text-white">Voting Vault (6)</div>
+          <div className="text-2xl font-bold text-primary-content">
+            Voting Vault (6)
+          </div>
           <div className="flex h-96 flex-col gap-y-4 overflow-auto pr-3">
             <div className="flex max-w-xl flex-col gap-y-1">
               <h3 className="font-bold underline">Locking Vault</h3>
