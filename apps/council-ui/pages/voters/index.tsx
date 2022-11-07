@@ -58,7 +58,16 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/voters/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/voters/details",
+                    query: {
+                      address: "0x000000000",
+                    },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -70,7 +79,16 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/voters/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/voters/details",
+                    query: {
+                      address: "0x000000000",
+                    },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -82,7 +100,16 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/voters/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/voters/details",
+                    query: {
+                      address: "0x000000000",
+                    },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -94,7 +121,16 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/voters/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/voters/details",
+                    query: {
+                      address: "0x000000000",
+                    },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -106,7 +142,16 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/voters/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/voters/details",
+                    query: {
+                      address: "0x000000000",
+                    },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
