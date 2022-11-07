@@ -5,6 +5,7 @@ module.exports = {
     // Custom plugins
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
     // "plugin:jest-dom/recommended",
     // "plugin:jsx-a11y/recommended",
 
@@ -47,6 +48,11 @@ module.exports = {
   },
   settings: {
     "import/resolver": {
+      typescript: {
+        // Tell eslint-config where to find the tsconfig when it runs, see:
+        // https://www.npmjs.com/package/eslint-import-resolver-typescript
+        project: "{apps,packages}/**/*/tsconfig.json",
+      },
       // always try to resolve types under `<root>@types` directory even it doesn't contain any
       // source code, like `@types/unist`
       "eslint-import-resolver-typescript": {

@@ -6,8 +6,7 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"],
-      "typechain/*": ["./typechain/*"]
+      "src/*": ["src/*"]
     },
     "resolveJsonModule": true
   }
