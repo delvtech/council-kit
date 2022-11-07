@@ -57,22 +57,15 @@ jobs:
         run: yarn
       - name: Build Mainnet with Next.js
         env:
-          NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
-          NEXT_PUBLIC_CHAIN_ID: 1
+          NEXT_PUBLIC_MAINNET_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
+          NEXT_PUBLIC_GOERLI_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
         run: npx turbo run build --filter=council-ui
       - name: Static HTML export of Mainnet with Next.js
-        run: yarn workspace council-ui run export:gh-pages-mainnet
-      - name: Build Goerli with Next.js
-        env:
-          NEXT_PUBLIC_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
-          NEXT_PUBLIC_CHAIN_ID: 5
-        run: npx turbo run build --filter=council-ui
-      - name: Static HTML export of Goerli with Next.js
-        run: yarn workspace council-ui run export:gh-pages-goerli
+        run: yarn workspace council-ui run export
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./apps/council-ui/gh-pages
+          path: ./apps/council-ui/out
 
   # Deployment job
   deploy:
