@@ -71,7 +71,6 @@ export default function Voters(): ReactElement {
                   y2="0"
                   stroke="green"
                   strokeWidth={4}
-                  // style="stroke:rgb(255,0,0);stroke-width:2"
                 />
               </svg>
             </div>
@@ -92,7 +91,6 @@ export default function Voters(): ReactElement {
                   y2="0"
                   stroke="green"
                   strokeWidth={4}
-                  // style="stroke:rgb(255,0,0);stroke-width:2"
                 />
               </svg>
             </div>
@@ -113,7 +111,6 @@ export default function Voters(): ReactElement {
                   y2="0"
                   stroke="green"
                   strokeWidth={4}
-                  // style="stroke:rgb(255,0,0);stroke-width:2"
                 />
               </svg>
             </div>
@@ -134,7 +131,6 @@ export default function Voters(): ReactElement {
                   y2="0"
                   stroke="green"
                   strokeWidth={4}
-                  // style="stroke:rgb(255,0,0);stroke-width:2"
                 />
               </svg>
             </div>
@@ -155,7 +151,6 @@ export default function Voters(): ReactElement {
                   y2="0"
                   stroke="green"
                   strokeWidth={4}
-                  // style="stroke:rgb(255,0,0);stroke-width:2"
                 />
               </svg>
             </div>
