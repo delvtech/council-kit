@@ -3,26 +3,26 @@ import { ReactElement } from "react";
 
 export default function Voters(): ReactElement {
   return (
-    <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
+    <div className="flex flex-col items-center max-w-5xl px-4 m-auto mt-16 gap-y-10">
       {/* Page Header */}
-      <div className="flex w-full items-center gap-x-2">
+      <div className="flex items-center w-full gap-x-2">
         <h1 className="w-full text-3xl text-primary-content">Voters</h1>
 
         {/* Search Input Box */}
         <input
           type="text"
           placeholder="Search"
-          className="daisy-input-bordered daisy-input w-64 max-w-xs"
+          className="w-64 max-w-xs daisy-input-bordered daisy-input"
         />
 
         {/* Filter Dropdown */}
         <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn m-1">
+          <label tabIndex={0} className="m-1 daisy-btn">
             Filter
           </label>
           <ul
             tabIndex={0}
-            className="daisy-dropdown-content daisy-menu rounded-box w-52 bg-base-100 p-2 shadow"
+            className="p-2 shadow daisy-dropdown-content daisy-menu rounded-box w-52 bg-base-100"
           >
             <li>
               <a>Item 1</a>
@@ -35,7 +35,7 @@ export default function Voters(): ReactElement {
       </div>
 
       {/* Voters Table */}
-      <table className="daisy-table-zebra daisy-table w-full min-w-fit">
+      <table className="w-full daisy-table-zebra daisy-table min-w-fit">
         {/* Table Header */}
         <thead>
           <tr>

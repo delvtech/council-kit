@@ -57,9 +57,9 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 </li>
               </ul>
             </div>
-            <Link href="/">
+            {/* <Link href="/">
               <Image alt="Council" src={CouncilLogo} width={200} height={52} />
-            </Link>
+            </Link> */}
           </div>
           <div className="daisy-navbar-center hidden lg:flex">
             <ul className="daisy-menu daisy-menu-horizontal p-0">
