@@ -23,13 +23,7 @@
     "turbo": "latest"
   },
   "lint-staged": {
-    "{apps,packages}/*/*.{gql,graphql,js,jsx,ts,tsx,json,md,yaml,yml}": [
-      "prettier --write"
-    ],
-    "{apps,packages}/*/*.{gql,graphql,jsx,ts,tsx}": [
-      "eslint --fix"
-    ],
-    "{apps,packages}/*/*/**/*.{gql,graphql,js,jsx,ts,tsx,json,md,yaml,yml}": [
+    "{apps,packages}/**/*.{gql,graphql,js,jsx,ts,tsx,json}": [
       "eslint --fix",
       "prettier --write"
     ]
