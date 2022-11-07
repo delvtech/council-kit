@@ -11,7 +11,10 @@
     "watch:example": "nodemon -r dotenv/config -r tsconfig-paths/register src/example/index.ts"
   },
   "dependencies": {
-    "lodash.uniqby": "^4.7.0"
+    "@elementfi/council-typechain": "./elementfi-council-typechain-v1.0.2.tgz",
+    "fast-json-stable-stringify": "^2.1.0",
+    "lodash.uniqby": "^4.7.0",
+    "lru-cache": "^7.14.1"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
