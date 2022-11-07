@@ -9,8 +9,8 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**"],
       "env": [
-        "NEXT_PUBLIC_ALCHEMY_KEY",
-        "NEXT_PUBLIC_CHAIN_ID",
+        "NEXT_PUBLIC_MAINNET_ALCHEMY_KEY",
+        "NEXT_PUBLIC_GOERLI_ALCHEMY_KEY",
         "NEXT_PUBLIC_LOCAL_RPC_URL"
       ]
     },

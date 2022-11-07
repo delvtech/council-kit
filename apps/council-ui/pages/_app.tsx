@@ -13,10 +13,7 @@ import CouncilLogo from "src/static/council-logo.svg";
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider
-        chains={chains}
-        initialChain={+(process.env.NEXT_PUBLIC_CHAIN_ID || 1)}
-      >
+      <RainbowKitProvider chains={chains}>
         <div className="daisy-navbar bg-base-100">
           <div className="daisy-navbar-start">
             <div className="daisy-dropdown">
@@ -26,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5"
+                  className="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -41,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               </label>
               <ul
                 tabIndex={0}
-                className="p-2 mt-3 shadow daisy-dropdown-content daisy-menu rounded-box daisy-menu-compact w-52 bg-base-100"
+                className="daisy-dropdown-content daisy-menu rounded-box daisy-menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
               >
                 <li>
                   <Link href="/proposals">proposals</Link>
@@ -61,8 +58,8 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               <Image alt="Council" src={CouncilLogo} width={200} height={52} />
             </Link>
           </div>
-          <div className="hidden daisy-navbar-center lg:flex">
-            <ul className="p-0 daisy-menu daisy-menu-horizontal">
+          <div className="daisy-navbar-center hidden lg:flex">
+            <ul className="daisy-menu daisy-menu-horizontal p-0">
               <li>
                 <Link href="/proposals">proposals</Link>
               </li>
