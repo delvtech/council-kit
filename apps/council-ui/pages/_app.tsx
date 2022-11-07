@@ -9,6 +9,9 @@ import "src/styles/globals.css";
 import Image from "next/image";
 import Link from "next/link";
 import CouncilLogo from "src/static/council-logo.svg";
+import { councilConfigs } from "src/config/council.config";
+
+console.log(councilConfigs);
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   return (
