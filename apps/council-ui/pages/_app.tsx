@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="w-5 h-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -41,19 +41,19 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               </label>
               <ul
                 tabIndex={0}
-                className="daisy-dropdown-content daisy-menu rounded-box daisy-menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
+                className="p-2 mt-3 shadow daisy-dropdown-content daisy-menu rounded-box daisy-menu-compact w-52 bg-base-100"
               >
                 <li>
-                  <a>proposals</a>
+                  <Link href="/proposals">proposals</Link>
                 </li>
                 <li>
-                  <a>vaults</a>
+                  <Link href="/vaults">vaults</Link>
                 </li>
                 <li>
-                  <a>voters</a>
+                  <Link href="/voters">voters</Link>
                 </li>
                 <li>
-                  <a>profile</a>
+                  <Link href="/profile">profile</Link>
                 </li>
               </ul>
             </div>
@@ -61,19 +61,19 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               <Image alt="Council" src={CouncilLogo} width={200} height={52} />
             </Link>
           </div>
-          <div className="daisy-navbar-center hidden lg:flex">
-            <ul className="daisy-menu daisy-menu-horizontal p-0">
+          <div className="hidden daisy-navbar-center lg:flex">
+            <ul className="p-0 daisy-menu daisy-menu-horizontal">
               <li>
-                <a>proposals</a>
+                <Link href="/proposals">proposals</Link>
               </li>
               <li>
-                <a>vaults</a>
+                <Link href="/vaults">vaults</Link>
               </li>
               <li>
-                <a>voters</a>
+                <Link href="/voters">voters</Link>
               </li>
               <li>
-                <a>profile</a>
+                <Link href="/profile">profile</Link>
               </li>
             </ul>
           </div>
