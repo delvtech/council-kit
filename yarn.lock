@@ -270,9 +270,9 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@elementfi/council-typechain@./elementfi-council-typechain-v1.0.2.tgz":
+"@elementfi/council-typechain@file:packages/council-sdk/elementfi-council-typechain-v1.0.2.tgz":
   version "1.0.2"
-  resolved "./elementfi-council-typechain-v1.0.2.tgz#05fab18eb3d0c3e9296531c063bcfde5fb3faf25"
+  resolved "file:packages/council-sdk/elementfi-council-typechain-v1.0.2.tgz#05fab18eb3d0c3e9296531c063bcfde5fb3faf25"
   dependencies:
     tsc "^2.0.3"
 
