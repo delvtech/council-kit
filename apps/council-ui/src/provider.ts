@@ -4,7 +4,7 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { councilConfigs } from "src/config/council.config";
 
 const configuredChains = allChains.filter((chain) => {
-  Object.keys(councilConfigs).includes(`${chain.id}`);
+  return Object.keys(councilConfigs).includes(`${chain.id}`);
 });
 
 const configuredProviders = configuredChains.map((chain) => {
