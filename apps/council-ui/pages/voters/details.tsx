@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-export default function Voters(): ReactElement {
+export default function VoterDetailsPage(): ReactElement {
   return (
     <div className="m-auto mt-16 flex max-w-6xl flex-col items-start gap-y-10 px-4">
       {/* Header */}
