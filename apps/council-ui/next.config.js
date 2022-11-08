@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires*/
-const { PHASE_DEVELOPMENT_SERVER } = require("next/dist/shared/lib/constants");
+const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
 
 /**
  * @type {import('next').NextConfig}
