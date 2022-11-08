@@ -6,7 +6,7 @@ import { CoinGeckoAPIDataSource } from "src/datasources/TokenAPI/CoinGeckoAPIDat
 import { TokenDataSource } from "./TokenDataSource";
 import { MockERC20, MockERC20__factory } from "@elementfi/council-typechain";
 
-export class TokenContractDataSource implements TokenDataSource {
+export class ERC20ContractDataSource implements TokenDataSource {
   address: string;
   apiDataSource: TokenAPIDataSource;
   erc20DataSource: ContractDataSource<MockERC20>;
