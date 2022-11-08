@@ -1,49 +1,53 @@
-import { BigNumber, Signer } from "ethers";
+import { ethers, Signer } from "ethers";
 import { CouncilContext } from "src/context";
+import { ERC20ContractDataSource } from "src/datasources/Token/ERC20ContractDataSource";
+import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
 import { Model } from "./Model";
 
 export class Token extends Model {
   address: string;
+  dataSource: TokenDataSource;
 
-  constructor(address: string, context: CouncilContext) {
+  constructor(
+    address: string,
+    context: CouncilContext,
+    dataSource?: TokenDataSource,
+  ) {
     super(context);
     this.address = address;
+    this.dataSource =
+      dataSource ||
+      context.registerDataSource(
+        { address },
+        new ERC20ContractDataSource(address, context.provider),
+      );
   }
 
-  async getSymbol(): Promise<string> {
-    return "CNCL";
+  getSymbol(): Promise<string> {
+    return this.dataSource.getSymbol();
   }
 
-  async getDecimals(): Promise<number> {
-    return 18;
+  getDecimals(): Promise<number> {
+    return this.dataSource.getDecimals();
   }
 
-  async getName(): Promise<string> {
-    return "Council Token";
+  getName(): Promise<string> {
+    return this.dataSource.getName();
   }
 
-  async getAllowance(owner: string, spender: string): Promise<string> {
-    return BigNumber.from(
-      "115792089237316195423570985008687907853269984665640564039457584007913129639935",
-    ).toString();
+  getAllowance(owner: string, spender: string): Promise<string> {
+    return this.dataSource.getAllowance(owner, spender);
   }
 
-  async getBalanceOf(address: string): Promise<string> {
-    return "10000";
+  getBalanceOf(address: string): Promise<string> {
+    return this.dataSource.getBalanceOf(address);
   }
 
-  /**
-   * Sets approval of token access up to a certain amount
-   * @param {Signer} signer - Signer.
-   * @param {string} spender - Address to approve access to.
-   * @param {string} [amount] - Amount approved for, defaults to maximum.
-   * @return {Promise<boolean>} successful - Boolean denoting a successful approval.
-   */
-  async approve(
-    signer: Signer,
-    spender: string,
-    amount?: string,
-  ): Promise<boolean> {
-    return true;
+  approve(signer: Signer, spender: string, amount?: string): Promise<boolean> {
+    return this.dataSource.approve(
+      signer,
+      spender,
+      amount ?? ethers.constants.MaxUint256.toString(),
+    );
   }
 }
