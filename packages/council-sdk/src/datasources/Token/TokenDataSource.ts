@@ -10,6 +10,6 @@ export interface TokenDataSource {
   approve: (
     signer: Signer,
     spender: string,
-    amount?: string,
+    amount: string,
   ) => Promise<boolean>;
 }

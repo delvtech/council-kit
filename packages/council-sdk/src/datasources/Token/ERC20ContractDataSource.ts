@@ -56,14 +56,12 @@ export class ERC20ContractDataSource implements TokenDataSource {
   async approve(
     signer: Signer,
     spender: string,
-    amount?: string,
+    amount: string,
   ): Promise<boolean> {
     const token = this.contract.contract.connect(signer);
     const transaction = await token.approve(
       spender,
-      amount
-        ? parseUnits(amount, await this.getDecimals())
-        : ethers.constants.MaxUint256,
+      parseUnits(amount, await this.getDecimals()),
     );
     await transaction.wait(); // will throw an error if transaction fails
     return true;
