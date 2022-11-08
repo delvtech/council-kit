@@ -22,10 +22,6 @@ export class Token extends Model {
     return "Council Token";
   }
 
-  async getPrice(currency: string): Promise<string | null> {
-    return ".5";
-  }
-
   async getAllowance(owner: string, spender: string): Promise<string> {
     return BigNumber.from(
       "115792089237316195423570985008687907853269984665640564039457584007913129639935",

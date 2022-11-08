@@ -5,7 +5,6 @@ export interface TokenDataSource {
   getSymbol: () => Promise<string>;
   getDecimals: () => Promise<number>;
   getName: () => Promise<string>;
-  getPrice: (currency: string) => Promise<number | null>;
   getAllowance: (owner: string, spender: string) => Promise<string>;
   getBalanceOf: (address: string) => Promise<string>;
   approve: (

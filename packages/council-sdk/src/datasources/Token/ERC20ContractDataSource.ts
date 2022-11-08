@@ -1,51 +1,38 @@
 import { ethers, providers, Signer } from "ethers";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
-import { TokenAPIDataSource } from "src/datasources/TokenAPI/TokenAPIDataSource";
-import { CoinGeckoAPIDataSource } from "src/datasources/TokenAPI/CoinGeckoAPIDataSource";
 import { TokenDataSource } from "./TokenDataSource";
 import { MockERC20, MockERC20__factory } from "@elementfi/council-typechain";
 
 export class ERC20ContractDataSource implements TokenDataSource {
   address: string;
-  apiDataSource: TokenAPIDataSource;
-  erc20DataSource: ContractDataSource<MockERC20>;
+  contract: ContractDataSource<MockERC20>;
 
   constructor(
     address: string,
     provider: providers.Provider,
-    options?: {
-      apiDataSource?: TokenAPIDataSource;
-      erc20DataSource?: ContractDataSource<MockERC20>;
-    },
+    contract?: ContractDataSource<MockERC20>,
   ) {
     this.address = address;
-    this.apiDataSource = options?.apiDataSource ?? new CoinGeckoAPIDataSource();
-    this.erc20DataSource =
-      options?.erc20DataSource ??
+    this.contract =
+      contract ||
       new ContractDataSource(MockERC20__factory.connect(address, provider));
   }
 
   getSymbol(): Promise<string> {
-    return this.erc20DataSource.call("symbol", []);
+    return this.contract.call("symbol", []);
   }
 
   getDecimals(): Promise<number> {
-    return this.erc20DataSource.call("decimals", []);
+    return this.contract.call("decimals", []);
   }
 
   getName(): Promise<string> {
-    return this.erc20DataSource.call("name", []);
-  }
-
-  async getPrice(currency: string): Promise<number | null> {
-    // TODO: find a more reliable way to get the id
-    const id = (await this.getName()).toLowerCase();
-    return this.apiDataSource.getTokenPrice(id, currency);
+    return this.contract.call("name", []);
   }
 
   async getAllowance(owner: string, spender: string): Promise<string> {
-    const balanceBigNumber = await this.erc20DataSource.call("allowance", [
+    const balanceBigNumber = await this.contract.call("allowance", [
       owner,
       spender,
     ]);
@@ -54,9 +41,7 @@ export class ERC20ContractDataSource implements TokenDataSource {
   }
 
   async getBalanceOf(address: string): Promise<string> {
-    const balanceBigNumber = await this.erc20DataSource.call("balanceOf", [
-      address,
-    ]);
+    const balanceBigNumber = await this.contract.call("balanceOf", [address]);
     const decimals = await this.getDecimals();
     return formatUnits(balanceBigNumber, decimals);
   }
@@ -73,7 +58,7 @@ export class ERC20ContractDataSource implements TokenDataSource {
     spender: string,
     amount?: string,
   ): Promise<boolean> {
-    const token = this.erc20DataSource.contract.connect(signer);
+    const token = this.contract.contract.connect(signer);
     const transaction = await token.approve(
       spender,
       amount
