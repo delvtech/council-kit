@@ -1,7 +1,7 @@
 import { CouncilContext } from "src/context";
 import { VotingVault } from "./VotingVault";
 
-export class GscVault extends VotingVault {
+export class GSCVault extends VotingVault {
   constructor(address: string, context: CouncilContext, name = "GSC Vault") {
     super(address, context, name);
   }

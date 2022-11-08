@@ -1,7 +1,7 @@
 import { VotingContract } from "src/models/VotingContract/VotingContract";
 import { CouncilContext } from "src/context";
 import ElementGoerliAddressList from "./ElementGoerliAddressList.json";
-import { GscVotingContract } from "src/models/VotingContract/GscVotingContract";
+import { GSCVotingContract } from "src/models/VotingContract/GSCVotingContract";
 import { parseUnits } from "ethers/lib/utils";
 import { getDefaultProvider } from "ethers";
 
@@ -22,8 +22,8 @@ export async function main(): Promise<void> {
     context,
   );
 
-  // create a new GscVotingContract instance for GSC voting
-  const gscVoting = new GscVotingContract(
+  // create a new GSCVotingContract instance for GSC voting
+  const gscVoting = new GSCVotingContract(
     addresses.gscVoting,
     addresses.gscVault,
     context,
@@ -177,10 +177,10 @@ export async function main(): Promise<void> {
           participation_grade: await (async () => {
             const [votesCount, votingOpportunitiesCount] =
               await coreVoting.getParticipation(addresses.coreVoting);
-            const [GscVotesCount, gscVotingOpportunitiesCount] =
+            const [GSCVotesCount, gscVotingOpportunitiesCount] =
               await gscVoting.getParticipation(addresses.coreVoting);
             return (
-              ((votesCount + GscVotesCount) /
+              ((votesCount + GSCVotesCount) /
                 (votingOpportunitiesCount + gscVotingOpportunitiesCount)) *
               100
             );
@@ -227,10 +227,10 @@ export async function main(): Promise<void> {
       participation_grade: await (async () => {
         const [votesCount, votingOpportunitiesCount] =
           await coreVoting.getParticipation(addresses.coreVoting);
-        const [GscVotesCount, gscVotingOpportunitiesCount] =
+        const [GSCVotesCount, gscVotingOpportunitiesCount] =
           await gscVoting.getParticipation(addresses.coreVoting);
         return (
-          ((votesCount + GscVotesCount) /
+          ((votesCount + GSCVotesCount) /
             (votingOpportunitiesCount + gscVotingOpportunitiesCount)) *
           100
         );
