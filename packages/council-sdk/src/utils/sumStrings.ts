@@ -1,16 +1,14 @@
-import { type ethers, BigNumber } from "ethers";
-import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { type ethers } from "ethers";
+import { formatEther, parseEther } from "ethers/lib/utils";
 
 /**
  * Takes a group of numbers represented as strings and sums them together using
  * {@linkcode ethers.BigNumber}.
- * @param numberStrings - The number strings to sum together
- * @param decimals - The decimal precision to use
  */
-export function sumStrings(numberStrings: string[], decimals = 18): string {
-  let total = BigNumber.from(0);
-  for (const bnString of numberStrings) {
-    total = total.add(parseUnits(bnString, decimals));
+export function sumStrings(numberStrings: string[]): string {
+  let total = parseEther(numberStrings[0]);
+  for (const bnString of numberStrings.slice(1)) {
+    total = total.add(parseEther(bnString));
   }
-  return formatUnits(total, decimals);
+  return formatEther(total);
 }
