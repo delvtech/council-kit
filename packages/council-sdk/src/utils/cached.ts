@@ -7,7 +7,8 @@ type GetAndSetOptions = Parameters<LRUCache<string, any>["get"]>[1] &
 /**
  * A utility for wrapping a callback with caching logic.
  * @param options
- * @param options.cacheKey The string used to identify the cached result.
+ * @param options.cacheKey The value to stringify and use to identify the cached
+ *   result.
  * @param options.callback A function with a return value that will be cached
  *   and reused based on the cache's options.
  * @param options.cache An optional `lru-cache` instance to use for the
@@ -37,4 +38,12 @@ export function cached<TCallback extends (...args: any[]) => any>({
     cache.set(key, value, options);
     return value;
   }
+}
+
+/**
+ * Returns a key stringified in the same way as the {@linkcode cached} utility.
+ * @param cacheKey The value to stringify
+ */
+export function cachedKey(cacheKey: string | any): string {
+  return stringify(cacheKey);
 }

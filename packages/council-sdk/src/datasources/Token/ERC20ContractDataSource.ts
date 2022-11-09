@@ -24,14 +24,14 @@ export class ERC20ContractDataSource
     return this.call("name", []);
   }
 
-  async getAllowance(owner: string, spender: string): Promise<string> {
-    const balanceBigNumber = await this.call("allowance", [owner, spender]);
+  async getBalanceOf(address: string): Promise<string> {
+    const balanceBigNumber = await this.call("balanceOf", [address]);
     const decimals = await this.getDecimals();
     return formatUnits(balanceBigNumber, decimals);
   }
 
-  async getBalanceOf(address: string): Promise<string> {
-    const balanceBigNumber = await this.call("balanceOf", [address]);
+  async getAllowance(owner: string, spender: string): Promise<string> {
+    const balanceBigNumber = await this.call("allowance", [owner, spender]);
     const decimals = await this.getDecimals();
     return formatUnits(balanceBigNumber, decimals);
   }
@@ -54,6 +54,8 @@ export class ERC20ContractDataSource
       parseUnits(amount, await this.getDecimals()),
     );
     await transaction.wait(); // will throw an error if transaction fails
+    const owner = await signer.getAddress();
+    this.deleteCall("allowance", [owner, spender]);
     return true;
   }
 }

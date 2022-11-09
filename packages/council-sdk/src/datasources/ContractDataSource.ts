@@ -37,4 +37,11 @@ export class ContractDataSource<
       return fn(...args);
     });
   }
+
+  deleteCall<K extends FunctionKeys<T>>(
+    property: K,
+    args: T[K] extends AnyFunction ? Parameters<T[K]> : never,
+  ): boolean {
+    return this.deleteCached([property, ...args]);
+  }
 }
