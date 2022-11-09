@@ -32,7 +32,7 @@ export class CachedDataSource implements DataSource {
 
   /**
    * Delete a single entry from the cache.
-   * @returns A boolean returned indicating the entry was successfully deleted
+   * @returns A boolean indicating the entry was successfully deleted
    */
   deleteCached(cacheKey?: string | any): boolean {
     return this.cache.delete(cachedKey(cacheKey));
