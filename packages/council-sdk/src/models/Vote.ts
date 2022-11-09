@@ -1,17 +1,19 @@
 import { CouncilContext } from "src/context";
+import { Ballot } from "src/datasources/VotingContract/VotingContractDataSource";
 import { Model } from "./Model";
 import { Proposal } from "./Proposal";
-
-export type Ballot = "yes" | "no" | "maybe";
+import { Voter } from "./Voter";
 
 export class Vote extends Model {
   power: string;
   ballot: Ballot;
   proposal: Proposal;
+  voter: Voter;
 
   constructor(
     power: string,
     ballot: Ballot,
+    voter: Voter,
     proposal: Proposal,
     context: CouncilContext,
   ) {
@@ -19,5 +21,6 @@ export class Vote extends Model {
     this.power = power;
     this.ballot = ballot;
     this.proposal = proposal;
+    this.voter = voter;
   }
 }

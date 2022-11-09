@@ -1,6 +1,6 @@
 import { CouncilContext } from "src/context";
 import { GSCVault } from "src/models/VotingVault/GSCVault";
-import { VotingContract } from "./VotingContract";
+import { VotingContract, VotingContractOptions } from "./VotingContract";
 
 export class GSCVotingContract extends VotingContract {
   vaults: [GSCVault];
@@ -9,9 +9,13 @@ export class GSCVotingContract extends VotingContract {
     address: string,
     gscVault: GSCVault | string,
     context: CouncilContext,
-    name = "GSC Voting",
+    options?: VotingContractOptions,
   ) {
-    super(address, [], context, name);
+    const { name = "GSC Voting", ...passThruOptions } = options || {};
+    super(address, [], context, {
+      ...passThruOptions,
+      name,
+    });
     const vault =
       gscVault instanceof GSCVault
         ? gscVault

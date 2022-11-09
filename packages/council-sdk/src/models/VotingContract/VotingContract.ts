@@ -6,38 +6,58 @@ import { Proposal } from "src/models/Proposal";
 import { Vote } from "src/models/Vote";
 import { Voter } from "src/models/Voter";
 import { VotingVault } from "src/models/VotingVault/VotingVault";
-import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
+import { VotingContractDataSource } from "src/datasources/VotingContract/VotingContractDataSource";
+import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
+
+export interface VotingContractOptions {
+  name?: string;
+  dataSource?: VotingContractDataSource;
+}
 
 export class VotingContract extends Model {
   address: string;
+  dataSource: VotingContractDataSource;
   vaults: VotingVault[];
 
   constructor(
     address: string,
     vaults: (VotingVault | string)[],
     context: CouncilContext,
-    name = "Core Voting",
+    options?: VotingContractOptions,
   ) {
-    super(context, name);
+    super(context, options?.name || "Core Voting");
     this.address = address;
     this.vaults = vaults.map((vault) =>
       vault instanceof VotingVault
         ? vault
         : new VotingVault(vault, this.context),
     );
+    this.dataSource =
+      options?.dataSource ||
+      this.context.registerDataSource(
+        { address },
+        new CoreVotingContractDataSource(address, context.provider),
+      );
   }
 
   getProposal(id: number): Proposal {
     return new Proposal(id, this, this.context);
   }
 
-  async getProposals(): Promise<Proposal[]> {
-    // TODO: get count from data source
-    const length = await Promise.resolve(10);
-    return Array.from(
-      { length },
-      (_, i) => new Proposal(i, this, this.context),
+  async getProposals(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<Proposal[]> {
+    const proposals = await this.dataSource.getProposals(fromBlock, toBlock);
+
+    return proposals.map(
+      ({ id, createdBlock, unlockBlock, expirationBlock }) =>
+        new Proposal(id, this, this.context, {
+          createdBlock,
+          unlockBlock,
+          expirationBlock,
+        }),
     );
   }
 
@@ -63,26 +83,44 @@ export class VotingContract extends Model {
     return uniqBy<Voter>(mergedVotersList, (voter) => voter.address);
   }
 
-  async getVotes(address: string): Promise<Vote[]> {
-    const proposals = await this.getProposals();
-    const votes = await Promise.all(
-      proposals.map((proposal) => proposal.getVote(address)),
+  async getVotes(
+    address?: string,
+    proposalId?: number,
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<Vote[]> {
+    const votes = await this.dataSource.getVotes(
+      address,
+      proposalId,
+      fromBlock,
+      toBlock ?? (await this.context.provider.getBlockNumber()),
     );
-    return votes.filter((vote) => BigNumber.from(vote.power).gt(0));
+    return votes.map(
+      ({ address, proposalId, power, ballot }) =>
+        new Vote(
+          power,
+          ballot,
+          new Voter(address, this.context),
+          new Proposal(proposalId, this, this.context),
+          this.context,
+        ),
+    );
   }
 
   async getParticipation(address: string): Promise<[number, number]> {
     const votes = await this.getVotes(address);
     const votedProposalIds = votes.map((vote) => vote.proposal.id);
     const proposals = await this.getProposals();
-    const missedVotePredicates = await Promise.all(
+    const missedVoteBooleans = await Promise.all(
       proposals
         .filter((proposal) => !votedProposalIds.includes(proposal.id))
         .map(async (proposal) =>
-          parseEther(await proposal.getVotingPower(address)).gt(0),
+          // could be null if the proposal has been deleted and the created
+          // block can't be fetched.
+          parseEther((await proposal.getVotingPower(address)) || "0").gt(0),
         ),
     );
-    const missedVotesCount = missedVotePredicates.filter(Boolean).length;
+    const missedVotesCount = missedVoteBooleans.filter(Boolean).length;
     return [proposals.length - missedVotesCount, proposals.length];
   }
 }
