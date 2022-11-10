@@ -111,7 +111,7 @@ export class VotingContract extends Model {
     const votes = await this.getVotes(address);
     const votedProposalIds = votes.map((vote) => vote.proposal.id);
     const proposals = await this.getProposals();
-    const missedVoteBooleans = await Promise.all(
+    const proposalsNotVoted = await Promise.all(
       proposals
         .filter((proposal) => !votedProposalIds.includes(proposal.id))
         .map(async (proposal) =>
@@ -120,7 +120,7 @@ export class VotingContract extends Model {
           parseEther((await proposal.getVotingPower(address)) || "0").gt(0),
         ),
     );
-    const missedVotesCount = missedVoteBooleans.filter(Boolean).length;
+    const missedVotesCount = proposalsNotVoted.filter(Boolean).length;
     return [proposals.length - missedVotesCount, proposals.length];
   }
 }
