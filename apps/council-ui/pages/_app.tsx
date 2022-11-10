@@ -8,6 +8,7 @@ import { useAccount, WagmiConfig } from "wagmi";
 import "src/styles/globals.css";
 import Link from "next/link";
 import { councilConfigs } from "src/config/council.config";
+import { makeVoterHref } from "src/routing/makeRoute";
 
 console.log(councilConfigs);
 
@@ -52,14 +53,16 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 <li>
                   <Link href="/voters">voters</Link>
                 </li>
-                <li>
-                  <Link href={`/voters/details?address=${address}`}>
-                    profile
-                  </Link>
-                </li>
+                {address && (
+                  <li>
+                    <Link href={makeVoterHref(address)}>profile</Link>
+                  </li>
+                )}
               </ul>
             </div>
-            <div className="ml-2 whitespace-nowrap text-xl">council-ui 🫡</div>
+            <div className="ml-2 whitespace-nowrap text-xl text-accent-content">
+              council-ui 🫡
+            </div>
             {/* <Link href="/">
               <Image alt="Council" src={CouncilLogo} width={200} height={52} />
             </Link> */}
@@ -75,9 +78,11 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               <li>
                 <Link href="/voters">voters</Link>
               </li>
-              <li>
-                <Link href={`/voters/details?address=${address}`}>profile</Link>
-              </li>
+              {address && (
+                <li>
+                  <Link href={makeVoterHref(address)}>profile</Link>
+                </li>
+              )}
             </ul>
           </div>
           <div className="daisy-navbar-end">

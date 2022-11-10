@@ -7,8 +7,8 @@ export default function Vaults(): ReactElement {
     <Container>
       {/* Page Header */}
       <div>
-        <div className="text-5xl">Vaults</div>
-        <div className="mt-6 text-lg ">
+        <div className="text-5xl text-accent-content">Vaults</div>
+        <div className="mt-6 text-lg">
           Voting Vaults provide the ability to assign voting power to specific
           types of tokens/positions. The result is beautiful — governance users
           can maximize capital efficiency while maintaining the ability to
@@ -37,7 +37,7 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link
                   href={{
                     pathname: "/vaults/details",
@@ -55,7 +55,7 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link
                   href={{
                     pathname: "/vaults/details",
@@ -73,7 +73,7 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link
                   href={{
                     pathname: "/vaults/details",
@@ -91,7 +91,7 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link
                   href={{
                     pathname: "/vaults/details",
@@ -109,7 +109,7 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link
                   href={{
                     pathname: "/vaults/details",
@@ -127,7 +127,7 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link
                   href={{
                     pathname: "/vaults/details",

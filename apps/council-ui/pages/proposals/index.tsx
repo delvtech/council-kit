@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ReactElement } from "react";
+import { makeProposalHref } from "src/routing/makeRoute";
 
 export default function Proposals(): ReactElement {
   return (
@@ -78,16 +79,7 @@ export default function Proposals(): ReactElement {
             <td>YES</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -101,16 +93,7 @@ export default function Proposals(): ReactElement {
             <td>YES</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -124,16 +107,7 @@ export default function Proposals(): ReactElement {
             <td>YES</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -147,16 +121,7 @@ export default function Proposals(): ReactElement {
             <td>YES</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -170,16 +135,7 @@ export default function Proposals(): ReactElement {
             <td>YES</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>

@@ -4,10 +4,9 @@ import { ReactElement } from "react";
 export default function VoterDetailsPage(): ReactElement {
   return (
     <Container>
-      {" "}
       {/* Header */}
       <div>
-        <h1 className="w-full text-5xl">Vitalik.eth</h1>
+        <h1 className="w-full text-5xl text-accent-content">Vitalik.eth</h1>
         <h2 className="mt-2 w-full text-2xl underline">0x000...000</h2>
       </div>
       {/* Statistics Row */}

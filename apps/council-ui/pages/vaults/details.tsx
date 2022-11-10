@@ -9,7 +9,7 @@ export default function Vault(): ReactElement {
         <h1 className="text-5xl text-accent-content underline">
           Locking Vault
         </h1>
-        <p className="mt-6 text-accent-content">
+        <p className="mt-6">
           The Locking vault allows users to deposit their tokens into a contract
           in exchange for voting power, which can also be delegated to a
           different user. The vault tracks the historical voting power of each
@@ -83,7 +83,7 @@ export default function Vault(): ReactElement {
           </div>
 
           {/* Action Submit Button */}
-          <button className="daisy-btn-primary daisy-btn">Deposit</button>
+          <button className="daisy-btn daisy-btn-primary">Deposit</button>
         </div>
 
         {/* Change Delegate Column */}
@@ -109,7 +109,7 @@ export default function Vault(): ReactElement {
           </div>
 
           {/* Action Submit Button */}
-          <button className="daisy-btn-primary daisy-btn">Delegate</button>
+          <button className="daisy-btn daisy-btn-primary">Delegate</button>
         </div>
       </div>
     </Container>
