@@ -1,74 +1,77 @@
+import { Container } from "components/base/Container";
 import { ReactElement } from "react";
 
 export default function Vault(): ReactElement {
   return (
-    <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
+    <Container>
       {/* Page Header */}
       <div>
-        <h1 className="mb-4 text-3xl text-primary-content underline">
-          Vault Name
+        <h1 className="text-5xl text-accent-content underline">
+          Locking Vault
         </h1>
-        <p className="text-secondary-content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris
+        <p className="mt-6">
+          The Locking vault allows users to deposit their tokens into a contract
+          in exchange for voting power, which can also be delegated to a
+          different user. The vault tracks the historical voting power of each
+          address and, when asked for voting power, searches the historical
+          record of that address’ voting power at the time when the vote was
+          proposed.
         </p>
       </div>
 
       {/* Statistics Row */}
       <div className="flex flex-wrap gap-4">
         <div className="daisy-stats">
-          <div className="daisy-stat bg-primary text-primary-content">
+          <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">Active Proposals</div>
-            <div className="daisy-stat-value">6</div>
+            <div className="daisy-stat-value text-sm">6</div>
           </div>
         </div>
 
         <div className="daisy-stats">
-          <div className="daisy-stat bg-primary text-primary-content">
+          <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">Your Voting Power</div>
-            <div className="daisy-stat-value">1,000,000</div>
+            <div className="daisy-stat-value text-sm">1,000,000</div>
           </div>
         </div>
 
         <div className="daisy-stats">
-          <div className="daisy-stat bg-primary text-primary-content">
+          <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">% of Total TVP</div>
-            <div className="daisy-stat-value">1.2%</div>
+            <div className="daisy-stat-value text-sm">1.2%</div>
           </div>
         </div>
 
         <div className="daisy-stats">
-          <div className="daisy-stat bg-primary text-primary-content">
+          <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">Delegated to You</div>
-            <div className="daisy-stat-value">90</div>
+            <div className="daisy-stat-value text-sm">90</div>
           </div>
         </div>
 
         <div className="daisy-stats">
-          <div className="daisy-stat bg-primary text-primary-content">
+          <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">Participants</div>
-            <div className="daisy-stat-value">2.112</div>
+            <div className="daisy-stat-value text-sm">2.112</div>
           </div>
         </div>
       </div>
-
-      <div className="grid h-48 w-full gap-y-10 sm:grid-cols-2 sm:grid-rows-1 sm:gap-y-0 sm:gap-x-8">
+      <div className="flex h-48 w-full flex-col gap-x-8 sm:flex-row">
         {/* Deposit/Withdraw Column */}
-        <div className="flex flex-col gap-y-4">
+        <div className="flex basis-1/2 flex-col gap-y-4">
           {/* Actions Headers */}
           <div className="flex gap-x-4">
-            <h2 className="text-2xl font-bold text-primary-content">Deposit</h2>
-            <h2 className="text-2xl text-primary-content">Withdraw</h2>
+            <h2 className="text-2xl font-extrabold">Deposit</h2>
+            <h2 className="text-2xl">Withdraw</h2>
           </div>
 
           {/* Token Amount Input */}
           <div className="flex">
-            <div className="daisy-form-control mr-2 w-full max-w-xs">
+            <div className="daisy-form-control mr-2 w-full">
               <input
                 type="text"
                 placeholder="Amount"
-                className="daisy-input-bordered daisy-input w-full max-w-xs"
+                className="daisy-input-bordered daisy-input w-full"
               />
               <label className="daisy-label">
                 <span className="daisy-label-text-alt">
@@ -80,15 +83,13 @@ export default function Vault(): ReactElement {
           </div>
 
           {/* Action Submit Button */}
-          <button className="daisy-btn-secondary daisy-btn">Deposit</button>
+          <button className="daisy-btn daisy-btn-primary">Deposit</button>
         </div>
 
         {/* Change Delegate Column */}
-        <div className="flex flex-col gap-y-4">
+        <div className="flex basis-1/2 flex-col gap-y-4">
           {/* Actions Headers */}
-          <div className="text-2xl font-bold text-primary-content">
-            Change Delegate
-          </div>
+          <div className="text-2xl font-bold">Change Delegate</div>
 
           {/* Delegate Address Input */}
           <div className="flex">
@@ -108,9 +109,9 @@ export default function Vault(): ReactElement {
           </div>
 
           {/* Action Submit Button */}
-          <button className="daisy-btn-secondary daisy-btn">Delegate</button>
+          <button className="daisy-btn daisy-btn-primary">Delegate</button>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }

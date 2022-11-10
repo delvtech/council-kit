@@ -5,11 +5,12 @@ export default function ProposalPage(): ReactElement {
   const {
     query: { id },
   } = useRouter();
+
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
       {/* Page Header */}
       <div className="flex w-full flex-wrap items-center gap-4">
-        <h1 className="mb-4 whitespace-nowrap text-3xl text-accent-content underline">
+        <h1 className="mb-4 whitespace-nowrap text-5xl text-accent-content underline">
           Proposal {id}
         </h1>
 
@@ -66,7 +67,7 @@ export default function ProposalPage(): ReactElement {
 
       <div className="flex w-full flex-wrap gap-10 sm:gap-y-0">
         <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
-          <h1 className="text-xl text-accent-content">Voting Activity</h1>
+          <h1 className="text-2xl text-accent-content">Voting Activity</h1>
           <div className="grid grid-cols-3">
             <h2>Voter</h2>
             <h2>Voting Power</h2>
@@ -75,7 +76,7 @@ export default function ProposalPage(): ReactElement {
           <input
             type="text"
             placeholder="Search"
-            className="daisy-input-bordered daisy-input-accent daisy-input w-full bg-base-300"
+            className="daisy-input-bordered daisy-input-accent daisy-input bg-base-300"
           />
 
           {/* Data Rows */}
@@ -112,7 +113,7 @@ export default function ProposalPage(): ReactElement {
 
         <div className="grow basis-[300px] md:grow-0">
           <div className="flex flex-col gap-y-4">
-            <h2 className="text-xl text-accent-content">Your Vote</h2>
+            <h2 className="text-2xl text-accent-content">Your Vote</h2>
             <div className="flex">
               <h3>Vaults</h3>
               <h3 className="ml-auto">Voting Power</h3>
@@ -184,11 +185,11 @@ export default function ProposalPage(): ReactElement {
             </div>
 
             <div className="daisy-btn-group m-auto">
-              <button className="daisy-btn-active daisy-btn-lg daisy-btn">
+              <button className="daisy-btn daisy-btn-active daisy-btn-lg">
                 YES
               </button>
-              <button className="daisy-btn-lg daisy-btn">NO</button>
-              <button className="daisy-btn-lg daisy-btn">ABSTAIN</button>
+              <button className="daisy-btn daisy-btn-lg">NO</button>
+              <button className="daisy-btn daisy-btn-lg">ABSTAIN</button>
             </div>
           </div>
         </div>

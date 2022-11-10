@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { ReactElement } from "react";
+import { makeProposalHref } from "src/routing/makeRoute";
 
 export default function Proposals(): ReactElement {
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
       {/* Page Header */}
       <div className="flex w-full items-center gap-x-2">
-        <h1 className="w-full text-3xl text-primary-content">Proposals</h1>
+        <h1 className="w-full text-5xl">Proposals</h1>
         {/* Sort Dropdown */}
         <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn m-1">
+          <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
             Sort
           </label>
           <ul
@@ -26,7 +27,7 @@ export default function Proposals(): ReactElement {
         </div>
 
         {/* Add Proposal Button */}
-        <button className="daisy-btn-outline daisy-btn-circle daisy-btn p-4">
+        {/* <button className="p-4 daisy-btn-outline daisy-btn daisy-btn-circle">
           <svg
             viewBox="0 0 40 40"
             fill="none"
@@ -49,7 +50,7 @@ export default function Proposals(): ReactElement {
               className="stroke-primary-content"
             ></line>
           </svg>
-        </button>
+        </button> */}
       </div>
 
       {/* Voters Table */}
@@ -77,17 +78,8 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -100,17 +92,8 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -123,17 +106,8 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -146,17 +120,8 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -169,17 +134,8 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/proposals/details",
-                    query: {
-                      id: "1",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
           </tr>

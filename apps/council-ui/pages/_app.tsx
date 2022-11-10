@@ -4,16 +4,17 @@ import type { AppProps } from "next/app";
 import { ReactElement } from "react";
 import { wagmiClient } from "src/clients/wagmi";
 import { chains } from "src/provider";
-import { WagmiConfig } from "wagmi";
+import { useAccount, WagmiConfig } from "wagmi";
 import "src/styles/globals.css";
-import Image from "next/image";
 import Link from "next/link";
-import CouncilLogo from "src/static/council-logo.svg";
 import { councilConfigs } from "src/config/council.config";
+import { makeVoterHref } from "src/routing/makeRoute";
 
 console.log(councilConfigs);
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
+  const { address } = useAccount();
+
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
@@ -52,10 +53,15 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 <li>
                   <Link href="/voters">voters</Link>
                 </li>
-                <li>
-                  <Link href="/profile">profile</Link>
-                </li>
+                {address && (
+                  <li>
+                    <Link href={makeVoterHref(address)}>profile</Link>
+                  </li>
+                )}
               </ul>
+            </div>
+            <div className="ml-2 whitespace-nowrap text-xl text-accent-content">
+              council-ui 🫡
             </div>
             {/* <Link href="/">
               <Image alt="Council" src={CouncilLogo} width={200} height={52} />
@@ -72,9 +78,11 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
               <li>
                 <Link href="/voters">voters</Link>
               </li>
-              <li>
-                <Link href="/profile">profile</Link>
-              </li>
+              {address && (
+                <li>
+                  <Link href={makeVoterHref(address)}>profile</Link>
+                </li>
+              )}
             </ul>
           </div>
           <div className="daisy-navbar-end">

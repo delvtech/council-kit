@@ -1,12 +1,14 @@
+import { Container } from "components/base/Container";
 import Link from "next/link";
 import { ReactElement } from "react";
+import { makeVoterHref } from "src/routing/makeRoute";
 
 export default function Voters(): ReactElement {
   return (
-    <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
+    <Container>
       {/* Page Header */}
       <div className="flex w-full items-center gap-x-2">
-        <h1 className="w-full text-3xl text-primary-content">Voters</h1>
+        <h1 className="w-full text-5xl text-accent-content">Voters</h1>
 
         {/* Search Input Box */}
         <input
@@ -17,7 +19,7 @@ export default function Voters(): ReactElement {
 
         {/* Filter Dropdown */}
         <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn m-1">
+          <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
             Filter
           </label>
           <ul
@@ -57,17 +59,8 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/voters/details",
-                    query: {
-                      address: "0x000000000",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -78,17 +71,8 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/voters/details",
-                    query: {
-                      address: "0x000000000",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -99,17 +83,8 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/voters/details",
-                    query: {
-                      address: "0x000000000",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -120,17 +95,8 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/voters/details",
-                    query: {
-                      address: "0x000000000",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -141,22 +107,13 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link
-                  href={{
-                    pathname: "/voters/details",
-                    query: {
-                      address: "0x000000000",
-                    },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
         </tbody>
       </table>
-    </div>
+    </Container>
   );
 }

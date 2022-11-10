@@ -1,16 +1,19 @@
+import { Container } from "components/base/Container";
 import Link from "next/link";
 import { ReactElement } from "react";
+import { makeVaultHref } from "src/routing/makeRoute";
 
 export default function Vaults(): ReactElement {
   return (
-    <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
+    <Container>
       {/* Page Header */}
       <div>
-        <div className="text-2xl text-primary-content">Vaults</div>
-        <div className="text-secondary-content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris
+        <div className="text-5xl text-accent-content">Vaults</div>
+        <div className="mt-6 text-lg">
+          Voting Vaults provide the ability to assign voting power to specific
+          types of tokens/positions. The result is beautiful — governance users
+          can maximize capital efficiency while maintaining the ability to
+          delegate or vote when the time comes.
         </div>
       </div>
 
@@ -36,7 +39,7 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -47,7 +50,7 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -58,7 +61,7 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -69,7 +72,7 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -80,7 +83,7 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -91,12 +94,12 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
         </tbody>
       </table>
-    </div>
+    </Container>
   );
 }
