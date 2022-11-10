@@ -1,6 +1,7 @@
 import { Container } from "components/base/Container";
 import Link from "next/link";
 import { ReactElement } from "react";
+import { makeVaultHref } from "src/routing/makeRoute";
 
 export default function Vaults(): ReactElement {
   return (
@@ -37,15 +38,8 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/vaults/details",
-                    query: { address: "0x0000" },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -55,15 +49,8 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/vaults/details",
-                    query: { address: "0x0000" },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -73,15 +60,8 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/vaults/details",
-                    query: { address: "0x0000" },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -91,15 +71,8 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/vaults/details",
-                    query: { address: "0x0000" },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -109,15 +82,8 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/vaults/details",
-                    query: { address: "0x0000" },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -127,15 +93,8 @@ export default function Vaults(): ReactElement {
             <td>1,000,000</td>
             <td>50,000</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link
-                  href={{
-                    pathname: "/vaults/details",
-                    query: { address: "0x0000" },
-                  }}
-                >
-                  ▹
-                </Link>
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+                <Link href={makeVaultHref("0x00000000000")}>▹</Link>
               </button>
             </th>
           </tr>
