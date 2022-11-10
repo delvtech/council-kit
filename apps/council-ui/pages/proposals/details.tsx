@@ -5,6 +5,7 @@ export default function ProposalPage(): ReactElement {
   const {
     query: { id },
   } = useRouter();
+
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
       {/* Page Header */}
@@ -184,11 +185,11 @@ export default function ProposalPage(): ReactElement {
             </div>
 
             <div className="daisy-btn-group m-auto">
-              <button className="daisy-btn-active daisy-btn-lg daisy-btn">
+              <button className="daisy-btn daisy-btn-active daisy-btn-lg">
                 YES
               </button>
-              <button className="daisy-btn-lg daisy-btn">NO</button>
-              <button className="daisy-btn-lg daisy-btn">ABSTAIN</button>
+              <button className="daisy-btn daisy-btn-lg">NO</button>
+              <button className="daisy-btn daisy-btn-lg">ABSTAIN</button>
             </div>
           </div>
         </div>

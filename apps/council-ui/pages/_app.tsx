@@ -4,16 +4,16 @@ import type { AppProps } from "next/app";
 import { ReactElement } from "react";
 import { wagmiClient } from "src/clients/wagmi";
 import { chains } from "src/provider";
-import { WagmiConfig } from "wagmi";
+import { useAccount, WagmiConfig } from "wagmi";
 import "src/styles/globals.css";
-import Image from "next/image";
 import Link from "next/link";
-import CouncilLogo from "src/static/council-logo.svg";
 import { councilConfigs } from "src/config/council.config";
 
 console.log(councilConfigs);
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
+  const { address } = useAccount();
+
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
@@ -53,7 +53,9 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                   <Link href="/voters">voters</Link>
                 </li>
                 <li>
-                  <Link href="/profile">profile</Link>
+                  <Link href={`/voters/details?address=${address}`}>
+                    profile
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -73,7 +75,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 <Link href="/voters">voters</Link>
               </li>
               <li>
-                <Link href="/profile">profile</Link>
+                <Link href={`/voters/details?address=${address}`}>profile</Link>
               </li>
             </ul>
           </div>
