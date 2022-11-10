@@ -94,11 +94,13 @@ export class Proposal extends Model {
     return data.expirationBlock > latestBlock && !(await this.getIsExecuted());
   }
 
-  async getIsExecuted(): Promise<boolean> {
-    // proposals are currently deleted from the contract once they're executed.
-    // There's also a ProposalExecuted event, but the id isn't indexed.
-    // TODO: How bad is it to query for all non-indexed events?
-    return !!(await this.getData());
+  async getIsExecuted(atBlock?: number): Promise<boolean> {
+    const deletedIds =
+      await this.votingContract.dataSource.getExecutedProposalIds(
+        undefined,
+        atBlock ?? (await this.context.provider.getBlockNumber()),
+      );
+    return deletedIds.includes(this.id);
   }
 
   async getVote(address: string): Promise<Vote> {
