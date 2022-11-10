@@ -1,5 +1,5 @@
 import LRUCache from "lru-cache";
-import { cached } from "src/utils/cached";
+import { cached, cachedKey } from "src/utils/cached";
 import { DataSource } from "./DataSource";
 
 // TODO: Add a clear entry method
@@ -21,5 +21,20 @@ export class CachedDataSource implements DataSource {
       cache: this.cache,
       callback,
     });
+  }
+
+  /**
+   * Delete all entries from the cache.
+   */
+  clearCached(): void {
+    return this.cache.clear();
+  }
+
+  /**
+   * Delete a single entry from the cache.
+   * @returns A boolean indicating the entry was successfully deleted
+   */
+  deleteCached(cacheKey?: string | any): boolean {
+    return this.cache.delete(cachedKey(cacheKey));
   }
 }
