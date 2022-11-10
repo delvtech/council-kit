@@ -65,13 +65,22 @@ export class CoreVotingContractDataSource
     });
   }
 
-  async getExecutedProposalIds(
+  getExecutedProposalIds(
     fromBlock?: number,
     toBlock?: number,
   ): Promise<number[]> {
-    const filter = this.contract.filters.ProposalExecuted();
-    const events = await this.contract.queryFilter(filter, fromBlock, toBlock);
-    return events.map(({ args }) => args.proposalId.toNumber());
+    return this.cached(
+      ["getExecutedProposalIds", fromBlock, toBlock],
+      async () => {
+        const filter = this.contract.filters.ProposalExecuted();
+        const events = await this.contract.queryFilter(
+          filter,
+          fromBlock,
+          toBlock,
+        );
+        return events.map(({ args }) => args.proposalId.toNumber());
+      },
+    );
   }
 
   async getVote(address: string, proposalId: number): Promise<VoteData> {
