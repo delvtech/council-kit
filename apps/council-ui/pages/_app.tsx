@@ -59,6 +59,7 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
                 </li>
               </ul>
             </div>
+            <div className="ml-2 whitespace-nowrap text-xl">council-ui 🫡</div>
             {/* <Link href="/">
               <Image alt="Council" src={CouncilLogo} width={200} height={52} />
             </Link> */}
