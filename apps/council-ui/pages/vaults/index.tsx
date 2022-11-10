@@ -1,16 +1,18 @@
+import { Container } from "components/base/Container";
 import Link from "next/link";
 import { ReactElement } from "react";
 
 export default function Vaults(): ReactElement {
   return (
-    <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
+    <Container>
       {/* Page Header */}
       <div>
-        <div className="text-2xl text-primary-content">Vaults</div>
-        <div className="text-secondary-content">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris
+        <div className="text-5xl text-accent-content">Vaults</div>
+        <div className="mt-6 text-lg text-accent-content ">
+          Voting Vaults provide the ability to assign voting power to specific
+          types of tokens/positions. The result is beautiful — governance users
+          can maximize capital efficiency while maintaining the ability to
+          delegate or vote when the time comes.
         </div>
       </div>
 
@@ -97,6 +99,6 @@ export default function Vaults(): ReactElement {
           </tr>
         </tbody>
       </table>
-    </div>
+    </Container>
   );
 }
