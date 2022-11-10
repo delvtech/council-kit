@@ -38,7 +38,14 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/vaults/details",
+                    query: { address: "0x0000" },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -49,7 +56,14 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/vaults/details",
+                    query: { address: "0x0000" },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -60,7 +74,14 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/vaults/details",
+                    query: { address: "0x0000" },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -71,7 +92,14 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/vaults/details",
+                    query: { address: "0x0000" },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -82,7 +110,14 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/vaults/details",
+                    query: { address: "0x0000" },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
@@ -93,7 +128,14 @@ export default function Vaults(): ReactElement {
             <td>50,000</td>
             <th>
               <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href="/vaults/0x0000000">▹</Link>
+                <Link
+                  href={{
+                    pathname: "/vaults/details",
+                    query: { address: "0x0000" },
+                  }}
+                >
+                  ▹
+                </Link>
               </button>
             </th>
           </tr>
