@@ -232,8 +232,8 @@ export default function VoterDetailsPage(): ReactElement {
         <div className="flex flex-col gap-y-4 sm:basis-[35%]">
           <div className="text-2xl font-bold">Voting Vault (6)</div>
           <div className="flex h-96 flex-col gap-y-4 overflow-auto pr-3">
-            <div className="flex flex-col gap-y-1">
-              <h3 className="font-bold underline">Locking Vault</h3>
+            <div className="flex flex-col gap-y-2">
+              <h3 className="text-xl font-bold underline">Locking Vault</h3>
               <div className="flex">
                 <p>Tokens Deposited</p>
                 <p className="ml-auto">6,000 ELFI</p>
@@ -252,8 +252,8 @@ export default function VoterDetailsPage(): ReactElement {
               </div>
             </div>
 
-            <div>
-              <h3 className="underline">Locking Vault</h3>
+            <div className="flex flex-col gap-y-2">
+              <h3 className="text-lg font-bold underline">Locking Vault</h3>
               <div className="flex">
                 <p>Tokens Deposited</p>
                 <p className="ml-auto">6,000 ELFI</p>
@@ -272,8 +272,8 @@ export default function VoterDetailsPage(): ReactElement {
               </div>
             </div>
 
-            <div>
-              <h3 className="underline">Locking Vault</h3>
+            <div className="flex flex-col gap-y-2">
+              <h3 className="text-lg font-bold underline">Locking Vault</h3>
               <div className="flex">
                 <p>Tokens Deposited</p>
                 <p className="ml-auto">6,000 ELFI</p>
@@ -292,8 +292,8 @@ export default function VoterDetailsPage(): ReactElement {
               </div>
             </div>
 
-            <div>
-              <h3 className="underline">Locking Vault</h3>
+            <div className="flex flex-col gap-y-2">
+              <h3 className="text-lg font-bold underline">Locking Vault</h3>
               <div className="flex">
                 <p>Tokens Deposited</p>
                 <p className="ml-auto">6,000 ELFI</p>
