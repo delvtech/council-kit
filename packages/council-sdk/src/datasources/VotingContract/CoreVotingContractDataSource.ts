@@ -65,6 +65,15 @@ export class CoreVotingContractDataSource
     });
   }
 
+  async getExecutedProposalIds(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<number[]> {
+    const filter = this.contract.filters.ProposalExecuted();
+    const events = await this.contract.queryFilter(filter, fromBlock, toBlock);
+    return events.map(({ args }) => args.proposalId.toNumber());
+  }
+
   async getVote(address: string, proposalId: number): Promise<VoteData> {
     const [power, ballotIndex] = await this.call("votes", [
       address,

@@ -30,6 +30,10 @@ export interface VotingContractDataSource {
     fromBlock?: number,
     toBlock?: number,
   ) => Promise<ProposalDataPreview[]>;
+  getExecutedProposalIds: (
+    fromBlock?: number,
+    toBlock?: number,
+  ) => Promise<number[]>;
   getVote: (address: string, proposalId: number) => Promise<VoteData>;
   getVotes: (
     address?: string,
