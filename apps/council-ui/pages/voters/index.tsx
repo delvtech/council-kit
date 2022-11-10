@@ -1,12 +1,13 @@
+import { Container } from "components/base/Container";
 import Link from "next/link";
 import { ReactElement } from "react";
 
 export default function Voters(): ReactElement {
   return (
-    <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
+    <Container>
       {/* Page Header */}
       <div className="flex w-full items-center gap-x-2">
-        <h1 className="w-full text-3xl text-primary-content">Voters</h1>
+        <h1 className="w-full text-5xl">Voters</h1>
 
         {/* Search Input Box */}
         <input
@@ -17,7 +18,7 @@ export default function Voters(): ReactElement {
 
         {/* Filter Dropdown */}
         <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn m-1">
+          <label tabIndex={0} className="daisy-btn-accent daisy-btn m-1">
             Filter
           </label>
           <ul
@@ -157,6 +158,6 @@ export default function Voters(): ReactElement {
           </tr>
         </tbody>
       </table>
-    </div>
+    </Container>
   );
 }
