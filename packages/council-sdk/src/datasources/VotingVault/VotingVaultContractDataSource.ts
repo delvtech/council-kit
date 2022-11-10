@@ -5,11 +5,11 @@ import {
 import { providers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
-import { VaultDataSource } from "./VotingVaultDataSource";
+import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
 export class VotingVaultContractDataSource
   extends ContractDataSource<IVotingVault>
-  implements VaultDataSource
+  implements VotingVaultDataSource
 {
   constructor(address: string, provider: providers.Provider) {
     super(IVotingVault__factory.connect(address, provider));
