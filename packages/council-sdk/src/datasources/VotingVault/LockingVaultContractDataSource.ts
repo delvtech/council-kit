@@ -12,7 +12,7 @@ export interface VoterWithPower {
   power: string;
 }
 
-export class LockingVaultDataSource extends VotingVaultContractDataSource {
+export class LockingVaultContractDataSource extends VotingVaultContractDataSource {
   contract: LockingVault;
 
   constructor(address: string, provider: providers.Provider) {

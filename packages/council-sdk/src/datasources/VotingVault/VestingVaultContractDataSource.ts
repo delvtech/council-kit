@@ -24,7 +24,7 @@ export interface VoterWithPower {
   power: string;
 }
 
-export class VestingVaultDataSource
+export class VestingVaultContractDataSource
   extends VotingVaultContractDataSource
   implements VotingVaultDataSource
 {
