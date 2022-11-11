@@ -1,26 +1,53 @@
 import { CouncilContext } from "src/context";
-import { VotingVault } from "./VotingVault";
+import { GSCVaultContractDataSource } from "src/datasources/VotingVault/GSCVaultContractDataSource";
+import { Voter } from "src/models/Voter";
+import { VotingVault, VotingVaultOptions } from "./VotingVault";
+
+interface GSCVaultOptions extends VotingVaultOptions {
+  dataSource?: GSCVaultContractDataSource;
+}
 
 export class GSCVault extends VotingVault {
-  constructor(address: string, context: CouncilContext, name = "GSC Vault") {
-    super(address, context, name);
+  dataSource: GSCVaultContractDataSource;
+
+  constructor(
+    address: string,
+    context: CouncilContext,
+    options?: GSCVaultOptions,
+  ) {
+    const { name = "GSC Vault", ...passThroughOptions } = options || {};
+    super(address, context, {
+      ...passThroughOptions,
+      name,
+    });
+    this.dataSource =
+      options?.dataSource ||
+      context.registerDataSource(
+        { address },
+        new GSCVaultContractDataSource(address, context.provider),
+      );
   }
 
-  async getRequiredVotingPower(): Promise<string> {
-    return "110000";
+  getRequiredVotingPower(): Promise<string> {
+    return this.dataSource.getRequiredVotingPower();
+  }
+
+  async getMembers(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
+    const addresses = await this.dataSource.getMembers(fromBlock, toBlock);
+    return addresses.map((address) => new Voter(address, this.context));
   }
 
   async getJoinDate(address: string): Promise<Date | null> {
-    return new Date();
+    const joinTimestamp = await this.dataSource.getJoinTimestamp(address);
+    return new Date(joinTimestamp);
   }
 
   async getIsMember(address: string): Promise<boolean> {
     return !!(await this.getJoinDate(address));
   }
 
-  async getIdleDuration(): Promise<number> {
-    // 4 days in ms
-    return 345600000;
+  getIdleDuration(): Promise<number> {
+    return this.dataSource.getIdleDuration();
   }
 
   async getIsIdle(address: string): Promise<boolean> {
