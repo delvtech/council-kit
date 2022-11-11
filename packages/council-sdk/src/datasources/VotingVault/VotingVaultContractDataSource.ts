@@ -1,4 +1,5 @@
 import {
+  GSCVault,
   IVotingVault,
   IVotingVault__factory,
 } from "@elementfi/council-typechain";
@@ -8,7 +9,7 @@ import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
 export class VotingVaultContractDataSource
-  extends ContractDataSource<IVotingVault>
+  extends ContractDataSource<IVotingVault | GSCVault>
   implements VotingVaultDataSource
 {
   constructor(address: string, provider: providers.Provider) {
