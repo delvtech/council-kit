@@ -72,7 +72,7 @@ export class VestingVaultContractDataSource
 
   getDelegatorsTo(
     address: string,
-    atBlock?: string,
+    atBlock?: number,
   ): Promise<VoterWithPower[]> {
     return this.cached(["getDelegatorsTo", address, atBlock], async () => {
       const filter = this.contract.filters.VoteChange(undefined, address);
