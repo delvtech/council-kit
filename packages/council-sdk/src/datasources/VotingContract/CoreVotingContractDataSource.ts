@@ -24,7 +24,7 @@ export class CoreVotingContractDataSource
   }
 
   async getProposalCount(): Promise<number> {
-    return await (await this.call("proposalCount", [])).toNumber();
+    return (await this.call("proposalCount", [])).toNumber();
   }
 
   async getProposal(id: number): Promise<ProposalData | null> {
