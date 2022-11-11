@@ -1,11 +1,11 @@
-import { Container } from "components/base/Container";
+import { Page } from "components/base/Page";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVaultHref } from "src/routing/makeRoute";
 
 export default function Vaults(): ReactElement {
   return (
-    <Container>
+    <Page>
       {/* Page Header */}
       <div>
         <div className="text-5xl text-accent-content">Vaults</div>
@@ -100,6 +100,6 @@ export default function Vaults(): ReactElement {
           </tr>
         </tbody>
       </table>
-    </Container>
+    </Page>
   );
 }

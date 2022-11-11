@@ -1,9 +1,9 @@
-import { Container } from "components/base/Container";
+import { Page } from "components/base/Page";
 import { ReactElement } from "react";
 
 export default function VoterDetailsPage(): ReactElement {
   return (
-    <Container>
+    <Page>
       {/* Header */}
       <div>
         <h1 className="w-full text-5xl text-accent-content">Vitalik.eth</h1>
@@ -313,6 +313,6 @@ export default function VoterDetailsPage(): ReactElement {
           </div>
         </div>
       </div>
-    </Container>
+    </Page>
   );
 }
