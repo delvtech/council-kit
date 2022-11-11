@@ -5,7 +5,7 @@ import { Voter } from "src/models/Voter";
 import { VotingVault, VotingVaultOptions } from "./VotingVault";
 
 interface LockingVaultOptions extends VotingVaultOptions {
-  dataSource: LockingVaultContractDataSource;
+  dataSource?: LockingVaultContractDataSource;
 }
 
 export class LockingVault extends VotingVault {
@@ -16,7 +16,11 @@ export class LockingVault extends VotingVault {
     context: CouncilContext,
     options?: LockingVaultOptions,
   ) {
-    super(address, context, options);
+    const { name = "Locking Vault", ...passThroughOptions } = options || {};
+    super(address, context, {
+      ...passThroughOptions,
+      name,
+    });
     this.dataSource =
       options?.dataSource ||
       context.registerDataSource(

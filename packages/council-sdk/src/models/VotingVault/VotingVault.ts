@@ -5,7 +5,7 @@ import { Model } from "src/models/Model";
 
 export interface VotingVaultOptions {
   name?: string;
-  dataSource: VotingVaultDataSource;
+  dataSource?: VotingVaultDataSource;
 }
 
 export class VotingVault extends Model {
@@ -17,7 +17,7 @@ export class VotingVault extends Model {
     context: CouncilContext,
     options?: VotingVaultOptions,
   ) {
-    super(context, options?.name);
+    super(context, options?.name ?? "Voting Vault");
     this.address = address;
     this.dataSource =
       options?.dataSource ||
