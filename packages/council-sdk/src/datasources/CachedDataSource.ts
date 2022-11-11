@@ -2,7 +2,6 @@ import LRUCache from "lru-cache";
 import { cached, cachedKey } from "src/utils/cached";
 import { DataSource } from "./DataSource";
 
-// TODO: Add a clear entry method
 export class CachedDataSource implements DataSource {
   cache: LRUCache<string, any>;
 
