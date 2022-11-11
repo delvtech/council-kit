@@ -26,7 +26,7 @@ export class VotingContract extends Model {
     context: CouncilContext,
     options?: VotingContractOptions,
   ) {
-    super(context, options?.name || "Core Voting");
+    super(context, options?.name ?? "Core Voting");
     this.address = address;
     this.vaults = vaults.map((vault) =>
       vault instanceof VotingVault
