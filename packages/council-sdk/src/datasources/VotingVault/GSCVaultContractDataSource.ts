@@ -1,5 +1,6 @@
 import { GSCVault, GSCVault__factory } from "@elementfi/council-typechain";
 import { providers } from "ethers";
+import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
@@ -9,6 +10,18 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource {
   constructor(address: string, provider: providers.Provider) {
     super(address, provider);
     this.contract = GSCVault__factory.connect(address, provider);
+  }
+
+  async getRequiredVotingPower(
+    this: ContractDataSource<GSCVault>,
+  ): Promise<string> {
+    const reqVotingPowerBigNumber = await this.call("votingPowerBound", []);
+    return formatEther(reqVotingPowerBigNumber);
+  }
+
+  async getIdleDuration(this: ContractDataSource<GSCVault>): Promise<number> {
+    const idleDurationBigNumber = await this.call("idleDuration", []);
+    return idleDurationBigNumber.toNumber() * 1000;
   }
 
   async getMembers(
@@ -31,11 +44,6 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource {
     address: string,
   ): Promise<number> {
     const joinDateBigNumber = await this.call("members", [address]);
-    return joinDateBigNumber.toNumber();
-  }
-
-  async getIdleDuration(this: ContractDataSource<GSCVault>): Promise<number> {
-    const idleDurationBigNumber = await this.call("idleDuration", []);
-    return idleDurationBigNumber.toNumber();
+    return joinDateBigNumber.toNumber() * 1000;
   }
 }
