@@ -38,6 +38,21 @@ export class ContractDataSource<
     });
   }
 
+  callStatic<K extends FunctionKeys<T["callStatic"]>>(
+    property: K,
+    args: T["callStatic"][K] extends AnyFunction
+      ? Parameters<T["callStatic"][K]>
+      : never,
+  ): T["callStatic"][K] extends AnyFunction
+    ? ReturnType<T["callStatic"][K]>
+    : never {
+    return this.cached([property, ...args], () => {
+      const contract = this.contract as T;
+      const fn = contract.callStatic[property as string] as AnyFunction;
+      return fn(...args);
+    });
+  }
+
   deleteCall<K extends FunctionKeys<T>>(
     property: K,
     args: T[K] extends AnyFunction ? Parameters<T[K]> : never,
