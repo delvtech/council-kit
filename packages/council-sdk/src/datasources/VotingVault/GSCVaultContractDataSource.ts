@@ -31,8 +31,8 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource {
   ): Promise<string[]> {
     return this.cached(["getMembers", fromBlock, toBlock], async () => {
       const filter = this.contract.filters.MembershipProved();
-      const memberShipProvedEvents = await this.contract.queryFilter(filter);
-      const memberAddresses = memberShipProvedEvents.map(
+      const membershipProvedEvents = await this.contract.queryFilter(filter);
+      const memberAddresses = membershipProvedEvents.map(
         ({ args }) => args.who,
       );
       return Array.from(new Set(memberAddresses));
