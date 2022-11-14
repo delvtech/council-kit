@@ -2,6 +2,7 @@ import { CouncilContext } from "src/context";
 import { LockingVaultContractDataSource } from "src/datasources/VotingVault/LockingVaultContractDataSource";
 import { Token } from "src/models/Token";
 import { Voter } from "src/models/Voter";
+import { sumStrings } from "src/utils/sumStrings";
 import { VotingVault, VotingVaultOptions } from "./VotingVault";
 
 interface LockingVaultOptions extends VotingVaultOptions {
@@ -46,6 +47,17 @@ export class LockingVault extends VotingVault {
     return votersWithPower.map(
       ({ address }) => new Voter(address, this.context),
     );
+  }
+
+  async getTotalVotingPower(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<string> {
+    const allVotersWithPower = await this.dataSource.getAllVotersWithPower(
+      fromBlock,
+      toBlock,
+    );
+    return sumStrings(allVotersWithPower.map(({ power }) => power));
   }
 
   getStaleBlockLag(): Promise<number> {

@@ -5,6 +5,7 @@ import {
 } from "src/datasources/VotingVault/VestingVaultContractDataSource";
 import { Token } from "src/models/Token";
 import { Voter } from "src/models/Voter";
+import { sumStrings } from "src/utils/sumStrings";
 import { VotingVault, VotingVaultOptions } from "./VotingVault";
 
 interface VestingVaultOptions extends VotingVaultOptions {
@@ -49,6 +50,17 @@ export class VestingVault extends VotingVault {
     return votersWithPower.map(
       ({ address }) => new Voter(address, this.context),
     );
+  }
+
+  async getTotalVotingPower(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<string> {
+    const allVotersWithPower = await this.dataSource.getAllVotersWithPower(
+      fromBlock,
+      toBlock,
+    );
+    return sumStrings(allVotersWithPower.map(({ power }) => power));
   }
 
   getStaleBlockLag(): Promise<number> {
