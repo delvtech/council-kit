@@ -1,8 +1,14 @@
+import { Proposal } from "@council/sdk";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeProposalHref } from "src/routing/makeRoute";
+import { useCouncil } from "src/ui/council/useCouncil";
+import { useQuery } from "wagmi";
+import { UseQueryResult } from "wagmi/dist/declarations/src/hooks/utils";
 
 export default function Proposals(): ReactElement {
+  const { data } = useProposalsPageData();
+  console.log({ data });
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
       {/* Page Header */}
@@ -10,7 +16,7 @@ export default function Proposals(): ReactElement {
         <h1 className="w-full text-5xl">Proposals</h1>
         {/* Sort Dropdown */}
         <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
+          <label tabIndex={0} className="daisy-btn-accent daisy-btn m-1">
             Sort
           </label>
           <ul
@@ -78,7 +84,7 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                 <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
@@ -92,7 +98,7 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                 <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
@@ -106,7 +112,7 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                 <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
@@ -120,7 +126,7 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                 <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
@@ -134,7 +140,7 @@ export default function Proposals(): ReactElement {
             <td>500,000 / 1.1m</td>
             <td>YES</td>
             <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                 <Link href={makeProposalHref("0x000000000000")}>▹</Link>
               </button>
             </th>
@@ -143,4 +149,11 @@ export default function Proposals(): ReactElement {
       </table>
     </div>
   );
+}
+
+function useProposalsPageData(): UseQueryResult<Proposal[], unknown> {
+  const council = useCouncil();
+  return useQuery(["proposalsPage"], {
+    queryFn: () => council.coreVoting.getProposals(),
+  });
 }
