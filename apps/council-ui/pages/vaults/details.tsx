@@ -1,9 +1,9 @@
-import { Container } from "components/base/Container";
+import { Page } from "components/base/Page";
 import { ReactElement } from "react";
 
 export default function Vault(): ReactElement {
   return (
-    <Container>
+    <Page>
       {/* Page Header */}
       <div>
         <h1 className="text-5xl text-accent-content underline">
@@ -83,7 +83,7 @@ export default function Vault(): ReactElement {
           </div>
 
           {/* Action Submit Button */}
-          <button className="daisy-btn daisy-btn-primary">Deposit</button>
+          <button className="daisy-btn-primary daisy-btn">Deposit</button>
         </div>
 
         {/* Change Delegate Column */}
@@ -109,9 +109,9 @@ export default function Vault(): ReactElement {
           </div>
 
           {/* Action Submit Button */}
-          <button className="daisy-btn daisy-btn-primary">Delegate</button>
+          <button className="daisy-btn-primary daisy-btn">Delegate</button>
         </div>
       </div>
-    </Container>
+    </Page>
   );
 }
