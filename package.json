@@ -9,7 +9,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel --filter=./apps/*",
-    "lint": "turbo run lint --filter=./apps/*",
+    "lint": "turbo run lint",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "postinstall": "husky install"
