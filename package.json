@@ -15,12 +15,18 @@
     "postinstall": "husky install"
   },
   "devDependencies": {
+    "@parcel/packager-ts": "2.8.0",
+    "@parcel/transformer-typescript-types": "2.8.0",
     "eslint-config-custom": "*",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "latest",
     "prettier-plugin-organize-imports": "^3.1.1",
-    "turbo": "latest"
+    "turbo": "latest",
+    "typescript": ">=3.0.0"
+  },
+  "resolutions": {
+    "typescript": "4.7.4"
   },
   "lint-staged": {
     "{apps,packages}/**/*.{gql,graphql,js,jsx,ts,tsx,json}": [
