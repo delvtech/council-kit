@@ -1,13 +1,17 @@
-import { Proposal } from "@council/sdk";
+import { Ballot, getBlockDate } from "@council/sdk";
 import Link from "next/link";
 import { ReactElement } from "react";
+import { makeEtherscanHref } from "src/paths/makeEtherscanHref";
 import { makeProposalHref } from "src/routing/makeRoute";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { formatAddress } from "src/ui/utils/formatAddress";
+import { useAccount } from "wagmi";
+import { formatBalance } from "src/ui/utils/formatBalance";
 
 export default function Proposals(): ReactElement {
-  const { data } = useProposalsPageData();
-  console.log({ data });
+  const { address } = useAccount();
+  const { data, isError, isLoading, error } = useProposalsPageData(address);
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
       {/* Page Header */}
@@ -75,84 +79,113 @@ export default function Proposals(): ReactElement {
 
         {/* Table Body */}
         <tbody>
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>1</td>
-            <td>Jan 1st, 2023</td>
-            <td>Jan 7nd, 2023</td>
-            <td>500,000 / 1.1m</td>
-            <td>YES</td>
-            <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>1</td>
-            <td>Jan 1st, 2023</td>
-            <td>Jan 7nd, 2023</td>
-            <td>500,000 / 1.1m</td>
-            <td>YES</td>
-            <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>1</td>
-            <td>Jan 1st, 2023</td>
-            <td>Jan 7nd, 2023</td>
-            <td>500,000 / 1.1m</td>
-            <td>YES</td>
-            <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>1</td>
-            <td>Jan 1st, 2023</td>
-            <td>Jan 7nd, 2023</td>
-            <td>500,000 / 1.1m</td>
-            <td>YES</td>
-            <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>1</td>
-            <td>Jan 1st, 2023</td>
-            <td>Jan 7nd, 2023</td>
-            <td>500,000 / 1.1m</td>
-            <td>YES</td>
-            <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                <Link href={makeProposalHref("0x000000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
+          {isLoading && (
+            <tr>
+              <td colSpan={7}>Loading...</td>
+            </tr>
+          )}
+          {isError && !isLoading && (
+            <tr>
+              <td colSpan={7}>
+                <div className="daisy-mockup-code">
+                  <pre className="text-error">
+                    <code>{error as string}</code>
+                  </pre>
+                </div>
+              </td>
+            </tr>
+          )}
+          {data &&
+            !isLoading &&
+            !isError &&
+            data.map(
+              ({
+                votingContract,
+                id,
+                created,
+                votingEnds,
+                requiredQuorum,
+                currentQuorum,
+                ballot,
+              }) => (
+                <tr key={`${votingContract}${id}`}>
+                  <th>
+                    <a
+                      href={makeEtherscanHref(votingContract)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {formatAddress(votingContract)}
+                    </a>
+                  </th>
+                  <td>{id}</td>
+                  <td>{created?.toLocaleDateString() ?? "🤷"}</td>
+                  <td>{votingEnds?.toLocaleDateString() ?? "🤷"}</td>
+                  <td>
+                    {formatBalance(currentQuorum, 0)} /{" "}
+                    {requiredQuorum ? formatBalance(requiredQuorum, 0) : "🤷"}
+                  </td>
+                  <td>{ballot}</td>
+                  <th>
+                    <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+                      <Link href={makeProposalHref("0x000000000000")}>▹</Link>
+                    </button>
+                  </th>
+                </tr>
+              ),
+            )}
         </tbody>
       </table>
     </div>
   );
 }
 
-function useProposalsPageData(): UseQueryResult<Proposal[], unknown> {
-  const council = useCouncil();
-  return useQuery(["proposalsPage"], {
-    queryFn: () => council.coreVoting.getProposals(),
+interface ProposalRowData {
+  votingContract: string;
+  id: number;
+  created: Date | null;
+  votingEnds: Date | null;
+  currentQuorum: string;
+  requiredQuorum: string | null;
+  ballot: Ballot;
+}
+
+function useProposalsPageData(
+  account: string | undefined,
+): UseQueryResult<ProposalRowData[], unknown> {
+  const { context, coreVoting, gscVoting } = useCouncil();
+  return useQuery(["proposalsPage", account], {
+    enabled: !!account,
+    queryFn: async () => {
+      let allProposals = await coreVoting.getProposals();
+
+      if (gscVoting) {
+        const gscProposals = await gscVoting.getProposals();
+        allProposals = [...allProposals, ...gscProposals];
+      }
+
+      return await Promise.all(
+        allProposals.map(async (proposal) => {
+          const createdBlock = await proposal.getCreatedBlock();
+          const expirationBlock = await proposal.getExpirationBlock();
+          const { ballot } = await proposal.getVote(account as string);
+          return {
+            votingContract: proposal.votingContract.address,
+            id: proposal.id,
+            created:
+              createdBlock &&
+              (await getBlockDate(createdBlock, context.provider)),
+            votingEnds:
+              expirationBlock &&
+              (await getBlockDate(expirationBlock, context.provider, {
+                estimateFutureDates: true,
+              })),
+            currentQuorum: await proposal.getCurrentQuorum(),
+            requiredQuorum: await proposal.getRequiredQuorum(),
+            ballot: ballot,
+          };
+        }),
+      );
+    },
   });
 }
