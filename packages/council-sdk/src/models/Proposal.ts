@@ -22,12 +22,12 @@ export interface ProposalOptions {
 export class Proposal extends Model {
   id: number;
   votingContract: VotingContract;
-  hash?: string;
-  requiredQuorum?: string;
-  createdBlock?: number;
-  unlockBlock?: number;
-  expirationBlock?: number;
-  lastCallBlock?: number;
+  private hash?: string;
+  private requiredQuorum?: string;
+  private createdBlock?: number;
+  private unlockBlock?: number;
+  private expirationBlock?: number;
+  private lastCallBlock?: number;
 
   constructor(
     id: number,
@@ -77,6 +77,36 @@ export class Proposal extends Model {
       expirationBlock: this.expirationBlock || dataPreview?.expirationBlock,
       lastCallBlock: this.lastCallBlock || dataPreview?.lastCallBlock,
     };
+  }
+
+  async getHash(): Promise<string | null> {
+    const data = await this.getData();
+    return data?.hash || null;
+  }
+
+  async getRequiredQuorum(): Promise<string | null> {
+    const data = await this.getData();
+    return data?.requiredQuorum || null;
+  }
+
+  async getCreatedBlock(): Promise<number | null> {
+    const data = await this.getData();
+    return data?.createdBlock || null;
+  }
+
+  async getUnlockBlock(): Promise<number | null> {
+    const data = await this.getData();
+    return data?.unlockBlock || null;
+  }
+
+  async getExpirationBlock(): Promise<number | null> {
+    const data = await this.getData();
+    return data?.expirationBlock || null;
+  }
+
+  async getLastCallBlock(): Promise<number | null> {
+    const data = await this.getData();
+    return data?.lastCallBlock || null;
   }
 
   /**
