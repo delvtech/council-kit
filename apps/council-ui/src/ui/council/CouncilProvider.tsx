@@ -3,7 +3,7 @@ import { getCouncilClient } from "src/clients/council";
 import { SupportedChainId } from "src/config/council.config";
 import { chains } from "src/provider";
 import { useNetwork } from "wagmi";
-import { CouncilClientContext } from "./context";
+import { CouncilClientContext } from "./CouncilClientContext";
 
 export function CouncilClientProvider({
   children,
