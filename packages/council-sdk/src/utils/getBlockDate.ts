@@ -32,7 +32,7 @@ export async function getBlockDate<TEstimate extends boolean = false>(
     options || {};
   const block = await provider.getBlock(blockNumber);
   if (block) {
-    new Date(block.timestamp * 1000);
+    return new Date(block.timestamp * 1000);
   } else if (estimateFutureDates) {
     const latestBlock = await provider.getBlockNumber();
     const secondsLeft = (blockNumber - latestBlock) * blockTime;
