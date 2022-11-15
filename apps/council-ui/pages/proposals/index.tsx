@@ -7,6 +7,7 @@ import { useCouncil } from "src/ui/council/useCouncil";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { formatAddress } from "src/ui/utils/formatAddress";
 import { useAccount } from "wagmi";
+import { formatBalance } from "src/ui/utils/formatBalance";
 
 export default function Proposals(): ReactElement {
   const { address } = useAccount();
@@ -86,7 +87,7 @@ export default function Proposals(): ReactElement {
           {isError && !isLoading && (
             <tr>
               <td colSpan={7}>
-                <div className="mockup-code">
+                <div className="daisy-mockup-code">
                   <pre className="text-error">
                     <code>{error as string}</code>
                   </pre>
@@ -121,7 +122,8 @@ export default function Proposals(): ReactElement {
                   <td>{created?.toLocaleDateString() ?? "🤷"}</td>
                   <td>{votingEnds?.toLocaleDateString() ?? "🤷"}</td>
                   <td>
-                    {currentQuorum} / {requiredQuorum}
+                    {formatBalance(currentQuorum, 0)} /{" "}
+                    {requiredQuorum ? formatBalance(requiredQuorum, 0) : "🤷"}
                   </td>
                   <td>{ballot}</td>
                   <th>

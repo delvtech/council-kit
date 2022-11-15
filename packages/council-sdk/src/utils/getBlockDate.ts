@@ -12,7 +12,7 @@ export interface GetBlockDateOptions<TEstimate extends boolean = false> {
   estimateFutureDates?: TEstimate;
   /**
    * The number of seconds it takes to mine a block; used when estimating the
-   * date of a block that hasn't been mined yet. Defaults to 12.05
+   * date of a block that hasn't been mined yet. Defaults to 12.07
    */
   blockTime?: number;
 }
