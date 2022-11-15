@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "build:packages": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev --parallel --filter=./apps/*",
     "lint": "turbo run lint",
     "format": "turbo run format",

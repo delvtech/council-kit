@@ -5,6 +5,9 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"]
     },
+    "build:packages": {
+      "outputs": ["dist/**"]
+    },
     "council-ui#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**"],
@@ -18,6 +21,7 @@
       "env": ["PROVIDER_URI"]
     },
     "lint": {
+      "dependsOn": ["build:packages"],
       "outputs": []
     },
     "dev": {
