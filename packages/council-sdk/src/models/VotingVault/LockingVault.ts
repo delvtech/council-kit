@@ -1,36 +1,86 @@
 import { CouncilContext } from "src/context";
+import { LockingVaultContractDataSource } from "src/datasources/VotingVault/LockingVaultContractDataSource";
 import { Token } from "src/models/Token";
-import { VotingVault } from "./VotingVault";
+import { Voter } from "src/models/Voter";
+import { sumStrings } from "src/utils/sumStrings";
+import { VotingVault, VotingVaultOptions } from "./VotingVault";
+
+interface LockingVaultOptions extends VotingVaultOptions {
+  dataSource?: LockingVaultContractDataSource;
+}
 
 export class LockingVault extends VotingVault {
+  dataSource: LockingVaultContractDataSource;
+
   constructor(
     address: string,
     context: CouncilContext,
-    name = "Locking Vault",
+    options?: LockingVaultOptions,
   ) {
-    super(address, context, name);
+    const { name = "Locking Vault", ...passThroughOptions } = options || {};
+    super(address, context, {
+      ...passThroughOptions,
+      name,
+    });
+    this.dataSource =
+      options?.dataSource ||
+      context.registerDataSource(
+        { address },
+        new LockingVaultContractDataSource(address, context.provider),
+      );
   }
 
   async getToken(): Promise<Token> {
-    return new Token(
-      "0x2b1a91De5B9C3Ad6439eeAeD0E481F8cf6E22601",
-      this.context,
+    const address = await this.dataSource.getToken();
+    return new Token(address, this.context);
+  }
+
+  getDepositedBalance(address: string): Promise<string> {
+    return this.dataSource.getDepositedBalance(address);
+  }
+
+  async getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
+    const votersWithPower = await this.dataSource.getAllVotersWithPower(
+      fromBlock,
+      toBlock,
+    );
+    return votersWithPower.map(
+      ({ address }) => new Voter(address, this.context),
     );
   }
 
-  async getDepositedBalance(address: string): Promise<string> {
-    return "10000";
+  async getTotalVotingPower(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<string> {
+    const allVotersWithPower = await this.dataSource.getAllVotersWithPower(
+      fromBlock,
+      toBlock,
+    );
+    return sumStrings(allVotersWithPower.map(({ power }) => power));
   }
 
-  async getStaleBlockLag(): Promise<number> {
-    return 200000;
+  getStaleBlockLag(): Promise<number> {
+    return this.dataSource.getStaleBlockLag();
   }
 
-  // will use queryVotePowerView
   async getHistoricalVotingPower(
     address: string,
     atBlock?: number,
   ): Promise<string> {
-    return "100000";
+    return this.dataSource.getHistoricalVotingPower(
+      address,
+      atBlock ?? (await this.context.provider.getBlockNumber()),
+    );
+  }
+
+  async getDelegate(address: string): Promise<Voter> {
+    const delegateAddress = await this.dataSource.getDelegate(address);
+    return new Voter(delegateAddress, this.context);
+  }
+
+  async getDelegatorsTo(address: string, atBlock?: number): Promise<Voter[]> {
+    const delegators = await this.dataSource.getDelegatorsTo(address, atBlock);
+    return delegators.map(({ address }) => new Voter(address, this.context));
   }
 }

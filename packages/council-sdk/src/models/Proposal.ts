@@ -2,12 +2,12 @@ import { CouncilContext } from "src/context";
 import { Model } from "./Model";
 import { Vote } from "./Vote";
 import { VotingContract } from "./VotingContract/VotingContract";
-import { formatEther, parseEther } from "ethers/lib/utils";
 import {
   ProposalData,
   VoteResults,
 } from "src/datasources/VotingContract/VotingContractDataSource";
 import { Voter } from "./Voter";
+import { sumStrings } from "src/utils/sumStrings";
 
 export interface ProposalOptions {
   hash?: string;
@@ -140,11 +140,7 @@ export class Proposal extends Model {
 
   async getCurrentQuorum(): Promise<string> {
     const results = await this.getResults();
-    const totalPowerVoted = parseEther("0");
-    for (const power of Object.values(results)) {
-      totalPowerVoted.add(parseEther(power));
-    }
-    return formatEther(totalPowerVoted);
+    return sumStrings(Object.values(results));
   }
 
   async getIsExecutable(): Promise<boolean> {

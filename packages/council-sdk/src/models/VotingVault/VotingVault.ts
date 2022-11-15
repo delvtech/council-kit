@@ -1,42 +1,38 @@
 import { CouncilContext } from "src/context";
+import { VotingVaultContractDataSource } from "src/datasources/VotingVault/VotingVaultContractDataSource";
+import { VotingVaultDataSource } from "src/datasources/VotingVault/VotingVaultDataSource";
 import { Model } from "src/models/Model";
-import { Voter } from "src/models/Voter";
+
+export interface VotingVaultOptions {
+  name?: string;
+  dataSource?: VotingVaultDataSource;
+}
 
 export class VotingVault extends Model {
   address: string;
+  dataSource: VotingVaultDataSource;
 
-  constructor(address: string, context: CouncilContext, name = "Voting Vault") {
-    super(context, name);
+  constructor(
+    address: string,
+    context: CouncilContext,
+    options?: VotingVaultOptions,
+  ) {
+    super(context, options?.name ?? "Voting Vault");
     this.address = address;
+    this.dataSource =
+      options?.dataSource ||
+      this.context.registerDataSource(
+        {
+          address,
+        },
+        new VotingVaultContractDataSource(address, context.provider),
+      );
   }
 
-  async getTotalVotingPower(atBlock?: number): Promise<string> {
-    return "1000000";
-  }
-
-  // will use callStatic.queryVotePower to only return actionable voting power.
   async getVotingPower(address: string, atBlock?: number): Promise<string> {
-    return "100000";
-  }
-
-  async getVoters(): Promise<Voter[]> {
-    return [
-      new Voter("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", this.context),
-      new Voter("0x70997970c51812dc3a010c7d01b50e0d17dc79c8", this.context),
-    ];
-  }
-
-  async getDelegate(address: string): Promise<Voter> {
-    return new Voter(
-      "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
-      this.context,
+    return this.dataSource.getVotingPower(
+      address,
+      atBlock ?? (await this.context.provider.getBlockNumber()),
     );
-  }
-
-  async getDelegatorsTo(address: string, atBlock?: number): Promise<Voter[]> {
-    return [
-      new Voter("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", this.context),
-      new Voter("0x70997970c51812dc3a010c7d01b50e0d17dc79c8", this.context),
-    ];
   }
 }
