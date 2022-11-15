@@ -16,15 +16,14 @@ export interface CouncilClient {
 }
 
 export function getCouncilClient(chainId: SupportedChainId): CouncilClient {
-  const provider = getProvider({ chainId });
   const config = councilConfigs[chainId];
-
   if (!config) {
     throw new Error(
-      `Attempted to create a council client with Chain ID ${chainId}, but no config was found. See src/config.`,
+      `Attempted to create a Council client with Chain ID ${chainId}, but no config was found. See src/config.`,
     );
   }
 
+  const provider = getProvider({ chainId });
   const context = new CouncilContext(provider);
 
   const coreVotingVaults = config.coreVoting.vaults.map(({ type, address }) => {
@@ -36,26 +35,22 @@ export function getCouncilClient(chainId: SupportedChainId): CouncilClient {
     }
   });
 
-  const coreVoting = new VotingContract(
-    config.coreVoting.address,
-    coreVotingVaults,
+  const client: CouncilClient = {
     context,
-  );
-
-  if (!config.gscVoting) {
-    return {
-      context,
-      coreVoting,
-    };
-  }
-
-  return {
-    context,
-    coreVoting,
-    gscVoting: new GSCVotingContract(
-      config.gscVoting.address,
-      new GSCVault(config.gscVoting.vaults[0].address, context),
+    coreVoting: new VotingContract(
+      config.coreVoting.address,
+      coreVotingVaults,
       context,
     ),
   };
+
+  if (config.gscVoting) {
+    client.gscVoting = new GSCVotingContract(
+      config.gscVoting.address,
+      new GSCVault(config.gscVoting.vaults[0].address, context),
+      context,
+    );
+  }
+
+  return client;
 }
