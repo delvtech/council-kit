@@ -1,9 +1,7 @@
-import { getDefaultProvider, providers } from "ethers";
+import { providers } from "ethers";
 import { DataSource } from "./datasources/DataSource";
 
 export interface CouncilContextOptions {
-  chainId?: number;
-  provider?: providers.Provider;
   dataSources?: DataSource[];
 }
 
@@ -14,23 +12,12 @@ export interface CouncilContextOptions {
  * data sources.
  */
 export class CouncilContext {
-  chainId: number;
   provider: providers.Provider;
   dataSources: DataSource[];
 
-  constructor({
-    chainId = 1,
-    provider,
-    dataSources = [],
-  }: CouncilContextOptions) {
-    this.chainId = chainId;
-    if (!provider) {
-      console.warn(
-        "You are using the default provider, subject to rate limiting.",
-      );
-    }
-    this.provider = provider ?? getDefaultProvider(chainId);
-    this.dataSources = dataSources;
+  constructor(provider: providers.Provider, options?: CouncilContextOptions) {
+    this.provider = provider;
+    this.dataSources = options?.dataSources || [];
   }
 
   /**

@@ -9,27 +9,36 @@ const configuredChains = allChains.filter((chain) => {
 
 const configuredProviders = configuredChains.map((chain) => {
   if (chain.id === 1) {
-    console.error(
-      "Chain ID 1 (mainnet) exists in council.config.ts, but no provider was given, see .env",
-    );
+    const mainnetAlchemyKey = process.env.NEXT_PUBLIC_MAINNET_ALCHEMY_KEY;
+    if (!mainnetAlchemyKey) {
+      console.error(
+        "Chain ID 1 (mainnet) exists in council.config.ts, but no provider was given, see .env",
+      );
+    }
     return alchemyProvider({
       apiKey: process.env.NEXT_PUBLIC_MAINNET_ALCHEMY_KEY,
     });
   }
 
   if (chain.id === 5) {
-    console.error(
-      "Chain ID 5 (goerli) exists in council.config.ts, but no provider was given, see .env",
-    );
+    const goerliAlchemyKey = process.env.NEXT_PUBLIC_GOERLI_ALCHEMY_KEY;
+    if (!goerliAlchemyKey) {
+      console.error(
+        "Chain ID 5 (goerli) exists in council.config.ts, but no provider was given, see .env",
+      );
+    }
     return alchemyProvider({
       apiKey: process.env.NEXT_PUBLIC_GOERLI_ALCHEMY_KEY,
     });
   }
 
   if (chain.id === 31337) {
-    console.error(
-      "Chain ID 31337 (hardhat/foundry) exists in council.config.ts, but no provider was given, see .env",
-    );
+    const localURL = process.env.NEXT_PUBLIC_LOCAL_RPC_URL;
+    if (!localURL) {
+      console.error(
+        "Chain ID 31337 (hardhat/foundry) exists in council.config.ts, but no provider was given, see .env",
+      );
+    }
     const localRpcUrl = process.env.NEXT_PUBLIC_LOCAL_RPC_URL;
     if (localRpcUrl) {
       return jsonRpcProvider({
