@@ -21,7 +21,7 @@
       "env": ["PROVIDER_URI"]
     },
     "lint": {
-      "dependsOn": ["build:packages"],
+      "dependsOn": ["build"],
       "outputs": []
     },
     "dev": {
