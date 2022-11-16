@@ -1,5 +1,5 @@
 import { GSCVault, GSCVault__factory } from "@elementfi/council-typechain";
-import { providers } from "ethers";
+import { BigNumber, providers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
@@ -30,12 +30,38 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource {
     toBlock?: string | number,
   ): Promise<string[]> {
     return this.cached(["getMembers", fromBlock, toBlock], async () => {
-      const filter = this.contract.filters.MembershipProved();
-      const membershipProvedEvents = await this.contract.queryFilter(filter);
-      const memberAddresses = membershipProvedEvents.map(
-        ({ args }) => args.who,
+      const latestJoinTimestampByMember: Record<string, BigNumber> = {};
+      const joinEvents = await this.contract.queryFilter(
+        this.contract.filters.MembershipProved(),
+        fromBlock,
+        toBlock,
       );
-      return Array.from(new Set(memberAddresses));
+      for (const { args } of joinEvents) {
+        const { who, when } = args;
+        if (
+          !latestJoinTimestampByMember[who] ||
+          when.gt(latestJoinTimestampByMember[who])
+        ) {
+          latestJoinTimestampByMember[who] = when;
+        }
+      }
+      const kickEvents = await this.contract.queryFilter(
+        this.contract.filters.Kicked(),
+        fromBlock,
+        toBlock,
+      );
+      for (const { args } of kickEvents) {
+        const { who, when } = args;
+        if (
+          latestJoinTimestampByMember[who] &&
+          when.gt(latestJoinTimestampByMember[who])
+        ) {
+          // if they were kicked after their latest join timestamp, remove them
+          // from the record.
+          delete latestJoinTimestampByMember[who];
+        }
+      }
+      return Object.keys(latestJoinTimestampByMember).map((voter) => voter);
     });
   }
 
