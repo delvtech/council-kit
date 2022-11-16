@@ -26,7 +26,7 @@ export default function Vaults(): ReactElement {
       </div>
 
       {/* Vault Table */}
-      <table className="daisy-table-zebra daisy-table w-full min-w-fit">
+      <table className="w-full daisy-table-zebra daisy-table min-w-fit">
         {/* Table Headers */}
         <thead>
           <tr>
@@ -49,7 +49,7 @@ export default function Vaults(): ReactElement {
             <tr>
               <td colSpan={7}>
                 <div className="daisy-mockup-code">
-                  <code className="block whitespace-pre-wrap px-6 text-error">
+                  <code className="block px-6 whitespace-pre-wrap text-error">
                     {(error as any).toString()}
                   </code>
                 </div>
@@ -114,3 +114,101 @@ function useVaultsPageData(
     );
   });
 }
+interface VaultTableProps {
+  // TODO @cashd: replace with sdk types
+  vaults: Vault[];
+}
+
+function VaultTable({ vaults }: VaultTableProps) {
+  return (
+    <table className="w-full daisy-table-zebra daisy-table min-w-fit">
+      {/* Table Headers */}
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Name</th>
+          <th>total voting power</th>
+          <th>your voting power</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      {/* Table Body */}
+      <tbody>
+        {vaults.map((vault) => (
+          <VaultTableRow vault={vault} key={vault.address} />
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+interface VaultTableRowProps {
+  // TODO @cashd: replace with sdk types
+  vault: Vault;
+}
+
+function VaultTableRow({ vault }: VaultTableRowProps) {
+  return (
+    <tr>
+      {/* TODO @cashd: format units */}
+      <th className="underline">{vault.address}</th>
+      <td>{vault.name}</td>
+      <td>{vault.totalVotingPower}</td>
+      <td>{vault.yourVotingPower}</td>
+      <th>
+        <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+          <Link href={makeVaultHref(vault.address)}>▹</Link>
+        </button>
+      </th>
+    </tr>
+  );
+}
+
+// TODO @cashd: replace with sdk types
+interface Vault {
+  address: string;
+  name: string;
+  totalVotingPower: number;
+  yourVotingPower: number;
+}
+
+// TODO @cashd: remove stubbed data
+const mockVaults: Vault[] = [
+  {
+    address: "0x200...000",
+    name: "Locking Vault",
+    totalVotingPower: 1_000_000,
+    yourVotingPower: 50_000,
+  },
+  {
+    address: "0x300...000",
+    name: "Vesting Vault",
+    totalVotingPower: 1_000_000,
+    yourVotingPower: 50_000,
+  },
+  {
+    address: "0x400...000",
+    name: "GSC Vault",
+    totalVotingPower: 1_000_000,
+    yourVotingPower: 50_000,
+  },
+  {
+    address: "0x500...000",
+    name: "NFT Vault",
+    totalVotingPower: 1_000_000,
+    yourVotingPower: 50_000,
+  },
+  {
+    address: "0x600...000",
+    name: "GitHub Vault",
+    totalVotingPower: 1_000_000,
+    yourVotingPower: 50_000,
+  },
+  {
+    address: "0x700...000",
+    name: "DAO Contributor Vault",
+    totalVotingPower: 1_000_000,
+    yourVotingPower: 50_000,
+  },
+];
