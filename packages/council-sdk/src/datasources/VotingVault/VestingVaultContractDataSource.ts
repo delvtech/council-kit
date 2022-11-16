@@ -1,4 +1,5 @@
 import { VestingVault, VestingVault__factory } from "@council/typechain";
+import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/VestingVault.sol/VestingVault";
 import { BigNumber, providers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
@@ -72,9 +73,9 @@ export class VestingVaultContractDataSource
     atBlock?: number,
   ): Promise<VoterWithPower[]> {
     return this.cached(["getDelegatorsTo", address, atBlock], async () => {
-      const filter = this.contract.filters.VoteChange(undefined, address);
-      const voteChangeEvents = await this.contract.queryFilter(
-        filter,
+      const voteChangeEvents = await this.getVoteChangeEvents(
+        address,
+        undefined,
         undefined,
         atBlock,
       );
@@ -112,15 +113,15 @@ export class VestingVaultContractDataSource
   }
 
   async getAllVotersWithPower(
-    fromBlock?: string | number,
-    toBlock?: string | number,
+    fromBlock?: number,
+    toBlock?: number,
   ): Promise<VoterWithPower[]> {
     return this.cached(
       ["getAllVotersWithPower", fromBlock, toBlock],
       async () => {
-        const filter = this.contract.filters.VoteChange();
-        const voteChangeEvents = await this.contract.queryFilter(
-          filter,
+        const voteChangeEvents = await this.getVoteChangeEvents(
+          undefined,
+          undefined,
           fromBlock,
           toBlock,
         );
@@ -137,5 +138,17 @@ export class VestingVaultContractDataSource
           }));
       },
     );
+  }
+
+  getVoteChangeEvents(
+    to?: string,
+    from?: string,
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<VoteChangeEvent[]> {
+    return this.cached(["VoteChange", to, from, fromBlock, toBlock], () => {
+      const filter = this.contract.filters.VoteChange(to, from);
+      return this.contract.queryFilter(filter, fromBlock, toBlock);
+    });
   }
 }
