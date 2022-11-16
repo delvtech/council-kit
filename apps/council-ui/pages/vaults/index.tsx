@@ -9,9 +9,10 @@ import { formatAddress } from "src/ui/utils/formatAddress";
 import { formatBalance } from "src/ui/utils/formatBalance";
 import { useAccount } from "wagmi";
 
-export default function Vaults(): ReactElement {
+export default function VaultsPage(): ReactElement {
   const { address } = useAccount();
   const { data, isLoading, isError, error } = useVaultsPageData(address);
+
   return (
     <Page>
       {/* Page Header */}
@@ -25,63 +26,17 @@ export default function Vaults(): ReactElement {
         </div>
       </div>
 
-      {/* Vault Table */}
-      <table className="daisy-table-zebra daisy-table w-full min-w-fit">
-        {/* Table Headers */}
-        <thead>
-          <tr>
-            <th>Address</th>
-            <th>Name</th>
-            <th>total voting power</th>
-            <th>your voting power</th>
-            <th></th>
-          </tr>
-        </thead>
-
-        {/* Table Body */}
-        <tbody>
-          {isLoading && (
-            <tr>
-              <td colSpan={7}>Loading...</td>
-            </tr>
-          )}
-          {isError && !isLoading && (
-            <tr>
-              <td colSpan={7}>
-                <div className="daisy-mockup-code">
-                  <code className="block whitespace-pre-wrap px-6 text-error">
-                    {(error as any).toString()}
-                  </code>
-                </div>
-              </td>
-            </tr>
-          )}
-          {data &&
-            !isLoading &&
-            !isError &&
-            data.map(({ address, name, tvp, votingPower }) => (
-              <tr key={address}>
-                <th>
-                  <a
-                    href={makeEtherscanHref(address)}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {formatAddress(address)}
-                  </a>
-                </th>
-                <td>{name}</td>
-                <td>{tvp ? formatBalance(tvp, 0) : "🤷"}</td>
-                <td>{votingPower ? formatBalance(votingPower) : "🤷"}</td>
-                <th>
-                  <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-                    <Link href={makeVaultHref(address)}>▹</Link>
-                  </button>
-                </th>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {isError ? (
+        <div className="daisy-mockup-code">
+          <code className="block whitespace-pre-wrap px-6 text-error">
+            {error ? (error as any).toString() : "Unknown error"}
+          </code>
+        </div>
+      ) : isLoading ? (
+        <progress className="daisy-progress m-auto w-56 items-center"></progress>
+      ) : (
+        <VaultTable rowData={data} />
+      )}
     </Page>
   );
 }
@@ -113,4 +68,49 @@ function useVaultsPageData(
       }),
     );
   });
+}
+
+interface VaultTableProps {
+  rowData?: VaultRowData[];
+}
+
+function VaultTable({ rowData }: VaultTableProps) {
+  return (
+    <table className="daisy-table-zebra daisy-table w-full min-w-fit">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Name</th>
+          <th>total voting power</th>
+          <th>your voting power</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {rowData &&
+          rowData.map((data) => <VaultTableRow {...data} key={data.address} />)}
+      </tbody>
+    </table>
+  );
+}
+
+function VaultTableRow({ address, name, tvp, votingPower }: VaultRowData) {
+  return (
+    <tr key={address}>
+      <th>
+        <a href={makeEtherscanHref(address)} target="_blank" rel="noreferrer">
+          {formatAddress(address)}
+        </a>
+      </th>
+      <td>{name}</td>
+      <td>{tvp ? formatBalance(tvp, 0) : "🤷"}</td>
+      <td>{votingPower ? formatBalance(votingPower) : "🤷"}</td>
+      <th>
+        <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+          <Link href={makeVaultHref(address)}>▹</Link>
+        </button>
+      </th>
+    </tr>
+  );
 }

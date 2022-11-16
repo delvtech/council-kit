@@ -1,14 +1,14 @@
 import { Ballot, getBlockDate } from "@council/sdk";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { parseEther } from "ethers/lib/utils";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
 import { makeEtherscanHref } from "src/paths/makeEtherscanHref";
 import { makeProposalHref } from "src/routing/makeRoute";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { formatAddress } from "src/ui/utils/formatAddress";
-import { useAccount } from "wagmi";
 import { formatBalance } from "src/ui/utils/formatBalance";
-import { parseEther } from "ethers/lib/utils";
+import { useAccount } from "wagmi";
 
 enum SortField {
   CREATED = "Created",
@@ -43,8 +43,8 @@ export default function Proposals(): ReactElement {
       <div className="flex w-full items-center gap-x-2">
         <h1 className="w-full text-5xl">Proposals</h1>
         {/* Sort Dropdown */}
-        <div className="daisy-dropdown-end daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn-accent daisy-btn m-1">
+        <div className="daisy-dropdown daisy-dropdown-end">
+          <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
             Sort
           </label>
           <ul
@@ -151,7 +151,7 @@ export default function Proposals(): ReactElement {
                   </td>
                   <td>{ballot ?? "🤷"}</td>
                   <th>
-                    <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+                    <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                       <Link href={makeProposalHref("0x000000000000")}>▹</Link>
                     </button>
                   </th>

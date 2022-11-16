@@ -1,5 +1,5 @@
-import { commify } from "ethers/lib/utils";
 import { format } from "d3-format";
+import { commify } from "ethers/lib/utils";
 
 /**
  * Used for final balance presentation since it cuts off decimals

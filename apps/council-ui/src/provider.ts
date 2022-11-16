@@ -1,7 +1,7 @@
-import { configureChains, allChains, ChainProviderFn } from "wagmi";
+import { councilConfigs } from "src/config/council.config";
+import { allChains, ChainProviderFn, configureChains } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-import { councilConfigs } from "src/config/council.config";
 
 const configuredChains = allChains.filter((chain) => {
   return Object.keys(councilConfigs).includes(`${chain.id}`);
