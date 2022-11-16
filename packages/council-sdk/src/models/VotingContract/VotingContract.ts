@@ -9,7 +9,6 @@ import { VotingVault } from "src/models/VotingVault/VotingVault";
 import { parseEther } from "ethers/lib/utils";
 import { VotingContractDataSource } from "src/datasources/VotingContract/VotingContractDataSource";
 import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
-import { LockingVault } from "src/models/VotingVault/LockingVault";
 
 export interface VotingContractOptions {
   name?: string;
@@ -65,9 +64,7 @@ export class VotingContract extends Model {
   async getTotalVotingPower(atBlock?: number): Promise<string> {
     const vaultPowers = await Promise.all(
       this.vaults.map(
-        (vault) =>
-          (vault as LockingVault).getTotalVotingPower?.(undefined, atBlock) ||
-          "0",
+        (vault) => vault.getTotalVotingPower?.(undefined, atBlock) || "0",
       ),
     );
     return sumStrings(vaultPowers);
@@ -82,7 +79,7 @@ export class VotingContract extends Model {
 
   async getVoters(): Promise<Voter[]> {
     const vaultVoters = await Promise.all(
-      this.vaults.map((vault) => (vault as LockingVault).getVoters?.() || []),
+      this.vaults.map((vault) => vault.getVoters?.() || []),
     );
     const mergedVotersList = ([] as Voter[]).concat(...vaultVoters);
     return uniqBy<Voter>(mergedVotersList, (voter) => voter.address);

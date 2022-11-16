@@ -8,6 +8,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { formatAddress } from "src/ui/utils/formatAddress";
 import { useAccount } from "wagmi";
 import { formatBalance } from "src/ui/utils/formatBalance";
+import { parseEther } from "ethers/lib/utils";
 
 enum SortField {
   CREATED = "Created",
@@ -111,9 +112,9 @@ export default function Proposals(): ReactElement {
             <tr>
               <td colSpan={7}>
                 <div className="daisy-mockup-code">
-                  <pre className="text-error">
-                    <code>{error as string}</code>
-                  </pre>
+                  <code className="block whitespace-pre-wrap px-6 text-error">
+                    {(error as any).toString()}
+                  </code>
                 </div>
               </td>
             </tr>
@@ -148,7 +149,7 @@ export default function Proposals(): ReactElement {
                     {formatBalance(currentQuorum, 0)} /{" "}
                     {requiredQuorum ? formatBalance(requiredQuorum, 0) : "🤷"}
                   </td>
-                  <td>{ballot}</td>
+                  <td>{ballot ?? "🤷"}</td>
                   <th>
                     <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
                       <Link href={makeProposalHref("0x000000000000")}>▹</Link>
@@ -170,45 +171,42 @@ interface ProposalRowData {
   votingEnds: Date | null;
   currentQuorum: string;
   requiredQuorum: string | null;
-  ballot: Ballot;
+  ballot: Ballot | null;
 }
 
 function useProposalsPageData(
   account: string | undefined,
 ): UseQueryResult<ProposalRowData[], unknown> {
   const { context, coreVoting, gscVoting } = useCouncil();
-  return useQuery(["proposalsPage", account], {
-    enabled: !!account,
-    queryFn: async () => {
-      let allProposals = await coreVoting.getProposals();
+  return useQuery(["proposalsPage", account], async () => {
+    let allProposals = await coreVoting.getProposals();
 
-      if (gscVoting) {
-        const gscProposals = await gscVoting.getProposals();
-        allProposals = [...allProposals, ...gscProposals];
-      }
+    if (gscVoting) {
+      const gscProposals = await gscVoting.getProposals();
+      allProposals = [...allProposals, ...gscProposals];
+    }
 
-      return await Promise.all(
-        allProposals.map(async (proposal) => {
-          const createdBlock = await proposal.getCreatedBlock();
-          const expirationBlock = await proposal.getExpirationBlock();
-          const { ballot } = await proposal.getVote(account as string);
-          return {
-            votingContract: proposal.votingContract.address,
-            id: proposal.id,
-            created:
-              createdBlock &&
-              (await getBlockDate(createdBlock, context.provider)),
-            votingEnds:
-              expirationBlock &&
-              (await getBlockDate(expirationBlock, context.provider, {
-                estimateFutureDates: true,
-              })),
-            currentQuorum: await proposal.getCurrentQuorum(),
-            requiredQuorum: await proposal.getRequiredQuorum(),
-            ballot: ballot,
-          };
-        }),
-      );
-    },
+    return await Promise.all(
+      allProposals.map(async (proposal) => {
+        const createdBlock = await proposal.getCreatedBlock();
+        const expirationBlock = await proposal.getExpirationBlock();
+        const vote = account ? await proposal.getVote(account) : null;
+        return {
+          votingContract: proposal.votingContract.address,
+          id: proposal.id,
+          created:
+            createdBlock &&
+            (await getBlockDate(createdBlock, context.provider)),
+          votingEnds:
+            expirationBlock &&
+            (await getBlockDate(expirationBlock, context.provider, {
+              estimateFutureDates: true,
+            })),
+          currentQuorum: await proposal.getCurrentQuorum(),
+          requiredQuorum: await proposal.getRequiredQuorum(),
+          ballot: vote && parseEther(vote.power).gt(0) ? vote.ballot : null,
+        };
+      }),
+    );
   });
 }
