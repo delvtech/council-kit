@@ -9,7 +9,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: "0.8.15",
+        version: "0.8.3",
         settings: {
           optimizer: {
             enabled: true,
@@ -23,7 +23,6 @@ const config: HardhatUserConfig = {
     outDir: "src",
     target: "ethers-v5",
     alwaysGenerateOverloads: true,
-    externalArtifacts: ["externalArtifacts/*.json"],
   },
 };
 
