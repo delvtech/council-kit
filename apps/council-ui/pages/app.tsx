@@ -1,16 +1,16 @@
 import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
+import { QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
-import { ReactElement } from "react";
-import { wagmiClient } from "src/clients/wagmi";
-import { chains } from "src/provider";
-import { useAccount, WagmiConfig } from "wagmi";
 import Link from "next/link";
+import { ReactElement } from "react";
+import { reactQueryClient } from "src/clients/reactQuery";
+import { wagmiClient } from "src/clients/wagmi";
 import { councilConfigs } from "src/config/council.config";
+import { chains } from "src/provider";
 import { makeVoterHref } from "src/routing/makeRoute";
 import { CouncilClientProvider } from "src/ui/council/CouncilProvider";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { reactQueryClient } from "src/clients/reactQuery";
+import { useAccount, WagmiConfig } from "wagmi";
 
 console.log(councilConfigs);
 

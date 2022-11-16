@@ -4,8 +4,8 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import { makeEtherscanHref } from "src/paths/makeEtherscanHref";
 import { makeVaultHref } from "src/routing/makeRoute";
-import { formatAddress } from "src/ui/utils/formatAddress";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { formatAddress } from "src/ui/utils/formatAddress";
 import { formatBalance } from "src/ui/utils/formatBalance";
 import { useAccount } from "wagmi";
 

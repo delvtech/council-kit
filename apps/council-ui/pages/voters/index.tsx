@@ -19,7 +19,7 @@ export default function Voters(): ReactElement {
 
         {/* Filter Dropdown */}
         <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn-accent daisy-btn m-1">
+          <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
             Filter
           </label>
           <ul
@@ -59,7 +59,7 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
@@ -71,7 +71,7 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
@@ -83,7 +83,7 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
@@ -95,7 +95,7 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>
@@ -107,7 +107,7 @@ export default function Voters(): ReactElement {
             <td>1.02%</td>
             <td>90%</td>
             <th>
-              <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
+              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterHref("0x000000000")}>▹</Link>
               </button>
             </th>

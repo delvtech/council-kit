@@ -83,7 +83,7 @@ export default function Vault(): ReactElement {
           </div>
 
           {/* Action Submit Button */}
-          <button className="daisy-btn-primary daisy-btn">Deposit</button>
+          <button className="daisy-btn daisy-btn-primary">Deposit</button>
         </div>
 
         {/* Change Delegate Column */}
@@ -109,7 +109,7 @@ export default function Vault(): ReactElement {
           </div>
 
           {/* Action Submit Button */}
-          <button className="daisy-btn-primary daisy-btn">Delegate</button>
+          <button className="daisy-btn daisy-btn-primary">Delegate</button>
         </div>
       </div>
     </Page>
