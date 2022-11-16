@@ -1,7 +1,7 @@
-import { Page } from "components/base/Page";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVoterHref } from "src/routing/makeRoute";
+import { Page } from "src/ui/base/Page";
 
 export default function Voters(): ReactElement {
   return (

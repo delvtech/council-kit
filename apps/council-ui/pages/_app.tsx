@@ -1,4 +1,7 @@
+// disabling prettier organize imports plugin to preserve css import order
+// organize-imports-ignore
 import dynamic from "next/dynamic";
+import "@rainbow-me/rainbowkit/styles.css";
 import "src/styles/globals.css";
 
 // We import the root of the app dynamically to turn off SSR for the entire app tree

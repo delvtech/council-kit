@@ -1,8 +1,15 @@
 import { UrlObject } from "url";
 
+// WARN: Change prefix if forking application!
+const prefix = "/council-monorepo";
+
+function makeUrl(path: string) {
+  return `${prefix}/${path}`;
+}
+
 export function makeVoterHref(address: string): UrlObject {
   return {
-    pathname: "/voters/details",
+    pathname: makeUrl("voters/details"),
     query: {
       address,
     },
@@ -11,7 +18,7 @@ export function makeVoterHref(address: string): UrlObject {
 
 export function makeProposalHref(id: string): UrlObject {
   return {
-    pathname: "/proposals/details",
+    pathname: makeUrl("proposals/details"),
     query: {
       id,
     },
@@ -20,7 +27,7 @@ export function makeProposalHref(id: string): UrlObject {
 
 export function makeVaultHref(address: string): UrlObject {
   return {
-    pathname: "/vaults/details",
+    pathname: makeUrl("vaults/details"),
     query: {
       address,
     },

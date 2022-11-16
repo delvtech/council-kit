@@ -41,7 +41,7 @@ export default function Proposals(): ReactElement {
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
       {/* Page Header */}
       <div className="flex w-full items-center gap-x-2">
-        <h1 className="w-full text-5xl">Proposals</h1>
+        <h1 className="w-full text-5xl text-accent-content">Proposals</h1>
         {/* Sort Dropdown */}
         <div className="daisy-dropdown daisy-dropdown-end">
           <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
