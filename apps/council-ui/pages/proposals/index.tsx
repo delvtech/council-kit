@@ -25,10 +25,10 @@ export default function Proposals(): ReactElement {
     }
     switch (sortField) {
       case SortField.QUORUM:
-        return data.sort((a, b) => +b.currentQuorum - +a.currentQuorum);
+        return data.slice().sort((a, b) => +b.currentQuorum - +a.currentQuorum);
       case SortField.CREATED:
       default:
-        return data.sort((a, b) => {
+        return data.slice().sort((a, b) => {
           const aTime = a.created ? a.created.getTime() : 0;
           const bTime = b.created ? b.created.getTime() : 0;
           return bTime - aTime;
