@@ -18,6 +18,8 @@
       ]
     },
     "@council/sdk#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
       "env": ["PROVIDER_URI", "NODE_ENV"]
     },
     "lint": {

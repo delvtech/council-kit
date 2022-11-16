@@ -18,7 +18,7 @@
     "watch:example": "nodemon -r dotenv/config -r tsconfig-paths/register src/example/index.ts"
   },
   "dependencies": {
-    "@elementfi/council-typechain": "file:elementfi-council-typechain-v1.0.2.tgz",
+    "@council/typechain": "*",
     "fast-json-stable-stringify": "^2.1.0",
     "lodash.uniqby": "^4.7.0",
     "lru-cache": "^7.14.1"

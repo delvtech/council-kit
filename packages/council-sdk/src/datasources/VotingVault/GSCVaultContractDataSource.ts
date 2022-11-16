@@ -1,4 +1,4 @@
-import { GSCVault, GSCVault__factory } from "@elementfi/council-typechain";
+import { GSCVault, GSCVault__factory } from "@council/typechain";
 import { BigNumber, providers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";

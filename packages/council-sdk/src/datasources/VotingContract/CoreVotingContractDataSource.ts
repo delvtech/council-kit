@@ -1,4 +1,4 @@
-import { CoreVoting, CoreVoting__factory } from "@elementfi/council-typechain";
+import { CoreVoting, CoreVoting__factory } from "@council/typechain";
 import { providers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";

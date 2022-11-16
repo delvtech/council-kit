@@ -2,7 +2,7 @@ import { providers, Signer } from "ethers";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { TokenDataSource } from "./TokenDataSource";
-import { MockERC20, MockERC20__factory } from "@elementfi/council-typechain";
+import { MockERC20, MockERC20__factory } from "@council/typechain";
 
 export class ERC20ContractDataSource
   extends ContractDataSource<MockERC20>
