@@ -8,16 +8,6 @@ const config: HardhatUserConfig = {
   },
   solidity: {
     compilers: [
-      // {
-      //   version: "0.8.3",
-      //   settings: {
-      //     optimizer: {
-      //       enabled: true,
-      //       runs: 10000,
-      //       // runs: 7500,
-      //     },
-      //   },
-      // },
       {
         version: "0.8.15",
         settings: {
