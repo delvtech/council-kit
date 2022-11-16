@@ -26,19 +26,17 @@ export default function VaultsPage(): ReactElement {
         </div>
       </div>
 
-      {isError && !isLoading && (
+      {isError ? (
         <div className="daisy-mockup-code">
           <code className="block whitespace-pre-wrap px-6 text-error">
-            {(error as any).toString()}
+            {error ? (error as any).toString() : "Unknown error"}
           </code>
         </div>
-      )}
-
-      {isLoading && (
+      ) : isLoading ? (
         <progress className="daisy-progress m-auto w-56 items-center"></progress>
+      ) : (
+        <VaultTable rowData={data} />
       )}
-
-      {data && !isLoading && <VaultTable rowData={data} />}
     </Page>
   );
 }
@@ -78,7 +76,6 @@ interface VaultTableProps {
 function VaultTable({ rowData }: VaultTableProps) {
   return (
     <table className="daisy-table-zebra daisy-table w-full min-w-fit">
-      {/* Table Headers */}
       <thead>
         <tr>
           <th>Address</th>
@@ -89,7 +86,6 @@ function VaultTable({ rowData }: VaultTableProps) {
         </tr>
       </thead>
 
-      {/* Table Body */}
       <tbody>
         {rowData &&
           rowData.map((data) => <VaultTableRow {...data} key={data.address} />)}
