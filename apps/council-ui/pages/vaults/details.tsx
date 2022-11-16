@@ -1,5 +1,5 @@
-import { Page } from "components/base/Page";
 import { ReactElement } from "react";
+import { Page } from "src/ui/base/Page";
 
 export default function Vault(): ReactElement {
   return (

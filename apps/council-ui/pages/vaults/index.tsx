@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { Page } from "components/base/Page";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeEtherscanHref } from "src/paths/makeEtherscanHref";
 import { makeVaultHref } from "src/routing/makeRoute";
+import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { formatAddress } from "src/ui/utils/formatAddress";
 import { formatBalance } from "src/ui/utils/formatBalance";
