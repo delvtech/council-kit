@@ -2,7 +2,7 @@ import {
   GSCVault,
   IVotingVault,
   IVotingVault__factory,
-} from "@elementfi/council-typechain";
+} from "@council/typechain";
 import { ethers, providers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";

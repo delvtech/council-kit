@@ -1,7 +1,4 @@
-import {
-  VestingVault,
-  VestingVault__factory,
-} from "@elementfi/council-typechain";
+import { VestingVault, VestingVault__factory } from "@council/typechain";
 import { BigNumber, providers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";

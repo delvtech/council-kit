@@ -270,12 +270,6 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@elementfi/council-typechain@file:packages/council-sdk/elementfi-council-typechain-v1.0.2.tgz":
-  version "1.0.2"
-  resolved "file:packages/council-sdk/elementfi-council-typechain-v1.0.2.tgz#05fab18eb3d0c3e9296531c063bcfde5fb3faf25"
-  dependencies:
-    tsc "^2.0.3"
-
 "@emotion/hash@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
@@ -7496,7 +7490,7 @@ ts-node@^10.9.1:
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
 
-tsc@^2.0.3, tsc@^2.0.4:
+tsc@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/tsc/-/tsc-2.0.4.tgz#5f6499146abea5dca4420b451fa4f2f9345238f5"
   integrity sha512-fzoSieZI5KKJVBYGvwbVZs/J5za84f2lSTLPYf6AGiIf43tZ3GNrI1QzTLcjtyDDP4aLxd46RTZq1nQxe7+k5Q==
