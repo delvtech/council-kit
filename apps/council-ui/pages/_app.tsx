@@ -6,7 +6,7 @@ import "src/styles/globals.css";
 // https://nextjs.org/docs/messages/react-hydration-error errors
 // In production the app will be build using next export which is client-side rendering based.
 // Although for the development server we have to turn off SSR manually.
-const DynamicApp = dynamic(() => import("./app"), {
+const DynamicApp = dynamic(() => import("../src/ui/app"), {
   ssr: false,
 });
 

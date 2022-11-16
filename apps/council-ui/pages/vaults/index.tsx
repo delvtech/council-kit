@@ -69,6 +69,7 @@ function useVaultsPageData(
     );
   });
 }
+
 interface VaultTableProps {
   rowData?: VaultRowData[];
 }
