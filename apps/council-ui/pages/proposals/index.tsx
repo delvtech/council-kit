@@ -1,6 +1,6 @@
 import { Ballot, getBlockDate } from "@council/sdk";
 import Link from "next/link";
-import { ReactElement } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { makeEtherscanHref } from "src/paths/makeEtherscanHref";
 import { makeProposalHref } from "src/routing/makeRoute";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -9,16 +9,40 @@ import { formatAddress } from "src/ui/utils/formatAddress";
 import { useAccount } from "wagmi";
 import { formatBalance } from "src/ui/utils/formatBalance";
 
+enum SortField {
+  CREATED = "Created",
+  QUORUM = "Quorum",
+}
+
 export default function Proposals(): ReactElement {
   const { address } = useAccount();
   const { data, isError, isLoading, error } = useProposalsPageData(address);
+
+  const [sortField, setSortField] = useState(SortField.CREATED);
+  const sortedData = useMemo(() => {
+    if (!data) {
+      return data;
+    }
+    switch (sortField) {
+      case SortField.QUORUM:
+        return data.sort((a, b) => +b.currentQuorum - +a.currentQuorum);
+      case SortField.CREATED:
+      default:
+        return data.sort((a, b) => {
+          const aTime = a.created ? a.created.getTime() : 0;
+          const bTime = b.created ? b.created.getTime() : 0;
+          return bTime - aTime;
+        });
+    }
+  }, [sortField, data]);
+
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
       {/* Page Header */}
       <div className="flex w-full items-center gap-x-2">
         <h1 className="w-full text-5xl">Proposals</h1>
         {/* Sort Dropdown */}
-        <div className="daisy-dropdown">
+        <div className="daisy-dropdown-end daisy-dropdown">
           <label tabIndex={0} className="daisy-btn-accent daisy-btn m-1">
             Sort
           </label>
@@ -26,12 +50,11 @@ export default function Proposals(): ReactElement {
             tabIndex={0}
             className="daisy-dropdown-content daisy-menu rounded-box w-52 bg-base-100 p-2 shadow"
           >
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 2</a>
-            </li>
+            {Object.values(SortField).map((sortField) => (
+              <li key={sortField}>
+                <a onClick={() => setSortField(sortField)}>{sortField}</a>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -95,10 +118,10 @@ export default function Proposals(): ReactElement {
               </td>
             </tr>
           )}
-          {data &&
+          {sortedData &&
             !isLoading &&
             !isError &&
-            data.map(
+            sortedData.map(
               ({
                 votingContract,
                 id,
