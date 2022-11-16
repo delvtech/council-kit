@@ -13,10 +13,6 @@ export class Voter extends Model {
     this.address = address;
   }
 
-  async getEnsName(): Promise<string> {
-    return "vitalik.eth";
-  }
-
   async getVotingPower(vaults: string[], atBlock?: number): Promise<string> {
     const vaultPowers = vaults.map((address) => {
       const vault = new VotingVault(address, this.context);
