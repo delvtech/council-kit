@@ -11,8 +11,8 @@
     "load-contracts": "sh scripts/load-contracts.sh",
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
-    "build:dist": "tsc --project tsconfig.build.json",
-    "build": "npm run load-contracts && npm run clean && npm run compile && npm run build:dist"
+    "build:src": "npm run load-contracts && npm run clean && npm run compile",
+    "build": "tsc --project tsconfig.build.json"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
