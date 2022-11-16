@@ -42,4 +42,8 @@ export class GSCVotingContract extends VotingContract {
   getIsIdle(address: string): Promise<boolean> {
     return this.vaults[0].getIsIdle(address);
   }
+
+  getIsEligible(address: string): Promise<boolean> {
+    return this.vaults[0].getIsEligible(address);
+  }
 }
