@@ -11,6 +11,7 @@ module.exports = {
     "@council/eslint-config",
   ],
   rules: {
-    "tailwindcss/classnames-order": "off", // Disable ordering in favor of prettier plugin
+    "tailwindcss/classnames-order": "off", // Disable ordering in favor of prettier plugin,
+    "@typescript-eslint/no-non-null-assertion": "off", // non-null assertions are useful when working with hooks
   },
 };

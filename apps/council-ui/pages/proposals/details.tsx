@@ -1,30 +1,123 @@
+import { getBlockDate, Proposal, VotingContract } from "@council/sdk";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { useCouncil } from "src/ui/council/useCouncil";
+import QuorumBar from "src/ui/QuorumBar";
+import { useProvider } from "wagmi";
+
+function useProposal(
+  proposalId: number,
+  votingContract: VotingContract | string,
+) {
+  const { context } = useCouncil();
+  return useQuery(
+    [votingContract, proposalId],
+    async () => {
+      return new Proposal(proposalId, votingContract, context);
+    },
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
+}
+
+interface ProposalQuorum {
+  currentQuorum?: string | null;
+  requiredQuorum?: string | null;
+}
+
+function useProposalQuorum(proposal?: Proposal) {
+  return useQuery<ProposalQuorum>(
+    [proposal],
+    async () => {
+      const currentQuorum = await proposal!.getCurrentQuorum();
+      const requiredQuorum = await proposal!.getRequiredQuorum();
+      return {
+        currentQuorum,
+        requiredQuorum,
+      };
+    },
+    {
+      enabled: !!proposal,
+    },
+  );
+}
+
+function useProposalStats(proposal?: Proposal) {
+  const provider = useProvider();
+  return useQuery(
+    [proposal, !!proposal],
+    async () => {
+      const createdAt = await getBlockDate(
+        await +proposal!.getCreatedBlock(),
+        provider,
+      );
+
+      const endsAt = await getBlockDate(
+        await +proposal!.getExpirationBlock(),
+        provider,
+      );
+
+      const unlockedAt = await getBlockDate(
+        await +proposal!.getUnlockBlock(),
+        provider,
+      );
+
+      const lastCallAt = await getBlockDate(
+        await +proposal!.getLastCallBlock(),
+        provider,
+      );
+
+      return {
+        createdAt,
+        endsAt,
+        unlockedAt,
+        lastCallAt,
+      };
+    },
+    {
+      enabled: !!proposal,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false,
+    },
+  );
+}
 
 export default function ProposalPage(): ReactElement {
   const {
-    query: { id },
+    query: { coreVotingAddressParam, idParam },
   } = useRouter();
+
+  const proposalId = +(idParam as string);
+  const coreVotingAddress = coreVotingAddressParam as string;
+
+  const { data: proposal } = useProposal(proposalId, coreVotingAddress);
+
+  //console.log(proposal, !!proposal);
+  const { data: proposalQuorum } = useProposalQuorum(proposal);
+  //console.log(proposalQuorum);
+
+  const { data: stats } = useProposalStats(proposal);
 
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
       {/* Page Header */}
       <div className="flex w-full flex-wrap items-center gap-4">
         <h1 className="mb-4 whitespace-nowrap text-5xl text-accent-content underline">
-          Proposal {id}
+          Proposal {proposalId}
         </h1>
 
-        <div className="sm:ml-auto">
-          <div className="flex w-full">
-            <h3>QUORUM</h3>
-            <p className="ml-auto font-bold">500,000 / 1.1m</p>
+        {proposalQuorum?.currentQuorum && proposalQuorum?.requiredQuorum && (
+          <div className="sm:ml-auto">
+            <QuorumBar
+              current={proposalQuorum.currentQuorum}
+              required={proposalQuorum.requiredQuorum}
+            />
           </div>
-          <progress
-            className="flex-end shrink-1 daisy-progress daisy-progress-info w-48 bg-neutral sm:w-64"
-            value="50"
-            max="100"
-          ></progress>
-        </div>
+        )}
       </div>
 
       {/* Statistics Row */}
@@ -39,28 +132,36 @@ export default function ProposalPage(): ReactElement {
         <div className="daisy-stats">
           <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">Created</div>
-            <div className="daisy-stat-value text-sm">Nov 10, 2022</div>
+            <div className="daisy-stat-value text-sm">
+              {stats?.createdAt?.toLocaleDateString()}
+            </div>
           </div>
         </div>
 
         <div className="daisy-stats">
           <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">Voting Ends</div>
-            <div className="daisy-stat-value text-sm">Jan 12, 2022</div>
+            <div className="daisy-stat-value text-sm">
+              {stats?.endsAt?.toLocaleDateString()}
+            </div>
           </div>
         </div>
 
         <div className="daisy-stats">
           <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">Unlocked</div>
-            <div className="daisy-stat-value text-sm">Dec 12, 2022</div>
+            <div className="daisy-stat-value text-sm">
+              {stats?.unlockedAt?.toLocaleDateString()}
+            </div>
           </div>
         </div>
 
         <div className="daisy-stats">
           <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">Last Call</div>
-            <div className="daisy-stat-value text-sm">Feb 12, 2022</div>
+            <div className="daisy-stat-value text-sm">
+              {stats?.lastCallAt?.toLocaleDateString()}
+            </div>
           </div>
         </div>
       </div>
