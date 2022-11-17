@@ -1,13 +1,16 @@
 import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClientProvider } from "@tanstack/react-query";
+import classNames from "classnames";
 import type { AppProps } from "next/app";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { reactQueryClient } from "src/clients/reactQuery";
 import { wagmiClient } from "src/clients/wagmi";
 import { councilConfigs } from "src/config/council.config";
 import { chains } from "src/provider";
 import { makeVoterHref } from "src/routing/makeRoute";
+import { Pages } from "src/routing/Pages";
 import { CouncilClientProvider } from "src/ui/council/CouncilProvider";
 import { useAccount, WagmiConfig } from "wagmi";
 
@@ -15,6 +18,14 @@ console.log(councilConfigs);
 
 function App({ Component, pageProps }: AppProps): ReactElement {
   const { address } = useAccount();
+
+  const { pathname } = useRouter();
+  let activePage: Pages = Pages.PROPOSALS;
+  if (pathname.startsWith(Pages.VAULTS)) {
+    activePage = Pages.VAULTS;
+  } else if (pathname.startsWith(Pages.VOTERS)) {
+    activePage = Pages.VOTERS;
+  }
 
   return (
     <WagmiConfig client={wagmiClient}>
@@ -73,13 +84,34 @@ function App({ Component, pageProps }: AppProps): ReactElement {
               <div className="daisy-navbar-center hidden lg:flex">
                 <ul className="daisy-menu daisy-menu-horizontal p-0">
                   <li>
-                    <Link href="/proposals">proposals</Link>
+                    <Link
+                      className={classNames({
+                        "daisy-active": activePage === Pages.PROPOSALS,
+                      })}
+                      href="/proposals"
+                    >
+                      proposals
+                    </Link>
                   </li>
                   <li>
-                    <Link href="/vaults">vaults</Link>
+                    <Link
+                      className={classNames({
+                        "daisy-active": activePage === Pages.VAULTS,
+                      })}
+                      href="/vaults"
+                    >
+                      vaults
+                    </Link>
                   </li>
                   <li>
-                    <Link href="/voters">voters</Link>
+                    <Link
+                      className={classNames({
+                        "daisy-active": activePage === Pages.VOTERS,
+                      })}
+                      href="/voters"
+                    >
+                      voters
+                    </Link>
                   </li>
                   {address && (
                     <li>
@@ -103,3 +135,6 @@ function App({ Component, pageProps }: AppProps): ReactElement {
 }
 
 export default App;
+function classnames(arg0: any): string | undefined {
+  throw new Error("Function not implemented.");
+}
