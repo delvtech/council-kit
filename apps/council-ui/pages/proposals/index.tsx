@@ -10,38 +10,22 @@ import { formatAddress } from "src/ui/utils/formatAddress";
 import { formatBalance } from "src/ui/utils/formatBalance";
 import { useAccount } from "wagmi";
 
-enum SortField {
-  CREATED = "Created",
-  QUORUM = "Quorum",
-}
-
-export default function Proposals(): ReactElement {
+export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
   const { data, isError, isLoading, error } = useProposalsPageData(address);
 
   const [sortField, setSortField] = useState(SortField.CREATED);
-  const sortedData = useMemo(() => {
-    if (!data) {
-      return data;
-    }
-    switch (sortField) {
-      case SortField.QUORUM:
-        return data.slice().sort((a, b) => +b.currentQuorum - +a.currentQuorum);
-      case SortField.CREATED:
-      default:
-        return data.slice().sort((a, b) => {
-          const aTime = a.created ? a.created.getTime() : 0;
-          const bTime = b.created ? b.created.getTime() : 0;
-          return bTime - aTime;
-        });
-    }
-  }, [sortField, data]);
+  const sortedData = useMemo(
+    () => sortProposalRowData(sortField, data),
+    [sortField, data],
+  );
 
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
       {/* Page Header */}
       <div className="flex w-full items-center gap-x-2">
         <h1 className="w-full text-5xl text-accent-content">Proposals</h1>
+
         {/* Sort Dropdown */}
         <div className="daisy-dropdown daisy-dropdown-end">
           <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
@@ -52,115 +36,95 @@ export default function Proposals(): ReactElement {
             className="daisy-dropdown-content daisy-menu rounded-box w-52 bg-base-100 p-2 shadow"
           >
             {Object.values(SortField).map((sortField) => (
-              <li key={sortField}>
+              <li key={`proposalSortField-${sortField}`}>
                 <a onClick={() => setSortField(sortField)}>{sortField}</a>
               </li>
             ))}
           </ul>
         </div>
-
-        {/* Add Proposal Button */}
-        {/* <button className="p-4 daisy-btn-outline daisy-btn daisy-btn-circle">
-          <svg
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <line
-              x1="0"
-              y1="20"
-              x2="40"
-              y2="20"
-              strokeWidth={5}
-              className="stroke-primary-content"
-            ></line>
-            <line
-              x1="20"
-              y1="0"
-              x2="20"
-              y2="40"
-              strokeWidth={5}
-              className="stroke-primary-content"
-            ></line>
-          </svg>
-        </button> */}
       </div>
 
-      {/* Voters Table */}
-      <table className="daisy-table-zebra daisy-table w-full min-w-fit">
-        {/* Table Header */}
-        <thead>
-          <tr>
-            <th>Voting Contract</th>
-            <th>ID</th>
-            <th>Created</th>
-            <th>Voting Ends</th>
-            <th>Quorum</th>
-            <th>Your Ballot</th>
-            <th></th>
-          </tr>
-        </thead>
-
-        {/* Table Body */}
-        <tbody>
-          {isLoading && (
-            <tr>
-              <td colSpan={7}>Loading...</td>
-            </tr>
-          )}
-          {isError && !isLoading && (
-            <tr>
-              <td colSpan={7}>
-                <div className="daisy-mockup-code">
-                  <code className="block whitespace-pre-wrap px-6 text-error">
-                    {(error as any).toString()}
-                  </code>
-                </div>
-              </td>
-            </tr>
-          )}
-          {sortedData &&
-            !isLoading &&
-            !isError &&
-            sortedData.map(
-              ({
-                votingContract,
-                id,
-                created,
-                votingEnds,
-                requiredQuorum,
-                currentQuorum,
-                ballot,
-              }) => (
-                <tr key={`${votingContract}${id}`}>
-                  <th>
-                    <a
-                      href={makeEtherscanHref(votingContract)}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {formatAddress(votingContract)}
-                    </a>
-                  </th>
-                  <td>{id}</td>
-                  <td>{created?.toLocaleDateString() ?? "🤷"}</td>
-                  <td>{votingEnds?.toLocaleDateString() ?? "🤷"}</td>
-                  <td>
-                    {formatBalance(currentQuorum, 0)} /{" "}
-                    {requiredQuorum ? formatBalance(requiredQuorum, 0) : "🤷"}
-                  </td>
-                  <td>{ballot ?? "🤷"}</td>
-                  <th>
-                    <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                      <Link href={makeProposalHref("0x000000000000")}>▹</Link>
-                    </button>
-                  </th>
-                </tr>
-              ),
-            )}
-        </tbody>
-      </table>
+      {isError ? (
+        <div className="daisy-mockup-code">
+          <code className="block whitespace-pre-wrap px-6 text-error">
+            {error ? (error as any).toString() : "Unknown error"}
+          </code>
+        </div>
+      ) : isLoading ? (
+        <progress className="daisy-progress m-auto w-56 items-center"></progress>
+      ) : (
+        <ProposalsTable rowData={sortedData} />
+      )}
     </div>
+  );
+}
+
+interface ProposalsTableProps {
+  rowData?: ProposalRowData[];
+}
+
+function ProposalsTable({ rowData }: ProposalsTableProps) {
+  return (
+    <table className="daisy-table-zebra daisy-table w-full min-w-fit">
+      <thead>
+        <tr>
+          <th>Voting Contract</th>
+          <th>ID</th>
+          <th>Created</th>
+          <th>Voting Ends</th>
+          <th>Quorum</th>
+          <th>Your Ballot</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {rowData &&
+          rowData.map((proposal) => (
+            <ProposalTableRow
+              {...proposal}
+              key={`${proposal.votingContract}${proposal.id}`}
+            />
+          ))}
+      </tbody>
+    </table>
+  );
+}
+
+function ProposalTableRow({
+  votingContract,
+  id,
+  created,
+  votingEnds,
+  currentQuorum,
+  requiredQuorum,
+  ballot,
+}: ProposalRowData) {
+  return (
+    <tr>
+      <th>
+        <a
+          href={makeEtherscanHref(votingContract)}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {formatAddress(votingContract)}
+        </a>
+      </th>
+      <td>{id}</td>
+      <td>{created?.toLocaleDateString() ?? "🤷"}</td>
+      <td>{votingEnds?.toLocaleDateString() ?? "🤷"}</td>
+      <td>
+        {formatBalance(currentQuorum, 0)} /{" "}
+        {requiredQuorum ? formatBalance(requiredQuorum, 0) : "🤷"}
+      </td>
+      <td>{ballot ?? "🤷"}</td>
+      <th>
+        <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+          <Link href={makeProposalHref("0x000000000000")}>▹</Link>
+        </button>
+      </th>
+    </tr>
   );
 }
 
@@ -209,4 +173,26 @@ function useProposalsPageData(
       }),
     );
   });
+}
+
+enum SortField {
+  CREATED = "Created",
+  QUORUM = "Quorum",
+}
+
+function sortProposalRowData(sort: SortField, data?: ProposalRowData[]) {
+  if (!data) {
+    return data;
+  }
+  switch (sort) {
+    case SortField.QUORUM:
+      return data.slice().sort((a, b) => +b.currentQuorum - +a.currentQuorum);
+    case SortField.CREATED:
+    default:
+      return data.slice().sort((a, b) => {
+        const aTime = a.created ? a.created.getTime() : 0;
+        const bTime = b.created ? b.created.getTime() : 0;
+        return bTime - aTime;
+      });
+  }
 }
