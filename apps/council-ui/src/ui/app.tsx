@@ -1,13 +1,16 @@
 import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClientProvider } from "@tanstack/react-query";
+import classNames from "classnames";
 import type { AppProps } from "next/app";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { reactQueryClient } from "src/clients/reactQuery";
 import { wagmiClient } from "src/clients/wagmi";
 import { councilConfigs } from "src/config/council.config";
 import { chains } from "src/provider";
 import { makeVoterHref } from "src/routing/makeRoute";
+import { Pages } from "src/routing/Pages";
 import { CouncilClientProvider } from "src/ui/council/CouncilProvider";
 import { useAccount, WagmiConfig } from "wagmi";
 
@@ -15,6 +18,8 @@ console.log(councilConfigs);
 
 function App({ Component, pageProps }: AppProps): ReactElement {
   const { address } = useAccount();
+
+  const { pathname } = useRouter();
 
   return (
     <WagmiConfig client={wagmiClient}>
@@ -48,13 +53,34 @@ function App({ Component, pageProps }: AppProps): ReactElement {
                     className="daisy-dropdown-content daisy-menu rounded-box daisy-menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
                   >
                     <li>
-                      <Link href="/proposals">proposals</Link>
+                      <Link
+                        className={classNames({
+                          "daisy-active": pathname.startsWith(Pages.PROPOSALS),
+                        })}
+                        href={Pages.PROPOSALS}
+                      >
+                        proposals
+                      </Link>
                     </li>
                     <li>
-                      <Link href="/vaults">vaults</Link>
+                      <Link
+                        className={classNames({
+                          "daisy-active": pathname.startsWith(Pages.VAULTS),
+                        })}
+                        href={Pages.VAULTS}
+                      >
+                        vaults
+                      </Link>
                     </li>
                     <li>
-                      <Link href="/voters">voters</Link>
+                      <Link
+                        className={classNames({
+                          "daisy-active": pathname.startsWith(Pages.VOTERS),
+                        })}
+                        href={Pages.VOTERS}
+                      >
+                        voters
+                      </Link>
                     </li>
                     {address && (
                       <li>
@@ -73,13 +99,34 @@ function App({ Component, pageProps }: AppProps): ReactElement {
               <div className="daisy-navbar-center hidden lg:flex">
                 <ul className="daisy-menu daisy-menu-horizontal p-0">
                   <li>
-                    <Link href="/proposals">proposals</Link>
+                    <Link
+                      className={classNames({
+                        "daisy-active": pathname.startsWith(Pages.PROPOSALS),
+                      })}
+                      href={Pages.PROPOSALS}
+                    >
+                      proposals
+                    </Link>
                   </li>
                   <li>
-                    <Link href="/vaults">vaults</Link>
+                    <Link
+                      className={classNames({
+                        "daisy-active": pathname.startsWith(Pages.VAULTS),
+                      })}
+                      href={Pages.PROPOSALS}
+                    >
+                      vaults
+                    </Link>
                   </li>
                   <li>
-                    <Link href="/voters">voters</Link>
+                    <Link
+                      className={classNames({
+                        "daisy-active": pathname.startsWith(Pages.VOTERS),
+                      })}
+                      href={Pages.VOTERS}
+                    >
+                      voters
+                    </Link>
                   </li>
                   {address && (
                     <li>
