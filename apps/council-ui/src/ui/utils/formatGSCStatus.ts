@@ -5,11 +5,14 @@ export function formatGSCStatus(
   isMember = false,
   isEligible = false,
 ): GSCStatus {
-  return isIdle
-    ? "Idle"
-    : isMember
-    ? "Member"
-    : isEligible
-    ? "Eligible"
-    : "Ineligible";
+  if (isIdle) {
+    return "Idle";
+  }
+  if (isMember) {
+    return "Member";
+  }
+  if (isEligible) {
+    return "Eligible";
+  }
+  return "Ineligible";
 }
