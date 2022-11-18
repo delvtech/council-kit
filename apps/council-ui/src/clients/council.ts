@@ -3,6 +3,7 @@ import {
   GSCVault,
   GSCVotingContract,
   LockingVault,
+  VestingVault,
   VotingContract,
   VotingVault,
 } from "@council/sdk";
@@ -30,6 +31,8 @@ export function getCouncilClient(chainId: SupportedChainId): CouncilClient {
     switch (type) {
       case "LockingVault":
         return new LockingVault(address, context);
+      case "VestingVault":
+        return new VestingVault(address, context);
       default:
         return new VotingVault(address, context);
     }
