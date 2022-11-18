@@ -1,8 +1,8 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
 import { ReactElement } from "react";
-import { makeEtherscanHref } from "src/paths/makeEtherscanHref";
-import { makeVaultHref } from "src/routing/makeRoute";
+import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeVaultURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { formatAddress } from "src/ui/utils/formatAddress";
@@ -97,7 +97,11 @@ function VaultTableRow({ address, name, tvp, votingPower }: VaultRowData) {
   return (
     <tr key={address}>
       <th>
-        <a href={makeEtherscanHref(address)} target="_blank" rel="noreferrer">
+        <a
+          href={makeEtherscanAddressURL(address)}
+          target="_blank"
+          rel="noreferrer"
+        >
           {formatAddress(address)}
         </a>
       </th>
@@ -106,7 +110,7 @@ function VaultTableRow({ address, name, tvp, votingPower }: VaultRowData) {
       <td>{votingPower ? formatBalance(votingPower) : "🤷"}</td>
       <th>
         <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-          <Link href={makeVaultHref(address)}>▹</Link>
+          <Link href={makeVaultURL(address)}>▹</Link>
         </button>
       </th>
     </tr>

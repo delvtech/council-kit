@@ -3,8 +3,8 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { parseEther } from "ethers/lib/utils";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
-import { makeEtherscanHref } from "src/paths/makeEtherscanHref";
-import { makeProposalHref } from "src/routing/makeRoute";
+import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeProposalURL } from "src/routes";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { formatAddress } from "src/ui/utils/formatAddress";
 import { formatBalance } from "src/ui/utils/formatBalance";
@@ -104,7 +104,7 @@ function ProposalTableRow({
     <tr>
       <th>
         <a
-          href={makeEtherscanHref(votingContract)}
+          href={makeEtherscanAddressURL(votingContract)}
           target="_blank"
           rel="noreferrer"
         >
@@ -121,7 +121,7 @@ function ProposalTableRow({
       <td>{ballot ?? "🤷"}</td>
       <th>
         <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-          <Link href={makeProposalHref("0x000000000000")}>▹</Link>
+          <Link href={makeProposalURL("0x000000000000")}>▹</Link>
         </button>
       </th>
     </tr>

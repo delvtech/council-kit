@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ReactElement } from "react";
-import { makeVoterHref } from "src/routing/makeRoute";
+import { makeVoterURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
 
 export default function Voters(): ReactElement {
@@ -60,7 +60,7 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterHref("0x000000000")}>▹</Link>
+                <Link href={makeVoterURL("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -72,7 +72,7 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterHref("0x000000000")}>▹</Link>
+                <Link href={makeVoterURL("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -84,7 +84,7 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterHref("0x000000000")}>▹</Link>
+                <Link href={makeVoterURL("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -96,7 +96,7 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterHref("0x000000000")}>▹</Link>
+                <Link href={makeVoterURL("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>
@@ -108,7 +108,7 @@ export default function Voters(): ReactElement {
             <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterHref("0x000000000")}>▹</Link>
+                <Link href={makeVoterURL("0x000000000")}>▹</Link>
               </button>
             </th>
           </tr>

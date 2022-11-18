@@ -9,8 +9,7 @@ import { reactQueryClient } from "src/clients/reactQuery";
 import { wagmiClient } from "src/clients/wagmi";
 import { councilConfigs } from "src/config/council.config";
 import { chains } from "src/provider";
-import { makeVoterHref } from "src/routing/makeRoute";
-import { Pages } from "src/routing/Pages";
+import { makeVoterURL, Routes } from "src/routes";
 import { CouncilClientProvider } from "src/ui/council/CouncilProvider";
 import { useAccount, WagmiConfig } from "wagmi";
 
@@ -55,9 +54,9 @@ function App({ Component, pageProps }: AppProps): ReactElement {
                     <li>
                       <Link
                         className={classNames({
-                          "daisy-active": pathname.startsWith(Pages.PROPOSALS),
+                          "daisy-active": pathname.startsWith(Routes.PROPOSALS),
                         })}
-                        href={Pages.PROPOSALS}
+                        href={Routes.PROPOSALS}
                       >
                         proposals
                       </Link>
@@ -65,9 +64,9 @@ function App({ Component, pageProps }: AppProps): ReactElement {
                     <li>
                       <Link
                         className={classNames({
-                          "daisy-active": pathname.startsWith(Pages.VAULTS),
+                          "daisy-active": pathname.startsWith(Routes.VAULTS),
                         })}
-                        href={Pages.VAULTS}
+                        href={Routes.VAULTS}
                       >
                         vaults
                       </Link>
@@ -75,16 +74,16 @@ function App({ Component, pageProps }: AppProps): ReactElement {
                     <li>
                       <Link
                         className={classNames({
-                          "daisy-active": pathname.startsWith(Pages.VOTERS),
+                          "daisy-active": pathname.startsWith(Routes.VOTERS),
                         })}
-                        href={Pages.VOTERS}
+                        href={Routes.VOTERS}
                       >
                         voters
                       </Link>
                     </li>
                     {address && (
                       <li>
-                        <Link href={makeVoterHref(address)}>profile</Link>
+                        <Link href={makeVoterURL(address)}>profile</Link>
                       </li>
                     )}
                   </ul>
@@ -101,9 +100,9 @@ function App({ Component, pageProps }: AppProps): ReactElement {
                   <li>
                     <Link
                       className={classNames({
-                        "daisy-active": pathname.startsWith(Pages.PROPOSALS),
+                        "daisy-active": pathname.startsWith(Routes.PROPOSALS),
                       })}
-                      href={Pages.PROPOSALS}
+                      href={Routes.PROPOSALS}
                     >
                       proposals
                     </Link>
@@ -111,9 +110,9 @@ function App({ Component, pageProps }: AppProps): ReactElement {
                   <li>
                     <Link
                       className={classNames({
-                        "daisy-active": pathname.startsWith(Pages.VAULTS),
+                        "daisy-active": pathname.startsWith(Routes.VAULTS),
                       })}
-                      href={Pages.VAULTS}
+                      href={Routes.VAULTS}
                     >
                       vaults
                     </Link>
@@ -121,16 +120,16 @@ function App({ Component, pageProps }: AppProps): ReactElement {
                   <li>
                     <Link
                       className={classNames({
-                        "daisy-active": pathname.startsWith(Pages.VOTERS),
+                        "daisy-active": pathname.startsWith(Routes.VOTERS),
                       })}
-                      href={Pages.VOTERS}
+                      href={Routes.VOTERS}
                     >
                       voters
                     </Link>
                   </li>
                   {address && (
                     <li>
-                      <Link href={makeVoterHref(address)}>profile</Link>
+                      <Link href={makeVoterURL(address)}>profile</Link>
                     </li>
                   )}
                 </ul>
