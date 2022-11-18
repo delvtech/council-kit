@@ -44,8 +44,6 @@ export default function Voters(): ReactElement {
             <th>Voter</th>
             <th>GSC Status</th>
             <th>Voting Power</th>
-            <th>% of TVP</th>
-            <th>participation grade</th>
             <th></th>
           </tr>
         </thead>
@@ -56,8 +54,6 @@ export default function Voters(): ReactElement {
             <th className="underline">0x000...000</th>
             <td>Ineligible</td>
             <td>50,000</td>
-            <td>1.02%</td>
-            <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterURL("0x000000000")}>▹</Link>
@@ -68,8 +64,6 @@ export default function Voters(): ReactElement {
             <th className="underline">0x000...000</th>
             <td>Ineligible</td>
             <td>50,000</td>
-            <td>1.02%</td>
-            <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterURL("0x000000000")}>▹</Link>
@@ -80,8 +74,6 @@ export default function Voters(): ReactElement {
             <th className="underline">0x000...000</th>
             <td>Ineligible</td>
             <td>50,000</td>
-            <td>1.02%</td>
-            <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterURL("0x000000000")}>▹</Link>
@@ -92,8 +84,6 @@ export default function Voters(): ReactElement {
             <th className="underline">0x000...000</th>
             <td>Ineligible</td>
             <td>50,000</td>
-            <td>1.02%</td>
-            <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterURL("0x000000000")}>▹</Link>
@@ -104,8 +94,6 @@ export default function Voters(): ReactElement {
             <th className="underline">0x000...000</th>
             <td>Ineligible</td>
             <td>50,000</td>
-            <td>1.02%</td>
-            <td>90%</td>
             <th>
               <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
                 <Link href={makeVoterURL("0x000000000")}>▹</Link>
