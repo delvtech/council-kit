@@ -5,9 +5,9 @@ import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { makeProposalURL } from "src/routes";
+import { formatAddress } from "src/ui/base/formatting/formatAddress";
+import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { formatAddress } from "src/ui/utils/formatAddress";
-import { formatBalance } from "src/ui/utils/formatBalance";
 import { useAccount } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {

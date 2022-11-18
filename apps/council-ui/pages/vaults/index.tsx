@@ -3,10 +3,10 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { makeVaultURL } from "src/routes";
+import { formatAddress } from "src/ui/base/formatting/formatAddress";
+import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { formatAddress } from "src/ui/utils/formatAddress";
-import { formatBalance } from "src/ui/utils/formatBalance";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
