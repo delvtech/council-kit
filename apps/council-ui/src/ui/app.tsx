@@ -113,7 +113,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
                       className={classNames({
                         "daisy-active": pathname.startsWith(Pages.VAULTS),
                       })}
-                      href={Pages.PROPOSALS}
+                      href={Pages.VAULTS}
                     >
                       vaults
                     </Link>
