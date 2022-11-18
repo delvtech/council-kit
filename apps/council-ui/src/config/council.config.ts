@@ -13,14 +13,14 @@ const mainnetCouncilConfig: CouncilConfig = {
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
-        name: "CoreVotingLockingVault",
+        name: "Locking Vault",
         address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD",
         type: "LockingVault",
         abi: {},
         descriptionURL: "https://moreinfo.com",
       },
       {
-        name: "VestingVault",
+        name: "Vesting Vault",
         address: "0x6De73946eab234F1EE61256F10067D713aF0e37A",
         type: "VestingVault",
         abi: {},
@@ -47,7 +47,7 @@ const mainnetCouncilConfig: CouncilConfig = {
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
-        name: "GSCVault",
+        name: "GSC Vault",
         address: "0xcA870E8aa4FCEa85b5f0c6F4209C8CBA9265B940",
         type: "GSCVault",
         abi: {},
@@ -74,14 +74,14 @@ const goerliCouncilConfig: CouncilConfig = {
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
-        name: "CoreVotingLockingVault",
+        name: "Locking Vault",
         address: "0xb5E8AF575Ee302A24c6C7746a99D895BeF67cb5D",
         type: "LockingVault",
         abi: {},
         descriptionURL: "https://moreinfo.com",
       },
       {
-        name: "VestingVault",
+        name: "Vesting Vault",
         address: "0xe69D2F8DeD2924e0845118E7E467Fc97F7994ef6",
         type: "LockingVault",
         abi: {},
@@ -108,7 +108,7 @@ const goerliCouncilConfig: CouncilConfig = {
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
-        name: "GSCVault",
+        name: "GSC Vault",
         address: "0x600c4926c9F88beCE3533ceaAA36804d6E23F1c1",
         type: "GSCVault",
         abi: {},
