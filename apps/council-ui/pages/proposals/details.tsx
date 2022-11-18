@@ -2,9 +2,9 @@ import { getBlockDate, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useCouncil } from "src/ui/council/useCouncil";
 import QuorumBar from "src/ui/QuorumBar";
-import { formatBalance } from "src/ui/utils/formatBalance";
 import ProposalVoting from "src/ui/voting/ProposalVoting";
 import { useAccount } from "wagmi";
 
@@ -196,9 +196,4 @@ function ProposalVotingActivity({
       })}
     </>
   );
-}
-
-interface ProposalQuorum {
-  currentQuorum?: string | null;
-  requiredQuorum?: string | null;
 }

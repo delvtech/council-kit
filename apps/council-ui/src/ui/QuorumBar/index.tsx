@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { formatBalance } from "src/ui/utils/formatBalance";
+import { formatBalance } from "src/ui/base/formatting/formatBalance";
 
 interface QuorumBarProps {
   current: string;

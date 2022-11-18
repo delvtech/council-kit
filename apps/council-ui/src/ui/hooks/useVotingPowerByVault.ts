@@ -9,7 +9,7 @@ interface VotingPowerByVault {
 
 export default function useVotingPowerByVault(
   account?: string,
-): UseQueryResult<VotingPowerByVault, unknown> {
+): UseQueryResult<VotingPowerByVault[], unknown> {
   const { coreVoting } = useCouncil();
 
   return useQuery(
