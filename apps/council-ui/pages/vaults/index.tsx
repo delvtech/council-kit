@@ -48,9 +48,7 @@ interface VaultRowData {
   votingPower: string | undefined;
 }
 
-function useVaultsPageData(
-  account?: string,
-): UseQueryResult<VaultRowData[], unknown> {
+function useVaultsPageData(account?: string): UseQueryResult<VaultRowData[]> {
   const { coreVoting, gscVoting } = useCouncil();
   return useQuery(["vaultsPage", account], () => {
     let allVaults = coreVoting.vaults;

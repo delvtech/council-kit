@@ -140,7 +140,7 @@ interface ProposalRowData {
 
 function useProposalsPageData(
   account: string | undefined,
-): UseQueryResult<ProposalRowData[], unknown> {
+): UseQueryResult<ProposalRowData[]> {
   const { context, coreVoting, gscVoting } = useCouncil();
   return useQuery(["proposalsPage", account], async () => {
     let allProposals = await coreVoting.getProposals();

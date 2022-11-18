@@ -7,6 +7,9 @@ import { commify } from "ethers/lib/utils";
  * @param numDecimals max decimals, default is 1
  * @returns a formatted string with proper commas and {numDecimals} decimal places
  */
-export function formatBalance(balance: string, numDecimals = 1): string {
+export function formatBalance(
+  balance: string | number,
+  numDecimals = 1,
+): string {
   return commify(format(`.${numDecimals}~f`)(+balance));
 }
