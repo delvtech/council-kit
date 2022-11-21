@@ -1,9 +1,15 @@
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { assertNever } from "assert-never";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVoterURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
+import { Progress } from "src/ui/base/Progress";
+import { useCouncil } from "src/ui/council/useCouncil";
 
 export default function Voters(): ReactElement {
+  const { data: voters, status, error } = useVoterPageData();
+
   return (
     <Page>
       {/* Page Header */}
@@ -36,72 +42,84 @@ export default function Voters(): ReactElement {
         </div>
       </div>
 
-      {/* Voters Table */}
-      <table className="daisy-table-zebra daisy-table w-full min-w-fit">
-        {/* Table Header */}
-        <thead>
-          <tr>
-            <th>Voter</th>
-            <th>GSC Status</th>
-            <th>Voting Power</th>
-            <th></th>
-          </tr>
-        </thead>
+      {(() => {
+        switch (status) {
+          case "loading":
+            return (
+              <div className="flex flex-col items-center gap-8 ">
+                <p>Loading voters. This might take a while...</p>
+                <Progress />
+              </div>
+            );
+          case "error":
+            return (
+              <div className="daisy-mockup-code">
+                <code className="block whitespace-pre-wrap px-6 text-error">
+                  {error ? (error as any).toString() : "Unknown error"}
+                </code>
+              </div>
+            );
 
-        {/* Table Body */}
-        <tbody>
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>Ineligible</td>
-            <td>50,000</td>
-            <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterURL("0x000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>Ineligible</td>
-            <td>50,000</td>
-            <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterURL("0x000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>Ineligible</td>
-            <td>50,000</td>
-            <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterURL("0x000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>Ineligible</td>
-            <td>50,000</td>
-            <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterURL("0x000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-          <tr>
-            <th className="underline">0x000...000</th>
-            <td>Ineligible</td>
-            <td>50,000</td>
-            <th>
-              <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                <Link href={makeVoterURL("0x000000000")}>▹</Link>
-              </button>
-            </th>
-          </tr>
-        </tbody>
-      </table>
+          case "success":
+            return (
+              <table className="daisy-table-zebra daisy-table w-full min-w-fit">
+                {/* Table Header */}
+                <thead>
+                  <tr>
+                    <th>Voter</th>
+                    <th>
+                      {/* purposely empty to make a space for the action button */}
+                    </th>
+                  </tr>
+                </thead>
+
+                {/* Table Body */}
+                <tbody>
+                  {voters.map(({ address, ensName }) => {
+                    return (
+                      <tr key={address}>
+                        <td className="underline">
+                          <Link href={makeVoterURL(address)}>
+                            {ensName ? ensName : address}
+                          </Link>
+                        </td>
+                        <td>
+                          <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
+                            <Link href={makeVoterURL(address)}>▹</Link>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            );
+          default:
+            assertNever(status);
+        }
+      })()}
     </Page>
   );
+}
+interface VoterRowData {
+  address: string;
+  ensName: string | null;
+  // TODO: Add `gscStatus` once we can reliably query it
+  // TODO: Add `votingPower` once we can reliably query it
+}
+
+function useVoterPageData(): UseQueryResult<VoterRowData[]> {
+  const {
+    coreVoting,
+    context: { provider },
+  } = useCouncil();
+  return useQuery<VoterRowData[]>(["voterPage"], async () => {
+    const voters = await coreVoting.getVoters();
+    return Promise.all(
+      voters.map(async (voter) => {
+        const ensName = await provider.lookupAddress(voter.address);
+        return { address: voter.address, ensName: ensName };
+      }),
+    );
+  });
 }
