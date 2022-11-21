@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
-import useVotingPowerByVault from "src/ui/hooks/useVotingPowerByVault";
+import useVotingPowerByVault from "src/ui/vaults/hooks/useVotingPowerByVault";
 
 export default function ProposalVoting({
   account,
 }: {
-  account?: string;
+  account: string | undefined;
 }): ReactElement {
   const { data: votingPowerByVault } = useVotingPowerByVault(account);
   const totalVotingPower = votingPowerByVault?.reduce(

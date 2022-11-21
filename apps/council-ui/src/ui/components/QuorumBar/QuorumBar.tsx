@@ -20,8 +20,8 @@ export default function QuorumBar({
       </div>
       <progress
         className="daisy-progress daisy-progress-info w-48 bg-neutral sm:w-64"
-        value={current.toString()}
-        max={required.toString()}
+        value={current}
+        max={required}
       ></progress>
     </div>
   );

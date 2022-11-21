@@ -1,6 +1,5 @@
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { useQuery } from "wagmi";
-import { UseQueryResult } from "wagmi/dist/declarations/src/hooks/utils";
 
 interface VotingPowerByVault {
   name: string;
@@ -8,21 +7,22 @@ interface VotingPowerByVault {
 }
 
 export default function useVotingPowerByVault(
-  account?: string,
+  account: string | undefined,
 ): UseQueryResult<VotingPowerByVault[], unknown> {
   const { coreVoting } = useCouncil();
 
-  return useQuery(
-    ["votingPowerByVault"],
+  return useQuery<VotingPowerByVault[]>(
+    ["votingPowerByVault", account],
     async () => {
       const vaults = coreVoting.vaults;
 
-      return await Promise.all(
+      return Promise.all(
         vaults.map(async (vault) => {
           return {
             name: vault.name,
-            votingPower: await vault.getVotingPower(account!),
-          } as VotingPowerByVault;
+            // safe to cast because this function only is ran when string is non-nullable
+            votingPower: await vault.getVotingPower(account as string),
+          };
         }),
       );
     },
