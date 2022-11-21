@@ -25,7 +25,7 @@ interface VotingContractProperties extends ContractProperties {
 }
 
 interface VaultProperties extends ContractProperties {
-  type: "LockingVault" | "GSCVault";
+  type: "LockingVault" | "VestingVault" | "GSCVault";
   name: string;
   descriptionURL: string;
 }

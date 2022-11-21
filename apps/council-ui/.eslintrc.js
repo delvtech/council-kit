@@ -11,6 +11,6 @@ module.exports = {
     "@council/eslint-config",
   ],
   rules: {
-    "tailwindcss/classnames-order": "off", // Disable ordering in favor of prettier plugin
+    "tailwindcss/classnames-order": "off", // Disable ordering in favor of prettier plugin,
   },
 };
