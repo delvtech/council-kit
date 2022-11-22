@@ -8,29 +8,29 @@ export interface CouncilConfig {
    * The chain id where the contracts are deployed
    */
   chainId: number;
-  timelock: ContractProperties;
-  coreVoting: VotingContractProperties;
-  gscVoting: VotingContractProperties;
+  timelock: ContractConfig;
+  coreVoting: VotingContractConfig;
+  gscVoting: VotingContractConfig;
 }
 
-interface ContractProperties {
+export interface ContractConfig {
   address: string;
   abi: Record<string, any>;
 }
 
-interface VotingContractProperties extends ContractProperties {
+export interface VotingContractConfig extends ContractConfig {
   descriptionURL: string;
-  vaults: VaultProperties[];
-  proposals: Record<string /*proposal id*/, ProposalProperties>;
+  vaults: VaultConfig[];
+  proposals: Record<string /*proposal id*/, ProposalConfig>;
 }
 
-interface VaultProperties extends ContractProperties {
+export interface VaultConfig extends ContractConfig {
   type: "LockingVault" | "VestingVault" | "GSCVault";
   name: string;
   descriptionURL: string;
 }
 
-interface ProposalProperties {
+export interface ProposalConfig {
   descriptionURL: string;
   targets: string[];
   calldatas: string[];

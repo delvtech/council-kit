@@ -116,12 +116,12 @@ export class Proposal extends Model {
    * executed.
    */
   async getIsActive(): Promise<boolean> {
-    const data = await this.getData();
-    if (!data?.expirationBlock) {
+    const expirationBlock = await this.getExpirationBlock();
+    if (!expirationBlock) {
       return false;
     }
     const latestBlock = await this.context.provider.getBlockNumber();
-    return data.expirationBlock > latestBlock && !(await this.getIsExecuted());
+    return expirationBlock > latestBlock && !(await this.getIsExecuted());
   }
 
   async getIsExecuted(atBlock?: number): Promise<boolean> {
@@ -157,11 +157,11 @@ export class Proposal extends Model {
   }
 
   async getVotingPower(address: string): Promise<string | null> {
-    const data = await this.getData();
-    if (!data) {
+    const createdBlock = await this.getCreatedBlock();
+    if (!createdBlock) {
       return null;
     }
-    return this.votingContract.getVotingPower(address, data.createdBlock);
+    return this.votingContract.getVotingPower(address, createdBlock);
   }
 
   getResults(): Promise<VoteResults> {
@@ -174,14 +174,15 @@ export class Proposal extends Model {
   }
 
   async getIsExecutable(): Promise<boolean> {
-    const data = await this.getData();
-    if (!data?.unlockBlock || !data?.requiredQuorum) {
+    const unlockBlock = await this.getUnlockBlock();
+    const requiredQuorum = await this.getRequiredQuorum();
+    if (!unlockBlock || !requiredQuorum) {
       return false;
     }
     const latestBlock = await this.context.provider.getBlockNumber();
     return (
-      latestBlock >= data.unlockBlock &&
-      (await this.getCurrentQuorum()) >= data.requiredQuorum
+      latestBlock >= unlockBlock &&
+      (await this.getCurrentQuorum()) >= requiredQuorum
     );
   }
 }

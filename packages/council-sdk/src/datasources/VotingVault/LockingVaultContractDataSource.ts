@@ -52,7 +52,8 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       const powerByDelegators: Record<string, BigNumber> = {};
       for (const { args } of voteChangeEvents) {
         const { from, amount } = args;
-        powerByDelegators[from] = powerByDelegators[from]?.add(amount) || from;
+        powerByDelegators[from] =
+          powerByDelegators[from]?.add(amount) || amount;
       }
       return Object.entries(powerByDelegators)
         .filter(([, power]) => power.gt(0))
