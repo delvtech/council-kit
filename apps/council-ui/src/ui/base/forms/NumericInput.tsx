@@ -38,7 +38,7 @@ export function NumericInput({
 
 /**
  * Remove any character that's not a number or decimal from a value and return
- * it as a string with a maxButtonValue number of decimals.
+ * it as a string with a max number of decimals.
  */
 function numberString(value: string | number, decimals = 18): string {
   const [integer, fraction] = value
