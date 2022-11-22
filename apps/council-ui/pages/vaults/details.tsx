@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { councilConfigs, SupportedChainId } from "src/config/council.config";
 import { VaultConfig } from "src/config/CouncilConfig";
+import { chains } from "src/provider";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -147,10 +148,10 @@ function useVaultDetailsData(
 ): UseQueryResult<VaultDetailsData> {
   const { context, coreVoting, gscVoting } = useCouncil();
   const { chain } = useNetwork();
-  const chainId = chain?.id;
+  const chainId = chain?.id ?? chains[0].id;
 
   return useQuery(["vaultDetails", address, account, chainId], async () => {
-    const config = councilConfigs[(chainId || 1) as SupportedChainId];
+    const config = councilConfigs[chainId as SupportedChainId];
 
     let vault = coreVoting.vaults.find((vault) => vault.address === address);
     let votingContract = vault && coreVoting;
