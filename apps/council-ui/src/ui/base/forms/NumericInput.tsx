@@ -11,8 +11,8 @@ export function NumericInput({
   onChange,
   id,
   infoText,
-  maxButtonValue,
   placeholder,
+  maxButtonValue,
   decimals,
 }: NumericInputProps): ReactElement {
   return (
