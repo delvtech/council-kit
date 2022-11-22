@@ -7,18 +7,29 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { formatGSCStatus } from "src/ui/utils/formatGSCStatus";
 
-function useVoter(address: string | undefined) {
-  const { coreVoting, context } = useCouncil();
+function useVoterData(address: string | undefined) {
+  const { coreVoting, context, gscVoting } = useCouncil();
   return useQuery(
     ["voter", address],
     async () => {
       const voter = new Voter(address as string, context);
       const votingHistory = await voter.getVotes(coreVoting.address);
+      const proposalsVoted = votingHistory.length;
+
+      const votingPower = await voter.getVotingPower(
+        coreVoting.vaults.map((vault) => vault.address),
+      );
+
+      const isGSC = await gscVoting?.getIsMember(address as string);
 
       return {
         voter,
         votingHistory,
+        votingPower,
+        proposalsVoted,
+        isGSC,
       };
     },
     {
@@ -31,7 +42,7 @@ export default function VoterDetailsPage(): ReactElement {
   const { query } = useRouter();
   const { address } = query as { address: string | undefined };
 
-  const { data: voter } = useVoter(address);
+  const { data: voterData } = useVoterData(address);
 
   return (
     <Page>
@@ -44,13 +55,19 @@ export default function VoterDetailsPage(): ReactElement {
         )}
       </div>
 
-      <VoterStatisticsRow />
+      {voterData && (
+        <VoterStatisticsRow
+          voterAddress={voterData.voter.address}
+          votingPower={voterData.votingPower}
+          proposalsVoted={voterData.proposalsVoted}
+        />
+      )}
 
       <div className="flex w-full flex-col gap-y-8 md:flex-row md:gap-x-4 md:gap-y-0">
-        {voter && (
+        {voterData && (
           <div className="flex min-w-[500px] flex-col gap-y-4 sm:basis-[65%]">
             <h2 className="text-2xl font-bold">Voting History</h2>
-            <VoterVoteHistoryList history={voter.votingHistory} />
+            <VoterVoteHistoryList history={voterData.votingHistory} />
           </div>
         )}
 
@@ -63,43 +80,68 @@ export default function VoterDetailsPage(): ReactElement {
   );
 }
 
-function VoterStatisticsRow(): ReactElement {
+interface VoterStatisticsRowProps {
+  voterAddress: string;
+  votingPower: string;
+  proposalsVoted: number;
+}
+
+function useFormattedGSCStatus(address: string) {
+  const { gscVoting } = useCouncil();
+  return useQuery(["gsc-status", address], async () => {
+    const isIdle = await gscVoting?.getIsIdle(address);
+    const isMember = await gscVoting?.getIsMember(address);
+    const isEligible = await gscVoting?.getIsEligible(address);
+
+    return formatGSCStatus(isIdle, isMember, isEligible);
+  });
+}
+
+function VoterStatisticsRow({
+  voterAddress,
+  votingPower,
+  proposalsVoted,
+}: VoterStatisticsRowProps): ReactElement {
+  const { data: gscStatus } = useFormattedGSCStatus(voterAddress);
+
   return (
     <div className="flex flex-wrap gap-4">
       <div className="daisy-stats">
         <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Active Proposals</div>
-          <div className="daisy-stat-value text-sm">6</div>
+          <div className="daisy-stat-title">Voting Power</div>
+          <div className="daisy-stat-value text-sm">
+            {formatBalance(votingPower, 0)}
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="daisy-stats">
+        <div className="daisy-stat bg-base-300">
+          <div className="daisy-stat-title">% of TVP</div>
+          <div className="daisy-stat-value text-sm">12%</div>
+        </div>
+      </div> */}
+
+      <div className="daisy-stats">
+        <div className="daisy-stat bg-base-300">
+          <div className="daisy-stat-title">GSC Member</div>
+          <div className="daisy-stat-value text-sm">{gscStatus}</div>
         </div>
       </div>
 
       <div className="daisy-stats">
         <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Your Voting Power</div>
-          <div className="daisy-stat-value text-sm">1,000,000</div>
+          <div className="daisy-stat-title">Proposals voted</div>
+          <div className="daisy-stat-value text-sm">{proposalsVoted}</div>
         </div>
       </div>
 
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">% of Total TVP</div>
-          <div className="daisy-stat-value text-sm">1.2%</div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Delegated to You</div>
-          <div className="daisy-stat-value text-sm">90</div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
+      {/* <div className="daisy-stats">
         <div className="daisy-stat bg-base-300">
           <div className="daisy-stat-title">Participants</div>
           <div className="daisy-stat-value text-sm">2.112</div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
