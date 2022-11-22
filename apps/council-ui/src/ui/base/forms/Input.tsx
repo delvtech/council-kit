@@ -25,9 +25,11 @@ export function Input({
         value={value}
         onChange={({ target }) => onChange(target.value)}
       />
-      <label className="daisy-label">
-        <span className="daisy-label-text-alt">{infoText}</span>
-      </label>
+      {infoText && (
+        <label className="daisy-label">
+          <span className="daisy-label-text-alt">{infoText}</span>
+        </label>
+      )}
     </div>
   );
 }
