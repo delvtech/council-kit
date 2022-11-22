@@ -2,7 +2,6 @@ import { LockingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { ReactElement } from "react";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { ChangeDelegateForm } from "./ChangeDelegateForm";
@@ -78,9 +77,7 @@ function useLockingVaultDetailsData(
       tokenSymbol: await token.getSymbol(),
       tokenBalance: await token.getBalanceOf(account),
       depositedBalance: await lockingVault.getDepositedBalance(account),
-      delegate:
-        (await context.provider.lookupAddress(delegate.address)) ??
-        formatAddress(delegate.address),
+      delegate: delegate.address,
     };
   });
 }
