@@ -122,10 +122,9 @@ const goerliCouncilConfig: CouncilConfig = {
   },
 };
 
-export type SupportedChainId = 1 | 5 | 31337;
+export type SupportedChainId = 1 | 5;
 
-export const councilConfigs: Partial<Record<SupportedChainId, CouncilConfig>> =
-  {
-    1: mainnetCouncilConfig,
-    5: goerliCouncilConfig,
-  };
+export const councilConfigs: Record<SupportedChainId, CouncilConfig> = {
+  1: mainnetCouncilConfig,
+  5: goerliCouncilConfig,
+};
