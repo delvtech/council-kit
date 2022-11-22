@@ -1,4 +1,5 @@
 import { ReactElement, useState } from "react";
+import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Input } from "src/ui/base/forms/Input";
 
 interface ChangeDelegateFormProps {
@@ -11,6 +12,7 @@ export function ChangeDelegateForm({
   onDelegate,
 }: ChangeDelegateFormProps): ReactElement {
   const [newDelegate, setNewDelegate] = useState("");
+  const delegateName = useDisplayName(currentDelegate);
 
   return (
     <div className="flex basis-1/2 flex-col gap-y-4">
@@ -19,7 +21,7 @@ export function ChangeDelegateForm({
         placeholder="Address or ENS"
         value={newDelegate}
         onChange={setNewDelegate}
-        infoText={`Current Delegate: ${currentDelegate}`}
+        infoText={`Current Delegate: ${delegateName}`}
       />
       <button
         className="daisy-btn daisy-btn-primary"
