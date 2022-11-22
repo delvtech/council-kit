@@ -26,7 +26,7 @@ export default function VoterDetailsPage(): ReactElement {
   );
 }
 
-function VoterStatisticsRow() {
+function VoterStatisticsRow(): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
       <div className="daisy-stats">
@@ -67,7 +67,7 @@ function VoterStatisticsRow() {
   );
 }
 
-function VoterVoteHistory() {
+function VoterVoteHistory(): ReactElement {
   return (
     <>
       <div className="grid grid-cols-5 items-center">
@@ -114,7 +114,7 @@ function VoterVoteHistory() {
   );
 }
 
-function VoterVotingPower() {
+function VoterVotingPower(): ReactElement {
   return (
     <div className="flex h-96 flex-col gap-y-4 overflow-auto pr-3">
       <div className="flex flex-col gap-y-2">
