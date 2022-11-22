@@ -1,15 +1,10 @@
-import {
-  LockingVault,
-  VestingVault,
-  VotingContract,
-  VotingVault,
-} from "@council/sdk";
+import { LockingVault, VestingVault, VotingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { councilConfigs, SupportedChainId } from "src/config/council.config";
-import { VaultConfig, VotingContractConfig } from "src/config/CouncilConfig";
+import { VaultConfig } from "src/config/CouncilConfig";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -153,31 +148,18 @@ function useVaultDetailsData(
   const { context, coreVoting, gscVoting } = useCouncil();
   const { chain } = useNetwork();
   const chainId = chain?.id;
+
   return useQuery(["vaultDetails", address, account, chainId], async () => {
-    const config = chainId ? councilConfigs[chainId as SupportedChainId] : null;
+    const config = councilConfigs[(chainId || 1) as SupportedChainId];
 
-    let vault: VotingVault | undefined;
-    let votingContract: VotingContract | undefined;
-    let votingContractConfig: VotingContractConfig | undefined;
-    let type: VaultConfig["type"] | undefined;
-
-    for (const coreVault of coreVoting.vaults) {
-      if (coreVault.address === address) {
-        vault = coreVault;
-        votingContract = coreVoting;
-        votingContractConfig = config?.coreVoting;
-        type = config?.coreVoting.vaults.find(
-          (vaultConfig) => vaultConfig.address === address,
-        )?.type;
-        break;
-      }
-    }
+    let vault = coreVoting.vaults.find((vault) => vault.address === address);
+    let votingContract = vault && coreVoting;
+    let votingContractConfig = vault && config.coreVoting;
 
     if (!vault && gscVoting && gscVoting?.vaults[0].address === address) {
       votingContract = gscVoting;
-      vault = gscVoting?.vaults[0];
-      votingContractConfig = config?.gscVoting;
-      type = "GSCVault";
+      vault = gscVoting.vaults[0];
+      votingContractConfig = config.gscVoting;
     }
 
     if (!vault) {
@@ -203,6 +185,11 @@ function useVaultDetailsData(
       }
     }
 
+    const type =
+      votingContractConfig &&
+      votingContractConfig.vaults.find(
+        (vaultConfig) => vaultConfig.address === address,
+      )?.type;
     const accountVotingPower = account && (await vault.getVotingPower(account));
 
     return {
@@ -218,9 +205,7 @@ function useVaultDetailsData(
           ? (+accountVotingPower / +(await vault.getTotalVotingPower())) * 100
           : undefined,
       delegatedToAccount,
-      participants: vault.getVoters
-        ? (await vault.getVoters()).length
-        : undefined,
+      participants: vault.getVoters && (await vault.getVoters()).length,
     };
   });
 }
