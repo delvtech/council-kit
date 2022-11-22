@@ -4,8 +4,8 @@ import assertNever from "assert-never";
 import { ReactElement } from "react";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { ChangeDelegateForm } from "./ChangeDelegateForm";
-import { DepositAndWithdrawForm } from "./DepositAndWithdrawForm";
+import { ChangeDelegateForm } from "./base/ChangeDelegateForm";
+import { DepositAndWithdrawForm } from "./base/DepositAndWithdrawForm";
 
 interface LockingVaultDetailsProps {
   address: string;
