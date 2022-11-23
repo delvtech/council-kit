@@ -13,70 +13,13 @@ import { useFormattedGSCStatus } from "src/ui/voter/hooks/useFormattedGSCStatus"
 import { VotingHistoryList } from "src/ui/voter/VotingHistoryList";
 import { useEnsName } from "wagmi";
 
-interface VoterDataByVault {
-  name: string;
-  votingPower: string;
-}
-
-interface VoterData {
-  isGSC: boolean | undefined;
-  proposalsVoted: number;
-  voter: Voter;
-  voterDataByVault: VoterDataByVault[];
-  votingHistory: Vote[];
-  votingPower: string;
-}
-
-function useVoterData(address: string | undefined) {
-  const { coreVoting, context, gscVoting } = useCouncil();
-
-  return useQuery<VoterData>(
-    ["voter", address],
-    async () => {
-      const voter = new Voter(address as string, context);
-
-      const votingHistory = await voter.getVotes(coreVoting.address);
-      const proposalsVoted = votingHistory.length;
-      const votingPower = await voter.getVotingPower(
-        coreVoting.vaults.map((vault) => vault.address),
-      );
-
-      const voterDataByVault = await Promise.all(
-        coreVoting.vaults.map(async (vault) => {
-          const name = vault.name;
-          const votingPower = await vault.getVotingPower(address as string);
-          // TODO @cashd: fetch current delegation and num wallets delegated data
-          return {
-            name,
-            votingPower,
-          };
-        }),
-      );
-
-      const isGSC = await gscVoting?.getIsMember(address as string);
-
-      return {
-        voter,
-        votingHistory,
-        votingPower,
-        proposalsVoted,
-        isGSC,
-        voterDataByVault,
-      };
-    },
-    {
-      enabled: !!address,
-    },
-  );
-}
-
 export default function VoterDetailsPage(): ReactElement {
   const { query } = useRouter();
   const { address } = query as { address: string | undefined };
 
   const { data: voterData, status, error } = useVoterData(address);
-  const addressA = getAddress(address as string);
-  const { data: ens } = useEnsName({ address: addressA });
+  const _address = getAddress(address as string);
+  const { data: ens } = useEnsName({ address: _address });
 
   return (
     <Page>
@@ -151,6 +94,63 @@ export default function VoterDetailsPage(): ReactElement {
   );
 }
 
+interface VoterDataByVault {
+  name: string;
+  votingPower: string;
+}
+
+interface VoterData {
+  isGSC: boolean | undefined;
+  proposalsVoted: number;
+  voter: Voter;
+  voterDataByVault: VoterDataByVault[];
+  votingHistory: Vote[];
+  votingPower: string;
+}
+
+function useVoterData(address: string | undefined) {
+  const { coreVoting, context, gscVoting } = useCouncil();
+
+  return useQuery<VoterData>(
+    ["voter", address],
+    async () => {
+      const voter = new Voter(address as string, context);
+
+      const votingHistory = await voter.getVotes(coreVoting.address);
+      const proposalsVoted = votingHistory.length;
+      const votingPower = await voter.getVotingPower(
+        coreVoting.vaults.map((vault) => vault.address),
+      );
+
+      const voterDataByVault = await Promise.all(
+        coreVoting.vaults.map(async (vault) => {
+          const name = vault.name;
+          const votingPower = await vault.getVotingPower(address as string);
+          // TODO @cashd: fetch current delegation and num wallets delegated data
+          return {
+            name,
+            votingPower,
+          };
+        }),
+      );
+
+      const isGSC = await gscVoting?.getIsMember(address as string);
+
+      return {
+        voter,
+        votingHistory,
+        votingPower,
+        proposalsVoted,
+        isGSC,
+        voterDataByVault,
+      };
+    },
+    {
+      enabled: !!address,
+    },
+  );
+}
+
 interface VoterStatisticsRowProps {
   voterAddress: string;
   votingPower: string;
@@ -205,22 +205,11 @@ function VotingPowerByVaultList({
         return (
           <div className="flex flex-col gap-y-2" key={vault.name}>
             <h3 className="text-xl font-bold underline">{vault.name}</h3>
-            {/* <div className="flex">
-              <p>Tokens Deposited</p>
-              <p className="ml-auto">6,000 ELFI</p>
-            </div> */}
+
             <div className="flex">
               <p>Voting Power</p>
               <p className="ml-auto">{formatBalance(vault.votingPower)} ELFI</p>
             </div>
-            {/* <div className="flex">
-              <p>Current Delegation</p>
-              <p className="ml-auto">Self</p>
-            </div>
-            <div className="flex">
-              <p>Wallets Delegated</p>
-              <p className="ml-auto underline">12</p>
-            </div> */}
           </div>
         );
       })}
