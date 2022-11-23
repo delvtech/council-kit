@@ -41,13 +41,13 @@ export class ERC20ContractDataSource
    * @param {Signer} signer - Signer.
    * @param {string} spender - Address to approve access to.
    * @param {string} [amount] - Amount approved for, defaults to maximum.
-   * @return {Promise<boolean>} successful - Boolean denoting a successful approval.
+   * @return {Promise<string>} - The transaction hash.
    */
   async approve(
     signer: Signer,
     spender: string,
     amount: string,
-  ): Promise<boolean> {
+  ): Promise<string> {
     const token = this.contract.connect(signer);
     const transaction = await token.approve(
       spender,
@@ -56,6 +56,6 @@ export class ERC20ContractDataSource
     await transaction.wait(); // will throw an error if transaction fails
     const owner = await signer.getAddress();
     this.deleteCall("allowance", [owner, spender]);
-    return true;
+    return transaction.hash;
   }
 }

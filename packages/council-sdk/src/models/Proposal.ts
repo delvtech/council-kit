@@ -3,11 +3,13 @@ import { Model } from "./Model";
 import { Vote } from "./Vote";
 import { VotingContract } from "./VotingContract/VotingContract";
 import {
+  Ballot,
   ProposalData,
   VoteResults,
 } from "src/datasources/VotingContract/VotingContractDataSource";
 import { Voter } from "./Voter";
 import { sumStrings } from "src/utils/sumStrings";
+import { Signer } from "ethers";
 
 export interface ProposalOptions {
   hash?: string;
@@ -183,6 +185,15 @@ export class Proposal extends Model {
     return (
       latestBlock >= unlockBlock &&
       (await this.getCurrentQuorum()) >= requiredQuorum
+    );
+  }
+
+  vote(signer: Signer, ballot: Ballot): Promise<string> {
+    return this.votingContract.dataSource.vote(
+      signer,
+      this.votingContract.vaults.map(({ address }) => address),
+      this.id,
+      ballot,
     );
   }
 }

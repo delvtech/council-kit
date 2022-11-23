@@ -1,3 +1,5 @@
+import { Signer } from "ethers";
+
 export interface ProposalDataPreview {
   id: number;
   createdBlock: number;
@@ -42,4 +44,10 @@ export interface VotingContractDataSource {
     toBlock?: number,
   ) => Promise<VoteData[]>;
   getResults: (proposalId: number) => Promise<VoteResults>;
+  vote: (
+    signer: Signer,
+    vaults: string[],
+    proposalId: number,
+    ballot: Ballot,
+  ) => Promise<string>;
 }
