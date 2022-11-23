@@ -1,3 +1,4 @@
+import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { LockingVaultContractDataSource } from "src/datasources/VotingVault/LockingVaultContractDataSource";
 import { Token } from "src/models/Token";
@@ -82,5 +83,9 @@ export class LockingVault extends VotingVault {
   async getDelegatorsTo(address: string, atBlock?: number): Promise<Voter[]> {
     const delegators = await this.dataSource.getDelegatorsTo(address, atBlock);
     return delegators.map(({ address }) => new Voter(address, this.context));
+  }
+
+  changeDelegate(signer: Signer, delegate: string): Promise<string> {
+    return this.dataSource.changeDelegate(signer, delegate);
   }
 }
