@@ -43,7 +43,7 @@ export class Token extends Model {
     return this.dataSource.getBalanceOf(address);
   }
 
-  approve(signer: Signer, spender: string, amount?: string): Promise<boolean> {
+  approve(signer: Signer, spender: string, amount?: string): Promise<string> {
     return this.dataSource.approve(
       signer,
       spender,

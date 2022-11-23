@@ -7,9 +7,5 @@ export interface TokenDataSource {
   getName: () => Promise<string>;
   getAllowance: (owner: string, spender: string) => Promise<string>;
   getBalanceOf: (address: string) => Promise<string>;
-  approve: (
-    signer: Signer,
-    spender: string,
-    amount: string,
-  ) => Promise<boolean>;
+  approve: (signer: Signer, spender: string, amount: string) => Promise<string>;
 }
