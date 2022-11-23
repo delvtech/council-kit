@@ -1,5 +1,5 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
-import { providers } from "ethers";
+import { providers, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import {
@@ -133,5 +133,23 @@ export class CoreVotingContractDataSource
       no: formatEther(noBigNumber),
       maybe: formatEther(maybeBigNumber),
     };
+  }
+
+  async vote(
+    signer: Signer,
+    vaults: string[],
+    proposalId: number,
+    ballot: Ballot,
+  ): Promise<string> {
+    const contract = this.contract.connect(signer);
+    const transaction = await contract.vote(
+      vaults,
+      vaults.map(() => "0x00"),
+      proposalId,
+      BALLOTS.indexOf(ballot),
+    );
+    await transaction.wait(); // will throw an error if transaction fails
+    this.deleteCall("votes", [await signer.getAddress(), proposalId]);
+    return transaction.hash;
   }
 }
