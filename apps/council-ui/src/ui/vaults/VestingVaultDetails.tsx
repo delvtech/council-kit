@@ -1,23 +1,21 @@
-import { LockingVault } from "@council/sdk";
+import { sumStrings, VestingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { ReactElement } from "react";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { ChangeDelegateForm } from "./base/ChangeDelegateForm";
-import { DepositAndWithdrawForm } from "./base/DepositAndWithdrawForm";
 
-interface LockingVaultDetailsProps {
+interface VestingVaultDetailsProps {
   address: string;
   account: string;
 }
 
-export function LockingVaultDetails({
+export function VestingVaultDetails({
   address,
   account,
-}: LockingVaultDetailsProps): ReactElement {
-  const { data, status, error } = useLockingVaultDetailsData(address, account);
-
+}: VestingVaultDetailsProps): ReactElement {
+  const { data, status, error } = useVestingVaultDetailsData(address, account);
   switch (status) {
     case "loading":
       return (
@@ -38,13 +36,7 @@ export function LockingVaultDetails({
     case "success":
       return (
         <div className="flex h-48 w-full flex-col gap-x-8 sm:flex-row">
-          <DepositAndWithdrawForm
-            symbol={data.tokenSymbol}
-            balance={data.tokenBalance}
-            depositedBalance={data.depositedBalance}
-            onDeposit={() => {}} // TODO
-            onWithdraw={() => {}} // TODO
-          />
+          <div className="basis-1/2">{/* TODO */}</div>
           <ChangeDelegateForm
             currentDelegate={data.delegate}
             onDelegate={() => {}} // TODO
@@ -57,27 +49,32 @@ export function LockingVaultDetails({
   }
 }
 
-interface LockingVaultDetailsData {
+interface VestingVaultDetailsData {
   tokenSymbol: string;
   tokenBalance: string;
-  depositedBalance: string;
+  grantBalance: string;
+  unlockDate: Date;
+  expirationDate: Date;
   delegate: string;
 }
 
-function useLockingVaultDetailsData(
+function useVestingVaultDetailsData(
   address: string,
   account: string,
-): UseQueryResult<LockingVaultDetailsData> {
+): UseQueryResult<VestingVaultDetailsData> {
   const { context } = useCouncil();
-  return useQuery(["lockingVaultDetails", address], async () => {
-    const lockingVault = new LockingVault(address, context);
-    const token = await lockingVault.getToken();
-    const delegate = await lockingVault.getDelegate(account);
+  return useQuery(["vestingVaultDetails", address, account], async () => {
+    const vestingVault = new VestingVault(address, context);
+    const token = await vestingVault.getToken();
+    const grant = await vestingVault.getGrant(account);
     return {
       tokenSymbol: await token.getSymbol(),
       tokenBalance: await token.getBalanceOf(account),
-      depositedBalance: await lockingVault.getDepositedBalance(account),
-      delegate: delegate.address,
+      // TODO: Confirm this is accurate.
+      grantBalance: sumStrings([grant.allocation, `-${grant.withdrawn}`]),
+      unlockDate: new Date(grant.unlockTimestamp),
+      expirationDate: new Date(grant.expirationTimestamp),
+      delegate: (await vestingVault.getDelegate(account)).address,
     };
   });
 }
