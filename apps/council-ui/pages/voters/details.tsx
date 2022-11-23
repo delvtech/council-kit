@@ -18,8 +18,10 @@ export default function VoterDetailsPage(): ReactElement {
   const { address } = query as { address: string | undefined };
 
   const { data: voterData, status, error } = useVoterData(address);
-  const _address = getAddress(address as string);
-  const { data: ens } = useEnsName({ address: _address });
+  const { data: ens } = useEnsName({
+    address: getAddress(address as string),
+    enabled: !!address,
+  });
 
   return (
     <Page>
