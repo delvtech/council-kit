@@ -10,6 +10,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { LockingVaultDetails } from "src/ui/vaults/LockingVaultDetails";
+import { VestingVaultDetails } from "src/ui/vaults/VestingVaultDetails";
 import { useAccount, useNetwork } from "wagmi";
 
 export default function Vault(): ReactElement {
@@ -113,7 +114,12 @@ export default function Vault(): ReactElement {
                   );
 
                 case "VestingVault":
-                  return <></>;
+                  return (
+                    <VestingVaultDetails
+                      account={address}
+                      address={query.address as string}
+                    />
+                  );
 
                 case "GSCVault":
                   return <></>;
