@@ -14,6 +14,10 @@ export function VoteResultBar({ results }: VoteResultBarProps): ReactElement {
     sumStrings([yesResult, noResult, maybeResult]),
   );
 
+  if (resultsTotal) {
+    return <div>Unknown</div>;
+  }
+
   const yesPercent =
     +formatUnits(parseEther(yesResult).div(resultsTotal), 0) * 100;
   const maybePercent =

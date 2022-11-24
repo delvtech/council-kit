@@ -28,6 +28,7 @@ export function VotingHistoryList({
 }
 
 function VoterVoteHistoryItem({ vote }: { vote: Vote }): ReactElement {
+  // TODO @cashd: revisit fetching data in this component, far down in component tree
   const { data: voteResults } = useVoteResults(vote);
 
   const id = vote.proposal.id;
