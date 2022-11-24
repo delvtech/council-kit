@@ -88,10 +88,6 @@ function useProposalDetailsPageData(proposalId?: number) {
   return useQuery<ProposalDetailsPageData | null>(
     [queryKeyBase, proposalId],
     async () => {
-      // if (!!!proposalId) {
-      //   return null;
-      // }
-
       const proposal = coreVoting.getProposal(proposalId!);
 
       const currentQuorum = await proposal.getCurrentQuorum();
@@ -130,9 +126,6 @@ function useProposalDetailsPageData(proposalId?: number) {
         votes,
       };
     },
-    // {
-    //   enabled: !!proposalId,
-    // },
   );
 }
 
