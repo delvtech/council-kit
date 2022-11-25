@@ -8,15 +8,30 @@ import { formatEther } from "ethers/lib/utils";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
-export class VotingVaultContractDataSource
-  extends ContractDataSource<IVotingVault | GSCVault>
+export class VotingVaultContractDataSource<
+    TVault extends IVotingVault | GSCVault = IVotingVault,
+  >
+  extends ContractDataSource<TVault>
   implements VotingVaultDataSource
 {
-  constructor(address: string, provider: providers.Provider) {
-    super(IVotingVault__factory.connect(address, provider));
+  constructor(address: string, provider: providers.Provider);
+  constructor(vault: TVault);
+  constructor(vaultOrAddress: string | TVault, provider?: providers.Provider) {
+    super(
+      typeof vaultOrAddress === "string"
+        ? (IVotingVault__factory.connect(
+            vaultOrAddress,
+            provider as providers.Provider,
+          ) as TVault)
+        : vaultOrAddress,
+    );
   }
 
-  async getVotingPower(address: string, atBlock: number): Promise<string> {
+  async getVotingPower(
+    this: ContractDataSource<IVotingVault>,
+    address: string,
+    atBlock: number,
+  ): Promise<string> {
     try {
       // TODO: find a better solution for this.
       // ethers.js will spit out an error message that we can't disable without turning off the

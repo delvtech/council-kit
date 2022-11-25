@@ -2,7 +2,6 @@ import { LockingVault, LockingVault__factory } from "@council/typechain";
 import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/LockingVault.sol/LockingVault";
 import { BigNumber, providers, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
-import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
 export interface VoterWithPower {
@@ -10,30 +9,21 @@ export interface VoterWithPower {
   power: string;
 }
 
-export class LockingVaultContractDataSource extends VotingVaultContractDataSource {
-  contract: LockingVault;
-
+export class LockingVaultContractDataSource extends VotingVaultContractDataSource<LockingVault> {
   constructor(address: string, provider: providers.Provider) {
-    super(address, provider);
-    this.contract = LockingVault__factory.connect(address, provider);
+    super(LockingVault__factory.connect(address, provider));
   }
 
-  getToken(this: ContractDataSource<LockingVault>): Promise<string> {
+  getToken(): Promise<string> {
     return this.call("token", []);
   }
 
-  async getDepositedBalance(
-    this: ContractDataSource<LockingVault>,
-    address: string,
-  ): Promise<string> {
+  async getDepositedBalance(address: string): Promise<string> {
     const [, balanceBigNumber] = await this.call("deposits", [address]);
     return formatEther(balanceBigNumber);
   }
 
-  async getDelegate(
-    this: ContractDataSource<LockingVault>,
-    address: string,
-  ): Promise<string> {
+  async getDelegate(address: string): Promise<string> {
     const [delegate] = await this.call("deposits", [address]);
     return delegate;
   }
@@ -64,15 +54,12 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     });
   }
 
-  async getStaleBlockLag(
-    this: ContractDataSource<LockingVault>,
-  ): Promise<number> {
+  async getStaleBlockLag(): Promise<number> {
     const staleBlockLagBigNumber = await this.call("staleBlockLag", []);
     return staleBlockLagBigNumber.toNumber();
   }
 
   async getHistoricalVotingPower(
-    this: ContractDataSource<LockingVault>,
     address: string,
     atBlock: number,
   ): Promise<string> {
@@ -123,11 +110,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     });
   }
 
-  async changeDelegate(
-    this: ContractDataSource<LockingVault>,
-    signer: Signer,
-    delegate: string,
-  ): Promise<string> {
+  async changeDelegate(signer: Signer, delegate: string): Promise<string> {
     const contract = this.contract.connect(signer);
     const transaction = await contract.changeDelegation(delegate);
     await transaction.wait(); // will throw an error if transaction fails

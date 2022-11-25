@@ -2,7 +2,6 @@ import { VestingVault, VestingVault__factory } from "@council/typechain";
 import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/VestingVault.sol/VestingVault";
 import { BigNumber, providers, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
-import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
@@ -23,24 +22,18 @@ export interface VoterWithPower {
 }
 
 export class VestingVaultContractDataSource
-  extends VotingVaultContractDataSource
+  extends VotingVaultContractDataSource<VestingVault>
   implements VotingVaultDataSource
 {
-  contract: VestingVault;
-
   constructor(address: string, provider: providers.Provider) {
-    super(address, provider);
-    this.contract = VestingVault__factory.connect(address, provider);
+    super(VestingVault__factory.connect(address, provider));
   }
 
-  getToken(this: ContractDataSource<VestingVault>): Promise<string> {
+  getToken(): Promise<string> {
     return this.call("token", []);
   }
 
-  async getGrant(
-    this: ContractDataSource<VestingVault>,
-    address: string,
-  ): Promise<Grant> {
+  async getGrant(address: string): Promise<Grant> {
     const {
       allocation,
       withdrawn,
@@ -94,15 +87,12 @@ export class VestingVaultContractDataSource
     });
   }
 
-  async getStaleBlockLag(
-    this: ContractDataSource<VestingVault>,
-  ): Promise<number> {
+  async getStaleBlockLag(): Promise<number> {
     const staleBlockLagBigNumber = await this.call("staleBlockLag", []);
     return staleBlockLagBigNumber.toNumber();
   }
 
   async getHistoricalVotingPower(
-    this: ContractDataSource<VestingVault>,
     address: string,
     atBlock: number,
   ): Promise<string> {
@@ -153,11 +143,7 @@ export class VestingVaultContractDataSource
     });
   }
 
-  async changeDelegate(
-    this: ContractDataSource<VestingVault>,
-    signer: Signer,
-    delegate: string,
-  ): Promise<string> {
+  async changeDelegate(signer: Signer, delegate: string): Promise<string> {
     const contract = this.contract.connect(signer);
     const transaction = await contract.delegate(delegate);
     await transaction.wait(); // will throw an error if transaction fails
