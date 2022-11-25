@@ -13,25 +13,22 @@ interface VestingVaultOptions extends VotingVaultOptions {
   dataSource?: VestingVaultContractDataSource;
 }
 
-export class VestingVault extends VotingVault {
-  dataSource: VestingVaultContractDataSource;
-
+export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   constructor(
     address: string,
     context: CouncilContext,
     options?: VestingVaultOptions,
   ) {
-    const { name = "Vesting Vault", ...passThroughOptions } = options || {};
     super(address, context, {
-      ...passThroughOptions,
-      name,
+      ...options,
+      name: options?.name ?? "Vesting Vault",
+      dataSource:
+        options?.dataSource ??
+        context.registerDataSource(
+          { address },
+          new VestingVaultContractDataSource(address, context.provider),
+        ),
     });
-    this.dataSource =
-      options?.dataSource ||
-      context.registerDataSource(
-        { address },
-        new VestingVaultContractDataSource(address, context.provider),
-      );
   }
 
   async getToken(): Promise<Token> {

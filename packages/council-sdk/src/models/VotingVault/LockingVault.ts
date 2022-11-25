@@ -10,25 +10,22 @@ interface LockingVaultOptions extends VotingVaultOptions {
   dataSource?: LockingVaultContractDataSource;
 }
 
-export class LockingVault extends VotingVault {
-  dataSource: LockingVaultContractDataSource;
-
+export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   constructor(
     address: string,
     context: CouncilContext,
     options?: LockingVaultOptions,
   ) {
-    const { name = "Locking Vault", ...passThroughOptions } = options || {};
     super(address, context, {
-      ...passThroughOptions,
-      name,
+      ...options,
+      name: options?.name ?? "Locking Vault",
+      dataSource:
+        options?.dataSource ??
+        context.registerDataSource(
+          { address },
+          new LockingVaultContractDataSource(address, context.provider),
+        ),
     });
-    this.dataSource =
-      options?.dataSource ||
-      context.registerDataSource(
-        { address },
-        new LockingVaultContractDataSource(address, context.provider),
-      );
   }
 
   async getToken(): Promise<Token> {
