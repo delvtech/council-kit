@@ -2,6 +2,7 @@ import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import { ReactElement } from "react";
+import { Toaster } from "react-hot-toast";
 import { reactQueryClient } from "src/clients/reactQuery";
 import { wagmiClient } from "src/clients/wagmi";
 import { councilConfigs } from "src/config/council.config";
@@ -22,6 +23,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
             <main>
               <Component {...pageProps} />
             </main>
+            <Toaster />
           </CouncilClientProvider>
         </QueryClientProvider>
       </RainbowKitProvider>
