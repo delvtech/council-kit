@@ -10,6 +10,8 @@ export function useDisplayName(address: string): string {
     provider.lookupAddress(address).then((ens) => {
       if (ens) {
         setName(ens);
+      } else {
+        setName(formatAddress(address));
       }
     });
   }, [address, provider]);
