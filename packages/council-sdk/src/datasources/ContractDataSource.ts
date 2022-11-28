@@ -1,4 +1,4 @@
-import { BaseContract } from "ethers";
+import { BaseContract, Signer } from "ethers";
 import LRUCache from "lru-cache";
 import { CachedDataSource } from "./CachedDataSource";
 
@@ -9,10 +9,14 @@ type AnyFunction = (...args: any) => any;
  */
 export type FunctionKeys<T> = Exclude<
   {
-    [K in keyof T]: T[K] extends AnyFunction ? K : never;
+    [K in keyof T]: T[K] extends AnyFunction ? K : undefined;
   }[keyof T],
   undefined
 >;
+
+export interface TransactionOptions {
+  onSubmitted?: (transaction: string) => void;
+}
 
 // TODO: add a method for event queries
 export class ContractDataSource<
@@ -33,7 +37,7 @@ export class ContractDataSource<
   ): T[K] extends AnyFunction ? ReturnType<T[K]> : never {
     return this.cached([property, ...args], () => {
       const contract = this.contract as T;
-      const fn = contract[property] as unknown as AnyFunction;
+      const fn = contract[property] as AnyFunction;
       return fn(...args);
     });
   }
@@ -51,6 +55,20 @@ export class ContractDataSource<
       const fn = contract.callStatic[property as string] as AnyFunction;
       return fn(...args);
     });
+  }
+
+  async callWithSigner<K extends FunctionKeys<T>>(
+    method: K,
+    args: T[K] extends AnyFunction ? Parameters<T[K]> : never,
+    signer: Signer,
+    options?: TransactionOptions,
+  ): Promise<T[K] extends AnyFunction ? Awaited<ReturnType<T[K]>> : never> {
+    const contract = this.contract.connect(signer) as T;
+    const fn = contract[method] as AnyFunction;
+    const transaction = await fn(...args);
+    options?.onSubmitted?.(transaction.hash);
+    await transaction.wait(); // will throw an error if transaction fails
+    return transaction;
   }
 
   deleteCall<K extends FunctionKeys<T>>(

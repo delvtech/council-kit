@@ -1,6 +1,9 @@
 import { providers, Signer } from "ethers";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
-import { ContractDataSource } from "src/datasources/ContractDataSource";
+import {
+  ContractDataSource,
+  TransactionOptions,
+} from "src/datasources/ContractDataSource";
 import { TokenDataSource } from "./TokenDataSource";
 import { MockERC20, MockERC20__factory } from "@council/typechain";
 
@@ -47,13 +50,14 @@ export class ERC20ContractDataSource
     signer: Signer,
     spender: string,
     amount: string,
+    options?: TransactionOptions,
   ): Promise<string> {
-    const token = this.contract.connect(signer);
-    const transaction = await token.approve(
-      spender,
-      parseUnits(amount, await this.getDecimals()),
+    const transaction = await this.callWithSigner(
+      "approve",
+      [spender, parseUnits(amount, await this.getDecimals())],
+      signer,
+      options,
     );
-    await transaction.wait(); // will throw an error if transaction fails
     const owner = await signer.getAddress();
     this.deleteCall("allowance", [owner, spender]);
     return transaction.hash;

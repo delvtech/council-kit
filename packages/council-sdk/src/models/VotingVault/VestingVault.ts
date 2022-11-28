@@ -1,5 +1,6 @@
 import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
   Grant,
   VestingVaultContractDataSource,
@@ -85,7 +86,11 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     return delegators.map(({ address }) => new Voter(address, this.context));
   }
 
-  changeDelegate(signer: Signer, delegate: string): Promise<string> {
-    return this.dataSource.changeDelegate(signer, delegate);
+  changeDelegate(
+    signer: Signer,
+    delegate: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.changeDelegate(signer, delegate, options);
   }
 }

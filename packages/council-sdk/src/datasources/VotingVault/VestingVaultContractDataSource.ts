@@ -2,6 +2,7 @@ import { VestingVault, VestingVault__factory } from "@council/typechain";
 import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/VestingVault.sol/VestingVault";
 import { BigNumber, providers, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
@@ -143,10 +144,17 @@ export class VestingVaultContractDataSource
     });
   }
 
-  async changeDelegate(signer: Signer, delegate: string): Promise<string> {
-    const contract = this.contract.connect(signer);
-    const transaction = await contract.delegate(delegate);
-    await transaction.wait(); // will throw an error if transaction fails
+  async changeDelegate(
+    signer: Signer,
+    delegate: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "delegate",
+      [delegate],
+      signer,
+      options,
+    );
     this.deleteCall("getGrant", [await signer.getAddress()]);
     this.deleteCached(["getDelegatorsTo", delegate, undefined]);
     return transaction.hash;

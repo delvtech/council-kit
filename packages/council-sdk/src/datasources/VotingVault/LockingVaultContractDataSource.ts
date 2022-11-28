@@ -2,6 +2,7 @@ import { LockingVault, LockingVault__factory } from "@council/typechain";
 import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/LockingVault.sol/LockingVault";
 import { BigNumber, providers, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
 export interface VoterWithPower {
@@ -110,10 +111,17 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     });
   }
 
-  async changeDelegate(signer: Signer, delegate: string): Promise<string> {
-    const contract = this.contract.connect(signer);
-    const transaction = await contract.changeDelegation(delegate);
-    await transaction.wait(); // will throw an error if transaction fails
+  async changeDelegate(
+    signer: Signer,
+    delegate: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "changeDelegation",
+      [delegate],
+      signer,
+      options,
+    );
     this.deleteCall("deposits", [await signer.getAddress()]);
     this.deleteCached(["getDelegatorsTo", delegate, undefined]);
     return transaction.hash;
