@@ -121,6 +121,7 @@ function useChangeDelegate(vaultAddress: string) {
         toast.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
           id: toastId,
         });
+        // Wrapping in new Error() to get stack trace
         console.error(new Error((error as any).toString()));
       },
     },
