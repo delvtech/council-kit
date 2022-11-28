@@ -118,7 +118,7 @@ function useChangeDelegate(vaultAddress: string) {
           id: toastId,
         });
         // The SDK will manage cache invalidation for us ✨
-        queryClient.refetchQueries();
+        queryClient.invalidateQueries();
       },
       onError(error, { delegate }) {
         toast.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
