@@ -47,14 +47,9 @@ export class Token extends Model {
   approve(
     signer: Signer,
     spender: string,
-    amount?: string,
+    amount: string,
     options?: TransactionOptions,
   ): Promise<string> {
-    return this.dataSource.approve(
-      signer,
-      spender,
-      amount ?? ethers.constants.MaxUint256.toString(),
-      options,
-    );
+    return this.dataSource.approve(signer, spender, amount, options);
   }
 }
