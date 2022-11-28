@@ -5,11 +5,13 @@ import { Input } from "src/ui/base/forms/Input";
 interface ChangeDelegateFormProps {
   currentDelegate: string;
   onDelegate: (delegate: string) => void;
+  disabled?: boolean;
 }
 
 export function ChangeDelegateForm({
   currentDelegate,
   onDelegate,
+  disabled = false,
 }: ChangeDelegateFormProps): ReactElement {
   const [newDelegate, setNewDelegate] = useState("");
   const delegateName = useDisplayName(currentDelegate);
@@ -26,6 +28,7 @@ export function ChangeDelegateForm({
       <button
         className="daisy-btn daisy-btn-primary"
         onClick={() => onDelegate(newDelegate)}
+        disabled={disabled}
       >
         Delegate
       </button>
