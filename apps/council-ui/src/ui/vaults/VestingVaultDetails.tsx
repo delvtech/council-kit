@@ -1,9 +1,18 @@
 import { sumStrings, VestingVault } from "@council/sdk";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import assertNever from "assert-never";
+import { Signer } from "ethers";
 import { ReactElement } from "react";
+import toast from "react-hot-toast";
+import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { useSigner } from "wagmi";
 import { ChangeDelegateForm } from "./base/ChangeDelegateForm";
 
 interface VestingVaultDetailsProps {
@@ -15,7 +24,9 @@ export function VestingVaultDetails({
   address,
   account,
 }: VestingVaultDetailsProps): ReactElement {
+  const { data: signer } = useSigner();
   const { data, status, error } = useVestingVaultDetailsData(address, account);
+  const { mutate: changeDelegate } = useChangeDelegate(address);
   switch (status) {
     case "loading":
       return (
@@ -39,7 +50,10 @@ export function VestingVaultDetails({
           <div className="basis-1/2">{/* TODO */}</div>
           <ChangeDelegateForm
             currentDelegate={data.delegate}
-            onDelegate={() => {}} // TODO
+            disabled={!signer}
+            onDelegate={(delegate) =>
+              changeDelegate({ signer: signer as Signer, delegate })
+            }
           />
         </div>
       );
@@ -77,4 +91,38 @@ function useVestingVaultDetailsData(
       delegate: (await vestingVault.getDelegate(account)).address,
     };
   });
+}
+
+interface ChangeDelegateArguments {
+  signer: Signer;
+  delegate: string;
+}
+
+function useChangeDelegate(vaultAddress: string) {
+  const { context } = useCouncil();
+  const queryClient = useQueryClient();
+  let toastId: string;
+  return useMutation(
+    ({ signer, delegate }: ChangeDelegateArguments): Promise<string> => {
+      const vault = new VestingVault(vaultAddress, context);
+      return vault.changeDelegate(signer, delegate, {
+        onSubmitted: () => (toastId = toast.loading("Delegating")),
+      });
+    },
+    {
+      onSuccess: (_, { delegate }) => {
+        toast.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
+          id: toastId,
+        });
+        // The SDK will manage cache invalidation for us ✨
+        queryClient.refetchQueries();
+      },
+      onError(error, { delegate }) {
+        toast.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
+          id: toastId,
+        });
+        console.error(new Error((error as any).toString()));
+      },
+    },
+  );
 }
