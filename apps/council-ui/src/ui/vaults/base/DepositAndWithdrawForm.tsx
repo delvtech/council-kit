@@ -10,6 +10,7 @@ interface DepositAndWithdrawFormProps {
   depositedBalance: string;
   onDeposit: (amount: string) => void;
   onWithdraw: (amount: string) => void;
+  disabled?: boolean;
 }
 
 export function DepositAndWithdrawForm({
@@ -18,6 +19,7 @@ export function DepositAndWithdrawForm({
   depositedBalance,
   onDeposit,
   onWithdraw,
+  disabled = false,
 }: DepositAndWithdrawFormProps): ReactElement {
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
   const [depositAmount, setDepositAmount] = useState("");
@@ -61,6 +63,7 @@ export function DepositAndWithdrawForm({
                 <button
                   className="daisy-btn daisy-btn-primary"
                   onClick={() => onDeposit(depositAmount)}
+                  disabled={disabled}
                 >
                   Deposit
                 </button>
@@ -83,6 +86,7 @@ export function DepositAndWithdrawForm({
                 <button
                   className="daisy-btn daisy-btn-primary"
                   onClick={() => onWithdraw(withdrawAmount)}
+                  disabled={disabled}
                 >
                   Withdraw
                 </button>

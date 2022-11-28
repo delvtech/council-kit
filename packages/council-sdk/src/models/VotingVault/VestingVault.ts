@@ -1,5 +1,6 @@
 import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
   Grant,
   VestingVaultContractDataSource,
@@ -13,25 +14,22 @@ interface VestingVaultOptions extends VotingVaultOptions {
   dataSource?: VestingVaultContractDataSource;
 }
 
-export class VestingVault extends VotingVault {
-  dataSource: VestingVaultContractDataSource;
-
+export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   constructor(
     address: string,
     context: CouncilContext,
     options?: VestingVaultOptions,
   ) {
-    const { name = "Vesting Vault", ...passThroughOptions } = options || {};
     super(address, context, {
-      ...passThroughOptions,
-      name,
+      ...options,
+      name: options?.name ?? "Vesting Vault",
+      dataSource:
+        options?.dataSource ??
+        context.registerDataSource(
+          { address },
+          new VestingVaultContractDataSource(address, context.provider),
+        ),
     });
-    this.dataSource =
-      options?.dataSource ||
-      context.registerDataSource(
-        { address },
-        new VestingVaultContractDataSource(address, context.provider),
-      );
   }
 
   async getToken(): Promise<Token> {
@@ -88,7 +86,11 @@ export class VestingVault extends VotingVault {
     return delegators.map(({ address }) => new Voter(address, this.context));
   }
 
-  changeDelegate(signer: Signer, delegate: string): Promise<string> {
-    return this.dataSource.changeDelegate(signer, delegate);
+  changeDelegate(
+    signer: Signer,
+    delegate: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.changeDelegate(signer, delegate, options);
   }
 }

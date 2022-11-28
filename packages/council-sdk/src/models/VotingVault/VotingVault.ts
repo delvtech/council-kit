@@ -4,25 +4,34 @@ import { VotingVaultDataSource } from "src/datasources/VotingVault/VotingVaultDa
 import { Model } from "src/models/Model";
 import { Voter } from "src/models/Voter";
 
-export interface VotingVaultOptions {
+export interface VotingVaultOptions<
+  TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
+> {
   name?: string;
-  dataSource?: VotingVaultDataSource;
+  dataSource?: TDataSource;
 }
 
 // Adds common methods as optional. This makes it possible to loop through a
 // list of VotingVaults and conditionally call these methods without TypeScript
 // complaining that the methods don't exist on type VotingVault.
-interface VotingVaultModel {
+interface VotingVaultModel<
+  TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
+> {
   address: string;
-  dataSource: VotingVaultDataSource;
+  dataSource: TDataSource;
   getVoters?(...args: any[]): Promise<Voter[]>;
   getTotalVotingPower?(...args: any[]): Promise<string>;
 }
 export interface VotingVault extends VotingVaultModel {}
 
-export class VotingVault extends Model implements VotingVaultModel {
+export class VotingVault<
+    TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
+  >
+  extends Model
+  implements VotingVaultModel
+{
   address: string;
-  dataSource: VotingVaultDataSource;
+  dataSource: TDataSource;
 
   constructor(
     address: string,
@@ -31,14 +40,13 @@ export class VotingVault extends Model implements VotingVaultModel {
   ) {
     super(context, options?.name ?? "Voting Vault");
     this.address = address;
-    this.dataSource =
-      options?.dataSource ||
+    this.dataSource = (options?.dataSource ||
       this.context.registerDataSource(
         {
           address,
         },
         new VotingVaultContractDataSource(address, context.provider),
-      );
+      )) as TDataSource;
   }
 
   async getVotingPower(address: string, atBlock?: number): Promise<string> {

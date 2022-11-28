@@ -8,25 +8,22 @@ interface GSCVaultOptions extends VotingVaultOptions {
   dataSource?: GSCVaultContractDataSource;
 }
 
-export class GSCVault extends VotingVault {
-  dataSource: GSCVaultContractDataSource;
-
+export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
   constructor(
     address: string,
     context: CouncilContext,
     options?: GSCVaultOptions,
   ) {
-    const { name = "GSC Vault", ...passThroughOptions } = options || {};
     super(address, context, {
-      ...passThroughOptions,
-      name,
+      ...options,
+      name: options?.name ?? "GSC Vault",
+      dataSource:
+        options?.dataSource ??
+        context.registerDataSource(
+          { address },
+          new GSCVaultContractDataSource(address, context.provider),
+        ),
     });
-    this.dataSource =
-      options?.dataSource ||
-      context.registerDataSource(
-        { address },
-        new GSCVaultContractDataSource(address, context.provider),
-      );
   }
 
   getRequiredVotingPower(): Promise<string> {

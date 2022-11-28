@@ -1,5 +1,6 @@
 import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { LockingVaultContractDataSource } from "src/datasources/VotingVault/LockingVaultContractDataSource";
 import { Token } from "src/models/Token";
 import { Voter } from "src/models/Voter";
@@ -10,25 +11,22 @@ interface LockingVaultOptions extends VotingVaultOptions {
   dataSource?: LockingVaultContractDataSource;
 }
 
-export class LockingVault extends VotingVault {
-  dataSource: LockingVaultContractDataSource;
-
+export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   constructor(
     address: string,
     context: CouncilContext,
     options?: LockingVaultOptions,
   ) {
-    const { name = "Locking Vault", ...passThroughOptions } = options || {};
     super(address, context, {
-      ...passThroughOptions,
-      name,
+      ...options,
+      name: options?.name ?? "Locking Vault",
+      dataSource:
+        options?.dataSource ??
+        context.registerDataSource(
+          { address },
+          new LockingVaultContractDataSource(address, context.provider),
+        ),
     });
-    this.dataSource =
-      options?.dataSource ||
-      context.registerDataSource(
-        { address },
-        new LockingVaultContractDataSource(address, context.provider),
-      );
   }
 
   async getToken(): Promise<Token> {
@@ -85,7 +83,11 @@ export class LockingVault extends VotingVault {
     return delegators.map(({ address }) => new Voter(address, this.context));
   }
 
-  changeDelegate(signer: Signer, delegate: string): Promise<string> {
-    return this.dataSource.changeDelegate(signer, delegate);
+  changeDelegate(
+    signer: Signer,
+    delegate: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.changeDelegate(signer, delegate, options);
   }
 }

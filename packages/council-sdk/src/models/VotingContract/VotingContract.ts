@@ -15,10 +15,12 @@ export interface VotingContractOptions {
   dataSource?: VotingContractDataSource;
 }
 
-export class VotingContract extends Model {
+export class VotingContract<
+  TVaults extends VotingVault[] = VotingVault[],
+> extends Model {
   address: string;
   dataSource: VotingContractDataSource;
-  vaults: VotingVault[];
+  vaults: TVaults;
 
   constructor(
     address: string,
@@ -32,7 +34,7 @@ export class VotingContract extends Model {
       vault instanceof VotingVault
         ? vault
         : new VotingVault(vault, this.context),
-    );
+    ) as TVaults;
     this.dataSource =
       options?.dataSource ||
       this.context.registerDataSource(

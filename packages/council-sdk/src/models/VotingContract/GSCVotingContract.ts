@@ -2,25 +2,26 @@ import { CouncilContext } from "src/context";
 import { GSCVault } from "src/models/VotingVault/GSCVault";
 import { VotingContract, VotingContractOptions } from "./VotingContract";
 
-export class GSCVotingContract extends VotingContract {
-  vaults: [GSCVault];
-
+export class GSCVotingContract extends VotingContract<[GSCVault]> {
   constructor(
     address: string,
     gscVault: GSCVault | string,
     context: CouncilContext,
     options?: VotingContractOptions,
   ) {
-    const { name = "GSC Voting", ...passThruOptions } = options || {};
-    super(address, [], context, {
-      ...passThruOptions,
-      name,
-    });
-    const vault =
-      gscVault instanceof GSCVault
-        ? gscVault
-        : new GSCVault(gscVault, this.context);
-    this.vaults = [vault];
+    super(
+      address,
+      [
+        gscVault instanceof GSCVault
+          ? gscVault
+          : new GSCVault(gscVault, context),
+      ],
+      context,
+      {
+        ...options,
+        name: options?.name ?? "GSC Voting",
+      },
+    );
   }
 
   getRequiredVotingPower(): Promise<string> {

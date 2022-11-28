@@ -2,6 +2,7 @@ import { ethers, Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { ERC20ContractDataSource } from "src/datasources/Token/ERC20ContractDataSource";
 import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { Model } from "./Model";
 
 export class Token extends Model {
@@ -43,11 +44,12 @@ export class Token extends Model {
     return this.dataSource.getBalanceOf(address);
   }
 
-  approve(signer: Signer, spender: string, amount?: string): Promise<string> {
-    return this.dataSource.approve(
-      signer,
-      spender,
-      amount ?? ethers.constants.MaxUint256.toString(),
-    );
+  approve(
+    signer: Signer,
+    spender: string,
+    amount: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.approve(signer, spender, amount, options);
   }
 }
