@@ -37,7 +37,7 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
 
   async getJoinDate(address: string): Promise<Date | null> {
     const joinTimestamp = await this.dataSource.getJoinTimestamp(address);
-    return new Date(joinTimestamp);
+    return joinTimestamp ? new Date(joinTimestamp) : null;
   }
 
   async getIsMember(address: string): Promise<boolean> {
