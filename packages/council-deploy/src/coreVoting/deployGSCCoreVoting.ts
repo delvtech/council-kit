@@ -1,10 +1,9 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
-import { ethers } from "ethers";
+import { ethers, Wallet } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
 interface DeployGSCCoreVotingOptions {
-  signer: SignerWithAddress;
+  signer: Wallet;
   ownerAddress: string;
   votingVaultAddresses: string[];
   /**

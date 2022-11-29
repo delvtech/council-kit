@@ -1,10 +1,10 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { MockERC20, MockERC20__factory } from "@council/typechain";
+import { Wallet } from "ethers";
 
 interface DeployVotingTokenOptions {
   tokenName: string;
   tokenSymbol: string;
-  signer: SignerWithAddress;
+  signer: Wallet;
 }
 
 export async function deployVotingToken({

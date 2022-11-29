@@ -1,8 +1,8 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { VestingVault, VestingVault__factory } from "@council/typechain";
+import { Wallet } from "ethers";
 
 interface DeployVestingVaultOptions {
-  signer: SignerWithAddress;
+  signer: Wallet;
   votingTokenAddress: string;
 
   timelockAddress: string;

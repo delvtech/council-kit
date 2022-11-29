@@ -1,4 +1,3 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Wallet } from "ethers";
 import hre from "hardhat";
 import { writeFile } from "src/base/writeFile";
@@ -12,10 +11,7 @@ async function main() {
     console.log("no private key for goerli deployer address provided");
     return;
   }
-  const signer = new Wallet(
-    goerliKey,
-    provider,
-  ) as unknown as SignerWithAddress;
+  const signer = new Wallet(goerliKey, provider);
 
   const councilAddresses = await deployCouncil(signer);
   console.log(councilAddresses);

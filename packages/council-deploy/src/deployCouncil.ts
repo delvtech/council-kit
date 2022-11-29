@@ -1,4 +1,3 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { deployCoreVoting } from "src/coreVoting/deployCoreVoting";
 import { deployTimelock } from "src/timelock/deployTimelock";
 import { deployTreasury } from "src/treasury/deployTreasury";
@@ -7,6 +6,7 @@ import { deployGSCVault } from "src/vaults/deployGSCVault";
 import { deployLockingVault } from "src/vaults/deployLockingVault";
 import { deployVestingVault } from "src/vaults/deployVestingVault";
 import { deployGSCCoreVoting } from "src/coreVoting/deployGSCCoreVoting";
+import { Wallet } from "ethers";
 
 export interface CouncilAddresses {
   votingToken: string;
@@ -19,9 +19,7 @@ export interface CouncilAddresses {
   treasury: string;
 }
 
-export async function deployCouncil(
-  signer: SignerWithAddress,
-): Promise<CouncilAddresses> {
+export async function deployCouncil(signer: Wallet): Promise<CouncilAddresses> {
   console.log("signer", signer.address);
 
   // The voting token is used to determine voting power in the Locking Vault and

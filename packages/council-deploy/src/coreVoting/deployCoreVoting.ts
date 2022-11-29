@@ -1,9 +1,9 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
+import { Wallet } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
 interface DeployCoreVotingOptions {
-  signer: SignerWithAddress;
+  signer: Wallet;
   votingVaultAddresses: string[];
   timelockAddress: string;
   baseQuorum: string;

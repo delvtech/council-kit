@@ -1,8 +1,8 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Treasury, Treasury__factory } from "@council/typechain";
+import { Wallet } from "ethers";
 
 interface DeployTreasuryOptions {
-  signer: SignerWithAddress;
+  signer: Wallet;
   ownerAddress: string;
 }
 
