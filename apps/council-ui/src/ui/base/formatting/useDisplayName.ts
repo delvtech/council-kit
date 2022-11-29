@@ -1,7 +1,11 @@
 import { useEnsName } from "wagmi";
 import { formatAddress } from "./formatAddress";
 
-export function useDisplayName(address: `0x${string}`): string {
-  const { data: ensName } = useEnsName({ address });
-  return ensName || formatAddress(address);
+export function useDisplayName(
+  address: string | undefined,
+): string | undefined {
+  const { data: ensName } = useEnsName({
+    address: address as `0x{string}` | undefined,
+  });
+  return ensName || (address && formatAddress(address));
 }

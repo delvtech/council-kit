@@ -37,7 +37,7 @@ export class ContractDataSource<
   ): T[K] extends AnyFunction ? ReturnType<T[K]> : never {
     return this.cached([property, ...args], () => {
       const contract = this.contract as T;
-      const fn = contract[property] as AnyFunction;
+      const fn = contract[property] as unknown as AnyFunction;
       return fn(...args);
     });
   }
@@ -64,7 +64,7 @@ export class ContractDataSource<
     options?: TransactionOptions,
   ): Promise<T[K] extends AnyFunction ? Awaited<ReturnType<T[K]>> : never> {
     const contract = this.contract.connect(signer) as T;
-    const fn = contract[method] as AnyFunction;
+    const fn = contract[method] as unknown as AnyFunction;
     const transaction = await fn(...args);
     options?.onSubmitted?.(transaction.hash);
     await transaction.wait(); // will throw an error if transaction fails
