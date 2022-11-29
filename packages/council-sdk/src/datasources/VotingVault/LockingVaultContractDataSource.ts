@@ -35,8 +35,8 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   ): Promise<VoterWithPower[]> {
     return this.cached(["getDelegatorsTo", address, atBlock], async () => {
       const voteChangeEvents = await this.getVoteChangeEvents(
-        address,
         undefined,
+        address,
         undefined,
         atBlock,
       );
@@ -100,13 +100,13 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   }
 
   getVoteChangeEvents(
-    to?: string,
     from?: string,
+    to?: string,
     fromBlock?: number,
     toBlock?: number,
   ): Promise<VoteChangeEvent[]> {
-    return this.cached(["VoteChange", to, from, fromBlock, toBlock], () => {
-      const filter = this.contract.filters.VoteChange(to, from);
+    return this.cached(["VoteChange", from, to, fromBlock, toBlock], () => {
+      const filter = this.contract.filters.VoteChange(from, to);
       return this.contract.queryFilter(filter, fromBlock, toBlock);
     });
   }

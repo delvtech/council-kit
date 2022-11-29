@@ -68,8 +68,8 @@ export class VestingVaultContractDataSource
   ): Promise<VoterWithPower[]> {
     return this.cached(["getDelegatorsTo", address, atBlock], async () => {
       const voteChangeEvents = await this.getVoteChangeEvents(
-        address,
         undefined,
+        address,
         undefined,
         atBlock,
       );
@@ -133,8 +133,8 @@ export class VestingVaultContractDataSource
   }
 
   getVoteChangeEvents(
-    to?: string,
     from?: string,
+    to?: string,
     fromBlock?: number,
     toBlock?: number,
   ): Promise<VoteChangeEvent[]> {
