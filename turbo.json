@@ -22,6 +22,11 @@
       "outputs": ["dist/**"],
       "env": ["PROVIDER_URI", "NODE_ENV"]
     },
+    "@council/deploy#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "env": ["GOERLI_DEPLOYER_PRIVATE_KEY", "GOERLI_URI"]
+    },
     "lint": {
       "dependsOn": ["^build"],
       "outputs": []
