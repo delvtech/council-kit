@@ -155,8 +155,7 @@ export class VestingVaultContractDataSource
       signer,
       options,
     );
-    this.deleteCall("getGrant", [await signer.getAddress()]);
-    this.deleteCached(["getDelegatorsTo", delegate, undefined]);
+    this.clearCached();
     return transaction.hash;
   }
 }

@@ -122,8 +122,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       signer,
       options,
     );
-    this.deleteCall("deposits", [await signer.getAddress()]);
-    this.deleteCached(["getDelegatorsTo", delegate, undefined]);
+    this.clearCached();
     return transaction.hash;
   }
 }
