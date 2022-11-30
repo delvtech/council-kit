@@ -125,4 +125,21 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     this.clearCached();
     return transaction.hash;
   }
+
+  async deposit(
+    signer: Signer,
+    account: string,
+    amount: string,
+    firstDelegate: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "deposit",
+      [account, amount, firstDelegate],
+      signer,
+      options,
+    );
+    this.clearCached();
+    return transaction.hash;
+  }
 }

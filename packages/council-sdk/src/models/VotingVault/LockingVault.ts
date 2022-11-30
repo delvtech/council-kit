@@ -90,4 +90,20 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   ): Promise<string> {
     return this.dataSource.changeDelegate(signer, delegate, options);
   }
+
+  deposit(
+    signer: Signer,
+    account: string,
+    amount: string,
+    firstDelegate: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.deposit(
+      signer,
+      account,
+      amount,
+      firstDelegate,
+      options,
+    );
+  }
 }
