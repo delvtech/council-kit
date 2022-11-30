@@ -142,36 +142,39 @@ function useProposalsPageData(
   account: string | undefined,
 ): UseQueryResult<ProposalRowData[]> {
   const { context, coreVoting, gscVoting } = useCouncil();
-  return useQuery(["proposalsPage", account], async () => {
-    let allProposals = await coreVoting.getProposals();
+  return useQuery({
+    queryKey: ["proposalsPage", account],
+    queryFn: async () => {
+      let allProposals = await coreVoting.getProposals();
 
-    if (gscVoting) {
-      const gscProposals = await gscVoting.getProposals();
-      allProposals = [...allProposals, ...gscProposals];
-    }
+      if (gscVoting) {
+        const gscProposals = await gscVoting.getProposals();
+        allProposals = [...allProposals, ...gscProposals];
+      }
 
-    return await Promise.all(
-      allProposals.map(async (proposal) => {
-        const createdBlock = await proposal.getCreatedBlock();
-        const expirationBlock = await proposal.getExpirationBlock();
-        const vote = account ? await proposal.getVote(account) : null;
-        return {
-          votingContract: proposal.votingContract.address,
-          id: proposal.id,
-          created:
-            createdBlock &&
-            (await getBlockDate(createdBlock, context.provider)),
-          votingEnds:
-            expirationBlock &&
-            (await getBlockDate(expirationBlock, context.provider, {
-              estimateFutureDates: true,
-            })),
-          currentQuorum: await proposal.getCurrentQuorum(),
-          requiredQuorum: await proposal.getRequiredQuorum(),
-          ballot: vote && parseEther(vote.power).gt(0) ? vote.ballot : null,
-        };
-      }),
-    );
+      return await Promise.all(
+        allProposals.map(async (proposal) => {
+          const createdBlock = await proposal.getCreatedBlock();
+          const expirationBlock = await proposal.getExpirationBlock();
+          const vote = account ? await proposal.getVote(account) : null;
+          return {
+            votingContract: proposal.votingContract.address,
+            id: proposal.id,
+            created:
+              createdBlock &&
+              (await getBlockDate(createdBlock, context.provider)),
+            votingEnds:
+              expirationBlock &&
+              (await getBlockDate(expirationBlock, context.provider, {
+                estimateFutureDates: true,
+              })),
+            currentQuorum: await proposal.getCurrentQuorum(),
+            requiredQuorum: await proposal.getRequiredQuorum(),
+            ballot: vote && parseEther(vote.power).gt(0) ? vote.ballot : null,
+          };
+        }),
+      );
+    },
   });
 }
 

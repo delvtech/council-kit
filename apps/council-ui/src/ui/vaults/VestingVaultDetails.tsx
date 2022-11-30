@@ -5,10 +5,10 @@ import {
   useQueryClient,
   UseQueryResult,
 } from "@tanstack/react-query";
-import assertNever from "assert-never";
+import { assertNever } from "assert-never";
 import { Signer } from "ethers";
 import { ReactElement } from "react";
-import toast from "react-hot-toast";
+import index from "react-hot-toast";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -77,19 +77,22 @@ function useVestingVaultDetailsData(
   account: string,
 ): UseQueryResult<VestingVaultDetailsData> {
   const { context } = useCouncil();
-  return useQuery(["vestingVaultDetails", address, account], async () => {
-    const vestingVault = new VestingVault(address, context);
-    const token = await vestingVault.getToken();
-    const grant = await vestingVault.getGrant(account);
-    return {
-      tokenSymbol: await token.getSymbol(),
-      tokenBalance: await token.getBalanceOf(account),
-      // TODO: Confirm this is accurate.
-      grantBalance: sumStrings([grant.allocation, `-${grant.withdrawn}`]),
-      unlockDate: new Date(grant.unlockTimestamp),
-      expirationDate: new Date(grant.expirationTimestamp),
-      delegate: (await vestingVault.getDelegate(account)).address,
-    };
+  return useQuery({
+    queryKey: ["vestingVaultDetails", address, account],
+    queryFn: async () => {
+      const vestingVault = new VestingVault(address, context);
+      const token = await vestingVault.getToken();
+      const grant = await vestingVault.getGrant(account);
+      return {
+        tokenSymbol: await token.getSymbol(),
+        tokenBalance: await token.getBalanceOf(account),
+        // TODO: Confirm this is accurate.
+        grantBalance: sumStrings([grant.allocation, `-${grant.withdrawn}`]),
+        unlockDate: new Date(grant.unlockTimestamp),
+        expirationDate: new Date(grant.expirationTimestamp),
+        delegate: (await vestingVault.getDelegate(account)).address,
+      };
+    },
   });
 }
 
@@ -106,19 +109,19 @@ function useChangeDelegate(vaultAddress: string) {
     ({ signer, delegate }: ChangeDelegateArguments): Promise<string> => {
       const vault = new VestingVault(vaultAddress, context);
       return vault.changeDelegate(signer, delegate, {
-        onSubmitted: () => (toastId = toast.loading("Delegating")),
+        onSubmitted: () => (toastId = index.loading("Delegating")),
       });
     },
     {
       onSuccess: (_, { delegate }) => {
-        toast.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
+        index.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
           id: toastId,
         });
         // The SDK will manage cache invalidation for us ✨
         queryClient.invalidateQueries();
       },
       onError(error, { delegate }) {
-        toast.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
+        index.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
           id: toastId,
         });
         // Wrapping in new Error() to get stack trace

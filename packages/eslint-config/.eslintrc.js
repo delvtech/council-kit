@@ -30,6 +30,10 @@ module.exports = {
       },
     ],
     "import/no-unused-modules": "error",
+    // vscode auto-import does a good job of naming a default exports after the
+    // package, whereas this rule requires us to name our imports after the
+    // files they live in, i.e.: "index" when dealing with npm packages.
+    "import/no-named-as-default": "off",
     curly: "error",
     "no-console": [
       "warn",

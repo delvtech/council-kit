@@ -48,23 +48,28 @@ interface VaultRowData {
   votingPower: string | undefined;
 }
 
-function useVaultsPageData(account?: string): UseQueryResult<VaultRowData[]> {
+function useVaultsPageData(
+  account: string | undefined,
+): UseQueryResult<VaultRowData[]> {
   const { coreVoting, gscVoting } = useCouncil();
-  return useQuery(["vaultsPage", account], () => {
-    let allVaults = coreVoting.vaults;
-    if (gscVoting) {
-      allVaults = [...allVaults, ...gscVoting.vaults];
-    }
-    return Promise.all(
-      allVaults.map(async (vault) => {
-        return {
-          address: vault.address,
-          name: vault.name,
-          tvp: await vault.getTotalVotingPower?.(),
-          votingPower: account && (await vault.getVotingPower(account)),
-        };
-      }),
-    );
+  return useQuery({
+    queryKey: ["vaultsPage", account],
+    queryFn: () => {
+      let allVaults = coreVoting.vaults;
+      if (gscVoting) {
+        allVaults = [...allVaults, ...gscVoting.vaults];
+      }
+      return Promise.all(
+        allVaults.map(async (vault) => {
+          return {
+            address: vault.address,
+            name: vault.name,
+            tvp: await vault.getTotalVotingPower?.(),
+            votingPower: account && (await vault.getVotingPower(account)),
+          };
+        }),
+      );
+    },
   });
 }
 

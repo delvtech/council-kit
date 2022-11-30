@@ -14,11 +14,11 @@ import { VestingVaultDetails } from "src/ui/vaults/VestingVaultDetails";
 import { useAccount, useNetwork } from "wagmi";
 
 export default function Vault(): ReactElement {
-  const { address } = useAccount();
+  const { address: account } = useAccount();
   const { query } = useRouter();
   const { data, isLoading, isError, error } = useVaultDetailsData(
     query.address as string,
-    address,
+    account,
   );
   return (
     <Page>
@@ -101,14 +101,14 @@ export default function Vault(): ReactElement {
             )}
           </div>
 
-          {address &&
+          {account &&
             query.address &&
             (() => {
               switch (data.type) {
                 case "LockingVault":
                   return (
                     <LockingVaultDetails
-                      account={address}
+                      account={account}
                       address={query.address as string}
                     />
                   );
@@ -116,7 +116,7 @@ export default function Vault(): ReactElement {
                 case "VestingVault":
                   return (
                     <VestingVaultDetails
-                      account={address}
+                      account={account}
                       address={query.address as string}
                     />
                   );
@@ -150,69 +150,73 @@ interface VaultDetailsData {
 
 function useVaultDetailsData(
   address: string,
-  account?: string,
+  account: string | undefined,
 ): UseQueryResult<VaultDetailsData> {
   const { context, coreVoting, gscVoting } = useCouncil();
   const { chain } = useNetwork();
   const chainId = chain?.id ?? chains[0].id;
 
-  return useQuery(["vaultDetails", address, account, chainId], async () => {
-    const config = councilConfigs[chainId as SupportedChainId];
+  return useQuery({
+    queryKey: ["vaultDetails", address, account, chainId],
+    queryFn: async () => {
+      const config = councilConfigs[chainId as SupportedChainId];
 
-    let vault = coreVoting.vaults.find((vault) => vault.address === address);
-    let votingContract = vault && coreVoting;
-    let votingContractConfig = vault && config.coreVoting;
+      let vault = coreVoting.vaults.find((vault) => vault.address === address);
+      let votingContract = vault && coreVoting;
+      let votingContractConfig = vault && config.coreVoting;
 
-    if (!vault && gscVoting && gscVoting?.vaults[0].address === address) {
-      votingContract = gscVoting;
-      vault = gscVoting.vaults[0];
-      votingContractConfig = config.gscVoting;
-    }
+      if (!vault && gscVoting && gscVoting?.vaults[0].address === address) {
+        votingContract = gscVoting;
+        vault = gscVoting.vaults[0];
+        votingContractConfig = config.gscVoting;
+      }
 
-    if (!vault) {
-      vault = new VotingVault(address, context);
-    }
+      if (!vault) {
+        vault = new VotingVault(address, context);
+      }
 
-    let delegatedToAccount: number | undefined;
-    if (
-      account &&
-      (vault instanceof LockingVault || vault instanceof VestingVault)
-    ) {
-      delegatedToAccount = (await vault.getDelegatorsTo(account)).length;
-    }
+      let delegatedToAccount: number | undefined;
+      if (
+        account &&
+        (vault instanceof LockingVault || vault instanceof VestingVault)
+      ) {
+        delegatedToAccount = (await vault.getDelegatorsTo(account)).length;
+      }
 
-    let activeProposalCount: number | undefined;
-    const proposals = await votingContract?.getProposals();
-    if (proposals) {
-      activeProposalCount = 0;
-      for (const proposal of proposals) {
-        if (await proposal.getIsActive()) {
-          activeProposalCount++;
+      let activeProposalCount: number | undefined;
+      const proposals = await votingContract?.getProposals();
+      if (proposals) {
+        activeProposalCount = 0;
+        for (const proposal of proposals) {
+          if (await proposal.getIsActive()) {
+            activeProposalCount++;
+          }
         }
       }
-    }
 
-    const type =
-      votingContractConfig &&
-      votingContractConfig.vaults.find(
-        (vaultConfig) => vaultConfig.address === address,
-      )?.type;
-    const accountVotingPower = account && (await vault.getVotingPower(account));
+      const type =
+        votingContractConfig &&
+        votingContractConfig.vaults.find(
+          (vaultConfig) => vaultConfig.address === address,
+        )?.type;
+      const accountVotingPower =
+        account && (await vault.getVotingPower(account));
 
-    return {
-      name: vault.name,
-      type,
-      descriptionURL: votingContractConfig?.vaults.find(
-        (vault) => vault.address === address,
-      )?.descriptionURL,
-      activeProposalCount,
-      accountVotingPower,
-      accountPercentOfTVP:
-        accountVotingPower && vault.getTotalVotingPower
-          ? (+accountVotingPower / +(await vault.getTotalVotingPower())) * 100
-          : undefined,
-      delegatedToAccount,
-      participants: vault.getVoters && (await vault.getVoters()).length,
-    };
+      return {
+        name: vault.name,
+        type,
+        descriptionURL: votingContractConfig?.vaults.find(
+          (vault) => vault.address === address,
+        )?.descriptionURL,
+        activeProposalCount,
+        accountVotingPower,
+        accountPercentOfTVP:
+          accountVotingPower && vault.getTotalVotingPower
+            ? (+accountVotingPower / +(await vault.getTotalVotingPower())) * 100
+            : undefined,
+        delegatedToAccount,
+        participants: vault.getVoters && (await vault.getVoters()).length,
+      };
+    },
   });
 }

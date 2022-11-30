@@ -8,7 +8,7 @@ import {
 import assertNever from "assert-never";
 import { Signer } from "ethers";
 import { ReactElement } from "react";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -83,16 +83,19 @@ function useLockingVaultDetailsData(
   account: string,
 ): UseQueryResult<LockingVaultDetailsData> {
   const { context } = useCouncil();
-  return useQuery(["lockingVaultDetails", address], async () => {
-    const lockingVault = new LockingVault(address, context);
-    const token = await lockingVault.getToken();
-    const delegate = await lockingVault.getDelegate(account);
-    return {
-      tokenSymbol: await token.getSymbol(),
-      tokenBalance: await token.getBalanceOf(account),
-      depositedBalance: await lockingVault.getDepositedBalance(account),
-      delegate: delegate.address,
-    };
+  return useQuery({
+    queryKey: ["lockingVaultDetails", address, account],
+    queryFn: async () => {
+      const lockingVault = new LockingVault(address, context);
+      const token = await lockingVault.getToken();
+      const delegate = await lockingVault.getDelegate(account);
+      return {
+        tokenSymbol: await token.getSymbol(),
+        tokenBalance: await token.getBalanceOf(account),
+        depositedBalance: await lockingVault.getDepositedBalance(account),
+        delegate: delegate.address,
+      };
+    },
   });
 }
 
