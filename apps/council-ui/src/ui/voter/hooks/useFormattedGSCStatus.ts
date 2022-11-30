@@ -6,15 +6,18 @@ export function useFormattedGSCStatus(
   address: string | undefined,
 ): UseQueryResult<GSCStatus> {
   const { gscVoting } = useCouncil();
-  return useQuery(["gsc-status", address], async () => {
-    if (!address) {
-      return undefined;
-    }
+  return useQuery({
+    queryKey: ["gsc-status", address],
+    queryFn: async () => {
+      if (!address) {
+        return undefined;
+      }
 
-    const isIdle = await gscVoting?.getIsIdle(address);
-    const isMember = await gscVoting?.getIsMember(address);
-    const isEligible = await gscVoting?.getIsEligible(address);
+      const isIdle = await gscVoting?.getIsIdle(address);
+      const isMember = await gscVoting?.getIsMember(address);
+      const isEligible = await gscVoting?.getIsEligible(address);
 
-    return formatGSCStatus(isIdle, isMember, isEligible);
+      return formatGSCStatus(isIdle, isMember, isEligible);
+    },
   });
 }

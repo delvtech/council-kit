@@ -156,63 +156,77 @@ function useVaultDetailsData(
   const { chain } = useNetwork();
   const chainId = chain?.id ?? chains[0].id;
 
-  return useQuery(["vaultDetails", address, account, chainId], async () => {
-    const config = councilConfigs[chainId as SupportedChainId];
+  return useQuery({
+    queryKey: [
+      "vaultDetails",
+      address,
+      account,
+      chainId,
+      councilConfigs[chainId as SupportedChainId],
+      gscVoting,
+      LockingVault,
+      VestingVault,
+      undefined,
+    ],
+    queryFn: async () => {
+      const config = councilConfigs[chainId as SupportedChainId];
 
-    let vault = coreVoting.vaults.find((vault) => vault.address === address);
-    let votingContract = vault && coreVoting;
-    let votingContractConfig = vault && config.coreVoting;
+      let vault = coreVoting.vaults.find((vault) => vault.address === address);
+      let votingContract = vault && coreVoting;
+      let votingContractConfig = vault && config.coreVoting;
 
-    if (!vault && gscVoting && gscVoting?.vaults[0].address === address) {
-      votingContract = gscVoting;
-      vault = gscVoting.vaults[0];
-      votingContractConfig = config.gscVoting;
-    }
+      if (!vault && gscVoting && gscVoting?.vaults[0].address === address) {
+        votingContract = gscVoting;
+        vault = gscVoting.vaults[0];
+        votingContractConfig = config.gscVoting;
+      }
 
-    if (!vault) {
-      vault = new VotingVault(address, context);
-    }
+      if (!vault) {
+        vault = new VotingVault(address, context);
+      }
 
-    let delegatedToAccount: number | undefined;
-    if (
-      account &&
-      (vault instanceof LockingVault || vault instanceof VestingVault)
-    ) {
-      delegatedToAccount = (await vault.getDelegatorsTo(account)).length;
-    }
+      let delegatedToAccount: number | undefined;
+      if (
+        account &&
+        (vault instanceof LockingVault || vault instanceof VestingVault)
+      ) {
+        delegatedToAccount = (await vault.getDelegatorsTo(account)).length;
+      }
 
-    let activeProposalCount: number | undefined;
-    const proposals = await votingContract?.getProposals();
-    if (proposals) {
-      activeProposalCount = 0;
-      for (const proposal of proposals) {
-        if (await proposal.getIsActive()) {
-          activeProposalCount++;
+      let activeProposalCount: number | undefined;
+      const proposals = await votingContract?.getProposals();
+      if (proposals) {
+        activeProposalCount = 0;
+        for (const proposal of proposals) {
+          if (await proposal.getIsActive()) {
+            activeProposalCount++;
+          }
         }
       }
-    }
 
-    const type =
-      votingContractConfig &&
-      votingContractConfig.vaults.find(
-        (vaultConfig) => vaultConfig.address === address,
-      )?.type;
-    const accountVotingPower = account && (await vault.getVotingPower(account));
+      const type =
+        votingContractConfig &&
+        votingContractConfig.vaults.find(
+          (vaultConfig) => vaultConfig.address === address,
+        )?.type;
+      const accountVotingPower =
+        account && (await vault.getVotingPower(account));
 
-    return {
-      name: vault.name,
-      type,
-      descriptionURL: votingContractConfig?.vaults.find(
-        (vault) => vault.address === address,
-      )?.descriptionURL,
-      activeProposalCount,
-      accountVotingPower,
-      accountPercentOfTVP:
-        accountVotingPower && vault.getTotalVotingPower
-          ? (+accountVotingPower / +(await vault.getTotalVotingPower())) * 100
-          : undefined,
-      delegatedToAccount,
-      participants: vault.getVoters && (await vault.getVoters()).length,
-    };
+      return {
+        name: vault.name,
+        type,
+        descriptionURL: votingContractConfig?.vaults.find(
+          (vault) => vault.address === address,
+        )?.descriptionURL,
+        activeProposalCount,
+        accountVotingPower,
+        accountPercentOfTVP:
+          accountVotingPower && vault.getTotalVotingPower
+            ? (+accountVotingPower / +(await vault.getTotalVotingPower())) * 100
+            : undefined,
+        delegatedToAccount,
+        participants: vault.getVoters && (await vault.getVoters()).length,
+      };
+    },
   });
 }

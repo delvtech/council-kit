@@ -114,9 +114,9 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
     coreVoting,
     context: { provider },
   } = useCouncil();
-  return useQuery<VoterRowData[]>(
-    ["voter-list-page"],
-    async () => {
+  return useQuery<VoterRowData[]>({
+    queryKey: ["voter-list-page", provider],
+    queryFn: async () => {
       const voters = await coreVoting.getVoters();
       const ensRecords = await getBulkEnsRecords(
         voters.map((voter) => voter.address),
@@ -128,8 +128,6 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
         ensName: ensRecords[voter.address],
       }));
     },
-    {
-      refetchOnWindowFocus: false,
-    },
-  );
+    refetchOnWindowFocus: false,
+  });
 }

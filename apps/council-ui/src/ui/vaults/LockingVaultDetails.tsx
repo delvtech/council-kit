@@ -83,16 +83,19 @@ function useLockingVaultDetailsData(
   account: string,
 ): UseQueryResult<LockingVaultDetailsData> {
   const { context } = useCouncil();
-  return useQuery(["lockingVaultDetails", address], async () => {
-    const lockingVault = new LockingVault(address, context);
-    const token = await lockingVault.getToken();
-    const delegate = await lockingVault.getDelegate(account);
-    return {
-      tokenSymbol: await token.getSymbol(),
-      tokenBalance: await token.getBalanceOf(account),
-      depositedBalance: await lockingVault.getDepositedBalance(account),
-      delegate: delegate.address,
-    };
+  return useQuery({
+    queryKey: ["lockingVaultDetails", address, LockingVault, context, account],
+    queryFn: async () => {
+      const lockingVault = new LockingVault(address, context);
+      const token = await lockingVault.getToken();
+      const delegate = await lockingVault.getDelegate(account);
+      return {
+        tokenSymbol: await token.getSymbol(),
+        tokenBalance: await token.getBalanceOf(account),
+        depositedBalance: await lockingVault.getDepositedBalance(account),
+        delegate: delegate.address,
+      };
+    },
   });
 }
 

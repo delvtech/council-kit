@@ -85,10 +85,13 @@ function useProposalDetailsPageData(proposalId?: number) {
   const { context, coreVoting } = useCouncil();
   const provider = context.provider;
 
-  return useQuery<ProposalDetailsPageData | null>(
-    [queryKeyBase, proposalId],
-    async () => {
-      const proposal = coreVoting.getProposal(proposalId!);
+  return useQuery<ProposalDetailsPageData | null>({
+    queryKey: [provider, queryKeyBase, proposalId],
+    enabled: proposalId !== undefined,
+    queryFn: async () => {
+      const proposal = coreVoting.getProposal(
+        proposalId as number /* safe to cast because enabled is set */,
+      );
 
       const currentQuorum = await proposal.getCurrentQuorum();
       const requiredQuorum = await proposal.getRequiredQuorum();
@@ -126,7 +129,7 @@ function useProposalDetailsPageData(proposalId?: number) {
         votes,
       };
     },
-  );
+  });
 }
 
 interface ProposalStatsBarProps {
