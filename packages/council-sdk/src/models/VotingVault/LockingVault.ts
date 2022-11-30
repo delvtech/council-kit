@@ -106,4 +106,12 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
       options,
     );
   }
+
+  withdraw(
+    signer: Signer,
+    amount: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.withdraw(signer, amount, options);
+  }
 }
