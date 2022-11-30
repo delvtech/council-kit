@@ -2,7 +2,6 @@ import { Vote, Voter } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { GSCStatus } from "src/ui/utils/formatGSCStatus";
-import { useVotingHistory } from "src/ui/voter/hooks/useVotingHistory";
 import { getFormattedGSCStatus } from "src/ui/voter/utils/getFormattedGSCStatus";
 
 interface VoterStatistics {
@@ -15,13 +14,13 @@ export function useVoterStats(
   address: string | undefined,
 ): UseQueryResult<VoterStatistics> {
   const { context, coreVoting, gscVoting } = useCouncil();
-  const { data: votingHistory } = useVotingHistory(address);
 
-  return useQuery(
-    ["voter-stats", address],
-    async () => {
-      // We can safely assume address will never be nullable because of our enabled option
+  return useQuery({
+    queryKey: ["voter-stats", address],
+    enabled: !!address,
+    queryFn: async () => {
       const voter = new Voter(address as string, context);
+      const votingHistory = await voter.getVotes(coreVoting.address);
       const votingPower = await voter.getVotingPower(
         coreVoting.vaults.map((vault) => vault.address),
       );
@@ -30,15 +29,12 @@ export function useVoterStats(
         : null;
 
       return {
-        votingHistory: votingHistory as Vote[],
+        votingHistory: votingHistory,
         votingPower,
         gscStatus,
       };
     },
-    {
-      enabled: !!address && !!votingHistory,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-    },
-  );
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
 }
