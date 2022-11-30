@@ -2,6 +2,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
 import Link from "next/link";
 import { ReactElement } from "react";
+import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
@@ -13,7 +14,7 @@ export default function Voters(): ReactElement {
   return (
     <Page>
       {/* Page Header */}
-      <div className="flex w-full items-center gap-x-2">
+      <div className="flex w-full items-center gap-x-2 max-w-xl mx-auto">
         <h1 className="w-full text-5xl text-accent-content">Voters</h1>
 
         {/* Search Input Box */}
@@ -62,7 +63,7 @@ export default function Voters(): ReactElement {
 
           case "success":
             return (
-              <table className="daisy-table-zebra daisy-table w-full min-w-fit">
+              <table className="daisy-table-zebra daisy-table max-w-2xl mx-auto">
                 {/* Table Header */}
                 <thead>
                   <tr>
@@ -113,13 +114,22 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
     coreVoting,
     context: { provider },
   } = useCouncil();
-  return useQuery<VoterRowData[]>(["voterPage"], async () => {
-    const voters = await coreVoting.getVoters();
-    return Promise.all(
-      voters.map(async (voter) => {
-        const ensName = await provider.lookupAddress(voter.address);
-        return { address: voter.address, ensName: ensName };
-      }),
-    );
-  });
+  return useQuery<VoterRowData[]>(
+    ["voterPage"],
+    async () => {
+      const voters = await coreVoting.getVoters();
+      const ensRecords = await getBulkEnsRecords(
+        voters.map((voter) => voter.address),
+        provider,
+      );
+
+      return voters.map((voter) => ({
+        address: voter.address,
+        ensName: ensRecords[voter.address],
+      }));
+    },
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
 }
