@@ -1,7 +1,8 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
+import Fuse from "fuse.js";
 import Link from "next/link";
-import { ReactElement } from "react";
+import { ReactElement, useDeferredValue, useMemo, useState } from "react";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
@@ -10,6 +11,7 @@ import { useCouncil } from "src/ui/council/useCouncil";
 
 export default function Voters(): ReactElement {
   const { data: voters, status, error } = useVoterPageData();
+  const { results, search } = useVoterSearch(voters);
 
   return (
     <Page>
@@ -22,6 +24,9 @@ export default function Voters(): ReactElement {
           type="text"
           placeholder="Search"
           className="daisy-input-bordered daisy-input w-64 max-w-xs"
+          onChange={(e) => {
+            search(e.target.value as string);
+          }}
         />
 
         {/* Filter Dropdown */}
@@ -56,7 +61,7 @@ export default function Voters(): ReactElement {
             return (
               <div className="daisy-mockup-code">
                 <code className="block whitespace-pre-wrap px-6 text-error">
-                  {error ? (error as any).toString() : "Unknown error"}
+                  {error ? (error as string).toString() : "Unknown error"}
                 </code>
               </div>
             );
@@ -76,7 +81,7 @@ export default function Voters(): ReactElement {
 
                 {/* Table Body */}
                 <tbody>
-                  {voters.map(({ address, ensName }) => {
+                  {results.slice(0, 100).map(({ address, ensName }) => {
                     return (
                       <tr key={address}>
                         <td className="underline">
@@ -132,4 +137,43 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
       refetchOnWindowFocus: false,
     },
   );
+}
+
+const voterSearchFuseOptions = {
+  threshold: 0.3,
+  isCaseSensitive: false,
+  ignoreLocation: true,
+  keys: ["address", "ensName"],
+};
+
+const searchCache: Record<string, Array<VoterRowData>> = {};
+
+function useVoterSearch(data: Array<VoterRowData> | undefined) {
+  const [input, setInput] = useState<string | null>(null);
+  const defferredInput = useDeferredValue(input);
+  const reset = () => setInput("");
+  const setValue = (i: string) => setInput(i);
+
+  const results = useMemo(() => {
+    const fuse = new Fuse(data ?? [], voterSearchFuseOptions);
+
+    if (input) {
+      if (searchCache[input]) {
+        return searchCache[input];
+      }
+
+      const filtered = fuse.search(input).map((item) => item.item);
+      searchCache[input] = filtered;
+
+      return filtered;
+    }
+
+    return data ?? [];
+  }, [defferredInput, data]);
+
+  return {
+    results,
+    reset,
+    search: setValue,
+  };
 }
