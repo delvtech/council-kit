@@ -58,8 +58,9 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
     });
   }
 
-  async getJoinTimestamp(address: string): Promise<number> {
+  async getJoinTimestamp(address: string): Promise<number | null> {
     const joinDateBigNumber = await this.call("members", [address]);
-    return joinDateBigNumber.toNumber() * 1000;
+    const joinDate = joinDateBigNumber.toNumber() * 1000;
+    return joinDate > 0 ? joinDate : null;
   }
 }
