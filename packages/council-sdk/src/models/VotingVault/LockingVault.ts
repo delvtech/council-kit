@@ -1,4 +1,5 @@
 import { Signer } from "ethers";
+import { parseUnits } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { LockingVaultContractDataSource } from "src/datasources/VotingVault/LockingVaultContractDataSource";
@@ -91,27 +92,35 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
     return this.dataSource.changeDelegate(signer, delegate, options);
   }
 
-  deposit(
+  async deposit(
     signer: Signer,
     account: string,
     amount: string,
     firstDelegate: string,
     options?: TransactionOptions,
   ): Promise<string> {
+    const token = await this.getToken();
+    const decimals = await token.getDecimals();
     return this.dataSource.deposit(
       signer,
       account,
-      amount,
+      parseUnits(amount, decimals),
       firstDelegate,
       options,
     );
   }
 
-  withdraw(
+  async withdraw(
     signer: Signer,
     amount: string,
     options?: TransactionOptions,
   ): Promise<string> {
-    return this.dataSource.withdraw(signer, amount, options);
+    const token = await this.getToken();
+    const decimals = await token.getDecimals();
+    return this.dataSource.withdraw(
+      signer,
+      parseUnits(amount, decimals),
+      options,
+    );
   }
 }

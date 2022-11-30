@@ -129,7 +129,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   async deposit(
     signer: Signer,
     account: string,
-    amount: string,
+    amount: BigNumber,
     firstDelegate: string,
     options?: TransactionOptions,
   ): Promise<string> {
@@ -145,7 +145,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
 
   async withdraw(
     signer: Signer,
-    amount: string,
+    amount: BigNumber,
     options?: TransactionOptions,
   ): Promise<string> {
     const transaction = await this.callWithSigner(
