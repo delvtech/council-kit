@@ -143,7 +143,7 @@ function useProposalsPageData(
 ): UseQueryResult<ProposalRowData[]> {
   const { context, coreVoting, gscVoting } = useCouncil();
   return useQuery({
-    queryKey: ["proposalsPage", gscVoting, account],
+    queryKey: ["proposalsPage", account],
     queryFn: async () => {
       let allProposals = await coreVoting.getProposals();
 

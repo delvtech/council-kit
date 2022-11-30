@@ -16,14 +16,7 @@ export function useVoterStats(
   const { context, coreVoting, gscVoting } = useCouncil();
 
   return useQuery({
-    queryKey: [
-      "voter-stats",
-      address,
-      Voter,
-      context,
-      coreVoting.address,
-      gscVoting,
-    ],
+    queryKey: ["voter-stats", address],
     enabled: !!address,
     queryFn: async () => {
       const voter = new Voter(address as string, context);

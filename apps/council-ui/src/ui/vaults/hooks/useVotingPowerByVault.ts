@@ -12,7 +12,8 @@ export default function useVotingPowerByVault(
   const { coreVoting } = useCouncil();
 
   return useQuery<VotingPowerByVault[]>({
-    queryKey: ["votingPowerByVault", account, coreVoting.vaults],
+    queryKey: ["votingPowerByVault", account],
+    enabled: !!account,
     queryFn: async () => {
       const vaults = coreVoting.vaults;
 
@@ -26,6 +27,5 @@ export default function useVotingPowerByVault(
         }),
       );
     },
-    enabled: !!account,
   });
 }

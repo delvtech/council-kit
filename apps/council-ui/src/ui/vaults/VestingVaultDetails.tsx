@@ -8,7 +8,7 @@ import {
 import { assertNever } from "assert-never";
 import { Signer } from "ethers";
 import { ReactElement } from "react";
-import { toast } from "react-hot-toast";
+import index from "react-hot-toast";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -78,14 +78,7 @@ function useVestingVaultDetailsData(
 ): UseQueryResult<VestingVaultDetailsData> {
   const { context } = useCouncil();
   return useQuery({
-    queryKey: [
-      "vestingVaultDetails",
-      address,
-      account,
-      VestingVault,
-      context,
-      Date,
-    ],
+    queryKey: ["vestingVaultDetails", address, account],
     queryFn: async () => {
       const vestingVault = new VestingVault(address, context);
       const token = await vestingVault.getToken();
@@ -116,19 +109,19 @@ function useChangeDelegate(vaultAddress: string) {
     ({ signer, delegate }: ChangeDelegateArguments): Promise<string> => {
       const vault = new VestingVault(vaultAddress, context);
       return vault.changeDelegate(signer, delegate, {
-        onSubmitted: () => (toastId = toast.loading("Delegating")),
+        onSubmitted: () => (toastId = index.loading("Delegating")),
       });
     },
     {
       onSuccess: (_, { delegate }) => {
-        toast.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
+        index.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
           id: toastId,
         });
         // The SDK will manage cache invalidation for us ✨
         queryClient.invalidateQueries();
       },
       onError(error, { delegate }) {
-        toast.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
+        index.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
           id: toastId,
         });
         // Wrapping in new Error() to get stack trace

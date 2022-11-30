@@ -48,10 +48,12 @@ interface VaultRowData {
   votingPower: string | undefined;
 }
 
-function useVaultsPageData(account?: string): UseQueryResult<VaultRowData[]> {
+function useVaultsPageData(
+  account: string | undefined,
+): UseQueryResult<VaultRowData[]> {
   const { coreVoting, gscVoting } = useCouncil();
   return useQuery({
-    queryKey: ["vaultsPage", account, coreVoting.vaults, gscVoting],
+    queryKey: ["vaultsPage", account],
     queryFn: () => {
       let allVaults = coreVoting.vaults;
       if (gscVoting) {

@@ -14,11 +14,11 @@ import { VestingVaultDetails } from "src/ui/vaults/VestingVaultDetails";
 import { useAccount, useNetwork } from "wagmi";
 
 export default function Vault(): ReactElement {
-  const { address } = useAccount();
+  const { address: account } = useAccount();
   const { query } = useRouter();
   const { data, isLoading, isError, error } = useVaultDetailsData(
     query.address as string,
-    address,
+    account,
   );
   return (
     <Page>
@@ -101,14 +101,14 @@ export default function Vault(): ReactElement {
             )}
           </div>
 
-          {address &&
+          {account &&
             query.address &&
             (() => {
               switch (data.type) {
                 case "LockingVault":
                   return (
                     <LockingVaultDetails
-                      account={address}
+                      account={account}
                       address={query.address as string}
                     />
                   );
@@ -116,7 +116,7 @@ export default function Vault(): ReactElement {
                 case "VestingVault":
                   return (
                     <VestingVaultDetails
-                      account={address}
+                      account={account}
                       address={query.address as string}
                     />
                   );
@@ -150,24 +150,14 @@ interface VaultDetailsData {
 
 function useVaultDetailsData(
   address: string,
-  account?: string,
+  account: string | undefined,
 ): UseQueryResult<VaultDetailsData> {
   const { context, coreVoting, gscVoting } = useCouncil();
   const { chain } = useNetwork();
   const chainId = chain?.id ?? chains[0].id;
 
   return useQuery({
-    queryKey: [
-      "vaultDetails",
-      address,
-      account,
-      chainId,
-      councilConfigs[chainId as SupportedChainId],
-      gscVoting,
-      LockingVault,
-      VestingVault,
-      undefined,
-    ],
+    queryKey: ["vaultDetails", address, account, chainId],
     queryFn: async () => {
       const config = councilConfigs[chainId as SupportedChainId];
 

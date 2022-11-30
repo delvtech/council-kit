@@ -9,8 +9,6 @@ import { useCouncil } from "src/ui/council/useCouncil";
 import ProposalVoting from "src/ui/voting/ProposalVoting";
 import { useAccount } from "wagmi";
 
-const queryKeyBase = "proposalDetailsPage";
-
 export default function ProposalPage(): ReactElement {
   const {
     query: { id },
@@ -86,7 +84,7 @@ function useProposalDetailsPageData(proposalId?: number) {
   const provider = context.provider;
 
   return useQuery<ProposalDetailsPageData | null>({
-    queryKey: [provider, queryKeyBase, proposalId],
+    queryKey: ["proposalDetailsPage", proposalId],
     enabled: proposalId !== undefined,
     queryFn: async () => {
       const proposal = coreVoting.getProposal(

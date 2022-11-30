@@ -12,6 +12,10 @@ module.exports = {
     "@council/eslint-config",
   ],
   rules: {
-    "tailwindcss/classnames-order": "off", // Disable ordering in favor of prettier plugin,
+    // Disable ordering in favor of prettier plugin
+    "tailwindcss/classnames-order": "off",
+    // Disabled because it catches things like Date and other constructors that
+    // don't need to be in the queryKey
+    "@tanstack/query/exhaustive-deps": "off",
   },
 };
