@@ -158,4 +158,10 @@ export class VestingVaultContractDataSource
     this.clearCached();
     return transaction.hash;
   }
+
+  async claim(signer: Signer, options?: TransactionOptions): Promise<string> {
+    const transaction = await this.callWithSigner("claim", [], signer, options);
+    this.clearCached();
+    return transaction.hash;
+  }
 }
