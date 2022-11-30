@@ -1,6 +1,6 @@
 import { ENS } from "@ensdomains/ensjs";
 import { providers } from "ethers";
-import { chunkArray } from "src/utils/ArrayChunk";
+import chunk from "lodash.chunk";
 
 /**
  * Fetches ENS names in bulk using MultiCall.
@@ -19,11 +19,11 @@ export async function getBulkEnsRecords(
   await ENSInstance.setProvider(provider as providers.JsonRpcProvider); // safe to cast
 
   // spit array in chunks to paginate bulk requests
-  const chunkedAddresses = chunkArray(addresses, options?.chunkSize ?? 100);
+  const chunkedAddresses = chunk(addresses, options?.chunkSize ?? 100);
 
   // fetch each paginated request
   const chunkedResults = await Promise.all(
-    chunkedAddresses.map<Promise<[string, string | null][]>>(async (chunk) => {
+    chunkedAddresses.map(async (chunk): Promise<[string, string | null][]> => {
       // batch call of ens names using MultiCall
       const batch = await ENSInstance.batch(
         ...chunk.map((address) => {

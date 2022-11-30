@@ -115,7 +115,7 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
     context: { provider },
   } = useCouncil();
   return useQuery<VoterRowData[]>(
-    ["voterPage"],
+    ["voter-list-page"],
     async () => {
       const voters = await coreVoting.getVoters();
       const ensRecords = await getBulkEnsRecords(
