@@ -22,6 +22,7 @@
     "d3-format": "^3.1.0",
     "daisyui": "^2.33.0",
     "ethers": "^5.7.2",
+    "fuse.js": "^6.6.2",
     "listr2": "^5.0.6",
     "lodash.chunk": "^4.2.0",
     "next": "13.0.0",
