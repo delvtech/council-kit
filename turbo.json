@@ -20,7 +20,7 @@
     "@council/sdk#build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],
-      "env": ["PROVIDER_URI", "NODE_ENV"]
+      "env": ["PROVIDER_URI", "EXAMPLE_WALLET_PRIVATE_KEY", "NODE_ENV"]
     },
     "@council/deploy#build": {
       "dependsOn": ["^build"],

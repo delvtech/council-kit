@@ -1,5 +1,6 @@
 import assertNever from "assert-never";
 import classNames from "classnames";
+import { parseEther } from "ethers/lib/utils";
 import { ReactElement, useState } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { NumericInput } from "src/ui/base/forms/NumericInput";
@@ -7,7 +8,9 @@ import { NumericInput } from "src/ui/base/forms/NumericInput";
 interface DepositAndWithdrawFormProps {
   symbol: string;
   balance: string;
+  allowance: string;
   depositedBalance: string;
+  onApprove: () => void;
   onDeposit: (amount: string) => void;
   onWithdraw: (amount: string) => void;
   disabled?: boolean;
@@ -16,7 +19,9 @@ interface DepositAndWithdrawFormProps {
 export function DepositAndWithdrawForm({
   symbol,
   balance,
+  allowance,
   depositedBalance,
+  onApprove,
   onDeposit,
   onWithdraw,
   disabled = false,
@@ -24,6 +29,8 @@ export function DepositAndWithdrawForm({
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
+
+  const isApproved = parseEther(allowance).gt(parseEther(depositAmount || "0"));
 
   return (
     <div className="flex basis-1/2 flex-col gap-y-4">
@@ -60,13 +67,23 @@ export function DepositAndWithdrawForm({
                   onChange={setDepositAmount}
                   infoText={`Balance: ${formatBalance(balance, 4)} ${symbol}`}
                 />
-                <button
-                  className="daisy-btn daisy-btn-primary"
-                  onClick={() => onDeposit(depositAmount)}
-                  disabled={disabled}
-                >
-                  Deposit
-                </button>
+                {isApproved ? (
+                  <button
+                    className="daisy-btn daisy-btn-primary"
+                    onClick={() => onDeposit(depositAmount)}
+                    disabled={disabled}
+                  >
+                    Deposit
+                  </button>
+                ) : (
+                  <button
+                    className="daisy-btn daisy-btn-primary"
+                    onClick={onApprove}
+                    disabled={disabled}
+                  >
+                    Approve
+                  </button>
+                )}
               </>
             );
 

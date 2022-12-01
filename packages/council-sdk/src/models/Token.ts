@@ -1,9 +1,10 @@
-import { ethers, Signer } from "ethers";
+import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { ERC20ContractDataSource } from "src/datasources/Token/ERC20ContractDataSource";
 import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { Model } from "./Model";
+import { parseUnits } from "ethers/lib/utils";
 
 export class Token extends Model {
   address: string;
@@ -44,12 +45,17 @@ export class Token extends Model {
     return this.dataSource.getBalanceOf(address);
   }
 
-  approve(
+  async approve(
     signer: Signer,
     spender: string,
     amount: string,
     options?: TransactionOptions,
   ): Promise<string> {
-    return this.dataSource.approve(signer, spender, amount, options);
+    return this.dataSource.approve(
+      signer,
+      spender,
+      parseUnits(amount, await this.getDecimals()),
+      options,
+    );
   }
 }

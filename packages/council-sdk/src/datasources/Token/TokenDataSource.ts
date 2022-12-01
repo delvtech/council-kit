@@ -1,4 +1,4 @@
-import { Signer } from "ethers";
+import { BigNumber, Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 
 export interface TokenDataSource {
@@ -11,7 +11,7 @@ export interface TokenDataSource {
   approve: (
     signer: Signer,
     spender: string,
-    amount: string,
+    amount: BigNumber,
     options?: TransactionOptions,
   ) => Promise<string>;
 }

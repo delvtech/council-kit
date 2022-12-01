@@ -1,5 +1,5 @@
-import { providers, Signer } from "ethers";
-import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { BigNumber, providers, Signer } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
 import {
   ContractDataSource,
   TransactionOptions,
@@ -49,12 +49,12 @@ export class ERC20ContractDataSource
   async approve(
     signer: Signer,
     spender: string,
-    amount: string,
+    amount: BigNumber,
     options?: TransactionOptions,
   ): Promise<string> {
     const transaction = await this.callWithSigner(
       "approve",
-      [spender, parseUnits(amount, await this.getDecimals())],
+      [spender, amount],
       signer,
       options,
     );

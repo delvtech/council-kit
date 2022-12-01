@@ -6,7 +6,8 @@ import {
   UseQueryResult,
 } from "@tanstack/react-query";
 import assertNever from "assert-never";
-import { Signer } from "ethers";
+import { ethers, Signer } from "ethers";
+import { formatUnits } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import toast from "react-hot-toast";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
@@ -28,6 +29,9 @@ export function LockingVaultDetails({
   const { data: signer } = useSigner();
   const { data, status, error } = useLockingVaultDetailsData(address, account);
   const { mutate: changeDelegate } = useChangeDelegate(address);
+  const { mutate: deposit } = useDeposit(address);
+  const { mutate: withdraw } = useWithdraw(address);
+  const { mutate: approve } = useApprove(address);
   switch (status) {
     case "loading":
       return (
@@ -51,10 +55,16 @@ export function LockingVaultDetails({
           <DepositAndWithdrawForm
             symbol={data.tokenSymbol}
             balance={data.tokenBalance}
+            allowance={data.tokenAllowance}
             depositedBalance={data.depositedBalance}
             disabled={!signer}
-            onDeposit={() => {}} // TODO
-            onWithdraw={() => {}} // TODO
+            onApprove={() => approve({ signer: signer as Signer })}
+            onDeposit={(amount) =>
+              deposit({ signer: signer as Signer, amount })
+            }
+            onWithdraw={(amount) =>
+              withdraw({ signer: signer as Signer, amount })
+            }
           />
           <ChangeDelegateForm
             currentDelegate={data.delegate}
@@ -74,6 +84,7 @@ export function LockingVaultDetails({
 interface LockingVaultDetailsData {
   tokenSymbol: string;
   tokenBalance: string;
+  tokenAllowance: string;
   depositedBalance: string;
   delegate: string;
 }
@@ -92,11 +103,119 @@ function useLockingVaultDetailsData(
       return {
         tokenSymbol: await token.getSymbol(),
         tokenBalance: await token.getBalanceOf(account),
+        tokenAllowance: await token.getAllowance(account, address),
         depositedBalance: await lockingVault.getDepositedBalance(account),
         delegate: delegate.address,
       };
     },
   });
+}
+
+interface ApproveArguments {
+  signer: Signer;
+}
+
+function useApprove(vaultAddress: string) {
+  const { context } = useCouncil();
+  const queryClient = useQueryClient();
+  let toastId: string;
+  return useMutation(
+    async ({ signer }: ApproveArguments): Promise<string> => {
+      const vault = new LockingVault(vaultAddress, context);
+      const token = await vault.getToken();
+      const decimals = await token.getDecimals();
+      return token.approve(
+        signer,
+        vault.address,
+        formatUnits(ethers.constants.MaxUint256, decimals),
+        {
+          onSubmitted: () => (toastId = toast.loading("Approving")),
+        },
+      );
+    },
+    {
+      onSuccess: () => {
+        toast.success(`Successfully approved!`, {
+          id: toastId,
+        });
+        queryClient.invalidateQueries();
+      },
+      onError(error) {
+        toast.error(`Failed to approve`, {
+          id: toastId,
+        });
+        console.error(error);
+      },
+    },
+  );
+}
+
+interface DepositAndWithdrawArguments {
+  signer: Signer;
+  amount: string;
+}
+
+function useDeposit(vaultAddress: string) {
+  const { context } = useCouncil();
+  const queryClient = useQueryClient();
+  let toastId: string;
+  return useMutation(
+    async ({
+      signer,
+      amount,
+    }: DepositAndWithdrawArguments): Promise<string> => {
+      const vault = new LockingVault(vaultAddress, context);
+      const account = await signer.getAddress();
+      return vault.deposit(signer, account, amount, account, {
+        onSubmitted: () => (toastId = toast.loading("Depositing")),
+      });
+    },
+    {
+      onSuccess: (_, { amount }) => {
+        toast.success(`Successfully deposited ${amount}!`, {
+          id: toastId,
+        });
+        queryClient.invalidateQueries();
+      },
+      onError(error, { amount }) {
+        toast.error(`Failed to deposit ${amount}`, {
+          id: toastId,
+        });
+        console.error(error);
+      },
+    },
+  );
+}
+
+function useWithdraw(vaultAddress: string) {
+  const { context } = useCouncil();
+  const queryClient = useQueryClient();
+  let toastId: string;
+  return useMutation(
+    async ({
+      signer,
+      amount,
+    }: DepositAndWithdrawArguments): Promise<string> => {
+      const vault = new LockingVault(vaultAddress, context);
+      return vault.withdraw(signer, amount, {
+        onSubmitted: () => (toastId = toast.loading("Withdrawing")),
+      });
+    },
+    {
+      onSuccess: (_, { amount }) => {
+        toast.success(`Successfully withdrew ${amount}!`, {
+          id: toastId,
+        });
+        queryClient.invalidateQueries();
+      },
+      onError(error, { amount }) {
+        toast.error(`Failed to withdraw ${amount}`, {
+          id: toastId,
+        });
+        console.error(error);
+      },
+    },
+  );
 }
 
 interface ChangeDelegateArguments {
@@ -120,15 +239,13 @@ function useChangeDelegate(vaultAddress: string) {
         toast.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
           id: toastId,
         });
-        // The SDK will manage cache invalidation for us ✨
         queryClient.invalidateQueries();
       },
       onError(error, { delegate }) {
-        toast.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
+        toast.error(`Failed to delegate to ${formatAddress(delegate)}`, {
           id: toastId,
         });
-        // Wrapping in new Error() to get stack trace
-        console.error(new Error((error as any).toString()));
+        console.error(error);
       },
     },
   );

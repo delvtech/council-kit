@@ -93,4 +93,8 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   ): Promise<string> {
     return this.dataSource.changeDelegate(signer, delegate, options);
   }
+
+  claim(signer: Signer, options?: TransactionOptions): Promise<string> {
+    return this.dataSource.claim(signer, options);
+  }
 }

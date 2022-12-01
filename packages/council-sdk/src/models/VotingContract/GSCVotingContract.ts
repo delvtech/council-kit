@@ -1,4 +1,5 @@
 import { CouncilContext } from "src/context";
+import { Voter } from "src/models/Voter";
 import { GSCVault } from "src/models/VotingVault/GSCVault";
 import { VotingContract, VotingContractOptions } from "./VotingContract";
 
@@ -22,6 +23,10 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
         name: options?.name ?? "GSC Voting",
       },
     );
+  }
+
+  getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
+    return this.vaults[0].getVoters(fromBlock, toBlock);
   }
 
   getRequiredVotingPower(): Promise<string> {
