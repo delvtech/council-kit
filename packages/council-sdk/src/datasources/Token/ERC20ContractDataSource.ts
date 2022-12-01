@@ -1,4 +1,4 @@
-import { BigNumber, providers, Signer } from "ethers";
+import { BigNumber, Signer } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import {
   ContractDataSource,
@@ -6,13 +6,14 @@ import {
 } from "src/datasources/ContractDataSource";
 import { TokenDataSource } from "./TokenDataSource";
 import { MockERC20, MockERC20__factory } from "@council/typechain";
+import { CouncilContext } from "src/context";
 
 export class ERC20ContractDataSource
   extends ContractDataSource<MockERC20>
   implements TokenDataSource
 {
-  constructor(address: string, provider: providers.Provider) {
-    super(MockERC20__factory.connect(address, provider));
+  constructor(address: string, context: CouncilContext) {
+    super(MockERC20__factory.connect(address, context.provider), context);
   }
 
   getSymbol(): Promise<string> {

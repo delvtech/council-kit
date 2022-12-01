@@ -14,10 +14,8 @@ export interface VoterWithPower {
 }
 
 export class LockingVaultContractDataSource extends VotingVaultContractDataSource<LockingVault> {
-  context: CouncilContext;
-
   constructor(address: string, context: CouncilContext) {
-    super(LockingVault__factory.connect(address, context.provider));
+    super(LockingVault__factory.connect(address, context.provider), context);
     this.context = context;
   }
 

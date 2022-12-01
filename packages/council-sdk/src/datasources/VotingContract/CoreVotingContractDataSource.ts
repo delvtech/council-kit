@@ -1,6 +1,7 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
-import { providers, Signer } from "ethers";
+import { Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
+import { CouncilContext } from "src/context";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import {
   Ballot,
@@ -19,8 +20,8 @@ export class CoreVotingContractDataSource
   extends ContractDataSource<CoreVoting>
   implements VotingContractDataSource
 {
-  constructor(address: string, provider: providers.Provider) {
-    super(CoreVoting__factory.connect(address, provider));
+  constructor(address: string, context: CouncilContext) {
+    super(CoreVoting__factory.connect(address, context.provider), context);
   }
 
   async getProposalCount(): Promise<number> {

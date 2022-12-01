@@ -1,11 +1,12 @@
 import { GSCVault, GSCVault__factory } from "@council/typechain";
-import { BigNumber, providers } from "ethers";
+import { BigNumber } from "ethers";
 import { formatEther } from "ethers/lib/utils";
+import { CouncilContext } from "src/context";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
 export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GSCVault> {
-  constructor(address: string, provider: providers.Provider) {
-    super(GSCVault__factory.connect(address, provider));
+  constructor(address: string, context: CouncilContext) {
+    super(GSCVault__factory.connect(address, context.provider), context);
   }
 
   async getRequiredVotingPower(): Promise<string> {

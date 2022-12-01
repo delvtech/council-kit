@@ -3,8 +3,9 @@ import {
   IVotingVault,
   IVotingVault__factory,
 } from "@council/typechain";
-import { ethers, providers } from "ethers";
+import { ethers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
+import { CouncilContext } from "src/context";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
@@ -14,16 +15,12 @@ export class VotingVaultContractDataSource<
   extends ContractDataSource<TVault>
   implements VotingVaultDataSource
 {
-  constructor(address: string, provider: providers.Provider);
-  constructor(vault: TVault);
-  constructor(vaultOrAddress: string | TVault, provider?: providers.Provider) {
+  constructor(vault: TVault | string, context: CouncilContext) {
     super(
-      typeof vaultOrAddress === "string"
-        ? (IVotingVault__factory.connect(
-            vaultOrAddress,
-            provider as providers.Provider,
-          ) as TVault)
-        : vaultOrAddress,
+      typeof vault === "string"
+        ? (IVotingVault__factory.connect(vault, context.provider) as TVault)
+        : vault,
+      context,
     );
   }
 

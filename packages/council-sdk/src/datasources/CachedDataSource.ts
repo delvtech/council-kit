@@ -1,11 +1,14 @@
 import LRUCache from "lru-cache";
 import { cached, cachedKey } from "src/utils/cached";
+import { CouncilContext } from "src/context";
 import { DataSource } from "./DataSource";
 
 export class CachedDataSource implements DataSource {
+  context: CouncilContext;
   cache: LRUCache<string, any>;
 
-  constructor(cache?: LRUCache<string, any>) {
+  constructor(context: CouncilContext, cache?: LRUCache<string, any>) {
+    this.context = context;
     this.cache = cache ?? new LRUCache({ max: 500 });
   }
 

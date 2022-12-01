@@ -27,7 +27,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
         options?.dataSource ??
         context.registerDataSource(
           { address },
-          new VestingVaultContractDataSource(address, context.provider),
+          new VestingVaultContractDataSource(address, context),
         ),
     });
   }

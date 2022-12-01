@@ -1,7 +1,8 @@
 import { BigNumber, Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { DataSource } from "src/datasources/DataSource";
 
-export interface TokenDataSource {
+export interface TokenDataSource extends DataSource {
   address: string;
   getSymbol: () => Promise<string>;
   getDecimals: () => Promise<number>;

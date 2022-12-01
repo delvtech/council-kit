@@ -1,4 +1,5 @@
 import { Signer } from "ethers";
+import { DataSource } from "src/datasources/DataSource";
 
 export interface ProposalDataPreview {
   id: number;
@@ -24,7 +25,7 @@ export interface VoteData {
 
 export type VoteResults = Record<Ballot, string>;
 
-export interface VotingContractDataSource {
+export interface VotingContractDataSource extends DataSource {
   address: string;
   getProposalCount: () => Promise<number>;
   getProposal: (id: number) => Promise<ProposalData | null>;

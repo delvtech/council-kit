@@ -39,7 +39,7 @@ export class VotingContract<
       options?.dataSource ||
       this.context.registerDataSource(
         { address },
-        new CoreVotingContractDataSource(address, context.provider),
+        new CoreVotingContractDataSource(address, context),
       );
   }
 
