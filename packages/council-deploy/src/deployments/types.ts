@@ -3,7 +3,7 @@ export interface DeploymentsJsonFile {
   deployments: DeploymentInfo[];
 }
 
-interface DeploymentInfo {
+export interface DeploymentInfo {
   timestamp: number;
   name: string;
   addresses: Record<string, string>;
