@@ -1,0 +1,19 @@
+{
+  "chainId": 5,
+  "deployments": [
+    {
+      "timestamp": 1669682481225,
+      "name": "initial deployment",
+      "addresses": {
+        "coreVoting": "0x2fEB997a11F1c8eF3E7c499beB7b5a314e24D479",
+        "votingToken": "0xFd96c0e175047372027D44f7837Bd38f5c906695",
+        "gscCoreVoting": "0x845b1F143eA35e595316590cF7ACee10464d9e8F",
+        "gscVault": "0x3467aF0f751878AD7AaFe536D2cf139650Ba97eE",
+        "lockingVault": "0xC36D89D80c4836D8FfF74c525F353E95C847e222",
+        "timelock": "0xf1B3C49bA0cB100727fBBD45Ff81a436713FC5B7",
+        "treasury": "0xa01B390d24D5Db9aC101fcB56cd20055B06f4da8",
+        "vestingVault": "0xf26BDBdd06658b1c0129b0aE0AF78e751db61E6c"
+      }
+    }
+  ]
+}
