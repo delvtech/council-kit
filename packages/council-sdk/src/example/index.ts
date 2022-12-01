@@ -52,7 +52,10 @@ export async function main(): Promise<void> {
   }
 
   // submit transactions
-  const signer = new Wallet(process.env.PRIVATE_KEY as string, provider);
+  const signer = new Wallet(
+    process.env.EXAMPLE_WALLET_PRIVATE_KEY as string,
+    provider,
+  );
   await lockingVault
     .changeDelegate(signer, signer.address, {
       onSubmitted: (hash) => {
