@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
 import Fuse from "fuse.js";
 import Link from "next/link";
-import { ReactElement, useDeferredValue, useMemo, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
@@ -150,9 +150,6 @@ const searchCache: Record<string, Array<VoterRowData>> = {};
 
 function useVoterSearch(data: Array<VoterRowData> | undefined) {
   const [input, setInput] = useState<string | null>(null);
-  const defferredInput = useDeferredValue(input);
-  const reset = () => setInput("");
-  const setValue = (i: string) => setInput(i);
 
   const results = useMemo(() => {
     const fuse = new Fuse(data ?? [], voterSearchFuseOptions);
@@ -169,11 +166,11 @@ function useVoterSearch(data: Array<VoterRowData> | undefined) {
     }
 
     return data ?? [];
-  }, [defferredInput, data]);
+  }, [input, data]);
 
   return {
     results,
-    reset,
-    search: setValue,
+    reset: () => setInput(""),
+    search: (i: string) => setInput(i),
   };
 }
