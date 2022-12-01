@@ -8,18 +8,9 @@ import { deployVestingVault } from "src/vaults/deployVestingVault";
 import { deployGSCCoreVoting } from "src/coreVoting/deployGSCCoreVoting";
 import { Wallet } from "ethers";
 
-export interface CouncilAddresses {
-  votingToken: string;
-  coreVoting: string;
-  gscCoreVoting: string;
-  gscVault: string;
-  timelock: string;
-  lockingVault: string;
-  vestingVault: string;
-  treasury: string;
-}
-
-export async function deployCouncil(signer: Wallet): Promise<CouncilAddresses> {
+export async function deployCouncil(
+  signer: Wallet,
+): Promise<Record<string, string>> {
   console.log("signer", signer.address);
 
   // The voting token is used to determine voting power in the Locking Vault and
