@@ -1,5 +1,6 @@
 {
 	"eslint.workingDirectories": [
 		"./apps/council-ui"
-	]
+	],
+	"dotenv.enableAutocloaking": true
 }
