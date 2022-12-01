@@ -96,7 +96,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
     signer: Signer,
     account: string,
     amount: string,
-    firstDelegate: string,
+    firstDelegate?: string,
     options?: TransactionOptions,
   ): Promise<string> {
     const token = await this.getToken();
@@ -105,7 +105,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
       signer,
       account,
       parseUnits(amount, decimals),
-      firstDelegate,
+      firstDelegate ?? account,
       options,
     );
   }
