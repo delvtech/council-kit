@@ -15,7 +15,7 @@ export function useFormattedGSCStatus(
       const isMember = await gscVoting?.getIsMember(address as string);
       const isEligible = await gscVoting?.getIsEligible(address as string);
 
-      return formatGSCStatus(isIdle, isMember, isEligible);
+      return formatGSCStatus({ isIdle, isMember, isEligible });
     },
   });
 }

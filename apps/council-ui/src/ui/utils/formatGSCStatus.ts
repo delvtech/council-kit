@@ -1,10 +1,16 @@
 export type GSCStatus = "Idle" | "Member" | "Eligible" | "Ineligible";
 
-export function formatGSCStatus(
+interface GSCStatusOptions {
+  isIdle?: boolean;
+  isMember?: boolean;
+  isEligible?: boolean;
+}
+
+export function formatGSCStatus({
   isIdle = false,
   isMember = false,
   isEligible = false,
-): GSCStatus {
+}: GSCStatusOptions = {}): GSCStatus {
   if (isIdle) {
     return "Idle";
   }
