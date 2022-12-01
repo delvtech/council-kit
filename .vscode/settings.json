@@ -2,5 +2,13 @@
 	"eslint.workingDirectories": [
 		"./apps/council-ui"
 	],
-	"dotenv.enableAutocloaking": true
+	"dotenv.enableAutocloaking": true,
+	"json.schemas": [
+		{
+			"fileMatch": [
+				"*.deployments.json"
+			],
+			"url": "./packages/council-deploy/src/deployments/deployments.schema.json"
+		}
+	]
 }
