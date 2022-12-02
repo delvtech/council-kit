@@ -11,6 +11,7 @@
     "@council/tsconfig": "*",
     "@council/typechain": "*",
     "@ethersproject/providers": "^5.6.5",
+    "@nomiclabs/hardhat-etherscan": "^3.1.3",
     "@types/prompt": "^1.1.4",
     "dotenv": "^16.0.0",
     "lint-staged": "^12.3.7",
