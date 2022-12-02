@@ -1,5 +1,6 @@
 import { Signer } from "ethers";
 import { DataSource } from "src/datasources/DataSource";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 
 export interface ProposalDataPreview {
   id: number;
@@ -50,5 +51,6 @@ export interface VotingContractDataSource extends DataSource {
     vaults: string[],
     proposalId: number,
     ballot: Ballot,
+    options?: TransactionOptions,
   ) => Promise<string>;
 }

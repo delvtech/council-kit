@@ -10,6 +10,7 @@ import {
 import { Voter } from "./Voter";
 import { sumStrings } from "src/utils/sumStrings";
 import { Signer } from "ethers";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 
 export interface ProposalOptions {
   hash?: string;
@@ -188,12 +189,17 @@ export class Proposal extends Model {
     );
   }
 
-  vote(signer: Signer, ballot: Ballot): Promise<string> {
+  vote(
+    signer: Signer,
+    ballot: Ballot,
+    options?: TransactionOptions,
+  ): Promise<string> {
     return this.votingContract.dataSource.vote(
       signer,
       this.votingContract.vaults.map(({ address }) => address),
       this.id,
       ballot,
+      options,
     );
   }
 }
