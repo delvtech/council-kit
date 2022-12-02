@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "chainId": {
+      "type": "integer"
+    },
+    "deployments": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "timestamp": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "addresses": {
+              "type": "object",
+              "properties": {
+                "coreVoting": {
+                  "type": "string"
+                },
+                "votingToken": {
+                  "type": "string"
+                },
+                "gscCoreVoting": {
+                  "type": "string"
+                },
+                "gscVault": {
+                  "type": "string"
+                },
+                "lockingVault": {
+                  "type": "string"
+                },
+                "timelock": {
+                  "type": "string"
+                },
+                "treasury": {
+                  "type": "string"
+                },
+                "vestingVault": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": ["timestamp", "name", "addresses"]
+        }
+      ]
+    }
+  },
+  "required": ["chainId", "deployments"]
+}
