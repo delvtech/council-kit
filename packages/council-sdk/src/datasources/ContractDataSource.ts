@@ -1,6 +1,6 @@
 import { BaseContract, Signer } from "ethers";
 import LRUCache from "lru-cache";
-import { CouncilContext } from "..";
+import { CouncilContext } from "src";
 import { CachedDataSource } from "./CachedDataSource";
 
 type AnyFunction = (...args: any) => any;
