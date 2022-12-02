@@ -30,7 +30,7 @@ export class CouncilContext {
     const dataSource = this.dataSources.find((dataSource) => {
       let isMatch = true;
       for (const [key, value] of Object.entries(filter)) {
-        if (dataSource[key] !== value) {
+        if (dataSource[key as keyof DataSource] !== value) {
           isMatch = false;
         }
       }
