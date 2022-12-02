@@ -1,7 +1,8 @@
 import { VestingVault, VestingVault__factory } from "@council/typechain";
 import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/VestingVault.sol/VestingVault";
-import { BigNumber, providers, Signer } from "ethers";
+import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
+import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
@@ -26,8 +27,8 @@ export class VestingVaultContractDataSource
   extends VotingVaultContractDataSource<VestingVault>
   implements VotingVaultDataSource
 {
-  constructor(address: string, provider: providers.Provider) {
-    super(VestingVault__factory.connect(address, provider));
+  constructor(address: string, context: CouncilContext) {
+    super(VestingVault__factory.connect(address, context.provider), context);
   }
 
   getToken(): Promise<string> {

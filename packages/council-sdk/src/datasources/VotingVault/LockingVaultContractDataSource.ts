@@ -1,9 +1,12 @@
 import { LockingVault, LockingVault__factory } from "@council/typechain";
 import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/LockingVault.sol/LockingVault";
-import { BigNumber, providers, Signer } from "ethers";
+import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
+import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
+import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
+import { CachedDataSource } from "src/datasources/CachedDataSource";
 
 export interface VoterWithPower {
   address: string;
@@ -11,8 +14,9 @@ export interface VoterWithPower {
 }
 
 export class LockingVaultContractDataSource extends VotingVaultContractDataSource<LockingVault> {
-  constructor(address: string, provider: providers.Provider) {
-    super(LockingVault__factory.connect(address, provider));
+  constructor(address: string, context: CouncilContext) {
+    super(LockingVault__factory.connect(address, context.provider), context);
+    this.context = context;
   }
 
   getToken(): Promise<string> {
@@ -139,6 +143,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       signer,
       options,
     );
+    this.resetTokenDataSource();
     this.clearCached();
     return transaction.hash;
   }
@@ -154,7 +159,17 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       signer,
       options,
     );
+    this.resetTokenDataSource();
     this.clearCached();
     return transaction.hash;
+  }
+
+  private async resetTokenDataSource() {
+    const tokenDataSource = this.context.getDataSource<TokenDataSource>({
+      address: await this.getToken(),
+    });
+    if (tokenDataSource instanceof CachedDataSource) {
+      tokenDataSource.clearCached();
+    }
   }
 }

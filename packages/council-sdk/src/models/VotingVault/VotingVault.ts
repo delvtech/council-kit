@@ -45,7 +45,7 @@ export class VotingVault<
         {
           address,
         },
-        new VotingVaultContractDataSource(address, context.provider),
+        new VotingVaultContractDataSource(address, context),
       )) as TDataSource;
   }
 

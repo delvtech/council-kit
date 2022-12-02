@@ -21,7 +21,7 @@ export class Token extends Model {
       dataSource ||
       context.registerDataSource(
         { address },
-        new ERC20ContractDataSource(address, context.provider),
+        new ERC20ContractDataSource(address, context),
       );
   }
 

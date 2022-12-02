@@ -83,7 +83,7 @@ const goerliCouncilConfig: CouncilConfig = {
       {
         name: "Vesting Vault",
         address: "0xe69D2F8DeD2924e0845118E7E467Fc97F7994ef6",
-        type: "LockingVault",
+        type: "VestingVault",
         abi: {},
         descriptionURL: "https://moreinfo.com",
       },
@@ -109,7 +109,7 @@ const goerliCouncilConfig: CouncilConfig = {
     vaults: [
       {
         name: "GSC Vault",
-        address: "0x600c4926c9F88beCE3533ceaAA36804d6E23F1c1",
+        address: "0x0A575bFA79454112c37B9Af2a6362c9c68f7d2e3",
         type: "GSCVault",
         abi: {},
         descriptionURL: "https://moreinfo.com",

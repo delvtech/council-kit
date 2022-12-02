@@ -1,3 +1,4 @@
+import { CouncilContext } from "..";
 import { CachedDataSource } from "./CachedDataSource";
 
 export class HTTPDataSource<T = any> extends CachedDataSource {
@@ -11,6 +12,7 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
 
   constructor(
     baseURL: string,
+    context: CouncilContext,
     options?: {
       defaultRequestOptions?: RequestInit;
       defaultGetOptions?: RequestInit;
@@ -20,7 +22,7 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
       onResponse?: (res: Response) => Promise<T>;
     },
   ) {
-    super();
+    super(context);
     this.baseURL = baseURL;
     this.defaultRequestOptions = options?.defaultRequestOptions ?? {};
     this.defaultGetOptions = options?.defaultGetOptions ?? { method: "GET" };

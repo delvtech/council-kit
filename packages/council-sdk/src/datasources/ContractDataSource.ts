@@ -1,5 +1,6 @@
 import { BaseContract, Signer } from "ethers";
 import LRUCache from "lru-cache";
+import { CouncilContext } from "..";
 import { CachedDataSource } from "./CachedDataSource";
 
 type AnyFunction = (...args: any) => any;
@@ -25,8 +26,12 @@ export class ContractDataSource<
   address: string;
   contract: T;
 
-  constructor(contract: T, cache?: LRUCache<string, any>) {
-    super(cache);
+  constructor(
+    contract: T,
+    context: CouncilContext,
+    cache?: LRUCache<string, any>,
+  ) {
+    super(context, cache);
     this.address = contract.address;
     this.contract = contract;
   }
