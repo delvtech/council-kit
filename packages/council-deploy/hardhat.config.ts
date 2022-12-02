@@ -1,8 +1,6 @@
 // This adds ethers to the hre which has dev utilities for local testnet like 'getSigners()'
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-etherscan";
-// Typechain support for hardhat
-import "@typechain/hardhat";
 import "dotenv/config";
 // This adds support for typescript paths mappings
 import "tsconfig-paths/register";
@@ -11,9 +9,6 @@ import { HardhatUserConfig } from "hardhat/config";
 
 const config: HardhatUserConfig = {
   defaultNetwork: "goerli",
-  paths: {
-    sources: "src",
-  },
   solidity: {
     compilers: [
       {

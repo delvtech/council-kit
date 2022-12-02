@@ -35,6 +35,8 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
+    "load-contracts": "sh scripts/load-contracts.sh",
+    "build": "npm run load-contracts",
     "deploy-goerli": "cross-env TS_NODE_TRANSPILE_ONLY=1 npx hardhat run src/goerli.ts --network goerli --no-compile"
   }
 }

@@ -1,7 +1,6 @@
-.DS_Store
-node_modules
 cache
 artifacts
+contracts
 
 # don't check in the compiled typescript factories
 compiled
