@@ -1,5 +1,6 @@
 // This adds ethers to the hre which has dev utilities for local testnet like 'getSigners()'
 import "@nomiclabs/hardhat-waffle";
+import "@nomiclabs/hardhat-etherscan";
 // Typechain support for hardhat
 import "@typechain/hardhat";
 import "dotenv/config";
@@ -39,6 +40,10 @@ const config: HardhatUserConfig = {
     goerli: {
       url: process.env.GOERLI_URI,
     },
+  },
+  // See: https://hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-etherscan
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
   },
 };
 
