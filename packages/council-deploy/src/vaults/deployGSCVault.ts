@@ -1,6 +1,10 @@
-import { GSCVault, GSCVault__factory } from "@council/typechain";
+import { GSCVault__factory } from "@council/typechain";
 import { Signer } from "ethers";
 import { parseEther } from "ethers/lib/utils";
+import {
+  ContractWithDeploymentArgs,
+  DeployArguments,
+} from "src/base/contractFactory";
 
 interface DeployGSCVaultOptions {
   signer: Signer;
@@ -20,14 +24,18 @@ export async function deployGSCVault({
   votingPowerBound,
   ownerAddress,
   idleDuration,
-}: DeployGSCVaultOptions): Promise<GSCVault> {
-  const gscVaultDeployer = new GSCVault__factory(signer);
-  const gscVault = await gscVaultDeployer.deploy(
+}: DeployGSCVaultOptions): Promise<
+  ContractWithDeploymentArgs<GSCVault__factory>
+> {
+  const gscVaultFactory = new GSCVault__factory(signer);
+  const deploymentArgs: DeployArguments<GSCVault__factory> = [
     coreVotingAddress,
     parseEther(votingPowerBound),
-    // temporarily set the owner as the signer so we can call setIdleDuration
+    // deploy this with the signer as the owner so we can call setIdleDuration,
+    // after that we'll set the owner to the ownerAddress
     await signer.getAddress(),
-  );
+  ];
+  const gscVault = await gscVaultFactory.deploy(...deploymentArgs);
 
   // This must be done after the contract is deployed
   await gscVault.setIdleDuration(idleDuration);
@@ -37,5 +45,5 @@ export async function deployGSCVault({
 
   console.log("Deployed GSCVault");
 
-  return gscVault;
+  return { address: gscVault.address, contract: gscVault, deploymentArgs };
 }

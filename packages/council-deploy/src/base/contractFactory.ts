@@ -21,6 +21,7 @@ export type ContractFromFactory<TContractFactory extends ContractFactory> =
 export interface ContractWithDeploymentArgs<
   TContractFactory extends ContractFactory,
 > {
+  address: string;
   contract: ContractFromFactory<TContractFactory>;
   deploymentArgs: DeployArguments<TContractFactory>;
 }

@@ -6,5 +6,10 @@ export interface DeploymentsJsonFile {
 export interface DeploymentInfo {
   timestamp: number;
   name: string;
-  addresses: Record<string, string>;
+  contracts: {
+    [contractName: string]: {
+      address: string;
+      deploymentArgs: unknown[];
+    };
+  };
 }

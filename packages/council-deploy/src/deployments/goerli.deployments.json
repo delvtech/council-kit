@@ -1,33 +1,4 @@
 {
   "chainId": 5,
-  "deployments": [
-    {
-      "timestamp": 1669682481225,
-      "name": "initial deployment",
-      "addresses": {
-        "coreVoting": "0x2fEB997a11F1c8eF3E7c499beB7b5a314e24D479",
-        "votingToken": "0xFd96c0e175047372027D44f7837Bd38f5c906695",
-        "gscCoreVoting": "0x845b1F143eA35e595316590cF7ACee10464d9e8F",
-        "gscVault": "0x3467aF0f751878AD7AaFe536D2cf139650Ba97eE",
-        "lockingVault": "0xC36D89D80c4836D8FfF74c525F353E95C847e222",
-        "timelock": "0xf1B3C49bA0cB100727fBBD45Ff81a436713FC5B7",
-        "treasury": "0xa01B390d24D5Db9aC101fcB56cd20055B06f4da8",
-        "vestingVault": "0xf26BDBdd06658b1c0129b0aE0AF78e751db61E6c"
-      }
-    },
-    {
-      "timestamp": 1669934913232,
-      "name": "Deployment #2",
-      "addresses": {
-        "coreVoting": "0xb580d21b3Ddb791bBd42fCE59a8585d6838745BD",
-        "votingToken": "0xb010bDc893b5D856d52c88D85e2E53175eC5B373",
-        "gscCoreVoting": "0x3382cF2AC71a3db33F42Cf6631AD3eaca42F1CB6",
-        "gscVault": "0x16F6fdFbB3afE1c752412A6c73E7D8e7e752bACC",
-        "lockingVault": "0x15D95f3bbaDE5127486E91A14913974ca0bCCBE7",
-        "timelock": "0x246B9a8b4F8dB2794eb82ae00980b5c4c7577F41",
-        "treasury": "0x5708008DA6b399c3e20784DaEd98320B2F8E09fa",
-        "vestingVault": "0xe339e5EB79c2532BbDac69C29581e1264E6Abc73"
-      }
-    }
-  ]
+  "deployments": []
 }

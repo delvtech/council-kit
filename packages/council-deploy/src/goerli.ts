@@ -24,11 +24,11 @@ async function main() {
     default: `Goerli Deployment #${goerliDeployments.deployments.length + 1}`,
   });
 
-  const councilAddresses = await deployCouncil(signer);
+  const contractDeployments = await deployCouncil(signer);
   const newDeployment: DeploymentInfo = {
     name: deploymentName as string,
     timestamp: Date.now(),
-    addresses: councilAddresses,
+    contracts: contractDeployments,
   };
   console.log(newDeployment);
 

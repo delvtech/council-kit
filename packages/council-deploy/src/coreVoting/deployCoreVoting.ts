@@ -1,6 +1,10 @@
-import { CoreVoting, CoreVoting__factory } from "@council/typechain";
+import { CoreVoting__factory } from "@council/typechain";
 import { Wallet } from "ethers";
 import { parseEther } from "ethers/lib/utils";
+import {
+  ContractWithDeploymentArgs,
+  DeployArguments,
+} from "src/base/contractFactory";
 
 interface DeployCoreVotingOptions {
   signer: Wallet;
@@ -30,15 +34,18 @@ export async function deployCoreVoting({
   gscCoreVotingAddress,
   lockDuration = 10,
   extraVotingTime = 15,
-}: DeployCoreVotingOptions): Promise<CoreVoting> {
-  const coreVotingDeployer = new CoreVoting__factory(signer);
-  const coreVoting = await coreVotingDeployer.deploy(
+}: DeployCoreVotingOptions): Promise<
+  ContractWithDeploymentArgs<CoreVoting__factory>
+> {
+  const coreVotingFactory = new CoreVoting__factory(signer);
+  const deploymentArgs: DeployArguments<CoreVoting__factory> = [
     await signer.getAddress(),
     parseEther(baseQuorum),
     parseEther(minProposalPower),
     gscCoreVotingAddress,
     votingVaultAddresses,
-  );
+  ];
+  const coreVoting = await coreVotingFactory.deploy(...deploymentArgs);
   console.log("Deployed CoreVoting");
 
   (await coreVoting.setLockDuration(lockDuration)).wait(1);
@@ -48,5 +55,5 @@ export async function deployCoreVoting({
   await coreVoting.setOwner(timelockAddress);
   console.log("Set owner of CoreVoting to Timelock");
 
-  return coreVoting;
+  return { address: coreVoting.address, contract: coreVoting, deploymentArgs };
 }

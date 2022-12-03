@@ -1,5 +1,9 @@
-import { VestingVault, VestingVault__factory } from "@council/typechain";
+import { VestingVault__factory } from "@council/typechain";
 import { Wallet } from "ethers";
+import {
+  ContractWithDeploymentArgs,
+  DeployArguments,
+} from "src/base/contractFactory";
 
 interface DeployVestingVaultOptions {
   signer: Wallet;
@@ -18,18 +22,26 @@ export async function deployVestingVault({
   votingTokenAddress,
   staleBlockLag,
   timelockAddress,
-}: DeployVestingVaultOptions): Promise<VestingVault> {
-  const vestingVaultDeployer = new VestingVault__factory(signer);
-  const vestingVault = await vestingVaultDeployer.deploy(
+}: DeployVestingVaultOptions): Promise<
+  ContractWithDeploymentArgs<VestingVault__factory>
+> {
+  const vestingVaultFactory = new VestingVault__factory(signer);
+  const deploymentArgs: DeployArguments<VestingVault__factory> = [
     votingTokenAddress,
     staleBlockLag,
-  );
-  await vestingVault.initialize(signer.address, signer.address);
+  ];
+  const vestingVault = await vestingVaultFactory.deploy(...deploymentArgs);
   console.log("Deployed VestingVault");
+
+  await vestingVault.initialize(signer.address, signer.address);
 
   // Only the Timelock can update things like the unvestedMultiplier.
   await vestingVault.setTimelock(timelockAddress);
   console.log("Set Timelock permissions on VestingVault");
 
-  return vestingVault;
+  return {
+    address: vestingVault.address,
+    contract: vestingVault,
+    deploymentArgs,
+  };
 }
