@@ -2,116 +2,107 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
 import Fuse from "fuse.js";
 import Link from "next/link";
-import { ReactElement, useMemo, useState } from "react";
+import { ReactElement, useEffect, useMemo, useRef, useState } from "react";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
 
+const MAX_LIST_SIZE = 125;
+
 export default function Voters(): ReactElement {
-  const { data: voters, status, error } = useVoterPageData();
+  const { data: voters, status, error, isLoading } = useVoterPageData();
   const { results, search } = useVoterSearch(voters);
 
   return (
     <Page>
-      {/* Page Header */}
-      <div className="flex w-full items-center gap-x-2 max-w-xl mx-auto">
-        <h1 className="w-full text-5xl text-accent-content">Voters</h1>
+      <div className="flex flex-col max-w-xl mx-auto gap-y-8">
+        {/* Page Header */}
+        <div className="flex w-full items-center gap-x-2">
+          <h1 className="w-full text-5xl text-accent-content text-center">
+            Voters
+          </h1>
+        </div>
 
         {/* Search Input Box */}
-        <input
-          type="text"
-          placeholder="Search"
-          className="daisy-input-bordered daisy-input w-64 max-w-xs"
-          onChange={(e) => {
-            search(e.target.value as string);
-          }}
-        />
+        {!isLoading && (
+          <input
+            type="text"
+            placeholder="Search by ens or address"
+            className="daisy-input-bordered daisy-input w-full"
+            onChange={(e) => {
+              search(e.target.value as string);
+            }}
+          />
+        )}
 
-        {/* Filter Dropdown */}
-        <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
-            Filter
-          </label>
-          <ul
-            tabIndex={0}
-            className="daisy-dropdown-content daisy-menu rounded-box w-52 bg-base-100 p-2 shadow"
-          >
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <a>Item 2</a>
-            </li>
-          </ul>
-        </div>
+        {(() => {
+          switch (status) {
+            case "loading":
+              return (
+                <div className="flex flex-col items-center gap-8 ">
+                  <p>Loading voters. This might take a while...</p>
+                  <Progress />
+                </div>
+              );
+            case "error":
+              return (
+                <div className="daisy-mockup-code">
+                  <code className="block whitespace-pre-wrap px-6 text-error">
+                    {error ? (error as string).toString() : "Unknown error"}
+                  </code>
+                </div>
+              );
+
+            case "success":
+              return (
+                <table className="daisy-table-zebra daisy-table w-full min-w-[250px] mb-10">
+                  {/* Table Header */}
+                  <thead>
+                    <tr>
+                      <th>Voter</th>
+                    </tr>
+                  </thead>
+
+                  {/* Table Body */}
+                  <tbody className="my-4">
+                    {results
+                      .slice(0, MAX_LIST_SIZE)
+                      .map(({ address, ensName }) => {
+                        return (
+                          <tr key={address}>
+                            <td className="underline sm:px-8 md:text-lg">
+                              <Link href={makeVoterURL(address)}>
+                                {ensName ? ensName : address}
+                              </Link>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+
+                  {results.length > MAX_LIST_SIZE && (
+                    <tfoot>
+                      <div className="py-8">
+                        Only loading the first {MAX_LIST_SIZE} voters. Please
+                        refine search to load more.
+                      </div>
+                    </tfoot>
+                  )}
+                </table>
+              );
+            default:
+              assertNever(status);
+          }
+        })()}
       </div>
-
-      {(() => {
-        switch (status) {
-          case "loading":
-            return (
-              <div className="flex flex-col items-center gap-8 ">
-                <p>Loading voters. This might take a while...</p>
-                <Progress />
-              </div>
-            );
-          case "error":
-            return (
-              <div className="daisy-mockup-code">
-                <code className="block whitespace-pre-wrap px-6 text-error">
-                  {error ? (error as string).toString() : "Unknown error"}
-                </code>
-              </div>
-            );
-
-          case "success":
-            return (
-              <table className="daisy-table-zebra daisy-table max-w-2xl mx-auto">
-                {/* Table Header */}
-                <thead>
-                  <tr>
-                    <th>Voter</th>
-                    <th>
-                      {/* purposely empty to make a space for the action button */}
-                    </th>
-                  </tr>
-                </thead>
-
-                {/* Table Body */}
-                <tbody>
-                  {results.slice(0, 100).map(({ address, ensName }) => {
-                    return (
-                      <tr key={address}>
-                        <td className="underline">
-                          <Link href={makeVoterURL(address)}>
-                            {ensName ? ensName : address}
-                          </Link>
-                        </td>
-                        <td>
-                          <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-                            <Link href={makeVoterURL(address)}>▹</Link>
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            );
-          default:
-            assertNever(status);
-        }
-      })()}
     </Page>
   );
 }
 interface VoterRowData {
   address: string;
   ensName: string | null;
-  // TODO: Add `gscStatus` once we can reliably query it
-  // TODO: Add `votingPower` once we can reliably query it
 }
 
 function useVoterPageData(): UseQueryResult<VoterRowData[]> {
@@ -144,21 +135,24 @@ const voterSearchFuseOptions = {
   keys: ["address", "ensName"],
 };
 
-const searchCache: Record<string, Array<VoterRowData>> = {};
-
 function useVoterSearch(data: Array<VoterRowData> | undefined) {
   const [input, setInput] = useState<string | null>(null);
+
+  const searchCache = useRef<Record<string, Array<VoterRowData>>>({});
+  useEffect(() => {
+    searchCache.current = {};
+  }, [data]);
 
   const results = useMemo(() => {
     const fuse = new Fuse(data ?? [], voterSearchFuseOptions);
 
     if (input) {
-      if (searchCache[input]) {
-        return searchCache[input];
+      if (searchCache.current[input]) {
+        return searchCache.current[input];
       }
 
       const filtered = fuse.search(input).map((item) => item.item);
-      searchCache[input] = filtered;
+      searchCache.current[input] = filtered;
 
       return filtered;
     }
