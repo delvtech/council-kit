@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
 import Fuse from "fuse.js";
 import Link from "next/link";
-import { ReactElement, useMemo, useState } from "react";
+import { ReactElement, useEffect, useMemo, useRef, useState } from "react";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
@@ -20,7 +20,9 @@ export default function Voters(): ReactElement {
       <div className="flex flex-col max-w-xl mx-auto gap-y-8">
         {/* Page Header */}
         <div className="flex w-full items-center gap-x-2">
-          <h1 className="w-full text-5xl text-accent-content">Voters</h1>
+          <h1 className="w-full text-5xl text-accent-content text-center">
+            Voters
+          </h1>
         </div>
 
         {/* Search Input Box */}
@@ -28,7 +30,7 @@ export default function Voters(): ReactElement {
           <input
             type="text"
             placeholder="Search by ens or address"
-            className="daisy-input-bordered daisy-input w-96 max-w-xs"
+            className="daisy-input-bordered daisy-input w-full"
             onChange={(e) => {
               search(e.target.value as string);
             }}
@@ -94,7 +96,7 @@ export default function Voters(): ReactElement {
               assertNever(status);
           }
         })()}
-      </div>{" "}
+      </div>
     </Page>
   );
 }
@@ -136,22 +138,21 @@ const voterSearchFuseOptions = {
 function useVoterSearch(data: Array<VoterRowData> | undefined) {
   const [input, setInput] = useState<string | null>(null);
 
-  const searchCache = useMemo<Record<string, Array<VoterRowData>>>(() => {
-    // blows the cache when data is changed
-    return {};
+  const searchCache = useRef<Record<string, Array<VoterRowData>>>({});
+  useEffect(() => {
+    searchCache.current = {};
   }, [data]);
 
   const results = useMemo(() => {
     const fuse = new Fuse(data ?? [], voterSearchFuseOptions);
 
     if (input) {
-      if (searchCache[input]) {
-        console.log("cache hit");
-        return searchCache[input];
+      if (searchCache.current[input]) {
+        return searchCache.current[input];
       }
 
       const filtered = fuse.search(input).map((item) => item.item);
-      searchCache[input] = filtered;
+      searchCache.current[input] = filtered;
 
       return filtered;
     }
