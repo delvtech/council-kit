@@ -1,10 +1,11 @@
 import { Wallet } from "ethers";
 import hre from "hardhat";
-import { writeFile } from "src/base/writeFile";
 import { deployCouncil } from "src/deployCouncil";
 import prompt from "prompt";
 import goerliDeployments from "src/deployments/goerli.deployments.json";
-import { DeploymentInfo, DeploymentsJsonFile } from "src/deployments/types";
+import { DeploymentsJsonFile } from "src/deployments/types";
+import { writeFile } from "src/base/writeFile";
+import { etherscanVerifyContracts } from "src/etherscan/verifyContract";
 
 const goerliKey = process.env.GOERLI_DEPLOYER_PRIVATE_KEY;
 
@@ -24,20 +25,34 @@ async function main() {
     default: `Goerli Deployment #${goerliDeployments.deployments.length + 1}`,
   });
 
+  // Deploy the contracts
   const contractDeployments = await deployCouncil(signer);
-  const newDeployment: DeploymentInfo = {
-    name: deploymentName as string,
-    timestamp: Date.now(),
-    contracts: contractDeployments,
-  };
-  console.log(newDeployment);
 
-  const updatedFile: DeploymentsJsonFile = {
+  writeFile<DeploymentsJsonFile>(`./src/deployments/goerli.deployments.json`, {
     ...goerliDeployments,
-    deployments: [...goerliDeployments.deployments, newDeployment],
-  };
+    deployments: [
+      ...goerliDeployments.deployments,
+      {
+        name: deploymentName as string,
+        timestamp: Date.now(),
+        signer: signer.address,
+        contracts: contractDeployments.map(
+          ({ address, name, deploymentArgs }) => ({
+            address,
+            name,
+            deploymentArgs,
+          }),
+        ),
+      },
+    ],
+  });
+  console.log("Updated goerli.deployments.json!");
 
-  writeFile(updatedFile, `./src/deployments/goerli.deployments.json`);
+  // Verifying contracts on etherscan at the end of this script is faster since
+  // it takes time for etherscan to index new contracts. Generally, it's good to
+  // wait a few blocks after a contract is deployed before trying to verify it.
+  console.log("Verifying contracts on etherscan...");
+  await etherscanVerifyContracts(contractDeployments);
 }
 
 main()
