@@ -8,6 +8,7 @@ import { makeProposalURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { ChevronDownSVG } from "src/ui/base/svg/ChevronDown";
+import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useAccount } from "wagmi";
@@ -134,7 +135,9 @@ function ProposalTableRow({
       <td>{ballot ?? "🤷"}</td>
       <th>
         <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-          <Link href={makeProposalURL(votingContract, id)}>▹</Link>
+          <Link href={makeProposalURL(votingContract, id)}>
+            <ChevronRightSVG />
+          </Link>
         </button>
       </th>
     </tr>
