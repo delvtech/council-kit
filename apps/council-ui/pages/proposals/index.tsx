@@ -7,6 +7,8 @@ import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressU
 import { makeProposalURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { ChevronDownSVG } from "src/ui/base/svg/ChevronDown";
+import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useAccount } from "wagmi";
 
@@ -28,12 +30,17 @@ export default function ProposalsPage(): ReactElement {
 
         {/* Sort Dropdown */}
         <div className="daisy-dropdown daisy-dropdown-end">
-          <label tabIndex={0} className="daisy-btn daisy-btn-accent m-1">
+          <label
+            tabIndex={0}
+            className="daisy-btn daisy-btn-accent m-1 flex-nowrap"
+          >
             Sort
+            <ChevronDownSVG />
           </label>
+
           <ul
             tabIndex={0}
-            className="daisy-dropdown-content daisy-menu rounded-box w-52 bg-base-100 p-2 shadow"
+            className="daisy-dropdown-content daisy-menu rounded-box w-52 bg-base-300 p-2"
           >
             {Object.values(SortField).map((sortField) => (
               <li key={`proposalSortField-${sortField}`}>
@@ -104,19 +111,25 @@ function ProposalTableRow({
     <tr>
       <th>
         <a
+          className="hover:underline"
           href={makeEtherscanAddressURL(votingContract)}
           target="_blank"
           rel="noreferrer"
         >
           {formatAddress(votingContract)}
+          <ExternalLinkSVG />
         </a>
       </th>
       <td>{id}</td>
       <td>{created?.toLocaleDateString() ?? "🤷"}</td>
       <td>{votingEnds?.toLocaleDateString() ?? "🤷"}</td>
       <td>
-        {formatBalance(currentQuorum, 0)} /{" "}
-        {requiredQuorum ? formatBalance(requiredQuorum, 0) : "🤷"}
+        {requiredQuorum
+          ? `${formatBalance(currentQuorum, 0)} / ${formatBalance(
+              requiredQuorum,
+              0,
+            )} `
+          : "🤷"}
       </td>
       <td>{ballot ?? "🤷"}</td>
       <th>
