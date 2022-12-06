@@ -48,7 +48,7 @@ export function useGSCVote(): UseMutationResult<
       },
 
       onError: (error, { proposalId, ballot }) => {
-        toast.success(
+        toast.error(
           `Failed to vote ${ballot} on GSC Proposal ${proposalId}}.`,
           {
             id: toastId,

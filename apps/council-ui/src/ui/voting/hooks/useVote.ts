@@ -41,7 +41,7 @@ export function useVote(): UseMutationResult<
         queryClient.invalidateQueries();
       },
       onError: (error, { proposalId, ballot }) => {
-        toast.success(`Failed to vote ${ballot} on Proposal ${proposalId}.`, {
+        toast.error(`Failed to vote ${ballot} on Proposal ${proposalId}.`, {
           id: toastId,
         });
         console.error(error);
