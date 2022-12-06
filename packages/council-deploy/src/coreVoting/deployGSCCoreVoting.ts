@@ -38,10 +38,10 @@ export async function deployGSCCoreVoting({
   const gscCoreVotingFactory = new CoreVoting__factory(signer);
   const deploymentArgs: DeployArguments<CoreVoting__factory> = [
     ownerAddress,
-    parseEther(baseQuorum),
+    parseEther(baseQuorum).toHexString(),
     // The GSC is authorized to create proposals without a minProposalPower.
     // Setting this to "1" just to satisfy the required argument for deployment.
-    parseEther("1"),
+    parseEther("1").toHexString(),
     // There is no GSC for the GSC, otherwise it'd just be turtles all the way
     // down.
     ethers.constants.AddressZero,
@@ -59,6 +59,7 @@ export async function deployGSCCoreVoting({
 
   return {
     address: gscCoreVoting.address,
+    name: "GSCCoreVoting",
     contract: gscCoreVoting,
     deploymentArgs,
   };

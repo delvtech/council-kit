@@ -23,6 +23,7 @@ export async function deployTreasury({
 
   return {
     address: treasury.address,
+    name: "Treasury",
     contract: treasury,
     deploymentArgs,
   };

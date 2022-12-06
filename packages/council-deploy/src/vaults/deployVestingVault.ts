@@ -41,6 +41,7 @@ export async function deployVestingVault({
 
   return {
     address: vestingVault.address,
+    name: "VestingVault",
     contract: vestingVault,
     deploymentArgs,
   };

@@ -40,8 +40,8 @@ export async function deployCoreVoting({
   const coreVotingFactory = new CoreVoting__factory(signer);
   const deploymentArgs: DeployArguments<CoreVoting__factory> = [
     await signer.getAddress(),
-    parseEther(baseQuorum),
-    parseEther(minProposalPower),
+    parseEther(baseQuorum).toHexString(),
+    parseEther(minProposalPower).toHexString(),
     gscCoreVotingAddress,
     votingVaultAddresses,
   ];
@@ -55,5 +55,10 @@ export async function deployCoreVoting({
   await coreVoting.setOwner(timelockAddress);
   console.log("Set owner of CoreVoting to Timelock");
 
-  return { address: coreVoting.address, contract: coreVoting, deploymentArgs };
+  return {
+    address: coreVoting.address,
+    name: "CoreVoting",
+    contract: coreVoting,
+    deploymentArgs,
+  };
 }

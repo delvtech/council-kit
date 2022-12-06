@@ -6,12 +6,16 @@ import { deployGSCVault } from "src/vaults/deployGSCVault";
 import { deployLockingVault } from "src/vaults/deployLockingVault";
 import { deployVestingVault } from "src/vaults/deployVestingVault";
 import { deployGSCCoreVoting } from "src/coreVoting/deployGSCCoreVoting";
-import { Wallet } from "ethers";
-import { DeploymentInfo } from "src/deployments/types";
+import { Contract, Wallet } from "ethers";
 
-export async function deployCouncil(
-  signer: Wallet,
-): Promise<DeploymentInfo["contracts"]> {
+export async function deployCouncil(signer: Wallet): Promise<
+  {
+    address: string;
+    contract: Contract;
+    name: string;
+    deploymentArgs: unknown[];
+  }[]
+> {
   console.log("Signer:", signer.address);
 
   // The voting token is used to determine voting power in the Locking Vault and
@@ -136,42 +140,16 @@ export async function deployCouncil(
   await timelock.contract.setOwner(coreVoting.address);
   console.log("Set owner of Timelock to CoreVoting");
 
-  return {
-    coreVoting: {
-      address: coreVoting.address,
-      deploymentArgs: coreVoting.deploymentArgs,
-    },
-    votingToken: {
-      address: votingToken.address,
-      deploymentArgs: votingToken.deploymentArgs,
-    },
-    gscCoreVoting: {
-      address: gscCoreVoting.address,
-      deploymentArgs: gscCoreVoting.deploymentArgs,
-    },
-    gscVault: {
-      address: gscVault.address,
-      deploymentArgs: gscVault.deploymentArgs,
-    },
-    lockingVault: {
-      address: lockingVault.address,
-      deploymentArgs: lockingVault.deploymentArgs,
-    },
-    lockingVaultProxy: {
-      address: lockingVaultProxy.address,
-      deploymentArgs: lockingVaultProxy.deploymentArgs,
-    },
-    timelock: {
-      address: timelock.address,
-      deploymentArgs: timelock.deploymentArgs,
-    },
-    treasury: {
-      address: treasury.address,
-      deploymentArgs: treasury.deploymentArgs,
-    },
-    vestingVault: {
-      address: vestingVault.address,
-      deploymentArgs: vestingVault.deploymentArgs,
-    },
-  };
+  console.log("All contracts deployed!");
+  return [
+    coreVoting,
+    votingToken,
+    gscCoreVoting,
+    gscVault,
+    lockingVault,
+    lockingVaultProxy,
+    timelock,
+    treasury,
+    vestingVault,
+  ];
 }

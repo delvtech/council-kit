@@ -33,5 +33,10 @@ export async function deployTimelock({
   // to delay the execution of proposals in the timelock
   await timelock.authorize(gscCoreVotingAddress);
 
-  return { address: timelock.address, contract: timelock, deploymentArgs };
+  return {
+    address: timelock.address,
+    name: "Timelock",
+    contract: timelock,
+    deploymentArgs,
+  };
 }

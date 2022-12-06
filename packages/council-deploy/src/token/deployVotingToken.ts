@@ -30,6 +30,7 @@ export async function deployVotingToken({
 
   return {
     address: votingToken.address,
+    name: "VotingToken",
     contract: votingToken,
     deploymentArgs,
   };

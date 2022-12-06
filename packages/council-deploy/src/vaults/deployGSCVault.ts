@@ -30,7 +30,7 @@ export async function deployGSCVault({
   const gscVaultFactory = new GSCVault__factory(signer);
   const deploymentArgs: DeployArguments<GSCVault__factory> = [
     coreVotingAddress,
-    parseEther(votingPowerBound),
+    parseEther(votingPowerBound).toHexString(),
     // deploy this with the signer as the owner so we can call setIdleDuration,
     // after that we'll set the owner to the ownerAddress
     await signer.getAddress(),
@@ -45,5 +45,10 @@ export async function deployGSCVault({
 
   console.log("Deployed GSCVault");
 
-  return { address: gscVault.address, contract: gscVault, deploymentArgs };
+  return {
+    address: gscVault.address,
+    name: "GSCVault",
+    contract: gscVault,
+    deploymentArgs,
+  };
 }
