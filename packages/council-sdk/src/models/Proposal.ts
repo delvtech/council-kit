@@ -136,17 +136,17 @@ export class Proposal extends Model {
     return deletedIds.includes(this.id);
   }
 
-  async getVote(address: string): Promise<Vote> {
-    const { ballot, power } = await this.votingContract.dataSource.getVote(
-      address,
-      this.id,
-    );
-    return new Vote(
-      power,
-      ballot,
-      new Voter(address, this.context),
-      this,
-      this.context,
+  async getVote(address: string): Promise<Vote | null> {
+    const vote = await this.votingContract.dataSource.getVote(address, this.id);
+    return (
+      vote &&
+      new Vote(
+        vote.power,
+        vote.ballot,
+        new Voter(address, this.context),
+        this,
+        this.context,
+      )
     );
   }
 

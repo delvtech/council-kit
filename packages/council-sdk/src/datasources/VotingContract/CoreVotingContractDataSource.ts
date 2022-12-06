@@ -84,17 +84,19 @@ export class CoreVotingContractDataSource
     );
   }
 
-  async getVote(address: string, proposalId: number): Promise<VoteData> {
+  async getVote(address: string, proposalId: number): Promise<VoteData | null> {
     const [power, ballotIndex] = await this.call("votes", [
       address,
       proposalId,
     ]);
-    return {
-      address,
-      proposalId,
-      power: formatEther(power),
-      ballot: BALLOTS[ballotIndex],
-    };
+    return power.gt(0)
+      ? {
+          address,
+          proposalId,
+          power: formatEther(power),
+          ballot: BALLOTS[ballotIndex],
+        }
+      : null;
   }
 
   async getVotes(

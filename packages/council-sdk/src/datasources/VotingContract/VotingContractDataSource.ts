@@ -38,7 +38,7 @@ export interface VotingContractDataSource extends DataSource {
     fromBlock?: number,
     toBlock?: number,
   ) => Promise<number[]>;
-  getVote: (address: string, proposalId: number) => Promise<VoteData>;
+  getVote: (address: string, proposalId: number) => Promise<VoteData | null>;
   getVotes: (
     address?: string,
     proposalId?: number,
