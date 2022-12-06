@@ -2,7 +2,10 @@ import { CoreVoting, CoreVoting__factory } from "@council/typechain";
 import { Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
-import { ContractDataSource } from "src/datasources/ContractDataSource";
+import {
+  ContractDataSource,
+  TransactionOptions,
+} from "src/datasources/ContractDataSource";
 import {
   Ballot,
   VotingContractDataSource,
@@ -143,16 +146,15 @@ export class CoreVotingContractDataSource
     vaults: string[],
     proposalId: number,
     ballot: Ballot,
+    options?: TransactionOptions,
   ): Promise<string> {
-    const contract = this.contract.connect(signer);
-    const transaction = await contract.vote(
-      vaults,
-      vaults.map(() => "0x00"),
-      proposalId,
-      BALLOTS.indexOf(ballot),
+    const transaction = await this.callWithSigner(
+      "vote",
+      [vaults, vaults.map(() => "0x00"), proposalId, BALLOTS.indexOf(ballot)],
+      signer,
+      options,
     );
-    await transaction.wait(); // will throw an error if transaction fails
-    this.deleteCall("votes", [await signer.getAddress(), proposalId]);
+    this.clearCached();
     return transaction.hash;
   }
 }
