@@ -3,8 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
+import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import QuorumBar from "src/ui/components/QuorumBar/QuorumBar";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
@@ -71,7 +74,7 @@ export default function ProposalPage(): ReactElement {
       return (
         <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
           <div className="flex w-full flex-wrap items-center gap-4">
-            <h1 className="mb-4 whitespace-nowrap text-5xl text-accent-content underline">
+            <h1 className="mb-4 whitespace-nowrap text-5xl text-accent-content">
               {data.name ?? `Proposal ${id}`}
             </h1>
             ) : (
@@ -279,35 +282,81 @@ interface ProposalVotingActivityProps {
   votes: Vote[] | null;
 }
 
+interface ProposalVotingActivityRowProps {
+  address: string;
+  votePower: string;
+  voteBallot: Ballot;
+}
+function ProposalVotingActivityRow({
+  address,
+  votePower,
+  voteBallot,
+}: ProposalVotingActivityRowProps) {
+  const ensName = useDisplayName(address);
+
+  return (
+    <div className="grid grid-cols-3 p-2">
+      <h2 className="underline">
+        {ensName ?? formatAddress(address)}
+        <a
+          href={makeEtherscanAddressURL(address)}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <ExternalLinkSVG />
+        </a>
+      </h2>
+      <h2>{formatBalance(votePower)}</h2>
+
+      {(() => {
+        switch (voteBallot) {
+          case "yes":
+            return (
+              <h2 className="text-green-400 font-semibold">
+                {voteBallot.toUpperCase()}
+              </h2>
+            );
+
+          case "no":
+            return (
+              <h2 className="text-red-400 font-semibold">
+                {voteBallot.toUpperCase()}
+              </h2>
+            );
+
+          case "maybe":
+            return <h2>{voteBallot.toUpperCase()}</h2>;
+        }
+      })()}
+    </div>
+  );
+}
+
 function ProposalVotingActivity({
   votes,
 }: ProposalVotingActivityProps): ReactElement {
   return (
     <>
       <div className="grid grid-cols-3">
-        <h2>Voter</h2>
-        <h2>Voting Power</h2>
-        <h2>Ballot</h2>
+        <h2 className="text-xl">Voter</h2>
+        <h2 className="text-xl">Voting Power</h2>
+        <h2 className="text-xl">Ballot</h2>
       </div>
       <input
         type="text"
         placeholder="Search"
-        className="daisy-input-bordered daisy-input bg-base-200"
+        className="daisy-input-bordered daisy-input"
       />
-      {votes?.map((vote, i) => {
-        const voter = vote.voter;
-        return (
-          <div
-            className="grid grid-cols-3"
-            // A voter can have multiple votes
-            key={`${voter.address}-${vote.ballot}-${i}`}
-          >
-            <h2 className="underline">{formatAddress(voter.address)}</h2>
-            <h2>{formatBalance(vote.power)}</h2>
-            <h2 className="text-green-400">{vote.ballot.toUpperCase()}</h2>
-          </div>
-        );
-      })}
+      <div className="overflow-y-auto h-72">
+        {votes?.map((vote, i) => (
+          <ProposalVotingActivityRow
+            key={`${vote.voter.address}-${vote.ballot}-${i}`}
+            address={vote.voter.address}
+            votePower={vote.power}
+            voteBallot={vote.ballot}
+          />
+        ))}
+      </div>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { Ballot } from "@council/sdk";
 import classNames from "classnames";
 import { ReactElement } from "react";
+import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import useVotingPowerByVault from "src/ui/vaults/hooks/useVotingPowerByVault";
 
 interface ProposalVotingProps {
@@ -29,22 +30,22 @@ export default function ProposalVoting({
     <div className="flex flex-col gap-y-4">
       <h2 className="text-2xl text-accent-content">Your Vote</h2>
       <div className="flex">
-        <h3>Vaults</h3>
-        <h3 className="ml-auto">Voting Power</h3>
+        <h3 className="text-xl">Vaults</h3>
+        <h3 className="text-xl ml-auto">Voting Power</h3>
       </div>
-      <div className="flex max-h-64 flex-col gap-y-3 overflow-y-auto pr-8">
+      <div className="flex max-h-64 flex-col gap-y-4 overflow-y-auto pr-2">
         {votingPowerByVault?.map((vault) => (
           <div className="flex" key={vault.name}>
-            <h3 className="underline">{vault.name}</h3>
-            <h3 className="ml-auto">{vault.votingPower}</h3>
+            <h3>{vault.name}</h3>
+            <h3 className="ml-auto">{formatBalance(vault.votingPower)}</h3>
           </div>
         ))}
       </div>
 
       <div className="flex">
-        <h2 className="text-lg text-accent-content">Total Voting Power</h2>
-        <h2 className="ml-auto text-lg font-bold text-accent-content">
-          {totalVotingPower}
+        <h2 className="text-xl text-accent-content">Total Voting Power</h2>
+        <h2 className="ml-auto text-xl font-bold text-accent-content pr-2">
+          {formatBalance(totalVotingPower ?? 0)}
         </h2>
       </div>
 
