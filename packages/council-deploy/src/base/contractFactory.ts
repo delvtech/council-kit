@@ -22,6 +22,7 @@ export interface ContractWithDeploymentArgs<
   TContractFactory extends ContractFactory,
 > {
   address: string;
+  name: string;
   contract: ContractFromFactory<TContractFactory>;
   deploymentArgs: DeployArguments<TContractFactory>;
 }
