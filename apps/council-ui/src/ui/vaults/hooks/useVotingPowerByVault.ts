@@ -8,6 +8,7 @@ interface VotingPowerByVault {
 
 export default function useVotingPowerByVault(
   account: string | undefined,
+  atBlock?: number,
 ): UseQueryResult<VotingPowerByVault[], unknown> {
   const { coreVoting } = useCouncil();
 
@@ -22,7 +23,7 @@ export default function useVotingPowerByVault(
           return {
             name: vault.name,
             // safe to cast because this function only is ran when string is non-nullable
-            votingPower: await vault.getVotingPower(account as string),
+            votingPower: await vault.getVotingPower(account as string, atBlock),
           };
         }),
       );

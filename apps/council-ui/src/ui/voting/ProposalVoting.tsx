@@ -1,12 +1,25 @@
+import { Ballot } from "@council/sdk";
+import classNames from "classnames";
 import { ReactElement } from "react";
 import useVotingPowerByVault from "src/ui/vaults/hooks/useVotingPowerByVault";
 
-export default function ProposalVoting({
-  account,
-}: {
+interface ProposalVotingProps {
+  atBlock: number | undefined;
   account: string | undefined;
-}): ReactElement {
-  const { data: votingPowerByVault } = useVotingPowerByVault(account);
+  onVote: (ballot: Ballot) => void;
+  disabled?: boolean;
+  accountBallot?: Ballot | null;
+}
+
+export default function ProposalVoting({
+  atBlock,
+  account,
+  onVote,
+  disabled,
+  accountBallot,
+}: ProposalVotingProps): ReactElement {
+  const { data: votingPowerByVault } = useVotingPowerByVault(account, atBlock);
+
   const totalVotingPower = votingPowerByVault?.reduce(
     (total, vault) => total + +vault.votingPower,
     0,
@@ -35,11 +48,34 @@ export default function ProposalVoting({
         </h2>
       </div>
 
-      {/* TODO voting actions just skeleton for now */}
       <div className="daisy-btn-group m-auto">
-        <button className="daisy-btn daisy-btn-active daisy-btn-lg">YES</button>
-        <button className="daisy-btn daisy-btn-lg">NO</button>
-        <button className="daisy-btn daisy-btn-lg">ABSTAIN</button>
+        <button
+          className={classNames("daisy-btn daisy-btn-lg", {
+            "daisy-btn-active": accountBallot === "yes",
+          })}
+          onClick={() => onVote("yes")}
+          disabled={disabled}
+        >
+          YES
+        </button>
+        <button
+          className={classNames("daisy-btn daisy-btn-lg", {
+            "daisy-btn-active": accountBallot === "no",
+          })}
+          onClick={() => onVote("no")}
+          disabled={disabled}
+        >
+          NO
+        </button>
+        <button
+          className={classNames("daisy-btn daisy-btn-lg", {
+            "daisy-btn-active": accountBallot === "maybe",
+          })}
+          onClick={() => onVote("maybe")}
+          disabled={disabled}
+        >
+          ABSTAIN
+        </button>
       </div>
     </div>
   );
