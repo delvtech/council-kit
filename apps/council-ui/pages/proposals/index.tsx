@@ -121,7 +121,7 @@ function ProposalTableRow({
       <td>{ballot ?? "🤷"}</td>
       <th>
         <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-          <Link href={makeProposalURL("0x000000000000")}>▹</Link>
+          <Link href={makeProposalURL(votingContract, id)}>▹</Link>
         </button>
       </th>
     </tr>
