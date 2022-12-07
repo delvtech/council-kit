@@ -36,6 +36,7 @@ export async function deployTimelock({
   return {
     address: timelock.address,
     name: "Timelock",
+    type: "Timelock",
     contract: timelock,
     deploymentArgs,
   };

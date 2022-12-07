@@ -22,38 +22,39 @@
             },
             "contracts": {
               "type": "array",
-              "items": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "address": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "deploymentArgs": {
-                      "type": "array",
-                      "items": {
-                        "oneOf": [
-                          { "type": "string" },
-                          { "type": "number" },
-                          {
-                            "type": "array",
-                            "items": {
-                              "oneOf": [
-                                { "type": "string" },
-                                { "type": "number" }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    }
+              "items": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string"
                   },
-                  "required": ["address", "name", "deploymentArgs"]
-                }
-              ]
+                  "name": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "deploymentArgs": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        { "type": "string" },
+                        { "type": "number" },
+                        {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              { "type": "string" },
+                              { "type": "number" }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": ["address", "name", "deploymentArgs", "type"]
+              }
             }
           },
           "required": ["name", "timestamp", "signer", "contracts"]

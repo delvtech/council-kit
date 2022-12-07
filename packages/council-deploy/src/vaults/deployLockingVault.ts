@@ -52,12 +52,14 @@ export async function deployLockingVault({
     lockingVault: {
       address: lockingVault.address,
       name: "LockingVault",
+      type: "LockingVault",
       contract: lockingVault,
       deploymentArgs: lockingVaultDeploymentArgs,
     },
     lockingVaultProxy: {
       address: lockingVaultProxy.address,
       name: "LockingVaultProxy",
+      type: "SimpleProxy",
       contract: lockingVaultProxy,
       deploymentArgs: lockingVaultProxyDeploymentArgs,
     },

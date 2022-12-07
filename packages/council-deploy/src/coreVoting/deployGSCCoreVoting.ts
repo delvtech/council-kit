@@ -60,6 +60,7 @@ export async function deployGSCCoreVoting({
   return {
     address: gscCoreVoting.address,
     name: "GSCCoreVoting",
+    type: "CoreVoting",
     contract: gscCoreVoting,
     deploymentArgs,
   };

@@ -10,6 +10,7 @@ export interface DeploymentInfo {
   contracts: {
     address: string;
     name: string;
+    type: string;
     deploymentArgs: unknown[];
   }[];
 }
