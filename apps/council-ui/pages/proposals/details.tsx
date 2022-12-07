@@ -4,7 +4,6 @@ import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
@@ -289,18 +288,18 @@ interface ProposalVotingActivityRowProps {
 }
 
 // TODO @cashd: this component will need to be refactored to optimize for
-//              ens fetching and searching higher up in the tree
+//   ens fetching and searching higher up in the tree
 function ProposalVotingActivityRow({
   address,
   votePower,
   voteBallot,
 }: ProposalVotingActivityRowProps) {
-  const ensName = useDisplayName(address);
+  const displayName = useDisplayName(address);
 
   return (
     <div className="grid grid-cols-3 p-2">
       <h2 className="underline">
-        {ensName ?? formatAddress(address)}
+        {displayName}
         <a
           href={makeEtherscanAddressURL(address)}
           target="_blank"
