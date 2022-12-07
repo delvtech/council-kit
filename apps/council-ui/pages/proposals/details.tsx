@@ -1,5 +1,6 @@
 import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
+import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
@@ -51,7 +52,9 @@ export default function ProposalPage(): ReactElement {
     case "loading":
       return (
         <div className="w-48 m-auto mt-48 px-8">
-          <progress className="daisy-progress"></progress>
+          <progress className="daisy-progress">
+            Loading proposal details. Hang on a sec...
+          </progress>
         </div>
       );
 
@@ -68,17 +71,14 @@ export default function ProposalPage(): ReactElement {
       return (
         <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
           <div className="flex w-full flex-wrap items-center gap-4">
-            {data ? (
-              <h1 className="mb-4 whitespace-nowrap text-5xl text-accent-content underline">
-                {data.name ?? `Proposal ${id}`}
-              </h1>
+            <h1 className="mb-4 whitespace-nowrap text-5xl text-accent-content underline">
+              {data.name ?? `Proposal ${id}`}
+            </h1>
             ) : (
-              <h1 className="text-center whitespace-nowrap text-5xl text-accent-content">
-                Unknown Proposal
-              </h1>
-            )}
-
-            {data && data.requiredQuorum && (
+            <h1 className="text-center whitespace-nowrap text-5xl text-accent-content">
+              Unknown Proposal
+            </h1>
+            {data.requiredQuorum && (
               <div className="sm:ml-auto">
                 <QuorumBar
                   current={data.currentQuorum}
@@ -88,33 +88,34 @@ export default function ProposalPage(): ReactElement {
             )}
           </div>
 
-          {data && (
-            <ProposalStatsBar
-              createdAtDate={data.createdAtDate}
-              endsAtDate={data.endsAtDate}
-              unlockedAtDate={data.unlockedAtDate}
-              lastCallAtDate={data.lastCallAtDate}
-            />
-          )}
+          <ProposalStatsBar
+            createdAtDate={data.createdAtDate}
+            endsAtDate={data.endsAtDate}
+            unlockedAtDate={data.unlockedAtDate}
+            lastCallAtDate={data.lastCallAtDate}
+          />
 
           <div className="flex w-full flex-wrap gap-10 sm:gap-y-0">
             <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
               <h1 className="text-2xl text-accent-content">Voting Activity</h1>
-              {data && <ProposalVotingActivity votes={data.votes} />}
+              <ProposalVotingActivity votes={data.votes} />
             </div>
 
             <div className="grow basis-[300px] md:grow-0">
               <ProposalVoting
-                atBlock={data?.createdAtBlock || blockNumber}
+                atBlock={data.createdAtBlock || blockNumber}
                 account={address}
-                accountBallot={data?.accountBallot}
-                disabled={!signer || !data?.isActive}
+                accountBallot={data.accountBallot}
+                disabled={!signer || !data.isActive}
                 onVote={handleVote}
               />
             </div>
           </div>
         </div>
       );
+
+    default:
+      assertNever(status);
   }
 }
 
@@ -141,9 +142,7 @@ function useProposalDetailsPageData(
   const { context, coreVoting, gscVoting } = useCouncil();
   const provider = context.provider;
 
-  // TODO: handle bad address?
-
-  return useQuery<ProposalDetailsPageData | null>({
+  return useQuery<ProposalDetailsPageData>({
     queryKey: ["proposalDetailsPage", id],
     enabled:
       votingContractAddress !== undefined &&
@@ -164,7 +163,9 @@ function useProposalDetailsPageData(
         type = "gsc";
         proposal = gscVoting.getProposal(id);
       } else {
-        return null;
+        throw new Error(
+          `No config found for voting contract address ${votingContractAddress}, See src/config.`,
+        );
       }
 
       const createdAtBlock = await proposal.getCreatedBlock();
