@@ -1,5 +1,6 @@
 import { Ballot, getBlockDate } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import assertNever from "assert-never";
 import { parseEther } from "ethers/lib/utils";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
@@ -7,6 +8,7 @@ import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressU
 import { makeProposalURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { Progress } from "src/ui/base/Progress";
 import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
@@ -16,11 +18,11 @@ import { useAccount } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
-  const { data, isError, isLoading, error } = useProposalsPageData(address);
+  const { data, error, status } = useProposalsPageData(address);
 
   const [sortOptions, setSortOptions] = useState<SortOptions>({
-    field: SortField.CREATED,
-    direction: SortDirection.ASC,
+    field: SortField.ID,
+    direction: SortDirection.NONE,
   });
 
   const sortedData = useMemo(
@@ -28,16 +30,26 @@ export default function ProposalsPage(): ReactElement {
     [sortOptions, data],
   );
 
+  // handle the field and direction of the sorting
   const handleSortOptionsChange = (field: SortField) => {
+    // user clicked on the same field, thus changing sort direction
     if (field === sortOptions.field) {
-      setSortOptions({
-        field,
-        direction:
-          sortOptions.direction === SortDirection.ASC
-            ? SortDirection.DESC
-            : SortDirection.ASC,
-      });
+      const newSortDirectionState = sortStates[sortOptions.direction];
+
+      // reset to no sorting
+      if (newSortDirectionState === SortDirection.NONE) {
+        setSortOptions({
+          field: SortField.ID,
+          direction: SortDirection.NONE,
+        });
+      } else {
+        setSortOptions({
+          field,
+          direction: newSortDirectionState,
+        });
+      }
     } else {
+      // user clicked a new field, starting the sorting at ascending
       setSortOptions({
         field,
         direction: SortDirection.ASC,
@@ -46,26 +58,40 @@ export default function ProposalsPage(): ReactElement {
   };
 
   return (
-    <div className="m-auto mt-16 flex max-w-5xl flex-col items-center gap-y-10 px-4">
-      <div className="flex w-full items-center gap-x-2">
-        <h1 className="w-full text-5xl text-accent-content">Proposals</h1>
-      </div>
+    <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
+      <h1 className="text-5xl text-accent-content">Proposals</h1>
 
-      {isError ? (
-        <div className="daisy-mockup-code">
-          <code className="block whitespace-pre-wrap px-6 text-error">
-            {error ? (error as any).toString() : "Unknown error"}
-          </code>
-        </div>
-      ) : isLoading ? (
-        <progress className="daisy-progress m-auto w-56 items-center"></progress>
-      ) : (
-        <ProposalsTable
-          rowData={sortedData}
-          sortOptions={sortOptions}
-          onSortOptionsChange={handleSortOptionsChange}
-        />
-      )}
+      {(() => {
+        switch (status) {
+          case "loading":
+            return (
+              <div className="flex flex-col items-center gap-8 ">
+                <p>Loading proposals. This might take a while...</p>
+                <Progress />
+              </div>
+            );
+
+          case "error":
+            return (
+              <div className="daisy-mockup-code">
+                <code className="block whitespace-pre-wrap px-6 text-error">
+                  {error ? (error as string).toString() : "Unknown error"}
+                </code>
+              </div>
+            );
+
+          case "success":
+            return (
+              <ProposalsTable
+                rowData={sortedData}
+                sortOptions={sortOptions}
+                onSortOptionsChange={handleSortOptionsChange}
+              />
+            );
+          default:
+            assertNever(status);
+        }
+      })()}
     </div>
   );
 }
@@ -74,6 +100,17 @@ interface ProposalsTableProps {
   rowData?: ProposalRowData[];
   sortOptions: SortOptions;
   onSortOptionsChange: (field: SortField) => void;
+}
+
+function SortDirectionStatus({ direction }: { direction: SortDirection }) {
+  switch (direction) {
+    case SortDirection.ASC:
+      return <DownArrowSVG />;
+    case SortDirection.DESC:
+      return <UpArrowSVG />;
+    default:
+      return null;
+  }
 }
 
 function ProposalsTable({
@@ -85,48 +122,36 @@ function ProposalsTable({
     <table className="daisy-table-zebra daisy-table w-full min-w-fit shadow-md">
       <thead>
         <tr>
-          <th className="cursor-pointer select-none">Voting Contract</th>
-          <th
-            className="cursor-pointer select-none"
-            onClick={() => onSortOptionsChange(SortField.ID)}
-          >
+          <th className="select-none">Voting Contract</th>
+
+          <th className="select-none">
             <span className="mr-1 select-none">ID</span>
-            {sortOptions.field === SortField.ID ? (
-              sortOptions.direction === SortDirection.ASC ? (
-                <DownArrowSVG />
-              ) : (
-                <UpArrowSVG />
-              )
-            ) : null}
           </th>
+
           <th
-            className="cursor-pointer select-none"
+            className="cursor-pointer select-none hover:opacity-60"
             onClick={() => onSortOptionsChange(SortField.CREATED)}
           >
             <span className="mr-1">Created</span>
-            {sortOptions.field === SortField.CREATED ? (
-              sortOptions.direction === SortDirection.ASC ? (
-                <DownArrowSVG />
-              ) : (
-                <UpArrowSVG />
-              )
-            ) : null}
+            {sortOptions.field === SortField.CREATED && (
+              <SortDirectionStatus direction={sortOptions.direction} />
+            )}
           </th>
-          <th className="cursor-pointer select-none">Voting Ends</th>
+
+          <th className="select-none">Voting Ends</th>
+
           <th
-            className="cursor-pointer select-none"
+            className="cursor-pointer select-none hover:opacity-60"
             onClick={() => onSortOptionsChange(SortField.QUORUM)}
           >
             <span className="mr-1">Quorum</span>
-            {sortOptions.field === SortField.QUORUM ? (
-              sortOptions.direction === SortDirection.ASC ? (
-                <DownArrowSVG />
-              ) : (
-                <UpArrowSVG />
-              )
-            ) : null}
+            {sortOptions.field === SortField.QUORUM && (
+              <SortDirectionStatus direction={sortOptions.direction} />
+            )}
           </th>
-          <th>Your Ballot</th>
+
+          <th className="select-none">Your Ballot</th>
+
           <th></th>
         </tr>
       </thead>
@@ -248,11 +273,20 @@ enum SortField {
 enum SortDirection {
   ASC,
   DESC,
+  NONE,
 }
+
 interface SortOptions {
   field: SortField;
   direction: SortDirection;
 }
+
+// simple state machine for sort state transitions
+const sortStates: Record<SortDirection, SortDirection> = {
+  [SortDirection.ASC]: SortDirection.DESC,
+  [SortDirection.DESC]: SortDirection.NONE,
+  [SortDirection.NONE]: SortDirection.ASC,
+};
 
 function sortProposalRowData(sort: SortOptions, data?: ProposalRowData[]) {
   if (!data) {
@@ -261,7 +295,8 @@ function sortProposalRowData(sort: SortOptions, data?: ProposalRowData[]) {
 
   switch (sort.field) {
     case SortField.ID:
-      return data;
+      return data.slice().sort((a, b) => b.id - a.id);
+
     case SortField.QUORUM:
       if (sort.direction === SortDirection.ASC) {
         return data.slice().sort((a, b) => +b.currentQuorum - +a.currentQuorum);
