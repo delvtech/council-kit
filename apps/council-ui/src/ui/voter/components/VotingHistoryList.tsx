@@ -20,8 +20,9 @@ export function VotingHistoryList({
         <p className="whitespace-nowrap">Voting Power</p>
       </div>
 
-      {history.map((vote) => (
-        <VoterVoteHistoryItem vote={vote} key={vote.proposal.id} />
+      {history.map((vote, i) => (
+        // a voter can have multiple votes on the same proposal
+        <VoterVoteHistoryItem vote={vote} key={`${vote.proposal.id}-${i}`} />
       ))}
     </>
   );

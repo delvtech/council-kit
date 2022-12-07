@@ -10,6 +10,7 @@ import {
 import { Voter } from "./Voter";
 import { sumStrings } from "src/utils/sumStrings";
 import { Signer } from "ethers";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 
 export interface ProposalOptions {
   hash?: string;
@@ -135,17 +136,17 @@ export class Proposal extends Model {
     return deletedIds.includes(this.id);
   }
 
-  async getVote(address: string): Promise<Vote> {
-    const { ballot, power } = await this.votingContract.dataSource.getVote(
-      address,
-      this.id,
-    );
-    return new Vote(
-      power,
-      ballot,
-      new Voter(address, this.context),
-      this,
-      this.context,
+  async getVote(address: string): Promise<Vote | null> {
+    const vote = await this.votingContract.dataSource.getVote(address, this.id);
+    return (
+      vote &&
+      new Vote(
+        vote.power,
+        vote.ballot,
+        new Voter(address, this.context),
+        this,
+        this.context,
+      )
     );
   }
 
@@ -188,12 +189,17 @@ export class Proposal extends Model {
     );
   }
 
-  vote(signer: Signer, ballot: Ballot): Promise<string> {
+  vote(
+    signer: Signer,
+    ballot: Ballot,
+    options?: TransactionOptions,
+  ): Promise<string> {
     return this.votingContract.dataSource.vote(
       signer,
       this.votingContract.vaults.map(({ address }) => address),
       this.id,
       ballot,
+      options,
     );
   }
 }

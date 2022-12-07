@@ -6,10 +6,14 @@ export enum Routes {
   VAULTS = "/vaults",
 }
 
-export function makeProposalURL(id: string): UrlObject {
+export function makeProposalURL(
+  votingContractAddress: string,
+  id: number,
+): UrlObject {
   return {
     pathname: "/proposals/details",
     query: {
+      votingContract: votingContractAddress,
       id,
     },
   };
