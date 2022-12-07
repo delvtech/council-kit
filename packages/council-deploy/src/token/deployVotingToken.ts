@@ -1,5 +1,9 @@
-import { MockERC20, MockERC20__factory } from "@council/typechain";
+import { MockERC20__factory } from "@council/typechain";
 import { Wallet } from "ethers";
+import {
+  ContractWithDeploymentArgs,
+  DeployArguments,
+} from "src/base/contractFactory";
 
 interface DeployVotingTokenOptions {
   tokenName: string;
@@ -11,14 +15,23 @@ export async function deployVotingToken({
   tokenName,
   tokenSymbol,
   signer,
-}: DeployVotingTokenOptions): Promise<MockERC20> {
-  const tokenDeployer = new MockERC20__factory(signer);
-  const votingToken = await tokenDeployer.deploy(
+}: DeployVotingTokenOptions): Promise<
+  ContractWithDeploymentArgs<MockERC20__factory>
+> {
+  const votingTokenFactory = new MockERC20__factory(signer);
+  const deploymentArgs: DeployArguments<MockERC20__factory> = [
     tokenName,
     tokenSymbol,
     signer.address,
-  );
+  ];
+
+  const votingToken = await votingTokenFactory.deploy(...deploymentArgs);
   console.log("Deployed VotingToken");
 
-  return votingToken;
+  return {
+    address: votingToken.address,
+    name: "VotingToken",
+    contract: votingToken,
+    deploymentArgs,
+  };
 }

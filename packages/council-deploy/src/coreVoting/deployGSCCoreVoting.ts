@@ -1,6 +1,10 @@
-import { CoreVoting, CoreVoting__factory } from "@council/typechain";
+import { CoreVoting__factory } from "@council/typechain";
 import { ethers, Wallet } from "ethers";
 import { parseEther } from "ethers/lib/utils";
+import {
+  ContractWithDeploymentArgs,
+  DeployArguments,
+} from "src/base/contractFactory";
 
 interface DeployGSCCoreVotingOptions {
   signer: Wallet;
@@ -28,29 +32,35 @@ export async function deployGSCCoreVoting({
   lockDuration,
   extraVotingTime,
   votingVaultAddresses,
-}: DeployGSCCoreVotingOptions): Promise<CoreVoting> {
-  const gscCoreVotingDeployer = new CoreVoting__factory(signer);
-
-  // The GSC is authorized to create proposals without a minProposalPower.
-  // Setting this to "1" just to satisfy the required argument for deployment.
-  const minProposalPower = parseEther("1");
-
-  const gscCoreVoting = await gscCoreVotingDeployer.deploy(
+}: DeployGSCCoreVotingOptions): Promise<
+  ContractWithDeploymentArgs<CoreVoting__factory>
+> {
+  const gscCoreVotingFactory = new CoreVoting__factory(signer);
+  const deploymentArgs: DeployArguments<CoreVoting__factory> = [
     ownerAddress,
-    parseEther(baseQuorum),
-    minProposalPower,
+    parseEther(baseQuorum).toHexString(),
+    // The GSC is authorized to create proposals without a minProposalPower.
+    // Setting this to "1" just to satisfy the required argument for deployment.
+    parseEther("1").toHexString(),
     // There is no GSC for the GSC, otherwise it'd just be turtles all the way
     // down.
     ethers.constants.AddressZero,
     // initial deployment without any voting vaults, later on the owner can call
     // `GSCCoreVoting.changeVaultStatus()` to add approved vaults.
     votingVaultAddresses,
-  );
+  ];
+
+  const gscCoreVoting = await gscCoreVotingFactory.deploy(...deploymentArgs);
   console.log("Deployed GSCCoreVoting");
 
   (await gscCoreVoting.setLockDuration(lockDuration)).wait(1);
   (await gscCoreVoting.changeExtraVotingTime(extraVotingTime)).wait(1);
   console.log("Set GSCCoreVoting lockDuration and extraVoteTime");
 
-  return gscCoreVoting;
+  return {
+    address: gscCoreVoting.address,
+    name: "GSCCoreVoting",
+    contract: gscCoreVoting,
+    deploymentArgs,
+  };
 }

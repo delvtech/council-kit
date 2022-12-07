@@ -11,43 +11,52 @@
         {
           "type": "object",
           "properties": {
-            "timestamp": {
-              "type": "integer"
-            },
             "name": {
               "type": "string"
             },
-            "addresses": {
-              "type": "object",
-              "properties": {
-                "coreVoting": {
-                  "type": "string"
-                },
-                "votingToken": {
-                  "type": "string"
-                },
-                "gscCoreVoting": {
-                  "type": "string"
-                },
-                "gscVault": {
-                  "type": "string"
-                },
-                "lockingVault": {
-                  "type": "string"
-                },
-                "timelock": {
-                  "type": "string"
-                },
-                "treasury": {
-                  "type": "string"
-                },
-                "vestingVault": {
-                  "type": "string"
+            "timestamp": {
+              "type": "integer"
+            },
+            "signer": {
+              "type": "string"
+            },
+            "contracts": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "deploymentArgs": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          { "type": "string" },
+                          { "type": "number" },
+                          {
+                            "type": "array",
+                            "items": {
+                              "oneOf": [
+                                { "type": "string" },
+                                { "type": "number" }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["address", "name", "deploymentArgs"]
                 }
-              }
+              ]
             }
           },
-          "required": ["timestamp", "name", "addresses"]
+          "required": ["name", "timestamp", "signer", "contracts"]
         }
       ]
     }

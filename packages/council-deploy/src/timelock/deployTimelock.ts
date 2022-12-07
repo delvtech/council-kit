@@ -1,5 +1,9 @@
-import { Timelock, Timelock__factory } from "@council/typechain";
+import { Timelock__factory } from "@council/typechain";
 import { Signer } from "ethers";
+import {
+  ContractWithDeploymentArgs,
+  DeployArguments,
+} from "src/base/contractFactory";
 
 interface DeployTimelockOptions {
   signer: Signer;
@@ -13,18 +17,26 @@ export async function deployTimelock({
   waitTimeInBlocks,
   ownerAddress,
   gscCoreVotingAddress,
-}: DeployTimelockOptions): Promise<Timelock> {
-  const timeLockDeployer = new Timelock__factory(signer);
-  const timelock = await timeLockDeployer.deploy(
+}: DeployTimelockOptions): Promise<
+  ContractWithDeploymentArgs<Timelock__factory>
+> {
+  const timeLockFactory = new Timelock__factory(signer);
+  const deploymentArgs: DeployArguments<Timelock__factory> = [
     waitTimeInBlocks,
     ownerAddress,
     gscCoreVotingAddress,
-  );
+  ];
+  const timelock = await timeLockFactory.deploy(...deploymentArgs);
   console.log("Deployed Timelock");
 
-  // gsc is authorized so that it can delay the execution of proposals in the
-  // timelock
+  // gsc is authorized so that it can use its special privilege of being able
+  // to delay the execution of proposals in the timelock
   await timelock.authorize(gscCoreVotingAddress);
 
-  return timelock;
+  return {
+    address: timelock.address,
+    name: "Timelock",
+    contract: timelock,
+    deploymentArgs,
+  };
 }

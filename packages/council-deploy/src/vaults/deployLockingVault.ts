@@ -1,9 +1,12 @@
 import {
   LockingVault__factory,
-  SimpleProxy,
   SimpleProxy__factory,
 } from "@council/typechain";
 import { Signer } from "ethers";
+import {
+  ContractWithDeploymentArgs,
+  DeployArguments,
+} from "src/base/contractFactory";
 
 interface DeployLockingVaultOptions {
   signer: Signer;
@@ -21,26 +24,42 @@ export async function deployLockingVault({
   votingTokenAddress,
   proxyOwnerAddress,
   staleBlockLag,
-}: DeployLockingVaultOptions): Promise<SimpleProxy> {
-  const lockingVaultDeployer = new LockingVault__factory(signer);
-  const lockingVaultBaseContract = await lockingVaultDeployer.deploy(
+}: DeployLockingVaultOptions): Promise<{
+  lockingVault: ContractWithDeploymentArgs<LockingVault__factory>;
+  lockingVaultProxy: ContractWithDeploymentArgs<SimpleProxy__factory>;
+}> {
+  const lockingVaultFactory = new LockingVault__factory(signer);
+  const lockingVaultDeploymentArgs: DeployArguments<LockingVault__factory> = [
     votingTokenAddress,
     staleBlockLag,
+  ];
+  const lockingVault = await lockingVaultFactory.deploy(
+    ...lockingVaultDeploymentArgs,
   );
   console.log("Deployed LockingVault");
 
   // deploy locking vault behind a proxy so it's upgradeable
-  const proxyDeployer = new SimpleProxy__factory(signer);
+  const simpleProxyFactory = new SimpleProxy__factory(signer);
+  const lockingVaultProxyDeploymentArgs: DeployArguments<SimpleProxy__factory> =
+    [proxyOwnerAddress, lockingVault.address];
 
-  const lockingVaultProxy = await proxyDeployer.deploy(
-    proxyOwnerAddress,
-    lockingVaultBaseContract.address,
-  );
-
-  const lockingVaultContract = lockingVaultProxy.attach(
-    lockingVaultProxy.address,
+  const lockingVaultProxy = await simpleProxyFactory.deploy(
+    ...lockingVaultProxyDeploymentArgs,
   );
   console.log("Deployed LockingVault proxy");
 
-  return lockingVaultContract;
+  return {
+    lockingVault: {
+      address: lockingVault.address,
+      name: "LockingVault",
+      contract: lockingVault,
+      deploymentArgs: lockingVaultDeploymentArgs,
+    },
+    lockingVaultProxy: {
+      address: lockingVaultProxy.address,
+      name: "LockingVaultProxy",
+      contract: lockingVaultProxy,
+      deploymentArgs: lockingVaultProxyDeploymentArgs,
+    },
+  };
 }
