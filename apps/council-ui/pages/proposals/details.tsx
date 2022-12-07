@@ -76,10 +76,6 @@ export default function ProposalPage(): ReactElement {
             <h1 className="mb-4 whitespace-nowrap text-5xl text-accent-content">
               {data.name ?? `Proposal ${id}`}
             </h1>
-            ) : (
-            <h1 className="text-center whitespace-nowrap text-5xl text-accent-content">
-              Unknown Proposal
-            </h1>
             {data.requiredQuorum && (
               <div className="sm:ml-auto">
                 <QuorumBar
