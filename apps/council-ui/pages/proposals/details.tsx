@@ -287,6 +287,9 @@ interface ProposalVotingActivityRowProps {
   votePower: string;
   voteBallot: Ballot;
 }
+
+// TODO @cashd: this component will need to be refactored to optimize for
+//              ens fetching and searching higher up in the tree
 function ProposalVotingActivityRow({
   address,
   votePower,

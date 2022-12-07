@@ -37,16 +37,16 @@ export default function ProposalVoting({
         {votingPowerByVault?.map((vault) => (
           <div className="flex" key={vault.name}>
             <h3>{vault.name}</h3>
-            <h3 className="ml-auto">{formatBalance(vault.votingPower)}</h3>
+            <p className="ml-auto">{formatBalance(vault.votingPower)}</p>
           </div>
         ))}
       </div>
 
       <div className="flex">
         <h2 className="text-xl text-accent-content">Total Voting Power</h2>
-        <h2 className="ml-auto text-xl font-bold text-accent-content pr-2">
+        <p className="ml-auto text-xl font-bold text-accent-content pr-2">
           {formatBalance(totalVotingPower ?? 0)}
-        </h2>
+        </p>
       </div>
 
       <div className="daisy-btn-group m-auto">
