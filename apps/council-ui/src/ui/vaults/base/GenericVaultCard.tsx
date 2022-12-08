@@ -19,7 +19,7 @@ export function GenericVaultCard({
   return (
     <div className="daisy-card bg-base-200 shadow md:w-[420px] border border-accent-focus">
       <figure>
-        <img src={"/voting-vault-art.webp"} alt="voting vault art" />
+        <img src={"/voting-vault-art.webp"} alt={`${name} art`} />
       </figure>
       <div className="daisy-card-body">
         <h2 className="daisy-card-title">{name}</h2>
