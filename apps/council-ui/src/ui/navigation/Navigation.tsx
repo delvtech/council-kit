@@ -11,7 +11,7 @@ export function Navigation(): ReactElement {
   const { pathname } = useRouter();
 
   return (
-    <div className="daisy-navbar bg-base-100">
+    <div className="daisy-navbar bg-base-200 ">
       <div className="daisy-navbar-start">
         <div className="daisy-dropdown">
           <label tabIndex={0} className="daisy-btn-ghost daisy-btn lg:hidden">

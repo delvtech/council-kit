@@ -16,7 +16,7 @@ export function ExternalInfoCard({
     <div className="p-4 border border-gray-300  rounded-xl w-fit hover:opacity-80 cursor-pointer select-text">
       <div className="mb-1">
         <a href={href}>
-          <h2 className="font-bold">
+          <h2 className="font-bold whitespace-nowrap">
             {header} <ExternalLinkSVG />
           </h2>
         </a>
