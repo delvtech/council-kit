@@ -1,23 +1,21 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import Link from "next/link";
+import assertNever from "assert-never";
 import { ReactElement } from "react";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
-import { makeVaultURL } from "src/routes";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
+import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { GenericVaultCard } from "src/ui/vaults/base/GenericVaultCard";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
   const { address } = useAccount();
-  const { data, isLoading, isError, error } = useVaultsPageData(address);
+  const { data, status, error } = useVaultsPageData(address);
 
   return (
     <Page>
-      {/* Page Header */}
       <div>
-        <div className="text-5xl text-accent-content">Vaults</div>
+        <div className="text-5xl font-semibold">Voting Vaults</div>
         <div className="mt-6 text-lg">
           Voting Vaults provide the ability to assign voting power to specific
           types of tokens/positions. The result is beautiful — governance users
@@ -26,17 +24,61 @@ export default function VaultsPage(): ReactElement {
         </div>
       </div>
 
-      {isError ? (
-        <div className="daisy-mockup-code">
-          <code className="block whitespace-pre-wrap px-6 text-error">
-            {error ? (error as any).toString() : "Unknown error"}
-          </code>
-        </div>
-      ) : isLoading ? (
-        <progress className="daisy-progress m-auto w-56 items-center"></progress>
-      ) : (
-        <VaultTable rowData={data} />
-      )}
+      {(() => {
+        switch (status) {
+          case "loading":
+            return (
+              <div className="flex flex-col items-center gap-8 ">
+                <p>Loading vaults This might take a while...</p>
+                <Progress />
+              </div>
+            );
+
+          case "error":
+            return (
+              <div className="daisy-mockup-code">
+                <code className="block whitespace-pre-wrap px-6 text-error">
+                  {error ? (error as string).toString() : "Unknown error"}
+                </code>
+              </div>
+            );
+
+          case "success":
+            return (
+              <div className="mb-8">
+                <div className="flex flex-wrap gap-6 justify-center lg:justify-start">
+                  {data &&
+                    data.map((vault) => {
+                      return (
+                        <GenericVaultCard
+                          key={vault.address}
+                          address={vault.address}
+                          name={vault.name}
+                          tvp={vault.tvp}
+                          votingPower={vault.votingPower}
+                        />
+                      );
+                    })}
+                </div>
+
+                <div className="flex mt-8 gap-4 flex-wrap sm:flex-nowrap">
+                  <ExternalInfoCard
+                    header="Learn more about voting vaults"
+                    body="Check out our documentation on voting votes and other parts of the council protocol."
+                    href="#"
+                  />
+                  <ExternalInfoCard
+                    header="Explore other types of vaults"
+                    body="Dive into the examples of voting vaults in our open source repository."
+                    href="#"
+                  />
+                </div>
+              </div>
+            );
+          default:
+            assertNever(status);
+        }
+      })()}
     </Page>
   );
 }
@@ -71,53 +113,4 @@ function useVaultsPageData(
       );
     },
   });
-}
-
-interface VaultTableProps {
-  rowData?: VaultRowData[];
-}
-
-function VaultTable({ rowData }: VaultTableProps) {
-  return (
-    <table className="daisy-table-zebra daisy-table w-full min-w-fit">
-      <thead>
-        <tr>
-          <th>Address</th>
-          <th>Name</th>
-          <th>total voting power</th>
-          <th>your voting power</th>
-          <th></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {rowData &&
-          rowData.map((data) => <VaultTableRow {...data} key={data.address} />)}
-      </tbody>
-    </table>
-  );
-}
-
-function VaultTableRow({ address, name, tvp, votingPower }: VaultRowData) {
-  return (
-    <tr key={address}>
-      <th>
-        <a
-          href={makeEtherscanAddressURL(address)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {formatAddress(address)}
-        </a>
-      </th>
-      <td>{name}</td>
-      <td>{tvp ? formatBalance(tvp, 0) : "🤷"}</td>
-      <td>{votingPower ? formatBalance(votingPower) : "🤷"}</td>
-      <th>
-        <button className="daisy-btn-ghost daisy-btn-sm daisy-btn">
-          <Link href={makeVaultURL(address)}>▹</Link>
-        </button>
-      </th>
-    </tr>
-  );
 }

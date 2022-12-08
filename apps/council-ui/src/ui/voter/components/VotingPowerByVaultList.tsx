@@ -17,18 +17,24 @@ export function VotingPowerByVaultList({
       {vaultData.map((row) => {
         return (
           <div className="flex flex-col gap-y-2" key={row.vault.address}>
-            <h3 className="text-xl font-bold underline">{row.vault.name}</h3>
+            <h3 className="text-xl font-semibold underline">
+              {row.vault.name}
+            </h3>
 
             {row.balance && (
               <div className="flex">
                 <p>Tokens Deposited</p>
-                <p className="ml-auto">{formatBalance(row.balance)} ELFI</p>
+                <p className="ml-auto font-bold">
+                  {formatBalance(row.balance)} ELFI
+                </p>
               </div>
             )}
 
             <div className="flex">
               <p>Voting Power</p>
-              <p className="ml-auto">{formatBalance(row.votingPower)}</p>
+              <p className="ml-auto font-bold">
+                {formatBalance(row.votingPower)}
+              </p>
             </div>
 
             {row.currentDelegate && (
@@ -38,7 +44,7 @@ export function VotingPowerByVaultList({
             {!!row.numDelegated && (
               <div className="flex">
                 <p># of Delegators</p>
-                <p className="ml-auto">{row.numDelegated}</p>
+                <p className="ml-auto font-bold">{row.numDelegated}</p>
               </div>
             )}
           </div>
@@ -60,7 +66,7 @@ function CurrentDelegateInfo({
   return (
     <div className="flex">
       <p>Current Delegate</p>
-      <p className="ml-auto">{name}</p>
+      <p className="ml-auto font-bold">{name}</p>
     </div>
   );
 }

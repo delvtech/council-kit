@@ -8,6 +8,7 @@ import { VaultConfig } from "src/config/CouncilConfig";
 import { chains } from "src/provider";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
+import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { LockingVaultDetails } from "src/ui/vaults/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/VestingVaultDetails";
@@ -32,18 +33,18 @@ export default function Vault(): ReactElement {
         <progress className="daisy-progress m-auto w-56 items-center"></progress>
       ) : (
         <>
-          {/* Page Header */}
           <div>
             {data.descriptionURL ? (
               <a href={data.descriptionURL} target="_blank" rel="noreferrer">
-                <h1 className="text-5xl text-accent-content">{data.name}</h1>
+                <h1 className="text-5xl font-bold">
+                  {data.name} <ExternalLinkSVG size={30} />
+                </h1>
               </a>
             ) : (
-              <h1 className="text-5xl text-accent-content">{data.name}</h1>
+              <h1 className="text-5xl font-bold">{data.name}</h1>
             )}
           </div>
 
-          {/* Statistics Row */}
           <div className="flex flex-wrap gap-4">
             {typeof data.activeProposalCount === "number" && (
               <div className="daisy-stats">

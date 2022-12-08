@@ -8,6 +8,7 @@ import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressU
 import { makeProposalURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Progress } from "src/ui/base/Progress";
 import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
@@ -59,7 +60,7 @@ export default function ProposalsPage(): ReactElement {
 
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
-      <h1 className="text-5xl text-accent-content">Proposals</h1>
+      <h1 className="text-5xl">Proposals</h1>
 
       {(() => {
         switch (status) {
@@ -82,11 +83,26 @@ export default function ProposalsPage(): ReactElement {
 
           case "success":
             return (
-              <ProposalsTable
-                rowData={sortedData}
-                sortOptions={sortOptions}
-                onSortOptionsChange={handleSortOptionsChange}
-              />
+              <div>
+                <ProposalsTable
+                  rowData={sortedData}
+                  sortOptions={sortOptions}
+                  onSortOptionsChange={handleSortOptionsChange}
+                />
+
+                <div className="flex mt-8 gap-4 flex-wrap md:flex-nowrap">
+                  <ExternalInfoCard
+                    header="Check out our docs to learn more about the proposal process."
+                    body="Click to dive deeper into proposals in Council. "
+                    href="#"
+                  />
+                  <ExternalInfoCard
+                    header="Learn to create your own on-chain proposals"
+                    body="Proposals are necessary for any critical governance actions to be executed."
+                    href="#"
+                  />
+                </div>
+              </div>
             );
           default:
             assertNever(status);
@@ -188,7 +204,7 @@ function ProposalTableRow({
           rel="noreferrer"
         >
           {formatAddress(votingContract)}
-          <ExternalLinkSVG />
+          <ExternalLinkSVG size={16} />
         </a>
       </th>
       <td>{id}</td>
