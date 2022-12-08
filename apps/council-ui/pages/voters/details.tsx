@@ -52,14 +52,14 @@ export default function VoterDetailsPage(): ReactElement {
       <div>
         {ens ? (
           <>
-            <h1 className="w-full text-5xl text-accent-content">{ens}</h1>
+            <h1 className="w-full text-5xl">{ens}</h1>
 
             <h2 className="mt-2 w-full text-2xl underline">
               {formatAddress(address)}
             </h2>
           </>
         ) : (
-          <h1 className="mt-2 w-full text-5xl text-accent-content underline">
+          <h1 className="mt-2 w-full text-5xl underline">
             {formatAddress(address)}
           </h1>
         )}

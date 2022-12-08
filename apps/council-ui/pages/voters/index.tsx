@@ -20,9 +20,7 @@ export default function Voters(): ReactElement {
       <div className="flex flex-col max-w-xl mx-auto gap-y-8">
         {/* Page Header */}
         <div className="flex w-full items-center gap-x-2">
-          <h1 className="w-full text-5xl text-accent-content text-center">
-            Voters
-          </h1>
+          <h1 className="w-full text-5xl text-center">Voters</h1>
         </div>
 
         {/* Search Input Box */}
@@ -57,7 +55,7 @@ export default function Voters(): ReactElement {
 
             case "success":
               return (
-                <table className="daisy-table-zebra daisy-table w-full min-w-[250px] mb-10">
+                <table className="daisy-table-zebra daisy-table w-full min-w-[250px] mb-10 outline rounded-lg">
                   {/* Table Header */}
                   <thead>
                     <tr>

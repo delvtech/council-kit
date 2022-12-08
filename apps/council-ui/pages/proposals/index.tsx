@@ -60,7 +60,7 @@ export default function ProposalsPage(): ReactElement {
 
   return (
     <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
-      <h1 className="text-5xl text-accent-content">Proposals</h1>
+      <h1 className="text-5xl">Proposals</h1>
 
       {(() => {
         switch (status) {

@@ -8,6 +8,7 @@ import { VaultConfig } from "src/config/CouncilConfig";
 import { chains } from "src/provider";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
+import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { LockingVaultDetails } from "src/ui/vaults/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/VestingVaultDetails";
@@ -32,22 +33,22 @@ export default function Vault(): ReactElement {
         <progress className="daisy-progress m-auto w-56 items-center"></progress>
       ) : (
         <>
-          {/* Page Header */}
           <div>
             {data.descriptionURL ? (
               <a href={data.descriptionURL} target="_blank" rel="noreferrer">
-                <h1 className="text-5xl text-accent-content">{data.name}</h1>
+                <h1 className="text-5xl font-bold">
+                  {data.name} <ExternalLinkSVG size={30} />
+                </h1>
               </a>
             ) : (
-              <h1 className="text-5xl text-accent-content">{data.name}</h1>
+              <h1 className="text-5xl font-bold">{data.name}</h1>
             )}
           </div>
 
-          {/* Statistics Row */}
           <div className="flex flex-wrap gap-4">
             {typeof data.activeProposalCount === "number" && (
               <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
+                <div className="daisy-stat border border-accent border-opacity-70 rounded-2xl bg-base-300">
                   <div className="daisy-stat-title">Active Proposals</div>
                   <div className="daisy-stat-value text-sm">
                     {data.activeProposalCount}
@@ -58,7 +59,7 @@ export default function Vault(): ReactElement {
 
             {data.accountVotingPower && (
               <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
+                <div className="daisy-stat border border-accent border-opacity-80 rounded-2xl bg-base-300">
                   <div className="daisy-stat-title">Your Voting Power</div>
                   <div className="daisy-stat-value text-sm">
                     {formatBalance(data.accountVotingPower)}
@@ -69,7 +70,7 @@ export default function Vault(): ReactElement {
 
             {typeof data.accountPercentOfTVP === "number" && (
               <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
+                <div className="daisy-stat border border-accent border-opacity-80 rounded-2xl bg-base-300">
                   <div className="daisy-stat-title">% of Total TVP</div>
                   <div className="daisy-stat-value text-sm">
                     {formatBalance(data.accountPercentOfTVP, 2)}%
@@ -80,7 +81,7 @@ export default function Vault(): ReactElement {
 
             {typeof data.delegatedToAccount === "number" && (
               <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
+                <div className="daisy-stat border border-accent border-opacity-80 rounded-2xl bg-base-300">
                   <div className="daisy-stat-title">Delegated to You</div>
                   <div className="daisy-stat-value text-sm">
                     {data.delegatedToAccount}
@@ -91,7 +92,7 @@ export default function Vault(): ReactElement {
 
             {typeof data.participants === "number" && (
               <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
+                <div className="daisy-stat border border-accent border-opacity-80 rounded-2xl bg-base-300">
                   <div className="daisy-stat-title">Participants</div>
                   <div className="daisy-stat-value text-sm">
                     {data.participants}
