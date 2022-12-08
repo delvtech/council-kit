@@ -74,9 +74,6 @@ export function Navigation(): ReactElement {
         <div className="ml-2 whitespace-nowrap text-xl text-accent-content">
           council-ui 🫡
         </div>
-        {/* <Link href="/">
-	<Image alt="Council" src={CouncilLogo} width={200} height={52} />
-      </Link> */}
       </div>
       <div className="daisy-navbar-center hidden lg:flex">
         <ul className="daisy-menu daisy-menu-horizontal p-0">
