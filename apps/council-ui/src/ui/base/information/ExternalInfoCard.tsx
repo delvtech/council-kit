@@ -17,7 +17,7 @@ export function ExternalInfoCard({
       <div className="mb-1">
         <a href={href}>
           <h2 className="font-bold whitespace-nowrap">
-            {header} <ExternalLinkSVG />
+            {header} <ExternalLinkSVG size={16} />
           </h2>
         </a>
       </div>

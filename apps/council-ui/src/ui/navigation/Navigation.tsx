@@ -32,7 +32,7 @@ export function Navigation(): ReactElement {
           </label>
           <ul
             tabIndex={0}
-            className="daisy-dropdown-content daisy-menu rounded-box daisy-menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
+            className="daisy-dropdown-content daisy-menu rounded-box mt-3 w-52 bg-base-300 p-2 shadow"
           >
             <li>
               <Link

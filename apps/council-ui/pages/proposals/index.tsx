@@ -90,15 +90,15 @@ export default function ProposalsPage(): ReactElement {
                   onSortOptionsChange={handleSortOptionsChange}
                 />
 
-                <div className="flex mt-8 gap-4 flex-wrap sm:flex-nowrap">
+                <div className="flex mt-8 gap-4 flex-wrap md:flex-nowrap">
                   <ExternalInfoCard
-                    header="Learn to create your own on-chain proposals"
-                    body="Proposals are necessary for any critical governance actions to be executed."
+                    header="Check out our docs to learn more about the proposal process."
+                    body="Click to dive deeper into proposals in Council. "
                     href="#"
                   />
                   <ExternalInfoCard
-                    header="Check out our docs to learn more about the proposal process."
-                    body="Proposals have their own life cycles and specifications. Click to dive deeper into proposals in Council. "
+                    header="Learn to create your own on-chain proposals"
+                    body="Proposals are necessary for any critical governance actions to be executed."
                     href="#"
                   />
                 </div>
@@ -204,7 +204,7 @@ function ProposalTableRow({
           rel="noreferrer"
         >
           {formatAddress(votingContract)}
-          <ExternalLinkSVG />
+          <ExternalLinkSVG size={16} />
         </a>
       </th>
       <td>{id}</td>

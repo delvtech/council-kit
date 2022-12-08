@@ -18,9 +18,8 @@ export default function Voters(): ReactElement {
   return (
     <Page>
       <div className="flex flex-col max-w-xl mx-auto gap-y-8">
-        {/* Page Header */}
         <div className="flex w-full items-center gap-x-2">
-          <h1 className="w-full text-5xl text-center">Voters</h1>
+          <h1 className="w-full text-5xl text-center font-bold">Voters</h1>
         </div>
 
         {/* Search Input Box */}
