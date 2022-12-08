@@ -22,19 +22,6 @@ export default function VaultsPage(): ReactElement {
           can maximize capital efficiency while maintaining the ability to
           delegate or vote when the time comes.
         </div>
-
-        <div className="flex mt-8 gap-4 flex-wrap sm:flex-nowrap">
-          <ExternalInfoCard
-            header="Learn more about voting vaults"
-            body="Check out our documentation on voting votes and other parts of the council protocol."
-            href="#"
-          />
-          <ExternalInfoCard
-            header="Explore other types of vaults"
-            body="Dive into the examples of voting vaults in our open source repository."
-            href="#"
-          />
-        </div>
       </div>
 
       {(() => {
@@ -72,6 +59,19 @@ export default function VaultsPage(): ReactElement {
                         />
                       );
                     })}
+                </div>
+
+                <div className="flex mt-8 gap-4 flex-wrap sm:flex-nowrap">
+                  <ExternalInfoCard
+                    header="Learn more about voting vaults"
+                    body="Check out our documentation on voting votes and other parts of the council protocol."
+                    href="#"
+                  />
+                  <ExternalInfoCard
+                    header="Explore other types of vaults"
+                    body="Dive into the examples of voting vaults in our open source repository."
+                    href="#"
+                  />
                 </div>
               </div>
             );

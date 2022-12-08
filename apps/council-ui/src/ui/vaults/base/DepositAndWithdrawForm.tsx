@@ -44,7 +44,7 @@ export function DepositAndWithdrawForm({
             Deposit
           </h2>
         </button>
-        <button className="ml-auto" onClick={() => setActiveTab("withdraw")}>
+        <button onClick={() => setActiveTab("withdraw")}>
           <h2
             className={classNames("text-2xl", {
               "font-extrabold": activeTab === "withdraw",

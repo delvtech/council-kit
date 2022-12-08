@@ -48,7 +48,7 @@ export default function Vault(): ReactElement {
           <div className="flex flex-wrap gap-4">
             {typeof data.activeProposalCount === "number" && (
               <div className="daisy-stats">
-                <div className="daisy-stat border border-accent border-opacity-70 rounded-2xl bg-base-300">
+                <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Active Proposals</div>
                   <div className="daisy-stat-value text-sm">
                     {data.activeProposalCount}
@@ -59,7 +59,7 @@ export default function Vault(): ReactElement {
 
             {data.accountVotingPower && (
               <div className="daisy-stats">
-                <div className="daisy-stat border border-accent border-opacity-80 rounded-2xl bg-base-300">
+                <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Your Voting Power</div>
                   <div className="daisy-stat-value text-sm">
                     {formatBalance(data.accountVotingPower)}
@@ -70,7 +70,7 @@ export default function Vault(): ReactElement {
 
             {typeof data.accountPercentOfTVP === "number" && (
               <div className="daisy-stats">
-                <div className="daisy-stat border border-accent border-opacity-80 rounded-2xl bg-base-300">
+                <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">% of Total TVP</div>
                   <div className="daisy-stat-value text-sm">
                     {formatBalance(data.accountPercentOfTVP, 2)}%
@@ -81,7 +81,7 @@ export default function Vault(): ReactElement {
 
             {typeof data.delegatedToAccount === "number" && (
               <div className="daisy-stats">
-                <div className="daisy-stat border border-accent border-opacity-80 rounded-2xl bg-base-300">
+                <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Delegated to You</div>
                   <div className="daisy-stat-value text-sm">
                     {data.delegatedToAccount}
@@ -92,7 +92,7 @@ export default function Vault(): ReactElement {
 
             {typeof data.participants === "number" && (
               <div className="daisy-stats">
-                <div className="daisy-stat border border-accent border-opacity-80 rounded-2xl bg-base-300">
+                <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Participants</div>
                   <div className="daisy-stat-value text-sm">
                     {data.participants}
