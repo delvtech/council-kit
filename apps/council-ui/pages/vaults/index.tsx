@@ -15,7 +15,7 @@ export default function VaultsPage(): ReactElement {
   return (
     <Page>
       <div>
-        <div className="text-5xl text-accent-content">Voting Vaults</div>
+        <div className="text-5xl font-semibold">Voting Vaults</div>
         <div className="mt-6 text-lg">
           Voting Vaults provide the ability to assign voting power to specific
           types of tokens/positions. The result is beautiful — governance users

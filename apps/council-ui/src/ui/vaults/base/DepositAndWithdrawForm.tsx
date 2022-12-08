@@ -33,7 +33,7 @@ export function DepositAndWithdrawForm({
   const isApproved = parseEther(allowance).gt(parseEther(depositAmount || "0"));
 
   return (
-    <div className="flex basis-1/2 flex-col gap-y-4">
+    <div className="flex basis-1/2 flex-col gap-y-4 daisy-card p-4 bg-base-300 h-fit">
       <div className="flex gap-x-4">
         <button onClick={() => setActiveTab("deposit")}>
           <h2
@@ -44,7 +44,7 @@ export function DepositAndWithdrawForm({
             Deposit
           </h2>
         </button>
-        <button onClick={() => setActiveTab("withdraw")}>
+        <button className="ml-auto" onClick={() => setActiveTab("withdraw")}>
           <h2
             className={classNames("text-2xl", {
               "font-extrabold": activeTab === "withdraw",
@@ -65,7 +65,14 @@ export function DepositAndWithdrawForm({
                   value={depositAmount}
                   maxButtonValue={balance}
                   onChange={setDepositAmount}
-                  infoText={`Balance: ${formatBalance(balance, 4)} ${symbol}`}
+                  infoText={
+                    <span className="text-lg">
+                      Balance:{" "}
+                      <span className="text-lg font-bold">
+                        {formatBalance(balance, 4)} {symbol}
+                      </span>
+                    </span>
+                  }
                 />
                 {isApproved ? (
                   <button

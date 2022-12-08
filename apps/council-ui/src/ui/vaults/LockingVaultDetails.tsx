@@ -51,7 +51,7 @@ export function LockingVaultDetails({
 
     case "success":
       return (
-        <div className="flex h-48 w-full flex-col gap-x-8 sm:flex-row">
+        <div className="flex h-48 w-full flex-col gap-8 sm:flex-row">
           <DepositAndWithdrawForm
             symbol={data.tokenSymbol}
             balance={data.tokenBalance}

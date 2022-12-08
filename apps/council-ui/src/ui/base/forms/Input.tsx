@@ -1,10 +1,10 @@
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 
 export interface InputProps {
   value: string | number;
   onChange: (value: string) => void;
   id?: string;
-  infoText?: string;
+  infoText?: ReactNode;
   placeholder?: string;
 }
 
@@ -21,7 +21,7 @@ export function Input({
         id={id}
         type="text"
         placeholder={placeholder}
-        className="daisy-input-bordered daisy-input w-full"
+        className="daisy-input-bordered daisy-input w-full text-lg"
         value={value}
         onChange={({ target }) => onChange(target.value)}
       />

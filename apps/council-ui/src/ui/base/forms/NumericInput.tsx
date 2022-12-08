@@ -26,7 +26,7 @@ export function NumericInput({
       />
       {typeof maxButtonValue !== "undefined" && (
         <button
-          className="daisy-btn-outline daisy-btn"
+          className="daisy-btn"
           onClick={() => onChange(numberString(maxButtonValue, decimals))}
         >
           Max

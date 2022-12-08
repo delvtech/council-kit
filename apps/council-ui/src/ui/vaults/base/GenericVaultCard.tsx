@@ -17,7 +17,7 @@ export function GenericVaultCard({
   votingPower,
 }: GenericVaultCardProps): ReactElement {
   return (
-    <div className="daisy-card bg-base-200 shadow-lg md:w-[420px] border border-accent-focus">
+    <div className="daisy-card bg-base-200 shadow md:w-[420px] border border-accent-focus">
       <figure>
         <img src={"/voting-vault-art.webp"} alt="voting vault art" />
       </figure>
@@ -29,13 +29,13 @@ export function GenericVaultCard({
             {tvp && (
               <div>
                 <h2>TVP</h2>
-                <p className="font-bold">{formatBalance(tvp)}</p>
+                <p className="font-extrabold">{formatBalance(tvp)}</p>
               </div>
             )}
             {votingPower && (
               <div>
                 <h2>Your TVP</h2>
-                <p className="font-bold">{formatBalance(votingPower)}</p>
+                <p className="font-extrabold">{formatBalance(votingPower)}</p>
               </div>
             )}
           </div>

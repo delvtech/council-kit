@@ -1,9 +1,9 @@
-export function ExternalLinkSVG(): JSX.Element {
+export function ExternalLinkSVG({ size = 16 }: { size: number }): JSX.Element {
   return (
     <svg
-      className="fill-neutral-content inline ml-1"
-      width={16}
-      height={16}
+      className="fill-base-content inline ml-1"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >
