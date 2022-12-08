@@ -301,7 +301,7 @@ function ProposalVotingActivityRow({
           target="_blank"
           rel="noreferrer"
         >
-          <ExternalLinkSVG />
+          <ExternalLinkSVG size={16} />
         </a>
       </h2>
       <h2>{formatBalance(votePower)}</h2>
