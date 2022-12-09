@@ -9,7 +9,7 @@ import { etherscanVerifyContracts } from "src/etherscan/verifyContract";
 
 const goerliKey = process.env.GOERLI_DEPLOYER_PRIVATE_KEY;
 
-async function main() {
+async function deployGoerli() {
   const provider = hre.ethers.provider;
   if (!goerliKey) {
     console.log("no private key for goerli deployer address provided");
@@ -37,9 +37,10 @@ async function main() {
         timestamp: Date.now(),
         signer: signer.address,
         contracts: contractDeployments.map(
-          ({ address, name, deploymentArgs }) => ({
+          ({ address, name, type, deploymentArgs }) => ({
             address,
             name,
+            type,
             deploymentArgs,
           }),
         ),
@@ -55,7 +56,7 @@ async function main() {
   await etherscanVerifyContracts(contractDeployments);
 }
 
-main()
+deployGoerli()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);
