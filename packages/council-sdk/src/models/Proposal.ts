@@ -236,7 +236,7 @@ export class Proposal extends Model {
   }
 
   /**
-   * Cast a ballot for this proposal.
+   * Vote on this proposal.
    * @param signer An ethers Signer instance for the voter.
    * @param ballot The ballot to cast.
    * @returns The transaction hash.
