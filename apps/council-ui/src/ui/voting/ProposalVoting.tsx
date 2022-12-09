@@ -19,7 +19,7 @@ export default function ProposalVoting({
   disabled,
   accountBallot,
 }: ProposalVotingProps): ReactElement {
-  const { data: votingPowerByVault } = useVotingPowerByVault(account);
+  const { data: votingPowerByVault } = useVotingPowerByVault(account, atBlock);
 
   const totalVotingPower = votingPowerByVault?.reduce(
     (total, vault) => total + +vault.votingPower,
