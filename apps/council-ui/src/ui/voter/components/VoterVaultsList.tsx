@@ -5,19 +5,22 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { VoterDataByVault } from "src/ui/voter/hooks/useVoterDataByVault";
 
-interface VotingPowerByVaultProps {
+interface VoterVaultsListProps {
   vaultData: VoterDataByVault[];
 }
 
-export function VotingPowerByVaultList({
+export function VoterVaultsList({
   vaultData,
-}: VotingPowerByVaultProps): ReactElement {
+}: VoterVaultsListProps): ReactElement {
   return (
-    <div className="flex h-96 flex-col gap-y-4 overflow-auto pr-3">
+    <div className="flex gap-6 w-full flex-wrap">
       {vaultData.map((row) => {
         return (
-          <div className="flex flex-col gap-y-2" key={row.vault.address}>
-            <h3 className="text-xl font-semibold underline">
+          <div
+            className="flex flex-col gap-y-2 daisy-card p-8 bg-base-300 min-w-[350px]"
+            key={row.vault.address}
+          >
+            <h3 className="text-2xl font-semibold underline">
               {row.vault.name}
             </h3>
 
