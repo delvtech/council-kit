@@ -1,4 +1,4 @@
-import { formatEther, formatUnits } from "ethers/lib/utils";
+import { formatEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
 
 interface VoteResultBarProps {
@@ -13,7 +13,7 @@ export function VoteResultBar({
   maybeResults,
 }: VoteResultBarProps): ReactElement {
   const resultsTotal =
-    +formatUnits(yesResults) +
+    +formatEther(yesResults) +
     +formatEther(noResults) +
     +formatEther(maybeResults);
 
@@ -21,8 +21,8 @@ export function VoteResultBar({
     return <div>Unknown</div>;
   }
 
-  const yesPercent = (+formatUnits(yesResults) / resultsTotal) * 100;
-  const maybePercent = (+formatUnits(maybeResults) / resultsTotal) * 100;
+  const yesPercent = (+formatEther(yesResults) / resultsTotal) * 100;
+  const maybePercent = (+formatEther(maybeResults) / resultsTotal) * 100;
 
   return (
     <svg height="10" width="100%">

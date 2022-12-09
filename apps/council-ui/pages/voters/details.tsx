@@ -33,7 +33,7 @@ export default function VoterDetailsPage(): ReactElement {
         <div className="daisy-card bg-neutral text-neutral-content">
           <div className="daisy-card-body items-center text-center">
             <h2 className="daisy-card-title">Error!</h2>
-            <p>No address provided or is malformed.</p>
+            <p>No address provided or address is malformed.</p>
           </div>
         </div>
       </div>
@@ -67,16 +67,14 @@ export default function VoterDetailsPage(): ReactElement {
             </a>
           </div>
         ) : (
-          <h1 className="mt-2 w-full text-5xl">
+          <h1 className="mt-2 w-full text-5xl underline">
             <a
               href={makeEtherscanAddressURL(address)}
               rel="noopener noreferrer"
               target="_blank"
             >
-              <h2 className="mt-2 w-full text-5xl underline">
-                {formatAddress(address)}
-                <ExternalLinkSVG size={24} />
-              </h2>
+              {formatAddress(address)}
+              <ExternalLinkSVG size={24} />
             </a>
           </h1>
         )}

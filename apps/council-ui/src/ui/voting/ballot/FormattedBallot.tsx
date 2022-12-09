@@ -11,12 +11,12 @@ export default function FormattedBallot({
   switch (ballot) {
     case "yes":
       return (
-        <h2 className="text-green-400 font-semibold">{ballot.toUpperCase()}</h2>
+        <h2 className="text-success font-semibold">{ballot.toUpperCase()}</h2>
       );
 
     case "no":
       return (
-        <h2 className="text-red-400 font-semibold">{ballot.toUpperCase()}</h2>
+        <h2 className="text-error font-semibold">{ballot.toUpperCase()}</h2>
       );
 
     case "maybe":

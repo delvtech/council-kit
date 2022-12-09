@@ -34,6 +34,7 @@ export function VotingHistoryTable({
   );
 }
 
+// TODO @cashd: un-stub data when the useVoteResults hook simulates reading at last call block
 function VoteHistoryRow({ vote }: { vote: Vote }): ReactElement {
   // const { data: voteResults } = useVoteResults(vote);
   const id = vote.proposal.id;
