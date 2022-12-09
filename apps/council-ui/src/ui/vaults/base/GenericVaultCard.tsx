@@ -17,7 +17,7 @@ export function GenericVaultCard({
   votingPower,
 }: GenericVaultCardProps): ReactElement {
   return (
-    <div className="daisy-card bg-base-200 shadow md:w-[420px] border border-accent-focus">
+    <div className="daisy-card bg-base-200 shadow md:w-[420px]">
       <figure>
         <img src={"/voting-vault-art.webp"} alt={`${name} art`} />
       </figure>
