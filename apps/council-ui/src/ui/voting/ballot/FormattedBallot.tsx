@@ -20,6 +20,6 @@ export default function FormattedBallot({
       );
 
     case "maybe":
-      return <h2>{ballot.toUpperCase()}</h2>;
+      return <h2 className="font-semibold">{ballot.toUpperCase()}</h2>;
   }
 }
