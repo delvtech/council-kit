@@ -36,6 +36,7 @@ export async function deployLockingVault({
   const lockingVault = await lockingVaultFactory.deploy(
     ...lockingVaultDeploymentArgs,
   );
+  await lockingVault.deployTransaction.wait(1);
   console.log("Deployed LockingVault");
 
   // deploy locking vault behind a proxy so it's upgradeable
@@ -46,6 +47,7 @@ export async function deployLockingVault({
   const lockingVaultProxy = await simpleProxyFactory.deploy(
     ...lockingVaultProxyDeploymentArgs,
   );
+  await lockingVaultProxy.deployTransaction.wait(1);
   console.log("Deployed LockingVault proxy");
 
   return {

@@ -26,6 +26,7 @@ export async function deployVotingToken({
   ];
 
   const votingToken = await votingTokenFactory.deploy(...deploymentArgs);
+  await votingToken.deployTransaction.wait(1);
   console.log("Deployed VotingToken");
 
   return {
