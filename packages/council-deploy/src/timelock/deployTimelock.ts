@@ -27,6 +27,7 @@ export async function deployTimelock({
     gscCoreVotingAddress,
   ];
   const timelock = await timeLockFactory.deploy(...deploymentArgs);
+  await timelock.deployTransaction.wait(1);
   console.log("Deployed Timelock");
 
   // gsc is authorized so that it can use its special privilege of being able

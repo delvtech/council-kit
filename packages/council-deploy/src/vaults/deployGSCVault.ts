@@ -9,6 +9,9 @@ import {
 interface DeployGSCVaultOptions {
   signer: Signer;
   coreVotingAddress: string;
+  /**
+   * Voting power requirement in coreVoting to get onto the GSC
+   */
   votingPowerBound: string;
   ownerAddress: string;
   /**
@@ -36,6 +39,7 @@ export async function deployGSCVault({
     await signer.getAddress(),
   ];
   const gscVault = await gscVaultFactory.deploy(...deploymentArgs);
+  await gscVault.deployTransaction.wait(1);
 
   // This must be done after the contract is deployed
   await gscVault.setIdleDuration(idleDuration);

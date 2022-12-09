@@ -51,6 +51,7 @@ export async function deployGSCCoreVoting({
   ];
 
   const gscCoreVoting = await gscCoreVotingFactory.deploy(...deploymentArgs);
+  await gscCoreVoting.deployTransaction.wait(1);
   console.log("Deployed GSCCoreVoting");
 
   (await gscCoreVoting.setLockDuration(lockDuration)).wait(1);

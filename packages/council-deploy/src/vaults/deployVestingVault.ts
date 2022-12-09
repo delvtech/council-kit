@@ -31,6 +31,7 @@ export async function deployVestingVault({
     staleBlockLag,
   ];
   const vestingVault = await vestingVaultFactory.deploy(...deploymentArgs);
+  await vestingVault.deployTransaction.wait(1);
   console.log("Deployed VestingVault");
 
   await vestingVault.initialize(signer.address, signer.address);

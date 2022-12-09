@@ -46,6 +46,7 @@ export async function deployCoreVoting({
     votingVaultAddresses,
   ];
   const coreVoting = await coreVotingFactory.deploy(...deploymentArgs);
+  await coreVoting.deployTransaction.wait(1);
   console.log("Deployed CoreVoting");
 
   (await coreVoting.setLockDuration(lockDuration)).wait(1);
