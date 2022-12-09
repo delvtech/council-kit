@@ -1,7 +1,7 @@
 import { deployCoreVoting } from "src/coreVoting/deployCoreVoting";
 import { deployTimelock } from "src/timelock/deployTimelock";
 import { deployTreasury } from "src/treasury/deployTreasury";
-import { deployVotingToken } from "src/token/deployVotingToken";
+import { deployVotingToken } from "src/votingToken/deployVotingToken";
 import { deployGSCVault } from "src/vaults/deployGSCVault";
 import { deployLockingVault } from "src/vaults/deployLockingVault";
 import { deployVestingVault } from "src/vaults/deployVestingVault";
