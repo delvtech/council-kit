@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVaultURL } from "src/routes";
@@ -18,9 +17,9 @@ export function GenericVaultCard({
   votingPower,
 }: GenericVaultCardProps): ReactElement {
   return (
-    <div className="daisy-card bg-base-200 shadow md:w-[420px] border border-accent-focus">
+    <div className="daisy-card bg-base-200 shadow md:w-[420px]">
       <figure>
-        <Image src={"/voting-vault-art.webp"} alt={`${name} art`} />
+        <img src={"/voting-vault-art.webp"} alt={`${name} art`} />
       </figure>
       <div className="daisy-card-body">
         <h2 className="daisy-card-title">{name}</h2>
