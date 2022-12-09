@@ -9,6 +9,7 @@ import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import QuorumBar from "src/ui/components/QuorumBar/QuorumBar";
 import { useCouncil } from "src/ui/council/useCouncil";
+import FormattedBallot from "src/ui/voting/ballot/FormattedBallot";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
 import ProposalVoting from "src/ui/voting/ProposalVoting";
@@ -305,27 +306,7 @@ function ProposalVotingActivityRow({
         </a>
       </h2>
       <h2>{formatBalance(votePower)}</h2>
-
-      {(() => {
-        switch (voteBallot) {
-          case "yes":
-            return (
-              <h2 className="text-green-400 font-semibold">
-                {voteBallot.toUpperCase()}
-              </h2>
-            );
-
-          case "no":
-            return (
-              <h2 className="text-red-400 font-semibold">
-                {voteBallot.toUpperCase()}
-              </h2>
-            );
-
-          case "maybe":
-            return <h2>{voteBallot.toUpperCase()}</h2>;
-        }
-      })()}
+      <FormattedBallot ballot={voteBallot} />
     </div>
   );
 }
