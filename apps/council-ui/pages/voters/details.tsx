@@ -1,13 +1,15 @@
 import { getAddress } from "ethers/lib/utils";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
+import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { GSCStatus } from "src/ui/utils/formatGSCStatus";
-import { VotingHistoryList } from "src/ui/voter/components/VotingHistoryList";
-import { VotingPowerByVaultList } from "src/ui/voter/components/VotingPowerByVaultList";
+import { VoterVaultsList } from "src/ui/voter/components/VoterVaultsList";
+import { VotingHistoryTable } from "src/ui/voter/components/VotingHistoryTable";
 import { useVoterDataByVault } from "src/ui/voter/hooks/useVoterDataByVault";
 import { useVoterStats } from "src/ui/voter/hooks/useVoterStats";
 import { useEnsName } from "wagmi";
@@ -20,7 +22,7 @@ export default function VoterDetailsPage(): ReactElement {
     useVoterStats(address);
   const { data: voterDataByVault, isLoading: vaultsDataLoading } =
     useVoterDataByVault(address);
-  const { data: ens } = useEnsName({
+  const { data: ens, isLoading: ensLoading } = useEnsName({
     address: getAddress(address as string),
     enabled: !!address,
   });
@@ -31,14 +33,14 @@ export default function VoterDetailsPage(): ReactElement {
         <div className="daisy-card bg-neutral text-neutral-content">
           <div className="daisy-card-body items-center text-center">
             <h2 className="daisy-card-title">Error!</h2>
-            <p>No address provided or malformed.</p>
+            <p>No address provided or address is malformed.</p>
           </div>
         </div>
       </div>
     );
   }
 
-  if (voterStatsLoading && vaultsDataLoading) {
+  if (voterStatsLoading && vaultsDataLoading && ensLoading) {
     return (
       <div className="flex flex-col items-center gap-8 mt-48">
         <p>Loading voter details. This might take a while...</p>
@@ -51,22 +53,35 @@ export default function VoterDetailsPage(): ReactElement {
     <Page>
       <div>
         {ens ? (
-          <>
+          <div>
             <h1 className="w-full text-5xl">{ens}</h1>
-
-            <h2 className="mt-2 w-full text-2xl underline">
-              {formatAddress(address)}
-            </h2>
-          </>
+            <a
+              href={makeEtherscanAddressURL(address)}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <h2 className="mt-2 w-full text-2xl underline">
+                {formatAddress(address)}
+                <ExternalLinkSVG size={24} />
+              </h2>
+            </a>
+          </div>
         ) : (
           <h1 className="mt-2 w-full text-5xl underline">
-            {formatAddress(address)}
+            <a
+              href={makeEtherscanAddressURL(address)}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {formatAddress(address)}
+              <ExternalLinkSVG size={24} />
+            </a>
           </h1>
         )}
       </div>
 
-      <>
-        {voterStats && voterStats.gscStatus && (
+      <div>
+        {voterStats && (
           <VoterStatisticsRow
             gscStatus={voterStats.gscStatus}
             votingPower={voterStats.votingPower}
@@ -74,32 +89,32 @@ export default function VoterDetailsPage(): ReactElement {
           />
         )}
 
-        <div className="flex w-full flex-col gap-y-8 md:flex-row md:gap-x-4 md:gap-y-0">
-          <div className="flex min-w-[500px] flex-col gap-y-4 sm:basis-[65%]">
+        <div className="flex w-full flex-col items-start gap-y-8 mt-8">
+          <div className="flex flex-col gap-y-4 w-full">
             <h2 className="text-2xl font-bold">Voting History</h2>
-            <VotingHistoryList
+            <VotingHistoryTable
               history={voterStats ? voterStats.votingHistory : []}
             />
           </div>
 
           {voterDataByVault && (
-            <div className="flex flex-col gap-y-4 sm:basis-[35%]">
-              <div className="text-2xl font-bold">
-                Voting Vault ({voterDataByVault.length})
-              </div>
-              <VotingPowerByVaultList vaultData={voterDataByVault} />
+            <div className="flex flex-col gap-y-4">
+              <h2 className="text-2xl font-bold">
+                Voting Vaults ({voterDataByVault.length})
+              </h2>
+              <VoterVaultsList vaultData={voterDataByVault} />
             </div>
           )}
         </div>
-      </>
+      </div>
     </Page>
   );
 }
 
 interface VoterStatisticsRowProps {
-  gscStatus: GSCStatus;
-  votingPower: string;
+  gscStatus: GSCStatus | null;
   proposalsVoted: number;
+  votingPower: string;
 }
 
 function VoterStatisticsRow({
@@ -118,12 +133,14 @@ function VoterStatisticsRow({
         </div>
       </div>
 
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">GSC Member</div>
-          <div className="daisy-stat-value text-sm">{gscStatus}</div>
+      {gscStatus && (
+        <div className="daisy-stats">
+          <div className="daisy-stat bg-base-300">
+            <div className="daisy-stat-title">GSC Member</div>
+            <div className="daisy-stat-value text-sm">{gscStatus}</div>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="daisy-stats">
         <div className="daisy-stat bg-base-300">

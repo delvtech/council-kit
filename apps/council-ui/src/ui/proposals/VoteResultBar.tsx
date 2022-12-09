@@ -1,27 +1,28 @@
-import { sumStrings, VoteResults } from "@council/sdk";
-import { formatUnits, parseEther } from "ethers/lib/utils";
+import { formatEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
 
 interface VoteResultBarProps {
-  results: VoteResults;
+  yesResults: string;
+  noResults: string;
+  maybeResults: string;
 }
 
-export function VoteResultBar({ results }: VoteResultBarProps): ReactElement {
-  const yesResult = results.yes;
-  const noResult = results.no;
-  const maybeResult = results.maybe;
-  const resultsTotal = parseEther(
-    sumStrings([yesResult, noResult, maybeResult]),
-  );
+export function VoteResultBar({
+  yesResults,
+  noResults,
+  maybeResults,
+}: VoteResultBarProps): ReactElement {
+  const resultsTotal =
+    +formatEther(yesResults) +
+    +formatEther(noResults) +
+    +formatEther(maybeResults);
 
-  if (resultsTotal) {
+  if (!resultsTotal) {
     return <div>Unknown</div>;
   }
 
-  const yesPercent =
-    +formatUnits(parseEther(yesResult).div(resultsTotal), 0) * 100;
-  const maybePercent =
-    +formatUnits(parseEther(maybeResult).div(resultsTotal), 0) * 100;
+  const yesPercent = (+formatEther(yesResults) / resultsTotal) * 100;
+  const maybePercent = (+formatEther(maybeResults) / resultsTotal) * 100;
 
   return (
     <svg height="10" width="100%">
@@ -30,24 +31,24 @@ export function VoteResultBar({ results }: VoteResultBarProps): ReactElement {
         y1="0"
         x2={`${yesPercent}%`}
         y2="0"
-        className="stroke-green-500"
-        strokeWidth={10}
+        className="stroke-success"
+        strokeWidth={12}
       />
       <line
         x1={`${yesPercent}%`}
         y1="0"
         x2={`${yesPercent + maybePercent}%`}
         y2="0"
-        className="stroke-neutral"
-        strokeWidth={10}
+        className="stroke-neutral-focus"
+        strokeWidth={12}
       />
       <line
         x1={`${yesPercent + maybePercent}%`}
         y1="0"
         x2="100%"
         y2="0"
-        className="stroke-red-500"
-        strokeWidth={10}
+        className="stroke-error"
+        strokeWidth={12}
       />
     </svg>
   );
