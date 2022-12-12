@@ -1,30 +1,67 @@
-## Getting Started
+# council-ui 🏛️
 
-First, run the development server:
+Council-ui is a reference frontend for DAOs built using the council framework using NextJS.
+
+## Principles
+
+This project tried to be as **un-opinionated** as possible, only picking popular libraries as dependencies, to encourage forking. Another founding principal for this project is to **minimize reliance on centralized servers**, meaning all data is loaded dynamically. Data fetching in the application could be optimized using an indexer or static data.
+
+## Getting started
+
+### Install dependencies
 
 ```bash
-yarn dev
+yarn
+```
+
+### Run the local server
+
+```bash
+yarn workspace council-ui dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### Linting
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```bash
+yarn workspace council-ui dev
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Linting
+
+```bash
+yarn workspace council-ui dev
+```
+
+## What's inside?
+
+- **NextJS**- react framework
+- **Tailwindcss** - component styling
+- **DaisyUI** - handy tailwind utility classes
+- **Rainbow-kit** - web3 wallet integration
+- **wagmi** - web3 hooks
+- **ens.js** - ens sdk for batch ens resolutions
+
+## Production
+
+This repository is pre-configured to be deployed using GitHub pages using a [custom action](). Furthermore, we've included some additional actions for CI code [linting]() and [formatting]90.
+
+If you need a custom deployment you can build the bundle using the following commands. This project decided not to use any SSR for production deployments to minimize the reliance on centralized servers.
+
+### Build and export the bundle
+
+```bash
+yarn workspace council-ui build
+
+yarn workspace council-ui export
+```
+
+The production bundle can be viewed at `/out`.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about council, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_source=github.com&utm_medium=referral&utm_campaign=turborepo-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [council](https://nextjs.org/docs) - view the council smart contracts.
+- [Learn about Council]() - documentation over the building blocks of council.
