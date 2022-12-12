@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { formatGSCStatus, GSCStatus } from "src/ui/utils/formatGSCStatus";
+import { formatGSCStatus, GSCStatus } from "src/ui/voter/utils/formatGSCStatus";
 
 export function useFormattedGSCStatus(
   address: string | undefined,

@@ -7,8 +7,8 @@ import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressU
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import QuorumBar from "src/ui/components/QuorumBar/QuorumBar";
 import { useCouncil } from "src/ui/council/useCouncil";
+import QuorumBar from "src/ui/proposals/QuorumBar/QuorumBar";
 import FormattedBallot from "src/ui/voting/ballot/FormattedBallot";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";

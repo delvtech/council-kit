@@ -7,11 +7,11 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import { GSCStatus } from "src/ui/utils/formatGSCStatus";
 import { VoterVaultsList } from "src/ui/voter/components/VoterVaultsList";
 import { VotingHistoryTable } from "src/ui/voter/components/VotingHistoryTable";
 import { useVoterDataByVault } from "src/ui/voter/hooks/useVoterDataByVault";
 import { useVoterStats } from "src/ui/voter/hooks/useVoterStats";
+import { GSCStatus } from "src/ui/voter/utils/formatGSCStatus";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {
