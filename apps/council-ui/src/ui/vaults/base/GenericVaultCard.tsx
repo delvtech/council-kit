@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVaultURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { makeImgSrc } from "src/ui/council/imgSrc";
 
 interface GenericVaultCardProps {
   address: string;
@@ -19,7 +20,7 @@ export function GenericVaultCard({
   return (
     <div className="daisy-card bg-base-200 shadow md:w-[420px]">
       <figure>
-        <img src={"/voting-vault-art.webp"} alt={`${name} art`} />
+        <img src={makeImgSrc("voting-vault-art.webp")} alt={`${name} art`} />
       </figure>
       <div className="daisy-card-body">
         <h2 className="daisy-card-title">{name}</h2>
