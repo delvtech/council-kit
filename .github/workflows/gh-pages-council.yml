@@ -2,7 +2,7 @@
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started
 #
-name: Deploy Council UI to GH Pages Mainnet
+name: Deploy Council UI to GH Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -17,11 +17,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-
-# Allow one concurrent deployment
-concurrency:
-  group: "pages-mainnet"
-  cancel-in-progress: true
 
 jobs:
   # Build job
@@ -55,12 +50,13 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: yarn
-      - name: Build Mainnet with Next.js
+      - name: Build with Next.js
         env:
           NEXT_PUBLIC_MAINNET_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
           NEXT_PUBLIC_GOERLI_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
+          NEXT_PUBLIC_COUNCIL_UI_BASE_PATH: ${{ secrets.COUNCIL_UI_BASE_PATH }}
         run: npx turbo run build --filter=council-ui
-      - name: Static HTML export of Mainnet with Next.js
+      - name: Static HTML export of Next.js
         run: yarn workspace council-ui run export
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
