@@ -1,5 +1,5 @@
 import { GSCVotingContract } from "@council/sdk";
-import { formatGSCStatus, GSCStatus } from "src/ui/utils/formatGSCStatus";
+import { formatGSCStatus, GSCStatus } from "src/ui/voter/utils/formatGSCStatus";
 
 export async function getFormattedGSCStatus(
   address: string,

@@ -1,7 +1,7 @@
 import { Vote, Voter } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { GSCStatus } from "src/ui/utils/formatGSCStatus";
+import { GSCStatus } from "src/ui/voter/utils/formatGSCStatus";
 import { getFormattedGSCStatus } from "src/ui/voter/utils/getFormattedGSCStatus";
 
 interface VoterStatistics {
