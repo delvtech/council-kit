@@ -16,5 +16,6 @@ module.exports = (phase) => {
   return {
     reactStrictMode: true,
     basePath: "/council-monorepo",
+    assetPrefix: "/council-monorepo",
   };
 };
