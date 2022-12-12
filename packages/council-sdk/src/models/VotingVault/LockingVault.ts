@@ -50,7 +50,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
-   * Returns the list of voters that have deposited tokens into this
+   * Get the list of voters that have deposited tokens into this
    * Locking Vault.
    * @param fromBlock The block number to start searching for voters from.
    * @param toBlock The block number to stop searching for voters at.
@@ -93,9 +93,6 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   /**
    * Get the voting power for a given address at a given block without
    * accounting for the stale block lag.
-   * @param address
-   * @param atBlock
-   * @returns
    */
   async getHistoricalVotingPower(
     address: string,
