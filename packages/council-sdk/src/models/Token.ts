@@ -25,26 +25,50 @@ export class Token extends Model {
       );
   }
 
+  /**
+   * Get the symbol for this token.
+   */
   getSymbol(): Promise<string> {
     return this.dataSource.getSymbol();
   }
 
+  /**
+   * Get the number of decimal places this token uses.
+   */
   getDecimals(): Promise<number> {
     return this.dataSource.getDecimals();
   }
 
+  /**
+   * Get the name of this token
+   */
   getName(): Promise<string> {
     return this.dataSource.getName();
   }
 
+  /**
+   * Get the spending allowance of a given spender for a given owner of this
+   * token.
+   */
   getAllowance(owner: string, spender: string): Promise<string> {
     return this.dataSource.getAllowance(owner, spender);
   }
 
+  /**
+   * Get the token balance of a given address
+   */
   getBalanceOf(address: string): Promise<string> {
     return this.dataSource.getBalanceOf(address);
   }
 
+  /**
+   * Give a spending allowance to a given spender for a given owner of this
+   * token.
+   * @param signer The Signer of the owner.
+   * @param spender The address of the spender.
+   * @param amount The amount of tokens the spender can spend.
+   * @returns The transaction hash.
+   */
   async approve(
     signer: Signer,
     spender: string,
