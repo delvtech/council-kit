@@ -15,7 +15,6 @@ module.exports = (phase) => {
   // Production Config
   return {
     reactStrictMode: true,
-    basePath: "/council-monorepo",
-    assetPrefix: "/council-monorepo",
+    basePath: process.env.NEXT_PUBLIC_COUNCIL_UI_BASE_PATH ?? "",
   };
 };

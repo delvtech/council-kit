@@ -14,7 +14,8 @@
       "env": [
         "NEXT_PUBLIC_MAINNET_ALCHEMY_KEY",
         "NEXT_PUBLIC_GOERLI_ALCHEMY_KEY",
-        "NEXT_PUBLIC_LOCAL_RPC_URL"
+        "NEXT_PUBLIC_LOCAL_RPC_URL",
+        "NEXT_PUBLIC_COUNCIL_UI_BASE_PATH"
       ]
     },
     "@council/sdk#build": {
