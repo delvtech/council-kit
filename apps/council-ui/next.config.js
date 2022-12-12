@@ -9,26 +9,12 @@ module.exports = (phase) => {
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     return {
       reactStrictMode: true,
-      // This makes it possible to call `next export` when using next/image with
-      // imported assets
-      images: {
-        loader: "akamai",
-        path: "./",
-      },
-    };
-  } else {
-    // Production Config
-    return {
-      reactStrictMode: true,
-      // js chunks and css files should have "./" appended to them so that GitHub
-      // pages can resolve them.
-      basePath: "/council-monorepo",
-      // This makes it possible to call `next export` when using next/image with
-      // imported assets
-      images: {
-        loader: "akamai",
-        path: "council-monorepo/",
-      },
     };
   }
+
+  // Production Config
+  return {
+    reactStrictMode: true,
+    basePath: "/council-monorepo",
+  };
 };
