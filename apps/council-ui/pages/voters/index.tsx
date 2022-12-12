@@ -38,7 +38,7 @@ export default function Voters(): ReactElement {
           switch (status) {
             case "loading":
               return (
-                <div className="flex flex-col items-center gap-8 ">
+                <div className="flex flex-col items-center gap-8">
                   <p>Loading voters. This might take a while...</p>
                   <Progress />
                 </div>

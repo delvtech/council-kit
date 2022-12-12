@@ -28,7 +28,7 @@ export default function VaultsPage(): ReactElement {
         switch (status) {
           case "loading":
             return (
-              <div className="flex flex-col items-center gap-8 ">
+              <div className="flex flex-col items-center gap-8">
                 <p>Loading vaults This might take a while...</p>
                 <Progress />
               </div>
