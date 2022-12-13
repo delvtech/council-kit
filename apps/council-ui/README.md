@@ -6,6 +6,10 @@ Council-ui is a reference frontend for DAOs built using the council framework us
 
 This project tried to be as **un-opinionated** as possible, only picking popular libraries as dependencies, to encourage forking. Another founding principal for this project is to **minimize reliance on centralized servers**, meaning all data is loaded dynamically. Data fetching in the application could be optimized using an indexer or static data.
 
+## Features
+
+TODO
+
 ## Getting started
 
 ### Install dependencies
@@ -18,6 +22,8 @@ yarn
 
 ```bash
 yarn workspace council-ui dev
+# or
+yarn dev # uses turbo repo
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -25,13 +31,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ### Linting
 
 ```bash
-yarn workspace council-ui dev
+yarn workspace council-ui lint:check
+yarn workspace council-ui lint
 ```
 
 ### Linting
 
 ```bash
-yarn workspace council-ui dev
+yarn workspace council-ui format:check
+yarn workspace council-ui format
+
 ```
 
 ## What's inside?
