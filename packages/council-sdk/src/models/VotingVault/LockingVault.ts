@@ -50,8 +50,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
-   * Get the list of voters that have deposited tokens into this
-   * Locking Vault.
+   * Get all participants with voting power in this vault.
    * @param fromBlock The block number to start searching for voters from.
    * @param toBlock The block number to stop searching for voters at.
    */
@@ -66,7 +65,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
-   * Get the sum of voting power held by all voters in this Locking Vault.
+   * Get the sum of voting power held by all voters in this Vesting Vault.
    * @param fromBlock The block number to start searching for voters from.
    * @param toBlock The block number to stop searching for voters at.
    */
@@ -113,7 +112,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
-   * Get a list of voters delegated to a given address.
+   * Get all voters delegated to a given address in this vault.
    */
   async getDelegatorsTo(address: string, atBlock?: number): Promise<Voter[]> {
     const delegators = await this.dataSource.getDelegatorsTo(address, atBlock);

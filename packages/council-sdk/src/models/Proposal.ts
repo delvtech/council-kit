@@ -28,7 +28,6 @@ export class Proposal extends Model {
    * @param id The id of the proposal in the voting contract.
    * @param votingContract the voting contract in which this proposal was
    *   created.
-   * @param context The context to use.
    */
   constructor(
     id: number,
@@ -173,7 +172,6 @@ export class Proposal extends Model {
    * Get all casted votes on this proposal
    * @param fromBlock The starting block number for the range of blocks fetched.
    * @param toBlock The ending block number for the range of blocks fetched.
-   * @returns
    */
   async getVotes(fromBlock?: number, toBlock?: number): Promise<Vote[]> {
     return this.votingContract.getVotes(

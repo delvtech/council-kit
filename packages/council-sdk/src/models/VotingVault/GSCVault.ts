@@ -39,7 +39,7 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
   }
 
   /**
-   * Get the list of current members
+   * Get all current members of this vault.
    * @param fromBlock The block number to start searching for members from.
    * @param toBlock The block number to stop searching for members at.
    */
@@ -49,7 +49,7 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
   }
 
   /**
-   * Get the list of current voters (alias for `getMembers`)
+   * Get all voters with voting power in this vault (alias for `getMembers`).
    * @param fromBlock The block number to start searching for voters from.
    * @param toBlock The block number to stop searching for voters at.
    */

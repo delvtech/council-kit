@@ -52,10 +52,9 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
-   * Get the list of voters that have grants in this Vesting Vault.
+   * Get all participants that have voting power in this vault.
    * @param fromBlock The block number to start searching for voters from.
    * @param toBlock The block number to stop searching for voters at.
-   * @returns
    */
   async getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
     const votersWithPower = await this.dataSource.getAllVotersWithPower(
@@ -118,7 +117,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
-   * Get a list of voters delegated to a given address.
+   * Get all voters delegated to a given address in this vault.
    */
   async getDelegatorsTo(address: string, atBlock?: number): Promise<Voter[]> {
     const delegators = await this.dataSource.getDelegatorsTo(address, atBlock);
