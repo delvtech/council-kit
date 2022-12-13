@@ -81,8 +81,8 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
   }
 
   /**
-   * Get a boolean indicating whether an address is eligible to join become a
-   * member of this vault.
+   * Get a boolean indicating whether an address is eligible to become a member
+   * of this vault.
    */
   getIsEligible(address: string): Promise<boolean> {
     return this.vaults[0].getIsEligible(address);
