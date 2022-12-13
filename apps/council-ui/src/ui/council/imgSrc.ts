@@ -9,7 +9,7 @@ export function makeImgSrc(fileNameInPublicDirectory: string): string {
   // ourselves.
   if (process.env.NEXT_PUBLIC_COUNCIL_UI_BASE_PATH) {
     const basePath = process.env.NEXT_PUBLIC_COUNCIL_UI_BASE_PATH;
-    return `${basePath}${fileNameInPublicDirectory}`;
+    return `${basePath}/${fileNameInPublicDirectory}`;
   }
 
   return `/${fileNameInPublicDirectory}`;
