@@ -14,7 +14,7 @@ export default function VaultHeader({
     <div>
       {descriptionURL ? (
         <ExternalLink href={descriptionURL} iconSize={30}>
-          {name}
+          <h1 className="text-5xl font-bold inline">{name}</h1>
         </ExternalLink>
       ) : (
         <h1 className="text-5xl font-bold">{name}</h1>

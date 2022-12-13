@@ -12,13 +12,13 @@ import index from "react-hot-toast";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
+import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/base/ChangeDelegateForm";
 import VaultHeader from "src/ui/vaults/base/VaultHeader";
-import { useVaultConfig } from "src/ui/vaults/hooks/useVaultConfig";
 import { useAccount, useSigner } from "wagmi";
 
 interface VestingVaultDetailsProps {
@@ -32,6 +32,7 @@ export function VestingVaultDetails({
   const { data: signer } = useSigner();
   const { data, status, error } = useVestingVaultDetailsData(address, account);
   const { mutate: changeDelegate } = useChangeDelegate(address);
+
   switch (status) {
     case "loading":
       return (
@@ -48,6 +49,63 @@ export function VestingVaultDetails({
       return (
         <Page>
           <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+
+          <div className="flex flex-wrap gap-4">
+            {data.activeProposalCount >= 0 && (
+              <div className="daisy-stats">
+                <div className="daisy-stat bg-base-300">
+                  <div className="daisy-stat-title">Active Proposals</div>
+                  <div className="daisy-stat-value text-sm">
+                    {data.activeProposalCount}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {data.accountVotingPower && (
+              <div className="daisy-stats">
+                <div className="daisy-stat bg-base-300">
+                  <div className="daisy-stat-title">Your Voting Power</div>
+                  <div className="daisy-stat-value text-sm">
+                    {formatBalance(data.accountVotingPower)}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {data.accountPercentOfTVP >= 0 && (
+              <div className="daisy-stats">
+                <div className="daisy-stat bg-base-300">
+                  <div className="daisy-stat-title">% of Total TVP</div>
+                  <div className="daisy-stat-value text-sm">
+                    {formatBalance(data.accountPercentOfTVP, 2)}%
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {data.delegatedToAccount >= 0 && (
+              <div className="daisy-stats">
+                <div className="daisy-stat bg-base-300">
+                  <div className="daisy-stat-title">Delegated to You</div>
+                  <div className="daisy-stat-value text-sm">
+                    {data.delegatedToAccount}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {data.participants >= 0 && (
+              <div className="daisy-stats">
+                <div className="daisy-stat bg-base-300">
+                  <div className="daisy-stat-title">Participants</div>
+                  <div className="daisy-stat-value text-sm">
+                    {data.participants}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
           <div className="flex h-48 w-full flex-col gap-x-8 sm:flex-row">
             <div className="basis-1/2">{/* TODO */}</div>
@@ -72,6 +130,7 @@ interface VestingVaultDetailsData {
   accountVotingPower: string;
   activeProposalCount: number;
   delegate: string;
+  delegatedToAccount: number;
   descriptionURL: string | undefined;
   expirationDate: Date;
   grantBalance: string;
@@ -89,9 +148,9 @@ function useVestingVaultDetailsData(
   const { context, coreVoting } = useCouncil();
 
   const chainId = useChainId();
-  const vaultConfig = useVaultConfig(
-    address,
-    councilConfigs[chainId].coreVoting,
+  const coreVotingConfig = councilConfigs[chainId].coreVoting;
+  const vaultConfig = coreVotingConfig.vaults.find(
+    (vault) => vault.address === address,
   );
 
   return useQuery({
@@ -126,9 +185,9 @@ function useVestingVaultDetailsData(
         name: vaultConfig?.name,
         accountVotingPower,
         participants: (await vestingVault.getVoters()).length,
-        delegatedToAccount: await vestingVault.getDelegatorsTo(
-          account as string,
-        ),
+        delegatedToAccount: (
+          await vestingVault.getDelegatorsTo(account as string)
+        ).length,
         activeProposalCount,
       };
     },

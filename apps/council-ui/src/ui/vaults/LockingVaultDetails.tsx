@@ -21,7 +21,6 @@ import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/base/ChangeDelegateForm";
 import { DepositAndWithdrawForm } from "src/ui/vaults/base/DepositAndWithdrawForm";
 import VaultHeader from "src/ui/vaults/base/VaultHeader";
-import { useVaultConfig } from "src/ui/vaults/hooks/useVaultConfig";
 import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultDetailsProps {
@@ -58,7 +57,7 @@ export function LockingVaultDetails({
           <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
 
           <div className="flex flex-wrap gap-4">
-            {typeof data.activeProposalCount === "number" && (
+            {data.activeProposalCount >= 0 && (
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Active Proposals</div>
@@ -80,9 +79,7 @@ export function LockingVaultDetails({
               </div>
             )}
 
-            {/* We are doing a type check because if the number is zero doing a regular
-            boolean check will not render component */}
-            {typeof data.accountPercentOfTVP === "number" && (
+            {data.accountPercentOfTVP >= 0 && (
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">% of Total TVP</div>
@@ -93,9 +90,7 @@ export function LockingVaultDetails({
               </div>
             )}
 
-            {/* We are doing a type check because if the number is zero doing a regular
-            boolean check will not render component */}
-            {typeof data.delegatedToAccount === "number" && (
+            {data.delegatedToAccount >= 0 && (
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Delegated to You</div>
@@ -106,9 +101,7 @@ export function LockingVaultDetails({
               </div>
             )}
 
-            {/* We are doing a type check because if the number is zero doing a regular
-            boolean check will not render component */}
-            {typeof data.participants === "number" && (
+            {data.participants >= 0 && (
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Participants</div>
@@ -172,9 +165,9 @@ function useLockingVaultDetailsData(
 ): UseQueryResult<LockingVaultDetailsData> {
   const { context, coreVoting } = useCouncil();
   const chainId = useChainId();
-  const vaultConfig = useVaultConfig(
-    address,
-    councilConfigs[chainId].coreVoting,
+  const coreVotingConfig = councilConfigs[chainId].coreVoting;
+  const vaultConfig = coreVotingConfig.vaults.find(
+    (vault) => vault.address === address,
   );
 
   return useQuery({
@@ -215,9 +208,9 @@ function useLockingVaultDetailsData(
         name: vaultConfig?.name,
         activeProposalCount,
         participants: (await lockingVault.getVoters()).length,
-        delegatedToAccount: await lockingVault.getDelegatorsTo(
-          account as string,
-        ),
+        delegatedToAccount: (
+          await lockingVault.getDelegatorsTo(account as string)
+        ).length,
       };
     },
   });

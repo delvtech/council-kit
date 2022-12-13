@@ -14,9 +14,9 @@ export default function ExternalLink({
 }: ExternalLinkProps): ReactElement {
   return (
     <a href={href} target="_blank" rel="noreferrer">
-      <h1 className="text-5xl font-bold hover:opacity-80">
+      <div className="hover:opacity-80 flex items-center">
         {children} <ExternalLinkSVG size={iconSize} />
-      </h1>
+      </div>
     </a>
   );
 }
