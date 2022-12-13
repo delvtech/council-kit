@@ -5,6 +5,9 @@ import { Vote } from "./Vote";
 import { VotingContract } from "./VotingContract/VotingContract";
 import { VotingVault } from "./VotingVault/VotingVault";
 
+/**
+ * A participant in Council
+ */
 export class Voter extends Model {
   address: string;
 
@@ -13,6 +16,9 @@ export class Voter extends Model {
     this.address = address;
   }
 
+  /**
+   * Get the total voting power for this Voter from a given list of vaults.
+   */
   async getVotingPower(vaults: string[], atBlock?: number): Promise<string> {
     const vaultPowers = vaults.map((address) => {
       const vault = new VotingVault(address, this.context);
@@ -21,6 +27,9 @@ export class Voter extends Model {
     return sumStrings(await Promise.all(vaultPowers));
   }
 
+  /**
+   * Get the casted votes for this Voter in a given Voting Contract
+   */
   async getVotes(votingContractAddress: string): Promise<Vote[]> {
     const votingContract = new VotingContract(
       votingContractAddress,
@@ -30,6 +39,11 @@ export class Voter extends Model {
     return votingContract.getVotes(this.address);
   }
 
+  /**
+   * Get the number of proposals this Voter has voted on and the number of
+   * proposals that they were able to vote on. If the numbers are the same, then
+   * this Voter has voted on every proposal they were able to.
+   */
   async getParticipation(
     votingContractAddress: string,
     votingVaultAddresses: string[],

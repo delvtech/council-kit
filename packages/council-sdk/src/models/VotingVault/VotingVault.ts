@@ -22,8 +22,13 @@ interface VotingVaultModel<
   getVoters?(...args: any[]): Promise<Voter[]>;
   getTotalVotingPower?(...args: any[]): Promise<string>;
 }
+
+// Include the common optional methods in the `VotingVault` export
 export interface VotingVault extends VotingVaultModel {}
 
+/**
+ * A vault which stores voting power by address
+ */
 export class VotingVault<
     TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
   >
@@ -49,6 +54,9 @@ export class VotingVault<
       )) as TDataSource;
   }
 
+  /**
+   * Get the voting power owned by a given address in this vault.
+   */
   async getVotingPower(address: string, atBlock?: number): Promise<string> {
     return this.dataSource.getVotingPower(
       address,

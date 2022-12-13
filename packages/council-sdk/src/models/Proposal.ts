@@ -28,7 +28,6 @@ export class Proposal extends Model {
    * @param id The id of the proposal in the voting contract.
    * @param votingContract the voting contract in which this proposal was
    *   created.
-   * @param context The context to use.
    */
   constructor(
     id: number,
@@ -46,7 +45,7 @@ export class Proposal extends Model {
 
   /**
    * Get the base set of data returned from fetching a proposal. The data
-   * returned will depend whether or not this proposal has been executed. Once
+   * returned will depend whether this proposal has been executed. Once
    * executed, the proposal is deleted from the voting contract and only a
    * preview of the data from the logs can be fetched.
    *
@@ -124,11 +123,10 @@ export class Proposal extends Model {
   }
 
   /**
-   * Get a boolean indicating whether or not this proposal is still active.
-   * Proposals are active during their voting period, i.e., from creation block
-   * up to expiration block or execution. Returns false if the current block
-   * is later than this proposal's expiration or this proposal has been
-   * executed.
+   * Get a boolean indicating whether this proposal is still active. Proposals
+   * are active during their voting period, i.e., from creation block up to
+   * expiration block or execution. Returns false if the current block is later
+   * than this proposal's expiration or this proposal has been executed.
    */
   async getIsActive(): Promise<boolean> {
     const expirationBlock = await this.getExpirationBlock();
@@ -140,7 +138,7 @@ export class Proposal extends Model {
   }
 
   /**
-   * Get a boolean indicating whether or not this proposal has been executed.
+   * Get a boolean indicating whether this proposal has been executed.
    * @param atBlock The block number to check. If this proposal was executed
    *   on or before this block, this will return true.
    */
@@ -174,7 +172,6 @@ export class Proposal extends Model {
    * Get all casted votes on this proposal
    * @param fromBlock The starting block number for the range of blocks fetched.
    * @param toBlock The ending block number for the range of blocks fetched.
-   * @returns
    */
   async getVotes(fromBlock?: number, toBlock?: number): Promise<Vote[]> {
     return this.votingContract.getVotes(
@@ -216,9 +213,9 @@ export class Proposal extends Model {
   }
 
   /**
-   * Get a boolean indicating whether or not this proposal can be executed.
-   * Proposals can only be executed if the quorum requirement has been met and
-   * the current block is between the unlock and last call blocks.
+   * Get a boolean indicating whether this proposal can be executed. Proposals
+   * can only be executed if the quorum requirement has been met and the current
+   * block is between the unlock and last call blocks.
    */
   async getIsExecutable(): Promise<boolean> {
     const unlockBlock = await this.getUnlockBlock();

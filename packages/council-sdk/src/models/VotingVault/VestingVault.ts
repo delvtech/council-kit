@@ -14,6 +14,10 @@ interface VestingVaultOptions extends VotingVaultOptions {
   dataSource?: VestingVaultContractDataSource;
 }
 
+/**
+ * A VotingVault that gives voting power for receiving grants and applies a
+ * multiplier on unvested tokens to reduce their voting power.
+ */
 export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   constructor(
     address: string,
@@ -32,15 +36,26 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     });
   }
 
+  /**
+   * Get the associated token for this LockingVault.
+   */
   async getToken(): Promise<Token> {
     const address = await this.dataSource.getToken();
     return new Token(address, this.context);
   }
 
+  /**
+   * Get the grant information for a given address.
+   */
   getGrant(address: string): Promise<Grant> {
     return this.dataSource.getGrant(address);
   }
 
+  /**
+   * Get all participants that have voting power in this vault.
+   * @param fromBlock The block number to start searching for voters from.
+   * @param toBlock The block number to stop searching for voters at.
+   */
   async getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
     const votersWithPower = await this.dataSource.getAllVotersWithPower(
       fromBlock,
@@ -51,6 +66,11 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     );
   }
 
+  /**
+   * Get the sum of voting power held by all voters in this Vesting Vault.
+   * @param fromBlock The block number to start searching for voters from.
+   * @param toBlock The block number to stop searching for voters at.
+   */
   async getTotalVotingPower(
     fromBlock?: number,
     toBlock?: number,
@@ -62,10 +82,22 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     return sumStrings(allVotersWithPower.map(({ power }) => power));
   }
 
+  /**
+   * Get the number of blocks before the delegation history is forgotten. Voting
+   * power from this vault can't be used on proposals that are older than the
+   * stale block lag.
+   */
   getStaleBlockLag(): Promise<number> {
     return this.dataSource.getStaleBlockLag();
   }
 
+  /**
+   * Get the voting power for a given address at a given block without
+   * accounting for the stale block lag.
+   * @param address
+   * @param atBlock
+   * @returns
+   */
   async getHistoricalVotingPower(
     address: string,
     atBlock?: number,
@@ -76,16 +108,28 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     );
   }
 
+  /**
+   * Get the current delegate of a given address.
+   */
   async getDelegate(address: string): Promise<Voter> {
     const delegateAddress = await this.dataSource.getDelegate(address);
     return new Voter(delegateAddress, this.context);
   }
 
+  /**
+   * Get all voters delegated to a given address in this vault.
+   */
   async getDelegatorsTo(address: string, atBlock?: number): Promise<Voter[]> {
     const delegators = await this.dataSource.getDelegatorsTo(address, atBlock);
     return delegators.map(({ address }) => new Voter(address, this.context));
   }
 
+  /**
+   * Change current delegate
+   * @param signer The Signer of the address delegating
+   * @param delegate The address to delegate to.
+   * @returns The transaction hash.
+   */
   changeDelegate(
     signer: Signer,
     delegate: string,
@@ -94,6 +138,11 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     return this.dataSource.changeDelegate(signer, delegate, options);
   }
 
+  /**
+   * Claim a grant and withdraw the tokens.
+   * @param signer The Signer of the wallet with a grant to claim.
+   * @returns The transaction hash.
+   */
   claim(signer: Signer, options?: TransactionOptions): Promise<string> {
     return this.dataSource.claim(signer, options);
   }
