@@ -1,18 +1,11 @@
 import { VestingVault } from "@council/sdk";
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
 import { Signer } from "ethers";
 import { ReactElement } from "react";
-import index from "react-hot-toast";
 import { councilConfigs } from "src/config/council.config";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
@@ -21,8 +14,9 @@ import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/base/ChangeDelegateForm";
 import VaultHeader from "src/ui/vaults/base/VaultHeader";
+import { useChangeDelegate } from "src/ui/vaults/hooks/useChangeDelegate";
+import { GrantCard } from "src/ui/vaults/vesting/GrantCard";
 import { useAccount, useSigner } from "wagmi";
-import { GrantCard } from "./vesting/GrantCard";
 
 interface VestingVaultDetailsProps {
   address: string;
@@ -225,38 +219,4 @@ function useVestingVaultDetailsData(
       };
     },
   });
-}
-
-interface ChangeDelegateArguments {
-  signer: Signer;
-  delegate: string;
-}
-
-function useChangeDelegate(vaultAddress: string) {
-  const { context } = useCouncil();
-  const queryClient = useQueryClient();
-  let toastId: string;
-  return useMutation(
-    ({ signer, delegate }: ChangeDelegateArguments): Promise<string> => {
-      const vault = new VestingVault(vaultAddress, context);
-      return vault.changeDelegate(signer, delegate, {
-        onSubmitted: () => (toastId = index.loading("Delegating")),
-      });
-    },
-    {
-      onSuccess: (_, { delegate }) => {
-        index.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
-          id: toastId,
-        });
-        // The SDK will manage cache invalidation for us ✨
-        queryClient.invalidateQueries();
-      },
-      onError(error, { delegate }) {
-        index.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
-          id: toastId,
-        });
-        console.error(error);
-      },
-    },
-  );
 }
