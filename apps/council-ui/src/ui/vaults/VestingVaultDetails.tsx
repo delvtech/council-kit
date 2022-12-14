@@ -1,4 +1,4 @@
-import { sumStrings, VestingVault } from "@council/sdk";
+import { VestingVault } from "@council/sdk";
 import {
   useMutation,
   useQuery,
@@ -22,6 +22,7 @@ import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/base/ChangeDelegateForm";
 import VaultHeader from "src/ui/vaults/base/VaultHeader";
 import { useAccount, useSigner } from "wagmi";
+import { GrantCard } from "./vesting/GrantCard";
 
 interface VestingVaultDetailsProps {
   address: string;
@@ -32,7 +33,10 @@ export function VestingVaultDetails({
 }: VestingVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
   const { data: signer } = useSigner();
-  const { data, status, error } = useVestingVaultDetailsData(address, account);
+  const { data, status, error } = useVestingVaultDetailsData(
+    address,
+    "0x0907742ce0a894b6a5d70e9df2c8d2fadcaf4039",
+  );
   const { mutate: changeDelegate } = useChangeDelegate(address);
 
   switch (status) {
@@ -121,8 +125,17 @@ export function VestingVaultDetails({
             </div>
           </div>
 
-          <div className="flex h-48 w-full flex-col gap-x-8 sm:flex-row">
-            <div className="basis-1/2">{/* TODO */}</div>
+          <div className="flex h-48 w-full flex-col gap-8 sm:flex-row">
+            <div className="basis-1/2">
+              <GrantCard
+                vestingVaultAddress={address}
+                grantBalance={data.grantBalance}
+                grantBalanceWithdrawn={data.grantBalanceWithdrawn}
+                creationDate={data.creationDate}
+                expirationDate={data.expirationDate}
+                unlockDate={data.unlockDate}
+              />
+            </div>
             <ChangeDelegateForm
               currentDelegate={data.delegate}
               disabled={!signer}
@@ -147,7 +160,9 @@ interface VestingVaultDetailsData {
   delegatedToAccount: number;
   descriptionURL: string | undefined;
   expirationDate: Date;
+  creationDate: Date;
   grantBalance: string;
+  grantBalanceWithdrawn: string;
   name: string | undefined;
   participants: number;
   tokenAddress: string;
@@ -193,7 +208,9 @@ function useVestingVaultDetailsData(
         tokenSymbol: await token.getSymbol(),
         tokenBalance: await token.getBalanceOf(account as string),
         // TODO: Confirm this is accurate.
-        grantBalance: sumStrings([grant.allocation, `-${grant.withdrawn}`]),
+        grantBalance: grant.allocation,
+        grantBalanceWithdrawn: grant.withdrawn,
+        creationDate: new Date(grant.createdTimestamp),
         unlockDate: new Date(grant.unlockTimestamp),
         expirationDate: new Date(grant.expirationTimestamp),
         delegate: (await vestingVault.getDelegate(account as string)).address,
