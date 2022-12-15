@@ -43,7 +43,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
 
   /**
    * Get the amount of tokens that a given `address` has deposited into this
-   * Locking Vault.
+   * vault.
    */
   getDepositedBalance(address: string): Promise<string> {
     return this.dataSource.getDepositedBalance(address);
@@ -120,8 +120,8 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
-   * Change current delegate
-   * @param signer The Signer of the address delegating
+   * Change current delegate.
+   * @param signer The Signer of the address delegating.
    * @param delegate The address to delegate to.
    * @returns The transaction hash.
    */
@@ -134,7 +134,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
-   * Deposit tokens into this Locking Vault.
+   * Deposit tokens into this vault.
    * @param signer The Signer of the wallet with the tokens.
    * @param account The address to credit this deposit to.
    * @param amount The amount of tokens to deposit. (formatted decimal string)
@@ -161,7 +161,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
-   * Withdraw tokens from this Locking Vault.
+   * Withdraw tokens from this vault.
    * @param signer The Signer of the wallet with a deposited balance.
    * @param amount The amount of tokens to withdraw. (formatted decimal string)
    * @returns The transaction hash.

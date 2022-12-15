@@ -2,7 +2,7 @@ import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
-  Grant,
+  GrantData,
   VestingVaultContractDataSource,
 } from "src/datasources/VotingVault/VestingVaultContractDataSource";
 import { Token } from "src/models/Token";
@@ -37,7 +37,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
-   * Get the associated token for this LockingVault.
+   * Get the associated token for this vault.
    */
   async getToken(): Promise<Token> {
     const address = await this.dataSource.getToken();
@@ -45,9 +45,9 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
-   * Get the grant information for a given address.
+   * Get the grant data for a given address.
    */
-  getGrant(address: string): Promise<Grant> {
+  getGrant(address: string): Promise<GrantData> {
     return this.dataSource.getGrant(address);
   }
 
@@ -67,7 +67,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
-   * Get the sum of voting power held by all voters in this Vesting Vault.
+   * Get the sum of voting power held by all voters in this vault.
    * @param fromBlock The block number to start searching for voters from.
    * @param toBlock The block number to stop searching for voters at.
    */
@@ -94,9 +94,6 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   /**
    * Get the voting power for a given address at a given block without
    * accounting for the stale block lag.
-   * @param address
-   * @param atBlock
-   * @returns
    */
   async getHistoricalVotingPower(
     address: string,
@@ -125,8 +122,8 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
-   * Change current delegate
-   * @param signer The Signer of the address delegating
+   * Change current delegate.
+   * @param signer The Signer of the address delegating.
    * @param delegate The address to delegate to.
    * @returns The transaction hash.
    */

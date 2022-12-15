@@ -78,7 +78,7 @@ export class Proposal extends Model {
 
   /**
    * Get the required quorum for this proposal to be executed measured by
-   * summing the voting power of all casted votes.  Not available on executed
+   * summing the voting power of all casted votes. Not available on executed
    * proposals.
    */
   async getRequiredQuorum(): Promise<string | null> {
@@ -170,8 +170,8 @@ export class Proposal extends Model {
 
   /**
    * Get all casted votes on this proposal
-   * @param fromBlock The starting block number for the range of blocks fetched.
-   * @param toBlock The ending block number for the range of blocks fetched.
+   * @param fromBlock Include all votes casted on or after this block number.
+   * @param toBlock Include all votes casted on or before this block number.
    */
   async getVotes(fromBlock?: number, toBlock?: number): Promise<Vote[]> {
     return this.votingContract.getVotes(
