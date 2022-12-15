@@ -3,6 +3,10 @@ import { cached, cachedKey } from "src/utils/cached";
 import { CouncilContext } from "src/context";
 import { DataSource } from "./DataSource";
 
+/**
+ * A DataSource with methods for caching return values using an LRU cache.
+ * @see https://github.com/isaacs/node-lru-cache
+ */
 export class CachedDataSource implements DataSource {
   context: CouncilContext;
   cache: LRUCache<string, any>;
@@ -12,9 +16,15 @@ export class CachedDataSource implements DataSource {
     this.cache = cache ?? new LRUCache({ max: 500 });
   }
 
-  // The return type will match the return type of the callback function.
+  /**
+   * Cache the result of a callback using a given key.
+   * @param cacheKey The key to use for the cache entry. The key will be reduced
+   *   to a string.
+   * @param callback The function to be cached. The return type of the `cached`
+   *   method will match the return type of this function.
+   * @returns The cached result of the callback function.
+   */
   cached<T extends (...args: any) => any, TKey = any>(
-    // The cache key will be reduced to a string
     cacheKey: TKey,
     callback: T,
   ): ReturnType<T> {
@@ -34,7 +44,7 @@ export class CachedDataSource implements DataSource {
 
   /**
    * Delete a single entry from the cache.
-   * @returns A boolean indicating the entry was successfully deleted
+   * @returns A boolean indicating whether the entry was successfully deleted.
    */
   deleteCached(cacheKey?: string | any): boolean {
     return this.cache.delete(cachedKey(cacheKey));

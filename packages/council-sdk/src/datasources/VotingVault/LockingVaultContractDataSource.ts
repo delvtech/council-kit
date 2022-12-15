@@ -8,31 +8,43 @@ import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
 import { CachedDataSource } from "src/datasources/CachedDataSource";
 
-export interface VoterWithPower {
-  address: string;
-  power: string;
-}
-
+/**
+ * A DataSource with methods for making cached calls to a
+ * {@linkcode LockingVault} contract from the Council protocol.
+ */
 export class LockingVaultContractDataSource extends VotingVaultContractDataSource<LockingVault> {
   constructor(address: string, context: CouncilContext) {
     super(LockingVault__factory.connect(address, context.provider), context);
     this.context = context;
   }
 
+  /**
+   * Get the address of the associated token for this vault.
+   */
   getToken(): Promise<string> {
     return this.call("token", []);
   }
 
+  /**
+   * Get the amount of tokens that a given `address` has deposited into this
+   * vault.
+   */
   async getDepositedBalance(address: string): Promise<string> {
     const [, balanceBigNumber] = await this.call("deposits", [address]);
     return formatEther(balanceBigNumber);
   }
 
+  /**
+   * Get the address of the current delegate of a given address.
+   */
   async getDelegate(address: string): Promise<string> {
     const [delegate] = await this.call("deposits", [address]);
     return delegate;
   }
 
+  /**
+   * Get the addresses of all voters delegated to a given address in this vault.
+   */
   getDelegatorsTo(
     address: string,
     atBlock?: number,
@@ -59,11 +71,20 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     });
   }
 
+  /**
+   * Get the number of blocks before the delegation history is forgotten. Voting
+   * power from this vault can't be used on proposals that are older than the
+   * stale block lag.
+   */
   async getStaleBlockLag(): Promise<number> {
     const staleBlockLagBigNumber = await this.call("staleBlockLag", []);
     return staleBlockLagBigNumber.toNumber();
   }
 
+  /**
+   * Get the voting power for a given address at a given block without
+   * accounting for the stale block lag.
+   */
   async getHistoricalVotingPower(
     address: string,
     atBlock: number,
@@ -75,6 +96,12 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     return formatEther(votingPowerBigNumber);
   }
 
+  /**
+   * Get the address and voting power of all participants that have voting power
+   * in this vault.
+   * @param fromBlock The block number to start searching for voters from.
+   * @param toBlock The block number to stop searching for voters at.
+   */
   async getAllVotersWithPower(
     fromBlock?: number,
     toBlock?: number,
@@ -103,6 +130,13 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     );
   }
 
+  /**
+   * Get all emitted {@linkcode VoteChangeEvent VoteChange} events.
+   * @param from The address that the voting power is coming from.
+   * @param to The address that the voting power is going to.
+   * @param fromBlock The block to start searching for events from.
+   * @param toBlock The block to stop searching for events at.
+   */
   getVoteChangeEvents(
     from?: string,
     to?: string,
@@ -115,6 +149,12 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     });
   }
 
+  /**
+   * Change current delegate.
+   * @param signer The Signer of the address delegating.
+   * @param delegate The address to delegate to.
+   * @returns The transaction hash.
+   */
   async changeDelegate(
     signer: Signer,
     delegate: string,
@@ -130,6 +170,15 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
     return transaction.hash;
   }
 
+  /**
+   * Deposit tokens into this vault.
+   * @param signer The Signer of the wallet with the tokens.
+   * @param account The address to credit this deposit to.
+   * @param amount A BigNumber of the amount of tokens to deposit.
+   * @param firstDelegate The address to delegate the resulting voting power to
+   *   if the account doesn't already have a delegate.
+   * @returns The transaction hash.
+   */
   async deposit(
     signer: Signer,
     account: string,
@@ -143,11 +192,17 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       signer,
       options,
     );
-    this.resetTokenDataSource();
+    this.clearTokenCached();
     this.clearCached();
     return transaction.hash;
   }
 
+  /**
+   * Withdraw tokens from this Locking Vault.
+   * @param signer The Signer of the wallet with a deposited balance.
+   * @param amount A BigNumber of the amount of tokens to withdraw.
+   * @returns The transaction hash.
+   */
   async withdraw(
     signer: Signer,
     amount: BigNumber,
@@ -159,12 +214,16 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       signer,
       options,
     );
-    this.resetTokenDataSource();
+    this.clearTokenCached();
     this.clearCached();
     return transaction.hash;
   }
 
-  private async resetTokenDataSource() {
+  /**
+   * Checks the `context` for a {@linkcode TokenDataSource} for this vault's
+   * token and clears the cache if it's a {@linkcode CachedDataSource}.
+   */
+  private async clearTokenCached() {
     const tokenDataSource = this.context.getDataSource<TokenDataSource>({
       address: await this.getToken(),
     });
@@ -172,4 +231,9 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       tokenDataSource.clearCached();
     }
   }
+}
+
+export interface VoterWithPower {
+  address: string;
+  power: string;
 }

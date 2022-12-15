@@ -9,12 +9,22 @@ import { CouncilContext } from "src/context";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
+/**
+ * A DataSource with methods for making cached calls to any voting vault
+ * contract that implements {@linkcode IVotingVault} or {@linkcode GSCVault}
+ * from the Council protocol.
+ */
 export class VotingVaultContractDataSource<
     TVault extends IVotingVault | GSCVault = IVotingVault,
   >
   extends ContractDataSource<TVault>
   implements VotingVaultDataSource
 {
+  /**
+   * Create a new `VotingVaultContractDataSource` instance.
+   * @param vault An `IVotingVault` or `GSCVault` instance from the
+   *   `@council/typechain` package or the address of the vault contract.
+   */
   constructor(vault: TVault | string, context: CouncilContext) {
     super(
       typeof vault === "string"
@@ -24,6 +34,10 @@ export class VotingVaultContractDataSource<
     );
   }
 
+  /**
+   * Get the voting power owned by a given address in this vault. Returns "0" if
+   * the voting power is unable to be fetched.
+   */
   async getVotingPower(
     this: ContractDataSource<IVotingVault>,
     address: string,
