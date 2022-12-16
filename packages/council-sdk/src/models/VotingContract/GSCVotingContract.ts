@@ -1,6 +1,9 @@
+import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { Voter } from "src/models/Voter";
 import { GSCVault } from "src/models/VotingVault/GSCVault";
+import { VotingVault } from "src/models/VotingVault/VotingVault";
 import { VotingContract, VotingContractOptions } from "./VotingContract";
 
 /**
@@ -11,7 +14,7 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
   /**
    * Create a new iGSCVotingContract model instance.
    * @param address The address of the deployed contract.
-   * @param gscVault The GSCVault instance or address for the approved GSC vault.
+   * @param gscVault The GSCVault instance or address of the approved GSC vault.
    */
   constructor(
     address: string,
@@ -78,5 +81,27 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
    */
   getIsIdle(address: string): Promise<boolean> {
     return this.vaults[0].getIsIdle(address);
+  }
+
+  /**
+   * Become a member of this GSC voting contract.
+   * @param signer The Signer of the joining member.
+   * @param vaults The addresses or VotingVault instances of the approved vaults
+   *   the joining member has voting power in. This is used to verify that the
+   *   joining member meets the minimum voting power requirement.
+   * @returns The transaction hash.
+   */
+  async join(
+    signer: Signer,
+    vaults: (string | VotingVault)[],
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.vaults[0].dataSource.join(
+      signer,
+      vaults.map((vault) =>
+        vault instanceof VotingVault ? vault.address : vault,
+      ),
+      options,
+    );
   }
 }

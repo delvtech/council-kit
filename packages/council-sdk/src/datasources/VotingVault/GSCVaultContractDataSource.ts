@@ -1,7 +1,8 @@
 import { GSCVault, GSCVault__factory } from "@council/typechain";
-import { BigNumber } from "ethers";
+import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
 /**
@@ -87,5 +88,28 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
     const joinDateBigNumber = await this.call("members", [address]);
     const joinDate = joinDateBigNumber.toNumber() * 1000;
     return joinDate > 0 ? joinDate : null;
+  }
+
+  /**
+   * Become a member of this GSC vault.
+   * @param signer The Signer of the joining member.
+   * @param vaults The addresses of the approved vaults the joining member has
+   *   voting power in. This is used to verify that the joining member meets the
+   *   minimum voting power requirement.
+   * @returns The transaction hash.
+   */
+  async join(
+    signer: Signer,
+    vaults: string[],
+    options?: TransactionOptions,
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "proveMembership",
+      [vaults, vaults.map(() => "0x00")],
+      signer,
+      options,
+    );
+    this.clearCached();
+    return transaction.hash;
   }
 }
