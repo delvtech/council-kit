@@ -1,4 +1,3 @@
-import { parseEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
 import { GSCVaultContractDataSource } from "src/datasources/VotingVault/GSCVaultContractDataSource";
 import { Voter } from "src/models/Voter";
@@ -32,7 +31,7 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
   }
 
   /**
-   * Get the amount of voting power required to join this GSC vault.
+   * Get the amount of voting power required to join this vault.
    */
   getRequiredVotingPower(): Promise<string> {
     return this.dataSource.getRequiredVotingPower();
@@ -58,7 +57,7 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
   }
 
   /**
-   * Get the join date of a given member.
+   * Get the join date of a given address.
    */
   async getJoinDate(address: string): Promise<Date | null> {
     const joinTimestamp = await this.dataSource.getJoinTimestamp(address);
@@ -91,15 +90,5 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
       isMember &&
       joinDate.getTime() + (await this.getIdleDuration()) > Date.now()
     );
-  }
-
-  /**
-   * Get a boolean indicating whether an address is eligible to join become a
-   * member of this vault.
-   */
-  async getIsEligible(address: string): Promise<boolean> {
-    const requiredVotingPower = await this.getRequiredVotingPower();
-    const addressVotingPower = await this.getVotingPower(address);
-    return parseEther(addressVotingPower).gte(parseEther(requiredVotingPower));
   }
 }

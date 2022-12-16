@@ -44,7 +44,7 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
   }
 
   /**
-   * Get the amount of voting power required to join this GSC vault.
+   * Get the amount of voting power required to join this voting contract.
    */
   getRequiredVotingPower(): Promise<string> {
     return this.vaults[0].getRequiredVotingPower();
@@ -78,13 +78,5 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
    */
   getIsIdle(address: string): Promise<boolean> {
     return this.vaults[0].getIsIdle(address);
-  }
-
-  /**
-   * Get a boolean indicating whether an address is eligible to join become a
-   * member of this vault.
-   */
-  getIsEligible(address: string): Promise<boolean> {
-    return this.vaults[0].getIsEligible(address);
   }
 }

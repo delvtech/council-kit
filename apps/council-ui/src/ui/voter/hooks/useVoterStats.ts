@@ -1,8 +1,7 @@
 import { Vote, Voter } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { GSCStatus } from "src/ui/voter/utils/formatGSCStatus";
-import { getFormattedGSCStatus } from "src/ui/voter/utils/getFormattedGSCStatus";
+import { GSCStatus, useGSCStatus } from "./useGSCStatus";
 
 interface VoterStatistics {
   votingHistory: Vote[];
@@ -13,8 +12,8 @@ interface VoterStatistics {
 export function useVoterStats(
   address: string | undefined,
 ): UseQueryResult<VoterStatistics> {
-  const { context, coreVoting, gscVoting } = useCouncil();
-
+  const { context, coreVoting } = useCouncil();
+  const { data: gscStatus } = useGSCStatus(address);
   return useQuery({
     queryKey: ["voter-stats", address],
     enabled: !!address,
@@ -24,14 +23,11 @@ export function useVoterStats(
       const votingPower = await voter.getVotingPower(
         coreVoting.vaults.map((vault) => vault.address),
       );
-      const gscStatus = gscVoting
-        ? await getFormattedGSCStatus(address as string, gscVoting)
-        : null;
 
       return {
         votingHistory: votingHistory,
         votingPower,
-        gscStatus,
+        gscStatus: gscStatus ?? null,
       };
     },
     refetchOnWindowFocus: false,

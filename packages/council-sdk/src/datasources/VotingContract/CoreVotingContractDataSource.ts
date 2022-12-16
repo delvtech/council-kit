@@ -19,6 +19,10 @@ const BALLOTS: Ballot[] = ["yes", "no", "maybe"];
 const EXECUTED_PROPOSAL_HASH =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 
+/**
+ * A DataSource with methods for making cached calls to a
+ * {@linkcode CoreVoting} contract from the Council protocol.
+ */
 export class CoreVotingContractDataSource
   extends ContractDataSource<CoreVoting>
   implements VotingContractDataSource

@@ -28,7 +28,7 @@ export function cached<TCallback extends (...args: any[]) => any>({
   cache?: LRUCache<string, any>;
   options?: GetAndSetOptions;
 }): ReturnType<TCallback> {
-  const key = stringify(cacheKey);
+  const key = cachedKey(cacheKey);
   if (cache.has(key)) {
     // console.log("✅ cache hit", key);
     return cache.get(key, options) as ReturnType<TCallback>;
@@ -42,8 +42,13 @@ export function cached<TCallback extends (...args: any[]) => any>({
 
 /**
  * Returns a key stringified in the same way as the {@linkcode cached} utility.
- * @param cacheKey The value to stringify
+ * This will not modify strings so
+ * `cachedKey('foo') === cachedKey(cachedKey('foo'))`.
+ * @param cacheKey The value to stringify.
  */
 export function cachedKey(cacheKey: string | any): string {
+  if (typeof cacheKey === "string") {
+    return cacheKey;
+  }
   return stringify(cacheKey);
 }

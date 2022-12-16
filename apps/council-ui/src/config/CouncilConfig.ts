@@ -10,7 +10,7 @@ export interface CouncilConfig {
   chainId: number;
   timelock: ContractConfig;
   coreVoting: VotingContractConfig;
-  gscVoting: VotingContractConfig;
+  gscVoting?: VotingContractConfig;
 }
 
 export interface ContractConfig {

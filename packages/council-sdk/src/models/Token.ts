@@ -62,8 +62,7 @@ export class Token extends Model {
   }
 
   /**
-   * Give a spending allowance to a given spender for a given owner of this
-   * token.
+   * Give a spending allowance to a given spender.
    * @param signer The Signer of the owner.
    * @param spender The address of the spender.
    * @param amount The amount of tokens the spender can spend.
