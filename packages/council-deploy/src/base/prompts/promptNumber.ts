@@ -2,6 +2,7 @@ import prompt from "prompt";
 /**
  * Returns a number string from stdin.
  */
+
 export async function promptNumber({
   message,
   defaultNumber,

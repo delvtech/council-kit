@@ -1,4 +1,5 @@
 import prompt from "prompt";
+
 export async function promptString({
   message,
   defaultValue,

@@ -28,7 +28,7 @@ const lockingVaultsTable = allLockingVaults.map((lockingVault) => ({
 async function promptChooseLockingVaultAndDepositTokens() {
   const provider = hre.ethers.provider;
   if (!goerliKey) {
-    console.log("no private key for goerli deployer address provided");
+    console.error("No private key for goerli deployer address provided.");
     return;
   }
 

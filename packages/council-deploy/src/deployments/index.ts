@@ -12,12 +12,9 @@ export function getDeploymentForContract(
   contractAddress: string,
   deployments: DeploymentInfo[],
 ): DeploymentInfo | undefined {
-  const deployment = deployments.find((deployment) => {
-    const deployedContractAddresses = deployment.contracts.map(
-      ({ address }) => address,
-    );
-    return deployedContractAddresses.includes(contractAddress);
-  });
+  const deployment = deployments.find((deployment) =>
+    deployment.contracts.find(({ address }) => address === contractAddress),
+  );
 
   return deployment;
 }

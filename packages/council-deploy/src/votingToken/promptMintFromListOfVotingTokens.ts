@@ -24,7 +24,7 @@ const votingTokensTable = allVotingTokens.map((votingToken) => ({
 async function mintFromListOfVotingTokens() {
   const provider = hre.ethers.provider;
   if (!goerliKey) {
-    console.log("No private key for goerli deployer address provided");
+    console.error("No private key for goerli deployer address provided.");
     return;
   }
 
