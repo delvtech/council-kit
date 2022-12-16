@@ -94,11 +94,13 @@ export class ContractDataSource<
       await transaction.wait(); // will throw an error if transaction fails
     } catch (error: unknown) {
       if (isTransactionReplacedError(error)) {
-        if (error.reason === "cancelled") {
-          options?.onCancelled?.(transaction.hash);
+        if (error.reason === "cancelled" && options?.onCancelled) {
+          options.onCancelled(transaction.hash);
+          return transaction;
         }
-        if (error.reason === "repriced") {
-          options?.onRepriced?.(transaction.hash);
+        if (error.reason === "repriced" && options?.onRepriced) {
+          options?.onRepriced(transaction.hash);
+          return transaction;
         }
       }
 
