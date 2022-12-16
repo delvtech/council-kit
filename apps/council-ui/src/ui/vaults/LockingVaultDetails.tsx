@@ -11,9 +11,11 @@ import { formatUnits } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import toast from "react-hot-toast";
 import { councilConfigs } from "src/config/council.config";
+import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -111,6 +113,19 @@ export function LockingVaultDetails({
                 </div>
               </div>
             )}
+
+            <div className="daisy-stats">
+              <div className="daisy-stat bg-base-300">
+                <div className="daisy-stat-title">Vault token</div>
+                <div className="daisy-stat-value text-sm">
+                  <ExternalLink
+                    href={makeEtherscanAddressURL(data.tokenAddress)}
+                  >
+                    {data.tokenSymbol}
+                  </ExternalLink>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="flex h-48 w-full flex-col gap-8 sm:flex-row">
@@ -154,6 +169,7 @@ interface LockingVaultDetailsData {
   descriptionURL: string | undefined;
   name: string | undefined;
   participants: number;
+  tokenAddress: string;
   tokenAllowance: string;
   tokenBalance: string;
   tokenSymbol: string;
@@ -196,6 +212,7 @@ function useLockingVaultDetailsData(
           100,
         accountVotingPower,
 
+        tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
         tokenBalance: await token.getBalanceOf(account as string),
         tokenAllowance: await token.getAllowance(account as string, address),
