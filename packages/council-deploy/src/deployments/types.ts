@@ -3,14 +3,16 @@ export interface DeploymentsJsonFile {
   deployments: DeploymentInfo[];
 }
 
+export interface ContractDeploymentInfo {
+  address: string;
+  name: string;
+  type: string;
+  deploymentArgs: unknown[];
+}
+
 export interface DeploymentInfo {
   timestamp: number;
   name: string;
   signer: string;
-  contracts: {
-    address: string;
-    name: string;
-    type: string;
-    deploymentArgs: unknown[];
-  }[];
+  contracts: ContractDeploymentInfo[];
 }
