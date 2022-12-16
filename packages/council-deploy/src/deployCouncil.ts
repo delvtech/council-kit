@@ -3,7 +3,7 @@ import { deployTimelock } from "src/timelock/deployTimelock";
 import { deployTreasury } from "src/treasury/deployTreasury";
 import { deployVotingToken } from "src/votingToken/deployVotingToken";
 import { deployGSCVault } from "src/vaults/deployGSCVault";
-import { deployLockingVault } from "src/vaults/deployLockingVault";
+import { deployLockingVault } from "src/vaults/lockingVault/deployLockingVault";
 import { deployVestingVault } from "src/vaults/deployVestingVault";
 import { deployGSCCoreVoting } from "src/coreVoting/deployGSCCoreVoting";
 import { Contract, Wallet } from "ethers";
