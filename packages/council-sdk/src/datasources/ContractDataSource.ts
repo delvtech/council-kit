@@ -99,13 +99,13 @@ export class ContractDataSource<
           return transaction;
         }
         if (error.reason === "repriced" && options?.onRepriced) {
-          options?.onRepriced(transaction.hash);
+          options.onRepriced(transaction.hash);
           return transaction;
         }
       }
 
-      // null is an object, but isn't truthy so !!error will be false here
-      if (!!error && typeof error === "object") {
+      // null is an object, but isn't truthy
+      if (error && typeof error === "object") {
         throw error;
       }
 
