@@ -1,4 +1,10 @@
-import { BaseContract, Signer, type ContractTransaction } from "ethers";
+import {
+  BaseContract,
+  ContractReceipt,
+  Signer,
+  type ContractTransaction,
+} from "ethers";
+import { Logger } from "ethers/lib/utils";
 import LRUCache from "lru-cache";
 import { CouncilContext } from "src";
 import { CachedDataSource } from "./CachedDataSource";
@@ -83,7 +89,37 @@ export class ContractDataSource<
     const fn = contract[method] as unknown as TransactionFunction;
     const transaction = await fn(...args);
     options?.onSubmitted?.(transaction.hash);
-    await transaction.wait(); // will throw an error if transaction fails
+
+    try {
+      await transaction.wait(); // will throw an error if transaction fails
+    } catch (error: unknown) {
+      if (isTransactionReplacedError(error)) {
+        if (error.reason === "cancelled" && options?.onCancelled) {
+          options.onCancelled(transaction.hash);
+          return transaction;
+        }
+        if (error.reason === "repriced" && options?.onRepriced) {
+          options.onRepriced(transaction.hash);
+          return transaction;
+        }
+      }
+
+      // null is an object, but isn't truthy
+      if (error && typeof error === "object") {
+        throw error;
+      }
+
+      if (typeof error === "string") {
+        throw new Error(error);
+      }
+
+      throw new Error(
+        `Unknown error calling ${method as string} on: ${
+          this.contract.address
+        } with arguments: ${args}`,
+      );
+    }
+
     return transaction;
   }
 
@@ -105,6 +141,8 @@ export interface TransactionOptions {
    * @param transaction The transaction hash.
    */
   onSubmitted?: (transaction: string) => void;
+  onCancelled?: (transaction: string) => void;
+  onRepriced?: (transaction: string) => void;
 }
 
 type AnyFunction = (...args: any) => any;
@@ -133,3 +171,31 @@ export type TransactionKeys<T> = Exclude<
   }[keyof T],
   undefined
 >;
+
+export interface TransactionReplacedError extends Error {
+  code: "TRANSACTION_REPLACED";
+  // The reason why the transaction was replaced
+  // - "repriced" is generally nothing of concern, the
+  //   only difference in the transaction is the gasPrice
+  // - "cancelled" means the `to` has been set to the `from`,
+  //   the data has been set to `0x` and value set to 0
+  // - "replaced" means that the transaction is unrelated to
+  //   the original transaction
+  reason: "repriced" | "cancelled" | "replaced";
+  // This is a short-hand property as the effects of either a
+  // "cancelled" or "replaced" tx are effectively cancelled
+  cancelled: boolean;
+  // The TransactionResponse which replaced the original
+  replacement: ContractTransaction;
+  // The TransactionReceipt of the replacement transaction
+  receipt: ContractReceipt;
+}
+
+export function isTransactionReplacedError(
+  error: TransactionReplacedError | any,
+): error is TransactionReplacedError {
+  if (error?.code === Logger.errors.TRANSACTION_REPLACED) {
+    return true;
+  }
+  return false;
+}
