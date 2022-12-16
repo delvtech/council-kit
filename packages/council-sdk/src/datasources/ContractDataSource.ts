@@ -194,12 +194,7 @@ export interface TransactionReplacedError extends Error {
 export function isTransactionReplacedError(
   error: TransactionReplacedError | any,
 ): error is TransactionReplacedError {
-  if (
-    typeof error === "object" &&
-    !!error &&
-    "code" in error &&
-    error.code === Logger.errors.TRANSACTION_REPLACED
-  ) {
+  if (error?.code === Logger.errors.TRANSACTION_REPLACED) {
     return true;
   }
   return false;
