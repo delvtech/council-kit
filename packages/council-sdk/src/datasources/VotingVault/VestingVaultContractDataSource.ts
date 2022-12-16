@@ -215,18 +215,18 @@ export interface GrantData {
   withdrawn: string;
 
   /**
-   * The timestamp of when the grant starts.
+   * The timestamp (in MS) of when the grant starts.
    */
   startTimestamp: number;
 
   /**
-   * The timestamp of when the full allocation is vested and any remaining
-   * balance can be withdrawn.
+   * The timestamp (in MS) of when the full allocation is vested and any
+   * remaining balance can be withdrawn.
    */
   expirationTimestamp: number;
 
   /**
-   * The timestamp after which any withdrawable tokens can be withdrawn.
+   * The timestamp (in MS) after which any withdrawable tokens can be withdrawn.
    */
   unlockTimestamp: number;
 
@@ -241,9 +241,8 @@ export interface GrantData {
   delegate: string;
 
   /**
-   * The starting and ending index of the specific range of tokens in the vault
-   * that belong to this grant. This is set when a grant is accepted with the
-   * `acceptGrant` method.
+   * The specific range of enumerated tokens in the vault that belong to this
+   * grant. This is set when a grant is accepted with the `acceptGrant` method.
    */
   range: [string, string];
 }
