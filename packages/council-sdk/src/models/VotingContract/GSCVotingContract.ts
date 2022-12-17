@@ -83,6 +83,14 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
   }
 
   /**
+   * Get the voting vaults a member joined with. Used to prove the member meets
+   * the minimum voting power requirement.
+   */
+  getMemberVaults(address: string): Promise<string[]> {
+    return this.vaults[0].getMemberVaults(address);
+  }
+
+  /**
    * Become a member of this GSC voting contract.
    * @param signer The Signer of the joining member.
    * @param vaults The addresses of the approved vaults the joining member has
