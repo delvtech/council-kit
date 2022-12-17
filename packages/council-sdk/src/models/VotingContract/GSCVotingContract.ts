@@ -3,7 +3,6 @@ import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { Voter } from "src/models/Voter";
 import { GSCVault } from "src/models/VotingVault/GSCVault";
-import { VotingVault } from "src/models/VotingVault/VotingVault";
 import { VotingContract, VotingContractOptions } from "./VotingContract";
 
 /**
@@ -86,22 +85,34 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
   /**
    * Become a member of this GSC voting contract.
    * @param signer The Signer of the joining member.
-   * @param vaults The addresses or VotingVault instances of the approved vaults
-   *   the joining member has voting power in. This is used to verify that the
-   *   joining member meets the minimum voting power requirement.
+   * @param vaults The addresses of the approved vaults the joining member has
+   *   voting power in. This is used to prove the joining member meets the
+   *   minimum voting power requirement. If voting power is moved to a different
+   *   vault, the member will become ineligible until they join again with the
+   *   new vault or risk being kicked.
    * @returns The transaction hash.
    */
   async join(
     signer: Signer,
-    vaults: (string | VotingVault)[],
+    vaults: string[],
     options?: TransactionOptions,
   ): Promise<string> {
-    return this.vaults[0].dataSource.join(
-      signer,
-      vaults.map((vault) =>
-        vault instanceof VotingVault ? vault.address : vault,
-      ),
-      options,
-    );
+    return this.vaults[0].join(signer, vaults, options);
+  }
+
+  /**
+   * Remove a member that's become ineligible from this GSC vault. A member
+   * becomes ineligible when the voting power in the vaults they joined with
+   * drops below the required minimum.
+   * @param signer The Signer of the wallet paying to kick.
+   * @param member The address of the ineligible member to kick.
+   * @returns The transaction hash.
+   */
+  kick(
+    signer: Signer,
+    member: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.vaults[0].kick(signer, member, options);
   }
 }
