@@ -29,7 +29,7 @@ export function VestingVaultDetails({
   const { data: signer } = useSigner();
   const { data, status, error } = useVestingVaultDetailsData(
     address,
-    "0x0907742ce0a894b6a5d70e9df2c8d2fadcaf4039",
+    "0x2dc2c7337da8adb2721cdde2eb91d922d4587489",
   );
   const { mutate: changeDelegate } = useChangeDelegate(address);
 
@@ -125,7 +125,6 @@ export function VestingVaultDetails({
                 vestingVaultAddress={address}
                 grantBalance={data.grantBalance}
                 grantBalanceWithdrawn={data.grantBalanceWithdrawn}
-                creationDate={data.creationDate}
                 expirationDate={data.expirationDate}
                 unlockDate={data.unlockDate}
               />
@@ -154,7 +153,6 @@ interface VestingVaultDetailsData {
   delegatedToAccount: number;
   descriptionURL: string | undefined;
   expirationDate: Date;
-  creationDate: Date;
   grantBalance: string;
   grantBalanceWithdrawn: string;
   name: string | undefined;
@@ -204,7 +202,6 @@ function useVestingVaultDetailsData(
         // TODO: Confirm this is accurate.
         grantBalance: grant.allocation,
         grantBalanceWithdrawn: grant.withdrawn,
-        creationDate: new Date(grant.createdTimestamp),
         unlockDate: new Date(grant.unlockTimestamp),
         expirationDate: new Date(grant.expirationTimestamp),
         delegate: (await vestingVault.getDelegate(account as string)).address,

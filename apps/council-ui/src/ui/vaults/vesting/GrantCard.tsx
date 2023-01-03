@@ -5,26 +5,26 @@ import { useClaimGrant } from "src/ui/vaults/hooks/useGrantClaim";
 import { useSigner } from "wagmi";
 
 interface GrantCardProps {
-  vestingVaultAddress: string;
-  creationDate: Date;
   expirationDate: Date;
   grantBalance: string;
   grantBalanceWithdrawn: string;
   unlockDate: Date;
+  vestingVaultAddress: string;
 }
 
 export function GrantCard({
-  vestingVaultAddress,
+  expirationDate,
   grantBalance,
   grantBalanceWithdrawn,
-  creationDate,
-  expirationDate,
   unlockDate,
+  vestingVaultAddress,
 }: GrantCardProps): ReactElement {
   const currentDate = new Date();
-
   const { data: signer } = useSigner();
   const { mutate: claim } = useClaimGrant(vestingVaultAddress);
+
+  const canClaim =
+    unlockDate.getTime() < currentDate.getTime() && !!grantBalance;
 
   return (
     <div className="flex flex-col gap-y-4 daisy-card p-4 bg-base-300 h-fit">
@@ -46,13 +46,6 @@ export function GrantCard({
         </div>
 
         <div className="flex">
-          <p>Created Date</p>
-          <p className="ml-auto font-bold">
-            {creationDate.toLocaleDateString()}
-          </p>
-        </div>
-
-        <div className="flex">
           <p>Vesting Starts</p>
           <p className="ml-auto font-bold">{unlockDate.toLocaleDateString()}</p>
         </div>
@@ -65,7 +58,17 @@ export function GrantCard({
         </div>
       </div>
 
-      {unlockDate.getTime() > currentDate.getTime() ? (
+      {canClaim ? (
+        <div className="daisy-tooltip daisy-tooltip-primary" data-tip="hello">
+          <button
+            className="daisy-btn daisy-btn-primary w-full"
+            onClick={() => claim({ signer: signer as Signer })}
+            disabled={!signer}
+          >
+            Withdraw
+          </button>
+        </div>
+      ) : (
         <div
           className="daisy-tooltip"
           data-tip="The vesting period has not started yet."
@@ -74,17 +77,7 @@ export function GrantCard({
             className="daisy-btn daisy-btn-primary w-full"
             disabled={true}
           >
-            Withdraw
-          </button>
-        </div>
-      ) : (
-        <div className="daisy-tooltip" data-tip="hello">
-          <button
-            className="daisy-btn daisy-btn-primary w-full"
-            onClick={() => claim({ signer: signer as Signer })}
-            disabled={!signer}
-          >
-            Withdraw
+            Withdraw {formatBalance} ELFI
           </button>
         </div>
       )}

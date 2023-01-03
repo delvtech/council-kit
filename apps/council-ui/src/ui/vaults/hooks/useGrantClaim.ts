@@ -21,7 +21,7 @@ export function useClaimGrant(
       const vault = new VestingVault(vestingVaultAddress, context);
 
       return vault.claim(signer, {
-        onSubmitted: () => (toastId = index.loading("Delegating")),
+        onSubmitted: () => (toastId = index.loading("Claiming grant...")),
       });
     },
     {

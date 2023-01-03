@@ -27,7 +27,9 @@ export function Input({
       />
       {infoText && (
         <label className="daisy-label">
-          <span className="daisy-label-text-alt">{infoText}</span>
+          <span className="daisy-label-text-alt select-text cursor-text">
+            {infoText}
+          </span>
         </label>
       )}
     </div>

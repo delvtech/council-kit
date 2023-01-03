@@ -1,4 +1,4 @@
-import { Signer } from "ethers";
+import { BigNumber, Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
@@ -52,6 +52,36 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
+   * Gets the amount of tokens currently claimable from the grant.
+   * @param address The grantee address.
+   * @returns The amount of claimable tokens.
+   */
+  async getClaimAmount(address: string): Promise<string> {
+    const currentBlock = await this.context.provider.getBlockNumber();
+    const grant = await this.getGrant(address);
+    const unlock = grant.unlockBlock;
+    const end = grant.expirationBlock;
+
+    // funds are not unlocked
+    if (currentBlock < unlock) {
+      return "0";
+    }
+
+    // all funds are claimable
+    if (currentBlock >= end) {
+      return BigNumber.from(grant.allocation).sub(grant.withdrawn).toString();
+    }
+
+    const grantDuration = end - unlock;
+    const blockDelta = currentBlock - unlock;
+    const tokensUnlocked = BigNumber.from(grant.allocation)
+      .mul(blockDelta)
+      .div(grantDuration);
+
+    return tokensUnlocked.sub(grant.withdrawn).toString();
+  }
+
+  /**
    * Get all participants that have voting power in this vault.
    * @param fromBlock The block number to start searching for voters from.
    * @param toBlock The block number to stop searching for voters at.
@@ -94,6 +124,9 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   /**
    * Get the voting power for a given address at a given block without
    * accounting for the stale block lag.
+   * @param address
+   * @param atBlock
+   * @returns The historical voting power of the given address.
    */
   async getHistoricalVotingPower(
     address: string,
