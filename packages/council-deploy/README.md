@@ -10,7 +10,7 @@ requires doing things in a specific order. This project serves to be a reference
 point for anyone looking to deploy their own version of Council.
 
 You might not need every contract provided by Council. Perhaps you don't need a
-GSC, or a Treasury, or a specific Voting Vault. You might already have a
+GSC, Treasury, or a specific Voting Vault. You might already have a
 voting token and don't need to deploy the one provided here. We intend to make
 this customization process easy with different Recipes for common deployment
 cases.
@@ -28,7 +28,7 @@ resolve any issues before going live on `mainnet`.
 
 ## Deploy contracts
 
-Contracts are deployed using the private key of the wallet specified in the .env
+Contracts are deployed using the private key of the wallet specified in the `.env`
 file, see: `GOERLI_DEPLOYER_PRIVATE_KEY`.
 
 Once all contracts are deployed, each one will be verified on Etherscan
