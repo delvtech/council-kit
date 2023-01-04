@@ -2,8 +2,6 @@ import goerli from "src/deployments/goerli.deployments.json";
 import { DeploymentInfo } from "src/deployments/types";
 
 export const goerliDeployments = goerli.deployments;
-export const latestGoerliDeployment =
-  goerliDeployments[goerliDeployments.length - 1];
 
 /**
  * Finds the deployment that the given contract is in.
