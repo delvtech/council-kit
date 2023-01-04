@@ -23,7 +23,7 @@ async function etherscanVerifyContract<T extends ContractFactory>(
   contract: Contract,
   constructorArguments: DeployArguments<T>,
 ): Promise<void> {
-  // wait for a couple of blocks so etherscan has enough time to index this
+  // wait a couple of blocks so etherscan has enough time to index this
   // contract, then attempt to verify it on Etherscan
   await contract.deployTransaction.wait(WAIT_BLOCK_CONFIRMATIONS);
   try {

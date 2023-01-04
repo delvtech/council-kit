@@ -21,10 +21,10 @@ resolve any issues before going live on `mainnet`.
 ## Installation
 
 1. Clone the council-monorepo then run, `yarn install`.
-2. Run `yarn workspace @council/deploy run build` to grab the latest contract code
-   and build the project.
+2. Run `yarn workspace @council/deploy run load-contracts` to grab the latest contract code
 3. Add your environment variables to `packages/council-deploy/.env`. See the
    `.env.sample` in this project for a template.
+4. Run `yarn workspace @council/deploy run build`.
 
 ## Deploy contracts
 
