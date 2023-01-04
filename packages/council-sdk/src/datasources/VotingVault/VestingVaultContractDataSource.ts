@@ -7,22 +7,6 @@ import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
-export interface Grant {
-  allocation: string;
-  withdrawn: string;
-  startBlock: number;
-  expirationBlock: number;
-  unlockBlock: number;
-  votingPower: string;
-  delegate: string;
-  range: [string, string];
-}
-
-export interface VoterWithPower {
-  address: string;
-  power: string;
-}
-
 /**
  * A DataSource with methods for making cached calls to a
  * {@linkcode VestingVault} contract from the Council protocol.
