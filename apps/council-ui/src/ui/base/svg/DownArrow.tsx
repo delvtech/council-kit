@@ -1,7 +1,7 @@
 export function DownArrowSVG(): JSX.Element {
   return (
     <svg
-      className="inline fill-neutral-content"
+      className="inline fill-base-content"
       width={16}
       height={16}
       viewBox="0 0 24 24"

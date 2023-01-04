@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import "@rainbow-me/rainbowkit/styles.css";
 import "src/styles/globals.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 // We import the root of the app dynamically to turn off SSR for the entire app tree
 // This is because NextJS and injected connectors (i.e. wagmi) don't integrate well and lead to

@@ -4,12 +4,12 @@ import assertNever from "assert-never";
 import { parseEther } from "ethers/lib/utils";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { makeProposalURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
-import { Progress } from "src/ui/base/Progress";
 import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
@@ -59,23 +59,22 @@ export default function ProposalsPage(): ReactElement {
   };
 
   return (
-    <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
-      <h1 className="text-5xl">Proposals</h1>
+    <div className="flex flex-col items-start max-w-5xl px-4 m-auto mt-16 gap-y-10">
+      <h1 className="text-5xl font-bold">Proposals</h1>
 
       {(() => {
         switch (status) {
           case "loading":
             return (
-              <div className="flex flex-col items-center gap-8">
-                <p>Loading proposals. This might take a while...</p>
-                <Progress />
+              <div className="w-full">
+                <SkeletonProposalTable />
               </div>
             );
 
           case "error":
             return (
               <div className="daisy-mockup-code">
-                <code className="block whitespace-pre-wrap px-6 text-error">
+                <code className="block px-6 whitespace-pre-wrap text-error">
                   {error ? (error as string).toString() : "Unknown error"}
                 </code>
               </div>
@@ -83,31 +82,31 @@ export default function ProposalsPage(): ReactElement {
 
           case "success":
             return (
-              <div>
+              <div className="w-full">
                 <ProposalsTable
                   rowData={sortedData}
                   sortOptions={sortOptions}
                   onSortOptionsChange={handleSortOptionsChange}
                 />
-
-                <div className="flex mt-8 gap-4 flex-wrap md:flex-nowrap">
-                  <ExternalInfoCard
-                    header="Check out our docs to learn more about the proposal process."
-                    body="Click to dive deeper into proposals in Council. "
-                    href="#"
-                  />
-                  <ExternalInfoCard
-                    header="Learn to create your own on-chain proposals"
-                    body="Proposals are necessary for any critical governance actions to be executed."
-                    href="#"
-                  />
-                </div>
               </div>
             );
           default:
             assertNever(status);
         }
       })()}
+
+      <div className="flex flex-wrap gap-4 md:flex-nowrap">
+        <ExternalInfoCard
+          header="Check out our docs to learn more about the proposal process."
+          body="Click to dive deeper into proposals in Council. "
+          href="#"
+        />
+        <ExternalInfoCard
+          header="Learn to create your own on-chain proposals"
+          body="Proposals are necessary for any critical governance actions to be executed."
+          href="#"
+        />
+      </div>
     </div>
   );
 }
@@ -135,7 +134,7 @@ function ProposalsTable({
   onSortOptionsChange,
 }: ProposalsTableProps) {
   return (
-    <table className="daisy-table-zebra daisy-table w-full min-w-fit shadow-md">
+    <table className="w-full shadow-md daisy-table-zebra daisy-table min-w-fit">
       <thead>
         <tr>
           <th className="select-none">Voting Contract</th>
@@ -336,4 +335,60 @@ function sortProposalRowData(sort: SortOptions, data?: ProposalRowData[]) {
         });
       }
   }
+}
+
+function SkeletonProposalTable() {
+  return (
+    <table className="w-full shadow-md daisy-table-zebra daisy-table min-w-fit">
+      <thead>
+        <tr>
+          <th className="w-48 select-none">Voting Contract</th>
+
+          <th className="w-16 select-none">
+            <span className="mr-1 select-none">ID</span>
+          </th>
+
+          <th className="w-32 select-none">
+            <span className="mr-1">Created</span>
+          </th>
+
+          <th className="w-32 select-none">Voting Ends</th>
+
+          <th className="w-64 select-none">
+            <span className="mr-1">Quorum</span>
+          </th>
+
+          <th className="select-none">Your Ballot</th>
+
+          <th className="w-16"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <th>
+            <Skeleton />
+          </th>
+          <td>
+            <Skeleton />
+          </td>
+          <td>
+            <Skeleton />
+          </td>
+          <td>
+            <Skeleton />
+          </td>
+          <td>
+            <Skeleton />
+          </td>
+          <td>
+            <Skeleton />
+          </td>
+          <td>
+            <Skeleton />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  );
 }
