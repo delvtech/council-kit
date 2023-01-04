@@ -1,7 +1,7 @@
 export function ChevronDownSVG(): JSX.Element {
   return (
     <svg
-      className="fill-neutral-focus inline"
+      className="inline fill-base-content"
       width={24}
       height={24}
       viewBox="0 0 24 24"
