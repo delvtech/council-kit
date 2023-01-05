@@ -6,7 +6,7 @@ import { Proposal } from "src/models/Proposal";
 import { Vote } from "src/models/Vote";
 import { Voter } from "src/models/Voter";
 import { VotingVault } from "src/models/VotingVault/VotingVault";
-import { parseEther } from "ethers/lib/utils";
+import { BytesLike, parseEther } from "ethers/lib/utils";
 import { VotingContractDataSource } from "src/datasources/VotingContract/VotingContractDataSource";
 import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
 
@@ -86,10 +86,18 @@ export class VotingContract<
 
   /**
    * Get the voting power owned by a given address in this voting contract.
+   * @param extraData ABI encoded optional extra data used by some vaults, such
+   *   as merkle proofs.
    */
-  async getVotingPower(address: string, atBlock?: number): Promise<string> {
+  async getVotingPower(
+    address: string,
+    atBlock?: number,
+    extraData?: BytesLike[],
+  ): Promise<string> {
     const vaultPowers = await Promise.all(
-      this.vaults.map((vault) => vault.getVotingPower(address, atBlock)),
+      this.vaults.map((vault, i) =>
+        vault.getVotingPower(address, atBlock, extraData?.[i]),
+      ),
     );
     return sumStrings(vaultPowers);
   }

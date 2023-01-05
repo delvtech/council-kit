@@ -15,6 +15,6 @@ export interface VotingVaultDataSource extends DataSource {
   getVotingPower: (
     address: string,
     atBlock: number,
-    extraData: BytesLike,
+    extraData?: BytesLike,
   ) => Promise<string>;
 }
