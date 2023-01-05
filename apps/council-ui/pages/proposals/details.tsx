@@ -8,6 +8,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { ProposalStatsBar } from "src/ui/proposals/components/ProposalStatsBar";
 import QuorumBar from "src/ui/proposals/QuorumBar/QuorumBar";
 import FormattedBallot from "src/ui/voting/ballot/FormattedBallot";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
@@ -22,7 +23,7 @@ export default function ProposalPage(): ReactElement {
 
   const { data: signer } = useSigner();
   const { address } = useAccount();
-  const { data, status, error } = useProposalDetailsPageData(
+  const { data, status, error, isLoading } = useProposalDetailsPageData(
     votingContractAddress,
     id,
     address,
@@ -54,7 +55,7 @@ export default function ProposalPage(): ReactElement {
   switch (status) {
     case "loading":
       return (
-        <div className="w-48 m-auto mt-48 px-8">
+        <div className="w-48 px-8 m-auto mt-48">
           <progress className="daisy-progress">
             Loading proposal details. Hang on a sec...
           </progress>
@@ -64,7 +65,7 @@ export default function ProposalPage(): ReactElement {
     case "error":
       return (
         <div className="daisy-mockup-code">
-          <code className="block whitespace-pre-wrap px-6 text-error">
+          <code className="block px-6 whitespace-pre-wrap text-error">
             {error ? (error as any).toString() : "Unknown error"}
           </code>
         </div>
@@ -72,9 +73,9 @@ export default function ProposalPage(): ReactElement {
 
     case "success":
       return (
-        <div className="m-auto mt-16 flex max-w-5xl flex-col items-start gap-y-10 px-4">
-          <div className="flex w-full flex-wrap items-center gap-4">
-            <h1 className="mb-4 whitespace-nowrap text-5xl text-accent-content">
+        <div className="flex flex-col items-start max-w-5xl px-4 m-auto mt-16 gap-y-10">
+          <div className="flex flex-wrap items-center w-full gap-4">
+            <h1 className="mb-4 text-5xl font-bold whitespace-nowrap">
               {data.name ?? `Proposal ${id}`}
             </h1>
             {data.requiredQuorum && (
@@ -90,11 +91,12 @@ export default function ProposalPage(): ReactElement {
           <ProposalStatsBar
             createdAtDate={data.createdAtDate}
             endsAtDate={data.endsAtDate}
-            unlockedAtDate={data.unlockedAtDate}
+            unlockAtDate={data.unlockedAtDate}
             lastCallAtDate={data.lastCallAtDate}
+            isLoading={true}
           />
 
-          <div className="flex w-full flex-wrap gap-10 sm:gap-y-0">
+          <div className="flex flex-wrap w-full gap-10 sm:gap-y-0">
             <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
               <h1 className="text-2xl text-accent-content">Voting Activity</h1>
               <ProposalVotingActivity votes={data.votes} />
@@ -203,75 +205,6 @@ function useProposalDetailsPageData(
       };
     },
   });
-}
-
-interface ProposalStatsBarProps {
-  createdAtDate: Date | null;
-  endsAtDate: Date | null;
-  unlockedAtDate: Date | null;
-  lastCallAtDate: Date | null;
-}
-
-function ProposalStatsBar({
-  createdAtDate,
-  endsAtDate,
-  unlockedAtDate,
-  lastCallAtDate,
-}: ProposalStatsBarProps): ReactElement {
-  return (
-    <div className="flex flex-wrap gap-4">
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Voting Contract</div>
-          <div className="daisy-stat-value text-sm">Core Voting</div>
-        </div>
-      </div>
-
-      {createdAtDate && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Created</div>
-            <div className="daisy-stat-value text-sm">
-              {createdAtDate.toLocaleDateString()}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {endsAtDate && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Voting Ends</div>
-            <div className="daisy-stat-value text-sm">
-              {endsAtDate.toLocaleDateString()}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {unlockedAtDate && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Unlocked</div>
-            <div className="daisy-stat-value text-sm">
-              {unlockedAtDate.toLocaleDateString()}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {lastCallAtDate && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Last Call</div>
-            <div className="daisy-stat-value text-sm">
-              {lastCallAtDate.toLocaleDateString()}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 }
 
 interface ProposalVotingActivityProps {
