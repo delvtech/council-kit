@@ -191,10 +191,16 @@ module.exports = {
        - dynamic: a boolean indicating whether to ignore dynamic (true) or static (false) dependencies.
           leave out if you want to exclude neither (recommended!)
     */
-    // exclude : {
-    //   path: '',
-    //   dynamic: true
-    // },
+    exclude: {
+      path: [
+        // exclude `ethers` because this the SDK is a package intended to be
+        // installed in apps, not an app in itself. See peer-deps-used rule,
+        // which explains why some modules should be excluded. This is one of
+        // those cases.
+        "ethers",
+      ],
+      dynamic: true,
+    },
 
     /* pattern specifying which files to include (regular expression)
        dependency-cruiser will skip everything not matching this pattern
