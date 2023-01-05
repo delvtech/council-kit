@@ -10,12 +10,12 @@ export default function FormattedBallot({
 }: FormattedBallotProps): ReactElement {
   switch (ballot) {
     case "yes":
-      return <h2 className="text-success font-semibold uppercase">{ballot}</h2>;
+      return <h2 className="font-semibold uppercase text-success">YES</h2>;
 
     case "no":
-      return <h2 className="text-error font-semibold uppercase">{ballot}</h2>;
+      return <h2 className="font-semibold uppercase text-error">NO</h2>;
 
     case "maybe":
-      return <h2 className="font-semibold uppercase">{ballot}</h2>;
+      return <h2 className="font-semibold uppercase">ABSTAIN</h2>;
   }
 }
