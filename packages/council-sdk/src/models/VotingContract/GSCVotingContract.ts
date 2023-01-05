@@ -1,4 +1,6 @@
+import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { Voter } from "src/models/Voter";
 import { GSCVault } from "src/models/VotingVault/GSCVault";
 import { VotingContract, VotingContractOptions } from "./VotingContract";
@@ -11,7 +13,7 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
   /**
    * Create a new iGSCVotingContract model instance.
    * @param address The address of the deployed contract.
-   * @param gscVault The GSCVault instance or address for the approved GSC vault.
+   * @param gscVault The GSCVault instance or address of the approved GSC vault.
    */
   constructor(
     address: string,
@@ -78,5 +80,47 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
    */
   getIsIdle(address: string): Promise<boolean> {
     return this.vaults[0].getIsIdle(address);
+  }
+
+  /**
+   * Get the voting vaults a member joined with. Used to prove the member meets
+   * the minimum voting power requirement.
+   */
+  getMemberVaults(address: string): Promise<string[]> {
+    return this.vaults[0].getMemberVaults(address);
+  }
+
+  /**
+   * Become a member of this GSC voting contract.
+   * @param signer The Signer of the joining member.
+   * @param vaults The addresses of the approved vaults the joining member has
+   *   voting power in. This is used to prove the joining member meets the
+   *   minimum voting power requirement. If voting power is moved to a different
+   *   vault, the member will become ineligible until they join again with the
+   *   new vault or risk being kicked.
+   * @returns The transaction hash.
+   */
+  async join(
+    signer: Signer,
+    vaults: string[],
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.vaults[0].join(signer, vaults, options);
+  }
+
+  /**
+   * Remove a member that's become ineligible from this GSC vault. A member
+   * becomes ineligible when the voting power in the vaults they joined with
+   * drops below the required minimum.
+   * @param signer The Signer of the wallet paying to kick.
+   * @param member The address of the ineligible member to kick.
+   * @returns The transaction hash.
+   */
+  kick(
+    signer: Signer,
+    member: string,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.vaults[0].kick(signer, member, options);
   }
 }

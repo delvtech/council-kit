@@ -1,3 +1,4 @@
+import { BytesLike } from "ethers";
 import { DataSource } from "src/datasources/DataSource";
 
 /**
@@ -8,6 +9,12 @@ export interface VotingVaultDataSource extends DataSource {
 
   /**
    * Get the voting power owned by a given address in this vault.
+   * @param extraData Abi encoded optional extra data used by some vaults, such
+   *   as merkle proofs
    */
-  getVotingPower: (address: string, atBlock: number) => Promise<string>;
+  getVotingPower: (
+    address: string,
+    atBlock: number,
+    extraData: BytesLike,
+  ) => Promise<string>;
 }

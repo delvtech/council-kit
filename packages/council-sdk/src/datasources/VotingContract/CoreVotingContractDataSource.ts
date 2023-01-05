@@ -1,6 +1,6 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
 import { Signer } from "ethers";
-import { formatEther } from "ethers/lib/utils";
+import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
 import {
   ContractDataSource,
@@ -150,11 +150,21 @@ export class CoreVotingContractDataSource
     vaults: string[],
     proposalId: number,
     ballot: Ballot,
-    options?: TransactionOptions,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
   ): Promise<string> {
     const transaction = await this.callWithSigner(
       "vote",
-      [vaults, vaults.map(() => "0x00"), proposalId, BALLOTS.indexOf(ballot)],
+      [
+        vaults,
+        options?.extraVaultData || vaults.map(() => "0x00"),
+        proposalId,
+        BALLOTS.indexOf(ballot),
+      ],
       signer,
       options,
     );
