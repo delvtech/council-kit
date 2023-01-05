@@ -1,4 +1,4 @@
-import { Signer } from "ethers";
+import { BytesLike, Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { GSCVaultContractDataSource } from "src/datasources/VotingVault/GSCVaultContractDataSource";
@@ -115,7 +115,12 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
   async join(
     signer: Signer,
     vaults: string[],
-    options?: TransactionOptions,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
   ): Promise<string> {
     return this.dataSource.join(signer, vaults, options);
   }
@@ -131,7 +136,12 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
   kick(
     signer: Signer,
     member: string,
-    options?: TransactionOptions,
+    options?: TransactionOptions & {
+      /**
+       * The extra data the vaults need to load the member's voting power
+       */
+      extraVaultData?: BytesLike[];
+    },
   ): Promise<string> {
     return this.dataSource.kick(signer, member, options);
   }

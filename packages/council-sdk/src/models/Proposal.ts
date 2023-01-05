@@ -9,7 +9,7 @@ import {
 } from "src/datasources/VotingContract/VotingContractDataSource";
 import { Voter } from "./Voter";
 import { sumStrings } from "src/utils/sumStrings";
-import { Signer } from "ethers";
+import { BytesLike, Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 
 export interface ProposalOptions {
@@ -186,13 +186,18 @@ export class Proposal extends Model {
    * Get the usable voting power of a given address for this proposal determined
    * by its creation block. Voting power changes after the creation block of
    * this proposal will not be reflected.
+   * @param extraData ABI encoded optional extra data used by some vaults, such
+   *   as merkle proofs.
    */
-  async getVotingPower(address: string): Promise<string | null> {
+  async getVotingPower(
+    address: string,
+    extraData?: BytesLike[],
+  ): Promise<string | null> {
     const createdBlock = await this.getCreatedBlock();
     if (!createdBlock) {
       return null;
     }
-    return this.votingContract.getVotingPower(address, createdBlock);
+    return this.votingContract.getVotingPower(address, createdBlock, extraData);
   }
 
   /**
@@ -241,7 +246,12 @@ export class Proposal extends Model {
   vote(
     signer: Signer,
     ballot: Ballot,
-    options?: TransactionOptions,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
   ): Promise<string> {
     return this.votingContract.dataSource.vote(
       signer,

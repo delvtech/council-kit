@@ -78,7 +78,10 @@ export interface VotingContractDataSource extends DataSource {
     proposalId: number,
     ballot: Ballot,
     options?: TransactionOptions & {
-      extraVaultData: BytesLike[];
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
     },
   ) => Promise<string>;
 }

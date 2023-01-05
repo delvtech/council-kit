@@ -1,3 +1,4 @@
+import { BytesLike } from "ethers";
 import { CouncilContext } from "src/context";
 import { VotingVaultContractDataSource } from "src/datasources/VotingVault/VotingVaultContractDataSource";
 import { VotingVaultDataSource } from "src/datasources/VotingVault/VotingVaultDataSource";
@@ -56,11 +57,18 @@ export class VotingVault<
 
   /**
    * Get the voting power owned by a given address in this vault.
+   * @param extraData ABI encoded optional extra data used by some vaults, such
+   *   as merkle proofs.
    */
-  async getVotingPower(address: string, atBlock?: number): Promise<string> {
+  async getVotingPower(
+    address: string,
+    atBlock?: number,
+    extraData: BytesLike = "0x00",
+  ): Promise<string> {
     return this.dataSource.getVotingPower(
       address,
       atBlock ?? (await this.context.provider.getBlockNumber()),
+      extraData,
     );
   }
 }

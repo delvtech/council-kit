@@ -4,6 +4,7 @@ import { Model } from "./Model";
 import { Vote } from "./Vote";
 import { VotingContract } from "./VotingContract/VotingContract";
 import { VotingVault } from "./VotingVault/VotingVault";
+import { BytesLike } from "ethers";
 
 /**
  * A participant in Council
@@ -18,11 +19,17 @@ export class Voter extends Model {
 
   /**
    * Get the total voting power for this Voter from a given list of vaults.
+   * @param extraData ABI encoded optional extra data used by some vaults, such
+   *   as merkle proofs.
    */
-  async getVotingPower(vaults: string[], atBlock?: number): Promise<string> {
-    const vaultPowers = vaults.map((address) => {
+  async getVotingPower(
+    vaults: string[],
+    atBlock?: number,
+    extraData?: BytesLike[],
+  ): Promise<string> {
+    const vaultPowers = vaults.map((address, i) => {
       const vault = new VotingVault(address, this.context);
-      return vault.getVotingPower(this.address, atBlock);
+      return vault.getVotingPower(this.address, atBlock, extraData?.[i]);
     });
     return sumStrings(await Promise.all(vaultPowers));
   }
