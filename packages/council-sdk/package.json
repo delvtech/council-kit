@@ -14,11 +14,13 @@
   "scripts": {
     "watch": "parcel watch",
     "build": "parcel build",
+    "depcruise": "depcruise --config .dependency-cruiser.js src",
     "example": "ts-node -r dotenv/config -r tsconfig-paths/register src/example/index.ts",
     "watch:example": "nodemon -r dotenv/config -r tsconfig-paths/register src/example/index.ts"
   },
   "dependencies": {
     "@council/typechain": "*",
+    "dependency-cruiser": "^12.3.0",
     "fast-json-stable-stringify": "^2.1.0",
     "lodash.uniqby": "^4.7.0",
     "lru-cache": "^7.14.1"
@@ -29,8 +31,8 @@
     "@council/tsconfig": "*",
     "@types/lodash.uniqby": "^4.7.7",
     "dotenv": "^16.0.3",
-    "ethers": "^5.7.2",
     "nodemon": "^2.0.20",
+    "ethers": "^5.7.2",
     "parcel": "^2.8.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
