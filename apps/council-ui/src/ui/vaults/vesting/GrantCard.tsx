@@ -1,4 +1,5 @@
 import { Signer } from "ethers";
+import { parseEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useClaimGrant } from "src/ui/vaults/hooks/useGrantClaim";
@@ -23,7 +24,7 @@ export function GrantCard({
   const { data: signer } = useSigner();
   const { mutate: claim } = useClaimGrant(vestingVaultAddress);
 
-  const grantExist = !!signer && grantBalance !== "0.0";
+  const grantExist = !!signer && parseEther(grantBalance).gt(0);
   const canClaim =
     unlockDate &&
     unlockDate.getTime() < currentDate.getTime() &&
