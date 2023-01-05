@@ -29,7 +29,9 @@ export function useClaimGrant(
         index.success(`Successfully claimed your ELFI!`, {
           id: toastId,
         });
-        // The SDK will manage cache invalidation for us ✨
+        // Invalidates the UI cache so that components will refetch the latest data.
+        // Note, the SDK has its own data cache that is cleared when we call claim.
+
         queryClient.invalidateQueries();
       },
       onError(error) {

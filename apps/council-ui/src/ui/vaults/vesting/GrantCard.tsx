@@ -5,10 +5,11 @@ import { useClaimGrant } from "src/ui/vaults/hooks/useGrantClaim";
 import { useSigner } from "wagmi";
 
 interface GrantCardProps {
-  expirationDate: Date;
+  expirationDate: Date | null;
   grantBalance: string;
   grantBalanceWithdrawn: string;
-  unlockDate: Date;
+  grantWithdrawableAmount: string;
+  unlockDate: Date | null;
   vestingVaultAddress: string;
 }
 
@@ -16,6 +17,7 @@ export function GrantCard({
   expirationDate,
   grantBalance,
   grantBalanceWithdrawn,
+  grantWithdrawableAmount,
   unlockDate,
   vestingVaultAddress,
 }: GrantCardProps): ReactElement {
@@ -24,10 +26,12 @@ export function GrantCard({
   const { mutate: claim } = useClaimGrant(vestingVaultAddress);
 
   const canClaim =
-    unlockDate.getTime() < currentDate.getTime() && !!grantBalance;
+    unlockDate &&
+    unlockDate.getTime() < currentDate.getTime() &&
+    !!grantBalance;
 
   return (
-    <div className="flex flex-col gap-y-4 daisy-card p-4 bg-base-300 h-fit">
+    <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
       <div className="text-2xl font-bold">Your Grant</div>
 
       <div className="flex flex-col gap-y-2">
@@ -45,39 +49,43 @@ export function GrantCard({
           </p>
         </div>
 
-        <div className="flex">
-          <p>Vesting Starts</p>
-          <p className="ml-auto font-bold">{unlockDate.toLocaleDateString()}</p>
-        </div>
+        {unlockDate && (
+          <div className="flex">
+            <p>Vesting Starts</p>
+            <p className="ml-auto font-bold">
+              {unlockDate.toLocaleDateString()}
+            </p>
+          </div>
+        )}
 
-        <div className="flex">
-          <p>Vesting Ends</p>
-          <p className="ml-auto font-bold">
-            {expirationDate.toLocaleDateString()}
-          </p>
-        </div>
+        {expirationDate && (
+          <div className="flex">
+            <p>Vesting Ends</p>
+            <p className="ml-auto font-bold">
+              {expirationDate.toLocaleDateString()}
+            </p>
+          </div>
+        )}
       </div>
 
       {canClaim ? (
-        <div className="daisy-tooltip daisy-tooltip-primary" data-tip="hello">
-          <button
-            className="daisy-btn daisy-btn-primary w-full"
-            onClick={() => claim({ signer: signer as Signer })}
-            disabled={!signer}
-          >
-            Withdraw
-          </button>
-        </div>
+        <button
+          className="w-full daisy-btn daisy-btn-primary"
+          onClick={() => claim({ signer: signer as Signer })}
+          disabled={!signer}
+        >
+          Withdraw
+        </button>
       ) : (
         <div
           className="daisy-tooltip"
           data-tip="The vesting period has not started yet."
         >
           <button
-            className="daisy-btn daisy-btn-primary w-full"
+            className="w-full daisy-btn daisy-btn-primary"
             disabled={true}
           >
-            Withdraw {formatBalance} ELFI
+            {`Withdraw ${grantWithdrawableAmount} ELFI`}
           </button>
         </div>
       )}

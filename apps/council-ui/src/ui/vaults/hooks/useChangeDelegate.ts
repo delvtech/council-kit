@@ -32,7 +32,8 @@ export function useChangeDelegate(
         index.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
           id: toastId,
         });
-        // The SDK will manage cache invalidation for us ✨
+        // Invalidates the UI cache so that components will refetch the latest data.
+        // Note, the SDK has its own data cache that is cleared when we call changeDelegate.
         queryClient.invalidateQueries();
       },
       onError(error, { delegate }) {

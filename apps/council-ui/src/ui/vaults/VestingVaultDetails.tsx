@@ -1,4 +1,4 @@
-import { VestingVault } from "@council/sdk";
+import { getBlockDate, VestingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
 import { Signer } from "ethers";
@@ -55,7 +55,7 @@ export function VestingVaultDetails({
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Active Proposals</div>
-                  <div className="daisy-stat-value text-sm">
+                  <div className="text-sm daisy-stat-value">
                     {data.activeProposalCount}
                   </div>
                 </div>
@@ -66,19 +66,8 @@ export function VestingVaultDetails({
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Your Voting Power</div>
-                  <div className="daisy-stat-value text-sm">
+                  <div className="text-sm daisy-stat-value">
                     {formatBalance(data.accountVotingPower)}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.accountPercentOfTVP >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">% of Total TVP</div>
-                  <div className="daisy-stat-value text-sm">
-                    {formatBalance(data.accountPercentOfTVP, 2)}%
                   </div>
                 </div>
               </div>
@@ -88,7 +77,7 @@ export function VestingVaultDetails({
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Delegated to You</div>
-                  <div className="daisy-stat-value text-sm">
+                  <div className="text-sm daisy-stat-value">
                     {data.delegatedToAccount}
                   </div>
                 </div>
@@ -99,7 +88,7 @@ export function VestingVaultDetails({
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Participants</div>
-                  <div className="daisy-stat-value text-sm">
+                  <div className="text-sm daisy-stat-value">
                     {data.participants}
                   </div>
                 </div>
@@ -108,7 +97,7 @@ export function VestingVaultDetails({
             <div className="daisy-stats">
               <div className="daisy-stat bg-base-300">
                 <div className="daisy-stat-title">Vault token</div>
-                <div className="daisy-stat-value text-sm">
+                <div className="text-sm daisy-stat-value">
                   <ExternalLink
                     href={makeEtherscanAddressURL(data.tokenAddress)}
                   >
@@ -119,12 +108,13 @@ export function VestingVaultDetails({
             </div>
           </div>
 
-          <div className="flex h-48 w-full flex-col gap-8 sm:flex-row">
+          <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
             <div className="basis-1/2">
               <GrantCard
                 vestingVaultAddress={address}
                 grantBalance={data.grantBalance}
                 grantBalanceWithdrawn={data.grantBalanceWithdrawn}
+                grantWithdrawableAmount={data.grantWithdrawableAmount}
                 expirationDate={data.expirationDate}
                 unlockDate={data.unlockDate}
               />
@@ -146,21 +136,21 @@ export function VestingVaultDetails({
 }
 
 interface VestingVaultDetailsData {
-  accountPercentOfTVP: number;
   accountVotingPower: string;
   activeProposalCount: number;
   delegate: string;
   delegatedToAccount: number;
   descriptionURL: string | undefined;
-  expirationDate: Date;
+  expirationDate: Date | null;
   grantBalance: string;
   grantBalanceWithdrawn: string;
+  grantWithdrawableAmount: string;
   name: string | undefined;
   participants: number;
   tokenAddress: string;
   tokenBalance: string;
   tokenSymbol: string;
-  unlockDate: Date;
+  unlockDate: Date | null;
 }
 
 function useVestingVaultDetailsData(
@@ -178,7 +168,7 @@ function useVestingVaultDetailsData(
   return useQuery({
     queryKey: ["vestingVaultDetails", address, account],
     enabled: !!account,
-    queryFn: async () => {
+    queryFn: async (): Promise<VestingVaultDetailsData> => {
       const vestingVault = new VestingVault(address, context);
       const token = await vestingVault.getToken();
       const grant = await vestingVault.getGrant(account as string);
@@ -199,11 +189,21 @@ function useVestingVaultDetailsData(
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
         tokenBalance: await token.getBalanceOf(account as string),
-        // TODO: Confirm this is accurate.
         grantBalance: grant.allocation,
         grantBalanceWithdrawn: grant.withdrawn,
-        unlockDate: new Date(grant.unlockTimestamp),
-        expirationDate: new Date(grant.expirationTimestamp),
+        grantWithdrawableAmount: await vestingVault.getGrantWithdrawableAmount(
+          account as string,
+        ),
+        unlockDate: await getBlockDate(grant.unlockBlock, context.provider, {
+          estimateFutureDates: true,
+        }),
+        expirationDate: await getBlockDate(
+          grant.expirationBlock,
+          context.provider,
+          {
+            estimateFutureDates: true,
+          },
+        ),
         delegate: (await vestingVault.getDelegate(account as string)).address,
         descriptionURL: vaultConfig?.descriptionURL,
         name: vaultConfig?.name,

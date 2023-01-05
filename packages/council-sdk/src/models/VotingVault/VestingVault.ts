@@ -1,4 +1,4 @@
-import { BigNumber, Signer } from "ethers";
+import { BigNumber, FixedNumber, Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
@@ -57,7 +57,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
    * @param address The grantee address.
    * @returns The amount of claimable tokens.
    */
-  async getClaimAmount(address: string): Promise<string> {
+  async getGrantWithdrawableAmount(address: string): Promise<string> {
     const currentBlock = await this.context.provider.getBlockNumber();
     const grant = await this.getGrant(address);
     const unlock = grant.unlockBlock;
@@ -70,16 +70,19 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
 
     // all funds are claimable
     if (currentBlock >= end) {
-      return BigNumber.from(grant.allocation).sub(grant.withdrawn).toString();
+      const amount = FixedNumber.from(grant.allocation).subUnsafe(
+        FixedNumber.from(grant.withdrawn),
+      );
+      return amount.toString();
     }
 
-    const grantDuration = end - unlock;
-    const blockDelta = currentBlock - unlock;
-    const tokensUnlocked = BigNumber.from(grant.allocation)
-      .mul(blockDelta)
-      .div(grantDuration);
+    const grantDuration = FixedNumber.from(end - unlock);
+    const blockDelta = FixedNumber.from(currentBlock - unlock);
+    const amount = FixedNumber.from(grant.allocation)
+      .mulUnsafe(blockDelta)
+      .divUnsafe(grantDuration);
 
-    return tokensUnlocked.sub(grant.withdrawn).toString();
+    return amount.subUnsafe(FixedNumber.from(grant.withdrawn)).toString();
   }
 
   /**
