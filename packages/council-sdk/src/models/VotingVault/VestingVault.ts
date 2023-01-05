@@ -1,4 +1,4 @@
-import { Signer } from "ethers";
+import { BigNumber, FixedNumber, Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
@@ -52,6 +52,40 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
+   * Gets the amount of tokens currently claimable from the grant.
+   * Mimics internal function https://github.com/element-fi/council/blob/main/contracts/vaults/VestingVault.sol#L434
+   * @param address The grantee address.
+   * @returns The amount of claimable tokens.
+   */
+  async getGrantWithdrawableAmount(address: string): Promise<string> {
+    const currentBlock = await this.context.provider.getBlockNumber();
+    const grant = await this.getGrant(address);
+    const unlock = grant.unlockBlock;
+    const end = grant.expirationBlock;
+
+    // funds are not unlocked
+    if (currentBlock < unlock) {
+      return "0";
+    }
+
+    // all funds are claimable
+    if (currentBlock >= end) {
+      const amount = FixedNumber.from(grant.allocation).subUnsafe(
+        FixedNumber.from(grant.withdrawn),
+      );
+      return amount.toString();
+    }
+
+    const grantDuration = FixedNumber.from(end - unlock);
+    const blockDelta = FixedNumber.from(currentBlock - unlock);
+    const amount = FixedNumber.from(grant.allocation)
+      .mulUnsafe(blockDelta)
+      .divUnsafe(grantDuration);
+
+    return amount.subUnsafe(FixedNumber.from(grant.withdrawn)).toString();
+  }
+
+  /**
    * Get all participants that have voting power in this vault.
    * @param fromBlock The block number to start searching for voters from.
    * @param toBlock The block number to stop searching for voters at.
@@ -94,6 +128,9 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   /**
    * Get the voting power for a given address at a given block without
    * accounting for the stale block lag.
+   * @param address
+   * @param atBlock
+   * @returns The historical voting power of the given address.
    */
   async getHistoricalVotingPower(
     address: string,

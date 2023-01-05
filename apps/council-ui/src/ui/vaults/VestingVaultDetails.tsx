@@ -1,18 +1,11 @@
-import { sumStrings, VestingVault } from "@council/sdk";
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { getBlockDate, VestingVault } from "@council/sdk";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
 import { Signer } from "ethers";
 import { ReactElement } from "react";
-import index from "react-hot-toast";
 import { councilConfigs } from "src/config/council.config";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
@@ -21,6 +14,8 @@ import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/base/ChangeDelegateForm";
 import VaultHeader from "src/ui/vaults/base/VaultHeader";
+import { useChangeDelegate } from "src/ui/vaults/hooks/useChangeDelegate";
+import { GrantCard } from "src/ui/vaults/vesting/GrantCard";
 import { useAccount, useSigner } from "wagmi";
 
 interface VestingVaultDetailsProps {
@@ -57,7 +52,7 @@ export function VestingVaultDetails({
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Active Proposals</div>
-                  <div className="daisy-stat-value text-sm">
+                  <div className="text-sm daisy-stat-value">
                     {data.activeProposalCount}
                   </div>
                 </div>
@@ -68,19 +63,8 @@ export function VestingVaultDetails({
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Your Voting Power</div>
-                  <div className="daisy-stat-value text-sm">
+                  <div className="text-sm daisy-stat-value">
                     {formatBalance(data.accountVotingPower)}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.accountPercentOfTVP >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">% of Total TVP</div>
-                  <div className="daisy-stat-value text-sm">
-                    {formatBalance(data.accountPercentOfTVP, 2)}%
                   </div>
                 </div>
               </div>
@@ -90,7 +74,7 @@ export function VestingVaultDetails({
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Delegated to You</div>
-                  <div className="daisy-stat-value text-sm">
+                  <div className="text-sm daisy-stat-value">
                     {data.delegatedToAccount}
                   </div>
                 </div>
@@ -101,7 +85,7 @@ export function VestingVaultDetails({
               <div className="daisy-stats">
                 <div className="daisy-stat bg-base-300">
                   <div className="daisy-stat-title">Participants</div>
-                  <div className="daisy-stat-value text-sm">
+                  <div className="text-sm daisy-stat-value">
                     {data.participants}
                   </div>
                 </div>
@@ -110,7 +94,7 @@ export function VestingVaultDetails({
             <div className="daisy-stats">
               <div className="daisy-stat bg-base-300">
                 <div className="daisy-stat-title">Vault token</div>
-                <div className="daisy-stat-value text-sm">
+                <div className="text-sm daisy-stat-value">
                   <ExternalLink
                     href={makeEtherscanAddressURL(data.tokenAddress)}
                   >
@@ -121,11 +105,19 @@ export function VestingVaultDetails({
             </div>
           </div>
 
-          <div className="flex h-48 w-full flex-col gap-x-8 sm:flex-row">
-            <div className="basis-1/2">{/* TODO */}</div>
+          <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
+            <div className="basis-1/2">
+              <GrantCard
+                vestingVaultAddress={address}
+                grantBalance={data.grantBalance}
+                grantBalanceWithdrawn={data.grantBalanceWithdrawn}
+                expirationDate={data.expirationDate}
+                unlockDate={data.unlockDate}
+              />
+            </div>
             <ChangeDelegateForm
               currentDelegate={data.delegate}
-              disabled={!signer}
+              disabled={!signer || !!data.accountVotingPower}
               onDelegate={(delegate) =>
                 changeDelegate({ signer: signer as Signer, delegate })
               }
@@ -140,20 +132,20 @@ export function VestingVaultDetails({
 }
 
 interface VestingVaultDetailsData {
-  accountPercentOfTVP: number;
   accountVotingPower: string;
   activeProposalCount: number;
   delegate: string;
   delegatedToAccount: number;
   descriptionURL: string | undefined;
-  expirationDate: Date;
+  expirationDate: Date | null;
   grantBalance: string;
+  grantBalanceWithdrawn: string;
   name: string | undefined;
   participants: number;
   tokenAddress: string;
   tokenBalance: string;
   tokenSymbol: string;
-  unlockDate: Date;
+  unlockDate: Date | null;
 }
 
 function useVestingVaultDetailsData(
@@ -171,7 +163,7 @@ function useVestingVaultDetailsData(
   return useQuery({
     queryKey: ["vestingVaultDetails", address, account],
     enabled: !!account,
-    queryFn: async () => {
+    queryFn: async (): Promise<VestingVaultDetailsData> => {
       const vestingVault = new VestingVault(address, context);
       const token = await vestingVault.getToken();
       const grant = await vestingVault.getGrant(account as string);
@@ -192,10 +184,18 @@ function useVestingVaultDetailsData(
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
         tokenBalance: await token.getBalanceOf(account as string),
-        // TODO: Confirm this is accurate.
-        grantBalance: sumStrings([grant.allocation, `-${grant.withdrawn}`]),
-        unlockDate: new Date(grant.unlockTimestamp),
-        expirationDate: new Date(grant.expirationTimestamp),
+        grantBalance: grant.allocation,
+        grantBalanceWithdrawn: grant.withdrawn,
+        unlockDate: await getBlockDate(grant.unlockBlock, context.provider, {
+          estimateFutureDates: true,
+        }),
+        expirationDate: await getBlockDate(
+          grant.expirationBlock,
+          context.provider,
+          {
+            estimateFutureDates: true,
+          },
+        ),
         delegate: (await vestingVault.getDelegate(account as string)).address,
         descriptionURL: vaultConfig?.descriptionURL,
         name: vaultConfig?.name,
@@ -208,38 +208,4 @@ function useVestingVaultDetailsData(
       };
     },
   });
-}
-
-interface ChangeDelegateArguments {
-  signer: Signer;
-  delegate: string;
-}
-
-function useChangeDelegate(vaultAddress: string) {
-  const { context } = useCouncil();
-  const queryClient = useQueryClient();
-  let toastId: string;
-  return useMutation(
-    ({ signer, delegate }: ChangeDelegateArguments): Promise<string> => {
-      const vault = new VestingVault(vaultAddress, context);
-      return vault.changeDelegate(signer, delegate, {
-        onSubmitted: () => (toastId = index.loading("Delegating")),
-      });
-    },
-    {
-      onSuccess: (_, { delegate }) => {
-        index.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
-          id: toastId,
-        });
-        // The SDK will manage cache invalidation for us ✨
-        queryClient.invalidateQueries();
-      },
-      onError(error, { delegate }) {
-        index.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
-          id: toastId,
-        });
-        console.error(error);
-      },
-    },
-  );
 }

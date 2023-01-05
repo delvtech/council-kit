@@ -11,6 +11,7 @@ import { VotingVaultDataSource } from "./VotingVaultDataSource";
  * A DataSource with methods for making cached calls to a
  * {@linkcode VestingVault} contract from the Council protocol.
  */
+
 export class VestingVaultContractDataSource
   extends VotingVaultContractDataSource<VestingVault>
   implements VotingVaultDataSource
@@ -43,9 +44,9 @@ export class VestingVaultContractDataSource
     return {
       allocation: formatEther(allocation),
       withdrawn: formatEther(withdrawn),
-      startTimestamp: created.toNumber() * 1000,
-      expirationTimestamp: expiration.toNumber() * 1000,
-      unlockTimestamp: cliff.toNumber() * 1000,
+      startBlock: created.toNumber(),
+      expirationBlock: expiration.toNumber(),
+      unlockBlock: cliff.toNumber(),
       votingPower: formatEther(latestVotingPower),
       delegate: delegatee.toString(),
       range: [formatEther(range[0]), formatEther(range[1])],
@@ -215,20 +216,20 @@ export interface GrantData {
   withdrawn: string;
 
   /**
-   * The timestamp (in MS) of when the grant starts.
+   * The block number of when the grant starts.
    */
-  startTimestamp: number;
+  startBlock: number;
 
   /**
-   * The timestamp (in MS) of when the full allocation is vested and any
+   * The block number of when the full allocation is vested and any
    * remaining balance can be withdrawn.
    */
-  expirationTimestamp: number;
+  expirationBlock: number;
 
   /**
-   * The timestamp (in MS) after which any withdrawable tokens can be withdrawn.
+   * The block number after which any withdrawable tokens can be withdrawn.
    */
-  unlockTimestamp: number;
+  unlockBlock: number;
 
   /**
    * The voting power provided by the grant.

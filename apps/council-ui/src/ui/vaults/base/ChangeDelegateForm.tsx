@@ -17,12 +17,13 @@ export function ChangeDelegateForm({
   const delegateName = useDisplayName(currentDelegate);
 
   return (
-    <div className="flex basis-1/2 flex-col gap-y-4 daisy-card p-4 bg-base-300 h-fit">
+    <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-300 h-fit">
       <div className="text-2xl font-bold">Change Delegate</div>
       <Input
         placeholder="Address or ENS"
         value={newDelegate}
         onChange={setNewDelegate}
+        disabled={disabled}
         infoText={
           <span className="text-lg">
             Current Delegate:{" "}
