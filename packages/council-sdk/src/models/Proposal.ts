@@ -1,13 +1,13 @@
 import { CouncilContext } from "src/context";
-import { Model } from "./Model";
-import { Vote } from "./Vote";
-import { VotingContract } from "./VotingContract/VotingContract";
+import { Model } from "src/models/Model";
+import { Vote } from "src/models/Vote";
+import { VotingContract } from "src/models/VotingContract/VotingContract";
 import {
   Ballot,
   ProposalData,
   VoteResults,
 } from "src/datasources/VotingContract/VotingContractDataSource";
-import { Voter } from "./Voter";
+import { Voter } from "src/models/Voter";
 import { sumStrings } from "src/utils/sumStrings";
 import { Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
