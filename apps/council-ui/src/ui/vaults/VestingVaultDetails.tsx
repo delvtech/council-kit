@@ -27,10 +27,7 @@ export function VestingVaultDetails({
 }: VestingVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
   const { data: signer } = useSigner();
-  const { data, status, error } = useVestingVaultDetailsData(
-    address,
-    "0x2dc2c7337da8adb2721cdde2eb91d922d4587489",
-  );
+  const { data, status, error } = useVestingVaultDetailsData(address, account);
   const { mutate: changeDelegate } = useChangeDelegate(address);
 
   switch (status) {
@@ -114,14 +111,13 @@ export function VestingVaultDetails({
                 vestingVaultAddress={address}
                 grantBalance={data.grantBalance}
                 grantBalanceWithdrawn={data.grantBalanceWithdrawn}
-                grantWithdrawableAmount={data.grantWithdrawableAmount}
                 expirationDate={data.expirationDate}
                 unlockDate={data.unlockDate}
               />
             </div>
             <ChangeDelegateForm
               currentDelegate={data.delegate}
-              disabled={!signer}
+              disabled={!signer || !!data.accountVotingPower}
               onDelegate={(delegate) =>
                 changeDelegate({ signer: signer as Signer, delegate })
               }
@@ -144,7 +140,6 @@ interface VestingVaultDetailsData {
   expirationDate: Date | null;
   grantBalance: string;
   grantBalanceWithdrawn: string;
-  grantWithdrawableAmount: string;
   name: string | undefined;
   participants: number;
   tokenAddress: string;
@@ -191,9 +186,6 @@ function useVestingVaultDetailsData(
         tokenBalance: await token.getBalanceOf(account as string),
         grantBalance: grant.allocation,
         grantBalanceWithdrawn: grant.withdrawn,
-        grantWithdrawableAmount: await vestingVault.getGrantWithdrawableAmount(
-          account as string,
-        ),
         unlockDate: await getBlockDate(grant.unlockBlock, context.provider, {
           estimateFutureDates: true,
         }),

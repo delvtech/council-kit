@@ -8,7 +8,6 @@ interface GrantCardProps {
   expirationDate: Date | null;
   grantBalance: string;
   grantBalanceWithdrawn: string;
-  grantWithdrawableAmount: string;
   unlockDate: Date | null;
   vestingVaultAddress: string;
 }
@@ -17,7 +16,6 @@ export function GrantCard({
   expirationDate,
   grantBalance,
   grantBalanceWithdrawn,
-  grantWithdrawableAmount,
   unlockDate,
   vestingVaultAddress,
 }: GrantCardProps): ReactElement {
@@ -25,10 +23,23 @@ export function GrantCard({
   const { data: signer } = useSigner();
   const { mutate: claim } = useClaimGrant(vestingVaultAddress);
 
+  const grantExist = !!signer && grantBalance !== "0.0";
   const canClaim =
     unlockDate &&
     unlockDate.getTime() < currentDate.getTime() &&
     !!grantBalance;
+
+  if (!grantExist) {
+    return (
+      <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
+        <div className="text-2xl font-bold">Your Grant</div>
+
+        <div className="semibold">
+          There is no grant allocated to this account.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
@@ -72,9 +83,8 @@ export function GrantCard({
         <button
           className="w-full daisy-btn daisy-btn-primary"
           onClick={() => claim({ signer: signer as Signer })}
-          disabled={!signer}
         >
-          Withdraw
+          Withdraw ELFI
         </button>
       ) : (
         <div
@@ -85,7 +95,7 @@ export function GrantCard({
             className="w-full daisy-btn daisy-btn-primary"
             disabled={true}
           >
-            {`Withdraw ${grantWithdrawableAmount} ELFI`}
+            Withdraw ELFI
           </button>
         </div>
       )}
