@@ -1,4 +1,3 @@
-import { type ethers } from "ethers";
 import { formatEther, parseEther } from "ethers/lib/utils";
 
 /**
@@ -6,6 +5,10 @@ import { formatEther, parseEther } from "ethers/lib/utils";
  * {@linkcode ethers.BigNumber}.
  */
 export function sumStrings(numberStrings: string[]): string {
+  if (!numberStrings.length) {
+    return "0";
+  }
+
   let total = parseEther(numberStrings[0]);
   for (const bnString of numberStrings.slice(1)) {
     total = total.add(parseEther(bnString));
