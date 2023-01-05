@@ -4,7 +4,7 @@ import {
   IVotingVault__factory,
 } from "@council/typechain";
 import { ethers } from "ethers";
-import { formatEther } from "ethers/lib/utils";
+import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
 import { ContractDataSource } from "src/datasources/ContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
@@ -37,11 +37,14 @@ export class VotingVaultContractDataSource<
   /**
    * Get the voting power owned by a given address in this vault. Returns "0" if
    * the voting power is unable to be fetched.
+   * @param extraData ABI encoded optional extra data used by some vaults, such
+   *   as merkle proofs.
    */
   async getVotingPower(
     this: ContractDataSource<IVotingVault>,
     address: string,
     atBlock: number,
+    extraData: BytesLike = "0x00",
   ): Promise<string> {
     try {
       // TODO: find a better solution for this.
@@ -53,7 +56,7 @@ export class VotingVaultContractDataSource<
       const votingPowerBigNumber = await this.callStatic("queryVotePower", [
         address,
         atBlock,
-        "0x00",
+        extraData,
       ]);
       ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.WARNING);
       return formatEther(votingPowerBigNumber);

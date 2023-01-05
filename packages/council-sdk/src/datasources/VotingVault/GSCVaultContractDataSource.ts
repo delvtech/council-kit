@@ -1,6 +1,6 @@
 import { GSCVault, GSCVault__factory } from "@council/typechain";
 import { BigNumber, Signer } from "ethers";
-import { formatEther } from "ethers/lib/utils";
+import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
@@ -111,11 +111,16 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
   async join(
     signer: Signer,
     vaults: string[],
-    options?: TransactionOptions,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
   ): Promise<string> {
     const transaction = await this.callWithSigner(
       "proveMembership",
-      [vaults, vaults.map(() => "0x00")],
+      [vaults, options?.extraVaultData || vaults.map(() => "0x00")],
       signer,
       options,
     );
@@ -134,12 +139,17 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
   async kick(
     signer: Signer,
     member: string,
-    options?: TransactionOptions,
+    options?: TransactionOptions & {
+      /**
+       * The extra data the vaults need to load the member's voting power
+       */
+      extraVaultData?: BytesLike[];
+    },
   ): Promise<string> {
     const vaults = await this.getMemberVaults(member);
     const transaction = await this.callWithSigner(
       "kick",
-      [member, vaults.map(() => "0x00")],
+      [member, options?.extraVaultData || vaults.map(() => "0x00")],
       signer,
       options,
     );
