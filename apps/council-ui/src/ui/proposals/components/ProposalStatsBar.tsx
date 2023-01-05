@@ -6,7 +6,6 @@ interface ProposalStatsBarProps {
   endsAtDate: Date | null;
   unlockAtDate: Date | null;
   lastCallAtDate: Date | null;
-  isLoading?: boolean;
 }
 
 export function ProposalStatsBar({
@@ -14,12 +13,7 @@ export function ProposalStatsBar({
   endsAtDate,
   unlockAtDate,
   lastCallAtDate,
-  isLoading,
 }: ProposalStatsBarProps): ReactElement {
-  if (isLoading) {
-    return <ProposalStatsBarSkeleton />;
-  }
-
   return (
     <div className="flex flex-wrap gap-4">
       <div className="daisy-stats">
@@ -76,7 +70,9 @@ export function ProposalStatsBar({
   );
 }
 
-function ProposalStatsBarSkeleton() {
+// ================ Skeletons ================
+
+export function ProposalStatsBarSkeleton(): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
       <div className="daisy-stats">
@@ -113,14 +109,14 @@ function ProposalStatsBarSkeleton() {
         </div>
       </div>
 
-      <div className="daisy-stats">
+      {/* <div className="daisy-stats">
         <div className="daisy-stat bg-base-300">
           <div className="daisy-stat-title">Last Call</div>
           <div className="text-sm daisy-stat-value">
             <Skeleton width={90} />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
