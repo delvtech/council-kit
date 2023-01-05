@@ -26,8 +26,9 @@ export function QuorumBar({ current, required }: QuorumBarProps): ReactElement {
         max={required}
       />
       <div className="flex flex-row-reverse gap-x-1">
-        <p className="font-bold">{formatBalance(current)}</p> <span>/</span>
-        <p> {formatBalance(required)}</p>
+        <p className="font-bold"> {formatBalance(required)}</p>
+        <span>/</span>
+        <p>{formatBalance(current)}</p>
       </div>
     </div>
   );
