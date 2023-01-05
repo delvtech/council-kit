@@ -1,122 +1,157 @@
 import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
-import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
-import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
+import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { ProposalStatsBar } from "src/ui/proposals/components/ProposalStatsBar";
-import QuorumBar from "src/ui/proposals/QuorumBar/QuorumBar";
-import FormattedBallot from "src/ui/voting/ballot/FormattedBallot";
+import {
+  ProposalStatsBar,
+  ProposalStatsBarSkeleton,
+} from "src/ui/proposals/components/ProposalStatsBar";
+import {
+  VotingActivityTable,
+  VotingActivityTableSkeleton,
+} from "src/ui/proposals/components/VotingActivityTable";
+import {
+  QuorumBar,
+  QuorumBarSkeleton,
+} from "src/ui/proposals/QuorumBar/QuorumBar";
+import {
+  ProposalVoting,
+  ProposalVotingSkeleton,
+} from "src/ui/voting/components/ProposalVoting";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
-import ProposalVoting from "src/ui/voting/ProposalVoting";
 import { useAccount, useBlockNumber, useSigner } from "wagmi";
 
 export default function ProposalPage(): ReactElement {
-  const { query } = useRouter();
+  const { query, replace } = useRouter();
+
+  // TODO: handle and validate the query strings
   const id = +(query.id as string);
   const votingContractAddress = query.votingContract as string;
 
   const { data: signer } = useSigner();
   const { address } = useAccount();
-  const { data, status, error, isLoading } = useProposalDetailsPageData(
+
+  // Data fetching
+  const { data, error, status } = useProposalDetailsPageData(
     votingContractAddress,
     id,
     address,
   );
-  const { mutate: vote } = useVote();
-  const { mutate: gscVote } = useGSCVote();
   const { data: blockNumber } = useBlockNumber();
 
-  // TODO:
-  // if (!id || !votingContractAddress) {
-  //   replace("/404");
-  // }
+  // Mutations
+  const { mutate: vote } = useVote();
+  const { mutate: gscVote } = useGSCVote();
+
+  if (!id || !votingContractAddress) {
+    replace("/404");
+  }
 
   function handleVote(ballot: Ballot) {
     if (!data || !signer) {
       return;
     }
-    const variables = {
+    const voteArgs = {
       signer,
       proposalId: id,
       ballot,
     };
     if (data.type === "gsc") {
-      return gscVote(variables);
+      return gscVote(voteArgs);
     }
-    return vote(variables);
+    return vote(voteArgs);
   }
 
   switch (status) {
-    case "loading":
-      return (
-        <div className="w-48 px-8 m-auto mt-48">
-          <progress className="daisy-progress">
-            Loading proposal details. Hang on a sec...
-          </progress>
-        </div>
-      );
-
     case "error":
-      return (
-        <div className="daisy-mockup-code">
-          <code className="block px-6 whitespace-pre-wrap text-error">
-            {error ? (error as any).toString() : "Unknown error"}
-          </code>
-        </div>
-      );
+      return <ErrorMessage error={error} />;
 
-    case "success":
+    default:
       return (
         <div className="flex flex-col items-start max-w-5xl px-4 m-auto mt-16 gap-y-10">
           <div className="flex flex-wrap items-center w-full gap-4">
             <h1 className="mb-4 text-5xl font-bold whitespace-nowrap">
-              {data.name ?? `Proposal ${id}`}
+              {data?.name ?? `Proposal ${id}`}
             </h1>
-            {data.requiredQuorum && (
-              <div className="sm:ml-auto">
-                <QuorumBar
-                  current={data.currentQuorum}
-                  required={data.requiredQuorum}
-                />
-              </div>
-            )}
+
+            <div className="sm:ml-auto w-96 sm:w-72">
+              {(() => {
+                switch (status) {
+                  case "success":
+                    if (data.requiredQuorum) {
+                      return (
+                        <QuorumBar
+                          current={data.currentQuorum}
+                          required={data.requiredQuorum}
+                        />
+                      );
+                    }
+
+                  case "loading":
+                    return <QuorumBarSkeleton />;
+                }
+              })()}
+            </div>
           </div>
 
-          <ProposalStatsBar
-            createdAtDate={data.createdAtDate}
-            endsAtDate={data.endsAtDate}
-            unlockAtDate={data.unlockedAtDate}
-            lastCallAtDate={data.lastCallAtDate}
-            isLoading={true}
-          />
+          {(() => {
+            switch (status) {
+              case "success":
+                return (
+                  <ProposalStatsBar
+                    createdAtDate={data?.createdAtDate}
+                    endsAtDate={data?.endsAtDate}
+                    unlockAtDate={data?.unlockedAtDate}
+                    lastCallAtDate={data?.lastCallAtDate}
+                  />
+                );
+
+              case "loading":
+                return <ProposalStatsBarSkeleton />;
+            }
+          })()}
 
           <div className="flex flex-wrap w-full gap-10 sm:gap-y-0">
             <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
-              <h1 className="text-2xl text-accent-content">Voting Activity</h1>
-              <ProposalVotingActivity votes={data.votes} />
+              <h1 className="text-2xl font-medium">Voting Activity</h1>
+              {(() => {
+                switch (status) {
+                  case "success":
+                    return <VotingActivityTable votes={data.votes} />;
+
+                  case "loading":
+                    return <VotingActivityTableSkeleton />;
+                }
+              })()}
             </div>
 
             <div className="grow basis-[300px] md:grow-0">
-              <ProposalVoting
-                atBlock={data.createdAtBlock || blockNumber}
-                account={address}
-                accountBallot={data.accountBallot}
-                disabled={!signer || !data.isActive}
-                onVote={handleVote}
-              />
+              <h2 className="mb-2 text-2xl font-medium">Your Vote</h2>
+
+              {(() => {
+                switch (status) {
+                  case "success":
+                    return (
+                      <ProposalVoting
+                        atBlock={data.createdAtBlock || blockNumber}
+                        account={address}
+                        accountBallot={data?.accountBallot}
+                        disabled={!signer || !data?.isActive}
+                        onVote={handleVote}
+                      />
+                    );
+
+                  case "loading":
+                    return <ProposalVotingSkeleton />;
+                }
+              })()}
             </div>
           </div>
         </div>
       );
-
-    default:
-      assertNever(status);
   }
 }
 
@@ -205,70 +240,4 @@ function useProposalDetailsPageData(
       };
     },
   });
-}
-
-interface ProposalVotingActivityProps {
-  votes: Vote[] | null;
-}
-
-interface ProposalVotingActivityRowProps {
-  address: string;
-  votePower: string;
-  voteBallot: Ballot;
-}
-
-// TODO @cashd: this component will need to be refactored to optimize for
-//   ens fetching and searching higher up in the tree
-function ProposalVotingActivityRow({
-  address,
-  votePower,
-  voteBallot,
-}: ProposalVotingActivityRowProps) {
-  const displayName = useDisplayName(address);
-
-  return (
-    <div className="grid grid-cols-3 p-2">
-      <h2 className="underline">
-        {displayName}
-        <a
-          href={makeEtherscanAddressURL(address)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <ExternalLinkSVG size={16} />
-        </a>
-      </h2>
-      <h2>{formatBalance(votePower)}</h2>
-      <FormattedBallot ballot={voteBallot} />
-    </div>
-  );
-}
-
-function ProposalVotingActivity({
-  votes,
-}: ProposalVotingActivityProps): ReactElement {
-  return (
-    <>
-      <div className="grid grid-cols-3">
-        <h2 className="text-xl">Voter</h2>
-        <h2 className="text-xl">Voting Power</h2>
-        <h2 className="text-xl">Ballot</h2>
-      </div>
-      <input
-        type="text"
-        placeholder="Search"
-        className="daisy-input-bordered daisy-input"
-      />
-      <div className="overflow-y-auto h-72">
-        {votes?.map((vote, i) => (
-          <ProposalVotingActivityRow
-            key={`${vote.voter.address}-${vote.ballot}-${i}`}
-            address={vote.voter.address}
-            votePower={vote.power}
-            voteBallot={vote.ballot}
-          />
-        ))}
-      </div>
-    </>
-  );
 }
