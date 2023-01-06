@@ -1,4 +1,5 @@
 import "@rainbow-me/rainbowkit/styles.css";
+import Link from "next/link";
 import { ReactElement } from "react";
 
 export default function Index(): ReactElement {
@@ -16,16 +17,16 @@ export default function Index(): ReactElement {
           governed protocol.
         </p>
         <div className="space-x-4">
-          {/* <Link href="/proposals">
+          <Link href="/proposals">
             <button className="daisy-btn daisy-btn-accent">Open App</button>
-          </Link> */}
-          {/* <a
+          </Link>
+          <a
             href="https://github.com/element-fi/council-monorepo"
             rel="noopener noreferrer"
             target="_blank"
           >
             <button className="daisy-btn daisy-btn-secondary">Github</button>
-          </a> */}
+          </a>
         </div>
       </div>
 
@@ -41,7 +42,7 @@ export default function Index(): ReactElement {
 
             <div className="daisy-mockup-code">
               <pre data-prefix="$">
-                {/* <code>git clone https://github.com/delve/council-monorepo</code> */}
+                <code>git clone https://github.com/delve/council-monorepo</code>
               </pre>
             </div>
           </div>
@@ -123,7 +124,6 @@ export default function Index(): ReactElement {
           always looking to make RainbowKit better, so please let us know how we
           can improve.
         </div>
-        {/* <div className="text-xs">stolen from raindbow kit</div> */}
       </div>
     </div>
   );
