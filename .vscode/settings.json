@@ -10,5 +10,6 @@
 			],
 			"url": "./packages/council-deploy/src/deployments/deployments.schema.json"
 		}
-	]
+	],
+	"markdown.extension.toc.levels": "2..6"
 }
