@@ -8,12 +8,13 @@ import { VotingContract, VotingContractOptions } from "./VotingContract";
 /**
  * A model of a CoreVoting contract intended to be used by the Governance
  * Steering Council.
+ * @category Models
  */
 export class GSCVotingContract extends VotingContract<[GSCVault]> {
   /**
    * Create a new iGSCVotingContract model instance.
-   * @param address The address of the deployed contract.
-   * @param gscVault The GSCVault instance or address of the approved GSC vault.
+   * @param address - The address of the deployed contract.
+   * @param gscVault - The GSCVault instance or address of the approved GSC vault.
    */
   constructor(
     address: string,
@@ -38,8 +39,8 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
 
   /**
    * Get all participants that have voting power in this voting contract.
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
+   * @param fromBlock - The block number to start searching for voters from.
+   * @param toBlock - The block number to stop searching for voters at.
    */
   getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
     return this.vaults[0].getVoters(fromBlock, toBlock);
@@ -92,8 +93,8 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
 
   /**
    * Become a member of this GSC voting contract.
-   * @param signer The Signer of the joining member.
-   * @param vaults The addresses of the approved vaults the joining member has
+   * @param signer - The Signer of the joining member.
+   * @param vaults - The addresses of the approved vaults the joining member has
    *   voting power in. This is used to prove the joining member meets the
    *   minimum voting power requirement. If voting power is moved to a different
    *   vault, the member will become ineligible until they join again with the
@@ -117,8 +118,8 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
    * Remove a member that's become ineligible from this GSC vault. A member
    * becomes ineligible when the voting power in the vaults they joined with
    * drops below the required minimum.
-   * @param signer The Signer of the wallet paying to kick.
-   * @param member The address of the ineligible member to kick.
+   * @param signer - The Signer of the wallet paying to kick.
+   * @param member - The address of the ineligible member to kick.
    * @returns The transaction hash.
    */
   kick(

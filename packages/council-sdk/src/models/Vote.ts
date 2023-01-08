@@ -1,9 +1,12 @@
 import { CouncilContext } from "src/context";
 import { Ballot } from "src/datasources/VotingContract/VotingContractDataSource";
-import { Model } from "./Model";
+import { Model, ModelOptions } from "./Model";
 import { Proposal } from "./Proposal";
 import { Voter } from "./Voter";
 
+/**
+ * @category Models
+ */
 export class Vote extends Model {
   power: string;
   ballot: Ballot;
@@ -16,8 +19,9 @@ export class Vote extends Model {
     voter: Voter,
     proposal: Proposal,
     context: CouncilContext,
+    options?: ModelOptions,
   ) {
-    super(context);
+    super(context, options);
     this.power = power;
     this.ballot = ballot;
     this.proposal = proposal;

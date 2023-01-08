@@ -1,6 +1,6 @@
 import { CouncilContext } from "src/context";
 import { sumStrings } from "src/utils/sumStrings";
-import { Model } from "./Model";
+import { Model, ModelOptions } from "./Model";
 import { Vote } from "./Vote";
 import { VotingContract } from "./VotingContract/VotingContract";
 import { VotingVault } from "./VotingVault/VotingVault";
@@ -8,18 +8,23 @@ import { BytesLike } from "ethers";
 
 /**
  * A participant in Council
+ * @category Models
  */
 export class Voter extends Model {
   address: string;
 
-  constructor(address: string, context: CouncilContext) {
-    super(context);
+  constructor(
+    address: string,
+    context: CouncilContext,
+    options?: ModelOptions,
+  ) {
+    super(context, options);
     this.address = address;
   }
 
   /**
    * Get the total voting power for this Voter from a given list of vaults.
-   * @param extraData ABI encoded optional extra data used by some vaults, such
+   * @param extraData - ABI encoded optional extra data used by some vaults, such
    *   as merkle proofs.
    */
   async getVotingPower(

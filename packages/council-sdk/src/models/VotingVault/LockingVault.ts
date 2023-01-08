@@ -8,12 +8,13 @@ import { Voter } from "src/models/Voter";
 import { sumStrings } from "src/utils/sumStrings";
 import { VotingVault, VotingVaultOptions } from "./VotingVault";
 
-interface LockingVaultOptions extends VotingVaultOptions {
+export interface LockingVaultOptions extends VotingVaultOptions {
   dataSource?: LockingVaultContractDataSource;
 }
 
 /**
  * A VotingVault that gives voting power for depositing tokens.
+ * @category Models
  */
 export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   constructor(
@@ -51,8 +52,8 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
 
   /**
    * Get all participants with voting power in this vault.
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
+   * @param fromBlock - Include all voters that had power on or after this block number.
+   * @param toBlock - Include all voters that had power on or before this block number.
    */
   async getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
     const votersWithPower = await this.dataSource.getAllVotersWithPower(
@@ -62,22 +63,6 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
     return votersWithPower.map(
       ({ address }) => new Voter(address, this.context),
     );
-  }
-
-  /**
-   * Get the sum of voting power held by all voters in this Vesting Vault.
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
-   */
-  async getTotalVotingPower(
-    fromBlock?: number,
-    toBlock?: number,
-  ): Promise<string> {
-    const allVotersWithPower = await this.dataSource.getAllVotersWithPower(
-      fromBlock,
-      toBlock,
-    );
-    return sumStrings(allVotersWithPower.map(({ power }) => power));
   }
 
   /**
@@ -104,6 +89,18 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
+   * Get the sum of voting power held by all voters in this Vesting Vault.
+   * @param atBlock - Get the total held at this block number.
+   */
+  async getTotalVotingPower(atBlock?: number): Promise<string> {
+    const allVotersWithPower = await this.dataSource.getAllVotersWithPower(
+      undefined,
+      atBlock,
+    );
+    return sumStrings(allVotersWithPower.map(({ power }) => power));
+  }
+
+  /**
    * Get the current delegate of a given address.
    */
   async getDelegate(address: string): Promise<Voter> {
@@ -121,8 +118,8 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
 
   /**
    * Change current delegate.
-   * @param signer The Signer of the address delegating.
-   * @param delegate The address to delegate to.
+   * @param signer - The Signer of the address delegating.
+   * @param delegate - The address to delegate to.
    * @returns The transaction hash.
    */
   changeDelegate(
@@ -135,10 +132,10 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
 
   /**
    * Deposit tokens into this vault.
-   * @param signer The Signer of the wallet with the tokens.
-   * @param account The address to credit this deposit to.
-   * @param amount The amount of tokens to deposit. (formatted decimal string)
-   * @param firstDelegate The address to delegate the resulting voting power to
+   * @param signer - The Signer of the wallet with the tokens.
+   * @param account - The address to credit this deposit to.
+   * @param amount - The amount of tokens to deposit. (formatted decimal string)
+   * @param firstDelegate - The address to delegate the resulting voting power to
    *   if the account doesn't already have a delegate.
    * @returns The transaction hash.
    */
@@ -162,8 +159,8 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
 
   /**
    * Withdraw tokens from this vault.
-   * @param signer The Signer of the wallet with a deposited balance.
-   * @param amount The amount of tokens to withdraw. (formatted decimal string)
+   * @param signer - The Signer of the wallet with a deposited balance.
+   * @param amount - The amount of tokens to withdraw. (formatted decimal string)
    * @returns The transaction hash.
    */
   async withdraw(

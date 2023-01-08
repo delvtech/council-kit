@@ -3,9 +3,24 @@ import { CouncilContext } from "src/context";
 import { ERC20ContractDataSource } from "src/datasources/Token/ERC20ContractDataSource";
 import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
-import { Model } from "./Model";
+import { Model, ModelOptions } from "./Model";
 import { parseUnits } from "ethers/lib/utils";
 
+/**
+ * @category Models
+ */
+export interface TokenOptions extends ModelOptions {
+  /**
+   * A data source to use instead of registering one with the `context`. If you
+   * pass in a data source, you take over the responsibility of registering it
+   * with the `context` to make it available to other models and data sources.
+   */
+  dataSource?: TokenDataSource;
+}
+
+/**
+ * @category Models
+ */
 export class Token extends Model {
   address: string;
   dataSource: TokenDataSource;
@@ -13,12 +28,12 @@ export class Token extends Model {
   constructor(
     address: string,
     context: CouncilContext,
-    dataSource?: TokenDataSource,
+    options?: TokenOptions,
   ) {
-    super(context);
+    super(context, options);
     this.address = address;
     this.dataSource =
-      dataSource ||
+      options?.dataSource ||
       context.registerDataSource(
         { address },
         new ERC20ContractDataSource(address, context),
@@ -63,9 +78,9 @@ export class Token extends Model {
 
   /**
    * Give a spending allowance to a given spender.
-   * @param signer The Signer of the owner.
-   * @param spender The address of the spender.
-   * @param amount The amount of tokens the spender can spend.
+   * @param signer - The Signer of the owner.
+   * @param spender - The address of the spender.
+   * @param amount - The amount of tokens the spender can spend.
    * @returns The transaction hash.
    */
   async approve(

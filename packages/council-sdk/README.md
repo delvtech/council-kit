@@ -2,158 +2,129 @@
 
 A JavaScript SDK for interfacing with the [Council protocol](https://github.com/element-fi/council).
 
-- [Council SDK](#council-sdk)
-  - [Example](#example)
-  - [Primary Concepts](#primary-concepts)
-    - [Models](#models)
-    - [Data Sources](#data-sources)
-    - [Context](#context)
-    - [Utils](#utils)
-  - [Context](#context-1)
-  - [Council Models](#council-models)
-    - [`VotingContract`](#votingcontract)
-    - [`VotingVault`](#votingvault)
-    - [`Proposal`](#proposal)
-    - [`Vote`](#vote)
-    - [`Voter`](#voter)
-    - [`Token`](#token)
-  - [DataSources](#datasources)
-    - [`VotingContractDataSource`](#votingcontractdatasource)
-    - [`VotingVaultDataSource`](#votingvaultdatasource)
-    - [`ContractDataSource`](#contractdatasource)
-    - [`HTTPDataSource`](#httpdatasource)
-    - [`CachedDataSource`](#cacheddatasource)
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+- [Primary Concepts](#primary-concepts)
+  - [Models](#models)
+  - [Data Sources](#data-sources)
+  - [Context](#context)
+  - [Utils](#utils)
+- [Reference](#reference)
+  - [Models](#models-1)
+  - [Data Sources](#data-sources-1)
   - [Utils](#utils-1)
-    - [`cached`](#cached)
-    - [`getBlockDate`](#getblockdate)
-    - [`sumStrings`](#sumstrings)
 
-## Example
 
-```typescript
+## Installation
+
+The Council SDK isn't currently available as a stand alone package but can be installed within the council monorepo.
+
+1. Clone the council-monorepo.
+2. Add `"@council/sdk": "*"` to the app or package's package.json.
+3. Run install: `yarn`.
+
+## Basic Usage
+
+```ts
 import { providers } from "ethers";
-import {
-  CouncilContext,
-  LockingVault,
-  VestingVault,
-  VotingContract,
-} from "@council/sdk";
+import { CouncilContext, VotingContract } from "@council/sdk";
 
-async function main() {
-  const provider = new providers.JsonRpcProvider("http://localhost:8545");
-  const context = new CouncilContext(provider);
+const provider = new providers.JsonRpcProvider("http://localhost:8545");
 
-  const lockingVault = new LockingVault("0x...", context);
-  const vestingVault = new VestingVault("0x...", context);
-  const coreVoting = new VotingContract(
-    "0x0...",
-    [lockingVault, vestingVault],
-    context,
-  );
+// 1. Create a new context instance
+const context = new CouncilContext(provider);
 
-  const proposals = await coreVoting.getProposals();
-  for (const proposal of proposals) {
-    console.log(await proposal.getResults());
-  }
-}
+// 2. Create model instances
+const coreVoting = new VotingContract("0x0...", [], context);
 
-main();
+// 3. Call methods on the models
+const aliceVotes = coreVoting.getVotes("0x...");
 ```
 
 ## Primary Concepts
 
+The SDK is made up of 4 main concepts, [Models](#models), [Data Sources](#data-sources), [Context](#context), and [Utils (utilities)](#utils).
+
 ### Models
 
-Models are the primary interface for the SDK. They are JavaScript classes with
-methods on them to fetch data and initiate transactions.
+Models are the primary interface for the SDK. They're JavaScript classes with methods on them to fetch data and submit transactions. It's common for these methods to return other models themselves where it makes sense. For example, fetching a proposal from a `VotingContract` model will return a new `Proposal` model instance with it's own methods.
 
-```typescript
-import { providers } from "ethers";
-import { CouncilContext, LockingVault } from "@council/sdk";
+```ts
+// initiates a new VotingContract Model instance
+const coreVoting = new VotingContract("0x0...", [], context);
 
-async function main() {
-  const provider = new providers.JsonRpcProvider("http://localhost:8545");
-  const context = new CouncilContext(provider);
+// returns a new Proposal Model instance
+const proposal0 = await coreVoting.getProposal(0);
 
-  const lockingVault = new LockingVault("0x...", context);
-  const token = await lockingVault.getToken();
-
-  console.log(token);
-  // Token { ... }
-
-  const balance = await token.getBalanceOf("0x...");
-
-  console.log(balance);
-  // "500.0867"
-}
-
-main();
+// returns a plain string
+const quorum = await proposal.getCurrentQuorum();
 ```
 
 ### Data Sources
 
-Data Sources are JavaScript classes that act as an interchangeable data access
-layer for the Models. They handle querying and caching logic so the models can
-just focus on defining Council entities and their relationships.
+Data sources are JavaScript classes that act as an interchangeable data access layer for the models. They handle querying and caching logic so the models can just focus on defining the shape of Council entities and their relationships.
 
-```typescript
-import { providers } from "ethers";
-import { LockingVaultContractDataSource } from "@council/sdk";
+Data sources return basic values and objects. They'll never return other data sources or models (class instances).
 
-async function main() {
-  const provider = new providers.JsonRpcProvider("http://localhost:8545");
+```ts
+const coreVoting = new CoreVotingContractDataSource("0x...", context);
 
-  const lockingVault = new LockingVaultContractDataSource("0x...", provider);
-  const token = await lockingVault.getToken();
-
-  // data sources return simple values or objects unlike models which can return other model instances
-  console.log(token);
-  // '0x...'
-}
-
-main();
+// returns a plain JavaScript object of data from the contract
+const proposal = await coreVoting.getProposal(0);
 ```
 
 ### Context
 
-The Context stores information about the context in which models are created and used including shared data sources and their cache. It also includes a couple utility methods for getting and registering new shared data sources.
+The [`CouncilContext`](docs/classes/CouncilContext.md) stores common information used in model and data source methods including shared data sources and their cache. It also includes a couple utility methods for getting and registering new shared data sources.
+
+```ts
+const context = new CouncilContext(provider);
+```
 
 ### Utils
 
 Utils are functions for common operations performed when building with the Council SDK.
 
-## Context
+```ts
+// Turn a block number into a Date object with the getBlockDate util.
+const blockDate = getBlockDate(minedBlockNumber, provider);
 
-## Council Models
+// Estimate future dates (e.g., expiration dates) with the estimateFutureDates option.
+const estimatedDate = getBlockDate(futureBlockNumber, provider, {
+  estimateFutureDates: true,
+});
+```
 
-### `VotingContract`
+## Reference
 
-### `VotingVault`
+### Models
 
-### `Proposal`
+- [`VotingContract`](docs/classes/VotingContract.md)
+  - [`GSCVotingContract`](docs/classes/GSCVotingContract.md)
+- [`VotingVault`](docs/classes/VotingVault.md)
+  - [`LockingVault`](docs/classes/LockingVault.md)
+  - [`VestingVault`](docs/classes/VestingVault.md)
+  - [`GSCVault`](docs/classes/GSCVault.md)
+- [`Proposal`](docs/classes/Proposal.md)
+- [`Token`](docs/classes/Token.md)
+- [`Vote`](docs/classes/Vote.md)
+- [`Voter`](docs/classes/Voter.md)
 
-### `Vote`
+### Data Sources
 
-### `Voter`
+- [`CachedDataSource`](docs/classes/CachedDataSource.md)
+  - [`ContractDataSource`](docs/classes/ContractDataSource.md)
+    - [`CoreVotingContractDataSource`](docs/classes/CoreVotingContractDataSource.md)
+    - [`VotingVaultContractDataSource`](docs/classes/VotingVaultContractDataSource.md)
+      - [`LockingVaultContractDataSource`](docs/classes/LockingVaultContractDataSource.md)
+      - [`VestingVaultContractDataSource`](docs/classes/VestingVaultContractDataSource.md)
+      - [`GSCVaultContractDataSource`](docs/classes/GSCVaultContractDataSource.md)
+    - [`ERC20ContractDataSource`](docs/classes/ERC20ContractDataSource.md)
+  - [`HTTPDataSource`](docs/classes/HTTPDataSource.md)
 
-### `Token`
+### Utils
 
-## DataSources
-
-### `VotingContractDataSource`
-
-### `VotingVaultDataSource`
-
-### `ContractDataSource`
-
-### `HTTPDataSource`
-
-### `CachedDataSource`
-
-## Utils
-
-### `cached`
-
-### `getBlockDate`
-
-### `sumStrings`
+- [`cached`](docs/modules.md#cached)
+- [`cachedkey`](docs/modules.md#cachedkey)
+- [`getblockdate`](docs/modules.md#getblockdate)
+- [`sumstrings`](docs/modules.md#sumstrings)

@@ -6,6 +6,7 @@ import { DataSource } from "./DataSource";
 /**
  * A DataSource with methods for caching return values using an LRU cache.
  * @see https://github.com/isaacs/node-lru-cache
+ * @category Data Sources
  */
 export class CachedDataSource implements DataSource {
   context: CouncilContext;
@@ -18,9 +19,9 @@ export class CachedDataSource implements DataSource {
 
   /**
    * Cache the result of a callback using a given key.
-   * @param cacheKey The key to use for the cache entry. The key will be reduced
+   * @param cacheKey - The key to use for the cache entry. The key will be reduced
    *   to a string.
-   * @param callback The function to be cached. The return type of the `cached`
+   * @param callback - The function to be cached. The return type of the `cached`
    *   method will match the return type of this function.
    * @returns The cached result of the callback function.
    */

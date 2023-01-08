@@ -6,8 +6,9 @@ import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
 /**
- * A DataSource with methods for making cached calls to a {@linkcode GSCVault}
- * contract from the Council protocol.
+ * A DataSource with methods for making cached calls to a `GSCVault` contract
+ * from the Council protocol.
+ * @category Data Sources
  */
 export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GSCVault> {
   constructor(address: string, context: CouncilContext) {
@@ -33,8 +34,8 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
 
   /**
    * Get the addresses of all current members of this vault.
-   * @param fromBlock The block number to start searching for members from.
-   * @param toBlock The block number to stop searching for members at.
+   * @param fromBlock - The block number to start searching for members from.
+   * @param toBlock - The block number to stop searching for members at.
    */
   async getMembers(
     fromBlock?: string | number,
@@ -100,8 +101,8 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
 
   /**
    * Become a member of this GSC vault.
-   * @param signer The Signer of the joining member.
-   * @param vaults The addresses of the approved vaults the joining member has
+   * @param signer - The Signer of the joining member.
+   * @param vaults - The addresses of the approved vaults the joining member has
    *   voting power in. This is used to prove the joining member meets the
    *   minimum voting power requirement. If voting power is moved to a different
    *   vault, the member will become ineligible until they join again with the
@@ -132,8 +133,8 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
    * Remove a member that's become ineligible from this GSC vault. A member
    * becomes ineligible when the voting power in the vaults they joined with
    * drops below the required minimum.
-   * @param signer The Signer of the wallet paying to kick.
-   * @param member The address of the ineligible member to kick.
+   * @param signer - The Signer of the wallet paying to kick.
+   * @param member - The address of the ineligible member to kick.
    * @returns The transaction hash.
    */
   async kick(

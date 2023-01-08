@@ -11,8 +11,9 @@ import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
 /**
  * A DataSource with methods for making cached calls to any voting vault
- * contract that implements {@linkcode IVotingVault} or {@linkcode GSCVault}
- * from the Council protocol.
+ * contract that implements `IVotingVault` or `GSCVault` from the Council
+ * protocol.
+ * @category Data Sources
  */
 export class VotingVaultContractDataSource<
     TVault extends IVotingVault | GSCVault = IVotingVault,
@@ -22,7 +23,7 @@ export class VotingVaultContractDataSource<
 {
   /**
    * Create a new `VotingVaultContractDataSource` instance.
-   * @param vault An `IVotingVault` or `GSCVault` instance from the
+   * @param vault - An `IVotingVault` or `GSCVault` instance from the
    *   `@council/typechain` package or the address of the vault contract.
    */
   constructor(vault: TVault | string, context: CouncilContext) {
@@ -37,7 +38,7 @@ export class VotingVaultContractDataSource<
   /**
    * Get the voting power owned by a given address in this vault. Returns "0" if
    * the voting power is unable to be fetched.
-   * @param extraData ABI encoded optional extra data used by some vaults, such
+   * @param extraData - ABI encoded optional extra data used by some vaults, such
    *   as merkle proofs.
    */
   async getVotingPower(

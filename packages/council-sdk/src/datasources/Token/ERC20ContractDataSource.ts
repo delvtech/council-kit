@@ -8,6 +8,9 @@ import { TokenDataSource } from "./TokenDataSource";
 import { MockERC20, MockERC20__factory } from "@council/typechain";
 import { CouncilContext } from "src/context";
 
+/**
+ * @category Data Sources
+ */
 export class ERC20ContractDataSource
   extends ContractDataSource<MockERC20>
   implements TokenDataSource
@@ -60,10 +63,10 @@ export class ERC20ContractDataSource
 
   /**
    * Sets approval of token access up to a certain amount
-   * @param {Signer} signer - Signer.
-   * @param {string} spender - Address to approve access to.
-   * @param {string} [amount] - Amount approved for, defaults to maximum.
-   * @return {Promise<string>} - The transaction hash.
+   * @param signer - Signer.
+   * @param spender - Address to approve access to.
+   * @param amount - Amount approved for, defaults to maximum.
+   * @return - The transaction hash.
    */
   async approve(
     signer: Signer,

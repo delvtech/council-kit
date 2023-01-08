@@ -1,5 +1,5 @@
 import { CouncilContext } from "src/context";
-import { Model } from "./Model";
+import { Model, ModelOptions } from "./Model";
 import { Vote } from "./Vote";
 import { VotingContract } from "./VotingContract/VotingContract";
 import {
@@ -12,12 +12,9 @@ import { sumStrings } from "src/utils/sumStrings";
 import { BytesLike, Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 
-export interface ProposalOptions {
-  name?: string;
-}
-
 /**
  * A model of a Proposal in Council
+ * @category Models
  */
 export class Proposal extends Model {
   id: number;
@@ -25,17 +22,20 @@ export class Proposal extends Model {
 
   /**
    * Create a new Proposal model instance.
-   * @param id The id of the proposal in the voting contract.
-   * @param votingContract the voting contract in which this proposal was
+   * @param id - The id of the proposal in the voting contract.
+   * @param votingContract - the voting contract in which this proposal was
    *   created.
    */
   constructor(
     id: number,
     votingContract: VotingContract | string,
     context: CouncilContext,
-    options?: ProposalOptions,
+    options?: ModelOptions,
   ) {
-    super(context, options?.name ?? `Proposal ${id}`);
+    super(context, {
+      ...options,
+      name: options?.name ?? `Proposal ${id}`,
+    });
     this.id = id;
     this.votingContract =
       votingContract instanceof VotingContract
@@ -68,7 +68,7 @@ export class Proposal extends Model {
   }
 
   /**
-   * Get the hash of this proposal used by its voting contract to verify the
+   * Get the hash of this proposal, used by its voting contract to verify the
    * proposal data on execution. Not available on executed proposals.
    */
   async getHash(): Promise<string | null> {
@@ -77,7 +77,7 @@ export class Proposal extends Model {
   }
 
   /**
-   * Get the required quorum for this proposal to be executed measured by
+   * Get the required quorum for this proposal to be executed, measured by
    * summing the voting power of all casted votes. Not available on executed
    * proposals.
    */
@@ -139,7 +139,7 @@ export class Proposal extends Model {
 
   /**
    * Get a boolean indicating whether this proposal has been executed.
-   * @param atBlock The block number to check. If this proposal was executed
+   * @param atBlock - The block number to check. If this proposal was executed
    *   on or before this block, this will return true.
    */
   async getIsExecuted(atBlock?: number): Promise<boolean> {
@@ -153,6 +153,7 @@ export class Proposal extends Model {
 
   /**
    * Get the casted vote for a given address on this proposal.
+   * @param address - The address that casted the vote.
    */
   async getVote(address: string): Promise<Vote | null> {
     const vote = await this.votingContract.dataSource.getVote(address, this.id);
@@ -170,8 +171,8 @@ export class Proposal extends Model {
 
   /**
    * Get all casted votes on this proposal
-   * @param fromBlock Include all votes casted on or after this block number.
-   * @param toBlock Include all votes casted on or before this block number.
+   * @param fromBlock - Include all votes casted on or after this block number.
+   * @param toBlock - Include all votes casted on or before this block number.
    */
   async getVotes(fromBlock?: number, toBlock?: number): Promise<Vote[]> {
     return this.votingContract.getVotes(
@@ -184,9 +185,9 @@ export class Proposal extends Model {
 
   /**
    * Get the usable voting power of a given address for this proposal determined
-   * by its creation block. Voting power changes after the creation block of
-   * this proposal will not be reflected.
-   * @param extraData ABI encoded optional extra data used by some vaults, such
+   * by its creation block. Any changes to voting power after the creation block
+   * of this proposal will not be reflected.
+   * @param extraData - ABI encoded optional extra data used by some vaults, such
    *   as merkle proofs.
    */
   async getVotingPower(
@@ -209,8 +210,8 @@ export class Proposal extends Model {
   }
 
   /**
-   * Get current quorum of this proposal measured by summing the voting power of
-   * all casted votes.
+   * Get the current quorum of this proposal measured by summing the voting
+   * power of all casted votes.
    */
   async getCurrentQuorum(): Promise<string> {
     const results = await this.getResults();
@@ -239,8 +240,8 @@ export class Proposal extends Model {
 
   /**
    * Vote on this proposal.
-   * @param signer An ethers Signer instance for the voter.
-   * @param ballot The ballot to cast.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param ballot - The ballot to cast.
    * @returns The transaction hash.
    */
   vote(
@@ -248,7 +249,7 @@ export class Proposal extends Model {
     ballot: Ballot,
     options?: TransactionOptions & {
       /**
-       * Extra data given to the vaults to help calculation
+       * Extra data given to the vaults to help calculation.
        */
       extraVaultData?: BytesLike[];
     },

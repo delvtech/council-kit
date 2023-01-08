@@ -13,6 +13,7 @@ import { CachedDataSource } from "./CachedDataSource";
  * A DataSource with methods for making cached calls to an ethers contract
  * instance.
  * @see https://docs.ethers.org/v5/api/contract/contract/
+ * @category Data Sources
  */
 // TODO: add a method for event queries
 export class ContractDataSource<
@@ -34,8 +35,8 @@ export class ContractDataSource<
   /**
    * Call a method on the contract and cache the result with a key made from the
    * method name and arguments.
-   * @param method The name of the method to call on the contract.
-   * @param args The array of arguments to pass to the method.
+   * @param method - The name of the method to call on the contract.
+   * @param args - The array of arguments to pass to the method.
    * @returns The value returned from the contract.
    * @see https://docs.ethers.org/v5/api/contract/contract/#Contract-functionsCall
    */
@@ -53,8 +54,8 @@ export class ContractDataSource<
   /**
    * Call a method on the contract using `callStatic` and cache the result with
    * a key made from the method name and arguments.
-   * @param method The name of the method to call on the contract.
-   * @param args The array of arguments to pass to the method.
+   * @param method - The name of the method to call on the contract.
+   * @param args - The array of arguments to pass to the method.
    * @returns The value returned from the contract.
    * @see https://docs.ethers.org/v5/api/contract/contract/#contract-callStatic
    */
@@ -74,10 +75,10 @@ export class ContractDataSource<
   /**
    * Call a write method on the contract with a signer and wait for the
    * transaction to resolve. If the transaction fails, this will throw an error.
-   * @param method The name of the write method to call on the contract.
-   * @param args The array of arguments to pass to the method.
-   * @param signer The Signer to connect to the contract with before calling.
-   * @returns A promise that resolves to the {@linkcode ContractTransaction}.
+   * @param method - The name of the write method to call on the contract.
+   * @param args - The array of arguments to pass to the method.
+   * @param signer - The Signer to connect to the contract with before calling.
+   * @returns A promise that resolves to the `ContractTransaction`.
    */
   async callWithSigner<K extends TransactionKeys<T>>(
     method: K,
@@ -135,20 +136,34 @@ export class ContractDataSource<
   }
 }
 
+/**
+ * @category Data Sources
+ */
 export interface TransactionOptions {
   /**
    * A function called when the transaction is submitted to the blockchain.
-   * @param transaction The transaction hash.
+   * @param transaction - The transaction hash.
    */
   onSubmitted?: (transaction: string) => void;
+
+  /**
+   * A function called when the transaction is canceled.
+   * @param transaction - The transaction hash.
+   */
   onCancelled?: (transaction: string) => void;
+
+  /**
+   * A function called when the transaction is repriced.
+   * @param transaction - The transaction hash.
+   */
   onRepriced?: (transaction: string) => void;
 }
 
-type AnyFunction = (...args: any) => any;
+export type AnyFunction = (...args: any) => any;
 
 /**
- * Get a union of all keys/properties on T that are functions
+ * Get a union of all keys/properties on T that are functions.
+ * @category Data Sources
  */
 export type FunctionKeys<T> = Exclude<
   {
@@ -157,13 +172,14 @@ export type FunctionKeys<T> = Exclude<
   undefined
 >;
 
-type TransactionFunction = (
+export type TransactionFunction = (
   ...args: any
 ) => ContractTransaction | Promise<ContractTransaction>;
 
 /**
  * Get a union of all keys/properties on T that are functions and return a
  * `ContractTransaction`.
+ * @category Data Sources
  */
 export type TransactionKeys<T> = Exclude<
   {
@@ -172,6 +188,9 @@ export type TransactionKeys<T> = Exclude<
   undefined
 >;
 
+/**
+ * @category Data Sources
+ */
 export interface TransactionReplacedError extends Error {
   code: "TRANSACTION_REPLACED";
   // The reason why the transaction was replaced
@@ -191,7 +210,7 @@ export interface TransactionReplacedError extends Error {
   receipt: ContractReceipt;
 }
 
-export function isTransactionReplacedError(
+function isTransactionReplacedError(
   error: TransactionReplacedError | any,
 ): error is TransactionReplacedError {
   if (error?.code === Logger.errors.TRANSACTION_REPLACED) {

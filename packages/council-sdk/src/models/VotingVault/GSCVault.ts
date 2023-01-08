@@ -5,7 +5,7 @@ import { GSCVaultContractDataSource } from "src/datasources/VotingVault/GSCVault
 import { Voter } from "src/models/Voter";
 import { VotingVault, VotingVaultOptions } from "./VotingVault";
 
-interface GSCVaultOptions extends VotingVaultOptions {
+export interface GSCVaultOptions extends VotingVaultOptions {
   dataSource?: GSCVaultContractDataSource;
 }
 
@@ -13,6 +13,7 @@ interface GSCVaultOptions extends VotingVaultOptions {
  * A VotingVault for the Governance Steering Council in which each member has a
  * single vote and must maintain a minimum required voting power in the core
  * voting vaults to remain eligible.
+ * @category Models
  */
 export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
   constructor(
@@ -41,8 +42,8 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
 
   /**
    * Get all current members of this vault.
-   * @param fromBlock The block number to start searching for members from.
-   * @param toBlock The block number to stop searching for members at.
+   * @param fromBlock - The block number to start searching for members from.
+   * @param toBlock - The block number to stop searching for members at.
    */
   async getMembers(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
     const addresses = await this.dataSource.getMembers(fromBlock, toBlock);
@@ -51,8 +52,8 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
 
   /**
    * Get all voters with voting power in this vault (alias for `getMembers`).
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
+   * @param fromBlock - The block number to start searching for voters from.
+   * @param toBlock - The block number to stop searching for voters at.
    */
   getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
     return this.getMembers(fromBlock, toBlock);
@@ -104,8 +105,8 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
 
   /**
    * Become a member of this GSC vault.
-   * @param signer The Signer of the joining member.
-   * @param vaults The addresses of the approved vaults the joining member has
+   * @param signer - The Signer of the joining member.
+   * @param vaults - The addresses of the approved vaults the joining member has
    *   voting power in. This is used to prove the joining member meets the
    *   minimum voting power requirement. If voting power is moved to a different
    *   vault, the member will become ineligible until they join again with the
@@ -129,8 +130,8 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
    * Remove a member that's become ineligible from this GSC vault. A member
    * becomes ineligible when the voting power in the vaults they joined with
    * drops below the required minimum.
-   * @param signer The Signer of the wallet paying to kick.
-   * @param member The address of the ineligible member to kick.
+   * @param signer - The Signer of the wallet paying to kick.
+   * @param member - The address of the ineligible member to kick.
    * @returns The transaction hash.
    */
   kick(

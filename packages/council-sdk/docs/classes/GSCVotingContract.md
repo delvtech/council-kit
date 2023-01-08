@@ -1,0 +1,507 @@
+[@council/sdk](../README.md) / [Exports](../modules.md) / GSCVotingContract
+
+# Class: GSCVotingContract
+
+A model of a CoreVoting contract intended to be used by the Governance
+Steering Council.
+
+## Hierarchy
+
+- [`VotingContract`](VotingContract.md)<[[`GSCVault`](GSCVault.md)]\>
+
+  ↳ **`GSCVotingContract`**
+
+## Table of contents
+
+### Constructors
+
+- [constructor](GSCVotingContract.md#constructor)
+
+### Properties
+
+- [address](GSCVotingContract.md#address)
+- [context](GSCVotingContract.md#context)
+- [dataSource](GSCVotingContract.md#datasource)
+- [name](GSCVotingContract.md#name)
+- [vaults](GSCVotingContract.md#vaults)
+
+### Methods
+
+- [getIdleDuration](GSCVotingContract.md#getidleduration)
+- [getIsIdle](GSCVotingContract.md#getisidle)
+- [getIsMember](GSCVotingContract.md#getismember)
+- [getJoinDate](GSCVotingContract.md#getjoindate)
+- [getMemberVaults](GSCVotingContract.md#getmembervaults)
+- [getParticipation](GSCVotingContract.md#getparticipation)
+- [getProposal](GSCVotingContract.md#getproposal)
+- [getProposals](GSCVotingContract.md#getproposals)
+- [getRequiredVotingPower](GSCVotingContract.md#getrequiredvotingpower)
+- [getTotalVotingPower](GSCVotingContract.md#gettotalvotingpower)
+- [getVoters](GSCVotingContract.md#getvoters)
+- [getVotes](GSCVotingContract.md#getvotes)
+- [getVotingPower](GSCVotingContract.md#getvotingpower)
+- [join](GSCVotingContract.md#join)
+- [kick](GSCVotingContract.md#kick)
+
+## Constructors
+
+### constructor
+
+• **new GSCVotingContract**(`address`, `gscVault`, `context`, `options?`)
+
+Create a new iGSCVotingContract model instance.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `address` | `string` | The address of the deployed contract. |
+| `gscVault` | `string` \| [`GSCVault`](GSCVault.md) | The GSCVault instance or address of the approved GSC vault. |
+| `context` | [`CouncilContext`](CouncilContext.md) | - |
+| `options?` | [`VotingContractOptions`](../interfaces/VotingContractOptions.md) | - |
+
+#### Overrides
+
+[VotingContract](VotingContract.md).[constructor](VotingContract.md#constructor)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:19](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L19)
+
+## Properties
+
+### address
+
+• **address**: `string`
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[address](VotingContract.md#address)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:32](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L32)
+
+___
+
+### context
+
+• **context**: [`CouncilContext`](CouncilContext.md)
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[context](VotingContract.md#context)
+
+#### Defined in
+
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Model.ts#L19)
+
+___
+
+### dataSource
+
+• **dataSource**: [`VotingContractDataSource`](../interfaces/VotingContractDataSource.md)
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[dataSource](VotingContract.md#datasource)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:33](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L33)
+
+___
+
+### name
+
+• **name**: `string`
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[name](VotingContract.md#name)
+
+#### Defined in
+
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Model.ts#L20)
+
+___
+
+### vaults
+
+• **vaults**: [[`GSCVault`](GSCVault.md)]
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[vaults](VotingContract.md#vaults)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:34](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L34)
+
+## Methods
+
+### getIdleDuration
+
+▸ **getIdleDuration**(): `Promise`<`number`\>
+
+Get the time (in MS) that a new GSC member must wait after joining before
+they can vote.
+
+#### Returns
+
+`Promise`<`number`\>
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:74](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L74)
+
+___
+
+### getIsIdle
+
+▸ **getIsIdle**(`address`): `Promise`<`boolean`\>
+
+Get a boolean indicating whether a member is still in the idle duration.
+Idle members cannot vote.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` |
+
+#### Returns
+
+`Promise`<`boolean`\>
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:82](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L82)
+
+___
+
+### getIsMember
+
+▸ **getIsMember**(`address`): `Promise`<`boolean`\>
+
+Get a boolean indicating whether a given address is a current member.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` |
+
+#### Returns
+
+`Promise`<`boolean`\>
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:66](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L66)
+
+___
+
+### getJoinDate
+
+▸ **getJoinDate**(`address`): `Promise`<``null`` \| `Date`\>
+
+Get the join date of a given member.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` |
+
+#### Returns
+
+`Promise`<``null`` \| `Date`\>
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:59](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L59)
+
+___
+
+### getMemberVaults
+
+▸ **getMemberVaults**(`address`): `Promise`<`string`[]\>
+
+Get the voting vaults a member joined with. Used to prove the member meets
+the minimum voting power requirement.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` |
+
+#### Returns
+
+`Promise`<`string`[]\>
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:90](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L90)
+
+___
+
+### getParticipation
+
+▸ **getParticipation**(`address`): `Promise`<[`number`, `number`]\>
+
+Get the number of proposals an address has voted on and the number of
+proposals that they were able to vote on. If the numbers are the same, then
+the address has voted on every proposal they were able to.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` |
+
+#### Returns
+
+`Promise`<[`number`, `number`]\>
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[getParticipation](VotingContract.md#getparticipation)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:161](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L161)
+
+___
+
+### getProposal
+
+▸ **getProposal**(`id`): [`Proposal`](Proposal.md)
+
+Get a proposal by id.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`Proposal`](Proposal.md)
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[getProposal](VotingContract.md#getproposal)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:69](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L69)
+
+___
+
+### getProposals
+
+▸ **getProposals**(`fromBlock?`, `toBlock?`): `Promise`<[`Proposal`](Proposal.md)[]\>
+
+Get all proposals ever created.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `fromBlock?` | `number` | Include all proposals created on or after this block number. |
+| `toBlock?` | `number` | Include all proposals created on or before this block number. |
+
+#### Returns
+
+`Promise`<[`Proposal`](Proposal.md)[]\>
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[getProposals](VotingContract.md#getproposals)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:78](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L78)
+
+___
+
+### getRequiredVotingPower
+
+▸ **getRequiredVotingPower**(): `Promise`<`string`\>
+
+Get the amount of voting power required to join this voting contract.
+
+#### Returns
+
+`Promise`<`string`\>
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:52](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L52)
+
+___
+
+### getTotalVotingPower
+
+▸ **getTotalVotingPower**(`atBlock?`): `Promise`<`string`\>
+
+Get the sum of voting power held by all voters in this voting contract.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `atBlock?` | `number` |
+
+#### Returns
+
+`Promise`<`string`\>
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[getTotalVotingPower](VotingContract.md#gettotalvotingpower)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:89](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L89)
+
+___
+
+### getVoters
+
+▸ **getVoters**(`fromBlock?`, `toBlock?`): `Promise`<[`Voter`](Voter.md)[]\>
+
+Get all participants that have voting power in this voting contract.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `fromBlock?` | `number` | The block number to start searching for voters from. |
+| `toBlock?` | `number` | The block number to stop searching for voters at. |
+
+#### Returns
+
+`Promise`<[`Voter`](Voter.md)[]\>
+
+#### Overrides
+
+[VotingContract](VotingContract.md).[getVoters](VotingContract.md#getvoters)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:45](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L45)
+
+___
+
+### getVotes
+
+▸ **getVotes**(`address?`, `proposalId?`, `fromBlock?`, `toBlock?`): `Promise`<[`Vote`](Vote.md)[]\>
+
+Get all casted votes on proposals in this voting contract.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `address?` | `string` | - |
+| `proposalId?` | `number` | - |
+| `fromBlock?` | `number` | The starting block number for the range of blocks fetched. |
+| `toBlock?` | `number` | The ending block number for the range of blocks fetched. |
+
+#### Returns
+
+`Promise`<[`Vote`](Vote.md)[]\>
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[getVotes](VotingContract.md#getvotes)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:132](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L132)
+
+___
+
+### getVotingPower
+
+▸ **getVotingPower**(`address`, `atBlock?`, `extraData?`): `Promise`<`string`\>
+
+Get the voting power owned by a given address in this voting contract.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `address` | `string` | - |
+| `atBlock?` | `number` | - |
+| `extraData?` | `BytesLike`[] | ABI encoded optional extra data used by some vaults, such as merkle proofs. |
+
+#### Returns
+
+`Promise`<`string`\>
+
+#### Inherited from
+
+[VotingContract](VotingContract.md).[getVotingPower](VotingContract.md#getvotingpower)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:103](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L103)
+
+___
+
+### join
+
+▸ **join**(`signer`, `vaults`, `options?`): `Promise`<`string`\>
+
+Become a member of this GSC voting contract.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `signer` | `Signer` | The Signer of the joining member. |
+| `vaults` | `string`[] | The addresses of the approved vaults the joining member has voting power in. This is used to prove the joining member meets the minimum voting power requirement. If voting power is moved to a different vault, the member will become ineligible until they join again with the new vault or risk being kicked. |
+| `options?` | [`TransactionOptions`](../interfaces/TransactionOptions.md) & { `extraVaultData?`: `BytesLike`[]  } | - |
+
+#### Returns
+
+`Promise`<`string`\>
+
+The transaction hash.
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:104](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L104)
+
+___
+
+### kick
+
+▸ **kick**(`signer`, `member`, `options?`): `Promise`<`string`\>
+
+Remove a member that's become ineligible from this GSC vault. A member
+becomes ineligible when the voting power in the vaults they joined with
+drops below the required minimum.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `signer` | `Signer` | The Signer of the wallet paying to kick. |
+| `member` | `string` | The address of the ineligible member to kick. |
+| `options?` | [`TransactionOptions`](../interfaces/TransactionOptions.md) & { `extraVaultData?`: `BytesLike`[]  } | - |
+
+#### Returns
+
+`Promise`<`string`\>
+
+The transaction hash.
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts:125](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/GSCVotingContract.ts#L125)

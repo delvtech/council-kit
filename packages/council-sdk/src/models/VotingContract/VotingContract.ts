@@ -1,7 +1,7 @@
 import uniqBy from "lodash.uniqby";
 import { CouncilContext } from "src/context";
 import { sumStrings } from "src/utils/sumStrings";
-import { Model } from "src/models/Model";
+import { Model, ModelOptions } from "src/models/Model";
 import { Proposal } from "src/models/Proposal";
 import { Vote } from "src/models/Vote";
 import { Voter } from "src/models/Voter";
@@ -10,13 +10,21 @@ import { BytesLike, parseEther } from "ethers/lib/utils";
 import { VotingContractDataSource } from "src/datasources/VotingContract/VotingContractDataSource";
 import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
 
-export interface VotingContractOptions {
-  name?: string;
+/**
+ * @category Models
+ */
+export interface VotingContractOptions extends ModelOptions {
+  /**
+   * A data source to use instead of registering one with the `context`. If you
+   * pass in a data source, you take over the responsibility of registering it
+   * with the `context` to make it available to other models and data sources.
+   */
   dataSource?: VotingContractDataSource;
 }
 
 /**
  * A model of a CoreVoting contract.
+ * @category Models
  */
 export class VotingContract<
   TVaults extends VotingVault[] = VotingVault[],
@@ -27,8 +35,8 @@ export class VotingContract<
 
   /**
    * Create a new VotingContract model instance.
-   * @param address The address of the deployed contract.
-   * @param vaults The VotingVault instances or addresses of the vaults that are
+   * @param address - The address of the deployed contract.
+   * @param vaults - The VotingVault instances or addresses of the vaults that are
    *   approved for this voting contract.
    */
   constructor(
@@ -37,7 +45,10 @@ export class VotingContract<
     context: CouncilContext,
     options?: VotingContractOptions,
   ) {
-    super(context, options?.name ?? "Core Voting");
+    super(context, {
+      ...options,
+      name: options?.name ?? "Core Voting",
+    });
     this.address = address;
     this.vaults = vaults.map((vault) =>
       vault instanceof VotingVault
@@ -61,8 +72,8 @@ export class VotingContract<
 
   /**
    * Get all proposals ever created.
-   * @param fromBlock Include all proposals created on or after this block number.
-   * @param toBlock Include all proposals created on or before this block number.
+   * @param fromBlock - Include all proposals created on or after this block number.
+   * @param toBlock - Include all proposals created on or before this block number.
    */
   async getProposals(
     fromBlock?: number,
@@ -86,7 +97,7 @@ export class VotingContract<
 
   /**
    * Get the voting power owned by a given address in this voting contract.
-   * @param extraData ABI encoded optional extra data used by some vaults, such
+   * @param extraData - ABI encoded optional extra data used by some vaults, such
    *   as merkle proofs.
    */
   async getVotingPower(
@@ -104,8 +115,6 @@ export class VotingContract<
 
   /**
    * Get all participants that have voting power in this voting contract.
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
    */
   async getVoters(): Promise<Voter[]> {
     const vaultVoters = await Promise.all(
@@ -117,8 +126,8 @@ export class VotingContract<
 
   /**
    * Get all casted votes on proposals in this voting contract.
-   * @param fromBlock The starting block number for the range of blocks fetched.
-   * @param toBlock The ending block number for the range of blocks fetched.
+   * @param fromBlock - The starting block number for the range of blocks fetched.
+   * @param toBlock - The ending block number for the range of blocks fetched.
    */
   async getVotes(
     address?: string,

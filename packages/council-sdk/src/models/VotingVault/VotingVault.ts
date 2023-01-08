@@ -2,13 +2,20 @@ import { BytesLike } from "ethers";
 import { CouncilContext } from "src/context";
 import { VotingVaultContractDataSource } from "src/datasources/VotingVault/VotingVaultContractDataSource";
 import { VotingVaultDataSource } from "src/datasources/VotingVault/VotingVaultDataSource";
-import { Model } from "src/models/Model";
+import { Model, ModelOptions } from "src/models/Model";
 import { Voter } from "src/models/Voter";
 
+/**
+ * @category Models
+ */
 export interface VotingVaultOptions<
   TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
-> {
-  name?: string;
+> extends ModelOptions {
+  /**
+   * A data source to use instead of registering one with the `context`. If you
+   * pass in a data source, you take over the responsibility of registering it
+   * with the `context` to make it available to other models and data sources.
+   */
   dataSource?: TDataSource;
 }
 
@@ -29,6 +36,7 @@ export interface VotingVault extends VotingVaultModel {}
 
 /**
  * A vault which stores voting power by address
+ * @category Models
  */
 export class VotingVault<
     TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
@@ -44,7 +52,10 @@ export class VotingVault<
     context: CouncilContext,
     options?: VotingVaultOptions,
   ) {
-    super(context, options?.name ?? "Voting Vault");
+    super(context, {
+      ...options,
+      name: options?.name ?? "Voting Vault",
+    });
     this.address = address;
     this.dataSource = (options?.dataSource ||
       this.context.registerDataSource(
@@ -56,8 +67,8 @@ export class VotingVault<
   }
 
   /**
-   * Get the voting power owned by a given address in this vault.
-   * @param extraData ABI encoded optional extra data used by some vaults, such
+   * Get the usable voting power owned by a given address in this vault.
+   * @param extraData - ABI encoded optional extra data used by some vaults, such
    *   as merkle proofs.
    */
   async getVotingPower(

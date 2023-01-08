@@ -8,8 +8,9 @@ import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
 /**
- * A DataSource with methods for making cached calls to a
- * {@linkcode VestingVault} contract from the Council protocol.
+ * A DataSource with methods for making cached calls to a `VestingVault`
+ * contract from the Council protocol.
+ * @category Data Sources
  */
 
 export class VestingVaultContractDataSource
@@ -118,8 +119,8 @@ export class VestingVaultContractDataSource
   /**
    * Get the address and voting power of all participants that have voting power
    * in this vault.
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
+   * @param fromBlock - The block number to start searching for voters from.
+   * @param toBlock - The block number to stop searching for voters at.
    */
   async getAllVotersWithPower(
     fromBlock?: number,
@@ -150,11 +151,11 @@ export class VestingVaultContractDataSource
   }
 
   /**
-   * Get all emitted {@linkcode VoteChangeEvent VoteChange} events.
-   * @param from The address that the voting power is coming from.
-   * @param to The address that the voting power is going to.
-   * @param fromBlock The block to start searching for events from.
-   * @param toBlock The block to stop searching for events at.
+   * Get all emitted `VoteChange` events.
+   * @param from - The address that the voting power is coming from.
+   * @param to - The address that the voting power is going to.
+   * @param fromBlock - The block to start searching for events from.
+   * @param toBlock - The block to stop searching for events at.
    */
   getVoteChangeEvents(
     from?: string,
@@ -170,8 +171,8 @@ export class VestingVaultContractDataSource
 
   /**
    * Change current delegate.
-   * @param signer The Signer of the address delegating.
-   * @param delegate The address to delegate to.
+   * @param signer - The Signer of the address delegating.
+   * @param delegate - The address to delegate to.
    * @returns The transaction hash.
    */
   async changeDelegate(
@@ -191,7 +192,7 @@ export class VestingVaultContractDataSource
 
   /**
    * Claim a grant and withdraw the tokens.
-   * @param signer The Signer of the wallet with a grant to claim.
+   * @param signer - The Signer of the wallet with a grant to claim.
    * @returns The transaction hash.
    */
   async claim(signer: Signer, options?: TransactionOptions): Promise<string> {
@@ -203,6 +204,7 @@ export class VestingVaultContractDataSource
 
 /**
  * A grant as it's stored in the contract.
+ * @category Data Sources
  */
 export interface GrantData {
   /**
@@ -248,6 +250,9 @@ export interface GrantData {
   range: [string, string];
 }
 
+/**
+ * @category Data Sources
+ */
 export interface VoterWithPower {
   address: string;
   power: string;
