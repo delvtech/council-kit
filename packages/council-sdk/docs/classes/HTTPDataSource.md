@@ -76,7 +76,7 @@ A DataSource with methods for caching requests to an HTTP API.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:53](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L53)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:53](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L53)
 
 ## Properties
 
@@ -88,7 +88,7 @@ The base URL prefixed to all method paths.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L12)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L12)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
 
 ___
 
@@ -129,7 +129,7 @@ This will be merged with and overwrite the `defaultRequestOptions`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L42)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L42)
 
 ___
 
@@ -142,7 +142,7 @@ This will be merged with and overwrite the `defaultRequestOptions`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:24](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L24)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:24](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L24)
 
 ___
 
@@ -155,7 +155,7 @@ This will be merged with and overwrite the `defaultRequestOptions`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:30](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L30)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:30](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L30)
 
 ___
 
@@ -168,7 +168,7 @@ This will be merged with and overwrite the `defaultRequestOptions`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:36](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L36)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:36](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L36)
 
 ___
 
@@ -180,7 +180,7 @@ The default options that are used for all request methods.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:17](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L17)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:17](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L17)
 
 ___
 
@@ -210,7 +210,7 @@ a promise that resolves to the processed response data.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:51](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L51)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:51](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L51)
 
 ## Methods
 
@@ -246,7 +246,7 @@ The cached result of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
 
 ___
 
@@ -266,7 +266,7 @@ Delete all entries from the cache.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
 
 ___
 
@@ -298,7 +298,7 @@ a promise that resolves to the response data processed by
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:202](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L202)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:202](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L202)
 
 ___
 
@@ -326,7 +326,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
 
 ___
 
@@ -359,7 +359,7 @@ a promise that resolves to the response data processed by
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:161](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L161)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:161](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L161)
 
 ___
 
@@ -392,7 +392,7 @@ a promise that resolves to the response data processed by
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:140](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L140)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:140](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L140)
 
 ___
 
@@ -425,4 +425,4 @@ a promise that resolves to the response data processed by
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/HTTPDataSource.ts:182](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/HTTPDataSource.ts#L182)
+[packages/council-sdk/src/datasources/HTTPDataSource.ts:182](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/HTTPDataSource.ts#L182)

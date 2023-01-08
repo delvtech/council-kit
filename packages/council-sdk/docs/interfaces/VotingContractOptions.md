@@ -27,7 +27,7 @@ with the `context` to make it available to other models and data sources.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:22](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L22)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:22](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L22)
 
 ___
 
@@ -44,4 +44,4 @@ affect on the model's behavior.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Model.ts#L11)
+[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L11)

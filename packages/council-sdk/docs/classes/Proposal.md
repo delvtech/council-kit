@@ -65,7 +65,7 @@ Create a new Proposal model instance.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:29](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L29)
+[packages/council-sdk/src/models/Proposal.ts:29](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L29)
 
 ## Properties
 
@@ -79,7 +79,7 @@ Create a new Proposal model instance.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:20](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L20)
+[packages/council-sdk/src/models/Proposal.ts:20](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L20)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L20)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:21](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L21)
+[packages/council-sdk/src/models/Proposal.ts:21](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L21)
 
 ## Methods
 
@@ -130,7 +130,7 @@ if this proposal instance was initiated with an invalid id.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:93](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L93)
+[packages/council-sdk/src/models/Proposal.ts:93](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L93)
 
 ___
 
@@ -147,7 +147,7 @@ power of all casted votes.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:216](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L216)
+[packages/council-sdk/src/models/Proposal.ts:216](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L216)
 
 ___
 
@@ -169,7 +169,7 @@ then only the id provided will be available.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:55](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L55)
+[packages/council-sdk/src/models/Proposal.ts:55](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L55)
 
 ___
 
@@ -186,7 +186,7 @@ be null if this proposal instance was initiated with an invalid id.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:111](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L111)
+[packages/council-sdk/src/models/Proposal.ts:111](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L111)
 
 ___
 
@@ -203,7 +203,7 @@ proposal data on execution. Not available on executed proposals.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:74](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L74)
+[packages/council-sdk/src/models/Proposal.ts:74](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L74)
 
 ___
 
@@ -222,7 +222,7 @@ than this proposal's expiration or this proposal has been executed.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:131](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L131)
+[packages/council-sdk/src/models/Proposal.ts:131](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L131)
 
 ___
 
@@ -240,7 +240,7 @@ block is between the unlock and last call blocks.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:226](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L226)
+[packages/council-sdk/src/models/Proposal.ts:226](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L226)
 
 ___
 
@@ -262,7 +262,7 @@ Get a boolean indicating whether this proposal has been executed.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:145](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L145)
+[packages/council-sdk/src/models/Proposal.ts:145](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L145)
 
 ___
 
@@ -279,7 +279,7 @@ Not available on executed proposals.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:120](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L120)
+[packages/council-sdk/src/models/Proposal.ts:120](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L120)
 
 ___
 
@@ -297,7 +297,7 @@ proposals.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:84](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L84)
+[packages/council-sdk/src/models/Proposal.ts:84](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L84)
 
 ___
 
@@ -314,7 +314,7 @@ Not available on executed proposals.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:208](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L208)
+[packages/council-sdk/src/models/Proposal.ts:208](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L208)
 
 ___
 
@@ -331,7 +331,7 @@ null if this proposal instance was initiated with an invalid id.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:102](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L102)
+[packages/council-sdk/src/models/Proposal.ts:102](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L102)
 
 ___
 
@@ -353,7 +353,7 @@ Get the casted vote for a given address on this proposal.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:158](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L158)
+[packages/council-sdk/src/models/Proposal.ts:158](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L158)
 
 ___
 
@@ -376,7 +376,7 @@ Get all casted votes on this proposal
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:177](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L177)
+[packages/council-sdk/src/models/Proposal.ts:177](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L177)
 
 ___
 
@@ -401,7 +401,7 @@ of this proposal will not be reflected.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:193](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L193)
+[packages/council-sdk/src/models/Proposal.ts:193](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L193)
 
 ___
 
@@ -427,4 +427,4 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Proposal.ts:247](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Proposal.ts#L247)
+[packages/council-sdk/src/models/Proposal.ts:247](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Proposal.ts#L247)

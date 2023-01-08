@@ -12,6 +12,7 @@ A JavaScript SDK for interfacing with the [Council protocol](https://github.com/
 - [Reference](#reference)
   - [Models](#models-1)
   - [Data Sources](#data-sources-1)
+  - [Context](#context-1)
   - [Utils](#utils-1)
 
 
@@ -121,6 +122,10 @@ const estimatedDate = getBlockDate(futureBlockNumber, provider, {
       - [`GSCVaultContractDataSource`](docs/classes/GSCVaultContractDataSource.md)
     - [`ERC20ContractDataSource`](docs/classes/ERC20ContractDataSource.md)
   - [`HTTPDataSource`](docs/classes/HTTPDataSource.md)
+
+### Context
+
+- [`CouncilContext`](docs/classes//CouncilContext.md)
 
 ### Utils
 

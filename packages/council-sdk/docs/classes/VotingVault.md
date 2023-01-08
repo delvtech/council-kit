@@ -73,7 +73,7 @@ A vault which stores voting power by address
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:50](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L50)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:50](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L50)
 
 ## Properties
 
@@ -87,7 +87,7 @@ VotingVaultModel.address
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:47](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L47)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:47](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L47)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -115,7 +115,7 @@ VotingVaultModel.dataSource
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:48](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L48)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:48](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L48)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -153,7 +153,7 @@ VotingVaultModel.getTotalVotingPower
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:31](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L31)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:31](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L31)
 
 ___
 
@@ -177,7 +177,7 @@ VotingVaultModel.getVoters
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:30](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L30)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:30](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L30)
 
 ___
 
@@ -201,4 +201,4 @@ Get the usable voting power owned by a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:74](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L74)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:74](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L74)

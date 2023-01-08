@@ -21,7 +21,7 @@ The vote data emitted in logs.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:122](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L122)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:122](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L122)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:125](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L125)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:125](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L125)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:124](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L124)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:124](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L124)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:123](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L123)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:123](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L123)

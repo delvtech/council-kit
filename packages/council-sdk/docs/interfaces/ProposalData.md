@@ -34,7 +34,7 @@ A proposal as it's stored in the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:96](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L96)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:96](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L96)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:98](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L98)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:98](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L98)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:106](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L106)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:106](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L106)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:95](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L95)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:95](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L95)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:108](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L108)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:108](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L108)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:107](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L107)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:107](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L107)
 
 ___
 
@@ -106,4 +106,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:97](https://github.com/element-fi/council-monorepo/blob/badbd3c/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L97)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:97](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L97)
