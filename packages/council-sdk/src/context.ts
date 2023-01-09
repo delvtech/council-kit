@@ -1,20 +1,38 @@
 import { providers } from "ethers";
 import { DataSource } from "./datasources/DataSource";
 
+/**
+ * @category Context
+ */
 export interface CouncilContextOptions {
   dataSources?: DataSource[];
 }
 
 /**
- * The CouncilContext stores information about the context in which models are
- * created and used including shared data sources and their cache. It also
- * includes a couple utility methods for getting and registering new shared
- * data sources.
+ * The Context stores common information used in model and data source methods
+ * including shared data sources and their cache. It also includes a couple
+ * utility methods for getting and registering new shared data sources.
+ * @category Context
  */
 export class CouncilContext {
+  /**
+   * The [ethers Provider](https://docs.ethers.org/v5/api/providers/) instance
+   * being used by data sources to fetch data from the blockchain.
+   */
   provider: providers.Provider;
+
+  /**
+   * A shared array of `DataSource` instances and their caches that will be
+   * reused by models. When a new model instance is created, it will add any
+   * missing data source instances it requires to this list.
+   */
   dataSources: DataSource[];
 
+  /**
+   * Create a new CouncilContext instance.
+   * @param provider - An [ethers Provider](https://docs.ethers.org/v5/api/providers/)
+   *   instance.
+   */
   constructor(provider: providers.Provider, options?: CouncilContextOptions) {
     this.provider = provider;
     this.dataSources = options?.dataSources || [];
@@ -23,7 +41,8 @@ export class CouncilContext {
   /**
    * Get a shared `DataSource` who's properties match a given filter object.
    * @param filter - An object of `DataSource` keys and values to look for.
-   * @returns The matching `DataSource` if found, else `null`.
+   * @returns The first `DataSource` instance in the `dataSources` array that
+   * matches the `filter`, or `null` if no match is found.
    */
   // TODO: How can we make this more efficient, yet still flexible
   getDataSource<T extends DataSource>(filter: Partial<T>): T | null {

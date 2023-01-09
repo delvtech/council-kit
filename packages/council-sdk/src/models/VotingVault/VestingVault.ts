@@ -1,4 +1,4 @@
-import { BigNumber, FixedNumber, Signer } from "ethers";
+import { FixedNumber, Signer } from "ethers";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
@@ -10,13 +10,14 @@ import { Voter } from "src/models/Voter";
 import { sumStrings } from "src/utils/sumStrings";
 import { VotingVault, VotingVaultOptions } from "./VotingVault";
 
-interface VestingVaultOptions extends VotingVaultOptions {
+export interface VestingVaultOptions extends VotingVaultOptions {
   dataSource?: VestingVaultContractDataSource;
 }
 
 /**
  * A VotingVault that gives voting power for receiving grants and applies a
  * multiplier on unvested tokens to reduce their voting power.
+ * @category Models
  */
 export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   constructor(
@@ -37,7 +38,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
-   * Get the associated token for this vault.
+   * Get this vault's token.
    */
   async getToken(): Promise<Token> {
     const address = await this.dataSource.getToken();
@@ -54,7 +55,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   /**
    * Gets the amount of tokens currently claimable from the grant.
    * Mimics internal function https://github.com/element-fi/council/blob/main/contracts/vaults/VestingVault.sol#L434
-   * @param address The grantee address.
+   * @param address - The grantee address.
    * @returns The amount of claimable tokens.
    */
   async getGrantWithdrawableAmount(address: string): Promise<string> {
@@ -87,8 +88,8 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
 
   /**
    * Get all participants that have voting power in this vault.
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
+   * @param fromBlock - Include all voters that had power on or after this block number.
+   * @param toBlock - Include all voters that had power on or before this block number.
    */
   async getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
     const votersWithPower = await this.dataSource.getAllVotersWithPower(
@@ -98,22 +99,6 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     return votersWithPower.map(
       ({ address }) => new Voter(address, this.context),
     );
-  }
-
-  /**
-   * Get the sum of voting power held by all voters in this vault.
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
-   */
-  async getTotalVotingPower(
-    fromBlock?: number,
-    toBlock?: number,
-  ): Promise<string> {
-    const allVotersWithPower = await this.dataSource.getAllVotersWithPower(
-      fromBlock,
-      toBlock,
-    );
-    return sumStrings(allVotersWithPower.map(({ power }) => power));
   }
 
   /**
@@ -143,6 +128,18 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
+   * Get the sum of voting power held by all voters in this vault.
+   * @param atBlock - Get the total held at this block number.
+   */
+  async getTotalVotingPower(atBlock?: number): Promise<string> {
+    const allVotersWithPower = await this.dataSource.getAllVotersWithPower(
+      undefined,
+      atBlock,
+    );
+    return sumStrings(allVotersWithPower.map(({ power }) => power));
+  }
+
+  /**
    * Get the current delegate of a given address.
    */
   async getDelegate(address: string): Promise<Voter> {
@@ -160,8 +157,8 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
 
   /**
    * Change current delegate.
-   * @param signer The Signer of the address delegating.
-   * @param delegate The address to delegate to.
+   * @param signer - The Signer of the address delegating.
+   * @param delegate - The address to delegate to.
    * @returns The transaction hash.
    */
   changeDelegate(
@@ -174,7 +171,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
 
   /**
    * Claim a grant and withdraw the tokens.
-   * @param signer The Signer of the wallet with a grant to claim.
+   * @param signer - The Signer of the wallet with a grant to claim.
    * @returns The transaction hash.
    */
   claim(signer: Signer, options?: TransactionOptions): Promise<string> {

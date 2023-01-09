@@ -4,6 +4,7 @@ import { TransactionOptions } from "src/datasources/ContractDataSource";
 
 /**
  * An interface for fetching data from any voting contract.
+ * @category Data Sources
  */
 export interface VotingContractDataSource extends DataSource {
   address: string;
@@ -14,14 +15,14 @@ export interface VotingContractDataSource extends DataSource {
   getProposalCount: () => Promise<number>;
 
   /**
-   * Get a proposal's {@linkcode ProposalData} by `id` if it exists.
+   * Get a proposal's `ProposalData` by `id` if it exists.
    */
   getProposal: (id: number) => Promise<ProposalData | null>;
 
   /**
-   * Get the {@link ProposalDataPreview} of all proposals ever created.
-   * @param fromBlock Include all proposals created on or after this block number.
-   * @param toBlock Include all proposals created on or before this block number.
+   * Get the `ProposalDataPreview` of all proposals ever created.
+   * @param fromBlock - Include all proposals created on or after this block number.
+   * @param toBlock - Include all proposals created on or before this block number.
    */
   getProposals: (
     fromBlock?: number,
@@ -30,8 +31,8 @@ export interface VotingContractDataSource extends DataSource {
 
   /**
    * Get the id of all executed proposals.
-   * @param fromBlock Include all proposals executed on or after this block number.
-   * @param toBlock Include all proposals executed on or before this block number.
+   * @param fromBlock - Include all proposals executed on or after this block number.
+   * @param toBlock - Include all proposals executed on or before this block number.
    * @returns
    */
   getExecutedProposalIds: (
@@ -47,8 +48,8 @@ export interface VotingContractDataSource extends DataSource {
 
   /**
    * Get all casted votes on this proposal
-   * @param fromBlock Include all votes casted on or after this block number.
-   * @param toBlock Include all votes casted on or before this block number.
+   * @param fromBlock - Include all votes casted on or after this block number.
+   * @param toBlock - Include all votes casted on or before this block number.
    */
   getVotes: (
     address?: string,
@@ -65,11 +66,11 @@ export interface VotingContractDataSource extends DataSource {
 
   /**
    * Vote on this proposal.
-   * @param signer An ethers Signer instance for the voter.
-   * @param vaults The addresses of the approved vaults to draw voting power
+   * @param signer - An ethers Signer instance for the voter.
+   * @param vaults - The addresses of the approved vaults to draw voting power
    *   from.
-   * @param proposalId The id of the proposal to vote on.
-   * @param ballot The ballot to cast.
+   * @param proposalId - The id of the proposal to vote on.
+   * @param ballot - The ballot to cast.
    * @returns The transaction hash.
    */
   vote: (
@@ -87,7 +88,8 @@ export interface VotingContractDataSource extends DataSource {
 }
 
 /**
- * A preview of {@linkcode ProposalData}, emitted in logs.
+ * A preview of `ProposalData`, emitted in logs.
+ * @category Data Sources
  */
 export interface ProposalDataPreview {
   id: number;
@@ -98,6 +100,7 @@ export interface ProposalDataPreview {
 
 /**
  * A proposal as it's stored in the contract.
+ * @category Data Sources
  */
 export interface ProposalData extends ProposalDataPreview {
   hash: string;
@@ -107,11 +110,13 @@ export interface ProposalData extends ProposalDataPreview {
 
 /**
  * A valid ballot option.
+ * @category Data Sources
  */
 export type Ballot = "yes" | "no" | "maybe";
 
 /**
  * The vote data emitted in logs.
+ * @category Data Sources
  */
 export interface VoteData {
   address: string;
@@ -122,5 +127,6 @@ export interface VoteData {
 
 /**
  * The amount of voting power casted by ballot.
+ * @category Data Sources
  */
 export type VoteResults = Record<Ballot, string>;

@@ -1,0 +1,307 @@
+[@council/sdk](README.md) / Exports
+
+# @council/sdk
+
+## Table of contents
+
+### Classes
+
+- [CachedDataSource](classes/CachedDataSource.md)
+- [ContractDataSource](classes/ContractDataSource.md)
+- [CoreVotingContractDataSource](classes/CoreVotingContractDataSource.md)
+- [CouncilContext](classes/CouncilContext.md)
+- [ERC20ContractDataSource](classes/ERC20ContractDataSource.md)
+- [GSCVault](classes/GSCVault.md)
+- [GSCVaultContractDataSource](classes/GSCVaultContractDataSource.md)
+- [GSCVotingContract](classes/GSCVotingContract.md)
+- [HTTPDataSource](classes/HTTPDataSource.md)
+- [LockingVault](classes/LockingVault.md)
+- [LockingVaultContractDataSource](classes/LockingVaultContractDataSource.md)
+- [Model](classes/Model.md)
+- [Proposal](classes/Proposal.md)
+- [Token](classes/Token.md)
+- [VestingVault](classes/VestingVault.md)
+- [VestingVaultContractDataSource](classes/VestingVaultContractDataSource.md)
+- [Vote](classes/Vote.md)
+- [Voter](classes/Voter.md)
+- [VotingContract](classes/VotingContract.md)
+- [VotingVault](classes/VotingVault.md)
+- [VotingVaultContractDataSource](classes/VotingVaultContractDataSource.md)
+
+### Interfaces
+
+- [CouncilContextOptions](interfaces/CouncilContextOptions.md)
+- [DataSource](interfaces/DataSource.md)
+- [GSCVaultOptions](interfaces/GSCVaultOptions.md)
+- [GetBlockDateOptions](interfaces/GetBlockDateOptions.md)
+- [GrantData](interfaces/GrantData.md)
+- [LockingVaultOptions](interfaces/LockingVaultOptions.md)
+- [ModelOptions](interfaces/ModelOptions.md)
+- [ProposalData](interfaces/ProposalData.md)
+- [ProposalDataPreview](interfaces/ProposalDataPreview.md)
+- [TokenDataSource](interfaces/TokenDataSource.md)
+- [TokenOptions](interfaces/TokenOptions.md)
+- [TransactionOptions](interfaces/TransactionOptions.md)
+- [TransactionReplacedError](interfaces/TransactionReplacedError.md)
+- [VestingVaultOptions](interfaces/VestingVaultOptions.md)
+- [VoteData](interfaces/VoteData.md)
+- [VoterWithPower](interfaces/VoterWithPower.md)
+- [VotingContractDataSource](interfaces/VotingContractDataSource.md)
+- [VotingContractOptions](interfaces/VotingContractOptions.md)
+- [VotingVaultDataSource](interfaces/VotingVaultDataSource.md)
+- [VotingVaultOptions](interfaces/VotingVaultOptions.md)
+
+### Type Aliases
+
+- [AnyFunction](modules.md#anyfunction)
+- [Ballot](modules.md#ballot)
+- [FunctionKeys](modules.md#functionkeys)
+- [GetAndSetOptions](modules.md#getandsetoptions)
+- [TransactionFunction](modules.md#transactionfunction)
+- [TransactionKeys](modules.md#transactionkeys)
+- [VoteResults](modules.md#voteresults)
+
+### Functions
+
+- [cached](modules.md#cached)
+- [cachedKey](modules.md#cachedkey)
+- [getBlockDate](modules.md#getblockdate)
+- [sumStrings](modules.md#sumstrings)
+
+## Data Sources
+
+### Ballot
+
+Ƭ **Ballot**: ``"yes"`` \| ``"no"`` \| ``"maybe"``
+
+A valid ballot option.
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:115](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L115)
+
+___
+
+### FunctionKeys
+
+Ƭ **FunctionKeys**<`T`\>: `Exclude`<{ [K in keyof T]: T[K] extends AnyFunction ? K : undefined }[keyof `T`], `undefined`\>
+
+Get a union of all keys/properties on T that are functions.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/ContractDataSource.ts:168](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L168)
+
+___
+
+### TransactionKeys
+
+Ƭ **TransactionKeys**<`T`\>: `Exclude`<{ [K in keyof T]: T[K] extends TransactionFunction ? K : undefined }[keyof `T`], `undefined`\>
+
+Get a union of all keys/properties on T that are functions and return a
+`ContractTransaction`.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/ContractDataSource.ts:184](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L184)
+
+___
+
+### VoteResults
+
+Ƭ **VoteResults**: `Record`<[`Ballot`](modules.md#ballot), `string`\>
+
+The amount of voting power casted by ballot.
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:132](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L132)
+
+## Utils
+
+### cached
+
+▸ **cached**<`TCallback`\>(`options`): `ReturnType`<`TCallback`\>
+
+A utility for wrapping a callback with caching logic.
+
+**`See`**
+
+https://github.com/isaacs/node-lru-cache
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCallback` | extends (...`args`: `any`[]) => `any` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `options` | `Object` |  |
+| `options.cache?` | `LRUCache`<`string`, `any`\> | An optional `lru-cache` instance to use for the callback's result. A new instance with `max: 500` is created by default. |
+| `options.cacheKey` | `any` | The value to stringify and use to identify the cached result. |
+| `options.callback` | `TCallback` | A function with a return value that will be cached and reused based on the cache's options. |
+| `options.options?` | [`GetAndSetOptions`](modules.md#getandsetoptions) | LRUCache's `get` and `set` options merged. |
+
+#### Returns
+
+`ReturnType`<`TCallback`\>
+
+The return value of the callback function.
+
+#### Defined in
+
+[packages/council-sdk/src/utils/cached.ts:21](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/cached.ts#L21)
+
+___
+
+### cachedKey
+
+▸ **cachedKey**(`cacheKey`): `string`
+
+Returns a key stringified in the same way as the `cached` utility.
+This will not modify strings so
+`cachedKey('foo') === cachedKey(cachedKey('foo'))`.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `cacheKey` | `any` | The value to stringify. |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[packages/council-sdk/src/utils/cached.ts:51](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/cached.ts#L51)
+
+___
+
+### getBlockDate
+
+▸ **getBlockDate**<`TEstimate`\>(`blockNumber`, `provider`, `options?`): `Promise`<`PossibleDate`<`TEstimate`\>\>
+
+Get the date of a given block by it's block number
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TEstimate` | extends `boolean` = ``false`` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `blockNumber` | `number` |
+| `provider` | `Provider` |
+| `options?` | [`GetBlockDateOptions`](interfaces/GetBlockDateOptions.md)<`TEstimate`\> |
+
+#### Returns
+
+`Promise`<`PossibleDate`<`TEstimate`\>\>
+
+#### Defined in
+
+[packages/council-sdk/src/utils/getBlockDate.ts:30](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/getBlockDate.ts#L30)
+
+___
+
+### sumStrings
+
+▸ **sumStrings**(`numberStrings`): `string`
+
+Takes a group of numbers represented as strings and sums them together using
+`ethers.BigNumber`.
+
+**`See`**
+
+https://docs.ethers.org/v5/api/utils/bignumber
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `numberStrings` | `string`[] |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[packages/council-sdk/src/utils/sumStrings.ts:10](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/sumStrings.ts#L10)
+
+## Other
+
+### AnyFunction
+
+Ƭ **AnyFunction**: (...`args`: `any`) => `any`
+
+#### Type declaration
+
+▸ (`...args`): `any`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...args` | `any` |
+
+##### Returns
+
+`any`
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/ContractDataSource.ts:162](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L162)
+
+___
+
+### GetAndSetOptions
+
+Ƭ **GetAndSetOptions**: `Parameters`<`LRUCache`<`string`, `any`\>[``"get"``]\>[``1``] & `Parameters`<`LRUCache`<`string`, `any`\>[``"set"``]\>[``2``]
+
+#### Defined in
+
+[packages/council-sdk/src/utils/cached.ts:4](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/cached.ts#L4)
+
+___
+
+### TransactionFunction
+
+Ƭ **TransactionFunction**: (...`args`: `any`) => `ContractTransaction` \| `Promise`<`ContractTransaction`\>
+
+#### Type declaration
+
+▸ (`...args`): `ContractTransaction` \| `Promise`<`ContractTransaction`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...args` | `any` |
+
+##### Returns
+
+`ContractTransaction` \| `Promise`<`ContractTransaction`\>
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/ContractDataSource.ts:175](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L175)

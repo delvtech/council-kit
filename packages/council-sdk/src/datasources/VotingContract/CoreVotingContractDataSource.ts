@@ -20,8 +20,9 @@ const EXECUTED_PROPOSAL_HASH =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 /**
- * A DataSource with methods for making cached calls to a
- * {@linkcode CoreVoting} contract from the Council protocol.
+ * A DataSource with methods for making cached calls to a `CoreVoting` contract
+ * from the Council protocol.
+ * @category Data Sources
  */
 export class CoreVotingContractDataSource
   extends ContractDataSource<CoreVoting>

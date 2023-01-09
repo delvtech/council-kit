@@ -3,6 +3,9 @@ import { providers } from "ethers";
 // based on https://etherscan.io/chart/blocktime
 const DEFAULT_BLOCK_TIME = 12.07;
 
+/**
+ * @category Utils
+ */
 export interface GetBlockDateOptions<TEstimate extends boolean = false> {
   /**
    * If true, dates for blocks that haven't been mined yet will be estimated
@@ -22,6 +25,7 @@ type PossibleDate<TEstimate> = TEstimate extends true ? Date : Date | null;
 
 /**
  * Get the date of a given block by it's block number
+ * @category Utils
  */
 export async function getBlockDate<TEstimate extends boolean = false>(
   blockNumber: number,

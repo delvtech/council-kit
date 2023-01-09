@@ -4,6 +4,7 @@ import { DataSource } from "src/datasources/DataSource";
 
 /**
  * An interface for fetching data from any token.
+ * @category Data Sources
  */
 export interface TokenDataSource extends DataSource {
   address: string;
@@ -38,10 +39,10 @@ export interface TokenDataSource extends DataSource {
 
   /**
    * Sets approval of token access up to a certain amount
-   * @param {Signer} signer - Signer.
-   * @param {string} spender - Address to approve access to.
-   * @param {string} [amount] - Amount approved for, defaults to maximum.
-   * @return {Promise<string>} - The transaction hash.
+   * @param signer - Signer.
+   * @param spender - Address to approve access to.
+   * @param amount - Amount approved for, defaults to maximum.
+   * @return - The transaction hash.
    */
   approve: (
     signer: Signer,

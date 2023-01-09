@@ -3,6 +3,7 @@ import { CachedDataSource } from "./CachedDataSource";
 
 /**
  * A DataSource with methods for caching requests to an HTTP API.
+ * @category Data Sources
  */
 export class HTTPDataSource<T = any> extends CachedDataSource {
   /**
@@ -16,26 +17,26 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
   defaultRequestOptions: RequestInit;
 
   /**
-   * The default options that are used for the {@linkcode get} method.
+   * The default options that are used for the `get` method.
    * This will be merged with and overwrite the `defaultRequestOptions`.
    *
    */
   defaultGetOptions: RequestInit;
 
   /**
-   * The default options that are used for the {@linkcode post} method.
+   * The default options that are used for the `post` method.
    * This will be merged with and overwrite the `defaultRequestOptions`.
    */
   defaultPostOptions: RequestInit;
 
   /**
-   * The default options that are used for the {@linkcode put} method.
+   * The default options that are used for the `put` method.
    * This will be merged with and overwrite the `defaultRequestOptions`.
    */
   defaultPutOptions: RequestInit;
 
   /**
-   * The default options that are used for the {@linkcode delete} method.
+   * The default options that are used for the `delete` method.
    * This will be merged with and overwrite the `defaultRequestOptions`.
    */
   defaultDeleteOptions: RequestInit;
@@ -44,7 +45,7 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
    * A function that processes the API's responses and returns the desired data.
    * The default implementation uses `response.json()` to parse the response as
    * JSON.
-   * @param res the response from the API.
+   * @param res - the response from the API.
    * @returns a promise that resolves to the processed response data.
    */
   onResponse: (res: Response) => Promise<T> = (res: Response) => res.json();
@@ -59,27 +60,26 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
       defaultRequestOptions?: RequestInit;
 
       /**
-       * The default options that are used for the {@linkcode get} method.
-       * This will be merged with and overwrite {@linkcode defaultRequestOptions}.
+       * The default options that are used for the `get` method.
+       * This will be merged with and overwrite `defaultRequestOptions`.
        */
       defaultGetOptions?: RequestInit;
 
       /**
-       * The default options that are used for the {@linkcode post} method.
-       * This will be merged with and overwrite {@linkcode defaultRequestOptions}.
+       * The default options that are used for the `post` method.
+       * This will be merged with and overwrite `defaultRequestOptions`.
        */
       defaultPostOptions?: RequestInit;
 
       /**
-       * The default options that are used for the {@linkcode put} method.
-       * This will be merged with and overwrite {@linkcode defaultRequestOptions}.
+       * The default options that are used for the `put` method.
+       * This will be merged with and overwrite `defaultRequestOptions`.
        */
       defaultPutOptions?: RequestInit;
 
       /**
-       * The default options that are used for the {@linkcode delete} method.
-       * This will be merged with and overwrite
-       * {@linkcode defaultRequestOptions}.
+       * The default options that are used for the `delete` method.
+       * This will be merged with and overwrite `defaultRequestOptions`.
        */
       defaultDeleteOptions?: RequestInit;
 
@@ -87,7 +87,7 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
        * A function that processes the API's responses and returns the desired
        * data. The default implementation uses `response.json()` to parse the
        * response as JSON.
-       * @param res the response from the API.
+       * @param res - the response from the API.
        * @returns a promise that resolves to the processed response data.
        */
       onResponse?: (res: Response) => Promise<T>;
@@ -131,12 +131,11 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
   /**
    * Make a `POST` request to the API and cache the result with a key made from
    * the method type, the path, and the request body.
-   * @param path the path to append to the {@linkcode baseURL}.
-   * @param requestOptions options for the request. This will be merged with
-   *   and overwrite {@linkcode defaultRequestOptions} and
-   *   {@linkcode defaultPostOptions}.
+   * @param path - the path to append to the `baseURL`.
+   * @param requestOptions - options for the request. This will be merged with
+   *   and overwrite `defaultRequestOptions` and `defaultPostOptions`.
    * @returns a promise that resolves to the response data processed by
-   *   {@linkcode onResponse}.
+   *   `onResponse`.
    */
   post<T>(path: string, options: RequestInit): Promise<T> {
     return this.cached(
@@ -153,12 +152,11 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
   /**
    * Make a `GET` request to the API and cache the result with a key made from
    * the method type and the path.
-   * @param path the path to append to the {@linkcode baseURL}.
-   * @param requestOptions options for the request. This will be merged with
-   *   and overwrite {@linkcode defaultRequestOptions} and
-   *   {@linkcode defaultGetOptions}.
+   * @param path - the path to append to the `baseURL`.
+   * @param requestOptions - options for the request. This will be merged with
+   *   and overwrite `defaultRequestOptions` and `defaultGetOptions`.
    * @returns a promise that resolves to the response data processed by
-   *   {@linkcode onResponse}.
+   *   `onResponse`.
    */
   get<T>(path: string, options: RequestInit = {}): Promise<T> {
     return this.cached(
@@ -175,12 +173,11 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
   /**
    * Make a `PUT` request to the API and cache the result with a key made from
    * the method type, the path, and the request body.
-   * @param path the path to append to the {@linkcode baseURL}.
-   * @param requestOptions options for the request. This will be merged with
-   *   and overwrite {@linkcode defaultRequestOptions} and
-   *   {@linkcode defaultPutOptions}.
+   * @param path - the path to append to the `baseURL`.
+   * @param requestOptions - options for the request. This will be merged with
+   *   and overwrite `defaultRequestOptions` and `defaultPutOptions`.
    * @returns a promise that resolves to the response data processed by
-   *   {@linkcode onResponse}.
+   *   `onResponse`.
    */
   put<T>(path: string, options: RequestInit): Promise<T> {
     return this.cached(
@@ -196,12 +193,11 @@ export class HTTPDataSource<T = any> extends CachedDataSource {
 
   /**
    * Make a `DELETE` request to the API.
-   * @param path the path to append to the {@linkcode baseURL}.
-   * @param requestOptions options for the request. This will be merged with
-   *   and overwrite {@linkcode defaultDeleteOptions} and
-   *   {@linkcode defaultPutOptions}.
+   * @param path - the path to append to the `baseURL`.
+   * @param requestOptions - options for the request. This will be merged with
+   *   and overwrite `defaultDeleteOptions` and `defaultPutOptions`.
    * @returns a promise that resolves to the response data processed by
-   *   {@linkcode onResponse}.
+   *   `onResponse`.
    */
   delete<T>(path: string, options: RequestInit = {}): Promise<T> {
     return fetch(`${this.baseURL}${path}`, {

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
+  "out": "docs",
+  "navigationLinks": {
+    "github": "https://github.com/element-fi/council-monorepo/tree/main/packages/council-sdk",
+    "council-monorepo": "https://github.com/element-fi/council-monorepo"
+  },
+  "categorizeByGroup": false,
+  "categoryOrder": ["Context", "Models", "Data Sources", "Utils", "*"]
+}

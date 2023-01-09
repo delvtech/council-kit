@@ -9,8 +9,9 @@ import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
 import { CachedDataSource } from "src/datasources/CachedDataSource";
 
 /**
- * A DataSource with methods for making cached calls to a
- * {@linkcode LockingVault} contract from the Council protocol.
+ * A DataSource with methods for making cached calls to a `LockingVault`
+ * contract from the Council protocol.
+ * @category Data Sources
  */
 export class LockingVaultContractDataSource extends VotingVaultContractDataSource<LockingVault> {
   constructor(address: string, context: CouncilContext) {
@@ -99,8 +100,8 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   /**
    * Get the address and voting power of all participants that have voting power
    * in this vault.
-   * @param fromBlock The block number to start searching for voters from.
-   * @param toBlock The block number to stop searching for voters at.
+   * @param fromBlock - The block number to start searching for voters from.
+   * @param toBlock - The block number to stop searching for voters at.
    */
   async getAllVotersWithPower(
     fromBlock?: number,
@@ -131,11 +132,11 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   }
 
   /**
-   * Get all emitted {@linkcode VoteChangeEvent VoteChange} events.
-   * @param from The address that the voting power is coming from.
-   * @param to The address that the voting power is going to.
-   * @param fromBlock The block to start searching for events from.
-   * @param toBlock The block to stop searching for events at.
+   * Get all emitted `VoteChange` events.
+   * @param from - The address that the voting power is coming from.
+   * @param to - The address that the voting power is going to.
+   * @param fromBlock - The block to start searching for events from.
+   * @param toBlock - The block to stop searching for events at.
    */
   getVoteChangeEvents(
     from?: string,
@@ -151,8 +152,8 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
 
   /**
    * Change current delegate.
-   * @param signer The Signer of the address delegating.
-   * @param delegate The address to delegate to.
+   * @param signer - The Signer of the address delegating.
+   * @param delegate - The address to delegate to.
    * @returns The transaction hash.
    */
   async changeDelegate(
@@ -172,10 +173,10 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
 
   /**
    * Deposit tokens into this vault.
-   * @param signer The Signer of the wallet with the tokens.
-   * @param account The address to credit this deposit to.
-   * @param amount A BigNumber of the amount of tokens to deposit.
-   * @param firstDelegate The address to delegate the resulting voting power to
+   * @param signer - The Signer of the wallet with the tokens.
+   * @param account - The address to credit this deposit to.
+   * @param amount - A BigNumber of the amount of tokens to deposit.
+   * @param firstDelegate - The address to delegate the resulting voting power to
    *   if the account doesn't already have a delegate.
    * @returns The transaction hash.
    */
@@ -199,8 +200,8 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
 
   /**
    * Withdraw tokens from this Locking Vault.
-   * @param signer The Signer of the wallet with a deposited balance.
-   * @param amount A BigNumber of the amount of tokens to withdraw.
+   * @param signer - The Signer of the wallet with a deposited balance.
+   * @param amount - A BigNumber of the amount of tokens to withdraw.
    * @returns The transaction hash.
    */
   async withdraw(
@@ -220,8 +221,8 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   }
 
   /**
-   * Checks the `context` for a {@linkcode TokenDataSource} for this vault's
-   * token and clears the cache if it's a {@linkcode CachedDataSource}.
+   * Checks the `context` for a `TokenDataSource` for this vault's
+   * token and clears the cache if it's a `CachedDataSource`.
    */
   private async clearTokenCached() {
     const tokenDataSource = this.context.getDataSource<TokenDataSource>({
@@ -233,6 +234,9 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   }
 }
 
+/**
+ * @category Data Sources
+ */
 export interface VoterWithPower {
   address: string;
   power: string;
