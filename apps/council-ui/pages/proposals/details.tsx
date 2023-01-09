@@ -66,74 +66,70 @@ export default function ProposalPage(): ReactElement {
     return vote(voteArgs);
   }
 
-  switch (status) {
-    case "error":
-      return <ErrorMessage error={error} />;
+  return status === "error" ? (
+    <ErrorMessage error={error} />
+  ) : (
+    <div className="max-w-5xl px-4 m-auto mt-16 space-y-10">
+      <div className="flex flex-wrap w-full gap-4">
+        <h1 className="text-5xl font-bold whitespace-nowrap">
+          {data?.name ?? `Proposal ${id}`}
+        </h1>
 
-    default:
-      return (
-        <div className="max-w-5xl px-4 m-auto mt-16 space-y-10">
-          <div className="flex flex-wrap w-full gap-4">
-            <h1 className="text-5xl font-bold whitespace-nowrap">
-              {data?.name ?? `Proposal ${id}`}
-            </h1>
-
-            <div className="sm:ml-auto w-96 sm:w-72">
-              {status === "success" ? (
-                <QuorumBar
-                  current={data.currentQuorum}
-                  required={data.requiredQuorum}
-                />
-              ) : (
-                <QuorumBarSkeleton />
-              )}
-            </div>
-          </div>
-
+        <div className="sm:ml-auto w-96 sm:w-72">
           {status === "success" ? (
-            <ProposalStatsBar
-              createdAtDate={data?.createdAtDate}
-              endsAtDate={data?.endsAtDate}
-              unlockAtDate={data?.unlockedAtDate}
-              lastCallAtDate={data?.lastCallAtDate}
+            <QuorumBar
+              current={data.currentQuorum}
+              required={data.requiredQuorum}
             />
           ) : (
-            <ProposalStatsBarSkeleton />
+            <QuorumBarSkeleton />
           )}
-
-          <div className="flex flex-wrap w-full gap-10 sm:gap-y-0">
-            <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
-              <h1 className="text-2xl font-medium">Voting Activity</h1>
-
-              {status === "success" ? (
-                <VotingActivityTable
-                  votes={data.votes}
-                  voterEnsRecords={data.voterEnsRecords}
-                />
-              ) : (
-                <VotingActivityTableSkeleton />
-              )}
-            </div>
-
-            <div className="grow basis-[300px] md:grow-0">
-              <h2 className="mb-2 text-2xl font-medium">Your Vote</h2>
-
-              {status === "success" ? (
-                <ProposalVoting
-                  atBlock={data.createdAtBlock || blockNumber}
-                  account={address}
-                  accountBallot={data?.accountBallot}
-                  disabled={!signer || !data?.isActive}
-                  onVote={handleVote}
-                />
-              ) : (
-                <ProposalVotingSkeleton />
-              )}
-            </div>
-          </div>
         </div>
-      );
-  }
+      </div>
+
+      {status === "success" ? (
+        <ProposalStatsBar
+          createdAtDate={data?.createdAtDate}
+          endsAtDate={data?.endsAtDate}
+          unlockAtDate={data?.unlockedAtDate}
+          lastCallAtDate={data?.lastCallAtDate}
+        />
+      ) : (
+        <ProposalStatsBarSkeleton />
+      )}
+
+      <div className="flex flex-wrap w-full gap-10 sm:gap-y-0">
+        <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
+          <h1 className="text-2xl font-medium">Voting Activity</h1>
+
+          {status === "success" ? (
+            <VotingActivityTable
+              votes={data.votes}
+              voterEnsRecords={data.voterEnsRecords}
+            />
+          ) : (
+            <VotingActivityTableSkeleton />
+          )}
+        </div>
+
+        <div className="grow basis-[300px] md:grow-0">
+          <h2 className="mb-2 text-2xl font-medium">Your Vote</h2>
+
+          {status === "success" ? (
+            <ProposalVoting
+              atBlock={data.createdAtBlock || blockNumber}
+              account={address}
+              accountBallot={data?.accountBallot}
+              disabled={!signer || !data?.isActive}
+              onVote={handleVote}
+            />
+          ) : (
+            <ProposalVotingSkeleton />
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 interface ProposalDetailsPageData {
