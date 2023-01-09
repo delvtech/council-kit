@@ -5,8 +5,8 @@ import { CouncilContext } from "src/context";
  */
 export interface ModelOptions {
   /**
-   * An arbitrary name for the instance. This is for convenience only and has no
-   * affect on the model's behavior.
+   * An arbitrary name for the instance. This is for convenience only (e.g.,
+   * display name, debugging) and has no affect on the model's behavior.
    */
   name?: string;
 }

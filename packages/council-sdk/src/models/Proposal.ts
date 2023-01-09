@@ -77,8 +77,9 @@ export class Proposal extends Model {
   }
 
   /**
-   * Get the required quorum for this proposal to be executed, measured by
-   * summing the voting power of all casted votes. Not available on executed
+   * Get the required quorum for this proposal to be executed. If the sum of
+   * voting power from all casted votes does not meet or exceed this number,
+   * then the proposal is not passing quorum. Not available on executed
    * proposals.
    */
   async getRequiredQuorum(): Promise<string | null> {
@@ -186,7 +187,8 @@ export class Proposal extends Model {
   /**
    * Get the usable voting power of a given address for this proposal determined
    * by its creation block. Any changes to voting power after the creation block
-   * of this proposal will not be reflected.
+   * of this proposal does not apply to this proposal and therefore will not be
+   * reflected.
    * @param extraData - ABI encoded optional extra data used by some vaults, such
    *   as merkle proofs.
    */
