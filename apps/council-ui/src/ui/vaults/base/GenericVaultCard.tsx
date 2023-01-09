@@ -51,23 +51,16 @@ export function GenericVaultCardSkeleton(): ReactElement {
     <div className="w-full sm:max-w-[300px] daisy-card bg-base-300">
       <div className="daisy-card-body">
         <h2 className="w-32">
-          <Skeleton />
-          <Skeleton />
+          <Skeleton count={2} />
         </h2>
 
         <div className="flex-col daisy-card-actions gap-y-6">
           <div className="flex flex-row items-start mr-auto text-lg gap-x-6">
             <div className="w-24">
-              <Skeleton />
-              <p className="font-bold">
-                <Skeleton />
-              </p>
+              <Skeleton count={2} />
             </div>
             <div className="w-24">
-              <Skeleton />
-              <p className="font-bold">
-                <Skeleton />
-              </p>
+              <Skeleton count={2} />
             </div>
           </div>
           <button className="daisy-btn daisy-btn-disabled daisy-btn-primary">
