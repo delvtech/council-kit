@@ -2,6 +2,8 @@ import { ENS } from "@ensdomains/ensjs";
 import { providers } from "ethers";
 import chunk from "lodash.chunk";
 
+export type EnsRecords = Record<string, string | null>;
+
 /**
  * Fetches ENS names in bulk using MultiCall.
  * Some addresses may not get resolved if the gas limit of the chunk was reached.
@@ -14,7 +16,7 @@ export async function getBulkEnsRecords(
   addresses: string[],
   provider: providers.Provider,
   options?: { chunkSize?: number },
-): Promise<Record<string, string | null>> {
+): Promise<EnsRecords> {
   const ENSInstance = new ENS();
   await ENSInstance.setProvider(provider as providers.JsonRpcProvider); // safe to cast
 

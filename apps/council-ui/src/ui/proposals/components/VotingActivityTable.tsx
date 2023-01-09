@@ -1,32 +1,30 @@
 import { Ballot, Vote } from "@council/sdk";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
+import { EnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import FormattedBallot from "src/ui/voting/ballot/FormattedBallot";
 
 interface VotingActivityTableProps {
   votes: Vote[] | null;
-  isLoading?: boolean;
+  voterEnsRecords: EnsRecords;
 }
 
 export function VotingActivityTable({
   votes,
+  voterEnsRecords,
 }: VotingActivityTableProps): ReactElement {
   return (
     <div className="w-full overflow-auto max-h-96">
       <table className="w-full daisy-table-zebra daisy-table">
         <thead>
           <tr>
-            <th className="select-none">Voter</th>
-
-            <th className="select-none">
-              <span className="mr-1">Voting Power</span>
-            </th>
-
-            <th className="select-none">Ballot</th>
+            <th>Voter</th>
+            <th>Voting Power</th>
+            <th>Ballot</th>
           </tr>
         </thead>
 
@@ -36,6 +34,7 @@ export function VotingActivityTable({
               <VotingActivityTableRow
                 key={`${vote.voter.address}-${vote.ballot}-${i}`}
                 address={vote.voter.address}
+                displayName={voterEnsRecords[vote.voter.address]}
                 votePower={vote.power}
                 voteBallot={vote.ballot}
               />
@@ -50,14 +49,15 @@ interface VotingActivityTableRowProps {
   address: string;
   votePower: string;
   voteBallot: Ballot;
+  displayName?: string | null;
 }
 
 function VotingActivityTableRow({
   address,
   votePower,
   voteBallot,
+  displayName,
 }: VotingActivityTableRowProps) {
-  const displayName = useDisplayName(address);
   return (
     <tr>
       <th>
@@ -67,7 +67,7 @@ function VotingActivityTableRow({
           target="_blank"
           rel="noreferrer"
         >
-          {displayName}
+          {displayName ?? formatAddress(address)}
           <ExternalLinkSVG size={16} />
         </a>
       </th>
@@ -87,17 +87,17 @@ export function VotingActivityTableSkeleton(): ReactElement {
       <table className="w-full daisy-table-zebra daisy-table">
         <thead>
           <tr>
-            <th className="select-none w-72">Voter</th>
+            <th className="w-72">Voter</th>
 
-            <th className="select-none">
+            <th>
               <span className="mr-1">Voting Power</span>
             </th>
 
-            <th className="select-none">Ballot</th>
+            <th>Ballot</th>
           </tr>
         </thead>
 
-        <tbody className="h-24 overflow-auto">
+        <tbody>
           <tr>
             <th>
               <Skeleton />

@@ -5,10 +5,14 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 
 interface QuorumBarProps {
   current: string;
-  required: string;
+  required: string | null;
 }
 
 export function QuorumBar({ current, required }: QuorumBarProps): ReactElement {
+  if (!required) {
+    return <QuorumBarSkeleton />;
+  }
+
   const percentage = FixedNumber.from(current)
     .divUnsafe(FixedNumber.from(required))
     .mulUnsafe(FixedNumber.from(100))
@@ -16,7 +20,7 @@ export function QuorumBar({ current, required }: QuorumBarProps): ReactElement {
 
   return (
     <div>
-      <div className="flex ">
+      <div className="flex">
         <h3 className="mr-6 font-medium">QUORUM</h3>
         <p className="ml-auto font-bold">{percentage.toString()} %</p>
       </div>
@@ -25,10 +29,10 @@ export function QuorumBar({ current, required }: QuorumBarProps): ReactElement {
         value={current}
         max={required}
       />
-      <div className="flex flex-row-reverse gap-x-1">
-        <p className="font-bold"> {formatBalance(required)}</p>
-        <span>/</span>
+      <div className="flex justify-end gap-x-1">
         <p>{formatBalance(current)}</p>
+        <span>/</span>
+        <p className="font-bold"> {formatBalance(required)}</p>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import {
@@ -46,7 +47,7 @@ export default function ProposalPage(): ReactElement {
   const { mutate: vote } = useVote();
   const { mutate: gscVote } = useGSCVote();
 
-  if (!id || !votingContractAddress) {
+  if (id < 0 || !votingContractAddress) {
     replace("/404");
   }
 
@@ -71,83 +72,63 @@ export default function ProposalPage(): ReactElement {
 
     default:
       return (
-        <div className="flex flex-col items-start max-w-5xl px-4 m-auto mt-16 gap-y-10">
-          <div className="flex flex-wrap items-center w-full gap-4">
-            <h1 className="mb-4 text-5xl font-bold whitespace-nowrap">
+        <div className="max-w-5xl px-4 m-auto mt-16 space-y-10">
+          <div className="flex flex-wrap w-full gap-4">
+            <h1 className="text-5xl font-bold whitespace-nowrap">
               {data?.name ?? `Proposal ${id}`}
             </h1>
 
             <div className="sm:ml-auto w-96 sm:w-72">
-              {(() => {
-                switch (status) {
-                  case "success":
-                    if (data.requiredQuorum) {
-                      return (
-                        <QuorumBar
-                          current={data.currentQuorum}
-                          required={data.requiredQuorum}
-                        />
-                      );
-                    }
-
-                  case "loading":
-                    return <QuorumBarSkeleton />;
-                }
-              })()}
+              {status === "success" ? (
+                <QuorumBar
+                  current={data.currentQuorum}
+                  required={data.requiredQuorum}
+                />
+              ) : (
+                <QuorumBarSkeleton />
+              )}
             </div>
           </div>
 
-          {(() => {
-            switch (status) {
-              case "success":
-                return (
-                  <ProposalStatsBar
-                    createdAtDate={data?.createdAtDate}
-                    endsAtDate={data?.endsAtDate}
-                    unlockAtDate={data?.unlockedAtDate}
-                    lastCallAtDate={data?.lastCallAtDate}
-                  />
-                );
-
-              case "loading":
-                return <ProposalStatsBarSkeleton />;
-            }
-          })()}
+          {status === "success" ? (
+            <ProposalStatsBar
+              createdAtDate={data?.createdAtDate}
+              endsAtDate={data?.endsAtDate}
+              unlockAtDate={data?.unlockedAtDate}
+              lastCallAtDate={data?.lastCallAtDate}
+            />
+          ) : (
+            <ProposalStatsBarSkeleton />
+          )}
 
           <div className="flex flex-wrap w-full gap-10 sm:gap-y-0">
             <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
               <h1 className="text-2xl font-medium">Voting Activity</h1>
-              {(() => {
-                switch (status) {
-                  case "success":
-                    return <VotingActivityTable votes={data.votes} />;
 
-                  case "loading":
-                    return <VotingActivityTableSkeleton />;
-                }
-              })()}
+              {status === "success" ? (
+                <VotingActivityTable
+                  votes={data.votes}
+                  voterEnsRecords={data.voterEnsRecords}
+                />
+              ) : (
+                <VotingActivityTableSkeleton />
+              )}
             </div>
 
             <div className="grow basis-[300px] md:grow-0">
               <h2 className="mb-2 text-2xl font-medium">Your Vote</h2>
 
-              {(() => {
-                switch (status) {
-                  case "success":
-                    return (
-                      <ProposalVoting
-                        atBlock={data.createdAtBlock || blockNumber}
-                        account={address}
-                        accountBallot={data?.accountBallot}
-                        disabled={!signer || !data?.isActive}
-                        onVote={handleVote}
-                      />
-                    );
-
-                  case "loading":
-                    return <ProposalVotingSkeleton />;
-                }
-              })()}
+              {status === "success" ? (
+                <ProposalVoting
+                  atBlock={data.createdAtBlock || blockNumber}
+                  account={address}
+                  accountBallot={data?.accountBallot}
+                  disabled={!signer || !data?.isActive}
+                  onVote={handleVote}
+                />
+              ) : (
+                <ProposalVotingSkeleton />
+              )}
             </div>
           </div>
         </div>
@@ -168,6 +149,7 @@ interface ProposalDetailsPageData {
   lastCallAtDate: Date | null;
   votes: Vote[];
   accountBallot?: Ballot;
+  voterEnsRecords: EnsRecords;
 }
 
 function useProposalDetailsPageData(
@@ -184,7 +166,7 @@ function useProposalDetailsPageData(
       votingContractAddress !== undefined &&
       id !== undefined &&
       account !== undefined,
-    queryFn: async () => {
+    queryFn: async (): Promise<ProposalDetailsPageData> => {
       // safe to cast since the fn is disabled if these aren't defined.
       votingContractAddress = votingContractAddress as string;
       id = id as number;
@@ -224,6 +206,12 @@ function useProposalDetailsPageData(
         ? await getBlockDate(lastCallAtBlock, provider)
         : null;
 
+      const votes = await proposal.getVotes();
+      const voterEnsRecords = await getBulkEnsRecords(
+        Array.from(new Set(votes.map((vote) => vote.voter.address))),
+        provider,
+      );
+
       return {
         type,
         name: proposal.name,
@@ -236,6 +224,7 @@ function useProposalDetailsPageData(
         unlockedAtDate,
         lastCallAtDate,
         votes: await proposal.getVotes(),
+        voterEnsRecords,
         accountBallot: (await proposal.getVote(account))?.ballot,
       };
     },
