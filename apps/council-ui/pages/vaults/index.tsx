@@ -1,89 +1,67 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import assertNever from "assert-never";
 import { ReactElement } from "react";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
-import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { GenericVaultCard } from "src/ui/vaults/base/GenericVaultCard";
+import {
+  GenericVaultCard,
+  GenericVaultCardSkeleton,
+} from "src/ui/vaults/base/GenericVaultCard";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
   const { address } = useAccount();
-  const { data, status, error } = useVaultsPageData(address);
+  const { data, status } = useVaultsPageData(address);
 
   return (
     <Page>
-      <div>
-        <div className="text-5xl font-semibold">Voting Vaults</div>
-        <div className="mt-6 text-lg">
+      <div className="px-4">
+        <h1 className="text-5xl font-bold">Voting Vaults</h1>
+        <p className="mt-6 text-lg">
           Voting Vaults provide the ability to assign voting power to specific
           types of tokens/positions. The result is beautiful — governance users
           can maximize capital efficiency while maintaining the ability to
           delegate or vote when the time comes.
-        </div>
+        </p>
       </div>
 
-      {(() => {
-        switch (status) {
-          case "loading":
-            return (
-              <div className="flex flex-col items-center gap-8">
-                <p>Loading vaults This might take a while...</p>
-                <Progress />
-              </div>
-            );
+      <div className="flex flex-wrap justify-center gap-6 lg:justify-start">
+        {status === "success" ? (
+          data.map((vault) => (
+            <GenericVaultCard
+              key={vault.address}
+              address={vault.address}
+              name={vault.name}
+              tvp={vault.tvp}
+              votingPower={vault.votingPower}
+            />
+          ))
+        ) : (
+          <>
+            <GenericVaultCardSkeleton />
+            <GenericVaultCardSkeleton />
+            <GenericVaultCardSkeleton />
+          </>
+        )}
+      </div>
 
-          case "error":
-            return (
-              <div className="daisy-mockup-code">
-                <code className="block whitespace-pre-wrap px-6 text-error">
-                  {error ? (error as string).toString() : "Unknown error"}
-                </code>
-              </div>
-            );
-
-          case "success":
-            return (
-              <div className="mb-8">
-                <div className="flex flex-wrap gap-6 justify-center lg:justify-start">
-                  {data &&
-                    data.map((vault) => {
-                      return (
-                        <GenericVaultCard
-                          key={vault.address}
-                          address={vault.address}
-                          name={vault.name}
-                          tvp={vault.tvp}
-                          votingPower={vault.votingPower}
-                        />
-                      );
-                    })}
-                </div>
-
-                <div className="flex mt-8 gap-4 flex-wrap sm:flex-nowrap">
-                  <ExternalInfoCard
-                    header="Learn more about voting vaults"
-                    body="Check out our documentation on voting votes and other parts of the council protocol."
-                    href="#"
-                  />
-                  <ExternalInfoCard
-                    header="Explore other types of vaults"
-                    body="Dive into the examples of voting vaults in our open source repository."
-                    href="#"
-                  />
-                </div>
-              </div>
-            );
-          default:
-            assertNever(status);
-        }
-      })()}
+      <div className="flex flex-wrap gap-4 mb-2 sm:flex-nowrap">
+        <ExternalInfoCard
+          header="Learn more about voting vaults"
+          body="Check out our documentation on voting votes and other parts of the council protocol."
+          href="#"
+        />
+        <ExternalInfoCard
+          header="Explore other types of vaults"
+          body="Dive into the examples of voting vaults in our open source repository."
+          href="#"
+        />
+      </div>
     </Page>
   );
 }
 
-interface VaultRowData {
+interface VaultData {
   address: string;
   name: string;
   tvp: string | undefined;
@@ -92,15 +70,17 @@ interface VaultRowData {
 
 function useVaultsPageData(
   account: string | undefined,
-): UseQueryResult<VaultRowData[]> {
+): UseQueryResult<VaultData[]> {
   const { coreVoting, gscVoting } = useCouncil();
+
   return useQuery({
     queryKey: ["vaultsPage", account],
-    queryFn: () => {
+    queryFn: (): Promise<VaultData[]> => {
       let allVaults = coreVoting.vaults;
       if (gscVoting) {
         allVaults = [...allVaults, ...gscVoting.vaults];
       }
+
       return Promise.all(
         allVaults.map(async (vault) => {
           return {
