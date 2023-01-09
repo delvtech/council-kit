@@ -7,7 +7,7 @@ interface ErrorMessageProps {
 export function ErrorMessage({ error }: ErrorMessageProps): ReactElement {
   return (
     <div className="daisy-mockup-code">
-      <code className="block whitespace-pre-wrap px-6 text-error">
+      <code className="block px-6 whitespace-pre-wrap text-error">
         {error ? (error as any).toString() : "Unknown error"}
       </code>
     </div>
