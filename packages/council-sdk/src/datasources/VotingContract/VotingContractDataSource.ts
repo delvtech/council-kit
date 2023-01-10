@@ -14,6 +14,7 @@ export interface VotingContractDataSource extends DataSource {
    */
   getProposalCount: () => Promise<number>;
 
+  getProposalCreatedBy: (id: number) => Promise<string | null>;
   /**
    * Get a proposal's `ProposalData` by `id` if it exists.
    */

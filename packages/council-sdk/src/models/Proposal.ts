@@ -105,6 +105,10 @@ export class Proposal extends Model {
     return data?.unlockBlock || null;
   }
 
+  async getCreatedBy(): Promise<string | null> {
+    return this.votingContract.dataSource.getProposalCreatedBy(this.id);
+  }
+
   /**
    * Get the block number of when this voting ends for this proposal. Will only
    * be null if this proposal instance was initiated with an invalid id.
