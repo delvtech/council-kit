@@ -1,14 +1,7 @@
 import { LockingVault } from "@council/sdk";
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  UseQueryResult,
-} from "@tanstack/react-query";
-import { ethers, Signer } from "ethers";
-import { formatUnits } from "ethers/lib/utils";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { Signer } from "ethers";
 import { ReactElement } from "react";
-import toast from "react-hot-toast";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
@@ -31,6 +24,7 @@ import {
   VaultStatsBarSkeleton,
 } from "src/ui/vaults/components/VaultStatsBar";
 import {
+  useApprove,
   useChangeDelegate,
   useDeposit,
   useWithdraw,
@@ -187,43 +181,4 @@ function useLockingVaultDetailsData(
       };
     },
   });
-}
-
-interface ApproveArguments {
-  signer: Signer;
-}
-
-function useApprove(vaultAddress: string) {
-  const { context } = useCouncil();
-  const queryClient = useQueryClient();
-  let toastId: string;
-  return useMutation(
-    async ({ signer }: ApproveArguments): Promise<string> => {
-      const vault = new LockingVault(vaultAddress, context);
-      const token = await vault.getToken();
-      const decimals = await token.getDecimals();
-      return token.approve(
-        signer,
-        vault.address,
-        formatUnits(ethers.constants.MaxUint256, decimals),
-        {
-          onSubmitted: () => (toastId = toast.loading("Approving")),
-        },
-      );
-    },
-    {
-      onSuccess: () => {
-        toast.success(`Successfully approved!`, {
-          id: toastId,
-        });
-        queryClient.invalidateQueries();
-      },
-      onError(error) {
-        toast.error(`Failed to approve`, {
-          id: toastId,
-        });
-        console.error(error);
-      },
-    },
-  );
 }
