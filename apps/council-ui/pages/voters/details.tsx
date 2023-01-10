@@ -8,11 +8,11 @@ import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { WalletIcon } from "src/ui/base/WalletIcon";
-import { GSCStatus } from "src/ui/voter/hooks/useGSCStatus";
-import { useVoterDataByVault } from "src/ui/voter/hooks/useVoterDataByVault";
-import { useVoterStats } from "src/ui/voter/hooks/useVoterStats";
-import { VoterVaultsList } from "src/ui/voter/VoterVaultsList";
-import { VotingHistoryTable } from "src/ui/voter/VotingHistoryTable";
+import { GSCStatus } from "src/ui/voters/hooks/useGSCStatus";
+import { useVoterDataByVault } from "src/ui/voters/hooks/useVoterDataByVault";
+import { useVoterStats } from "src/ui/voters/hooks/useVoterStats";
+import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
+import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {
