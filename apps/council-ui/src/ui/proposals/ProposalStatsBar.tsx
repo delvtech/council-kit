@@ -1,7 +1,12 @@
+import Link from "next/link";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
+import { makeVoterURL } from "src/routes";
+import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
+import { WalletIcon } from "src/ui/base/WalletIcon";
 
 interface ProposalStatsBarProps {
+  createdBy: string | null;
   createdAtDate: Date | null;
   endsAtDate: Date | null;
   unlockAtDate: Date | null;
@@ -9,11 +14,13 @@ interface ProposalStatsBarProps {
 }
 
 export function ProposalStatsBar({
+  createdBy,
   createdAtDate,
   endsAtDate,
   unlockAtDate,
   lastCallAtDate,
 }: ProposalStatsBarProps): ReactElement {
+  const createdByDisplayName = useDisplayName(createdBy);
   return (
     <div className="flex flex-wrap gap-4">
       <div className="daisy-stats">
@@ -66,6 +73,23 @@ export function ProposalStatsBar({
           </div>
         </div>
       )}
+
+      {createdByDisplayName && createdBy && (
+        <div className="daisy-stats">
+          <div className="daisy-stat bg-base-300">
+            <div className="daisy-stat-title">Created By</div>
+            <div className="text-sm daisy-stat-value">
+              <Link
+                className="hover:underline flex items-center"
+                href={makeVoterURL(createdBy)}
+              >
+                <WalletIcon address={createdBy} size={16} className="mr-1" />
+                {createdByDisplayName}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -109,14 +133,22 @@ export function ProposalStatsBarSkeleton(): ReactElement {
         </div>
       </div>
 
-      {/* <div className="daisy-stats">
+      <div className="daisy-stats">
         <div className="daisy-stat bg-base-300">
           <div className="daisy-stat-title">Last Call</div>
           <div className="text-sm daisy-stat-value">
             <Skeleton width={90} />
           </div>
         </div>
-      </div> */}
+      </div>
+      <div className="daisy-stats">
+        <div className="daisy-stat bg-base-300">
+          <div className="daisy-stat-title">Created By</div>
+          <div className="text-sm daisy-stat-value">
+            <Skeleton width={90} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

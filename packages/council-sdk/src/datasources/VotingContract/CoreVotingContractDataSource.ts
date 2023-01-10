@@ -1,4 +1,5 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
+import { ProposalCreatedEvent } from "@council/typechain/dist/contracts/CoreVoting";
 import { Signer } from "ethers";
 import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
@@ -36,6 +37,33 @@ export class CoreVotingContractDataSource
     return (await this.call("proposalCount", [])).toNumber();
   }
 
+  async getProposalCreatedBy(id: number): Promise<string | null> {
+    const proposalCreatedEvents = await this.getProposalCreatedEvents();
+    const createdEvent = proposalCreatedEvents.find(
+      ({ args }) => args.proposalId.toNumber() === id,
+    );
+    let createdBy: string | null = null;
+    if (createdEvent) {
+      createdBy = (
+        await this.context.provider.getTransaction(createdEvent.transactionHash)
+      ).from;
+    }
+    return createdBy;
+  }
+
+  async getProposalCreatedEvents(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<ProposalCreatedEvent[]> {
+    return this.cached(
+      ["getProposalCreatedEvents", fromBlock, toBlock],
+      async () => {
+        const filter = this.contract.filters.ProposalCreated();
+        return this.contract.queryFilter(filter, fromBlock, toBlock);
+      },
+    );
+  }
+
   async getProposal(id: number): Promise<ProposalData | null> {
     const { proposalHash, quorum, created, unlock, expiration, lastCall } =
       await this.call("proposals", [id]);
@@ -57,12 +85,7 @@ export class CoreVotingContractDataSource
     toBlock?: number,
   ): Promise<ProposalDataPreview[]> {
     return this.cached(["getProposals", fromBlock, toBlock], async () => {
-      const filter = this.contract.filters.ProposalCreated();
-      const events = await this.contract.queryFilter(
-        filter,
-        fromBlock,
-        toBlock,
-      );
+      const events = await this.getProposalCreatedEvents(fromBlock, toBlock);
       return events.map(({ args }) => {
         return {
           id: args.proposalId.toNumber(),
