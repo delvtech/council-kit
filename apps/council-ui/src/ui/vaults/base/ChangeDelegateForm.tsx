@@ -1,4 +1,5 @@
 import { ReactElement, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Input } from "src/ui/base/forms/Input";
 
@@ -36,6 +37,33 @@ export function ChangeDelegateForm({
         onClick={() => onDelegate(newDelegate)}
         disabled={disabled}
       >
+        Delegate
+      </button>
+    </div>
+  );
+}
+
+// ================ Skeletons ================
+
+export function ChangeDelegateFormSkeleton(): ReactElement {
+  return (
+    <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-300 h-fit">
+      <div className="text-2xl font-bold">Change Delegate</div>
+      <Input
+        placeholder="Address or ENS"
+        value={""}
+        onChange={() => {}}
+        disabled={true}
+        infoText={
+          <span className="flex text-xl">
+            Current Delegate:
+            <div className="w-32 ml-1">
+              <Skeleton />
+            </div>
+          </span>
+        }
+      />
+      <button className="daisy-btn daisy-btn-primary" disabled={true}>
         Delegate
       </button>
     </div>

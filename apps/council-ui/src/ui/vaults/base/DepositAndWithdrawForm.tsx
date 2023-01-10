@@ -2,6 +2,7 @@ import assertNever from "assert-never";
 import classNames from "classnames";
 import { parseEther } from "ethers/lib/utils";
 import { ReactElement, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { NumericInput } from "src/ui/base/forms/NumericInput";
 
@@ -33,7 +34,7 @@ export function DepositAndWithdrawForm({
   const isApproved = parseEther(allowance).gt(parseEther(depositAmount || "0"));
 
   return (
-    <div className="flex basis-1/2 flex-col gap-y-4 daisy-card p-4 bg-base-300 h-fit">
+    <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-300 h-fit">
       <div className="flex gap-x-4">
         <button onClick={() => setActiveTab("deposit")}>
           <h2
@@ -121,6 +122,43 @@ export function DepositAndWithdrawForm({
             assertNever(activeTab);
         }
       })()}
+    </div>
+  );
+}
+
+// ================ Skeletons ================
+
+export function DepositAndWithdrawFormSkeleton(): ReactElement {
+  return (
+    <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-300 h-fit">
+      <div className="flex gap-x-4">
+        <button>
+          <h2 className="text-2xl font-bold">Deposit</h2>
+        </button>
+        <button>
+          <h2 className="text-2xl">Withdraw</h2>
+        </button>
+      </div>
+      <>
+        <NumericInput
+          disabled={true}
+          placeholder="Amount"
+          value={""}
+          maxButtonValue={0}
+          onChange={() => {}}
+          infoText={
+            <span className="flex text-xl">
+              Balance:
+              <div className="w-32 ml-1">
+                <Skeleton />
+              </div>
+            </span>
+          }
+        />
+        <button className="daisy-btn daisy-btn-primary" disabled={true}>
+          Withdraw
+        </button>
+      </>
     </div>
   );
 }
