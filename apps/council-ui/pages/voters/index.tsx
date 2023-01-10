@@ -7,6 +7,7 @@ import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
+import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useCouncil } from "src/ui/council/useCouncil";
 
 const MAX_LIST_SIZE = 125;
@@ -70,7 +71,14 @@ export default function Voters(): ReactElement {
                         return (
                           <tr key={address}>
                             <td className="underline sm:px-8 md:text-lg">
-                              <Link href={makeVoterURL(address)}>
+                              <Link
+                                href={makeVoterURL(address)}
+                                className="flex items-center"
+                              >
+                                <WalletIcon
+                                  address={address}
+                                  className="mr-2"
+                                />
                                 {ensName ? ensName : address}
                               </Link>
                             </td>
