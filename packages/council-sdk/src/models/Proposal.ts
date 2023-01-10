@@ -6,11 +6,11 @@ import {
   Ballot,
   ProposalData,
   VoteResults,
-} from "src/datasources/VotingContract/VotingContractDataSource";
+} from "src/datasources/VotingContractDataSource";
 import { Voter } from "./Voter";
 import { sumStrings } from "src/utils/sumStrings";
 import { BytesLike, Signer } from "ethers";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
 
 /**
  * A model of a Proposal in Council

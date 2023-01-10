@@ -5,7 +5,7 @@ import { CouncilContext } from "src/context";
 import {
   ContractDataSource,
   TransactionOptions,
-} from "src/datasources/ContractDataSource";
+} from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
 import {
   Ballot,
   VotingContractDataSource,
@@ -13,7 +13,7 @@ import {
   VoteData,
   VoteResults,
   ProposalDataPreview,
-} from "./VotingContractDataSource";
+} from "src/datasources/VotingContractDataSource";
 
 const BALLOTS: Ballot[] = ["yes", "no", "maybe"];
 const EXECUTED_PROPOSAL_HASH =

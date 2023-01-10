@@ -1,8 +1,8 @@
 import { Signer } from "ethers";
 import { CouncilContext } from "src/context";
-import { ERC20ContractDataSource } from "src/datasources/Token/ERC20ContractDataSource";
-import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { ERC20ContractDataSource } from "src/datasources/CachedDataSource/ContractDataSource/ERC20ContractDataSource";
+import { TokenDataSource } from "src/datasources/TokenDataSource";
+import { TransactionOptions } from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
 import { Model, ModelOptions } from "./Model";
 import { parseUnits } from "ethers/lib/utils";
 

@@ -1,4 +1,4 @@
-import { CouncilContext } from "..";
+import { CouncilContext } from "src/context";
 import { CachedDataSource } from "./CachedDataSource";
 
 /**

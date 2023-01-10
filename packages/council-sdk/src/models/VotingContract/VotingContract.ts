@@ -7,8 +7,8 @@ import { Vote } from "src/models/Vote";
 import { Voter } from "src/models/Voter";
 import { VotingVault } from "src/models/VotingVault/VotingVault";
 import { BytesLike, parseEther } from "ethers/lib/utils";
-import { VotingContractDataSource } from "src/datasources/VotingContract/VotingContractDataSource";
-import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
+import { VotingContractDataSource } from "src/datasources/VotingContractDataSource";
+import { CoreVotingContractDataSource } from "src/datasources/CachedDataSource/ContractDataSource/CoreVotingContractDataSource";
 
 /**
  * @category Models

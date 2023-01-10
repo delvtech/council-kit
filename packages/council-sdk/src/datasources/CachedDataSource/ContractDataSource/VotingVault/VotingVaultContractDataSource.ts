@@ -6,8 +6,8 @@ import {
 import { ethers } from "ethers";
 import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
-import { ContractDataSource } from "src/datasources/ContractDataSource";
-import { VotingVaultDataSource } from "./VotingVaultDataSource";
+import { ContractDataSource } from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
+import { VotingVaultDataSource } from "src/datasources/VotingVaultDataSource";
 
 /**
  * A DataSource with methods for making cached calls to any voting vault

@@ -15,22 +15,22 @@ export * from "./models/VotingVault/LockingVault";
 export * from "./models/VotingVault/VestingVault";
 
 export * from "./datasources/DataSource";
-export * from "./datasources/CachedDataSource";
-export * from "./datasources/ContractDataSource";
-export * from "./datasources/HTTPDataSource";
+export * from "./datasources/CachedDataSource/CachedDataSource";
+export * from "./datasources/CachedDataSource/ContractDataSource/ContractDataSource";
+export * from "./datasources/CachedDataSource/HTTPDataSource";
 
-export * from "./datasources/Token/TokenDataSource";
-export * from "./datasources/Token/ERC20ContractDataSource";
+export * from "./datasources/TokenDataSource";
+export * from "./datasources/CachedDataSource/ContractDataSource/ERC20ContractDataSource";
 
-export * from "./datasources/VotingContract/VotingContractDataSource";
-export * from "./datasources/VotingContract/CoreVotingContractDataSource";
+export * from "./datasources/VotingContractDataSource";
+export * from "./datasources/CachedDataSource/ContractDataSource/CoreVotingContractDataSource";
 
-export * from "./datasources/VotingVault/VotingVaultDataSource";
-export * from "./datasources/VotingVault/VotingVaultContractDataSource";
-export * from "./datasources/VotingVault/GSCVaultContractDataSource";
-export * from "./datasources/VotingVault/LockingVaultContractDataSource";
-export * from "./datasources/VotingVault/VestingVaultContractDataSource";
-export { type VoterWithPower } from "./datasources/VotingVault/LockingVaultContractDataSource";
+export * from "./datasources/VotingVaultDataSource";
+export * from "./datasources/CachedDataSource/ContractDataSource/VotingVault/VotingVaultContractDataSource";
+export * from "./datasources/CachedDataSource/ContractDataSource/VotingVault/GSCVaultContractDataSource";
+export * from "./datasources/CachedDataSource/ContractDataSource/VotingVault/LockingVaultContractDataSource";
+export * from "./datasources/CachedDataSource/ContractDataSource/VotingVault/VestingVaultContractDataSource";
+export { type VoterWithPower } from "./datasources/CachedDataSource/ContractDataSource/VotingVault/LockingVaultContractDataSource";
 
 export * from "./utils/cached";
 export * from "./utils/getBlockDate";

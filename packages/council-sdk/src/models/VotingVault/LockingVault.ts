@@ -1,8 +1,8 @@
 import { Signer } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
-import { LockingVaultContractDataSource } from "src/datasources/VotingVault/LockingVaultContractDataSource";
+import { TransactionOptions } from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
+import { LockingVaultContractDataSource } from "src/datasources/CachedDataSource/ContractDataSource/VotingVault/LockingVaultContractDataSource";
 import { Token } from "src/models/Token";
 import { Voter } from "src/models/Voter";
 import { sumStrings } from "src/utils/sumStrings";

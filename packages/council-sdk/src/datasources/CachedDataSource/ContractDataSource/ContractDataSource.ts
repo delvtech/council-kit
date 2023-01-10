@@ -7,7 +7,7 @@ import {
 import { Logger } from "ethers/lib/utils";
 import LRUCache from "lru-cache";
 import { CouncilContext } from "src";
-import { CachedDataSource } from "./CachedDataSource";
+import { CachedDataSource } from "src/datasources/CachedDataSource/CachedDataSource";
 
 /**
  * A DataSource with methods for making cached calls to an ethers contract

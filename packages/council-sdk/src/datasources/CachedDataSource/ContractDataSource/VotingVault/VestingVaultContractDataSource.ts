@@ -3,9 +3,9 @@ import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/Vestin
 import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
-import { VotingVaultDataSource } from "./VotingVaultDataSource";
+import { VotingVaultDataSource } from "src/datasources/VotingVaultDataSource";
 
 /**
  * A DataSource with methods for making cached calls to a `VestingVault`

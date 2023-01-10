@@ -1,7 +1,7 @@
 import { BytesLike } from "ethers";
 import { CouncilContext } from "src/context";
-import { VotingVaultContractDataSource } from "src/datasources/VotingVault/VotingVaultContractDataSource";
-import { VotingVaultDataSource } from "src/datasources/VotingVault/VotingVaultDataSource";
+import { VotingVaultContractDataSource } from "src/datasources/CachedDataSource/ContractDataSource/VotingVault/VotingVaultContractDataSource";
+import { VotingVaultDataSource } from "src/datasources/VotingVaultDataSource";
 import { Model, ModelOptions } from "src/models/Model";
 import { Voter } from "src/models/Voter";
 

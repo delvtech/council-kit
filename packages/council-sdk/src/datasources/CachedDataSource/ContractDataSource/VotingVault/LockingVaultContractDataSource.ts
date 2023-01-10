@@ -3,10 +3,10 @@ import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/Lockin
 import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
-import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
-import { CachedDataSource } from "src/datasources/CachedDataSource";
+import { TokenDataSource } from "src/datasources/TokenDataSource";
+import { CachedDataSource } from "src/datasources/CachedDataSource/CachedDataSource";
 
 /**
  * A DataSource with methods for making cached calls to a `LockingVault`

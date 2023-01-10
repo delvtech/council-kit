@@ -1,10 +1,10 @@
 import { FixedNumber, Signer } from "ethers";
 import { CouncilContext } from "src/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
 import {
   GrantData,
   VestingVaultContractDataSource,
-} from "src/datasources/VotingVault/VestingVaultContractDataSource";
+} from "src/datasources/CachedDataSource/ContractDataSource/VotingVault/VestingVaultContractDataSource";
 import { Token } from "src/models/Token";
 import { Voter } from "src/models/Voter";
 import { sumStrings } from "src/utils/sumStrings";

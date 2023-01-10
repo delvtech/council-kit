@@ -1,5 +1,5 @@
 import { BigNumber, Signer } from "ethers";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/CachedDataSource/ContractDataSource/ContractDataSource";
 import { DataSource } from "src/datasources/DataSource";
 
 /**
