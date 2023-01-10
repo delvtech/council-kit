@@ -23,12 +23,10 @@ import {
   VaultStatsBar,
   VaultStatsBarSkeleton,
 } from "src/ui/vaults/components/VaultStatsBar";
-import {
-  useApprove,
-  useChangeDelegate,
-  useDeposit,
-  useWithdraw,
-} from "src/ui/vaults/LockingVault/hooks";
+import { useApprove } from "src/ui/vaults/LockingVault/hooks/useApprove";
+import { useChangeDelegate } from "src/ui/vaults/LockingVault/hooks/useChangeDelegate";
+import { useDeposit } from "src/ui/vaults/LockingVault/hooks/useDeposit";
+import { useWithdraw } from "src/ui/vaults/LockingVault/hooks/useWithdraw";
 import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultDetailsProps {
