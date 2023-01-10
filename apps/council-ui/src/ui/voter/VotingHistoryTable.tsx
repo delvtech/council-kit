@@ -2,7 +2,7 @@ import { Vote } from "@council/sdk";
 import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { VoteResultBar } from "src/ui/proposals/VoteResultBar";
-import FormattedBallot from "src/ui/voting/ballot/FormattedBallot";
+import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingHistoryTableProps {
   history: Vote[];

@@ -7,11 +7,11 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import { VoterVaultsList } from "src/ui/voter/components/VoterVaultsList";
-import { VotingHistoryTable } from "src/ui/voter/components/VotingHistoryTable";
 import { GSCStatus } from "src/ui/voter/hooks/useGSCStatus";
 import { useVoterDataByVault } from "src/ui/voter/hooks/useVoterDataByVault";
 import { useVoterStats } from "src/ui/voter/hooks/useVoterStats";
+import { VoterVaultsList } from "src/ui/voter/VoterVaultsList";
+import { VotingHistoryTable } from "src/ui/voter/VotingHistoryTable";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {
@@ -31,7 +31,7 @@ export default function VoterDetailsPage(): ReactElement {
     return (
       <div className="flex flex-col items-center gap-8 mt-48">
         <div className="daisy-card bg-neutral text-neutral-content">
-          <div className="daisy-card-body items-center text-center">
+          <div className="items-center text-center daisy-card-body">
             <h2 className="daisy-card-title">Error!</h2>
             <p>No address provided or address is malformed.</p>
           </div>
@@ -60,14 +60,14 @@ export default function VoterDetailsPage(): ReactElement {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <h2 className="mt-2 w-full text-2xl underline">
+              <h2 className="w-full mt-2 text-2xl underline">
                 {formatAddress(address)}
                 <ExternalLinkSVG size={24} />
               </h2>
             </a>
           </div>
         ) : (
-          <h1 className="mt-2 w-full text-5xl underline">
+          <h1 className="w-full mt-2 text-5xl underline">
             <a
               href={makeEtherscanAddressURL(address)}
               rel="noopener noreferrer"
@@ -89,8 +89,8 @@ export default function VoterDetailsPage(): ReactElement {
           />
         )}
 
-        <div className="flex w-full flex-col items-start gap-y-8 mt-8">
-          <div className="flex flex-col gap-y-4 w-full">
+        <div className="flex flex-col items-start w-full mt-8 gap-y-8">
+          <div className="flex flex-col w-full gap-y-4">
             <h2 className="text-2xl font-bold">Voting History</h2>
             <VotingHistoryTable
               history={voterStats ? voterStats.votingHistory : []}
@@ -127,7 +127,7 @@ function VoterStatisticsRow({
       <div className="daisy-stats">
         <div className="daisy-stat bg-base-300">
           <div className="daisy-stat-title">Voting Power</div>
-          <div className="daisy-stat-value text-sm">
+          <div className="text-sm daisy-stat-value">
             {formatBalance(votingPower, 0)}
           </div>
         </div>
@@ -137,7 +137,7 @@ function VoterStatisticsRow({
         <div className="daisy-stats">
           <div className="daisy-stat bg-base-300">
             <div className="daisy-stat-title">GSC Member</div>
-            <div className="daisy-stat-value text-sm">{gscStatus}</div>
+            <div className="text-sm daisy-stat-value">{gscStatus}</div>
           </div>
         </div>
       )}
@@ -145,7 +145,7 @@ function VoterStatisticsRow({
       <div className="daisy-stats">
         <div className="daisy-stat bg-base-300">
           <div className="daisy-stat-title">Proposals voted</div>
-          <div className="daisy-stat-value text-sm">{proposalsVoted}</div>
+          <div className="text-sm daisy-stat-value">{proposalsVoted}</div>
         </div>
       </div>
     </div>

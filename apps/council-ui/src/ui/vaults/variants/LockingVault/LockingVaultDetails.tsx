@@ -7,26 +7,24 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
+
 import {
   ChangeDelegateForm,
   ChangeDelegateFormSkeleton,
-} from "src/ui/vaults/base/ChangeDelegateForm";
+} from "src/ui/vaults/ChangeDelegateForm";
 import {
   DepositAndWithdrawForm,
   DepositAndWithdrawFormSkeleton,
-} from "src/ui/vaults/base/DepositAndWithdrawForm";
-import {
-  VaultHeader,
-  VaultHeaderSkeleton,
-} from "src/ui/vaults/base/VaultHeader";
+} from "src/ui/vaults/DepositAndWithdrawForm";
+import { useApprove } from "src/ui/vaults/variants/LockingVault/hooks/useApprove";
+import { useChangeDelegate } from "src/ui/vaults/variants/LockingVault/hooks/useChangeDelegate";
+import { useDeposit } from "src/ui/vaults/variants/LockingVault/hooks/useDeposit";
+import { useWithdraw } from "src/ui/vaults/variants/LockingVault/hooks/useWithdraw";
+import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
 import {
   VaultStatsBar,
   VaultStatsBarSkeleton,
-} from "src/ui/vaults/components/VaultStatsBar";
-import { useApprove } from "src/ui/vaults/LockingVault/hooks/useApprove";
-import { useChangeDelegate } from "src/ui/vaults/LockingVault/hooks/useChangeDelegate";
-import { useDeposit } from "src/ui/vaults/LockingVault/hooks/useDeposit";
-import { useWithdraw } from "src/ui/vaults/LockingVault/hooks/useWithdraw";
+} from "src/ui/vaults/VaultStatsBar";
 import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultDetailsProps {
