@@ -21,13 +21,12 @@ export function WalletIcon({
   // create a ref to the div's dom node so we can add the icon.
   const jazziconRef = useRef<HTMLDivElement | null>(null);
 
-  // https://github.com/MetaMask/metamask-extension/blob/master/ui/helpers/utils/icon-factory.js#L84
-  const seed = parseInt(address.slice(2, 10), 16);
-  const icon = jazzicon(size, seed);
-
   useEffect(() => {
+    // https://github.com/MetaMask/metamask-extension/blob/master/ui/helpers/utils/icon-factory.js#L84
+    const seed = parseInt(address.slice(2, 10), 16);
+    const icon = jazzicon(size, seed);
     jazziconRef.current?.replaceChildren(icon);
-  });
+  }, [address, size]);
 
   return (
     <div
