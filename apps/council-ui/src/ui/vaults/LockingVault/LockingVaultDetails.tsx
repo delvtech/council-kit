@@ -11,24 +11,31 @@ import { ReactElement } from "react";
 import toast from "react-hot-toast";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
-import { useAccount, useSigner } from "wagmi";
 import {
   ChangeDelegateForm,
   ChangeDelegateFormSkeleton,
-} from "./base/ChangeDelegateForm";
+} from "src/ui/vaults/base/ChangeDelegateForm";
 import {
   DepositAndWithdrawForm,
   DepositAndWithdrawFormSkeleton,
-} from "./base/DepositAndWithdrawForm";
-import { VaultHeader, VaultHeaderSkeleton } from "./base/VaultHeader";
+} from "src/ui/vaults/base/DepositAndWithdrawForm";
+import {
+  VaultHeader,
+  VaultHeaderSkeleton,
+} from "src/ui/vaults/base/VaultHeader";
 import {
   VaultStatsBar,
   VaultStatsBarSkeleton,
-} from "./components/VaultStatsBar";
+} from "src/ui/vaults/components/VaultStatsBar";
+import {
+  useChangeDelegate,
+  useDeposit,
+  useWithdraw,
+} from "src/ui/vaults/LockingVault/hooks";
+import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultDetailsProps {
   address: string;
@@ -213,107 +220,6 @@ function useApprove(vaultAddress: string) {
       },
       onError(error) {
         toast.error(`Failed to approve`, {
-          id: toastId,
-        });
-        console.error(error);
-      },
-    },
-  );
-}
-
-interface DepositAndWithdrawArguments {
-  signer: Signer;
-  amount: string;
-}
-
-function useDeposit(vaultAddress: string) {
-  const { context } = useCouncil();
-  const queryClient = useQueryClient();
-  let toastId: string;
-  return useMutation(
-    async ({
-      signer,
-      amount,
-    }: DepositAndWithdrawArguments): Promise<string> => {
-      const vault = new LockingVault(vaultAddress, context);
-      const account = await signer.getAddress();
-      return vault.deposit(signer, account, amount, account, {
-        onSubmitted: () => (toastId = toast.loading("Depositing")),
-      });
-    },
-    {
-      onSuccess: (_, { amount }) => {
-        toast.success(`Successfully deposited ${amount}!`, {
-          id: toastId,
-        });
-        queryClient.invalidateQueries();
-      },
-      onError(error, { amount }) {
-        toast.error(`Failed to deposit ${amount}`, {
-          id: toastId,
-        });
-        console.error(error);
-      },
-    },
-  );
-}
-
-function useWithdraw(vaultAddress: string) {
-  const { context } = useCouncil();
-  const queryClient = useQueryClient();
-  let toastId: string;
-  return useMutation(
-    async ({
-      signer,
-      amount,
-    }: DepositAndWithdrawArguments): Promise<string> => {
-      const vault = new LockingVault(vaultAddress, context);
-      return vault.withdraw(signer, amount, {
-        onSubmitted: () => (toastId = toast.loading("Withdrawing")),
-      });
-    },
-    {
-      onSuccess: (_, { amount }) => {
-        toast.success(`Successfully withdrew ${amount}!`, {
-          id: toastId,
-        });
-        queryClient.invalidateQueries();
-      },
-      onError(error, { amount }) {
-        toast.error(`Failed to withdraw ${amount}`, {
-          id: toastId,
-        });
-        console.error(error);
-      },
-    },
-  );
-}
-
-interface ChangeDelegateArguments {
-  signer: Signer;
-  delegate: string;
-}
-
-function useChangeDelegate(vaultAddress: string) {
-  const { context } = useCouncil();
-  const queryClient = useQueryClient();
-  let toastId: string;
-  return useMutation(
-    ({ signer, delegate }: ChangeDelegateArguments): Promise<string> => {
-      const vault = new LockingVault(vaultAddress, context);
-      return vault.changeDelegate(signer, delegate, {
-        onSubmitted: () => (toastId = toast.loading("Delegating")),
-      });
-    },
-    {
-      onSuccess: (_, { delegate }) => {
-        toast.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
-          id: toastId,
-        });
-        queryClient.invalidateQueries();
-      },
-      onError(error, { delegate }) {
-        toast.error(`Failed to delegate to ${formatAddress(delegate)}`, {
           id: toastId,
         });
         console.error(error);

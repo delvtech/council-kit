@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { useChainId } from "src/ui/network/useChainId";
-import { LockingVaultDetails } from "src/ui/vaults/LockingVaultDetails";
+import { LockingVaultDetails } from "src/ui/vaults/LockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/VestingVaultDetails";
 
 export default function Vault(): ReactElement {
