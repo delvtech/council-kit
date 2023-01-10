@@ -5,25 +5,30 @@ import {
   useQueryClient,
   UseQueryResult,
 } from "@tanstack/react-query";
-import assertNever from "assert-never";
 import { ethers, Signer } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import toast from "react-hot-toast";
 import { councilConfigs } from "src/config/council.config";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
-import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
-import { ChangeDelegateForm } from "src/ui/vaults/base/ChangeDelegateForm";
-import { DepositAndWithdrawForm } from "src/ui/vaults/base/DepositAndWithdrawForm";
-import VaultHeader from "src/ui/vaults/base/VaultHeader";
 import { useAccount, useSigner } from "wagmi";
+import {
+  ChangeDelegateForm,
+  ChangeDelegateFormSkeleton,
+} from "./base/ChangeDelegateForm";
+import {
+  DepositAndWithdrawForm,
+  DepositAndWithdrawFormSkeleton,
+} from "./base/DepositAndWithdrawForm";
+import { VaultHeader, VaultHeaderSkeleton } from "./base/VaultHeader";
+import {
+  VaultStatsBar,
+  VaultStatsBarSkeleton,
+} from "./components/VaultStatsBar";
 
 interface LockingVaultDetailsProps {
   address: string;
@@ -41,122 +46,66 @@ export function LockingVaultDetails({
   const { mutate: withdraw } = useWithdraw(address);
   const { mutate: approve } = useApprove(address);
 
-  switch (status) {
-    case "loading":
-      return (
-        <div className="flex flex-col items-center gap-8 mt-48">
-          <p>Loading Locking Vault data. This might take a while...</p>
-          <Progress />
-        </div>
-      );
-
-    case "error":
-      return <ErrorMessage error={error} />;
-
-    case "success":
-      return (
-        <Page>
-          <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
-
-          <div className="flex flex-wrap gap-4">
-            {data.activeProposalCount >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">Active Proposals</div>
-                  <div className="daisy-stat-value text-sm">
-                    {data.activeProposalCount}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.accountVotingPower && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">Your Voting Power</div>
-                  <div className="daisy-stat-value text-sm">
-                    {formatBalance(data.accountVotingPower)}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.accountPercentOfTVP >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">% of Total TVP</div>
-                  <div className="daisy-stat-value text-sm">
-                    {formatBalance(data.accountPercentOfTVP, 2)}%
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.delegatedToAccount >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">Delegated to You</div>
-                  <div className="daisy-stat-value text-sm">
-                    {data.delegatedToAccount}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.participants >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">Participants</div>
-                  <div className="daisy-stat-value text-sm">
-                    {data.participants}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="daisy-stats">
-              <div className="daisy-stat bg-base-300">
-                <div className="daisy-stat-title">Vault token</div>
-                <div className="daisy-stat-value text-sm">
-                  <ExternalLink
-                    href={makeEtherscanAddressURL(data.tokenAddress)}
-                  >
-                    {data.tokenSymbol}
-                  </ExternalLink>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex h-48 w-full flex-col gap-8 sm:flex-row">
-            <DepositAndWithdrawForm
-              symbol={data.tokenSymbol}
-              balance={data.tokenBalance}
-              allowance={data.tokenAllowance}
-              depositedBalance={data.depositedBalance}
-              disabled={!signer}
-              onApprove={() => approve({ signer: signer as Signer })}
-              onDeposit={(amount) =>
-                deposit({ signer: signer as Signer, amount })
-              }
-              onWithdraw={(amount) =>
-                withdraw({ signer: signer as Signer, amount })
-              }
-            />
-            <ChangeDelegateForm
-              currentDelegate={data.delegate}
-              disabled={!signer}
-              onDelegate={(delegate) =>
-                changeDelegate({ signer: signer as Signer, delegate })
-              }
-            />
-          </div>
-        </Page>
-      );
-
-    default:
-      assertNever(status);
+  if (status === "error") {
+    return <ErrorMessage error={error} />;
   }
+
+  return (
+    <Page>
+      {status === "success" ? (
+        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+      ) : (
+        <VaultHeaderSkeleton />
+      )}
+
+      {status === "success" ? (
+        <VaultStatsBar
+          activeProposalCount={data.activeProposalCount}
+          accountVotingPower={data.accountVotingPower}
+          accountPercentOfTVP={data.accountPercentOfTVP}
+          delegatedToAccount={data.delegatedToAccount}
+          participants={data.participants}
+          tokenAddress={data.tokenAddress}
+          tokenSymbol={data.tokenSymbol}
+        />
+      ) : (
+        <VaultStatsBarSkeleton />
+      )}
+
+      <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
+        {status === "success" ? (
+          <DepositAndWithdrawForm
+            symbol={data.tokenSymbol}
+            balance={data.tokenBalance}
+            allowance={data.tokenAllowance}
+            depositedBalance={data.depositedBalance}
+            disabled={!signer}
+            onApprove={() => approve({ signer: signer as Signer })}
+            onDeposit={(amount) =>
+              deposit({ signer: signer as Signer, amount })
+            }
+            onWithdraw={(amount) =>
+              withdraw({ signer: signer as Signer, amount })
+            }
+          />
+        ) : (
+          <DepositAndWithdrawFormSkeleton />
+        )}
+
+        {status === "success" ? (
+          <ChangeDelegateForm
+            currentDelegate={data.delegate}
+            disabled={!signer}
+            onDelegate={(delegate) =>
+              changeDelegate({ signer: signer as Signer, delegate })
+            }
+          />
+        ) : (
+          <ChangeDelegateFormSkeleton />
+        )}
+      </div>
+    </Page>
+  );
 }
 
 interface LockingVaultDetailsData {
