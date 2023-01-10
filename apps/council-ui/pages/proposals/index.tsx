@@ -206,8 +206,8 @@ function ProposalTableRow({
         </a>
       </th>
       <td>{id}</td>
-      <td>{created?.toLocaleDateString() ?? "🤷"}</td>
-      <td>{votingEnds?.toLocaleDateString() ?? "🤷"}</td>
+      <td>{created?.toLocaleDateString() ?? <em>unknown</em>}</td>
+      <td>{votingEnds?.toLocaleDateString() ?? <em>unknown</em>}</td>
       <td>
         {requiredQuorum ? (
           <progress
@@ -216,10 +216,10 @@ function ProposalTableRow({
             max={requiredQuorum}
           />
         ) : (
-          "🤷"
+          <em>unknown</em>
         )}
       </td>
-      <td>{ballot ?? "🤷"}</td>
+      <td>{ballot ?? <em>n/a</em>}</td>
       <th>
         <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
           <Link href={makeProposalURL(votingContract, id)}>
