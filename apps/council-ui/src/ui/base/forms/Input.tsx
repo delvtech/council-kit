@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from "react";
 
 export interface InputProps {
-  disabled: boolean;
+  disabled?: boolean;
   id?: string;
   infoText?: ReactNode;
   onChange: (value: string) => void;

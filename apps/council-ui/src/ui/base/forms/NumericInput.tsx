@@ -14,10 +14,12 @@ export function NumericInput({
   placeholder,
   maxButtonValue,
   decimals,
+  disabled,
 }: NumericInputProps): ReactElement {
   return (
     <div className="flex w-full">
       <Input
+        disabled={disabled}
         value={numberString(value, decimals)}
         onChange={(newValue) => onChange(numberString(newValue, decimals))}
         id={id}
@@ -28,6 +30,7 @@ export function NumericInput({
         <button
           className="daisy-btn"
           onClick={() => onChange(numberString(maxButtonValue, decimals))}
+          disabled={disabled}
         >
           Max
         </button>

@@ -1,15 +1,14 @@
-import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
-import { Page } from "src/ui/base/Page";
 import { useChainId } from "src/ui/network/useChainId";
-import { LockingVaultDetails } from "src/ui/vaults/LockingVaultDetails";
+import { LockingVaultDetails } from "src/ui/vaults/LockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/VestingVaultDetails";
 
 export default function Vault(): ReactElement {
   const {
     query: { address },
+    replace,
   } = useRouter();
 
   const chainId = useChainId();
@@ -18,8 +17,8 @@ export default function Vault(): ReactElement {
     (vault) => vault.address === address,
   );
 
-  if (!address || !vaultConfig?.type) {
-    return <Page>could not find vault by address</Page>;
+  if (!address || !vaultConfig) {
+    replace("/404");
   }
 
   return (
@@ -35,11 +34,8 @@ export default function Vault(): ReactElement {
           case "GSCVault":
             return <></>;
 
-          case undefined:
-            return <></>;
-
           default:
-            assertNever(vaultConfig?.type);
+            return <></>;
         }
       })()}
     </div>
