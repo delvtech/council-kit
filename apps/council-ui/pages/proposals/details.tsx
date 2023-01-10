@@ -63,9 +63,11 @@ export default function ProposalPage(): ReactElement {
     return vote(voteArgs);
   }
 
-  return status === "error" ? (
-    <ErrorMessage error={error} />
-  ) : (
+  if (status === "error") {
+    return <ErrorMessage error={error} />;
+  }
+
+  return (
     <div className="max-w-5xl px-4 m-auto mt-16 space-y-10">
       <div className="flex flex-wrap w-full gap-4">
         <h1 className="text-5xl font-bold whitespace-nowrap">
@@ -86,10 +88,11 @@ export default function ProposalPage(): ReactElement {
 
       {status === "success" ? (
         <ProposalStatsBar
-          createdAtDate={data?.createdAtDate}
-          endsAtDate={data?.endsAtDate}
-          unlockAtDate={data?.unlockedAtDate}
-          lastCallAtDate={data?.lastCallAtDate}
+          createdBy={data.createdBy}
+          createdAtDate={data.createdAtDate}
+          endsAtDate={data.endsAtDate}
+          unlockAtDate={data.unlockedAtDate}
+          lastCallAtDate={data.lastCallAtDate}
         />
       ) : (
         <ProposalStatsBarSkeleton />
@@ -136,6 +139,7 @@ interface ProposalDetailsPageData {
   currentQuorum: string;
   requiredQuorum: string | null;
   createdAtBlock: number | null;
+  createdBy: string | null;
   createdAtDate: Date | null;
   endsAtDate: Date | null;
   unlockedAtDate: Date | null;
@@ -212,6 +216,7 @@ function useProposalDetailsPageData(
         currentQuorum: await proposal.getCurrentQuorum(),
         requiredQuorum: await proposal.getRequiredQuorum(),
         createdAtBlock,
+        createdBy: await proposal.getCreatedBy(),
         createdAtDate,
         endsAtDate,
         unlockedAtDate,
