@@ -3,7 +3,7 @@ import { getAddress } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
-import { VoterDataByVault } from "src/ui/voter/hooks/useVoterDataByVault";
+import { VoterDataByVault } from "src/ui/voters/hooks/useVoterDataByVault";
 
 interface VoterVaultsListProps {
   vaultData: VoterDataByVault[];
