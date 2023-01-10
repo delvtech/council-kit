@@ -8,7 +8,6 @@ import Skeleton from "react-loading-skeleton";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
 import { makeProposalURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
@@ -210,12 +209,15 @@ function ProposalTableRow({
       <td>{created?.toLocaleDateString() ?? "🤷"}</td>
       <td>{votingEnds?.toLocaleDateString() ?? "🤷"}</td>
       <td>
-        {requiredQuorum
-          ? `${formatBalance(currentQuorum, 0)} / ${formatBalance(
-              requiredQuorum,
-              0,
-            )} `
-          : "🤷"}
+        {requiredQuorum ? (
+          <progress
+            className="w-full daisy-progress daisy-progress-info bg-neutral"
+            value={currentQuorum}
+            max={requiredQuorum}
+          />
+        ) : (
+          "🤷"
+        )}
       </td>
       <td>{ballot ?? "🤷"}</td>
       <th>
