@@ -1,11 +1,12 @@
 import { Ballot, Vote } from "@council/sdk";
+import Link from "next/link";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
 import { EnsRecords } from "src/ens/getBulkEnsRecords";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeVoterURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
+import { WalletIcon } from "src/ui/base/WalletIcon";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingActivityTableProps {
@@ -61,15 +62,13 @@ function VotingActivityTableRow({
   return (
     <tr>
       <th>
-        <a
-          className="hover:underline"
-          href={makeEtherscanAddressURL(address)}
-          target="_blank"
-          rel="noreferrer"
+        <Link
+          className="hover:underline flex items-center"
+          href={makeVoterURL(address)}
         >
+          <WalletIcon address={address} className="mr-2" />
           {displayName ?? formatAddress(address)}
-          <ExternalLinkSVG size={16} />
-        </a>
+        </Link>
       </th>
       <td>{formatBalance(votePower)}</td>
       <td>

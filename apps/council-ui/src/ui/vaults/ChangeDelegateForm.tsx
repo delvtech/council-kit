@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { ReactElement, useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import { makeVoterURL } from "src/routes";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Input } from "src/ui/base/forms/Input";
+import { WalletIcon } from "src/ui/base/WalletIcon";
 
 interface ChangeDelegateFormProps {
   currentDelegate: string;
@@ -26,9 +29,15 @@ export function ChangeDelegateForm({
         onChange={setNewDelegate}
         disabled={disabled}
         infoText={
-          <span className="text-lg">
+          <span className="text-lg flex items-center">
             Current Delegate:{" "}
-            <span className="text-lg font-bold">{delegateName}</span>
+            <Link
+              href={makeVoterURL(currentDelegate)}
+              className="hover:underline text-lg font-bold flex items-center"
+            >
+              <WalletIcon address={currentDelegate} className="mx-2" />
+              {delegateName}
+            </Link>
           </span>
         }
       />

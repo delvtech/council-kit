@@ -7,6 +7,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
+import { WalletIcon } from "src/ui/base/WalletIcon";
 import { GSCStatus } from "src/ui/voter/hooks/useGSCStatus";
 import { useVoterDataByVault } from "src/ui/voter/hooks/useVoterDataByVault";
 import { useVoterStats } from "src/ui/voter/hooks/useVoterStats";
@@ -60,7 +61,8 @@ export default function VoterDetailsPage(): ReactElement {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <h2 className="w-full mt-2 text-2xl underline">
+              <h2 className="w-full mt-2 text-2xl underline flex items-center">
+                <WalletIcon address={address} className="mr-2" />
                 {formatAddress(address)}
                 <ExternalLinkSVG size={24} />
               </h2>
@@ -72,7 +74,9 @@ export default function VoterDetailsPage(): ReactElement {
               href={makeEtherscanAddressURL(address)}
               rel="noopener noreferrer"
               target="_blank"
+              className="flex items-center"
             >
+              <WalletIcon address={address} className="mr-4" size={32} />
               {formatAddress(address)}
               <ExternalLinkSVG size={24} />
             </a>
