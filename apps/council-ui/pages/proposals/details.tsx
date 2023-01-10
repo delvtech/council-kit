@@ -8,21 +8,18 @@ import { useCouncil } from "src/ui/council/useCouncil";
 import {
   ProposalStatsBar,
   ProposalStatsBarSkeleton,
-} from "src/ui/proposals/components/ProposalStatsBar";
+} from "src/ui/proposals/ProposalStatsBar";
+import { QuorumBar, QuorumBarSkeleton } from "src/ui/proposals/QuorumBar";
 import {
   VotingActivityTable,
   VotingActivityTableSkeleton,
-} from "src/ui/proposals/components/VotingActivityTable";
-import {
-  QuorumBar,
-  QuorumBarSkeleton,
-} from "src/ui/proposals/QuorumBar/QuorumBar";
+} from "src/ui/proposals/VotingActivityTable";
+import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
+import { useVote } from "src/ui/voting/hooks/useVote";
 import {
   ProposalVoting,
   ProposalVotingSkeleton,
-} from "src/ui/voting/components/ProposalVoting";
-import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
-import { useVote } from "src/ui/voting/hooks/useVote";
+} from "src/ui/voting/ProposalVoting";
 import { useAccount, useBlockNumber, useSigner } from "wagmi";
 
 export default function ProposalPage(): ReactElement {

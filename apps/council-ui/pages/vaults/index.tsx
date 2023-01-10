@@ -6,7 +6,7 @@ import { useCouncil } from "src/ui/council/useCouncil";
 import {
   GenericVaultCard,
   GenericVaultCardSkeleton,
-} from "src/ui/vaults/base/GenericVaultCard";
+} from "src/ui/vaults/GenericVaultCard";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {

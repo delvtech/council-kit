@@ -12,10 +12,10 @@ import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
-import { ChangeDelegateForm } from "src/ui/vaults/base/ChangeDelegateForm";
-import VaultHeader from "src/ui/vaults/base/VaultHeader";
+import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { useChangeDelegate } from "src/ui/vaults/hooks/useChangeDelegate";
-import { GrantCard } from "src/ui/vaults/vesting/GrantCard";
+import { GrantCard } from "src/ui/vaults/variants/VestingVault/GrantCard";
+import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { useAccount, useSigner } from "wagmi";
 
 interface VestingVaultDetailsProps {

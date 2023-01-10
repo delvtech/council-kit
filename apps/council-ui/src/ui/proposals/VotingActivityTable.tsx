@@ -6,7 +6,7 @@ import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressU
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import FormattedBallot from "src/ui/voting/ballot/FormattedBallot";
+import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingActivityTableProps {
   votes: Vote[] | null;
