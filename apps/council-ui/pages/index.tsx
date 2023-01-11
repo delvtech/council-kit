@@ -32,7 +32,7 @@ export default function Index(): ReactElement {
       </div>
 
       <div className="w-full p-24 bg-base-300">
-        <div className="max-w-5xl">
+        <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
             <div className="text-4xl font-bold">Get Started</div>
             <div className="text-xl text-center">
@@ -51,7 +51,7 @@ export default function Index(): ReactElement {
       </div>
 
       <div className="w-full p-24">
-        <div className="max-w-5xl">
+        <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
             <div className="text-4xl font-bold">Why use Council?</div>
             <div className="text-xl text-center">
@@ -106,11 +106,11 @@ export default function Index(): ReactElement {
       </div>
 
       <div className="w-full p-24 bg-base-300">
-        <div className="max-w-5xl">
+        <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
             <div className="text-4xl font-medium">Council 🤝 DAOs </div>
 
-            <div className="flex gap-6">
+            <div className="flex flex-wrap justify-center gap-6">
               <div className="w-48 daisy-card bg-neutral text-neutral-content">
                 <div className="items-center text-center daisy-card-body">
                   <h2 className="daisy-card-title">Yearn</h2>
@@ -151,15 +151,19 @@ export default function Index(): ReactElement {
         </div>
       </div>
 
-      <div className="flex flex-col max-w-5xl p-24 m-auto text-center gap-y-8">
-        <div className="text-5xl font-medium">
-          Built with ❤️ and 🧠 by <span className="text-secondary">Delve</span>
-        </div>
-        <div className="text-lg">
-          Building Council has been an absolute pleasure and we couldn&apos;t
-          have done it without the feedback and support from you all. We&apos;re
-          always looking to make Council better, so please let us know how we
-          can continue to improve or ask how you can start contributing.
+      <div className="w-full p-24">
+        <div className="flex flex-col max-w-5xl m-auto text-center gap-y-8">
+          <div className="text-5xl font-medium">
+            Built with ❤️ and 🧠 by{" "}
+            <span className="text-secondary">Delve</span>
+          </div>
+          <div className="text-lg">
+            Building Council has been an absolute pleasure and we couldn&apos;t
+            have done it without the feedback and support from you all.
+            We&apos;re always looking to make Council better, so please let us
+            know how we can continue to improve or ask how you can start
+            contributing.
+          </div>
         </div>
       </div>
     </div>
