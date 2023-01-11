@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { WalletIcon } from "src/ui/base/WalletIcon";
-import { VoterDataByVault } from "src/ui/voters/hooks/useVoterDataByVault";
+import { VoterDataByVault } from "src/ui/voters/utils/getVoterDataByVault";
 
 interface VoterVaultsListProps {
   vaultData: VoterDataByVault[];
@@ -19,7 +19,7 @@ export function VoterVaultsList({
       {vaultData.map((row) => {
         return (
           <div
-            className="flex flex-col grow p-8 md:grow-0 gap-y-2 daisy-card bg-base-300"
+            className="flex flex-col p-8 grow md:grow-0 gap-y-2 daisy-card bg-base-300"
             key={row.vault.address}
           >
             <h3 className="text-2xl font-semibold underline">

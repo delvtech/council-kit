@@ -54,7 +54,7 @@ export function VotingHistoryTableSkeleton(): ReactElement {
   return (
     <div>
       <div className="overflow-x-auto">
-        <table className="w-full max-w-xl daisy-table">
+        <table className="w-full md:max-w-3xl daisy-table">
           <thead>
             <tr>
               <th className="w-24">Proposal</th>

@@ -1,12 +1,4 @@
-import {
-  LockingVault,
-  VestingVault,
-  Vote,
-  Voter,
-  VotingContract,
-  VotingVault,
-  VotingVaultDataSource,
-} from "@council/sdk";
+import { Vote, Voter } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getAddress } from "ethers/lib/utils";
 import { useRouter } from "next/router";
@@ -18,6 +10,10 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { GSCStatus, useGSCStatus } from "src/ui/voters/hooks/useGSCStatus";
+import {
+  getVoterDataByVault,
+  VoterDataByVault,
+} from "src/ui/voters/utils/getVoterDataByVault";
 import {
   VoterStatsRow,
   VoterStatsRowSkeleton,
@@ -48,43 +44,41 @@ export default function VoterDetailsPage(): ReactElement {
     <Page>
       <VoterHeader address={address} />
 
-      <div>
-        {status === "success" ? (
-          <VoterStatsRow
-            gscStatus={data.gscStatus}
-            proposalsVoted={data.votingHistory.length}
-            votingPower={data.votingPower}
-          />
-        ) : (
-          <VoterStatsRowSkeleton />
-        )}
+      {status === "success" ? (
+        <VoterStatsRow
+          gscStatus={data.gscStatus}
+          proposalsVoted={data.votingHistory.length}
+          votingPower={data.votingPower}
+        />
+      ) : (
+        <VoterStatsRowSkeleton />
+      )}
 
-        <div className="flex flex-col items-start w-full mt-8 gap-y-8">
-          <div className="flex flex-col w-full gap-y-4">
-            <h2 className="text-2xl font-bold">Voting History</h2>
-            {status === "success" ? (
-              <VotingHistoryTable history={data.votingHistory} />
-            ) : (
-              <VotingHistoryTableSkeleton />
-            )}
-          </div>
-
+      <div className="flex flex-col items-start w-full mt-8 gap-y-8">
+        <div className="flex flex-col w-full gap-y-4">
+          <h2 className="text-2xl font-bold">Voting History</h2>
           {status === "success" ? (
-            <div className="flex flex-col gap-y-4">
-              <h2 className="text-2xl font-bold">
-                Voting Vaults ({data.voterDataByVault.length})
-              </h2>
-              <VoterVaultsList vaultData={data.voterDataByVault} />
-            </div>
+            <VotingHistoryTable history={data.votingHistory} />
           ) : (
-            <div className="flex flex-col gap-y-4">
-              <h2 className="w-64 text-2xl">
-                <Skeleton />
-              </h2>
-              <VoterVaultsListSkeleton />
-            </div>
+            <VotingHistoryTableSkeleton />
           )}
         </div>
+
+        {status === "success" ? (
+          <div className="flex flex-col gap-y-4">
+            <h2 className="text-2xl font-bold">
+              Voting Vaults ({data.voterDataByVault.length})
+            </h2>
+            <VoterVaultsList vaultData={data.voterDataByVault} />
+          </div>
+        ) : (
+          <div className="flex flex-col gap-y-4">
+            <h2 className="w-64 text-2xl">
+              <Skeleton />
+            </h2>
+            <VoterVaultsListSkeleton />
+          </div>
+        )}
       </div>
     </Page>
   );
@@ -122,14 +116,14 @@ function VoterHeader({ address }: VoterHeaderProps) {
         rel="noopener noreferrer"
         target="_blank"
       >
-        <h2 className="flex items-center w-full mt-2 text-2xl underline">
-          <Address address={address} options={{ iconSize: 24 }} />
+        <h2 className="flex items-center w-full mt-2 text-2xl">
+          <Address address={address} iconSize={24} />
         </h2>
       </a>
     </div>
   ) : (
     <h1 className="w-full mt-2 text-5xl">
-      <Address address={address} options={{ iconSize: 36 }} />
+      <Address address={address} iconSize={36} />
     </h1>
   );
 }
@@ -170,57 +164,4 @@ export function useVoterData(
     },
     refetchOnWindowFocus: false,
   });
-}
-
-interface VoterDataByVault {
-  vault: VotingVault;
-  votingPower: string;
-  balance?: string;
-  numDelegated?: number;
-  currentDelegate?: Voter;
-}
-
-// TODO @ryan: can we have something like implemented in the sdk?
-async function getVoterDataByVault(
-  address: string,
-  coreVoting: VotingContract<VotingVault<VotingVaultDataSource>[]>,
-): Promise<VoterDataByVault[]> {
-  return Promise.all(
-    coreVoting.vaults.map(async (vault) => {
-      const name = vault.name;
-      const votingPower = await vault.getVotingPower(address);
-
-      if (vault instanceof LockingVault) {
-        const balance = await vault.getDepositedBalance(address);
-        const numDelegated = (await vault.getDelegatorsTo(address)).length;
-        const currentDelegate = await vault.getDelegate(address);
-        return {
-          vault,
-          votingPower,
-          balance,
-          numDelegated,
-          currentDelegate,
-        };
-      }
-
-      if (vault instanceof VestingVault) {
-        const balance = await (await vault.getGrant(address)).votingPower;
-        const numDelegated = (await vault.getDelegatorsTo(address)).length;
-        const currentDelegate = await vault.getDelegate(address);
-        return {
-          vault,
-          votingPower,
-          balance,
-          numDelegated,
-          currentDelegate,
-        };
-      }
-
-      return {
-        vault,
-        name,
-        votingPower,
-      };
-    }),
-  );
 }

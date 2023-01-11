@@ -8,34 +8,25 @@ import { WalletIcon } from "./WalletIcon";
 interface AddressProps {
   address: string;
   className?: string;
-  options?: {
-    iconSize?: number;
-  };
+  iconSize?: number;
 }
 
 export function Address({
   address,
   className,
-  options,
+  iconSize,
 }: AddressProps): ReactElement {
   return (
     <a
-      className={classNames(
-        "hover:underline hover:opacity-70 flex items-center",
-        className,
-      )}
+      className={classNames("hover:underline  flex items-center", className)}
       href={makeEtherscanAddressURL(address)}
       target="_blank"
       rel="noreferrer"
     >
-      <WalletIcon
-        address={address}
-        className="mr-2"
-        size={options?.iconSize ?? 16}
-      />
+      <WalletIcon address={address} className="mr-2" size={iconSize ?? 16} />
 
       {formatAddress(address)}
-      <ExternalLinkSVG size={options?.iconSize ?? 16} />
+      <ExternalLinkSVG size={iconSize ?? 16} />
     </a>
   );
 }
