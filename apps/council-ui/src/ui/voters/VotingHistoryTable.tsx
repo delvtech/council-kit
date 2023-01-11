@@ -1,7 +1,7 @@
 import { Vote } from "@council/sdk";
 import { ReactElement } from "react";
+import Skeleton from "react-loading-skeleton";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { VoteResultBar } from "src/ui/proposals/VoteResultBar";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingHistoryTableProps {
@@ -14,13 +14,12 @@ export function VotingHistoryTable({
   return (
     <div>
       <div className="overflow-x-auto">
-        <table className="daisy-table w-full max-w-3xl">
+        <table className="w-full md:max-w-3xl daisy-table">
           <thead>
             <tr>
-              <th className="select-none">Proposal</th>
-              <th className="select-none">Vote Outcome</th>
-              <th className="select-none">Vote</th>
-              <th className="select-none">Voting Power</th>
+              <th>Proposal</th>
+              <th>Vote</th>
+              <th>Voting Power</th>
             </tr>
           </thead>
           <tbody>
@@ -34,9 +33,7 @@ export function VotingHistoryTable({
   );
 }
 
-// TODO @cashd: un-stub data when the useVoteResults hook simulates reading at last call block
 function VoteHistoryRow({ vote }: { vote: Vote }): ReactElement {
-  // const { data: voteResults } = useVoteResults(vote);
   const id = vote.proposal.id;
   const votingPower = vote.power;
 
@@ -44,16 +41,86 @@ function VoteHistoryRow({ vote }: { vote: Vote }): ReactElement {
     <tr>
       <td>{vote.proposal.name ?? `Proposal #${id}`}</td>
       <td>
-        <VoteResultBar
-          yesResults={"5000000000000000000000"}
-          noResults={"2000000000000000000000"}
-          maybeResults={"1000000000000000000000"}
-        />
-      </td>
-      <td>
         <FormattedBallot ballot={vote.ballot} />
       </td>
       <td>{formatBalance(votingPower)}</td>
     </tr>
+  );
+}
+
+// ================ Skeletons ================
+
+export function VotingHistoryTableSkeleton(): ReactElement {
+  return (
+    <div>
+      <div className="overflow-x-auto">
+        <table className="w-full max-w-xl daisy-table">
+          <thead>
+            <tr>
+              <th className="w-24">Proposal</th>
+              <th className="w-24">Vote</th>
+              <th className="w-24">Voting Power</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <Skeleton />
+              </td>
+
+              <td>
+                <Skeleton />
+              </td>
+
+              <td>
+                <Skeleton />
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <Skeleton />
+              </td>
+
+              <td>
+                <Skeleton />
+              </td>
+
+              <td>
+                <Skeleton />
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <Skeleton />
+              </td>
+
+              <td>
+                <Skeleton />
+              </td>
+
+              <td>
+                <Skeleton />
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <Skeleton />
+              </td>
+
+              <td>
+                <Skeleton />
+              </td>
+
+              <td>
+                <Skeleton />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }

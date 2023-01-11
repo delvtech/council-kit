@@ -1,112 +1,87 @@
+import {
+  LockingVault,
+  VestingVault,
+  Vote,
+  Voter,
+  VotingContract,
+  VotingVault,
+  VotingVaultDataSource,
+} from "@council/sdk";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getAddress } from "ethers/lib/utils";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import Skeleton from "react-loading-skeleton";
 import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { Address } from "src/ui/base/Address";
+import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
-import { Progress } from "src/ui/base/Progress";
-import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import { WalletIcon } from "src/ui/base/WalletIcon";
-import { GSCStatus } from "src/ui/voters/hooks/useGSCStatus";
-import { useVoterDataByVault } from "src/ui/voters/hooks/useVoterDataByVault";
-import { useVoterStats } from "src/ui/voters/hooks/useVoterStats";
-import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
-import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
+import { useCouncil } from "src/ui/council/useCouncil";
+import { GSCStatus, useGSCStatus } from "src/ui/voters/hooks/useGSCStatus";
+import {
+  VoterStatsRow,
+  VoterStatsRowSkeleton,
+} from "src/ui/voters/VoterStatsRow";
+import {
+  VoterVaultsList,
+  VoterVaultsListSkeleton,
+} from "src/ui/voters/VoterVaultsList";
+import {
+  VotingHistoryTable,
+  VotingHistoryTableSkeleton,
+} from "src/ui/voters/VotingHistoryTable";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {
   const { query } = useRouter();
   const { address } = query as { address: string | undefined };
 
-  const { data: voterStats, isLoading: voterStatsLoading } =
-    useVoterStats(address);
-  const { data: voterDataByVault, isLoading: vaultsDataLoading } =
-    useVoterDataByVault(address);
-  const { data: ens, isLoading: ensLoading } = useEnsName({
-    address: getAddress(address as string),
-    enabled: !!address,
-  });
+  const { data, status } = useVoterData(address);
 
   if (!address) {
     return (
-      <div className="flex flex-col items-center gap-8 mt-48">
-        <div className="daisy-card bg-neutral text-neutral-content">
-          <div className="items-center text-center daisy-card-body">
-            <h2 className="daisy-card-title">Error!</h2>
-            <p>No address provided or address is malformed.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (voterStatsLoading && vaultsDataLoading && ensLoading) {
-    return (
-      <div className="flex flex-col items-center gap-8 mt-48">
-        <p>Loading voter details. This might take a while...</p>
-        <Progress />
-      </div>
+      <ErrorMessage error="No address provided or address is malformed." />
     );
   }
 
   return (
     <Page>
-      <div>
-        {ens ? (
-          <div>
-            <h1 className="w-full text-5xl">{ens}</h1>
-            <a
-              href={makeEtherscanAddressURL(address)}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <h2 className="w-full mt-2 text-2xl underline flex items-center">
-                <WalletIcon address={address} className="mr-2" />
-                {formatAddress(address)}
-                <ExternalLinkSVG size={24} />
-              </h2>
-            </a>
-          </div>
-        ) : (
-          <h1 className="w-full mt-2 text-5xl underline">
-            <a
-              href={makeEtherscanAddressURL(address)}
-              rel="noopener noreferrer"
-              target="_blank"
-              className="flex items-center"
-            >
-              <WalletIcon address={address} className="mr-4" size={32} />
-              {formatAddress(address)}
-              <ExternalLinkSVG size={24} />
-            </a>
-          </h1>
-        )}
-      </div>
+      <VoterHeader address={address} />
 
       <div>
-        {voterStats && (
-          <VoterStatisticsRow
-            gscStatus={voterStats.gscStatus}
-            votingPower={voterStats.votingPower}
-            proposalsVoted={voterStats.votingHistory.length}
+        {status === "success" ? (
+          <VoterStatsRow
+            gscStatus={data.gscStatus}
+            proposalsVoted={data.votingHistory.length}
+            votingPower={data.votingPower}
           />
+        ) : (
+          <VoterStatsRowSkeleton />
         )}
 
         <div className="flex flex-col items-start w-full mt-8 gap-y-8">
           <div className="flex flex-col w-full gap-y-4">
             <h2 className="text-2xl font-bold">Voting History</h2>
-            <VotingHistoryTable
-              history={voterStats ? voterStats.votingHistory : []}
-            />
+            {status === "success" ? (
+              <VotingHistoryTable history={data.votingHistory} />
+            ) : (
+              <VotingHistoryTableSkeleton />
+            )}
           </div>
 
-          {voterDataByVault && (
+          {status === "success" ? (
             <div className="flex flex-col gap-y-4">
               <h2 className="text-2xl font-bold">
-                Voting Vaults ({voterDataByVault.length})
+                Voting Vaults ({data.voterDataByVault.length})
               </h2>
-              <VoterVaultsList vaultData={voterDataByVault} />
+              <VoterVaultsList vaultData={data.voterDataByVault} />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-y-4">
+              <h2 className="w-64 text-2xl">
+                <Skeleton />
+              </h2>
+              <VoterVaultsListSkeleton />
             </div>
           )}
         </div>
@@ -115,43 +90,137 @@ export default function VoterDetailsPage(): ReactElement {
   );
 }
 
-interface VoterStatisticsRowProps {
-  gscStatus: GSCStatus | null;
-  proposalsVoted: number;
-  votingPower: string;
+interface VoterHeaderProps {
+  address: string;
 }
 
-function VoterStatisticsRow({
-  gscStatus,
-  votingPower,
-  proposalsVoted,
-}: VoterStatisticsRowProps): ReactElement {
-  return (
-    <div className="flex flex-wrap gap-4">
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Voting Power</div>
-          <div className="text-sm daisy-stat-value">
-            {formatBalance(votingPower, 0)}
-          </div>
-        </div>
-      </div>
+function VoterHeader({ address }: VoterHeaderProps) {
+  const { data: ens, isLoading: ensLoading } = useEnsName({
+    address: getAddress(address as string),
+    enabled: !!address,
+  });
 
-      {gscStatus && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">GSC Member</div>
-            <div className="text-sm daisy-stat-value">{gscStatus}</div>
-          </div>
-        </div>
-      )}
+  if (ensLoading) {
+    return (
+      <div>
+        <h1 className="text-5xl w-72">
+          <Skeleton />
+        </h1>
 
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Proposals voted</div>
-          <div className="text-sm daisy-stat-value">{proposalsVoted}</div>
-        </div>
+        <h2 className="w-48 mt-2 text-2xl">
+          <Skeleton />
+        </h2>
       </div>
+    );
+  }
+
+  return ens ? (
+    <div>
+      <h1 className="w-full text-5xl">{ens}</h1>
+      <a
+        href={makeEtherscanAddressURL(address)}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <h2 className="flex items-center w-full mt-2 text-2xl underline">
+          <Address address={address} options={{ iconSize: 24 }} />
+        </h2>
+      </a>
     </div>
+  ) : (
+    <h1 className="w-full mt-2 text-5xl">
+      <Address address={address} options={{ iconSize: 36 }} />
+    </h1>
+  );
+}
+
+interface VoterData {
+  votingHistory: Vote[];
+  votingPower: string;
+  gscStatus: GSCStatus | null;
+  voterDataByVault: VoterDataByVault[];
+}
+
+export function useVoterData(
+  address: string | undefined,
+): UseQueryResult<VoterData> {
+  const { context, coreVoting } = useCouncil();
+  const { data: gscStatus } = useGSCStatus(address);
+
+  return useQuery({
+    queryKey: ["voter-stats", address, gscStatus],
+    enabled: !!address,
+    queryFn: async (): Promise<VoterData> => {
+      const voter = new Voter(address as string, context);
+      const votingHistory = await voter.getVotes(coreVoting.address);
+      const votingPower = await voter.getVotingPower(
+        coreVoting.vaults.map((vault) => vault.address),
+      );
+      const voterDataByVault = await getVoterDataByVault(
+        address as string,
+        coreVoting,
+      );
+
+      return {
+        votingHistory: votingHistory,
+        votingPower,
+        gscStatus: gscStatus ?? null,
+        voterDataByVault,
+      };
+    },
+    refetchOnWindowFocus: false,
+  });
+}
+
+interface VoterDataByVault {
+  vault: VotingVault;
+  votingPower: string;
+  balance?: string;
+  numDelegated?: number;
+  currentDelegate?: Voter;
+}
+
+// TODO @ryan: can we have something like implemented in the sdk?
+async function getVoterDataByVault(
+  address: string,
+  coreVoting: VotingContract<VotingVault<VotingVaultDataSource>[]>,
+): Promise<VoterDataByVault[]> {
+  return Promise.all(
+    coreVoting.vaults.map(async (vault) => {
+      const name = vault.name;
+      const votingPower = await vault.getVotingPower(address);
+
+      if (vault instanceof LockingVault) {
+        const balance = await vault.getDepositedBalance(address);
+        const numDelegated = (await vault.getDelegatorsTo(address)).length;
+        const currentDelegate = await vault.getDelegate(address);
+        return {
+          vault,
+          votingPower,
+          balance,
+          numDelegated,
+          currentDelegate,
+        };
+      }
+
+      if (vault instanceof VestingVault) {
+        const balance = await (await vault.getGrant(address)).votingPower;
+        const numDelegated = (await vault.getDelegatorsTo(address)).length;
+        const currentDelegate = await vault.getDelegate(address);
+        return {
+          vault,
+          votingPower,
+          balance,
+          numDelegated,
+          currentDelegate,
+        };
+      }
+
+      return {
+        vault,
+        name,
+        votingPower,
+      };
+    }),
   );
 }
