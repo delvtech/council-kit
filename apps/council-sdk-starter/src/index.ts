@@ -50,24 +50,6 @@ export async function main(): Promise<void> {
       await coreVoting.getVotingPower(member.address),
     );
   }
-
-  // // submit transactions
-  // const signer = new Wallet(
-  //   process.env.EXAMPLE_WALLET_PRIVATE_KEY as string,
-  //   provider,
-  // );
-  // await lockingVault
-  //   .changeDelegate(signer, signer.address, {
-  //     onSubmitted: (hash) => {
-  //       console.log("transaction submitted", hash);
-  //     },
-  //   })
-  //   .then(() => {
-  //     console.log("Success!");
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
 }
 
 main();
