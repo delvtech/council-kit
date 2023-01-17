@@ -16,10 +16,10 @@ import {
   DepositAndWithdrawForm,
   DepositAndWithdrawFormSkeleton,
 } from "src/ui/vaults/DepositAndWithdrawForm";
-import { useApprove } from "src/ui/vaults/variants/LockingVault/hooks/useApprove";
-import { useChangeDelegate } from "src/ui/vaults/variants/LockingVault/hooks/useChangeDelegate";
-import { useDeposit } from "src/ui/vaults/variants/LockingVault/hooks/useDeposit";
-import { useWithdraw } from "src/ui/vaults/variants/LockingVault/hooks/useWithdraw";
+import { useApprove } from "src/ui/vaults/lockingVault/hooks/useApprove";
+import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
+import { useDeposit } from "src/ui/vaults/lockingVault/hooks/useDeposit";
+import { useWithdraw } from "src/ui/vaults/lockingVault/hooks/useWithdraw";
 import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
 import {
   VaultStatsBar,

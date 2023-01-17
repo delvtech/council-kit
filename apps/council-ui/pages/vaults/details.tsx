@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { useChainId } from "src/ui/network/useChainId";
-import { LockingVaultDetails } from "src/ui/vaults/variants/LockingVault/LockingVaultDetails";
-import { VestingVaultDetails } from "src/ui/vaults/variants/VestingVault/VestingVaultDetails";
+import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
+import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
 import { getAllVaults } from "src/vaults/vaults";
 
 export default function Vault(): ReactElement {
