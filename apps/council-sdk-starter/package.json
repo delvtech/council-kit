@@ -16,10 +16,7 @@
   "scripts": {
     "watch": "parcel watch",
     "build": "parcel build",
-    "docs": "typedoc",
-    "docs:watch": "typedoc --watch",
-    "example": "ts-node -r dotenv/config -r tsconfig-paths/register src/example/index.ts",
-    "watch:example": "nodemon -r dotenv/config -r tsconfig-paths/register src/example/index.ts"
+    "start": "ts-node -r dotenv/config -r tsconfig-paths/register src/index.ts"
   },
   "dependencies": {
     "@council/sdk": "*",
@@ -28,6 +25,7 @@
   "devDependencies": {
     "@council/eslint-config": "*",
     "@council/prettier-config": "*",
+    "tsconfig-paths": "^4.1.0",
     "@council/tsconfig": "*",
     "dotenv": "^16.0.3",
     "parcel": "^2.8.0",

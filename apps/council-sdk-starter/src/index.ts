@@ -1,4 +1,4 @@
-import addressList from "src/addresses/ElementGoerliAddressList.json";
+import addressList from "src/addresses/ElementMainnetAddressList.json";
 import { getDefaultProvider, Wallet } from "ethers";
 import {
   CouncilContext,
@@ -32,7 +32,7 @@ export async function main(): Promise<void> {
 
   // create a new GSCVotingContract instance for GSC voting
   const gscVoting = new GSCVotingContract(
-    addresses.gscVoting,
+    addresses.gscCoreVoting,
     gscVault,
     context,
   );
@@ -51,23 +51,23 @@ export async function main(): Promise<void> {
     );
   }
 
-  // submit transactions
-  const signer = new Wallet(
-    process.env.EXAMPLE_WALLET_PRIVATE_KEY as string,
-    provider,
-  );
-  await lockingVault
-    .changeDelegate(signer, signer.address, {
-      onSubmitted: (hash) => {
-        console.log("transaction submitted", hash);
-      },
-    })
-    .then(() => {
-      console.log("Success!");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  // // submit transactions
+  // const signer = new Wallet(
+  //   process.env.EXAMPLE_WALLET_PRIVATE_KEY as string,
+  //   provider,
+  // );
+  // await lockingVault
+  //   .changeDelegate(signer, signer.address, {
+  //     onSubmitted: (hash) => {
+  //       console.log("transaction submitted", hash);
+  //     },
+  //   })
+  //   .then(() => {
+  //     console.log("Success!");
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
 }
 
 main();
