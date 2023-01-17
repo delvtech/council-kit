@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
-import { councilConfigs } from "src/config/council.config";
 import { useChainId } from "src/ui/network/useChainId";
 import { LockingVaultDetails } from "src/ui/vaults/variants/LockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/variants/VestingVault/VestingVaultDetails";
+import { getAllVaults } from "src/vaults/vaults";
 
 export default function Vault(): ReactElement {
   const {
@@ -12,10 +12,8 @@ export default function Vault(): ReactElement {
   } = useRouter();
 
   const chainId = useChainId();
-  const coreVotingConfig = councilConfigs[chainId].coreVoting;
-  const vaultConfig = coreVotingConfig.vaults.find(
-    (vault) => vault.address === address,
-  );
+  const allVaults = getAllVaults(chainId);
+  const vaultConfig = allVaults.find((vault) => vault.address === address);
 
   if (!address || !vaultConfig) {
     replace("/404");
