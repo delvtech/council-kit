@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 

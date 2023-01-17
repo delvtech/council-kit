@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { ReactElement } from "react";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { formatAddress } from "./formatting/formatAddress";
 import { ExternalLinkSVG } from "./svg/ExternalLink";
 import { WalletIcon } from "./WalletIcon";

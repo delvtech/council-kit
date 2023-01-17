@@ -4,7 +4,7 @@ import { assertNever } from "assert-never";
 import { Signer } from "ethers";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
