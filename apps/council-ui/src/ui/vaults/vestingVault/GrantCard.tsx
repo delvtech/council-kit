@@ -2,7 +2,7 @@ import { Signer } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { useClaimGrant } from "src/ui/vaults/hooks/useGrantClaim";
+import { useClaimGrant } from "src/ui/vaults/vestingVault/hooks/useGrantClaim";
 import { useSigner } from "wagmi";
 
 interface GrantCardProps {
