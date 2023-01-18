@@ -8,6 +8,6 @@ export function getLockingVaults(
     .flat();
 
   return allDeployedContracts.filter(
-    (deployedContract) => deployedContract.type === "LockingVault",
+    (deployedContract) => deployedContract.name === "LockingVaultProxy",
   );
 }
