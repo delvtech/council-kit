@@ -5,7 +5,7 @@ import { parseEther } from "ethers/lib/utils";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { makeProposalURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";

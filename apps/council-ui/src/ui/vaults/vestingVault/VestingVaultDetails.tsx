@@ -4,7 +4,7 @@ import { assertNever } from "assert-never";
 import { Signer } from "ethers";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
@@ -13,9 +13,9 @@ import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
-import { useChangeDelegate } from "src/ui/vaults/hooks/useChangeDelegate";
-import { GrantCard } from "src/ui/vaults/variants/VestingVault/GrantCard";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
+import { GrantCard } from "src/ui/vaults/vestingVault/GrantCard";
+import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
 import { useAccount, useSigner } from "wagmi";
 
 interface VestingVaultDetailsProps {

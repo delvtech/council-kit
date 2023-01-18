@@ -4,7 +4,7 @@ import { getAddress } from "ethers/lib/utils";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
-import { makeEtherscanAddressURL } from "src/lib/etherscan/makeEtherscanAddressURL";
+import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { Address } from "src/ui/base/Address";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";

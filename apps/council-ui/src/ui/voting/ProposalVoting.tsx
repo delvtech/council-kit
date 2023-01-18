@@ -33,7 +33,7 @@ export function ProposalVoting({
         <h3 className="text-lg font-medium">Vaults</h3>
         <h3 className="ml-auto text-lg font-medium">Voting Power</h3>
       </div>
-      <div className="flex flex-col overflow-y-auto pr- max-h-64 gap-y-4">
+      <div className="flex flex-col overflow-y-auto max-h-64 gap-y-4">
         {votingPowerByVault?.map((vault) => (
           <div className="flex" key={vault.name}>
             <h3>{vault.name}</h3>
@@ -91,7 +91,7 @@ export function ProposalVotingSkeleton(): ReactElement {
         <h3 className="text-lg font-medium">Vaults</h3>
         <h3 className="ml-auto text-lg font-medium">Voting Power</h3>
       </div>
-      <div className="flex flex-col overflow-y-auto pr- max-h-64 gap-y-4">
+      <div className="flex flex-col overflow-y-auto max-h-64 gap-y-4">
         <div className="flex">
           <h3 className="w-32">
             <Skeleton />
