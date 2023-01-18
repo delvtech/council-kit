@@ -35,7 +35,7 @@ export function ChangeDelegateForm({
           <span className="text-lg flex items-center">
             Current Delegate:
             {isDelegateZeroAddress ? (
-              <span className="italic ml-2">Not delegated</span>
+              <span className="font-bold ml-2">None</span>
             ) : (
               <Link
                 href={makeVoterURL(currentDelegate)}

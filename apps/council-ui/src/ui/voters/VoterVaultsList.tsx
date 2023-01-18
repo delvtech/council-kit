@@ -75,7 +75,7 @@ function CurrentDelegateInfo({
     <div className="flex gap-x-6">
       <p>Current Delegate</p>
       {isDelegateZeroAddress ? (
-        <span className="italic">Not delegated</span>
+        <span className="font-bold">None</span>
       ) : (
         <p className="flex items-center ml-auto font-bold">
           <WalletIcon className="mr-1" address={delegate.address} size={16} />
