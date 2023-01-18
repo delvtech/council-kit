@@ -13,8 +13,9 @@ const goerliTimelockAddress = goerliContracts.find(
 const goerliCoreVotingAddress = goerliContracts.find(
   ({ name }) => name === "CoreVoting",
 )?.address as string;
+// Using the proxy address for the Locking vault
 const goerliLockingVaultAddress = goerliContracts.find(
-  ({ name }) => name === "LockingVault",
+  ({ name }) => name === "LockingVaultProxy",
 )?.address as string;
 const goerliVestingVaultAddress = goerliContracts.find(
   ({ name }) => name === "VestingVault",

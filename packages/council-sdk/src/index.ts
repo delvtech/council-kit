@@ -35,3 +35,4 @@ export { type VoterWithPower } from "./datasources/VotingVault/LockingVaultContr
 export * from "./utils/cached";
 export * from "./utils/getBlockDate";
 export * from "./utils/sumStrings";
+export * from "./utils/onlyVaultsWithPower";
