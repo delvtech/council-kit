@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import {
   ProposalStatsBar,
@@ -68,7 +69,7 @@ export default function ProposalPage(): ReactElement {
   }
 
   return (
-    <div className="max-w-5xl px-4 m-auto mt-16 space-y-10">
+    <Page>
       <div className="flex flex-wrap w-full gap-4">
         <h1 className="text-5xl font-bold whitespace-nowrap">
           {data?.name ?? `Proposal ${id}`}
@@ -128,7 +129,7 @@ export default function ProposalPage(): ReactElement {
           )}
         </div>
       </div>
-    </div>
+    </Page>
   );
 }
 
