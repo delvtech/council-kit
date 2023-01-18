@@ -9,7 +9,6 @@ import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
-import { Page } from "src/ui/base/Page";
 import { Progress } from "src/ui/base/Progress";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
@@ -50,7 +49,7 @@ export function VestingVaultDetails({
 
     case "success":
       return (
-        <Page>
+        <>
           <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
 
           <div className="flex flex-wrap gap-4">
@@ -131,7 +130,7 @@ export function VestingVaultDetails({
               />
             ) : null}
           </div>
-        </Page>
+        </>
       );
 
     default:

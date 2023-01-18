@@ -9,6 +9,7 @@ import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { makeProposalURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
+import { Page } from "src/ui/base/Page";
 import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
@@ -58,7 +59,7 @@ export default function ProposalsPage(): ReactElement {
   };
 
   return (
-    <div className="flex flex-col items-start max-w-5xl px-4 m-auto mt-16 gap-y-10">
+    <Page>
       <h1 className="text-5xl font-bold">Proposals</h1>
 
       {(() => {
@@ -106,7 +107,7 @@ export default function ProposalsPage(): ReactElement {
           href="#"
         />
       </div>
-    </div>
+    </Page>
   );
 }
 
