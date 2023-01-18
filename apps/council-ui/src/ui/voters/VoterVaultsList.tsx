@@ -1,4 +1,5 @@
 import { Voter } from "@council/sdk";
+import { ethers } from "ethers";
 import { getAddress } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -67,14 +68,20 @@ function CurrentDelegateInfo({
   delegate,
 }: CurrentDelegateInfoProps): ReactElement {
   const name = useDisplayName(getAddress(delegate.address));
+  const isDelegateZeroAddress =
+    delegate.address === ethers.constants.AddressZero;
 
   return (
     <div className="flex gap-x-6">
       <p>Current Delegate</p>
-      <p className="flex items-center ml-auto font-bold">
-        <WalletIcon className="mr-1" address={delegate.address} size={16} />
-        {name}
-      </p>
+      {isDelegateZeroAddress ? (
+        <span className="italic">Not delegated</span>
+      ) : (
+        <p className="flex items-center ml-auto font-bold">
+          <WalletIcon className="mr-1" address={delegate.address} size={16} />
+          {name}
+        </p>
+      )}
     </div>
   );
 }
