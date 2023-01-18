@@ -1,5 +1,5 @@
-import addressList from "src/addresses/ElementMainnetAddressList.json";
-import { getDefaultProvider, Wallet } from "ethers";
+import addressList from "src/addresses/ElementGoerliAddressList.json";
+import { getDefaultProvider, Wallet, utils, BigNumber } from "ethers";
 import {
   CouncilContext,
   GSCVault,
@@ -7,21 +7,29 @@ import {
   LockingVault,
   VestingVault,
   VotingContract,
+  Ballot,
 } from "@council/sdk";
+import { CoreVoting__factory } from "@council/typechain";
 
 const defaultChainId = 5;
 const provider = getDefaultProvider(process.env.PROVIDER_URI || defaultChainId);
+// console.log(provider);
 
 export async function main(): Promise<void> {
   const { addresses } = addressList;
 
+  console.log("here");
+
   // create a context instance for the models to share
   const context = new CouncilContext(provider);
+
+  console.log("here");
 
   // create vault instances
   const lockingVault = new LockingVault(addresses.lockingVault, context);
   const vestingVault = new VestingVault(addresses.vestingVault, context);
   const gscVault = new GSCVault(addresses.gscVault, context);
+  console.log("here");
 
   // create a new VotingContract instance for general voting
   const coreVoting = new VotingContract(
@@ -32,7 +40,7 @@ export async function main(): Promise<void> {
 
   // create a new GSCVotingContract instance for GSC voting
   const gscVoting = new GSCVotingContract(
-    addresses.gscCoreVoting,
+    addresses.gscVoting,
     gscVault,
     context,
   );
@@ -43,6 +51,8 @@ export async function main(): Promise<void> {
     console.log(`${proposal.name} results:`, await proposal.getResults());
   }
 
+  console.log("here");
+
   const gscMembers = await gscVoting.getVoters();
   for (const member of gscMembers) {
     console.log(
@@ -50,6 +60,33 @@ export async function main(): Promise<void> {
       await coreVoting.getVotingPower(member.address),
     );
   }
+
+  // submit transactions
+  const signer = new Wallet(process.env.WALLET_PRIVATE_KEY as string, provider);
+
+  const vaults = [lockingVault.address];
+  const targets = [coreVoting.address];
+  const coreVotingInterface = new utils.Interface(CoreVoting__factory.abi);
+  const calldatas = [
+    coreVotingInterface.encodeFunctionData("setDefaultQuorum", [
+      BigNumber.from(10),
+    ]),
+  ];
+
+  const currentBlock = await provider.getBlockNumber();
+  const lockDuration = 6496 * 3;
+  console.log(vaults, targets, calldatas, currentBlock + lockDuration + 300001);
+
+  const tx = await coreVoting.createProposal(
+    signer,
+    vaults,
+    targets,
+    calldatas,
+    currentBlock + lockDuration + 300001,
+    "yes",
+  );
+
+  console.log(tx);
 }
 
 main();

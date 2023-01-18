@@ -7,8 +7,13 @@ import { Vote } from "src/models/Vote";
 import { Voter } from "src/models/Voter";
 import { VotingVault } from "src/models/VotingVault/VotingVault";
 import { BytesLike, parseEther } from "ethers/lib/utils";
-import { VotingContractDataSource } from "src/datasources/VotingContract/VotingContractDataSource";
+import {
+  Ballot,
+  VotingContractDataSource,
+} from "src/datasources/VotingContract/VotingContractDataSource";
 import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
+import { Signer } from "ethers";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 
 /**
  * @category Models
@@ -81,6 +86,42 @@ export class VotingContract<
   ): Promise<Proposal[]> {
     const proposals = await this.dataSource.getProposals(fromBlock, toBlock);
     return proposals.map(({ id }) => new Proposal(id, this, this.context));
+  }
+
+  /**
+   * Create a new proposal.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param vaults - The addresses of the approved vaults to draw voting power
+   *   from.
+   * @param targets - The targets (contract addresses) to call.
+   * @param calldatas - The calldatas to call each target with.
+   * @param lastCall: A block number that limits when the proposal can be executed.
+   * @param ballot: The vote for the proposal from the signer's account.
+   * @returns The transaction hash.
+   */
+  createProposal(
+    signer: Signer,
+    vaults: string[],
+    targets: string[],
+    calldatas: BytesLike[],
+    lastCall: number,
+    ballot: Ballot,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
+  ): Promise<string> {
+    return this.dataSource.createProposal(
+      signer,
+      vaults,
+      targets,
+      calldatas,
+      lastCall,
+      ballot,
+      options,
+    );
   }
 
   /**

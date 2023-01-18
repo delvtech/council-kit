@@ -18,6 +18,11 @@
         "NEXT_PUBLIC_COUNCIL_UI_BASE_PATH"
       ]
     },
+    "council-sdk-starter#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "env": ["PROVIDER_URI", "WALLET_PRIVATE_KEY", "NODE_ENV"]
+    },
     "@council/sdk#build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],

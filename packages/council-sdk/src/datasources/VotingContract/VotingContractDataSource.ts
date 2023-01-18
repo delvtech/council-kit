@@ -20,6 +20,21 @@ export interface VotingContractDataSource extends DataSource {
    */
   getProposal: (id: number) => Promise<ProposalData | null>;
 
+  createProposal: (
+    signer: Signer,
+    vaults: string[],
+    targets: string[],
+    calldatas: BytesLike[],
+    lastCall: number,
+    ballot: Ballot,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
+  ) => Promise<string>;
+
   /**
    * Get the `ProposalDataPreview` of all proposals ever created.
    * @param fromBlock - Include all proposals created on or after this block number.
