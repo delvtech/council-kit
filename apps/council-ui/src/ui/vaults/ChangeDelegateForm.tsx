@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import Link from "next/link";
 import { ReactElement, useState } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -19,6 +20,8 @@ export function ChangeDelegateForm({
 }: ChangeDelegateFormProps): ReactElement {
   const [newDelegate, setNewDelegate] = useState("");
   const delegateName = useDisplayName(currentDelegate);
+  const isDelegateZeroAddress =
+    currentDelegate === ethers.constants.AddressZero;
 
   return (
     <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-300 h-fit">
@@ -30,14 +33,18 @@ export function ChangeDelegateForm({
         disabled={disabled}
         infoText={
           <span className="text-lg flex items-center">
-            Current Delegate:{" "}
-            <Link
-              href={makeVoterURL(currentDelegate)}
-              className="hover:underline text-lg font-bold flex items-center"
-            >
-              <WalletIcon address={currentDelegate} className="mx-2" />
-              {delegateName}
-            </Link>
+            Current Delegate:
+            {isDelegateZeroAddress ? (
+              <span className="font-bold ml-2">None</span>
+            ) : (
+              <Link
+                href={makeVoterURL(currentDelegate)}
+                className="hover:underline text-lg font-bold flex items-center"
+              >
+                <WalletIcon address={currentDelegate} className="mx-2" />
+                {delegateName}
+              </Link>
+            )}
           </span>
         }
       />

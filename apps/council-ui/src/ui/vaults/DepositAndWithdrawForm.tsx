@@ -38,8 +38,8 @@ export function DepositAndWithdrawForm({
       <div className="flex gap-x-4">
         <button onClick={() => setActiveTab("deposit")}>
           <h2
-            className={classNames("text-2xl", {
-              "font-extrabold": activeTab === "deposit",
+            className={classNames("text-2xl hover:underline", {
+              "font-extrabold underline": activeTab === "deposit",
             })}
           >
             Deposit
@@ -47,8 +47,8 @@ export function DepositAndWithdrawForm({
         </button>
         <button onClick={() => setActiveTab("withdraw")}>
           <h2
-            className={classNames("text-2xl", {
-              "font-extrabold": activeTab === "withdraw",
+            className={classNames("text-2xl hover:underline", {
+              "font-extrabold underline": activeTab === "withdraw",
             })}
           >
             Withdraw
