@@ -1,4 +1,5 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { parseEther } from "ethers/lib/utils";
 import { useCouncil } from "src/ui/council/useCouncil";
 
 export type GSCStatus = "N/A" | "Idle" | "Member" | "Eligible" | "Ineligible";
@@ -29,7 +30,7 @@ export function useGSCStatus(
       const votingPower = await coreVoting.getVotingPower(address);
       const requiredVotingPower = await gscVoting.getRequiredVotingPower();
 
-      if (votingPower >= requiredVotingPower) {
+      if (parseEther(votingPower).gt(parseEther(requiredVotingPower))) {
         return "Eligible";
       }
 
