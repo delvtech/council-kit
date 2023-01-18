@@ -2,6 +2,7 @@ import { getBlockDate, VestingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { assertNever } from "assert-never";
 import { Signer } from "ethers";
+import { parseUnits } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
@@ -29,6 +30,11 @@ export function VestingVaultDetails({
   const { data: signer } = useSigner();
   const { data, status, error } = useVestingVaultDetailsData(address, account);
   const { mutate: changeDelegate } = useChangeDelegate(address);
+
+  const hasGrant = parseUnits(
+    data?.grantBalance || "0",
+    data?.tokenDecimals,
+  ).gt(0);
 
   switch (status) {
     case "loading":
@@ -115,13 +121,15 @@ export function VestingVaultDetails({
                 unlockDate={data.unlockDate}
               />
             </div>
-            <ChangeDelegateForm
-              currentDelegate={data.delegate}
-              disabled={!signer || !!data.accountVotingPower}
-              onDelegate={(delegate) =>
-                changeDelegate({ signer: signer as Signer, delegate })
-              }
-            />
+            {hasGrant ? (
+              <ChangeDelegateForm
+                currentDelegate={data.delegate}
+                disabled={!signer || !!data.accountVotingPower}
+                onDelegate={(delegate) =>
+                  changeDelegate({ signer: signer as Signer, delegate })
+                }
+              />
+            ) : null}
           </div>
         </Page>
       );
@@ -145,6 +153,7 @@ interface VestingVaultDetailsData {
   tokenAddress: string;
   tokenBalance: string;
   tokenSymbol: string;
+  tokenDecimals: number;
   unlockDate: Date | null;
 }
 
@@ -166,6 +175,7 @@ function useVestingVaultDetailsData(
     queryFn: async (): Promise<VestingVaultDetailsData> => {
       const vestingVault = new VestingVault(address, context);
       const token = await vestingVault.getToken();
+      const tokenDecimals = await token.getDecimals();
       const grant = await vestingVault.getGrant(account as string);
 
       const accountVotingPower = await vestingVault.getVotingPower(
@@ -183,6 +193,7 @@ function useVestingVaultDetailsData(
       return {
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
+        tokenDecimals,
         tokenBalance: await token.getBalanceOf(account as string),
         grantBalance: grant.allocation,
         grantBalanceWithdrawn: grant.withdrawn,
