@@ -8,7 +8,7 @@ import { useAccount } from "wagmi";
 
 export function Navigation(): ReactElement {
   const { address } = useAccount();
-  const { pathname } = useRouter();
+  const { pathname, query } = useRouter();
 
   return (
     <div className="daisy-navbar bg-base-200 ">
@@ -57,7 +57,9 @@ export function Navigation(): ReactElement {
             <li>
               <Link
                 className={classNames({
-                  "daisy-active": pathname.startsWith(Routes.VOTERS),
+                  "daisy-active":
+                    pathname.startsWith(Routes.VOTERS) &&
+                    address !== query.address,
                 })}
                 href={Routes.VOTERS}
               >
@@ -66,7 +68,16 @@ export function Navigation(): ReactElement {
             </li>
             {address && (
               <li>
-                <Link href={makeVoterURL(address)}>profile</Link>
+                <Link
+                  className={classNames({
+                    "daisy-active":
+                      pathname.startsWith(Routes.VOTERS) &&
+                      address === query.address,
+                  })}
+                  href={makeVoterURL(address)}
+                >
+                  profile
+                </Link>
               </li>
             )}
           </ul>
@@ -100,7 +111,9 @@ export function Navigation(): ReactElement {
           <li>
             <Link
               className={classNames({
-                "daisy-active": pathname.startsWith(Routes.VOTERS),
+                "daisy-active":
+                  pathname.startsWith(Routes.VOTERS) &&
+                  address !== query.address,
               })}
               href={Routes.VOTERS}
             >
@@ -109,7 +122,16 @@ export function Navigation(): ReactElement {
           </li>
           {address && (
             <li>
-              <Link href={makeVoterURL(address)}>profile</Link>
+              <Link
+                className={classNames({
+                  "daisy-active":
+                    pathname.startsWith(Routes.VOTERS) &&
+                    address === query.address,
+                })}
+                href={makeVoterURL(address)}
+              >
+                profile
+              </Link>
             </li>
           )}
         </ul>
