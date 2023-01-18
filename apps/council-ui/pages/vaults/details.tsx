@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { Page } from "src/ui/base/Page";
 import { useChainId } from "src/ui/network/useChainId";
 import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
@@ -20,7 +21,7 @@ export default function Vault(): ReactElement {
   }
 
   return (
-    <div>
+    <Page>
       {(() => {
         switch (vaultConfig?.type) {
           case "LockingVault":
@@ -36,6 +37,6 @@ export default function Vault(): ReactElement {
             return <></>;
         }
       })()}
-    </div>
+    </Page>
   );
 }
