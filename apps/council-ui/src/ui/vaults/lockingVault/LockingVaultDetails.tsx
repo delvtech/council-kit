@@ -19,11 +19,11 @@ import { useApprove } from "src/ui/vaults/lockingVault/hooks/useApprove";
 import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
 import { useDeposit } from "src/ui/vaults/lockingVault/hooks/useDeposit";
 import { useWithdraw } from "src/ui/vaults/lockingVault/hooks/useWithdraw";
-import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
 import {
-  VaultStatsBar,
+  LockingVaultStatsBar,
   VaultStatsBarSkeleton,
-} from "src/ui/vaults/VaultStatsBar";
+} from "src/ui/vaults/lockingVault/LockingVaultStatsBar";
+import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
 import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultDetailsProps {
@@ -55,7 +55,7 @@ export function LockingVaultDetails({
       )}
 
       {status === "success" ? (
-        <VaultStatsBar
+        <LockingVaultStatsBar
           activeProposalCount={data.activeProposalCount}
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
