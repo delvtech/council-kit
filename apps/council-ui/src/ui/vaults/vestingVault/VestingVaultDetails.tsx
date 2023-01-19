@@ -1,20 +1,23 @@
 import { getBlockDate, VestingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { assertNever } from "assert-never";
 import { Signer } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
-import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import ExternalLink from "src/ui/base/links/ExternalLink";
-import { Progress } from "src/ui/base/Progress";
+import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
-import { VaultHeader } from "src/ui/vaults/VaultHeader";
-import { GrantCard } from "src/ui/vaults/vestingVault/GrantCard";
+import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
+import {
+  VaultStatsBar,
+  VaultStatsBarSkeleton,
+} from "src/ui/vaults/VaultStatsBar";
+import {
+  GrantCard,
+  GrantCardSkeleton,
+} from "src/ui/vaults/vestingVault/GrantCard";
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
 import { useAccount, useSigner } from "wagmi";
 
@@ -35,110 +38,62 @@ export function VestingVaultDetails({
     data?.tokenDecimals,
   ).gt(0);
 
-  switch (status) {
-    case "loading":
-      return (
-        <div className="flex flex-col items-center gap-8 mt-48">
-          <p>Loading Locking Vault data. This might take a while...</p>
-          <Progress />
-        </div>
-      );
-
-    case "error":
-      return <ErrorMessage error={error} />;
-
-    case "success":
-      return (
-        <>
-          <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
-
-          <div className="flex flex-wrap gap-4">
-            {data.activeProposalCount >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">Active Proposals</div>
-                  <div className="text-sm daisy-stat-value">
-                    {data.activeProposalCount}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.accountVotingPower && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">Your Voting Power</div>
-                  <div className="text-sm daisy-stat-value">
-                    {formatBalance(data.accountVotingPower)}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.delegatedToAccount >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">Delegated to You</div>
-                  <div className="text-sm daisy-stat-value">
-                    {data.delegatedToAccount}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {data.participants >= 0 && (
-              <div className="daisy-stats">
-                <div className="daisy-stat bg-base-300">
-                  <div className="daisy-stat-title">Participants</div>
-                  <div className="text-sm daisy-stat-value">
-                    {data.participants}
-                  </div>
-                </div>
-              </div>
-            )}
-            <div className="daisy-stats">
-              <div className="daisy-stat bg-base-300">
-                <div className="daisy-stat-title">Vault token</div>
-                <div className="text-sm daisy-stat-value">
-                  <ExternalLink
-                    href={makeEtherscanAddressURL(data.tokenAddress)}
-                  >
-                    {data.tokenSymbol}
-                  </ExternalLink>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
-            <div className="basis-1/2">
-              <GrantCard
-                vestingVaultAddress={address}
-                grantBalance={data.grantBalance}
-                grantBalanceWithdrawn={data.grantBalanceWithdrawn}
-                expirationDate={data.expirationDate}
-                unlockDate={data.unlockDate}
-              />
-            </div>
-            {hasGrant ? (
-              <ChangeDelegateForm
-                currentDelegate={data.delegate}
-                disabled={!signer || !!data.accountVotingPower}
-                onDelegate={(delegate) =>
-                  changeDelegate({ signer: signer as Signer, delegate })
-                }
-              />
-            ) : null}
-          </div>
-        </>
-      );
-
-    default:
-      assertNever(status);
+  if (status === "error") {
+    return <ErrorMessage error={error} />;
   }
+
+  return (
+    <Page>
+      {status === "success" ? (
+        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+      ) : (
+        <VaultHeaderSkeleton />
+      )}
+
+      {status === "success" ? (
+        <VaultStatsBar
+          activeProposalCount={data.activeProposalCount}
+          accountVotingPower={data.accountVotingPower}
+          accountPercentOfTVP={data.accountPercentOfTVP}
+          delegatedToAccount={data.delegatedToAccount}
+          participants={data.participants}
+          tokenAddress={data.tokenAddress}
+          tokenSymbol={data.tokenSymbol}
+        />
+      ) : (
+        <VaultStatsBarSkeleton />
+      )}
+
+      <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
+        <div className="basis-1/2">
+          {status === "success" ? (
+            <GrantCard
+              vestingVaultAddress={address}
+              grantBalance={data.grantBalance}
+              grantBalanceWithdrawn={data.grantBalanceWithdrawn}
+              expirationDate={data.expirationDate}
+              unlockDate={data.unlockDate}
+            />
+          ) : (
+            <GrantCardSkeleton />
+          )}
+        </div>
+        {status === "success" && hasGrant ? (
+          <ChangeDelegateForm
+            currentDelegate={data.delegate}
+            disabled={!signer || !!data.accountVotingPower}
+            onDelegate={(delegate) =>
+              changeDelegate({ signer: signer as Signer, delegate })
+            }
+          />
+        ) : null}
+      </div>
+    </Page>
+  );
 }
 
 interface VestingVaultDetailsData {
+  accountPercentOfTVP: number;
   accountVotingPower: string;
   activeProposalCount: number;
   delegate: string;
@@ -151,8 +106,8 @@ interface VestingVaultDetailsData {
   participants: number;
   tokenAddress: string;
   tokenBalance: string;
-  tokenSymbol: string;
   tokenDecimals: number;
+  tokenSymbol: string;
   unlockDate: Date | null;
 }
 
@@ -215,6 +170,9 @@ function useVestingVaultDetailsData(
           await vestingVault.getDelegatorsTo(account as string)
         ).length,
         activeProposalCount,
+        accountPercentOfTVP:
+          (+accountVotingPower / +(await vestingVault.getTotalVotingPower())) *
+          100,
       };
     },
   });

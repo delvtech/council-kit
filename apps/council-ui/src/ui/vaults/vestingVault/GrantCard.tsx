@@ -1,6 +1,7 @@
 import { Signer } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
+import Skeleton from "react-loading-skeleton";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useClaimGrant } from "src/ui/vaults/vestingVault/hooks/useGrantClaim";
 import { useSigner } from "wagmi";
@@ -33,7 +34,7 @@ export function GrantCard({
   if (!grantExist) {
     return (
       <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
-        <div className="text-2xl font-bold">Your Grant</div>
+        <div className="text-2xl font-bold">Your Vesting Info</div>
 
         <div className="font-semibold">
           There is no grant allocated to this account.
@@ -44,7 +45,7 @@ export function GrantCard({
 
   return (
     <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
-      <div className="text-2xl font-bold">Your Grant</div>
+      <div className="text-2xl font-bold">Your Vesting Info</div>
 
       <div className="flex flex-col gap-y-2">
         <div className="flex">
@@ -100,6 +101,55 @@ export function GrantCard({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+// ================ Skeletons ================
+
+export function GrantCardSkeleton(): ReactElement {
+  return (
+    <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
+      <div className="text-2xl font-bold">Your Vesting Info</div>
+
+      <div className="flex flex-col gap-y-2">
+        <div className="flex">
+          <p>Grant Amount</p>
+          <p className="w-32 ml-auto font-bold">
+            <Skeleton />
+          </p>
+        </div>
+
+        <div className="flex">
+          <p>Grant Claimed</p>
+          <p className="w-32 ml-auto font-bold">
+            <Skeleton />
+          </p>
+        </div>
+
+        <div className="flex">
+          <p>Vesting Starts</p>
+          <p className="w-32 ml-auto font-bold">
+            <Skeleton />
+          </p>
+        </div>
+
+        <div className="flex">
+          <p>Vesting Ends</p>
+          <p className="w-32 ml-auto font-bold">
+            <Skeleton />
+          </p>
+        </div>
+      </div>
+
+      <div
+        className="daisy-tooltip"
+        data-tip="The vesting period has not started yet."
+      >
+        <button className="w-full daisy-btn daisy-btn-primary" disabled={true}>
+          Withdraw ELFI
+        </button>
+      </div>
     </div>
   );
 }
