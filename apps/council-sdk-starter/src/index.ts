@@ -7,13 +7,11 @@ import {
   LockingVault,
   VestingVault,
   VotingContract,
-  Ballot,
 } from "@council/sdk";
 import { CoreVoting__factory } from "@council/typechain";
 
 const defaultChainId = 5;
 const provider = getDefaultProvider(process.env.PROVIDER_URI || defaultChainId);
-// console.log(provider);
 
 export async function main(): Promise<void> {
   const { addresses } = addressList;
@@ -22,7 +20,7 @@ export async function main(): Promise<void> {
   const context = new CouncilContext(provider);
 
   // create vault instances
-  const lockingVault = new LockingVault(addresses.lockingVault, context);
+  const lockingVault = new LockingVault(addresses.lockingVaultProxy, context);
   const vestingVault = new VestingVault(addresses.vestingVault, context);
   const gscVault = new GSCVault(addresses.gscVault, context);
 

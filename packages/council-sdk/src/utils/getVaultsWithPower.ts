@@ -1,6 +1,6 @@
 import { VotingVault } from "..";
 
-export async function onlyVaultsWithPower(
+export async function getVaultsWithPower(
   account: string,
   vaults: VotingVault[],
 ): Promise<VotingVault[]> {

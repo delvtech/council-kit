@@ -1,4 +1,4 @@
-import { onlyVaultsWithPower } from "@council/sdk";
+import { getVaultsWithPower } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
 
@@ -17,7 +17,7 @@ export default function useVotingPowerByVault(
     queryKey: ["votingPowerByVault", account],
     enabled: !!account,
     queryFn: async () => {
-      const vaults = await onlyVaultsWithPower(
+      const vaults = await getVaultsWithPower(
         account as string,
         coreVoting.vaults,
       );

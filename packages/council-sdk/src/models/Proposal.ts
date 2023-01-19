@@ -9,10 +9,9 @@ import {
 } from "src/datasources/VotingContract/VotingContractDataSource";
 import { Voter } from "./Voter";
 import { sumStrings } from "src/utils/sumStrings";
-import { BytesLike, FixedNumber, Signer } from "ethers";
+import { BytesLike, Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
-import { VotingVault } from "./VotingVault/VotingVault";
-import { onlyVaultsWithPower } from "src/utils/onlyVaultsWithPower";
+import { getVaultsWithPower } from "src/utils/getVaultsWithPower";
 
 /**
  * A model of a Proposal in Council
@@ -262,7 +261,7 @@ export class Proposal extends Model {
       extraVaultData?: BytesLike[];
     },
   ): Promise<string> {
-    const vaults = await onlyVaultsWithPower(
+    const vaults = await getVaultsWithPower(
       await signer.getAddress(),
       this.votingContract.vaults,
     );
