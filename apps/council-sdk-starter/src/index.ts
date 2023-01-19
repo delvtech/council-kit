@@ -1,5 +1,5 @@
-import addressList from "src/addresses/ElementMainnetAddressList.json";
-import { getDefaultProvider, Wallet } from "ethers";
+import addressList from "src/addresses/ElementGoerliAddressList.json";
+import { getDefaultProvider, Wallet, utils, BigNumber } from "ethers";
 import {
   CouncilContext,
   GSCVault,
@@ -8,6 +8,7 @@ import {
   VestingVault,
   VotingContract,
 } from "@council/sdk";
+import { CoreVoting__factory } from "@council/typechain";
 
 const defaultChainId = 5;
 const provider = getDefaultProvider(process.env.PROVIDER_URI || defaultChainId);
@@ -19,7 +20,7 @@ export async function main(): Promise<void> {
   const context = new CouncilContext(provider);
 
   // create vault instances
-  const lockingVault = new LockingVault(addresses.lockingVault, context);
+  const lockingVault = new LockingVault(addresses.lockingVaultProxy, context);
   const vestingVault = new VestingVault(addresses.vestingVault, context);
   const gscVault = new GSCVault(addresses.gscVault, context);
 
@@ -32,7 +33,7 @@ export async function main(): Promise<void> {
 
   // create a new GSCVotingContract instance for GSC voting
   const gscVoting = new GSCVotingContract(
-    addresses.gscCoreVoting,
+    addresses.gscVoting,
     gscVault,
     context,
   );
@@ -50,6 +51,33 @@ export async function main(): Promise<void> {
       await coreVoting.getVotingPower(member.address),
     );
   }
+
+  // submit transactions
+  const signer = new Wallet(process.env.WALLET_PRIVATE_KEY as string, provider);
+
+  const vaults = [lockingVault.address];
+  const targets = [coreVoting.address];
+  const coreVotingInterface = new utils.Interface(CoreVoting__factory.abi);
+  const calldatas = [
+    coreVotingInterface.encodeFunctionData("setDefaultQuorum", [
+      BigNumber.from(10),
+    ]),
+  ];
+
+  const currentBlock = await provider.getBlockNumber();
+  const lockDuration = 6496 * 3;
+  console.log(vaults, targets, calldatas, currentBlock + lockDuration + 300001);
+
+  const tx = await coreVoting.createProposal(
+    signer,
+    vaults,
+    targets,
+    calldatas,
+    currentBlock + lockDuration + 300001,
+    "yes",
+  );
+
+  console.log(tx);
 }
 
 main();

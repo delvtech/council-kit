@@ -1,12 +1,11 @@
 {
   "addresses": {
-    "coreVoting": "0x0CB8aa45068EE31e97B717b0B35e26A43884c84c",
-    "gscVoting": "0x600c4926c9F88beCE3533ceaAA36804d6E23F1c1",
-    "gscVault": "0x0A575bFA79454112c37B9Af2a6362c9c68f7d2e3",
-    "lockingVault": "0xb5E8AF575Ee302A24c6C7746a99D895BeF67cb5D",
-    "timeLock": "0x36687bdD319a78AB4b4347f3A7459Da235AFc4f4",
-    "treasury": "0xd46dDb33A33FD3D352d08cc7022Ce1f5c6ccFF1a",
-    "vestingVault": "0xe69D2F8DeD2924e0845118E7E467Fc97F7994ef6"
+    "coreVoting": "0x9cCCd46b3faba5E7B36afB1F2Fc15184C5BBF753",
+    "gscVoting": "0x5E2fc838BB3a010a1e02c0317515bDF6Ec3C1559",
+    "gscVault": "0x31904CAFc645F2ECf41f4342aFf315d18C9E2719",
+    "lockingVaultProxy": "0x39D361a15d9CBCeEB7b586216Aa4c91a84e4cc08",
+    "timeLock": "0x256ff711de4C574A0D763DA784b8358Ea54139E6",
+    "vestingVault": "0xe7105916B532A36Cd28F092A36b4B4228a38D762"
   },
   "chainId": 5
 }

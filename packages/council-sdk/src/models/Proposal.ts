@@ -11,6 +11,7 @@ import { Voter } from "./Voter";
 import { sumStrings } from "src/utils/sumStrings";
 import { BytesLike, Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { getVaultsWithPower } from "src/utils/getVaultsWithPower";
 
 /**
  * A model of a Proposal in Council
@@ -250,7 +251,7 @@ export class Proposal extends Model {
    * @param ballot - The ballot to cast.
    * @returns The transaction hash.
    */
-  vote(
+  async vote(
     signer: Signer,
     ballot: Ballot,
     options?: TransactionOptions & {
@@ -260,9 +261,13 @@ export class Proposal extends Model {
       extraVaultData?: BytesLike[];
     },
   ): Promise<string> {
+    const vaults = await getVaultsWithPower(
+      await signer.getAddress(),
+      this.votingContract.vaults,
+    );
     return this.votingContract.dataSource.vote(
       signer,
-      this.votingContract.vaults.map(({ address }) => address),
+      vaults.map(({ address }) => address),
       this.id,
       ballot,
       options,

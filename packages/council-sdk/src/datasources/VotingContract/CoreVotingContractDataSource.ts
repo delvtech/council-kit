@@ -97,6 +97,47 @@ export class CoreVotingContractDataSource
     });
   }
 
+  /**
+   * Create a new proposal.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param vaults - The addresses of the approved vaults to draw voting power
+   *   from.
+   * @param targets - The targets (contract addresses) to call.
+   * @param calldatas - The calldatas to call each target with.
+   * @param lastCall: A block number that limits when the proposal can be executed.
+   * @param ballot: The vote for the proposal from the signer's account.
+   * @returns The transaction hash.
+   */
+  async createProposal(
+    signer: Signer,
+    vaults: string[],
+    targets: string[],
+    calldatas: BytesLike[],
+    lastCall: number,
+    ballot: Ballot,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "proposal",
+      [
+        vaults,
+        options?.extraVaultData || vaults.map(() => "0x00"),
+        targets,
+        calldatas,
+        lastCall,
+        BALLOTS.indexOf(ballot),
+      ],
+      signer,
+    );
+    this.clearCached();
+    return transaction.hash;
+  }
+
   getExecutedProposalIds(
     fromBlock?: number,
     toBlock?: number,
