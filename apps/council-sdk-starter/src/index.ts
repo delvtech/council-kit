@@ -18,18 +18,13 @@ const provider = getDefaultProvider(process.env.PROVIDER_URI || defaultChainId);
 export async function main(): Promise<void> {
   const { addresses } = addressList;
 
-  console.log("here");
-
   // create a context instance for the models to share
   const context = new CouncilContext(provider);
-
-  console.log("here");
 
   // create vault instances
   const lockingVault = new LockingVault(addresses.lockingVault, context);
   const vestingVault = new VestingVault(addresses.vestingVault, context);
   const gscVault = new GSCVault(addresses.gscVault, context);
-  console.log("here");
 
   // create a new VotingContract instance for general voting
   const coreVoting = new VotingContract(
@@ -50,8 +45,6 @@ export async function main(): Promise<void> {
   for (const proposal of coreProposals) {
     console.log(`${proposal.name} results:`, await proposal.getResults());
   }
-
-  console.log("here");
 
   const gscMembers = await gscVoting.getVoters();
   for (const member of gscMembers) {

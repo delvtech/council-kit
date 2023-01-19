@@ -17,7 +17,10 @@ export default function useVotingPowerByVault(
     queryKey: ["votingPowerByVault", account],
     enabled: !!account,
     queryFn: async () => {
-      const vaults = await onlyVaultsWithPower(account, coreVoting.vaults);
+      const vaults = await onlyVaultsWithPower(
+        account as string,
+        coreVoting.vaults,
+      );
 
       return Promise.all(
         vaults.map(async (vault) => {
