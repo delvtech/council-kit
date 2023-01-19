@@ -1,18 +1,17 @@
 import { Ballot, getBlockDate } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
+import classNames from "classnames";
 import { parseEther } from "ethers/lib/utils";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactElement, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { makeProposalURL } from "src/routes";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
-import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useAccount } from "wagmi";
@@ -134,38 +133,34 @@ function ProposalsTable({
   onSortOptionsChange,
 }: ProposalsTableProps) {
   return (
-    <table className="w-full shadow-md daisy-table-zebra daisy-table min-w-fit">
+    <table className="w-full daisy-table-zebra daisy-table min-w-fit">
       <thead>
         <tr>
-          <th className="select-none">Voting Contract</th>
-
-          <th className="select-none">
-            <span className="mr-1 select-none">ID</span>
-          </th>
+          <th>Voting Contract</th>
 
           <th
-            className="cursor-pointer select-none hover:opacity-60"
-            onClick={() => onSortOptionsChange(SortField.CREATED)}
+            className="cursor-pointer"
+            onClick={() => onSortOptionsChange(SortField.ENDS)}
           >
-            <span className="mr-1">Created</span>
-            {sortOptions.field === SortField.CREATED && (
+            <span className="mr-1 select-none hover:underline">
+              Voting Ends
+            </span>
+            {sortOptions.field === SortField.ENDS && (
               <SortDirectionStatus direction={sortOptions.direction} />
             )}
           </th>
 
-          <th className="select-none">Voting Ends</th>
-
           <th
-            className="cursor-pointer select-none hover:opacity-60"
+            className="cursor-pointer"
             onClick={() => onSortOptionsChange(SortField.QUORUM)}
           >
-            <span className="mr-1">Quorum</span>
+            <span className="mr-1 select-none hover:underline">Quorum</span>
             {sortOptions.field === SortField.QUORUM && (
               <SortDirectionStatus direction={sortOptions.direction} />
             )}
           </th>
 
-          <th className="select-none">Your Ballot</th>
+          <th>Your Ballot</th>
 
           <th></th>
         </tr>
@@ -176,7 +171,7 @@ function ProposalsTable({
           rowData.map((proposal) => (
             <ProposalTableRow
               {...proposal}
-              key={`${proposal.votingContract}${proposal.id}`}
+              key={`${proposal.votingContractName}${proposal.id}`}
             />
           ))}
       </tbody>
@@ -184,46 +179,85 @@ function ProposalsTable({
   );
 }
 
+interface MiniQuorumBarProps {
+  currentQuorum: string;
+  requiredQuorum: string | null;
+  votingEnds: Date | null;
+}
+function MiniQuorumBar({
+  currentQuorum,
+  requiredQuorum,
+  votingEnds,
+}: MiniQuorumBarProps) {
+  const currentDate = new Date();
+
+  if (!requiredQuorum) {
+    if (votingEnds && currentDate > votingEnds) {
+      return (
+        <progress
+          className="w-full daisy-progress daisy-progress-error"
+          value={100}
+          max={100}
+        />
+      );
+    }
+    return <progress className="w-full daisy-progress" value={0} max={100} />;
+  }
+
+  const hasPassedQuorum = +currentQuorum >= +requiredQuorum;
+
+  if (votingEnds && currentDate > votingEnds && !hasPassedQuorum) {
+    return (
+      <progress
+        className="w-full daisy-progress daisy-progress-error"
+        value={100}
+        max={100}
+      />
+    );
+  }
+
+  return (
+    <progress
+      className={classNames("w-full daisy-progress daisy-progress-info", {
+        "daisy-progress-success": hasPassedQuorum,
+      })}
+      value={currentQuorum}
+      max={requiredQuorum}
+    />
+  );
+}
+
 function ProposalTableRow({
-  votingContract,
+  votingContractAddress,
+  votingContractName,
   id,
-  created,
   votingEnds,
   currentQuorum,
   requiredQuorum,
   ballot,
 }: ProposalRowData) {
+  const { push } = useRouter();
+
   return (
-    <tr>
+    <tr
+      onClick={() => push(makeProposalURL(votingContractAddress, id))}
+      className="hover:cursor-pointer"
+    >
       <th>
-        <a
-          className="hover:underline"
-          href={makeEtherscanAddressURL(votingContract)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {formatAddress(votingContract)}
-          <ExternalLinkSVG size={16} />
-        </a>
+        {votingContractName} Proposal {id}
       </th>
-      <td>{id}</td>
-      <td>{created?.toLocaleDateString() ?? <em>unknown</em>}</td>
       <td>{votingEnds?.toLocaleDateString() ?? <em>unknown</em>}</td>
       <td>
-        {requiredQuorum ? (
-          <progress
-            className="w-full daisy-progress daisy-progress-info bg-neutral"
-            value={currentQuorum}
-            max={requiredQuorum}
-          />
-        ) : (
-          <em>unknown</em>
-        )}
+        <MiniQuorumBar
+          currentQuorum={currentQuorum}
+          requiredQuorum={requiredQuorum}
+          votingEnds={votingEnds}
+        />
       </td>
-      <td>{ballot ?? <em>n/a</em>}</td>
+      <td>{ballot ?? <em>Not voted</em>}</td>
       <th>
         <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-          <Link href={makeProposalURL(votingContract, id)}>
+          <Link href={makeProposalURL(votingContractAddress, id)}>
             <ChevronRightSVG />
           </Link>
         </button>
@@ -233,7 +267,8 @@ function ProposalTableRow({
 }
 
 interface ProposalRowData {
-  votingContract: string;
+  votingContractName: string;
+  votingContractAddress: string;
   id: number;
   created: Date | null;
   votingEnds: Date | null;
@@ -262,7 +297,8 @@ function useProposalsPageData(
           const expirationBlock = await proposal.getExpirationBlock();
           const vote = account ? await proposal.getVote(account) : null;
           return {
-            votingContract: proposal.votingContract.address,
+            votingContractAddress: proposal.votingContract.address,
+            votingContractName: proposal.votingContract.name,
             id: proposal.id,
             created:
               createdBlock &&
@@ -284,7 +320,7 @@ function useProposalsPageData(
 
 enum SortField {
   ID = "ID",
-  CREATED = "Created",
+  ENDS = "ENDS",
   QUORUM = "Quorum",
 }
 
@@ -322,7 +358,7 @@ function sortProposalRowData(sort: SortOptions, data?: ProposalRowData[]) {
         return data.slice().sort((a, b) => +a.currentQuorum - +b.currentQuorum);
       }
 
-    case SortField.CREATED:
+    case SortField.ENDS:
     default:
       if (sort.direction === SortDirection.ASC) {
         return data.slice().sort((a, b) => {
@@ -345,23 +381,23 @@ function SkeletonProposalTable() {
     <table className="w-full shadow-md daisy-table-zebra daisy-table min-w-fit">
       <thead>
         <tr>
-          <th className="w-48 select-none">Voting Contract</th>
+          <th className="w-48">Voting Contract</th>
 
-          <th className="w-16 select-none">
-            <span className="mr-1 select-none">ID</span>
+          <th className="w-16">
+            <span className="mr-1">ID</span>
           </th>
 
-          <th className="w-32 select-none">
+          <th className="w-32">
             <span className="mr-1">Created</span>
           </th>
 
-          <th className="w-32 select-none">Voting Ends</th>
+          <th className="w-32">Voting Ends</th>
 
-          <th className="w-64 select-none">
+          <th className="w-64">
             <span className="mr-1">Quorum</span>
           </th>
 
-          <th className="select-none">Your Ballot</th>
+          <th>Your Ballot</th>
 
           <th className="w-16"></th>
         </tr>

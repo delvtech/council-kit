@@ -89,6 +89,7 @@ export default function ProposalPage(): ReactElement {
 
       {status === "success" ? (
         <ProposalStatsBar
+          votingContractAddress={votingContractAddress}
           createdBy={data.createdBy}
           createdAtDate={data.createdAtDate}
           endsAtDate={data.endsAtDate}
