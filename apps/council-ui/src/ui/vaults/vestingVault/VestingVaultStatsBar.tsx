@@ -3,6 +3,7 @@ import Skeleton from "react-loading-skeleton";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
+import { Stat } from "src/ui/base/Stat";
 
 interface VestingVaultStatsBarProps {
   activeProposalCount: number;
@@ -26,66 +27,37 @@ export function VestingVaultStatsBar({
   return (
     <div className="flex flex-wrap gap-4">
       {activeProposalCount >= 0 && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Active Proposals</div>
-            <div className="text-sm daisy-stat-value">
-              {activeProposalCount}
-            </div>
-          </div>
-        </div>
+        <Stat label="Active Proposals" value={activeProposalCount} />
       )}
 
       {accountVotingPower && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Your Voting Power</div>
-            <div className="text-sm daisy-stat-value">
-              {formatBalance(accountVotingPower)}
-            </div>
-          </div>
-        </div>
+        <Stat
+          label="Your Voting Power"
+          value={formatBalance(accountVotingPower)}
+        />
       )}
 
       {accountPercentOfTVP >= 0 && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">% of Total TVP</div>
-            <div className="text-sm daisy-stat-value">
-              {formatBalance(accountPercentOfTVP, 2)}%
-            </div>
-          </div>
-        </div>
+        <Stat
+          label="% of Total TVP"
+          value={`${formatBalance(accountPercentOfTVP, 2)}%`}
+        />
       )}
 
       {delegatedToAccount >= 0 && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Delegated to You</div>
-            <div className="text-sm daisy-stat-value">{delegatedToAccount}</div>
-          </div>
-        </div>
+        <Stat label="Delegated to You" value={delegatedToAccount} />
       )}
 
-      {participants >= 0 && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Participants</div>
-            <div className="text-sm daisy-stat-value">{participants}</div>
-          </div>
-        </div>
-      )}
+      {participants >= 0 && <Stat label="Participants" value={participants} />}
 
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Vault token</div>
-          <div className="text-sm daisy-stat-value">
-            <ExternalLink href={makeEtherscanAddressURL(tokenAddress)}>
-              {tokenSymbol}
-            </ExternalLink>
-          </div>
-        </div>
-      </div>
+      <Stat
+        label="Vault token"
+        value={
+          <ExternalLink href={makeEtherscanAddressURL(tokenAddress)}>
+            {tokenSymbol}
+          </ExternalLink>
+        }
+      />
     </div>
   );
 }
@@ -95,59 +67,12 @@ export function VestingVaultStatsBar({
 export function VaultStatsBarSkeleton(): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Active Proposals</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Your Voting Power</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">% of Total TVP</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Delegated to You</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Participants</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Vault token</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
+      <Stat label="Active Proposals" value={<Skeleton width={90} />} />
+      <Stat label="% of Total TVP" value={<Skeleton width={90} />} />
+      <Stat label="Your Voting Power" value={<Skeleton width={90} />} />
+      <Stat label="Delegated to You" value={<Skeleton width={90} />} />
+      <Stat label="Participants" value={<Skeleton width={90} />} />
+      <Stat label="Vault token" value={<Skeleton width={90} />} />
     </div>
   );
 }
