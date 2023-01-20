@@ -3,26 +3,27 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { parseEther } from "ethers/lib/utils";
 import { ReactElement, useMemo, useState } from "react";
-import Skeleton from "react-loading-skeleton";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import {
+  ProposalRowData,
   ProposalSortDirection,
   ProposalSortField,
   ProposalSortOptions,
   ProposalsTable,
+  ProposalTableSkeleton,
 } from "src/ui/proposals/ProposalsTable";
-import { ProposalRowData } from "src/ui/proposals/types";
 import { useAccount } from "wagmi";
 
+// TODO @cashd: Move sorting logic into the Proposal table component
 export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
   const { data, error, status } = useProposalsPageData(address);
 
   const [sortOptions, setSortOptions] = useState<ProposalSortOptions>({
-    field: ProposalSortField.ID,
-    direction: ProposalSortDirection.NONE,
+    field: ProposalSortField.ENDS,
+    direction: ProposalSortDirection.ASC,
   });
 
   const sortedData = useMemo(
@@ -31,31 +32,11 @@ export default function ProposalsPage(): ReactElement {
   );
 
   // handle the field and direction of the sorting
-  const handleSortOptionsChange = (field: ProposalSortField) => {
-    // user clicked on the same field, thus changing sort direction
-    if (field === sortOptions.field) {
-      const newSortDirectionState = sortStates[sortOptions.direction];
-
-      // reset to no sorting
-      if (newSortDirectionState === ProposalSortDirection.NONE) {
-        setSortOptions({
-          field: ProposalSortField.ID,
-          direction: ProposalSortDirection.NONE,
-        });
-      } else {
-        setSortOptions({
-          field,
-          direction: newSortDirectionState,
-        });
-      }
-    } else {
-      // user clicked a new field, starting the sorting at ascending
-      setSortOptions({
-        field,
-        direction: ProposalSortDirection.ASC,
-      });
-    }
-  };
+  const handleSortOptionsChange = (field: ProposalSortField) =>
+    setSortOptions({
+      field,
+      direction: sortStates[sortOptions.direction],
+    });
 
   return (
     <Page>
@@ -66,7 +47,7 @@ export default function ProposalsPage(): ReactElement {
           case "loading":
             return (
               <div className="w-full">
-                <SkeletonProposalTable />
+                <ProposalTableSkeleton />
               </div>
             );
 
@@ -154,8 +135,7 @@ function useProposalsPageData(
 // simple state machine for sort state transitions
 const sortStates: Record<ProposalSortDirection, ProposalSortDirection> = {
   [ProposalSortDirection.ASC]: ProposalSortDirection.DESC,
-  [ProposalSortDirection.DESC]: ProposalSortDirection.NONE,
-  [ProposalSortDirection.NONE]: ProposalSortDirection.ASC,
+  [ProposalSortDirection.DESC]: ProposalSortDirection.ASC,
 };
 
 function sortProposalRowData(
@@ -167,9 +147,6 @@ function sortProposalRowData(
   }
 
   switch (sort.field) {
-    case ProposalSortField.ID:
-      return data.slice().sort((a, b) => b.id - a.id);
-
     case ProposalSortField.QUORUM:
       if (sort.direction === ProposalSortDirection.ASC) {
         return data.slice().sort((a, b) => +b.currentQuorum - +a.currentQuorum);
@@ -181,72 +158,16 @@ function sortProposalRowData(
     default:
       if (sort.direction === ProposalSortDirection.ASC) {
         return data.slice().sort((a, b) => {
-          const aTime = a.created ? a.created.getTime() : 0;
-          const bTime = b.created ? b.created.getTime() : 0;
+          const aTime = a.votingEnds ? a.votingEnds.getTime() : 0;
+          const bTime = b.votingEnds ? b.votingEnds.getTime() : 0;
           return bTime - aTime;
         });
       } else {
         return data.slice().sort((a, b) => {
-          const aTime = a.created ? a.created.getTime() : 0;
-          const bTime = b.created ? b.created.getTime() : 0;
+          const aTime = a.votingEnds ? a.votingEnds.getTime() : 0;
+          const bTime = b.votingEnds ? b.votingEnds.getTime() : 0;
           return aTime - bTime;
         });
       }
   }
-}
-
-function SkeletonProposalTable() {
-  return (
-    <table className="w-full shadow-md daisy-table-zebra daisy-table min-w-fit">
-      <thead>
-        <tr>
-          <th className="w-48">Voting Contract</th>
-
-          <th className="w-16">
-            <span className="mr-1">ID</span>
-          </th>
-
-          <th className="w-32">
-            <span className="mr-1">Created</span>
-          </th>
-
-          <th className="w-32">Voting Ends</th>
-
-          <th className="w-64">
-            <span className="mr-1">Quorum</span>
-          </th>
-
-          <th>Your Ballot</th>
-
-          <th className="w-16"></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <th>
-            <Skeleton />
-          </th>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  );
 }

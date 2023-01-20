@@ -5,7 +5,6 @@ import { parseUnits } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
@@ -43,7 +42,7 @@ export function VestingVaultDetails({
   }
 
   return (
-    <Page>
+    <>
       {status === "success" ? (
         <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
       ) : (
@@ -88,7 +87,7 @@ export function VestingVaultDetails({
           />
         ) : null}
       </div>
-    </Page>
+    </>
   );
 }
 

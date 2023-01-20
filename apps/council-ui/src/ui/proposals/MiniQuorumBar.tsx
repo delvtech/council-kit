@@ -15,15 +15,6 @@ export function MiniQuorumBar({
   const currentDate = new Date();
 
   if (!requiredQuorum) {
-    if (votingEnds && currentDate > votingEnds) {
-      return (
-        <progress
-          className="w-full daisy-progress daisy-progress-error"
-          value={100}
-          max={100}
-        />
-      );
-    }
     return <progress className="w-full daisy-progress" value={0} max={100} />;
   }
 
@@ -33,8 +24,8 @@ export function MiniQuorumBar({
     return (
       <progress
         className="w-full daisy-progress daisy-progress-error"
-        value={100}
-        max={100}
+        value={currentQuorum}
+        max={requiredQuorum}
       />
     );
   }
