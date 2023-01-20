@@ -91,7 +91,7 @@ export function LockingVaultDetails({
         {status === "success" ? (
           <ChangeDelegateForm
             currentDelegate={data.delegate}
-            disabled={!signer}
+            disabled={!signer || !+data.accountVotingPower}
             onDelegate={(delegate) =>
               changeDelegate({ signer: signer as Signer, delegate })
             }
@@ -135,9 +135,13 @@ function useLockingVaultDetailsData(
     queryKey: ["lockingVaultDetails", address, account],
     enabled: !!account,
     queryFn: async () => {
+      // safe to cast because the enabled option is set
+      account = account as string;
+
       const lockingVault = new LockingVault(address, context);
       const token = await lockingVault.getToken();
-      const delegate = await lockingVault.getDelegate(account as string);
+      const delegate = await lockingVault.getDelegate(account);
+      const accountVotingPower = await lockingVault.getVotingPower(account);
 
       let activeProposalCount = 0;
       const proposals = await coreVoting.getProposals();
@@ -147,10 +151,6 @@ function useLockingVaultDetailsData(
         }
       }
 
-      const accountVotingPower = await lockingVault.getVotingPower(
-        account as string,
-      );
-
       return {
         accountPercentOfTVP:
           (+accountVotingPower / +(await lockingVault.getTotalVotingPower())) *
@@ -159,20 +159,17 @@ function useLockingVaultDetailsData(
 
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
-        tokenBalance: await token.getBalanceOf(account as string),
-        tokenAllowance: await token.getAllowance(account as string, address),
-        depositedBalance: await lockingVault.getDepositedBalance(
-          account as string,
-        ),
+        tokenBalance: await token.getBalanceOf(account),
+        tokenAllowance: await token.getAllowance(account, address),
+        depositedBalance: await lockingVault.getDepositedBalance(account),
 
         delegate: delegate.address,
         descriptionURL: vaultConfig?.descriptionURL,
         name: vaultConfig?.name,
         activeProposalCount,
         participants: (await lockingVault.getVoters()).length,
-        delegatedToAccount: (
-          await lockingVault.getDelegatorsTo(account as string)
-        ).length,
+        delegatedToAccount: (await lockingVault.getDelegatorsTo(account))
+          .length,
       };
     },
   });
