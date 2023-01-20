@@ -1,29 +1,29 @@
-import { Ballot, getBlockDate } from "@council/sdk";
+import { getBlockDate } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { parseEther } from "ethers/lib/utils";
-import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
-import Skeleton from "react-loading-skeleton";
-import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
-import { makeProposalURL } from "src/routes";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
-import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
-import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
-import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
 import { useCouncil } from "src/ui/council/useCouncil";
+import {
+  ProposalRowData,
+  ProposalSortDirection,
+  ProposalSortField,
+  ProposalSortOptions,
+  ProposalsTable,
+  ProposalTableSkeleton,
+} from "src/ui/proposals/ProposalsTable";
 import { useAccount } from "wagmi";
 
+// TODO @cashd: Move sorting logic into the Proposal table component
 export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
   const { data, error, status } = useProposalsPageData(address);
 
-  const [sortOptions, setSortOptions] = useState<SortOptions>({
-    field: SortField.ID,
-    direction: SortDirection.NONE,
+  const [sortOptions, setSortOptions] = useState<ProposalSortOptions>({
+    field: ProposalSortField.ENDS,
+    direction: ProposalSortDirection.ASC,
   });
 
   const sortedData = useMemo(
@@ -32,31 +32,11 @@ export default function ProposalsPage(): ReactElement {
   );
 
   // handle the field and direction of the sorting
-  const handleSortOptionsChange = (field: SortField) => {
-    // user clicked on the same field, thus changing sort direction
-    if (field === sortOptions.field) {
-      const newSortDirectionState = sortStates[sortOptions.direction];
-
-      // reset to no sorting
-      if (newSortDirectionState === SortDirection.NONE) {
-        setSortOptions({
-          field: SortField.ID,
-          direction: SortDirection.NONE,
-        });
-      } else {
-        setSortOptions({
-          field,
-          direction: newSortDirectionState,
-        });
-      }
-    } else {
-      // user clicked a new field, starting the sorting at ascending
-      setSortOptions({
-        field,
-        direction: SortDirection.ASC,
-      });
-    }
-  };
+  const handleSortOptionsChange = (field: ProposalSortField) =>
+    setSortOptions({
+      field,
+      direction: sortStates[sortOptions.direction],
+    });
 
   return (
     <Page>
@@ -67,7 +47,7 @@ export default function ProposalsPage(): ReactElement {
           case "loading":
             return (
               <div className="w-full">
-                <SkeletonProposalTable />
+                <ProposalTableSkeleton />
               </div>
             );
 
@@ -111,137 +91,6 @@ export default function ProposalsPage(): ReactElement {
   );
 }
 
-interface ProposalsTableProps {
-  rowData?: ProposalRowData[];
-  sortOptions: SortOptions;
-  onSortOptionsChange: (field: SortField) => void;
-}
-
-function SortDirectionStatus({ direction }: { direction: SortDirection }) {
-  switch (direction) {
-    case SortDirection.ASC:
-      return <DownArrowSVG />;
-    case SortDirection.DESC:
-      return <UpArrowSVG />;
-    default:
-      return null;
-  }
-}
-
-function ProposalsTable({
-  rowData,
-  sortOptions,
-  onSortOptionsChange,
-}: ProposalsTableProps) {
-  return (
-    <table className="w-full shadow-md daisy-table-zebra daisy-table min-w-fit">
-      <thead>
-        <tr>
-          <th className="select-none">Voting Contract</th>
-
-          <th className="select-none">
-            <span className="mr-1 select-none">ID</span>
-          </th>
-
-          <th
-            className="cursor-pointer select-none hover:opacity-60"
-            onClick={() => onSortOptionsChange(SortField.CREATED)}
-          >
-            <span className="mr-1">Created</span>
-            {sortOptions.field === SortField.CREATED && (
-              <SortDirectionStatus direction={sortOptions.direction} />
-            )}
-          </th>
-
-          <th className="select-none">Voting Ends</th>
-
-          <th
-            className="cursor-pointer select-none hover:opacity-60"
-            onClick={() => onSortOptionsChange(SortField.QUORUM)}
-          >
-            <span className="mr-1">Quorum</span>
-            {sortOptions.field === SortField.QUORUM && (
-              <SortDirectionStatus direction={sortOptions.direction} />
-            )}
-          </th>
-
-          <th className="select-none">Your Ballot</th>
-
-          <th></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {rowData &&
-          rowData.map((proposal) => (
-            <ProposalTableRow
-              {...proposal}
-              key={`${proposal.votingContract}${proposal.id}`}
-            />
-          ))}
-      </tbody>
-    </table>
-  );
-}
-
-function ProposalTableRow({
-  votingContract,
-  id,
-  created,
-  votingEnds,
-  currentQuorum,
-  requiredQuorum,
-  ballot,
-}: ProposalRowData) {
-  return (
-    <tr>
-      <th>
-        <a
-          className="hover:underline"
-          href={makeEtherscanAddressURL(votingContract)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {formatAddress(votingContract)}
-          <ExternalLinkSVG size={16} />
-        </a>
-      </th>
-      <td>{id}</td>
-      <td>{created?.toLocaleDateString() ?? <em>unknown</em>}</td>
-      <td>{votingEnds?.toLocaleDateString() ?? <em>unknown</em>}</td>
-      <td>
-        {requiredQuorum ? (
-          <progress
-            className="w-full daisy-progress daisy-progress-info bg-neutral"
-            value={currentQuorum}
-            max={requiredQuorum}
-          />
-        ) : (
-          <em>unknown</em>
-        )}
-      </td>
-      <td>{ballot ?? <em>n/a</em>}</td>
-      <th>
-        <button className="daisy-btn daisy-btn-ghost daisy-btn-sm">
-          <Link href={makeProposalURL(votingContract, id)}>
-            <ChevronRightSVG />
-          </Link>
-        </button>
-      </th>
-    </tr>
-  );
-}
-
-interface ProposalRowData {
-  votingContract: string;
-  id: number;
-  created: Date | null;
-  votingEnds: Date | null;
-  currentQuorum: string;
-  requiredQuorum: string | null;
-  ballot: Ballot | null;
-}
-
 function useProposalsPageData(
   account: string | undefined,
 ): UseQueryResult<ProposalRowData[]> {
@@ -262,7 +111,8 @@ function useProposalsPageData(
           const expirationBlock = await proposal.getExpirationBlock();
           const vote = account ? await proposal.getVote(account) : null;
           return {
-            votingContract: proposal.votingContract.address,
+            votingContractAddress: proposal.votingContract.address,
+            votingContractName: proposal.votingContract.name,
             id: proposal.id,
             created:
               createdBlock &&
@@ -282,116 +132,42 @@ function useProposalsPageData(
   });
 }
 
-enum SortField {
-  ID = "ID",
-  CREATED = "Created",
-  QUORUM = "Quorum",
-}
-
-enum SortDirection {
-  ASC,
-  DESC,
-  NONE,
-}
-
-interface SortOptions {
-  field: SortField;
-  direction: SortDirection;
-}
-
 // simple state machine for sort state transitions
-const sortStates: Record<SortDirection, SortDirection> = {
-  [SortDirection.ASC]: SortDirection.DESC,
-  [SortDirection.DESC]: SortDirection.NONE,
-  [SortDirection.NONE]: SortDirection.ASC,
+const sortStates: Record<ProposalSortDirection, ProposalSortDirection> = {
+  [ProposalSortDirection.ASC]: ProposalSortDirection.DESC,
+  [ProposalSortDirection.DESC]: ProposalSortDirection.ASC,
 };
 
-function sortProposalRowData(sort: SortOptions, data?: ProposalRowData[]) {
+function sortProposalRowData(
+  sort: ProposalSortOptions,
+  data?: ProposalRowData[],
+) {
   if (!data) {
     return undefined;
   }
 
   switch (sort.field) {
-    case SortField.ID:
-      return data.slice().sort((a, b) => b.id - a.id);
-
-    case SortField.QUORUM:
-      if (sort.direction === SortDirection.ASC) {
+    case ProposalSortField.QUORUM:
+      if (sort.direction === ProposalSortDirection.ASC) {
         return data.slice().sort((a, b) => +b.currentQuorum - +a.currentQuorum);
       } else {
         return data.slice().sort((a, b) => +a.currentQuorum - +b.currentQuorum);
       }
 
-    case SortField.CREATED:
+    case ProposalSortField.ENDS:
     default:
-      if (sort.direction === SortDirection.ASC) {
+      if (sort.direction === ProposalSortDirection.ASC) {
         return data.slice().sort((a, b) => {
-          const aTime = a.created ? a.created.getTime() : 0;
-          const bTime = b.created ? b.created.getTime() : 0;
+          const aTime = a.votingEnds ? a.votingEnds.getTime() : 0;
+          const bTime = b.votingEnds ? b.votingEnds.getTime() : 0;
           return bTime - aTime;
         });
       } else {
         return data.slice().sort((a, b) => {
-          const aTime = a.created ? a.created.getTime() : 0;
-          const bTime = b.created ? b.created.getTime() : 0;
+          const aTime = a.votingEnds ? a.votingEnds.getTime() : 0;
+          const bTime = b.votingEnds ? b.votingEnds.getTime() : 0;
           return aTime - bTime;
         });
       }
   }
-}
-
-function SkeletonProposalTable() {
-  return (
-    <table className="w-full shadow-md daisy-table-zebra daisy-table min-w-fit">
-      <thead>
-        <tr>
-          <th className="w-48 select-none">Voting Contract</th>
-
-          <th className="w-16 select-none">
-            <span className="mr-1 select-none">ID</span>
-          </th>
-
-          <th className="w-32 select-none">
-            <span className="mr-1">Created</span>
-          </th>
-
-          <th className="w-32 select-none">Voting Ends</th>
-
-          <th className="w-64 select-none">
-            <span className="mr-1">Quorum</span>
-          </th>
-
-          <th className="select-none">Your Ballot</th>
-
-          <th className="w-16"></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <th>
-            <Skeleton />
-          </th>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  );
 }
