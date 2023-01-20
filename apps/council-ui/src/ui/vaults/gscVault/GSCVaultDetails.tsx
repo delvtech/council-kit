@@ -58,17 +58,18 @@ function useGSCVaultDetails(
   // safe to cast because this component should never be rendered unless it's
   // already known that there's a GSC Core Voting in the system.
   // See: pages/vaults/details.tsx
-  const gscCoreVoting = councilConfigs[chainId]
+  const gscCoreVotingConfig = councilConfigs[chainId]
     .gscVoting as VotingContractConfig;
-
-  const vaultConfig = gscCoreVoting.vaults.find(
+  const vaultConfig = gscCoreVotingConfig.vaults.find(
     (vault) => vault.address === address,
   ) as VaultConfig;
 
   return useQuery({
     queryKey: ["gscLockingVaultDetails", address, account],
-    enabled: !!account && !!vaultConfig,
+    enabled: !!account,
     queryFn: async (): Promise<GSCVaultDetailsData> => {
+      const accountAsString = account as string;
+
       const gscVault = new GSCVault(address, context);
 
       let activeProposalCount = 0;
@@ -79,14 +80,12 @@ function useGSCVaultDetails(
         }
       }
 
-      const isAccountGSCMember = await gscVault.getIsMember(account as string);
+      const isAccountGSCMember = await gscVault.getIsMember(accountAsString);
 
       return {
         isAccountGSCMember,
-        // safe to cast because enabled is set
-        descriptionURL: (vaultConfig as VaultConfig).descriptionURL,
-        // safe to cast because enabled is set
-        name: (vaultConfig as VaultConfig).name,
+        descriptionURL: vaultConfig.descriptionURL,
+        name: vaultConfig.name,
         activeProposalCount,
         participants: (await gscVault.getVoters()).length,
       };
