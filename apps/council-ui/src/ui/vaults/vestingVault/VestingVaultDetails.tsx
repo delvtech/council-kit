@@ -77,15 +77,15 @@ export function VestingVaultDetails({
             <GrantCardSkeleton />
           )}
         </div>
-        {status === "success" && hasGrant ? (
+        {status === "success" && (
           <ChangeDelegateForm
             currentDelegate={data.delegate}
-            disabled={!signer || !!data.accountVotingPower}
+            disabled={!signer || !+data.accountVotingPower}
             onDelegate={(delegate) =>
               changeDelegate({ signer: signer as Signer, delegate })
             }
           />
-        ) : null}
+        )}
       </div>
     </>
   );
@@ -126,14 +126,14 @@ function useVestingVaultDetailsData(
     queryKey: ["vestingVaultDetails", address, account],
     enabled: !!account,
     queryFn: async (): Promise<VestingVaultDetailsData> => {
+      // safe to cast because of the enabled option
+      account = account as string;
+
       const vestingVault = new VestingVault(address, context);
       const token = await vestingVault.getToken();
       const tokenDecimals = await token.getDecimals();
-      const grant = await vestingVault.getGrant(account as string);
-
-      const accountVotingPower = await vestingVault.getVotingPower(
-        account as string,
-      );
+      const grant = await vestingVault.getGrant(account);
+      const accountVotingPower = await vestingVault.getVotingPower(account);
 
       let activeProposalCount = 0;
       const proposals = await coreVoting.getProposals();
@@ -147,7 +147,7 @@ function useVestingVaultDetailsData(
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
         tokenDecimals,
-        tokenBalance: await token.getBalanceOf(account as string),
+        tokenBalance: await token.getBalanceOf(account),
         grantBalance: grant.allocation,
         grantBalanceWithdrawn: grant.withdrawn,
         unlockDate: await getBlockDate(grant.unlockBlock, context.provider, {
@@ -160,14 +160,13 @@ function useVestingVaultDetailsData(
             estimateFutureDates: true,
           },
         ),
-        delegate: (await vestingVault.getDelegate(account as string)).address,
+        delegate: (await vestingVault.getDelegate(account)).address,
         descriptionURL: vaultConfig?.descriptionURL,
         name: vaultConfig?.name,
         accountVotingPower,
         participants: (await vestingVault.getVoters()).length,
-        delegatedToAccount: (
-          await vestingVault.getDelegatorsTo(account as string)
-        ).length,
+        delegatedToAccount: (await vestingVault.getDelegatorsTo(account))
+          .length,
         activeProposalCount,
         accountPercentOfTVP:
           (+accountVotingPower / +(await vestingVault.getTotalVotingPower())) *
