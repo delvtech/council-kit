@@ -10,14 +10,14 @@ import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
 import {
-  VaultStatsBar,
-  VaultStatsBarSkeleton,
-} from "src/ui/vaults/VaultStatsBar";
-import {
   GrantCard,
   GrantCardSkeleton,
 } from "src/ui/vaults/vestingVault/GrantCard";
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
+import {
+  VaultStatsBarSkeleton,
+  VestingVaultStatsBar,
+} from "src/ui/vaults/vestingVault/VestingVaultStatsBar";
 import { useAccount, useSigner } from "wagmi";
 
 interface VestingVaultDetailsProps {
@@ -50,7 +50,7 @@ export function VestingVaultDetails({
       )}
 
       {status === "success" ? (
-        <VaultStatsBar
+        <VestingVaultStatsBar
           activeProposalCount={data.activeProposalCount}
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}

@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { Page } from "src/ui/base/Page";
 import { useChainId } from "src/ui/network/useChainId";
+import { GSCVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
 import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
 import { getAllVaults } from "src/vaults/vaults";
@@ -31,7 +32,7 @@ export default function Vault(): ReactElement {
             return <VestingVaultDetails address={address as string} />;
 
           case "GSCVault":
-            return <></>;
+            return <GSCVaultDetails address={address as string} />;
 
           default:
             return <></>;

@@ -4,7 +4,7 @@ import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 
-interface VaultStatsBarProps {
+interface LockingVaultStatsBarProps {
   activeProposalCount: number;
   accountVotingPower: string;
   accountPercentOfTVP: number;
@@ -14,7 +14,7 @@ interface VaultStatsBarProps {
   tokenSymbol: string;
 }
 
-export function VaultStatsBar({
+export function LockingVaultStatsBar({
   activeProposalCount,
   accountVotingPower,
   accountPercentOfTVP,
@@ -22,7 +22,7 @@ export function VaultStatsBar({
   participants,
   tokenAddress,
   tokenSymbol,
-}: VaultStatsBarProps): ReactElement {
+}: LockingVaultStatsBarProps): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
       {activeProposalCount >= 0 && (

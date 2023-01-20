@@ -22,6 +22,8 @@ export async function deployVotingToken({
   const deploymentArgs: DeployArguments<MockERC20__factory> = [
     tokenName,
     tokenSymbol,
+    // setting the owner to the Signer so that it's possible to mint tokens at
+    // any time using whatever wallet deployed the token.
     signer.address,
   ];
 
