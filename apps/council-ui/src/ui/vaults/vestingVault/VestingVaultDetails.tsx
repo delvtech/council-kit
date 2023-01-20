@@ -80,7 +80,7 @@ export function VestingVaultDetails({
         {status === "success" && (
           <ChangeDelegateForm
             currentDelegate={data.delegate}
-            disabled={!signer || !!data.accountVotingPower}
+            disabled={!signer || !+data.accountVotingPower}
             onDelegate={(delegate) =>
               changeDelegate({ signer: signer as Signer, delegate })
             }
