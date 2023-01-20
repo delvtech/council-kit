@@ -4,6 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import { makeVoterURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
+import { Stat } from "src/ui/base/Stat";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 
 interface ProposalStatsBarProps {
@@ -26,74 +27,43 @@ export function ProposalStatsBar({
   const createdByDisplayName = useDisplayName(createdBy);
   return (
     <div className="flex flex-wrap gap-4">
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Voting Contract</div>
-          <div className="text-sm daisy-stat-value">
-            <Address address={votingContractAddress} />
-          </div>
-        </div>
-      </div>
+      <Stat
+        label="Voting contract"
+        value={<Address address={votingContractAddress} />}
+      />
 
       {createdByDisplayName && createdBy && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Created By</div>
-            <div className="text-sm daisy-stat-value">
-              <Link
-                className="flex items-center hover:underline"
-                href={makeVoterURL(createdBy)}
-              >
-                <WalletIcon address={createdBy} size={16} className="mr-1" />
-                {createdByDisplayName}
-              </Link>
-            </div>
-          </div>
-        </div>
+        <Stat
+          label="Created by"
+          value={
+            <Link
+              className="flex items-center hover:underline"
+              href={makeVoterURL(createdBy)}
+            >
+              <WalletIcon address={createdBy} size={16} className="mr-1" />
+              {createdByDisplayName}
+            </Link>
+          }
+        />
       )}
 
       {createdAtDate && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Created at</div>
-            <div className="text-sm daisy-stat-value">
-              {createdAtDate.toLocaleDateString()}
-            </div>
-          </div>
-        </div>
+        <Stat label="Created at" value={createdAtDate.toLocaleDateString()} />
       )}
 
       {unlockAtDate && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Executable On</div>
-            <div className="text-sm daisy-stat-value">
-              {unlockAtDate.toLocaleDateString()}
-            </div>
-          </div>
-        </div>
+        <Stat label="Executable on" value={unlockAtDate.toLocaleDateString()} />
       )}
 
       {endsAtDate && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Voting Ends</div>
-            <div className="text-sm daisy-stat-value">
-              {endsAtDate.toLocaleDateString()}
-            </div>
-          </div>
-        </div>
+        <Stat label="Voting ends" value={endsAtDate.toLocaleDateString()} />
       )}
 
       {lastCallAtDate && (
-        <div className="daisy-stats">
-          <div className="daisy-stat bg-base-300">
-            <div className="daisy-stat-title">Execution Deadline</div>
-            <div className="text-sm daisy-stat-value">
-              {lastCallAtDate.toLocaleDateString()}
-            </div>
-          </div>
-        </div>
+        <Stat
+          label="Execution deadline"
+          value={lastCallAtDate.toLocaleDateString()}
+        />
       )}
     </div>
   );
@@ -104,56 +74,12 @@ export function ProposalStatsBar({
 export function ProposalStatsBarSkeleton(): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Voting Contract</div>
-          <div className="text-sm daisy-stat-value">Core Voting</div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Created</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Voting Ends</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Unlocked</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Last Call</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
-      <div className="daisy-stats">
-        <div className="daisy-stat bg-base-300">
-          <div className="daisy-stat-title">Created By</div>
-          <div className="text-sm daisy-stat-value">
-            <Skeleton width={90} />
-          </div>
-        </div>
-      </div>
+      <Stat label="Voting contract" value={<Skeleton width={90} />} />
+      <Stat label="Created by" value={<Skeleton width={90} />} />
+      <Stat label="Created at" value={<Skeleton width={90} />} />
+      <Stat label="Executable on" value={<Skeleton width={90} />} />
+      <Stat label="Voting ends" value={<Skeleton width={90} />} />
+      <Stat label="Execution deadline" value={<Skeleton width={90} />} />
     </div>
   );
 }
