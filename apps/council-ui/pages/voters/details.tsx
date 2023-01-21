@@ -9,7 +9,7 @@ import { Address } from "src/ui/base/Address";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { GSCStatus, useGSCStatus } from "src/ui/voters/hooks/useGSCStatus";
+import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import {
   getVoterDataByVault,
   VoterDataByVault,
@@ -26,6 +26,7 @@ import {
   VotingHistoryTable,
   VotingHistoryTableSkeleton,
 } from "src/ui/voters/VotingHistoryTable";
+import { GSCStatus } from "src/vaults/gscVault";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {
@@ -141,27 +142,30 @@ export function useVoterData(
   const { context, coreVoting } = useCouncil();
   const { data: gscStatus } = useGSCStatus(address);
 
+  const queryEnabled = !!address;
   return useQuery({
     queryKey: ["voter-stats", address, gscStatus],
-    enabled: !!address,
-    queryFn: async (): Promise<VoterData> => {
-      const voter = new Voter(address as string, context);
-      const votingHistory = await voter.getVotes(coreVoting.address);
-      const votingPower = await voter.getVotingPower(
-        coreVoting.vaults.map((vault) => vault.address),
-      );
-      const voterDataByVault = await getVoterDataByVault(
-        address as string,
-        coreVoting,
-      );
+    enabled: queryEnabled,
+    queryFn: queryEnabled
+      ? async (): Promise<VoterData> => {
+          const voter = new Voter(address, context);
+          const votingHistory = await voter.getVotes(coreVoting.address);
+          const votingPower = await voter.getVotingPower(
+            coreVoting.vaults.map((vault) => vault.address),
+          );
+          const voterDataByVault = await getVoterDataByVault(
+            address,
+            coreVoting,
+          );
 
-      return {
-        votingHistory: votingHistory,
-        votingPower,
-        gscStatus: gscStatus ?? null,
-        voterDataByVault,
-      };
-    },
+          return {
+            votingHistory: votingHistory,
+            votingPower,
+            gscStatus: gscStatus ?? null,
+            voterDataByVault,
+          };
+        }
+      : undefined,
     refetchOnWindowFocus: false,
   });
 }

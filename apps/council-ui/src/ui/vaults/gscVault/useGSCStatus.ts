@@ -1,8 +1,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { parseEther } from "ethers/lib/utils";
 import { useCouncil } from "src/ui/council/useCouncil";
-
-export type GSCStatus = "N/A" | "Idle" | "Member" | "Eligible" | "Ineligible";
+import { GSCStatus } from "src/vaults/gscVault";
 
 export function useGSCStatus(
   address: string | undefined,
