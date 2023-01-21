@@ -1,4 +1,4 @@
-import { GSCVault, GSCVotingContract } from "@council/sdk";
+import { GSCVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
@@ -7,19 +7,27 @@ import { getActiveProposalCount } from "src/proposals/getActiveProposalCount";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
+import {
+  GSCVaultStatsBar,
+  GSCVaultStatsBarSkeleton,
+} from "src/ui/vaults/gscVault/GSCVaultStatsBar";
 
 import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
+import { getGSCStatus, GSCStatus } from "src/vaults/gscVault";
 import { useAccount } from "wagmi";
 
 interface GSCVaultDetailsProps {
-  address: string;
+  gscVaultAddress: string;
 }
 
 export function GSCVaultDetails({
-  address,
+  gscVaultAddress,
 }: GSCVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
-  const { data, status, error } = useGSCVaultDetails(address, account);
+  const { data, status, error } = useGSCVaultDetails({
+    gscVaultAddress: gscVaultAddress,
+    account,
+  });
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
@@ -33,7 +41,15 @@ export function GSCVaultDetails({
         <VaultHeaderSkeleton />
       )}
 
-      {/* TODO: Stats here */}
+      {status === "success" ? (
+        <GSCVaultStatsBar
+          accountMembership={data.gscStatus}
+          activeProposalCount={data.activeProposalCount}
+          participants={data.participants}
+        />
+      ) : (
+        <GSCVaultStatsBarSkeleton />
+      )}
 
       <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
         {/* TODO: Forms and GSC Members table here */}
@@ -43,44 +59,50 @@ export function GSCVaultDetails({
 }
 
 interface GSCVaultDetailsData {
-  isAccountGSCMember: boolean;
+  gscStatus: GSCStatus;
   activeProposalCount: number;
   descriptionURL: string | undefined;
   name: string | undefined;
   participants: number;
 }
 
-function useGSCVaultDetails(
-  address: string,
-  account: string | undefined,
-): UseQueryResult<GSCVaultDetailsData> {
-  const { context, gscVoting } = useCouncil();
+function useGSCVaultDetails({
+  gscVaultAddress,
+  account,
+}: {
+  gscVaultAddress: string;
+  account: string | undefined;
+}): UseQueryResult<GSCVaultDetailsData> {
+  const { context, coreVoting, gscVoting } = useCouncil();
   const chainId = useChainId();
+
   // safe to cast because this component should never be rendered unless it's
   // already known that there's a GSC Core Voting in the system.
   // See: pages/vaults/details.tsx
   const gscCoreVotingConfig = councilConfigs[chainId]
     .gscVoting as VotingContractConfig;
   const vaultConfig = gscCoreVotingConfig.vaults.find(
-    (vault) => vault.address === address,
+    (vault) => vault.address === gscVaultAddress,
   ) as VaultConfig;
 
-  const queryEnabled = !!account;
+  const queryEnabled = !!account && !!gscVoting;
   return useQuery({
-    queryKey: ["gscLockingVaultDetails", address, account],
+    queryKey: ["gscLockingVaultDetails", gscVaultAddress, account],
     enabled: queryEnabled,
     queryFn: queryEnabled
       ? async (): Promise<GSCVaultDetailsData> => {
-          const gscVault = new GSCVault(address, context);
+          const gscVault = new GSCVault(gscVaultAddress, context);
 
-          const activeProposalCount = await getActiveProposalCount(
-            gscVoting as GSCVotingContract,
-          );
-          const isAccountGSCMember = await gscVault.getIsMember(account);
+          const activeProposalCount = await getActiveProposalCount(gscVoting);
           const participants = (await gscVault.getVoters()).length;
+          const gscStatus = await getGSCStatus({
+            coreVoting,
+            gscVoting,
+            address: account,
+          });
 
           return {
-            isAccountGSCMember,
+            gscStatus,
             descriptionURL: vaultConfig.descriptionURL,
             name: vaultConfig.name,
             activeProposalCount,

@@ -33,7 +33,7 @@ export function GSCVaultStatsBar({
 
 // ================ Skeletons ================
 
-export function VaultStatsBarSkeleton(): ReactElement {
+export function GSCVaultStatsBarSkeleton(): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
       <Stat label="Active Proposals" value={<Skeleton width={90} />} />
