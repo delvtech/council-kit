@@ -1,8 +1,9 @@
-import { GSCVault } from "@council/sdk";
+import { GSCVault, GSCVotingContract } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { VaultConfig, VotingContractConfig } from "src/config/CouncilConfig";
+import { getActiveProposalCount } from "src/proposals/getActiveProposalCount";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
@@ -64,31 +65,28 @@ function useGSCVaultDetails(
     (vault) => vault.address === address,
   ) as VaultConfig;
 
+  const queryEnabled = !!account;
   return useQuery({
     queryKey: ["gscLockingVaultDetails", address, account],
-    enabled: !!account,
-    queryFn: async (): Promise<GSCVaultDetailsData> => {
-      const accountAsString = account as string;
+    enabled: queryEnabled,
+    queryFn: queryEnabled
+      ? async (): Promise<GSCVaultDetailsData> => {
+          const gscVault = new GSCVault(address, context);
 
-      const gscVault = new GSCVault(address, context);
+          const activeProposalCount = await getActiveProposalCount(
+            gscVoting as GSCVotingContract,
+          );
+          const isAccountGSCMember = await gscVault.getIsMember(account);
+          const participants = (await gscVault.getVoters()).length;
 
-      let activeProposalCount = 0;
-      const proposals = (await gscVoting?.getProposals()) || [];
-      for (const proposal of proposals) {
-        if (await proposal.getIsActive()) {
-          activeProposalCount++;
+          return {
+            isAccountGSCMember,
+            descriptionURL: vaultConfig.descriptionURL,
+            name: vaultConfig.name,
+            activeProposalCount,
+            participants: participants,
+          };
         }
-      }
-
-      const isAccountGSCMember = await gscVault.getIsMember(accountAsString);
-
-      return {
-        isAccountGSCMember,
-        descriptionURL: vaultConfig.descriptionURL,
-        name: vaultConfig.name,
-        activeProposalCount,
-        participants: (await gscVault.getVoters()).length,
-      };
-    },
+      : undefined,
   });
 }
