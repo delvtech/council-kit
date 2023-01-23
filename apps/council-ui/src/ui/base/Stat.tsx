@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from "react";
 
 interface StatProps {
-  label: string;
+  label: ReactNode;
   value: ReactNode;
 
   // TODO: Add `labelTooltip: string` if we ever need it

@@ -45,7 +45,7 @@ export function DefinitionTooltip({
     <Tooltip
       {...passThruProps}
       className={classNames(
-        "cursor-help border-b border-dashed border-current",
+        "cursor-help border-b border-dotted border-current",
         className,
       )}
     />

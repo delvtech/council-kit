@@ -4,6 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import { makeVaultURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { definitions, DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 
 interface GenericVaultCardProps {
   address: string;
@@ -27,11 +28,20 @@ export function GenericVaultCard({
         <div className="flex-col daisy-card-actions gap-y-6">
           <div className="flex flex-row items-start mr-auto text-lg gap-x-6">
             <div>
-              <h2>TVP</h2>
+              <h2>
+                <DefinitionTooltip content={definitions.TVP}>
+                  TVP
+                </DefinitionTooltip>
+              </h2>
               <p className="font-bold">{tvp ? formatBalance(tvp) : "None"}</p>
             </div>
             <div>
-              <h2>Your TVP</h2>
+              <h2>
+                Your{" "}
+                <DefinitionTooltip content={definitions.TVP}>
+                  TVP
+                </DefinitionTooltip>
+              </h2>
               <p className="font-bold">
                 {votingPower ? formatBalance(votingPower) : "None"}
               </p>
