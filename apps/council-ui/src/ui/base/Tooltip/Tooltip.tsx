@@ -23,11 +23,7 @@ export function Tooltip({
     <Tooltip2
       {...passThruProps}
       {...propsWithDefaults}
-      className={classNames(
-        Classes.TOOLTIP2_INDICATOR,
-        "cursor-help",
-        className,
-      )}
+      className={classNames(Classes.TOOLTIP2_INDICATOR, className)}
       popoverClassName={classNames(
         styles.popover,
         popoverClassName,
