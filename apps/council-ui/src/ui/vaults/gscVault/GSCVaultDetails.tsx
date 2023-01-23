@@ -45,7 +45,7 @@ export function GSCVaultDetails({
         <GSCVaultStatsBar
           accountMembership={data.gscStatus}
           activeProposalCount={data.activeProposalCount}
-          participants={data.participants}
+          membersCount={data.participants}
         />
       ) : (
         <GSCVaultStatsBarSkeleton />

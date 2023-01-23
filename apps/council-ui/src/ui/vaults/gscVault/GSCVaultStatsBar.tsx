@@ -6,13 +6,13 @@ import { GSCStatus } from "src/vaults/gscVault";
 interface GSCVaultStatsBarProps {
   activeProposalCount: number;
   accountMembership: GSCStatus;
-  participants: number;
+  membersCount: number;
 }
 
 export function GSCVaultStatsBar({
   activeProposalCount,
   accountMembership,
-  participants,
+  membersCount,
 }: GSCVaultStatsBarProps): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
@@ -24,8 +24,8 @@ export function GSCVaultStatsBar({
         <Stat label="Your GSC Membership Status" value={accountMembership} />
       )}
 
-      {participants >= 0 && (
-        <Stat label="# of GSC Members" value={participants} />
+      {membersCount >= 0 && (
+        <Stat label="# of GSC Members" value={membersCount} />
       )}
     </div>
   );
