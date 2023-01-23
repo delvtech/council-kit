@@ -13,10 +13,13 @@ export default function ExternalLink({
   iconSize = 16,
 }: ExternalLinkProps): ReactElement {
   return (
-    <a href={href} target="_blank" rel="noreferrer">
-      <div className="flex items-center hover:underline">
-        {children} <ExternalLinkSVG size={iconSize} />
-      </div>
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="daisy-link daisy-link-hover inline-flex self-start items-center"
+    >
+      {children} <ExternalLinkSVG size={iconSize} />
     </a>
   );
 }
