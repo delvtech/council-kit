@@ -12,6 +12,7 @@
     "format:check": "prettier --check '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'"
   },
   "dependencies": {
+    "@blueprintjs/popover2": "^1.11.3",
     "@council/deploy": "*",
     "@council/sdk": "*",
     "@ensdomains/ensjs": "^3.0.0-alpha.37",
