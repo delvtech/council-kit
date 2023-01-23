@@ -2,41 +2,21 @@ import { getBlockDate } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { parseEther } from "ethers/lib/utils";
-import { ReactElement, useMemo, useState } from "react";
+import { ReactElement } from "react";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import {
   ProposalRowData,
-  ProposalSortDirection,
-  ProposalSortField,
-  ProposalSortOptions,
   ProposalsTable,
-  ProposalTableSkeleton,
 } from "src/ui/proposals/ProposalsTable";
+import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalsTableSkeleton";
 import { useAccount } from "wagmi";
 
 // TODO @cashd: Move sorting logic into the Proposal table component
 export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
   const { data, error, status } = useProposalsPageData(address);
-
-  const [sortOptions, setSortOptions] = useState<ProposalSortOptions>({
-    field: ProposalSortField.ENDS,
-    direction: ProposalSortDirection.ASC,
-  });
-
-  const sortedData = useMemo(
-    () => sortProposalRowData(sortOptions, data),
-    [sortOptions, data],
-  );
-
-  // handle the field and direction of the sorting
-  const handleSortOptionsChange = (field: ProposalSortField) =>
-    setSortOptions({
-      field,
-      direction: sortStates[sortOptions.direction],
-    });
 
   return (
     <Page>
@@ -47,7 +27,7 @@ export default function ProposalsPage(): ReactElement {
           case "loading":
             return (
               <div className="w-full">
-                <ProposalTableSkeleton />
+                <ProposalsTableSkeleton />
               </div>
             );
 
@@ -63,11 +43,7 @@ export default function ProposalsPage(): ReactElement {
           case "success":
             return (
               <div className="w-full">
-                <ProposalsTable
-                  rowData={sortedData}
-                  sortOptions={sortOptions}
-                  onSortOptionsChange={handleSortOptionsChange}
-                />
+                <ProposalsTable rowData={data} />
               </div>
             );
           default:
@@ -130,44 +106,4 @@ function useProposalsPageData(
       );
     },
   });
-}
-
-// simple state machine for sort state transitions
-const sortStates: Record<ProposalSortDirection, ProposalSortDirection> = {
-  [ProposalSortDirection.ASC]: ProposalSortDirection.DESC,
-  [ProposalSortDirection.DESC]: ProposalSortDirection.ASC,
-};
-
-function sortProposalRowData(
-  sort: ProposalSortOptions,
-  data?: ProposalRowData[],
-) {
-  if (!data) {
-    return undefined;
-  }
-
-  switch (sort.field) {
-    case ProposalSortField.QUORUM:
-      if (sort.direction === ProposalSortDirection.ASC) {
-        return data.slice().sort((a, b) => +b.currentQuorum - +a.currentQuorum);
-      } else {
-        return data.slice().sort((a, b) => +a.currentQuorum - +b.currentQuorum);
-      }
-
-    case ProposalSortField.ENDS:
-    default:
-      if (sort.direction === ProposalSortDirection.ASC) {
-        return data.slice().sort((a, b) => {
-          const aTime = a.votingEnds ? a.votingEnds.getTime() : 0;
-          const bTime = b.votingEnds ? b.votingEnds.getTime() : 0;
-          return bTime - aTime;
-        });
-      } else {
-        return data.slice().sort((a, b) => {
-          const aTime = a.votingEnds ? a.votingEnds.getTime() : 0;
-          const bTime = b.votingEnds ? b.votingEnds.getTime() : 0;
-          return aTime - bTime;
-        });
-      }
-  }
 }
