@@ -19,8 +19,8 @@ export function VaultHeader({
   return (
     <div className="flex flex-col gap-1">
       <h1 className="inline text-5xl font-bold">{name}</h1>
-      <ExternalLink href={descriptionURL} iconSize={18}>
-        <span>Click here to learn more about this vault</span>
+      <ExternalLink href={descriptionURL} iconSize={18} className="self-start">
+        <span>Learn more about this vault</span>
       </ExternalLink>
     </div>
   );
