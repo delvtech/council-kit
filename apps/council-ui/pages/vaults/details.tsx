@@ -32,7 +32,7 @@ export default function Vault(): ReactElement {
             return <VestingVaultDetails address={address as string} />;
 
           case "GSCVault":
-            return <GSCVaultDetails address={address as string} />;
+            return <GSCVaultDetails vaultAddress={address as string} />;
 
           default:
             return <></>;
