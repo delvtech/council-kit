@@ -11,6 +11,7 @@ import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useCouncil } from "src/ui/council/useCouncil";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
+import { asyncFilter } from "src/utils/asyncFilter";
 
 interface VotingActivityTableProps {
   votes: Vote[];
@@ -41,38 +42,29 @@ export function VotingActivityTable({
 
   const [gscOnly, setGscOnly] = useState(false);
 
-  const asyncVotesFilter = async () => {
-    // SDK caches the GSC member status
-    const results = await Promise.all(
-      votes.map(async (vote) => gscVoting?.getIsMember(vote.voter.address)),
-    );
-
-    return votes.filter((_, index) => results[index]);
-  };
-
   const [filteredVotes, setFilteredVotes] = useState(votes);
-
-  useEffect(() => {
-    if (gscOnly) {
-      asyncVotesFilter().then((votes) => setFilteredVotes(votes));
-    } else {
-      // reset filter
-      setFilteredVotes(votes);
-    }
-  }, [gscOnly]);
 
   const sortedData = useMemo(
     () => sortVotes(sortOptions, filteredVotes),
     [sortOptions, filteredVotes],
   );
 
+  useEffect(() => {
+    if (gscOnly && gscVoting) {
+      asyncFilter(votes, (vote) =>
+        gscVoting.getIsMember(vote.voter.address),
+      ).then((filteredVotes) => setFilteredVotes(filteredVotes));
+    } else {
+      // reset filter
+      setFilteredVotes(votes);
+    }
+  }, [gscOnly]);
+
   const handleSortOptionsChange = (field: SortField) =>
     setSortOptions({
       field,
       direction: sortStates[sortOptions.direction],
     });
-
-  console.log(gscOnly);
 
   return (
     <div className="flex flex-col gap-y-2">
