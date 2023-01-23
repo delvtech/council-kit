@@ -4,6 +4,8 @@ import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";
+import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { TVP_TIP } from "src/ui/vaults/tooltips";
 
 interface LockingVaultStatsBarProps {
   activeProposalCount: number;
@@ -39,7 +41,12 @@ export function LockingVaultStatsBar({
 
       {accountPercentOfTVP >= 0 && (
         <Stat
-          label="% of Total TVP"
+          label={
+            <>
+              % of Total{" "}
+              <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
+            </>
+          }
           value={`${formatBalance(accountPercentOfTVP, 2)}%`}
         />
       )}
@@ -69,7 +76,15 @@ export function VaultStatsBarSkeleton(): ReactElement {
     <div className="flex flex-wrap gap-4">
       <Stat label="Active Proposals" value={<Skeleton width={90} />} />
       <Stat label="Your Voting Power" value={<Skeleton width={90} />} />
-      <Stat label="% of Total TVP" value={<Skeleton width={90} />} />
+      <Stat
+        label={
+          <>
+            % of Total{" "}
+            <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
+          </>
+        }
+        value={<Skeleton width={90} />}
+      />
       <Stat label="Delegated to You" value={<Skeleton width={90} />} />
       <Stat label="Participants" value={<Skeleton width={90} />} />
       <Stat label="Vault token" value={<Skeleton width={90} />} />

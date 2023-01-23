@@ -1,8 +1,10 @@
 import { Voter } from "@council/sdk";
 import { ethers } from "ethers";
 import { getAddress } from "ethers/lib/utils";
+import Link from "next/link";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
+import { makeVaultURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { WalletIcon } from "src/ui/base/WalletIcon";
@@ -23,9 +25,11 @@ export function VoterVaultsList({
             className="flex flex-col p-8 grow md:grow-0 gap-y-2 daisy-card bg-base-300"
             key={row.vault.address}
           >
-            <h3 className="text-2xl font-semibold underline">
-              {row.vault.name}
-            </h3>
+            <Link href={makeVaultURL(row.vault.address)}>
+              <h3 className="text-2xl font-semibold underline">
+                {row.vault.name}
+              </h3>
+            </Link>
 
             {row.balance && (
               <div className="flex">

@@ -1,0 +1,17 @@
+.popover :global(.bp4-popover2-content) {
+  @apply bg-neutral text-neutral-content px-2 py-1 bg-opacity-90 rounded text-sm;
+}
+
+.popover :global(.bp4-popover2-arrow) {
+  width: 30px;
+  height: 30px;
+}
+
+.popover :global(.bp4-popover2-arrow-border) {
+  display: none
+}
+
+.popover :global(.bp4-popover2-arrow-fill) {
+  @apply fill-neutral opacity-90;
+}
+
