@@ -1,7 +1,7 @@
 import { Ballot, Vote } from "@council/sdk";
 import { FixedNumber } from "ethers";
 import Link from "next/link";
-import { ReactElement, useMemo, useState } from "react";
+import { ChangeEvent, ReactElement, useEffect, useMemo, useState } from "react";
 import { EnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
@@ -9,6 +9,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
 import { WalletIcon } from "src/ui/base/WalletIcon";
+import { useCouncil } from "src/ui/council/useCouncil";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingActivityTableProps {
@@ -36,9 +37,33 @@ export function VotingActivityTable({
     direction: "ASC",
   });
 
+  const { gscVoting } = useCouncil();
+
+  const [gscOnly, setGscOnly] = useState(false);
+
+  const asyncVotesFilter = async () => {
+    // SDK caches the GSC member status
+    const results = await Promise.all(
+      votes.map(async (vote) => gscVoting?.getIsMember(vote.voter.address)),
+    );
+
+    return votes.filter((_, index) => results[index]);
+  };
+
+  const [filteredVotes, setFilteredVotes] = useState(votes);
+
+  useEffect(() => {
+    if (gscOnly) {
+      asyncVotesFilter().then((votes) => setFilteredVotes(votes));
+    } else {
+      // reset filter
+      setFilteredVotes(votes);
+    }
+  }, [gscOnly]);
+
   const sortedData = useMemo(
-    () => sortVotes(sortOptions, votes),
-    [sortOptions, votes],
+    () => sortVotes(sortOptions, filteredVotes),
+    [sortOptions, filteredVotes],
   );
 
   const handleSortOptionsChange = (field: SortField) =>
@@ -47,40 +72,56 @@ export function VotingActivityTable({
       direction: sortStates[sortOptions.direction],
     });
 
-  return (
-    <div className="w-full overflow-auto max-h-96">
-      <table className="w-full daisy-table-zebra daisy-table">
-        <thead>
-          <tr>
-            <th>Voter</th>
-            <th
-              className="cursor-pointer"
-              onClick={() => handleSortOptionsChange("VotingPower")}
-            >
-              <span className="mr-1 select-none hover:underline">
-                Voting Power
-              </span>
-              <SortDirectionStatus
-                direction={sortOptions.direction}
-                enabled={sortOptions.field === "VotingPower"}
-              />
-            </th>
-            <th>Ballot</th>
-          </tr>
-        </thead>
+  console.log(gscOnly);
 
-        <tbody className="h-24 overflow-auto">
-          {sortedData.map((vote, i) => (
-            <VotingActivityTableRow
-              key={`${vote.voter.address}-${vote.ballot}-${i}`}
-              address={vote.voter.address}
-              displayName={voterEnsRecords[vote.voter.address]}
-              votePower={vote.power}
-              voteBallot={vote.ballot}
-            />
-          ))}
-        </tbody>
-      </table>
+  return (
+    <div className="flex flex-col gap-y-2">
+      <label className="mb-2 cursor-pointer daisy-label w-fit">
+        <span className="mr-2 font-medium daisy-label-text">GSC Only</span>
+        <input
+          type="checkbox"
+          className="daisy-toggle daisy-toggle-warning"
+          checked={gscOnly}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            setGscOnly(event.target.checked);
+          }}
+        />
+      </label>
+
+      <div className="w-full overflow-auto max-h-96">
+        <table className="w-full daisy-table-zebra daisy-table">
+          <thead>
+            <tr>
+              <th>Voter</th>
+              <th
+                className="cursor-pointer"
+                onClick={() => handleSortOptionsChange("VotingPower")}
+              >
+                <span className="mr-1 select-none hover:underline">
+                  Voting Power
+                </span>
+                <SortDirectionStatus
+                  direction={sortOptions.direction}
+                  enabled={sortOptions.field === "VotingPower"}
+                />
+              </th>
+              <th>Ballot</th>
+            </tr>
+          </thead>
+
+          <tbody className="h-24 overflow-auto">
+            {sortedData.map((vote, i) => (
+              <VotingActivityTableRow
+                key={`${vote.voter.address}-${vote.ballot}-${i}`}
+                address={vote.voter.address}
+                displayName={voterEnsRecords[vote.voter.address]}
+                votePower={vote.power}
+                voteBallot={vote.ballot}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
