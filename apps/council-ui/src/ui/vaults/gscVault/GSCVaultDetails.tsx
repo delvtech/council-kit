@@ -17,15 +17,15 @@ import { getGSCStatus, GSCStatus } from "src/vaults/gscVault";
 import { useAccount } from "wagmi";
 
 interface GSCVaultDetailsProps {
-  gscVaultAddress: string;
+  vaultAddress: string;
 }
 
 export function GSCVaultDetails({
-  gscVaultAddress,
+  vaultAddress: vaultAddress,
 }: GSCVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
   const { data, status, error } = useGSCVaultDetails({
-    gscVaultAddress: gscVaultAddress,
+    vaultAddress,
     account,
   });
 
@@ -67,10 +67,10 @@ interface GSCVaultDetailsData {
 }
 
 function useGSCVaultDetails({
-  gscVaultAddress,
+  vaultAddress: gscVaultAddress,
   account,
 }: {
-  gscVaultAddress: string;
+  vaultAddress: string;
   account: string | undefined;
 }): UseQueryResult<GSCVaultDetailsData> {
   const { context, coreVoting, gscVoting } = useCouncil();
@@ -106,7 +106,7 @@ function useGSCVaultDetails({
             descriptionURL: vaultConfig.descriptionURL,
             name: vaultConfig.name,
             activeProposalCount,
-            participants: participants,
+            participants,
           };
         }
       : undefined,
