@@ -11,10 +11,8 @@ import {
   ProposalStatsBarSkeleton,
 } from "src/ui/proposals/ProposalStatsBar";
 import { QuorumBar, QuorumBarSkeleton } from "src/ui/proposals/QuorumBar";
-import {
-  VotingActivityTable,
-  VotingActivityTableSkeleton,
-} from "src/ui/proposals/VotingActivityTable";
+import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable";
+import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTableSkeleton";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
 import {
@@ -102,7 +100,9 @@ export default function ProposalPage(): ReactElement {
 
       <div className="flex flex-wrap w-full gap-10 sm:gap-y-0">
         <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
-          <h1 className="text-2xl font-medium">Voting Activity</h1>
+          <h1 className="text-2xl font-medium">
+            Voting Activity {data?.votes && `(${data.votes.length})`}
+          </h1>
 
           {status === "success" ? (
             <VotingActivityTable
