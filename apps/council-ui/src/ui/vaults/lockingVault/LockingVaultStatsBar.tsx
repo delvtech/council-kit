@@ -4,7 +4,8 @@ import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";
-import { definitions, DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { TVP_TIP } from "src/ui/vaults/tooltips";
 
 interface LockingVaultStatsBarProps {
   activeProposalCount: number;
@@ -43,9 +44,7 @@ export function LockingVaultStatsBar({
           label={
             <>
               % of Total{" "}
-              <DefinitionTooltip content={definitions.TVP}>
-                TVP
-              </DefinitionTooltip>
+              <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
             </>
           }
           value={`${formatBalance(accountPercentOfTVP, 2)}%`}
@@ -81,7 +80,7 @@ export function VaultStatsBarSkeleton(): ReactElement {
         label={
           <>
             % of Total{" "}
-            <DefinitionTooltip content={definitions.TVP}>TVP</DefinitionTooltip>
+            <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
           </>
         }
         value={<Skeleton width={90} />}

@@ -51,7 +51,3 @@ export function DefinitionTooltip({
     />
   );
 }
-
-export const definitions = {
-  TVP: "Total Voting Power",
-};
