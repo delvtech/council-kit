@@ -149,7 +149,12 @@ export function useVoterData(
     queryFn: queryEnabled
       ? async (): Promise<VoterData> => {
           const voter = new Voter(address, context);
-          const votingHistory = await voter.getVotes(coreVoting.address);
+          // display voting history in reverse chronological order, ie: most
+          // recent proposals first
+          // TODO: Where does GSC Voting history fit in this?
+          const votingHistory = [
+            ...(await voter.getVotes(coreVoting.address)),
+          ].reverse();
           const votingPower = await voter.getVotingPower(
             coreVoting.vaults.map((vault) => vault.address),
           );
@@ -159,7 +164,7 @@ export function useVoterData(
           );
 
           return {
-            votingHistory: votingHistory,
+            votingHistory,
             votingPower,
             gscStatus: gscStatus ?? null,
             voterDataByVault,
