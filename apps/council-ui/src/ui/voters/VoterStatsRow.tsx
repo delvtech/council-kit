@@ -17,7 +17,7 @@ export function VoterStatsRow({
 }: VoterStatsRowProps): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
-      <Stat label="Voting Power" value={formatBalance(votingPower, 0)} />
+      <Stat label="Total Voting Power" value={formatBalance(votingPower, 0)} />
 
       {gscStatus && <Stat label="GSC Member" value={gscStatus} />}
 
@@ -29,7 +29,7 @@ export function VoterStatsRow({
 export function VoterStatsRowSkeleton(): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
-      <Stat label="Voting Power" value={<Skeleton />} />
+      <Stat label="Total Voting Power" value={<Skeleton />} />
       <Stat label="GSC Member" value={<Skeleton />} />
       <Stat label="Proposals voted" value={<Skeleton />} />
     </div>
