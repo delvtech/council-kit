@@ -53,7 +53,7 @@ export function ProposalStatsBar({
       )}
       {createdTransactionHash && (
         <Stat
-          label="Created Transaction Hash"
+          label="Created Transaction"
           value={
             <Link
               className="flex items-center hover:underline"
@@ -95,7 +95,7 @@ export function ProposalStatsBarSkeleton(): ReactElement {
     <div className="flex flex-wrap gap-4">
       <Stat label="Voting contract" value={<Skeleton width={90} />} />
       <Stat label="Created by" value={<Skeleton width={90} />} />
-      <Stat label="Created Transaction Hash" value={<Skeleton width={90} />} />
+      <Stat label="Created Transaction" value={<Skeleton width={90} />} />
       <Stat label="Created at" value={<Skeleton width={90} />} />
       <Stat label="Executable on" value={<Skeleton width={90} />} />
       <Stat label="Voting ends" value={<Skeleton width={90} />} />
