@@ -34,4 +34,6 @@ export interface ProposalConfig {
   descriptionURL: string;
   targets: string[];
   calldatas: string[];
+  snapshotURL?: string;
+  forumURL?: string;
 }

@@ -2,23 +2,21 @@ import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { councilConfigs } from "src/config/council.config";
 import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
-import {
-  ProposalStatsBar,
-  ProposalStatsBarSkeleton,
-} from "src/ui/proposals/ProposalStatsBar";
+import { useChainId } from "src/ui/network/useChainId";
+import { ProposalStatsBar } from "src/ui/proposals/ProposalStatsBar";
+import { ProposalStatsBarSkeleton } from "src/ui/proposals/ProposalStatsBarSkeleton";
 import { QuorumBar, QuorumBarSkeleton } from "src/ui/proposals/QuorumBar";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTableSkeleton";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
-import {
-  ProposalVoting,
-  ProposalVotingSkeleton,
-} from "src/ui/voting/ProposalVoting";
+import { ProposalVoting } from "src/ui/voting/ProposalVoting";
+import { ProposalVotingSkeleton } from "src/ui/voting/ProposalVotingSkeleton";
 import { useAccount, useBlockNumber, useSigner } from "wagmi";
 
 export default function ProposalPage(): ReactElement {
@@ -94,6 +92,8 @@ export default function ProposalPage(): ReactElement {
           endsAtDate={data.endsAtDate}
           unlockAtDate={data.unlockedAtDate}
           lastCallAtDate={data.lastCallAtDate}
+          forumURL={data.forumURL}
+          snapshotURL={data.snapshotURL}
         />
       ) : (
         <ProposalStatsBarSkeleton />
@@ -151,6 +151,8 @@ interface ProposalDetailsPageData {
   votes: Vote[];
   accountBallot?: Ballot;
   voterEnsRecords: EnsRecords;
+  forumURL?: string;
+  snapshotURL?: string;
 }
 
 function useProposalDetailsPageData(
@@ -160,6 +162,8 @@ function useProposalDetailsPageData(
 ) {
   const { context, coreVoting, gscVoting } = useCouncil();
   const provider = context.provider;
+  const chainId = useChainId();
+  const proposalConfig = councilConfigs[chainId].coreVoting.proposals;
 
   const queryEnabled =
     votingContractAddress !== undefined &&
@@ -219,7 +223,6 @@ function useProposalDetailsPageData(
             currentQuorum: await proposal.getCurrentQuorum(),
             requiredQuorum: await proposal.getRequiredQuorum(),
             createdAtBlock,
-            createdTransactionHash,
             createdBy: await proposal.getCreatedBy(),
             createdAtDate,
             endsAtDate,
@@ -228,6 +231,9 @@ function useProposalDetailsPageData(
             votes: await proposal.getVotes(),
             voterEnsRecords,
             accountBallot: (await proposal.getVote(account))?.ballot,
+            forumURL: proposalConfig[id.toString()].forumURL,
+            snapshotURL: proposalConfig[id.toString()].snapshotURL,
+            createdTransactionHash,
           };
         }
       : undefined,

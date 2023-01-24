@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { ReactElement } from "react";
-import Skeleton from "react-loading-skeleton";
 import { makeEtherscanTransactionURL } from "src/etherscan/makeEtherscanTransactionURL";
 import { makeVoterURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
+import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { WalletIcon } from "src/ui/base/WalletIcon";
@@ -18,6 +18,9 @@ interface ProposalStatsBarProps {
   endsAtDate: Date | null;
   unlockAtDate: Date | null;
   lastCallAtDate: Date | null;
+
+  forumURL?: string;
+  snapshotURL?: string;
 }
 
 export function ProposalStatsBar({
@@ -28,6 +31,8 @@ export function ProposalStatsBar({
   endsAtDate,
   unlockAtDate,
   lastCallAtDate,
+  forumURL,
+  snapshotURL,
 }: ProposalStatsBarProps): ReactElement {
   const createdByDisplayName = useDisplayName(createdBy);
   return (
@@ -66,6 +71,20 @@ export function ProposalStatsBar({
         />
       )}
 
+      {forumURL && (
+        <Stat
+          label="Snapshot"
+          value={<ExternalLink href={forumURL}>Results</ExternalLink>}
+        />
+      )}
+
+      {snapshotURL && (
+        <Stat
+          label="Discussion"
+          value={<ExternalLink href={snapshotURL}>Common Wealth</ExternalLink>}
+        />
+      )}
+
       {createdAtDate && (
         <Stat label="Created at" value={createdAtDate.toLocaleDateString()} />
       )}
@@ -84,22 +103,6 @@ export function ProposalStatsBar({
           value={lastCallAtDate.toLocaleDateString()}
         />
       )}
-    </div>
-  );
-}
-
-// ================ Skeletons ================
-
-export function ProposalStatsBarSkeleton(): ReactElement {
-  return (
-    <div className="flex flex-wrap gap-4">
-      <Stat label="Voting contract" value={<Skeleton width={90} />} />
-      <Stat label="Created by" value={<Skeleton width={90} />} />
-      <Stat label="Created Transaction" value={<Skeleton width={90} />} />
-      <Stat label="Created at" value={<Skeleton width={90} />} />
-      <Stat label="Executable on" value={<Skeleton width={90} />} />
-      <Stat label="Voting ends" value={<Skeleton width={90} />} />
-      <Stat label="Execution deadline" value={<Skeleton width={90} />} />
     </div>
   );
 }
