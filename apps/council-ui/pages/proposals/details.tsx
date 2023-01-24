@@ -5,12 +5,14 @@ import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ProposalStatsBar } from "src/ui/proposals/ProposalStatsBar";
 import { ProposalStatsBarSkeleton } from "src/ui/proposals/ProposalStatsBarSkeleton";
-import { QuorumBar, QuorumBarSkeleton } from "src/ui/proposals/QuorumBar";
+import { QuorumBar } from "src/ui/proposals/QuorumBar";
+import { QuorumBarSkeleton } from "src/ui/proposals/QuorumBarSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTableSkeleton";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
@@ -66,16 +68,28 @@ export default function ProposalPage(): ReactElement {
 
   return (
     <Page>
-      <div className="flex flex-wrap w-full gap-4">
-        <h1 className="text-5xl font-bold whitespace-nowrap">
-          {data?.name ?? `Proposal ${id}`}
-        </h1>
+      <div className="flex flex-wrap w-full gap-4 whitespace-nowrap">
+        <div className="flex flex-col gap-1">
+          <h1 className="inline text-5xl font-bold">
+            {data?.name ?? `Proposal ${id}`}
+          </h1>
+          {data?.descriptionURL && (
+            <ExternalLink
+              href={data.descriptionURL}
+              iconSize={18}
+              className="self-start"
+            >
+              <span>Learn more about this proposal</span>
+            </ExternalLink>
+          )}
+        </div>
 
         <div className="sm:ml-auto w-96 sm:w-72">
           {status === "success" ? (
             <QuorumBar
               current={data.currentQuorum}
               required={data.requiredQuorum}
+              votingEnds={data.endsAtDate}
             />
           ) : (
             <QuorumBarSkeleton />
@@ -92,8 +106,6 @@ export default function ProposalPage(): ReactElement {
           endsAtDate={data.endsAtDate}
           unlockAtDate={data.unlockedAtDate}
           lastCallAtDate={data.lastCallAtDate}
-          forumURL={data.forumURL}
-          snapshotURL={data.snapshotURL}
         />
       ) : (
         <ProposalStatsBarSkeleton />
@@ -151,8 +163,7 @@ interface ProposalDetailsPageData {
   votes: Vote[];
   accountBallot?: Ballot;
   voterEnsRecords: EnsRecords;
-  forumURL?: string;
-  snapshotURL?: string;
+  descriptionURL: string | null;
 }
 
 function useProposalDetailsPageData(
@@ -202,12 +213,16 @@ function useProposalDetailsPageData(
 
           const unlockedAtBlock = await proposal.getUnlockBlock();
           const unlockedAtDate = unlockedAtBlock
-            ? await getBlockDate(unlockedAtBlock, provider)
+            ? await getBlockDate(unlockedAtBlock, provider, {
+                estimateFutureDates: true,
+              })
             : null;
 
           const lastCallAtBlock = await proposal.getLastCallBlock();
           const lastCallAtDate = lastCallAtBlock
-            ? await getBlockDate(lastCallAtBlock, provider)
+            ? await getBlockDate(lastCallAtBlock, provider, {
+                estimateFutureDates: true,
+              })
             : null;
 
           const votes = await proposal.getVotes();
@@ -230,10 +245,11 @@ function useProposalDetailsPageData(
             lastCallAtDate,
             votes: await proposal.getVotes(),
             voterEnsRecords,
-            accountBallot: (await proposal.getVote(account))?.ballot,
-            forumURL: proposalConfig[id.toString()].forumURL,
-            snapshotURL: proposalConfig[id.toString()].snapshotURL,
             createdTransactionHash,
+            accountBallot: (await proposal.getVote(account))?.ballot,
+            descriptionURL: proposalConfig[id.toString()]
+              ? proposalConfig[id.toString()].descriptionURL
+              : null,
           };
         }
       : undefined,
