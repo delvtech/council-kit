@@ -159,74 +159,72 @@ function useProposalDetailsPageData(
   const { context, coreVoting, gscVoting } = useCouncil();
   const provider = context.provider;
 
+  const queryEnabled =
+    votingContractAddress !== undefined &&
+    id !== undefined &&
+    account !== undefined;
   return useQuery<ProposalDetailsPageData>({
     queryKey: ["proposalDetailsPage", id],
-    enabled:
-      votingContractAddress !== undefined &&
-      id !== undefined &&
-      account !== undefined,
-    queryFn: async (): Promise<ProposalDetailsPageData> => {
-      // safe to cast since the fn is disabled if these aren't defined.
-      votingContractAddress = votingContractAddress as string;
-      id = id as number;
-      account = account as string;
+    enabled: queryEnabled,
+    queryFn: queryEnabled
+      ? async (): Promise<ProposalDetailsPageData> => {
+          let proposal: Proposal | undefined;
+          let type: ProposalDetailsPageData["type"] = "core";
 
-      let proposal: Proposal | undefined;
-      let type: ProposalDetailsPageData["type"] = "core";
+          if (votingContractAddress === coreVoting.address) {
+            proposal = coreVoting.getProposal(id);
+          } else if (votingContractAddress === gscVoting?.address) {
+            type = "gsc";
+            proposal = gscVoting.getProposal(id);
+          } else {
+            throw new Error(
+              `No config found for voting contract address ${votingContractAddress}, See src/config.`,
+            );
+          }
 
-      if (votingContractAddress === coreVoting.address) {
-        proposal = coreVoting.getProposal(id);
-      } else if (votingContractAddress === gscVoting?.address) {
-        type = "gsc";
-        proposal = gscVoting.getProposal(id);
-      } else {
-        throw new Error(
-          `No config found for voting contract address ${votingContractAddress}, See src/config.`,
-        );
-      }
+          const createdAtBlock = await proposal.getCreatedBlock();
+          const createdAtDate = createdAtBlock
+            ? await getBlockDate(createdAtBlock, provider)
+            : null;
 
-      const createdAtBlock = await proposal.getCreatedBlock();
-      const createdAtDate = createdAtBlock
-        ? await getBlockDate(createdAtBlock, provider)
-        : null;
+          const endsAtBlock = await proposal.getExpirationBlock();
+          const endsAtDate = endsAtBlock
+            ? await getBlockDate(endsAtBlock, provider)
+            : null;
 
-      const endsAtBlock = await proposal.getExpirationBlock();
-      const endsAtDate = endsAtBlock
-        ? await getBlockDate(endsAtBlock, provider)
-        : null;
+          const unlockedAtBlock = await proposal.getUnlockBlock();
+          const unlockedAtDate = unlockedAtBlock
+            ? await getBlockDate(unlockedAtBlock, provider)
+            : null;
 
-      const unlockedAtBlock = await proposal.getUnlockBlock();
-      const unlockedAtDate = unlockedAtBlock
-        ? await getBlockDate(unlockedAtBlock, provider)
-        : null;
+          const lastCallAtBlock = await proposal.getLastCallBlock();
+          const lastCallAtDate = lastCallAtBlock
+            ? await getBlockDate(lastCallAtBlock, provider)
+            : null;
 
-      const lastCallAtBlock = await proposal.getLastCallBlock();
-      const lastCallAtDate = lastCallAtBlock
-        ? await getBlockDate(lastCallAtBlock, provider)
-        : null;
+          const votes = await proposal.getVotes();
+          const voterEnsRecords = await getBulkEnsRecords(
+            Array.from(new Set(votes.map((vote) => vote.voter.address))),
+            provider,
+          );
 
-      const votes = await proposal.getVotes();
-      const voterEnsRecords = await getBulkEnsRecords(
-        Array.from(new Set(votes.map((vote) => vote.voter.address))),
-        provider,
-      );
-
-      return {
-        type,
-        name: proposal.name,
-        isActive: await proposal.getIsActive(),
-        currentQuorum: await proposal.getCurrentQuorum(),
-        requiredQuorum: await proposal.getRequiredQuorum(),
-        createdAtBlock,
-        createdBy: await proposal.getCreatedBy(),
-        createdAtDate,
-        endsAtDate,
-        unlockedAtDate,
-        lastCallAtDate,
-        votes: await proposal.getVotes(),
-        voterEnsRecords,
-        accountBallot: (await proposal.getVote(account))?.ballot,
-      };
-    },
+          return {
+            type,
+            name: proposal.name,
+            isActive: await proposal.getIsActive(),
+            currentQuorum: await proposal.getCurrentQuorum(),
+            requiredQuorum: await proposal.getRequiredQuorum(),
+            createdAtBlock,
+            createdBy: await proposal.getCreatedBy(),
+            createdAtDate,
+            endsAtDate,
+            unlockedAtDate,
+            lastCallAtDate,
+            votes: await proposal.getVotes(),
+            voterEnsRecords,
+            accountBallot: (await proposal.getVote(account))?.ballot,
+          };
+        }
+      : undefined,
   });
 }
