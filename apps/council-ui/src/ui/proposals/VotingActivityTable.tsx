@@ -8,10 +8,10 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
+import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useCouncil } from "src/ui/council/useCouncil";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
-import { asyncFilter } from "src/utils/asyncFilter";
 
 interface VotingActivityTableProps {
   votes: Vote[];
@@ -135,7 +135,7 @@ function VotingActivityTableRow({
     <tr>
       <th>
         <Link
-          className="flex items-center hover:underline"
+          className="flex items-center daisy-link daisy-link-hover"
           href={makeVoterURL(address)}
         >
           <WalletIcon address={address} className="mr-2" />
@@ -186,15 +186,15 @@ function sortVotes(sort: SortOptions, data: Vote[]) {
             .subUnsafe(FixedNumber.from(a.power))
             .toUnsafeFloat(),
         );
-    } else {
-      return data
-        .slice()
-        .sort((a, b) =>
-          FixedNumber.from(a.power)
-            .subUnsafe(FixedNumber.from(b.power))
-            .toUnsafeFloat(),
-        );
     }
+
+    return data
+      .slice()
+      .sort((a, b) =>
+        FixedNumber.from(a.power)
+          .subUnsafe(FixedNumber.from(b.power))
+          .toUnsafeFloat(),
+      );
   }
 
   return data;
