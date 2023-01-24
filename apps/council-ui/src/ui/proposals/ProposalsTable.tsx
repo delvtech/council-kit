@@ -37,7 +37,7 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
   const handleSortOptionsChange = (field: ProposalSortField) =>
     setSortOptions({
       field,
-      direction: sortStates[sortOptions.direction],
+      direction: sortToggleStates[sortOptions.direction],
     });
 
   return (
@@ -168,7 +168,7 @@ export interface ProposalSortOptions {
 }
 
 // simple state machine for sort state transitions
-const sortStates: Record<ProposalSortDirection, ProposalSortDirection> = {
+const sortToggleStates: Record<ProposalSortDirection, ProposalSortDirection> = {
   [ProposalSortDirection.ASC]: ProposalSortDirection.DESC,
   [ProposalSortDirection.DESC]: ProposalSortDirection.ASC,
 };

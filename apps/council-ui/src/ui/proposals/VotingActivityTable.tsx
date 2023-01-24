@@ -1,37 +1,96 @@
 import { Ballot, Vote } from "@council/sdk";
+import { FixedNumber } from "ethers";
 import Link from "next/link";
-import { ReactElement } from "react";
-import Skeleton from "react-loading-skeleton";
+import { ChangeEvent, ReactElement, useMemo, useState } from "react";
 import { EnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
+import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
+import { useFilterVotesByGSCOnlyEffect } from "./hooks/useFilterVotesByGSCOnlyEffect";
 
 interface VotingActivityTableProps {
-  votes: Vote[] | null;
+  votes: Vote[];
   voterEnsRecords: EnsRecords;
+}
+
+const SortFieldOptions = ["VotingPower"] as const;
+type SortField = typeof SortFieldOptions[number];
+
+const SortDirectionOptions = ["ASC", "DESC"] as const;
+type SortDirection = typeof SortDirectionOptions[number];
+
+interface SortOptions {
+  field: SortField;
+  direction: SortDirection;
 }
 
 export function VotingActivityTable({
   votes,
   voterEnsRecords,
 }: VotingActivityTableProps): ReactElement {
-  return (
-    <div className="w-full overflow-auto max-h-96">
-      <table className="w-full daisy-table-zebra daisy-table">
-        <thead>
-          <tr>
-            <th>Voter</th>
-            <th>Voting Power</th>
-            <th>Ballot</th>
-          </tr>
-        </thead>
+  const [sortOptions, setSortOptions] = useState<SortOptions>({
+    field: "VotingPower",
+    direction: "ASC",
+  });
 
-        <tbody className="h-24 overflow-auto">
-          {votes &&
-            votes.map((vote, i) => (
+  const [gscOnly, setGscOnly] = useState(false);
+
+  const [filteredVotes, setFilteredVotes] = useState(votes);
+
+  const sortedData = useMemo(
+    () => sortVotes(sortOptions, filteredVotes),
+    [sortOptions, filteredVotes],
+  );
+
+  useFilterVotesByGSCOnlyEffect(votes, gscOnly, setFilteredVotes);
+
+  const handleSortOptionsChange = (field: SortField) =>
+    setSortOptions({
+      field,
+      direction: sortToggleStates[sortOptions.direction],
+    });
+
+  return (
+    <div className="flex flex-col gap-y-2">
+      <label className="mb-2 cursor-pointer daisy-label w-fit">
+        <span className="mr-2 font-medium daisy-label-text">GSC Only</span>
+        <input
+          type="checkbox"
+          className="daisy-toggle daisy-toggle-warning"
+          checked={gscOnly}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            setGscOnly(event.target.checked);
+          }}
+        />
+      </label>
+
+      <div className="w-full overflow-auto max-h-96">
+        <table className="w-full daisy-table-zebra daisy-table">
+          <thead>
+            <tr>
+              <th>Voter</th>
+              <th
+                className="cursor-pointer"
+                onClick={() => handleSortOptionsChange("VotingPower")}
+              >
+                <span className="mr-1 select-none hover:underline">
+                  Voting Power
+                </span>
+                <SortDirectionStatus
+                  direction={sortOptions.direction}
+                  enabled={sortOptions.field === "VotingPower"}
+                />
+              </th>
+              <th>Ballot</th>
+            </tr>
+          </thead>
+
+          <tbody className="h-24 overflow-auto">
+            {sortedData.map((vote, i) => (
               <VotingActivityTableRow
                 key={`${vote.voter.address}-${vote.ballot}-${i}`}
                 address={vote.voter.address}
@@ -40,8 +99,9 @@ export function VotingActivityTable({
                 voteBallot={vote.ballot}
               />
             ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -63,7 +123,7 @@ function VotingActivityTableRow({
     <tr>
       <th>
         <Link
-          className="hover:underline flex items-center"
+          className="flex items-center daisy-link daisy-link-hover"
           href={makeVoterURL(address)}
         >
           <WalletIcon address={address} className="mr-2" />
@@ -78,98 +138,52 @@ function VotingActivityTableRow({
   );
 }
 
-// ================ Skeletons ================
+interface SortDirectionProps {
+  direction: SortDirection;
+  enabled: boolean;
+}
 
-export function VotingActivityTableSkeleton(): ReactElement {
-  return (
-    <div className="w-full overflow-auto max-h-96">
-      <table className="w-full daisy-table-zebra daisy-table">
-        <thead>
-          <tr>
-            <th className="w-72">Voter</th>
+function SortDirectionStatus({ direction, enabled }: SortDirectionProps) {
+  if (!enabled) {
+    return null;
+  }
 
-            <th>
-              <span className="mr-1">Voting Power</span>
-            </th>
+  switch (direction) {
+    case "ASC":
+      return <DownArrowSVG />;
+    case "DESC":
+      return <UpArrowSVG />;
+    default:
+      return null;
+  }
+}
 
-            <th>Ballot</th>
-          </tr>
-        </thead>
+// simple state machine for sort state transitions
+const sortToggleStates: Record<SortDirection, SortDirection> = {
+  ["ASC"]: "DESC",
+  ["DESC"]: "ASC",
+};
 
-        <tbody>
-          <tr>
-            <th>
-              <Skeleton />
-            </th>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
+function sortVotes(sort: SortOptions, data: Vote[]) {
+  if (sort.field === "VotingPower") {
+    if (sort.direction === "ASC") {
+      return data
+        .slice()
+        .sort((a, b) =>
+          FixedNumber.from(b.power)
+            .subUnsafe(FixedNumber.from(a.power))
+            .toUnsafeFloat(),
+        );
+    }
 
-          <tr>
-            <th>
-              <Skeleton />
-            </th>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
+    return data
+      .slice()
+      .sort((a, b) =>
+        FixedNumber.from(a.power)
+          .subUnsafe(FixedNumber.from(b.power))
+          .toUnsafeFloat(),
+      );
+  }
 
-          <tr>
-            <th>
-              <Skeleton />
-            </th>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-
-          <tr>
-            <th>
-              <Skeleton />
-            </th>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-
-          <tr>
-            <th>
-              <Skeleton />
-            </th>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-
-          <tr>
-            <th>
-              <Skeleton />
-            </th>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
+  return data;
 }
