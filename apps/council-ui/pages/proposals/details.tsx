@@ -89,6 +89,7 @@ export default function ProposalPage(): ReactElement {
         <ProposalStatsBar
           votingContractAddress={votingContractAddress}
           createdBy={data.createdBy}
+          createdTransactionHash={data.createdTransactionHash}
           createdAtDate={data.createdAtDate}
           endsAtDate={data.endsAtDate}
           unlockAtDate={data.unlockedAtDate}
@@ -143,6 +144,7 @@ interface ProposalDetailsPageData {
   createdAtBlock: number | null;
   createdBy: string | null;
   createdAtDate: Date | null;
+  createdTransactionHash: string | undefined;
   endsAtDate: Date | null;
   unlockedAtDate: Date | null;
   lastCallAtDate: Date | null;
@@ -182,6 +184,7 @@ function useProposalDetailsPageData(
             );
           }
 
+          const { createdTransactionHash } = await proposal.getData();
           const createdAtBlock = await proposal.getCreatedBlock();
           const createdAtDate = createdAtBlock
             ? await getBlockDate(createdAtBlock, provider)
@@ -215,6 +218,7 @@ function useProposalDetailsPageData(
             currentQuorum: await proposal.getCurrentQuorum(),
             requiredQuorum: await proposal.getRequiredQuorum(),
             createdAtBlock,
+            createdTransactionHash,
             createdBy: await proposal.getCreatedBy(),
             createdAtDate,
             endsAtDate,
