@@ -39,13 +39,9 @@ export const mainnetCouncilConfig: CouncilConfig = {
         calldatas: [],
       },
       3: {
-        descriptionURL: "",
+        descriptionURL: "https://moreinfo.com",
         targets: [],
         calldatas: [],
-        forumURL:
-          "https://commonwealth.im/element-finance/discussion/6504-egp15-element-fixed-borrow-protocol-grant-proposal-by-component",
-        snapshotURL:
-          "https://snapshot.org/#/elfi.eth/proposal/0x132d4d3e0580349d938d22c844ce088ba2e5f394fc28b41f2927856746b125d7",
       },
     },
   },
