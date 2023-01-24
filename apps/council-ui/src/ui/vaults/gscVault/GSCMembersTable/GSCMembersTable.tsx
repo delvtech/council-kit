@@ -9,10 +9,12 @@ import { GSCMemberInfo } from "src/vaults/gscVault";
 
 interface GSCMembersTableProps {
   members: GSCMemberInfo[];
+  requiredVotingPower: string;
 }
 
 export function GSCMembersTable({
   members,
+  requiredVotingPower,
 }: GSCMembersTableProps): ReactElement {
   return (
     <div className="w-full overflow-auto">
@@ -23,6 +25,7 @@ export function GSCMembersTable({
           {members.map((memberInfo) => (
             <GSCMembersTableRow
               key={memberInfo.member.address}
+              requiredVotingPower={requiredVotingPower}
               member={memberInfo}
             />
           ))}
@@ -34,11 +37,14 @@ export function GSCMembersTable({
 
 interface GSCMembersTableRow {
   member: GSCMemberInfo;
+  requiredVotingPower: string;
 }
 
 function GSCMembersTableRow({
   member: { member, ensName, qualifyingVotingPower },
+  requiredVotingPower,
 }: GSCMembersTableRow) {
+  const isKickButtonDisabled = +qualifyingVotingPower > +requiredVotingPower;
   return (
     <tr>
       <td>
@@ -52,7 +58,9 @@ function GSCMembersTableRow({
       </td>
       <td>{formatBalance(qualifyingVotingPower)}</td>
       <td>
-        <button className="daisy-btn">Kick</button>
+        <button className="daisy-btn" disabled={isKickButtonDisabled}>
+          Kick Member
+        </button>
       </td>
     </tr>
   );
