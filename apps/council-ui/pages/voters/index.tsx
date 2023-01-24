@@ -22,7 +22,7 @@ export default function Voters(): ReactElement {
 
   return (
     <Page>
-      <div className="flex flex-col max-w-xl mx-auto gap-y-8">
+      <div className="flex flex-col max-w-3xl mx-auto gap-y-8">
         <div className="flex flex-col">
           <h1 className="text-5xl font-bold">Voters</h1>
           <p className="mt-6 text-lg">
@@ -74,16 +74,19 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
   return useQuery<VoterRowData[]>({
     queryKey: ["voter-list-page", chainId],
     queryFn: async () => {
-      const voters = await coreVoting.getVoters();
+      const votersWithPower = await coreVoting.getVotingPowersByVoter();
       const ensRecords = await getBulkEnsRecords(
-        voters.map((voter) => voter.address),
+        votersWithPower.map(({ voter }) => voter.address),
         provider,
       );
 
-      return voters.map((voter) => ({
-        address: voter.address,
-        ensName: ensRecords[voter.address],
-      }));
+      return await Promise.all(
+        votersWithPower.map(async ({ voter, votingPower }) => ({
+          address: voter.address,
+          ensName: ensRecords[voter.address],
+          votingPower,
+        })),
+      );
     },
     refetchOnWindowFocus: false,
     staleTime: Infinity,
