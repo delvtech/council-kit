@@ -13,7 +13,7 @@ import { WalletIcon } from "src/ui/base/WalletIcon";
 interface ProposalStatsBarProps {
   votingContractAddress: string;
   createdBy: string | null;
-  createdTransactionHash: string | null | undefined;
+  createdTransactionHash: string | null;
   createdAtDate: Date | null;
   endsAtDate: Date | null;
   unlockAtDate: Date | null;

@@ -144,7 +144,7 @@ interface ProposalDetailsPageData {
   createdAtBlock: number | null;
   createdBy: string | null;
   createdAtDate: Date | null;
-  createdTransactionHash: string | undefined;
+  createdTransactionHash: string | null;
   endsAtDate: Date | null;
   unlockedAtDate: Date | null;
   lastCallAtDate: Date | null;
@@ -184,7 +184,8 @@ function useProposalDetailsPageData(
             );
           }
 
-          const { createdTransactionHash } = await proposal.getData();
+          const createdTransactionHash =
+            await proposal.getCreatedTransactionHash();
           const createdAtBlock = await proposal.getCreatedBlock();
           const createdAtDate = createdAtBlock
             ? await getBlockDate(createdAtBlock, provider)
