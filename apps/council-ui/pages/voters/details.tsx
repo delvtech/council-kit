@@ -55,6 +55,22 @@ export default function VoterDetailsPage(): ReactElement {
         <VoterStatsRowSkeleton />
       )}
 
+      {status === "success" ? (
+        <div className="flex flex-col gap-y-4">
+          <h2 className="text-2xl font-bold">
+            Voting Vaults ({data.voterDataByVault.length})
+          </h2>
+          <VoterVaultsList vaultData={data.voterDataByVault} />
+        </div>
+      ) : (
+        <div className="flex flex-col gap-y-4">
+          <h2 className="w-64 text-2xl">
+            <Skeleton />
+          </h2>
+          <VoterVaultsListSkeleton />
+        </div>
+      )}
+
       <div className="flex flex-col items-start w-full mt-8 gap-y-8">
         <div className="flex flex-col w-full gap-y-4">
           <h2 className="text-2xl font-bold">Voting History</h2>
@@ -64,22 +80,6 @@ export default function VoterDetailsPage(): ReactElement {
             <VotingHistoryTableSkeleton />
           )}
         </div>
-
-        {status === "success" ? (
-          <div className="flex flex-col gap-y-4">
-            <h2 className="text-2xl font-bold">
-              Voting Vaults ({data.voterDataByVault.length})
-            </h2>
-            <VoterVaultsList vaultData={data.voterDataByVault} />
-          </div>
-        ) : (
-          <div className="flex flex-col gap-y-4">
-            <h2 className="w-64 text-2xl">
-              <Skeleton />
-            </h2>
-            <VoterVaultsListSkeleton />
-          </div>
-        )}
       </div>
     </Page>
   );
