@@ -121,6 +121,7 @@ export interface VotingContractDataSource extends DataSource {
 export interface ProposalDataPreview {
   id: number;
   createdBlock: number;
+  createdTransactionHash: string;
   unlockBlock: number;
   expirationBlock: number;
 }
