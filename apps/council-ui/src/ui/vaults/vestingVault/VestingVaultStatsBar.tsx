@@ -52,7 +52,7 @@ export function VestingVaultStatsBar({
       )}
 
       {delegatedToAccount >= 0 && (
-        <Stat label="Delegated to You" value={delegatedToAccount} />
+        <Stat label="Wallets Delegated to You" value={delegatedToAccount} />
       )}
 
       {participants >= 0 && <Stat label="Participants" value={participants} />}
@@ -85,7 +85,7 @@ export function VaultStatsBarSkeleton(): ReactElement {
         value={<Skeleton width={90} />}
       />
       <Stat label="Your Voting Power" value={<Skeleton width={90} />} />
-      <Stat label="Delegated to You" value={<Skeleton width={90} />} />
+      <Stat label="Wallets Delegated to You" value={<Skeleton width={90} />} />
       <Stat label="Participants" value={<Skeleton width={90} />} />
       <Stat label="Vault token" value={<Skeleton width={90} />} />
     </div>
