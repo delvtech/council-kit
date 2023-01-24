@@ -30,7 +30,7 @@ export * from "./datasources/VotingVault/VotingVaultContractDataSource";
 export * from "./datasources/VotingVault/GSCVaultContractDataSource";
 export * from "./datasources/VotingVault/LockingVaultContractDataSource";
 export * from "./datasources/VotingVault/VestingVaultContractDataSource";
-export { type VoterWithPower } from "./datasources/VotingVault/LockingVaultContractDataSource";
+export { type VoterAddressWithPower } from "./datasources/VotingVault/LockingVaultContractDataSource";
 
 export * from "./utils/cached";
 export * from "./utils/getBlockDate";

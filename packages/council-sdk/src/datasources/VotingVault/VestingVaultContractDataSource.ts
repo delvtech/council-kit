@@ -68,7 +68,7 @@ export class VestingVaultContractDataSource
   getDelegatorsTo(
     address: string,
     atBlock?: number,
-  ): Promise<VoterWithPower[]> {
+  ): Promise<VoterAddressWithPower[]> {
     return this.cached(["getDelegatorsTo", address, atBlock], async () => {
       const voteChangeEvents = await this.getVoteChangeEvents(
         undefined,
@@ -125,7 +125,7 @@ export class VestingVaultContractDataSource
   async getAllVotersWithPower(
     fromBlock?: number,
     toBlock?: number,
-  ): Promise<VoterWithPower[]> {
+  ): Promise<VoterAddressWithPower[]> {
     return this.cached(
       ["getAllVotersWithPower", fromBlock, toBlock],
       async () => {
@@ -253,7 +253,7 @@ export interface GrantData {
 /**
  * @category Data Sources
  */
-export interface VoterWithPower {
+export interface VoterAddressWithPower {
   address: string;
   power: string;
 }

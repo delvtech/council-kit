@@ -9,6 +9,7 @@ import { Token } from "src/models/Token";
 import { Voter } from "src/models/Voter";
 import { sumStrings } from "src/utils/sumStrings";
 import { VotingVault, VotingVaultOptions } from "./VotingVault";
+import { VoterWithPower } from "src/models/VotingVault/types";
 
 export interface VestingVaultOptions extends VotingVaultOptions {
   dataSource?: VestingVaultContractDataSource;
@@ -99,6 +100,27 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     return votersWithPower.map(
       ({ address }) => new Voter(address, this.context),
     );
+  }
+
+  /**
+   * Get all participants with voting power in this vault along with their
+   * voting power. This is a convenience method to fetch voting power for a
+   * large number of voters in a single call.
+   * @param fromBlock - Include all voters that had power on or after this block number.
+   * @param toBlock - Include all voters that had power on or before this block number.
+   */
+  async getVotingPowersByVoter(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<VoterWithPower[]> {
+    const votersWithPower = await this.dataSource.getAllVotersWithPower(
+      fromBlock,
+      toBlock,
+    );
+    return votersWithPower.map(({ address, power }) => ({
+      voter: new Voter(address, this.context),
+      votingPower: power,
+    }));
   }
 
   /**
