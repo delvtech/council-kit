@@ -110,6 +110,12 @@ export class Proposal extends Model {
     return this.votingContract.dataSource.getProposalCreatedBy(this.id);
   }
 
+  getCreatedTransactionHash(): Promise<string | null> {
+    return this.votingContract.dataSource.getProposalCreatedTransactionHash(
+      this.id,
+    );
+  }
+
   /**
    * Get the block number of when this voting ends for this proposal. Will only
    * be null if this proposal instance was initiated with an invalid id.

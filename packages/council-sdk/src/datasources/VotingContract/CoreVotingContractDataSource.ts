@@ -64,12 +64,7 @@ export class CoreVotingContractDataSource
     );
   }
 
-  async getProposal(id: number): Promise<ProposalData | null> {
-    const { proposalHash, quorum, created, unlock, expiration, lastCall } =
-      await this.call("proposals", [id]);
-    if (proposalHash === EXECUTED_PROPOSAL_HASH) {
-      return null;
-    }
+  async getProposalCreatedTransactionHash(id: number): Promise<string | null> {
     const proposalCreatedEvents = await this.getProposalCreatedEvents();
     const createdEvent = proposalCreatedEvents.find(
       ({ args }) => args.proposalId.toNumber() === id,
@@ -78,9 +73,18 @@ export class CoreVotingContractDataSource
       return null;
     }
 
+    return createdEvent.transactionHash;
+  }
+
+  async getProposal(id: number): Promise<ProposalData | null> {
+    const { proposalHash, quorum, created, unlock, expiration, lastCall } =
+      await this.call("proposals", [id]);
+    if (proposalHash === EXECUTED_PROPOSAL_HASH) {
+      return null;
+    }
+
     return {
       id,
-      createdTransactionHash: createdEvent.transactionHash,
       hash: proposalHash,
       requiredQuorum: formatEther(quorum),
       createdBlock: created.toNumber(),
@@ -96,10 +100,9 @@ export class CoreVotingContractDataSource
   ): Promise<ProposalDataPreview[]> {
     return this.cached(["getProposals", fromBlock, toBlock], async () => {
       const events = await this.getProposalCreatedEvents(fromBlock, toBlock);
-      return events.map(({ args, transactionHash }) => {
+      return events.map(({ args }) => {
         return {
           id: args.proposalId.toNumber(),
-          createdTransactionHash: transactionHash,
           createdBlock: args.created.toNumber(),
           unlockBlock: args.execution.toNumber(),
           expirationBlock: args.expiration.toNumber(),
