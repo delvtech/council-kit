@@ -1,17 +1,16 @@
 import { Ballot, Vote } from "@council/sdk";
 import { FixedNumber } from "ethers";
 import Link from "next/link";
-import { ChangeEvent, ReactElement, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, ReactElement, useMemo, useState } from "react";
 import { EnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
-import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { WalletIcon } from "src/ui/base/WalletIcon";
-import { useCouncil } from "src/ui/council/useCouncil";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
+import { useFilterVotesByGSCOnlyEffect } from "./hooks/useFilterVotesByGSCOnlyEffect";
 
 interface VotingActivityTableProps {
   votes: Vote[];
@@ -38,8 +37,6 @@ export function VotingActivityTable({
     direction: "ASC",
   });
 
-  const { gscVoting } = useCouncil();
-
   const [gscOnly, setGscOnly] = useState(false);
 
   const [filteredVotes, setFilteredVotes] = useState(votes);
@@ -49,21 +46,12 @@ export function VotingActivityTable({
     [sortOptions, filteredVotes],
   );
 
-  useEffect(() => {
-    if (gscOnly && gscVoting) {
-      asyncFilter(votes, (vote) =>
-        gscVoting.getIsMember(vote.voter.address),
-      ).then((filteredVotes) => setFilteredVotes(filteredVotes));
-    } else {
-      // reset filter
-      setFilteredVotes(votes);
-    }
-  }, [gscOnly]);
+  useFilterVotesByGSCOnlyEffect(votes, gscOnly, setFilteredVotes);
 
   const handleSortOptionsChange = (field: SortField) =>
     setSortOptions({
       field,
-      direction: sortStates[sortOptions.direction],
+      direction: sortToggleStates[sortOptions.direction],
     });
 
   return (
@@ -171,7 +159,7 @@ function SortDirectionStatus({ direction, enabled }: SortDirectionProps) {
 }
 
 // simple state machine for sort state transitions
-const sortStates: Record<SortDirection, SortDirection> = {
+const sortToggleStates: Record<SortDirection, SortDirection> = {
   ["ASC"]: "DESC",
   ["DESC"]: "ASC",
 };
