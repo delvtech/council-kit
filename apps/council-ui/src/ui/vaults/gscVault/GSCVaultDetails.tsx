@@ -51,6 +51,7 @@ export function GSCVaultDetails({
           accountMembership={data.gscStatus}
           activeProposalCount={data.activeProposalCount}
           membersCount={data.members.length}
+          requiredVotingPower={data.requiredVotingPower}
         />
       ) : (
         <GSCVaultStatsBarSkeleton />
@@ -58,7 +59,10 @@ export function GSCVaultDetails({
 
       <div className="flex flex-col w-full gap-8 sm:flex-row">
         {status === "success" ? (
-          <GSCMembersTable members={data.members} />
+          <GSCMembersTable
+            members={data.members}
+            requiredVotingPower={data.requiredVotingPower}
+          />
         ) : (
           <GSCMembersTableSkeleton />
         )}
@@ -73,6 +77,7 @@ interface GSCVaultDetailsData {
   descriptionURL: string | undefined;
   name: string | undefined;
   members: GSCMemberInfo[];
+  requiredVotingPower: string;
 }
 
 function useGSCVaultDetails({
@@ -103,6 +108,7 @@ function useGSCVaultDetails({
       ? async (): Promise<GSCVaultDetailsData> => {
           const gscVault = new GSCVault(vaultAddress, context);
 
+          const requiredVotingPower = await gscVault.getRequiredVotingPower();
           const activeProposalCount = await getActiveProposalCount(gscVoting);
           const members = await getGSCMembers(
             gscVault,
@@ -122,6 +128,7 @@ function useGSCVaultDetails({
             name: vaultConfig.name,
             activeProposalCount,
             members,
+            requiredVotingPower,
           };
         }
       : undefined,
