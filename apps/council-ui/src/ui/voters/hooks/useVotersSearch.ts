@@ -9,38 +9,37 @@ const voterSearchFuseOptions = {
   keys: ["address", "ensName"],
 };
 
-export function useVotersSearch(data: Array<VoterRowData> | undefined): {
+export function useVotersSearch(voters: VoterRowData[] | undefined): {
   results: VoterRowData[];
   reset: () => void;
   search: (i: string) => void;
 } {
-  const [input, setInput] = useState<string | null>(null);
+  const [input, setInput] = useState("");
 
-  const searchCache = useRef<Record<string, Array<VoterRowData>>>({});
+  const searchCache = useRef<Record<string, VoterRowData[]>>({});
   useEffect(() => {
     searchCache.current = {};
-  }, [data]);
+  }, [voters]);
 
   const results = useMemo(() => {
-    const fuse = new Fuse(data ?? [], voterSearchFuseOptions);
+    if (!input) {
+      return voters || [];
+    }
+    const fuse = new Fuse(voters || [], voterSearchFuseOptions);
 
-    if (input) {
-      if (searchCache.current[input]) {
-        return searchCache.current[input];
-      }
-
-      const filtered = fuse.search(input).map((item) => item.item);
-      searchCache.current[input] = filtered;
-
-      return filtered;
+    if (searchCache.current[input]) {
+      return searchCache.current[input];
     }
 
-    return data ?? [];
-  }, [input, data]);
+    const filtered = fuse.search(input).map((result) => result.item);
+    searchCache.current[input] = filtered;
+
+    return filtered;
+  }, [input, voters]);
 
   return {
     results,
     reset: () => setInput(""),
-    search: (i: string) => setInput(i),
+    search: setInput,
   };
 }
