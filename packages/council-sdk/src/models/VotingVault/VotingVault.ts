@@ -4,7 +4,7 @@ import { VotingVaultContractDataSource } from "src/datasources/VotingVault/Votin
 import { VotingVaultDataSource } from "src/datasources/VotingVault/VotingVaultDataSource";
 import { Model, ModelOptions } from "src/models/Model";
 import { Voter } from "src/models/Voter";
-import { VoterWithPower } from "src/models/VotingVault/types";
+import { VoterPowerBreakdown } from "src/models/VotingVault/types";
 
 /**
  * @category Models
@@ -29,7 +29,7 @@ interface IVotingVault<
   address: string;
   dataSource: TDataSource;
   getVoters?(...args: any[]): Promise<Voter[]>;
-  getVotersWithVotingPower?(...args: any[]): Promise<VoterWithPower[]>;
+  getVotingPowerBreakdown?(...args: any[]): Promise<VoterPowerBreakdown[]>;
   getTotalVotingPower?(...args: any[]): Promise<string>;
 }
 

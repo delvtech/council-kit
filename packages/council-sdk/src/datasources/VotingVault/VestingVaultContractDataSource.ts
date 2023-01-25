@@ -88,7 +88,7 @@ export class VestingVaultContractDataSource
         .filter(([, power]) => power.gt(0))
         .map(([address, power]) => ({
           address,
-          power: formatEther(power),
+          votingPower: formatEther(power),
         }));
     });
   }
@@ -131,17 +131,22 @@ export class VestingVaultContractDataSource
   }
 
   /**
-   * Get the address and voting power of all participants that have voting power
-   * in this vault.
-   * @param fromBlock - The block number to start searching for voters from.
-   * @param toBlock - The block number to stop searching for voters at.
+   * Get the address of all participants that have voting power in this vault
+   * along with their voting power, the amount of voting power being delegated
+   * to them, and the amount of power delegated to them by each delegator. This
+   * is a convenience method to fetch voting power and delegation data for a
+   * large number of voters in a single call.
+   * @param fromBlock - Include all voters that had power on or after this block
+   * number.
+   * @param toBlock - Include all voters that had power on or before this block
+   * number.
    */
-  async getAllVotersWithPower(
+  async getVotingPowerBreakdown(
     fromBlock?: number,
     toBlock?: number,
-  ): Promise<VoterAddressWithPower[]> {
+  ): Promise<VoterAddressPowerBreakdown[]> {
     return this.cached(
-      ["getAllVotersWithPower", fromBlock, toBlock],
+      ["getVotingPowerBreakdown", fromBlock, toBlock],
       async () => {
         const voteChangeEvents = await this.getVoteChangeEvents(
           undefined,
@@ -149,16 +154,52 @@ export class VestingVaultContractDataSource
           fromBlock,
           toBlock,
         );
-        const powersByVoter: Record<string, BigNumber> = {};
+
+        const breakdownsByVoter: Record<
+          string, // voter address
+          {
+            power: BigNumber;
+            fromDelegators: BigNumber;
+            byDelegator: Record<
+              string, // delegator address
+              BigNumber
+            >;
+          }
+        > = {};
+
         for (const { args } of voteChangeEvents) {
-          const { to, amount } = args;
-          powersByVoter[to] = powersByVoter[to]?.add(amount) || amount;
+          const { from, to, amount } = args;
+
+          if (!breakdownsByVoter[to]) {
+            breakdownsByVoter[to] = {
+              power: BigNumber.from(0),
+              fromDelegators: BigNumber.from(0),
+              byDelegator: {},
+            };
+          }
+
+          breakdownsByVoter[to].power = breakdownsByVoter[to].power.add(amount);
+
+          if (from !== to) {
+            breakdownsByVoter[to].fromDelegators =
+              breakdownsByVoter[to].fromDelegators.add(amount);
+            breakdownsByVoter[to].byDelegator[from] =
+              breakdownsByVoter[to].byDelegator[from]?.add(amount) || amount;
+          }
         }
-        return Object.entries(powersByVoter)
-          .filter(([, power]) => power.gt(0))
-          .map(([address, power]) => ({
+
+        return Object.entries(breakdownsByVoter)
+          .filter(([, { power }]) => power.gt(0))
+          .map(([address, { power, fromDelegators, byDelegator }]) => ({
             address,
-            power: formatEther(power),
+            votingPower: formatEther(power),
+            votingPowerFromDelegators: formatEther(fromDelegators),
+            delegators: Object.entries(byDelegator)
+              .filter(([, power]) => power.gt(0))
+              .map(([address, power]) => ({
+                address,
+                votingPower: formatEther(power),
+              })),
           }));
       },
     );
@@ -269,5 +310,19 @@ export interface GrantData {
  */
 export interface VoterAddressWithPower {
   address: string;
-  power: string;
+  votingPower: string;
+}
+
+/**
+ * @category Data Sources
+ */
+export interface VoterAddressPowerBreakdown extends VoterAddressWithPower {
+  /**
+   * The total voting power from all wallets delegated to this voter.
+   */
+  votingPowerFromDelegators: string;
+  /**
+   * All wallets delegated to this voter with the power they're delegating.
+   */
+  delegators: VoterAddressWithPower[];
 }
