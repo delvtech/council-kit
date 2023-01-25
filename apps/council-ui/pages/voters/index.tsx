@@ -27,9 +27,8 @@ export default function Voters(): ReactElement {
         <div className="flex flex-col">
           <h1 className="text-5xl font-bold">Voters</h1>
           <p className="mt-6 text-lg">
-            Voters are accounts that have participated in any on-chain vote
-            since the inception of the DAO. You can search by partial keywords
-            using ENS names or addresses.
+            Voters are accounts that currently have voting power. You can search
+            by partial keywords using ENS names or addresses.
           </p>
         </div>
 
