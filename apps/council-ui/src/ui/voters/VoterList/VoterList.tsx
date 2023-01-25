@@ -51,7 +51,7 @@ export function VoterList({
                   {ensName ? ensName : formatAddress(address)}
                   {isGSCMember && (
                     <Tooltip content="GSC Member">
-                      <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-success" />
+                      <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />
                     </Tooltip>
                   )}
                 </span>
