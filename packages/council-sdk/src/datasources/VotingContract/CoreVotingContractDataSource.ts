@@ -64,6 +64,12 @@ export class CoreVotingContractDataSource
     );
   }
 
+  /**
+   * Returns the hash of the transaction that created the proposal. Returns null
+   * if the id passed does not correspond to a valid proposal.
+   * @param id The id of the proposal
+   * @returns The transaction hash
+   */
   async getProposalCreatedTransactionHash(id: number): Promise<string | null> {
     const proposalCreatedEvents = await this.getProposalCreatedEvents();
     const createdEvent = proposalCreatedEvents.find(

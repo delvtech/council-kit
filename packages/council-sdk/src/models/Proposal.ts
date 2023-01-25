@@ -110,6 +110,11 @@ export class Proposal extends Model {
     return this.votingContract.dataSource.getProposalCreatedBy(this.id);
   }
 
+  /**
+   * Returns the hash of the transaction that created the proposal, or null if
+   * the Proposal doesn't exist.
+   * @returns The transaction hash
+   */
   getCreatedTransactionHash(): Promise<string | null> {
     return this.votingContract.dataSource.getProposalCreatedTransactionHash(
       this.id,
