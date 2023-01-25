@@ -1,5 +1,6 @@
+import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { ReactElement, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
@@ -16,6 +17,14 @@ export default function Voters(): ReactElement {
   const { data: voters, status, error } = useVoterPageData();
   const { results, search } = useVotersSearch(voters);
   const [listSize, setListSize] = useState(DEFAULT_LIST_SIZE);
+  const [gscOnly, setGscOnly] = useState(false);
+
+  const filteredResults = useMemo(() => {
+    if (gscOnly) {
+      return results.filter(({ isGSCMember }) => isGSCMember);
+    }
+    return results;
+  }, [gscOnly, results]);
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
@@ -32,7 +41,7 @@ export default function Voters(): ReactElement {
           </p>
         </div>
 
-        {status === "success" ? (
+        <div className="flex gap-4 items-center">
           <input
             type="text"
             placeholder="Search by ENS or address"
@@ -40,19 +49,24 @@ export default function Voters(): ReactElement {
             onChange={(e) => {
               search(e.target.value as string);
             }}
+            disabled={status !== "success"}
           />
-        ) : (
-          <input
-            type="text"
-            placeholder="Search by ENS or address"
-            className="w-full daisy-input-bordered daisy-input"
-            disabled
-          />
-        )}
+          <label className="cursor-pointer daisy-label w-min whitespace-nowrap flex items-center gap-1">
+            <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
+            <span className="font-medium daisy-label-text mr-1">GSC Only</span>
+            <input
+              type="checkbox"
+              className="daisy-toggle daisy-toggle-warning"
+              checked={gscOnly}
+              onChange={({ target }) => setGscOnly(target.checked)}
+              disabled={status !== "success"}
+            />
+          </label>
+        </div>
 
         {status === "success" ? (
           <VoterList
-            voters={results}
+            voters={filteredResults}
             size={listSize}
             onSizeChange={(newSize) => setListSize(newSize)}
           />
