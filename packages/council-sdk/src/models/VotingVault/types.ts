@@ -5,9 +5,6 @@ export interface VoterWithPower {
   votingPower: string;
 }
 
-/**
- * @category Data Sources
- */
 export interface VoterPowerBreakdown extends VoterWithPower {
   /**
    * The total voting power from all wallets delegated to this voter.
