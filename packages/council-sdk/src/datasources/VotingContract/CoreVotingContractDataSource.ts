@@ -64,20 +64,40 @@ export class CoreVotingContractDataSource
     );
   }
 
+  /**
+   * Returns the hash of the transaction that created the proposal. Returns null
+   * if the id passed does not correspond to a valid proposal.
+   * @param id The id of the proposal
+   * @returns The transaction hash
+   */
+  async getProposalCreatedTransactionHash(id: number): Promise<string | null> {
+    const proposalCreatedEvents = await this.getProposalCreatedEvents();
+    const createdEvent = proposalCreatedEvents.find(
+      ({ args }) => args.proposalId.toNumber() === id,
+    );
+    if (!createdEvent) {
+      return null;
+    }
+
+    return createdEvent.transactionHash;
+  }
+
   async getProposal(id: number): Promise<ProposalData | null> {
     const { proposalHash, quorum, created, unlock, expiration, lastCall } =
       await this.call("proposals", [id]);
-    return proposalHash === EXECUTED_PROPOSAL_HASH
-      ? null
-      : {
-          id,
-          hash: proposalHash,
-          requiredQuorum: formatEther(quorum),
-          createdBlock: created.toNumber(),
-          unlockBlock: unlock.toNumber(),
-          expirationBlock: expiration.toNumber(),
-          lastCallBlock: lastCall.toNumber(),
-        };
+    if (proposalHash === EXECUTED_PROPOSAL_HASH) {
+      return null;
+    }
+
+    return {
+      id,
+      hash: proposalHash,
+      requiredQuorum: formatEther(quorum),
+      createdBlock: created.toNumber(),
+      unlockBlock: unlock.toNumber(),
+      expirationBlock: expiration.toNumber(),
+      lastCallBlock: lastCall.toNumber(),
+    };
   }
 
   getProposals(

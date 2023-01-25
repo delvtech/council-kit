@@ -111,6 +111,17 @@ export class Proposal extends Model {
   }
 
   /**
+   * Returns the hash of the transaction that created the proposal, or null if
+   * the Proposal doesn't exist.
+   * @returns The transaction hash
+   */
+  getCreatedTransactionHash(): Promise<string | null> {
+    return this.votingContract.dataSource.getProposalCreatedTransactionHash(
+      this.id,
+    );
+  }
+
+  /**
    * Get the block number of when this voting ends for this proposal. Will only
    * be null if this proposal instance was initiated with an invalid id.
    */

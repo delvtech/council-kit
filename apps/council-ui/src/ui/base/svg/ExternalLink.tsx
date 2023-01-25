@@ -1,4 +1,4 @@
-export function ExternalLinkSVG({ size = 16 }: { size: number }): JSX.Element {
+export function ExternalLinkSVG({ size = 16 }: { size?: number }): JSX.Element {
   return (
     <svg
       className="fill-base-content inline ml-1"
