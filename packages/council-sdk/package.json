@@ -15,7 +15,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "docs": "typedoc",
-    "docs:watch": "typedoc --watch",
+    "watch:docs": "typedoc --watch",
     "example": "ts-node -r dotenv/config -r tsconfig-paths/register src/example/index.ts",
     "watch:example": "nodemon -r dotenv/config -r tsconfig-paths/register src/example/index.ts"
   },
