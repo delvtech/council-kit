@@ -74,16 +74,17 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
   return useQuery<VoterRowData[]>({
     queryKey: ["voter-list-page", chainId],
     queryFn: async () => {
-      const votersWithPower = await coreVoting.getVotersWithVotingPower();
+      const voterPowerBreakdowns = await coreVoting.getVotingPowerBreakdown();
       const ensRecords = await getBulkEnsRecords(
-        votersWithPower.map(({ voter }) => voter.address),
+        voterPowerBreakdowns.map(({ voter }) => voter.address),
         provider,
       );
 
-      return votersWithPower.map(({ voter, votingPower }) => ({
+      return voterPowerBreakdowns.map(({ voter, votingPower, delegators }) => ({
         address: voter.address,
         ensName: ensRecords[voter.address],
         votingPower,
+        numberOfDelegators: delegators.length,
       }));
     },
     refetchOnWindowFocus: false,
