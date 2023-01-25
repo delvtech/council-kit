@@ -2,8 +2,6 @@ import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Stat } from "src/ui/base/Stat";
 
-// ================ Skeletons ================
-
 export function GSCVaultStatsBarSkeleton(): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
