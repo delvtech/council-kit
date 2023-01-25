@@ -7,7 +7,8 @@ import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
 import { VoterRowData } from "src/ui/voters/types";
-import { VoterList, VoterListSkeleton } from "src/ui/voters/VoterList";
+import { VoterList } from "src/ui/voters/VoterList/VoterList";
+import { VoterListSkeleton } from "src/ui/voters/VoterList/VoterListSkeleton";
 
 const DEFAULT_LIST_SIZE = 100;
 
@@ -22,7 +23,7 @@ export default function Voters(): ReactElement {
 
   return (
     <Page>
-      <div className="flex flex-col max-w-xl mx-auto gap-y-8">
+      <div className="flex flex-col max-w-3xl mx-auto gap-y-8">
         <div className="flex flex-col">
           <h1 className="text-5xl font-bold">Voters</h1>
           <p className="mt-6 text-lg">
@@ -74,15 +75,16 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
   return useQuery<VoterRowData[]>({
     queryKey: ["voter-list-page", chainId],
     queryFn: async () => {
-      const voters = await coreVoting.getVoters();
+      const votersWithPower = await coreVoting.getVotersWithVotingPower();
       const ensRecords = await getBulkEnsRecords(
-        voters.map((voter) => voter.address),
+        votersWithPower.map(({ voter }) => voter.address),
         provider,
       );
 
-      return voters.map((voter) => ({
+      return votersWithPower.map(({ voter, votingPower }) => ({
         address: voter.address,
         ensName: ensRecords[voter.address],
+        votingPower,
       }));
     },
     refetchOnWindowFocus: false,

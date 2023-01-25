@@ -14,6 +14,7 @@ import {
 import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
 import { Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { VoterWithPower } from "src/models/VotingVault/types";
 
 /**
  * @category Models
@@ -163,6 +164,31 @@ export class VotingContract<
     );
     const mergedVotersList = ([] as Voter[]).concat(...vaultVoters);
     return uniqBy<Voter>(mergedVotersList, (voter) => voter.address);
+  }
+
+  /**
+   * Get all participants with voting power in this voting contract along with
+   * their voting power. This is a convenience method to fetch voting power for
+   * a large number of voters in a single call.
+   */
+  async getVotersWithVotingPower(): Promise<VoterWithPower[]> {
+    const vaultVotingPowers = await Promise.all(
+      this.vaults.map((vault) => vault.getVotersWithVotingPower?.() || []),
+    );
+    const mergedVotingPowersList = ([] as VoterWithPower[]).concat(
+      ...vaultVotingPowers,
+    );
+
+    const totalVotingPowersByAddress: Record<string, VoterWithPower> = {};
+    for (const { voter, votingPower } of mergedVotingPowersList) {
+      const runningTotal =
+        totalVotingPowersByAddress[voter.address]?.votingPower || "0";
+      totalVotingPowersByAddress[voter.address] = {
+        voter,
+        votingPower: sumStrings([runningTotal, votingPower]),
+      };
+    }
+    return Object.values(totalVotingPowersByAddress);
   }
 
   /**

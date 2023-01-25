@@ -49,7 +49,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   getDelegatorsTo(
     address: string,
     atBlock?: number,
-  ): Promise<VoterWithPower[]> {
+  ): Promise<VoterAddressWithPower[]> {
     return this.cached(["getDelegatorsTo", address, atBlock], async () => {
       const voteChangeEvents = await this.getVoteChangeEvents(
         undefined,
@@ -106,7 +106,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   async getAllVotersWithPower(
     fromBlock?: number,
     toBlock?: number,
-  ): Promise<VoterWithPower[]> {
+  ): Promise<VoterAddressWithPower[]> {
     return this.cached(
       ["getAllVotersWithPower", fromBlock, toBlock],
       async () => {
@@ -237,7 +237,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
 /**
  * @category Data Sources
  */
-export interface VoterWithPower {
+export interface VoterAddressWithPower {
   address: string;
   power: string;
 }

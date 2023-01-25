@@ -4,6 +4,7 @@ import { VotingVaultContractDataSource } from "src/datasources/VotingVault/Votin
 import { VotingVaultDataSource } from "src/datasources/VotingVault/VotingVaultDataSource";
 import { Model, ModelOptions } from "src/models/Model";
 import { Voter } from "src/models/Voter";
+import { VoterWithPower } from "src/models/VotingVault/types";
 
 /**
  * @category Models
@@ -22,17 +23,20 @@ export interface VotingVaultOptions<
 // Adds common methods as optional. This makes it possible to loop through a
 // list of VotingVaults and conditionally call these methods without TypeScript
 // complaining that the methods don't exist on type VotingVault.
-interface VotingVaultModel<
+interface IVotingVault<
   TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
 > {
   address: string;
   dataSource: TDataSource;
   getVoters?(...args: any[]): Promise<Voter[]>;
+  getVotersWithVotingPower?(...args: any[]): Promise<VoterWithPower[]>;
   getTotalVotingPower?(...args: any[]): Promise<string>;
 }
 
-// Include the common optional methods in the `VotingVault` export
-export interface VotingVault extends VotingVaultModel {}
+// Include the common optional methods in the `VotingVault` export. The original
+// interface name has to be different than the model name so that the model can
+// implement it.
+export interface VotingVault extends IVotingVault {}
 
 /**
  * A vault which stores voting power by address
@@ -42,7 +46,7 @@ export class VotingVault<
     TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
   >
   extends Model
-  implements VotingVaultModel
+  implements IVotingVault
 {
   address: string;
   dataSource: TDataSource;
