@@ -180,7 +180,7 @@ export class VotingContract<
       address,
       proposalId,
       fromBlock,
-      toBlock ?? (await this.context.provider.getBlockNumber()),
+      toBlock,
     );
     return votes.map(
       ({ address, proposalId, power, ballot }) =>

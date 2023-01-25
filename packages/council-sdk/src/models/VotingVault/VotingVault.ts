@@ -76,10 +76,6 @@ export class VotingVault<
     atBlock?: number,
     extraData: BytesLike = "0x00",
   ): Promise<string> {
-    return this.dataSource.getVotingPower(
-      address,
-      atBlock ?? (await this.context.provider.getBlockNumber()),
-      extraData,
-    );
+    return this.dataSource.getVotingPower(address, atBlock, extraData);
   }
 }

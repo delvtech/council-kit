@@ -121,10 +121,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
     address: string,
     atBlock?: number,
   ): Promise<string> {
-    return this.dataSource.getHistoricalVotingPower(
-      address,
-      atBlock ?? (await this.context.provider.getBlockNumber()),
-    );
+    return this.dataSource.getHistoricalVotingPower(address, atBlock);
   }
 
   /**
