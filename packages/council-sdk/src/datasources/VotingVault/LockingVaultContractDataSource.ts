@@ -60,6 +60,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       const powerByDelegators: Record<string, BigNumber> = {};
       for (const { args } of voteChangeEvents) {
         const { from, amount } = args;
+        // ignore self-delegation
         if (from !== address) {
           powerByDelegators[from] =
             powerByDelegators[from]?.add(amount) || amount;
@@ -161,6 +162,7 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
 
           breakdownsByVoter[to].power = breakdownsByVoter[to].power.add(amount);
 
+          // ignore self-delegation
           if (from !== to) {
             breakdownsByVoter[to].fromDelegators =
               breakdownsByVoter[to].fromDelegators.add(amount);
