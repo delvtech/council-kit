@@ -67,6 +67,7 @@ export default function Voters(): ReactElement {
 function useVoterPageData(): UseQueryResult<VoterRowData[]> {
   const {
     coreVoting,
+    gscVoting,
     context: { provider },
   } = useCouncil();
   const chainId = useChainId();
@@ -75,6 +76,8 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
     queryKey: ["voter-list-page", chainId],
     queryFn: async () => {
       const voterPowerBreakdowns = await coreVoting.getVotingPowerBreakdown();
+      const gscMembers = (await gscVoting?.getVoters()) || [];
+      const gscMemberAddresses = gscMembers.map(({ address }) => address);
       const ensRecords = await getBulkEnsRecords(
         voterPowerBreakdowns.map(({ voter }) => voter.address),
         provider,
@@ -85,6 +88,7 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
         ensName: ensRecords[voter.address],
         votingPower,
         numberOfDelegators: delegators.length,
+        isGSCMember: gscMemberAddresses.includes(voter.address),
       }));
     },
     refetchOnWindowFocus: false,

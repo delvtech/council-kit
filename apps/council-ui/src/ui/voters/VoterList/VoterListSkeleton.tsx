@@ -7,7 +7,7 @@ import { GridTableRow } from "src/ui/base/tables/GridTableRow";
 export function VoterListSkeleton(): ReactElement {
   return (
     <div className="min-w-[250px]">
-      <GridTableHeader className="grid-cols-[1fr_1fr_1fr_56px]">
+      <GridTableHeader className="grid-cols-[1.5fr_1fr_1fr_56px]">
         <span>Voter</span>
         <span>Voting Power</span>
         <span># of Delegators</span>
@@ -15,7 +15,7 @@ export function VoterListSkeleton(): ReactElement {
       </GridTableHeader>
 
       {new Array(8).fill(null).map((_, i) => (
-        <GridTableRow key={i} className="grid-cols-[1fr_1fr_1fr_56px]">
+        <GridTableRow key={i} className="grid-cols-[1.5fr_1fr_1fr_56px]">
           <Skeleton />
           <Skeleton />
           <Skeleton />

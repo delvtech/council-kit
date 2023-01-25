@@ -3,4 +3,5 @@ export interface VoterRowData {
   ensName: string | null;
   votingPower: string;
   numberOfDelegators: number;
+  isGSCMember: boolean;
 }
