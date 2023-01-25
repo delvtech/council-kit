@@ -44,7 +44,7 @@ export class VotingVaultContractDataSource<
   async getVotingPower(
     this: ContractDataSource<IVotingVault>,
     address: string,
-    atBlock: number,
+    atBlock?: number,
     extraData: BytesLike = "0x00",
   ): Promise<string> {
     try {
@@ -54,11 +54,22 @@ export class VotingVaultContractDataSource<
       // account is not found, it can flood the console with errors.  this is a workaround until a
       // better solution is found.
       ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.OFF);
-      const votingPowerBigNumber = await this.callStatic("queryVotePower", [
-        address,
-        atBlock,
-        extraData,
-      ]);
+      // Using this.cached instead of this.call because the atBlock argument is
+      // required by the queryVotePower method, but we want the atBlock argument
+      // optional. So instead we make the cache key include the possibly
+      // undefined argument, then grab the latest block in the callback if it's
+      // not defined. This means that subsequent calls to getVotingPower will
+      // return a cached value unless explicitly called with a specific atBlock.
+      const votingPowerBigNumber = await this.cached(
+        ["queryVotePower", address, atBlock, extraData],
+        async () => {
+          return await this.contract.callStatic.queryVotePower(
+            address,
+            atBlock ?? (await this.context.provider.getBlockNumber()),
+            extraData,
+          );
+        },
+      );
       ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.WARNING);
       return formatEther(votingPowerBigNumber);
     } catch (error) {

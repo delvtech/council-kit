@@ -152,7 +152,7 @@ export class Proposal extends Model {
     const deletedIds =
       await this.votingContract.dataSource.getExecutedProposalIds(
         undefined,
-        atBlock ?? (await this.context.provider.getBlockNumber()),
+        atBlock,
       );
     return deletedIds.includes(this.id);
   }
@@ -181,12 +181,7 @@ export class Proposal extends Model {
    * @param toBlock - Include all votes casted on or before this block number.
    */
   async getVotes(fromBlock?: number, toBlock?: number): Promise<Vote[]> {
-    return this.votingContract.getVotes(
-      undefined,
-      this.id,
-      fromBlock,
-      toBlock ?? (await this.context.provider.getBlockNumber()),
-    );
+    return this.votingContract.getVotes(undefined, this.id, fromBlock, toBlock);
   }
 
   /**

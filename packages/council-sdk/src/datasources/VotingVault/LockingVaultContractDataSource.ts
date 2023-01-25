@@ -88,12 +88,24 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
    */
   async getHistoricalVotingPower(
     address: string,
-    atBlock: number,
+    atBlock?: number,
   ): Promise<string> {
-    const votingPowerBigNumber = await this.call("queryVotePowerView", [
-      address,
-      atBlock,
-    ]);
+    // Using this.cached instead of this.call because the atBlock argument is
+    // required by the queryVotePowerView method, but we want the atBlock
+    // argument optional. So instead we make the cache key include the possibly
+    // undefined argument, then grab the latest block in the callback if it's
+    // not defined. This means that subsequent calls to getHistoricalVotingPower
+    // will return a cached value unless explicitly called with a specific
+    // atBlock.
+    const votingPowerBigNumber = await this.cached(
+      ["queryVotePowerView", address, atBlock],
+      async () => {
+        return await this.contract.queryVotePowerView(
+          address,
+          atBlock ?? (await this.context.provider.getBlockNumber()),
+        );
+      },
+    );
     return formatEther(votingPowerBigNumber);
   }
 

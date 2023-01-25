@@ -10,12 +10,12 @@ export interface VotingVaultDataSource extends DataSource {
 
   /**
    * Get the voting power owned by a given address in this vault.
-   * @param extraData - Abi encoded optional extra data used by some vaults, such
-   *   as merkle proofs
+   * @param extraData - Abi encoded optional extra data used by some vaults,
+   *   such as merkle proofs
    */
   getVotingPower: (
     address: string,
-    atBlock: number,
+    atBlock?: number,
     extraData?: BytesLike,
   ) => Promise<string>;
 }
