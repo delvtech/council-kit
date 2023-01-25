@@ -109,7 +109,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
    * @param fromBlock - Include all voters that had power on or after this block number.
    * @param toBlock - Include all voters that had power on or before this block number.
    */
-  async getVotingPowersByVoter(
+  async getVotersWithVotingPower(
     fromBlock?: number,
     toBlock?: number,
   ): Promise<VoterWithPower[]> {

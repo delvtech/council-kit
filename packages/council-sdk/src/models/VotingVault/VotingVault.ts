@@ -29,7 +29,7 @@ interface IVotingVault<
   address: string;
   dataSource: TDataSource;
   getVoters?(...args: any[]): Promise<Voter[]>;
-  getVotingPowersByVoter?(...args: any[]): Promise<VoterWithPower[]>;
+  getVotersWithVotingPower?(...args: any[]): Promise<VoterWithPower[]>;
   getTotalVotingPower?(...args: any[]): Promise<string>;
 }
 
