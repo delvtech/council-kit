@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { ReactElement } from "react";
-import Skeleton from "react-loading-skeleton";
 import { makeVoterURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
@@ -60,31 +59,6 @@ export function VoterList({
           </button>
         </div>
       )}
-    </div>
-  );
-}
-
-export function VoterListSkeleton(): ReactElement {
-  return (
-    <div className="min-w-[250px]">
-      <div className="grid grid-cols-[5fr_2fr_56px] text-xs leading-4 font-bold uppercase bg-base-200 rounded-t-lg [&>*]:p-4">
-        <span>Voter</span>
-        <span>Voting Power</span>
-        <span className="col-span-1"></span>
-      </div>
-
-      {new Array(8).fill(null).map((_, i) => (
-        <div
-          key={i}
-          className="group grid grid-cols-[5fr_2fr_56px] md:text-lg odd:bg-base-200 last:rounded-b-lg [&>*]:p-4 items-center"
-        >
-          <Skeleton />
-          <Skeleton />
-          <span>
-            <ChevronRightIcon className="w-6 h-6 stroke-base-content opacity-40" />
-          </span>
-        </div>
-      ))}
     </div>
   );
 }
