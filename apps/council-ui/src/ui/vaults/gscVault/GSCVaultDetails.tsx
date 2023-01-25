@@ -7,13 +7,18 @@ import { getActiveProposalCount } from "src/proposals/getActiveProposalCount";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
-import {
-  GSCVaultStatsBar,
-  GSCVaultStatsBarSkeleton,
-} from "src/ui/vaults/gscVault/GSCVaultStatsBar";
+import { GSCMembersTable } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTable";
+import { GSCMembersTableSkeleton } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTableSkeleton";
+import { GSCVaultStatsBar } from "src/ui/vaults/gscVault/GSCVaultStatsBar/GSCVaultStatsBar";
+import { GSCVaultStatsBarSkeleton } from "src/ui/vaults/gscVault/GSCVaultStatsBar/GSCVaultStatsBarSkeleton";
 
 import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
-import { getGSCStatus, GSCStatus } from "src/vaults/gscVault";
+import {
+  getGSCMembers,
+  getGSCStatus,
+  GSCMemberInfo,
+  GSCStatus,
+} from "src/vaults/gscVault";
 import { useAccount } from "wagmi";
 
 interface GSCVaultDetailsProps {
@@ -45,14 +50,22 @@ export function GSCVaultDetails({
         <GSCVaultStatsBar
           accountMembership={data.gscStatus}
           activeProposalCount={data.activeProposalCount}
-          participants={data.participants}
+          membersCount={data.members.length}
+          requiredVotingPower={data.requiredVotingPower}
         />
       ) : (
         <GSCVaultStatsBarSkeleton />
       )}
 
-      <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
-        {/* TODO: Forms and GSC Members table here */}
+      <div className="flex flex-col w-full gap-8 sm:flex-row">
+        {status === "success" ? (
+          <GSCMembersTable
+            members={data.members}
+            requiredVotingPower={data.requiredVotingPower}
+          />
+        ) : (
+          <GSCMembersTableSkeleton />
+        )}
       </div>
     </>
   );
@@ -63,11 +76,12 @@ interface GSCVaultDetailsData {
   activeProposalCount: number;
   descriptionURL: string | undefined;
   name: string | undefined;
-  participants: number;
+  members: GSCMemberInfo[];
+  requiredVotingPower: string;
 }
 
 function useGSCVaultDetails({
-  vaultAddress: gscVaultAddress,
+  vaultAddress,
   account,
 }: {
   vaultAddress: string;
@@ -76,25 +90,32 @@ function useGSCVaultDetails({
   const { context, coreVoting, gscVoting } = useCouncil();
   const chainId = useChainId();
 
+  const coreVotingConfig = councilConfigs[chainId].coreVoting;
   // safe to cast because this component should never be rendered unless it's
   // already known that there's a GSC Core Voting in the system.
   // See: pages/vaults/details.tsx
   const gscCoreVotingConfig = councilConfigs[chainId]
     .gscVoting as VotingContractConfig;
   const vaultConfig = gscCoreVotingConfig.vaults.find(
-    (vault) => vault.address === gscVaultAddress,
+    (vault) => vault.address === vaultAddress,
   ) as VaultConfig;
 
   const queryEnabled = !!account && !!gscVoting;
   return useQuery({
-    queryKey: ["gscLockingVaultDetails", gscVaultAddress, account],
+    queryKey: ["gscLockingVaultDetails", vaultAddress, account],
     enabled: queryEnabled,
     queryFn: queryEnabled
       ? async (): Promise<GSCVaultDetailsData> => {
-          const gscVault = new GSCVault(gscVaultAddress, context);
+          const gscVault = new GSCVault(vaultAddress, context);
 
+          const requiredVotingPower = await gscVault.getRequiredVotingPower();
           const activeProposalCount = await getActiveProposalCount(gscVoting);
-          const participants = (await gscVault.getVoters()).length;
+          const members = await getGSCMembers(
+            gscVault,
+            coreVotingConfig.vaults.map((vault) => vault.address),
+            context.provider,
+          );
+
           const gscStatus = await getGSCStatus({
             coreVoting,
             gscVoting,
@@ -106,7 +127,8 @@ function useGSCVaultDetails({
             descriptionURL: vaultConfig.descriptionURL,
             name: vaultConfig.name,
             activeProposalCount,
-            participants,
+            members,
+            requiredVotingPower,
           };
         }
       : undefined,
