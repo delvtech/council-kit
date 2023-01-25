@@ -5,9 +5,9 @@ import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { LockingVaultContractDataSource } from "src/datasources/VotingVault/LockingVaultContractDataSource";
 import { Token } from "src/models/Token";
 import { Voter } from "src/models/Voter";
+import { VoterPowerBreakdown } from "src/models/VotingVault/types";
 import { sumStrings } from "src/utils/sumStrings";
 import { VotingVault, VotingVaultOptions } from "./VotingVault";
-import { VoterWithPower } from "src/models/VotingVault/types";
 
 export interface LockingVaultOptions extends VotingVaultOptions {
   dataSource?: LockingVaultContractDataSource;
@@ -57,7 +57,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
    * @param toBlock - Include all voters that had power on or before this block number.
    */
   async getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
-    const votersWithPower = await this.dataSource.getAllVotersWithPower(
+    const votersWithPower = await this.dataSource.getVotingPowerBreakdown(
       fromBlock,
       toBlock,
     );
@@ -67,24 +67,35 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
   }
 
   /**
-   * Get all participants with voting power in this vault along with their
-   * voting power. This is a convenience method to fetch voting power for a
-   * large number of voters in a single call.
-   * @param fromBlock - Include all voters that had power on or after this block number.
-   * @param toBlock - Include all voters that had power on or before this block number.
+   * Get all participants that have voting power in this vault along with their
+   * voting power, the amount of voting power being delegated to them, and the
+   * amount of power delegated to them by each delegator. This is a convenience
+   * method to fetch voting power and delegation data for a large number of
+   * voters in a single call.
+   * @param fromBlock - Include all voters that had power on or after this block
+   * number.
+   * @param toBlock - Include all voters that had power on or before this block
+   * number.
    */
-  async getVotersWithVotingPower(
+  async getVotingPowerBreakdown(
     fromBlock?: number,
     toBlock?: number,
-  ): Promise<VoterWithPower[]> {
-    const votersWithPower = await this.dataSource.getAllVotersWithPower(
+  ): Promise<VoterPowerBreakdown[]> {
+    const voterPowerBreakdowns = await this.dataSource.getVotingPowerBreakdown(
       fromBlock,
       toBlock,
     );
-    return votersWithPower.map(({ address, power }) => ({
-      voter: new Voter(address, this.context),
-      votingPower: power,
-    }));
+    return voterPowerBreakdowns.map(
+      ({ address, votingPower, votingPowerFromDelegators, delegators }) => ({
+        voter: new Voter(address, this.context),
+        votingPower,
+        votingPowerFromDelegators,
+        delegators: delegators.map(({ address, votingPower }) => ({
+          voter: new Voter(address, this.context),
+          votingPower,
+        })),
+      }),
+    );
   }
 
   /**
@@ -112,11 +123,11 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
    * @param atBlock - Get the total held at this block number.
    */
   async getTotalVotingPower(atBlock?: number): Promise<string> {
-    const allVotersWithPower = await this.dataSource.getAllVotersWithPower(
+    const allVotersWithPower = await this.dataSource.getVotingPowerBreakdown(
       undefined,
       atBlock,
     );
-    return sumStrings(allVotersWithPower.map(({ power }) => power));
+    return sumStrings(allVotersWithPower.map(({ votingPower }) => votingPower));
   }
 
   /**

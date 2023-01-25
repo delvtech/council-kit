@@ -3,10 +3,10 @@ import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/Lockin
 import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
-import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
-import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
 import { CachedDataSource } from "src/datasources/CachedDataSource";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
+import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
 /**
  * A DataSource with methods for making cached calls to a `LockingVault`
@@ -60,14 +60,17 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
       const powerByDelegators: Record<string, BigNumber> = {};
       for (const { args } of voteChangeEvents) {
         const { from, amount } = args;
-        powerByDelegators[from] =
-          powerByDelegators[from]?.add(amount) || amount;
+        // ignore self-delegation
+        if (from !== address) {
+          powerByDelegators[from] =
+            powerByDelegators[from]?.add(amount) || amount;
+        }
       }
       return Object.entries(powerByDelegators)
         .filter(([, power]) => power.gt(0))
         .map(([address, power]) => ({
           address,
-          power: formatEther(power),
+          votingPower: formatEther(power),
         }));
     });
   }
@@ -110,17 +113,22 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
   }
 
   /**
-   * Get the address and voting power of all participants that have voting power
-   * in this vault.
-   * @param fromBlock - The block number to start searching for voters from.
-   * @param toBlock - The block number to stop searching for voters at.
+   * Get the address of all participants that have voting power in this vault
+   * along with their voting power, the amount of voting power being delegated
+   * to them, and the amount of power delegated to them by each delegator. This
+   * is a convenience method to fetch voting power and delegation data for a
+   * large number of voters in a single call.
+   * @param fromBlock - Include all voters that had power on or after this block
+   * number.
+   * @param toBlock - Include all voters that had power on or before this block
+   * number.
    */
-  async getAllVotersWithPower(
+  async getVotingPowerBreakdown(
     fromBlock?: number,
     toBlock?: number,
-  ): Promise<VoterAddressWithPower[]> {
+  ): Promise<VoterAddressPowerBreakdown[]> {
     return this.cached(
-      ["getAllVotersWithPower", fromBlock, toBlock],
+      ["getVotingPowerBreakdown", fromBlock, toBlock],
       async () => {
         const voteChangeEvents = await this.getVoteChangeEvents(
           undefined,
@@ -128,16 +136,53 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
           fromBlock,
           toBlock,
         );
-        const powersByVoter: Record<string, BigNumber> = {};
+
+        const breakdownsByVoter: Record<
+          string, // voter address
+          {
+            power: BigNumber;
+            fromDelegators: BigNumber;
+            byDelegators: Record<
+              string, // delegator address
+              BigNumber
+            >;
+          }
+        > = {};
+
         for (const { args } of voteChangeEvents) {
-          const { to, amount } = args;
-          powersByVoter[to] = powersByVoter[to]?.add(amount) || amount;
+          const { from, to, amount } = args;
+
+          if (!breakdownsByVoter[to]) {
+            breakdownsByVoter[to] = {
+              power: BigNumber.from(0),
+              fromDelegators: BigNumber.from(0),
+              byDelegators: {},
+            };
+          }
+
+          breakdownsByVoter[to].power = breakdownsByVoter[to].power.add(amount);
+
+          // ignore self-delegation
+          if (from !== to) {
+            breakdownsByVoter[to].fromDelegators =
+              breakdownsByVoter[to].fromDelegators.add(amount);
+            breakdownsByVoter[to].byDelegators[from] =
+              breakdownsByVoter[to].byDelegators[from]?.add(amount) || amount;
+          }
         }
-        return Object.entries(powersByVoter)
-          .filter(([, power]) => power.gt(0))
-          .map(([address, power]) => ({
+
+        return Object.entries(breakdownsByVoter)
+          .filter(([, { power }]) => power.gt(0))
+          .map(([address, { power, fromDelegators, byDelegators }]) => ({
             address,
-            power: formatEther(power),
+            votingPower: formatEther(power),
+            votingPowerFromDelegators: formatEther(fromDelegators),
+            delegators: Object.entries(byDelegators)
+              .filter(([, power]) => power.gt(0))
+              .map(([address, power]) => ({
+                address,
+                votingPower: formatEther(power),
+              })),
           }));
       },
     );
@@ -251,5 +296,21 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
  */
 export interface VoterAddressWithPower {
   address: string;
-  power: string;
+  votingPower: string;
+}
+
+/**
+ * @category Data Sources
+ */
+export interface VoterAddressPowerBreakdown extends VoterAddressWithPower {
+  /**
+   * The total voting power from all wallets delegated to this voter. Does not
+   * include self-delegation.
+   */
+  votingPowerFromDelegators: string;
+  /**
+   * All wallets delegated to this voter with the power they're delegating. Does
+   * not include self-delegation.
+   */
+  delegators: VoterAddressWithPower[];
 }

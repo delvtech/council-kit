@@ -13,7 +13,6 @@ import {
 import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalsTableSkeleton";
 import { useAccount } from "wagmi";
 
-// TODO @cashd: Move sorting logic into the Proposal table component
 export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
   const { data, error, status } = useProposalsPageData(address);

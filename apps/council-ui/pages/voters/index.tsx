@@ -27,9 +27,8 @@ export default function Voters(): ReactElement {
         <div className="flex flex-col">
           <h1 className="text-5xl font-bold">Voters</h1>
           <p className="mt-6 text-lg">
-            Voters are accounts that have participated in any on-chain vote
-            since the inception of the DAO. You can search by partial keywords
-            using ENS names or addresses.
+            Voters are accounts that currently have voting power. You can search
+            by partial keywords using ENS names or addresses.
           </p>
         </div>
 
@@ -68,6 +67,7 @@ export default function Voters(): ReactElement {
 function useVoterPageData(): UseQueryResult<VoterRowData[]> {
   const {
     coreVoting,
+    gscVoting,
     context: { provider },
   } = useCouncil();
   const chainId = useChainId();
@@ -75,16 +75,20 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
   return useQuery<VoterRowData[]>({
     queryKey: ["voter-list-page", chainId],
     queryFn: async () => {
-      const votersWithPower = await coreVoting.getVotersWithVotingPower();
+      const voterPowerBreakdowns = await coreVoting.getVotingPowerBreakdown();
+      const gscMembers = (await gscVoting?.getVoters()) || [];
+      const gscMemberAddresses = gscMembers.map(({ address }) => address);
       const ensRecords = await getBulkEnsRecords(
-        votersWithPower.map(({ voter }) => voter.address),
+        voterPowerBreakdowns.map(({ voter }) => voter.address),
         provider,
       );
 
-      return votersWithPower.map(({ voter, votingPower }) => ({
+      return voterPowerBreakdowns.map(({ voter, votingPower, delegators }) => ({
         address: voter.address,
         ensName: ensRecords[voter.address],
         votingPower,
+        numberOfDelegators: delegators.length,
+        isGSCMember: gscMemberAddresses.includes(voter.address),
       }));
     },
     refetchOnWindowFocus: false,

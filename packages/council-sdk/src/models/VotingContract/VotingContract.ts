@@ -1,20 +1,23 @@
+import { Signer } from "ethers";
+import { BytesLike, parseEther } from "ethers/lib/utils";
 import uniqBy from "lodash.uniqby";
 import { CouncilContext } from "src/context";
-import { sumStrings } from "src/utils/sumStrings";
-import { Model, ModelOptions } from "src/models/Model";
-import { Proposal } from "src/models/Proposal";
-import { Vote } from "src/models/Vote";
-import { Voter } from "src/models/Voter";
-import { VotingVault } from "src/models/VotingVault/VotingVault";
-import { BytesLike, parseEther } from "ethers/lib/utils";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
 import {
   Ballot,
   VotingContractDataSource,
 } from "src/datasources/VotingContract/VotingContractDataSource";
-import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
-import { Signer } from "ethers";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
-import { VoterWithPower } from "src/models/VotingVault/types";
+import { Model, ModelOptions } from "src/models/Model";
+import { Proposal } from "src/models/Proposal";
+import { Vote } from "src/models/Vote";
+import { Voter } from "src/models/Voter";
+import {
+  VoterPowerBreakdown,
+  VoterWithPower,
+} from "src/models/VotingVault/types";
+import { VotingVault } from "src/models/VotingVault/VotingVault";
+import { sumStrings } from "src/utils/sumStrings";
 
 /**
  * @category Models
@@ -167,28 +170,100 @@ export class VotingContract<
   }
 
   /**
-   * Get all participants with voting power in this voting contract along with
-   * their voting power. This is a convenience method to fetch voting power for
-   * a large number of voters in a single call.
+   * Get all participants that have voting power in this voting contract along
+   * with their voting power, the amount of voting power being delegated to
+   * them, and the amount of power delegated to them by each delegator. This is
+   * a convenience method to fetch voting power and delegation data for a large
+   * number of voters in a single call.
+   * @param fromBlock - Include all voters that had power on or after this block
+   * number.
+   * @param toBlock - Include all voters that had power on or before this block
+   * number.
    */
-  async getVotersWithVotingPower(): Promise<VoterWithPower[]> {
-    const vaultVotingPowers = await Promise.all(
-      this.vaults.map((vault) => vault.getVotersWithVotingPower?.() || []),
-    );
-    const mergedVotingPowersList = ([] as VoterWithPower[]).concat(
-      ...vaultVotingPowers,
+  async getVotingPowerBreakdown(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<VoterPowerBreakdown[]> {
+    // get a list of breakdowns for each vault
+    const vaultBreakdowns = await Promise.all(
+      this.vaults.map(
+        (vault) => vault.getVotingPowerBreakdown?.(fromBlock, toBlock) || [],
+      ),
     );
 
-    const totalVotingPowersByAddress: Record<string, VoterWithPower> = {};
-    for (const { voter, votingPower } of mergedVotingPowersList) {
-      const runningTotal =
-        totalVotingPowersByAddress[voter.address]?.votingPower || "0";
-      totalVotingPowersByAddress[voter.address] = {
-        voter,
-        votingPower: sumStrings([runningTotal, votingPower]),
-      };
+    // concatenate them together into a single array
+    const mergedBreakdownsList = ([] as VoterPowerBreakdown[]).concat(
+      ...vaultBreakdowns,
+    );
+
+    // create a temp object to merge unique addresses
+    const breakdownsByVoter: Record<
+      string,
+      VoterWithPower & {
+        fromDelegators: string;
+        byDelegator: Record<string, VoterWithPower>;
+      }
+    > = {};
+
+    for (const {
+      voter,
+      votingPower,
+      votingPowerFromDelegators,
+      delegators,
+    } of mergedBreakdownsList) {
+      const breakdown = breakdownsByVoter[voter.address];
+
+      if (!breakdown) {
+        // Add a breakdown for this voter in the unique list
+        breakdownsByVoter[voter.address] = {
+          voter,
+          votingPower,
+          fromDelegators: votingPowerFromDelegators,
+          // key delegators by their address
+          byDelegator: Object.fromEntries(
+            delegators.map((delegatorWithPower) => [
+              delegatorWithPower.voter.address,
+              delegatorWithPower,
+            ]),
+          ),
+        };
+      } else {
+        // if a breakdown for this voter already exists, then merge with the
+        // current one.
+        breakdown.votingPower = sumStrings([
+          breakdown.votingPower,
+          votingPower,
+        ]);
+        breakdown.fromDelegators = sumStrings([
+          breakdown.fromDelegators,
+          votingPowerFromDelegators,
+        ]);
+
+        for (const delegatorWithPower of delegators) {
+          if (!breakdown.byDelegator[delegatorWithPower.voter.address]) {
+            // Add the delegator with power to the breakdown in the unique list
+            breakdown.byDelegator[delegatorWithPower.voter.address] =
+              delegatorWithPower;
+          } else {
+            breakdown.byDelegator[
+              delegatorWithPower.voter.address
+            ].votingPower = sumStrings([
+              breakdown.byDelegator[delegatorWithPower.voter.address]
+                .votingPower,
+              delegatorWithPower.votingPower,
+            ]);
+          }
+        }
+      }
     }
-    return Object.values(totalVotingPowersByAddress);
+    return Object.values(breakdownsByVoter).map(
+      ({ voter, votingPower, fromDelegators, byDelegator }) => ({
+        voter,
+        votingPower,
+        votingPowerFromDelegators: fromDelegators,
+        delegators: Object.values(byDelegator),
+      }),
+    );
   }
 
   /**
