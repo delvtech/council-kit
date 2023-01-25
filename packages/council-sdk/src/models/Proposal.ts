@@ -1,17 +1,17 @@
+import { BytesLike, Signer } from "ethers";
 import { CouncilContext } from "src/context";
-import { Model, ModelOptions } from "./Model";
-import { Vote } from "./Vote";
-import { VotingContract } from "./VotingContract/VotingContract";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
   Ballot,
   ProposalData,
   VoteResults,
 } from "src/datasources/VotingContract/VotingContractDataSource";
-import { Voter } from "./Voter";
-import { sumStrings } from "src/utils/sumStrings";
-import { BytesLike, Signer } from "ethers";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { getVaultsWithPower } from "src/utils/getVaultsWithPower";
+import { sumStrings } from "src/utils/sumStrings";
+import { Model, ModelOptions } from "./Model";
+import { Vote } from "./Vote";
+import { Voter } from "./Voter";
+import { VotingContract } from "./VotingContract/VotingContract";
 
 /**
  * A model of a Proposal in Council

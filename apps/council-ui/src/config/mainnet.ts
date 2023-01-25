@@ -38,6 +38,11 @@ export const mainnetCouncilConfig: CouncilConfig = {
         targets: [],
         calldatas: [],
       },
+      3: {
+        descriptionURL: "https://moreinfo.com",
+        targets: [],
+        calldatas: [],
+      },
     },
   },
 

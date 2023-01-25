@@ -2,23 +2,23 @@ import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { councilConfigs } from "src/config/council.config";
 import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
-import {
-  ProposalStatsBar,
-  ProposalStatsBarSkeleton,
-} from "src/ui/proposals/ProposalStatsBar";
-import { QuorumBar, QuorumBarSkeleton } from "src/ui/proposals/QuorumBar";
+import { useChainId } from "src/ui/network/useChainId";
+import { ProposalStatsBar } from "src/ui/proposals/ProposalStatsBar";
+import { ProposalStatsBarSkeleton } from "src/ui/proposals/ProposalStatsBarSkeleton";
+import { QuorumBar } from "src/ui/proposals/QuorumBar";
+import { QuorumBarSkeleton } from "src/ui/proposals/QuorumBarSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTableSkeleton";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
-import {
-  ProposalVoting,
-  ProposalVotingSkeleton,
-} from "src/ui/voting/ProposalVoting";
+import { ProposalVoting } from "src/ui/voting/ProposalVoting";
+import { ProposalVotingSkeleton } from "src/ui/voting/ProposalVotingSkeleton";
 import { useAccount, useBlockNumber, useSigner } from "wagmi";
 
 export default function ProposalPage(): ReactElement {
@@ -68,16 +68,28 @@ export default function ProposalPage(): ReactElement {
 
   return (
     <Page>
-      <div className="flex flex-wrap w-full gap-4">
-        <h1 className="text-5xl font-bold whitespace-nowrap">
-          {data?.name ?? `Proposal ${id}`}
-        </h1>
+      <div className="flex flex-wrap w-full gap-4 whitespace-nowrap">
+        <div className="flex flex-col gap-1">
+          <h1 className="inline text-5xl font-bold">
+            {data?.name ?? `Proposal ${id}`}
+          </h1>
+          {data?.descriptionURL && (
+            <ExternalLink
+              href={data.descriptionURL}
+              iconSize={18}
+              className="self-start"
+            >
+              <span>Learn more about this proposal</span>
+            </ExternalLink>
+          )}
+        </div>
 
         <div className="sm:ml-auto w-96 sm:w-72">
           {status === "success" ? (
             <QuorumBar
               current={data.currentQuorum}
               required={data.requiredQuorum}
+              votingEnds={data.endsAtDate}
             />
           ) : (
             <QuorumBarSkeleton />
@@ -151,6 +163,7 @@ interface ProposalDetailsPageData {
   votes: Vote[];
   accountBallot?: Ballot;
   voterEnsRecords: EnsRecords;
+  descriptionURL: string | null;
 }
 
 function useProposalDetailsPageData(
@@ -160,6 +173,8 @@ function useProposalDetailsPageData(
 ) {
   const { context, coreVoting, gscVoting } = useCouncil();
   const provider = context.provider;
+  const chainId = useChainId();
+  const proposalConfig = councilConfigs[chainId].coreVoting.proposals;
 
   const queryEnabled =
     votingContractAddress !== undefined &&
@@ -193,17 +208,23 @@ function useProposalDetailsPageData(
 
           const endsAtBlock = await proposal.getExpirationBlock();
           const endsAtDate = endsAtBlock
-            ? await getBlockDate(endsAtBlock, provider)
+            ? await getBlockDate(endsAtBlock, provider, {
+                estimateFutureDates: true,
+              })
             : null;
 
           const unlockedAtBlock = await proposal.getUnlockBlock();
           const unlockedAtDate = unlockedAtBlock
-            ? await getBlockDate(unlockedAtBlock, provider)
+            ? await getBlockDate(unlockedAtBlock, provider, {
+                estimateFutureDates: true,
+              })
             : null;
 
           const lastCallAtBlock = await proposal.getLastCallBlock();
           const lastCallAtDate = lastCallAtBlock
-            ? await getBlockDate(lastCallAtBlock, provider)
+            ? await getBlockDate(lastCallAtBlock, provider, {
+                estimateFutureDates: true,
+              })
             : null;
 
           const votes = await proposal.getVotes();
@@ -219,7 +240,6 @@ function useProposalDetailsPageData(
             currentQuorum: await proposal.getCurrentQuorum(),
             requiredQuorum: await proposal.getRequiredQuorum(),
             createdAtBlock,
-            createdTransactionHash,
             createdBy: await proposal.getCreatedBy(),
             createdAtDate,
             endsAtDate,
@@ -227,7 +247,11 @@ function useProposalDetailsPageData(
             lastCallAtDate,
             votes: await proposal.getVotes(),
             voterEnsRecords,
+            createdTransactionHash,
             accountBallot: (await proposal.getVote(account))?.ballot,
+            descriptionURL: proposalConfig[id.toString()]
+              ? proposalConfig[id.toString()].descriptionURL
+              : null,
           };
         }
       : undefined,
