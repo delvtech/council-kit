@@ -51,14 +51,14 @@ export function VoterList({
                   {ensName ? ensName : formatAddress(address)}
                   {isGSCMember && (
                     <Tooltip content="GSC Member">
-                      <BuildingLibraryIcon className="w-5 h-5 fill-warning ml-1" />
+                      <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-success" />
                     </Tooltip>
                   )}
                 </span>
                 <span>{numberOfDelegators}</span>
                 <span>{formatBalance(votingPower, 0)}</span>
                 <span>
-                  <ChevronRightIcon className="w-6 h-6 stroke-current opacity-40 group-hover:opacity-100 transition-all" />
+                  <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
                 </span>
               </GridTableRowLink>
             );

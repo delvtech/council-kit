@@ -1,6 +1,6 @@
 import { BytesLike, Signer } from "ethers";
-import { DataSource } from "src/datasources/DataSource";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { DataSource } from "src/datasources/DataSource";
 
 /**
  * An interface for fetching data from any voting contract.

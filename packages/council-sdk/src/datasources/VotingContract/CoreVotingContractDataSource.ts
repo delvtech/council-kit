@@ -9,11 +9,11 @@ import {
 } from "src/datasources/ContractDataSource";
 import {
   Ballot,
-  VotingContractDataSource,
   ProposalData,
+  ProposalDataPreview,
   VoteData,
   VoteResults,
-  ProposalDataPreview,
+  VotingContractDataSource,
 } from "./VotingContractDataSource";
 
 const BALLOTS: Ballot[] = ["yes", "no", "maybe"];
