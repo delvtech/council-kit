@@ -10,7 +10,7 @@ export function GridTableHeader({
   return (
     <div
       className={classNames(
-        "grid grid-flow-col auto-cols-fr text-xs leading-4 font-bold uppercase bg-base-200 rounded-t-lg [&>*]:p-4",
+        "grid grid-flow-col auto-cols-fr text-xs leading-4 font-bold uppercase bg-base-200 rounded-t-lg [&>*]:p-4 [&>*]:flex [&>*]:items-center",
         className,
       )}
     >

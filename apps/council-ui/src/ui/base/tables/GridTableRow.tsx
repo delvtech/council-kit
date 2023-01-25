@@ -10,7 +10,7 @@ export function GridTableRow({
   return (
     <div
       className={classNames(
-        "group grid grid-flow-col auto-cols-fr odd:bg-base-200 transition-all last:rounded-b-lg [&>*]:p-4 [&>*]:flex [&>*]:items-center",
+        "grid grid-flow-col auto-cols-fr odd:bg-base-200 last:rounded-b-lg [&>*]:p-4 [&>*]:flex [&>*]:items-center",
         className,
       )}
     >
