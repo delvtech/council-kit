@@ -81,13 +81,11 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
         provider,
       );
 
-      return await Promise.all(
-        votersWithPower.map(async ({ voter, votingPower }) => ({
-          address: voter.address,
-          ensName: ensRecords[voter.address],
-          votingPower,
-        })),
-      );
+      return votersWithPower.map(({ voter, votingPower }) => ({
+        address: voter.address,
+        ensName: ensRecords[voter.address],
+        votingPower,
+      }));
     },
     refetchOnWindowFocus: false,
     staleTime: Infinity,
