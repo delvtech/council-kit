@@ -27,9 +27,15 @@ export function VoterList({
   voters,
   size,
   onSizeChange,
+  defaultSortField,
+  defaultSortDirection,
 }: VoterListProps): ReactElement {
-  const [sortField, setSortField] = useState<SortField>();
-  const [sortDirection, setSortDirection] = useState<SortDirection>();
+  const [sortField, setSortField] = useState<SortField | undefined>(
+    defaultSortField,
+  );
+  const [sortDirection, setSortDirection] = useState<SortDirection | undefined>(
+    defaultSortDirection,
+  );
 
   const sortedVoters = useMemo(
     () =>
