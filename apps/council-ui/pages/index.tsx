@@ -1,4 +1,3 @@
-import "@rainbow-me/rainbowkit/styles.css";
 import Link from "next/link";
 import { ReactElement } from "react";
 
