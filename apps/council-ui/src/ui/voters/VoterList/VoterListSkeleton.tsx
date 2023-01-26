@@ -9,8 +9,8 @@ export function VoterListSkeleton(): ReactElement {
     <div className="min-w-[250px]">
       <GridTableHeader className="grid-cols-[1.5fr_1fr_1fr_56px]">
         <span>Voter</span>
-        <span>Voting Power</span>
         <span># of Delegators</span>
+        <span>Voting Power</span>
         <span className="col-span-1"></span>
       </GridTableHeader>
 
