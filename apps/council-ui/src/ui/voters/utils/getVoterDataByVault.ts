@@ -12,6 +12,7 @@ export interface VoterDataByVault {
   votingPower: string;
   balance?: string;
   numDelegated?: number;
+  votersDelegated?: Voter[];
   currentDelegate?: Voter;
 }
 
@@ -26,26 +27,28 @@ export async function getVoterDataByVault(
 
       if (vault instanceof LockingVault) {
         const balance = await vault.getDepositedBalance(address);
-        const numDelegated = (await vault.getDelegatorsTo(address)).length;
+        const votersDelegated = await vault.getDelegatorsTo(address);
         const currentDelegate = await vault.getDelegate(address);
         return {
           vault,
           votingPower,
           balance,
-          numDelegated,
+          votersDelegated,
+          numDelegated: votersDelegated.length,
           currentDelegate,
         };
       }
 
       if (vault instanceof VestingVault) {
         const balance = await (await vault.getGrant(address)).votingPower;
-        const numDelegated = (await vault.getDelegatorsTo(address)).length;
+        const votersDelegated = await vault.getDelegatorsTo(address);
         const currentDelegate = await vault.getDelegate(address);
         return {
           vault,
           votingPower,
           balance,
-          numDelegated,
+          votersDelegated,
+          numDelegated: votersDelegated.length,
           currentDelegate,
         };
       }
