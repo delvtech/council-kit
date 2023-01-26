@@ -1,12 +1,12 @@
 import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { ReactElement } from "react";
+import { TooltipWrapper } from "react-tooltip";
 import { makeVoterURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
-import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { VoterRowData } from "src/ui/voters/types";
 
@@ -50,9 +50,9 @@ export function VoterList({
                   <WalletIcon address={address} className="mr-2" />
                   {ensName ? ensName : formatAddress(address)}
                   {isGSCMember && (
-                    <Tooltip content="GSC Member">
+                    <TooltipWrapper content="GSC Member">
                       <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-success" />
-                    </Tooltip>
+                    </TooltipWrapper>
                   )}
                 </span>
                 <span>{numberOfDelegators}</span>
