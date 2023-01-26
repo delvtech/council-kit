@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import { ReactElement } from "react";
 import { Toaster } from "react-hot-toast";
+import { Tooltip, TooltipProvider } from "react-tooltip";
 import { reactQueryClient } from "src/clients/reactQuery";
 import { wagmiClient } from "src/clients/wagmi";
 import { councilConfigs } from "src/config/council.config";
@@ -19,11 +20,18 @@ function App({ Component, pageProps }: AppProps): ReactElement {
       <RainbowKitProvider chains={chains}>
         <QueryClientProvider client={reactQueryClient}>
           <CouncilClientProvider>
-            <Navigation />
-            <main>
-              <Component {...pageProps} />
-            </main>
-            <Toaster />
+            <TooltipProvider>
+              <Navigation />
+              <main>
+                <Component {...pageProps} />
+              </main>
+              <Toaster />
+              {/* Share a single tooltip for the entire app to avoid nasty
+              coupling of tooltip and the wrapped component via an `id` prop.
+              This follows the recipe in
+              https://react-tooltip.com/docs/examples/multiple-anchors */}
+              <Tooltip />
+            </TooltipProvider>
           </CouncilClientProvider>
         </QueryClientProvider>
       </RainbowKitProvider>
