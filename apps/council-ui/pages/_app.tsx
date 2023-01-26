@@ -1,6 +1,7 @@
 // disabling prettier organize imports plugin to preserve css import order
 // organize-imports-ignore
 import dynamic from "next/dynamic";
+import "react-tooltip/dist/react-tooltip.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import "src/styles/globals.css";
 import "react-loading-skeleton/dist/skeleton.css";
