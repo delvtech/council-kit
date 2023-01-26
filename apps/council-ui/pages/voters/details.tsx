@@ -18,14 +18,10 @@ import {
   VoterStatsRow,
   VoterStatsRowSkeleton,
 } from "src/ui/voters/VoterStatsRow";
-import {
-  VoterVaultsList,
-  VoterVaultsListSkeleton,
-} from "src/ui/voters/VoterVaultsList";
-import {
-  VotingHistoryTable,
-  VotingHistoryTableSkeleton,
-} from "src/ui/voters/VotingHistoryTable";
+import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
+import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
+import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
+import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import { GSCStatus } from "src/vaults/gscVault";
 import { useEnsName } from "wagmi";
 
@@ -60,7 +56,10 @@ export default function VoterDetailsPage(): ReactElement {
           <h2 className="text-2xl font-bold">
             Voting Vaults ({data.voterDataByVault.length})
           </h2>
-          <VoterVaultsList vaultData={data.voterDataByVault} />
+          <VoterVaultsList
+            address={address}
+            vaultData={data.voterDataByVault}
+          />
         </div>
       ) : (
         <div className="flex flex-col gap-y-4">
@@ -71,11 +70,15 @@ export default function VoterDetailsPage(): ReactElement {
         </div>
       )}
 
-      <div className="flex flex-col items-start w-full mt-8 gap-y-8">
+      <div className="flex flex-col items-start w-full gap-y-8">
         <div className="flex flex-col w-full gap-y-4">
-          <h2 className="text-2xl font-bold">Voting History</h2>
+          <h2 className="text-2xl font-bold">
+            Voting History ({data?.votingHistory.length ?? 0})
+          </h2>
           {status === "success" ? (
-            <VotingHistoryTable history={data.votingHistory} />
+            <div className="overflow-x-auto">
+              <VotingHistoryTable history={data.votingHistory} />
+            </div>
           ) : (
             <VotingHistoryTableSkeleton />
           )}
@@ -111,7 +114,7 @@ function VoterHeader({ address }: VoterHeaderProps) {
 
   return ens ? (
     <div>
-      <h1 className="w-full text-5xl">{ens}</h1>
+      <h1 className="w-full text-5xl font-bold">{ens}</h1>
       <a
         href={makeEtherscanAddressURL(address)}
         rel="noopener noreferrer"
