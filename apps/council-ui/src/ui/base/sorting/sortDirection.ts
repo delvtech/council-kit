@@ -3,16 +3,16 @@ export type SortDirection = "ASC" | "DESC";
 // simple state machine for sort state transitions
 export function toggleSortDirection(
   currentDirection: SortDirection | undefined,
-  primarySortDirection: SortDirection = "DESC",
+  primaryDirection: SortDirection = "DESC",
 ): SortDirection | undefined {
-  const secondarySortDirection = oppositeDirection[primarySortDirection];
+  const secondaryDirection = oppositeDirection[primaryDirection];
   switch (currentDirection) {
-    case primarySortDirection:
-      return secondarySortDirection;
-    case secondarySortDirection:
+    case primaryDirection:
+      return secondaryDirection;
+    case secondaryDirection:
       return undefined;
     default:
-      return primarySortDirection;
+      return primaryDirection;
   }
 }
 
