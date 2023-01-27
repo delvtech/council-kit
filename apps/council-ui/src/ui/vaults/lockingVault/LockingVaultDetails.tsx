@@ -56,7 +56,6 @@ export function LockingVaultDetails({
 
       {status === "success" ? (
         <LockingVaultStatsBar
-          activeProposalCount={data.activeProposalCount}
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
           delegatedToAccount={data.delegatedToAccount}
@@ -143,14 +142,6 @@ function useLockingVaultDetailsData(
       const delegate = await lockingVault.getDelegate(account);
       const accountVotingPower = await lockingVault.getVotingPower(account);
 
-      let activeProposalCount = 0;
-      const proposals = await coreVoting.getProposals();
-      for (const proposal of proposals) {
-        if (await proposal.getIsActive()) {
-          activeProposalCount++;
-        }
-      }
-
       return {
         accountPercentOfTVP:
           (+accountVotingPower / +(await lockingVault.getTotalVotingPower())) *
@@ -166,7 +157,6 @@ function useLockingVaultDetailsData(
         delegate: delegate.address,
         descriptionURL: vaultConfig?.descriptionURL,
         name: vaultConfig?.name,
-        activeProposalCount,
         participants: (await lockingVault.getVoters()).length,
         delegatedToAccount: (await lockingVault.getDelegatorsTo(account))
           .length,

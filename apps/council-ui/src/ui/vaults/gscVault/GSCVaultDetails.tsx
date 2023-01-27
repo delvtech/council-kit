@@ -3,7 +3,6 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { VaultConfig, VotingContractConfig } from "src/config/CouncilConfig";
-import { getActiveProposalCount } from "src/proposals/getActiveProposalCount";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
@@ -49,7 +48,6 @@ export function GSCVaultDetails({
       {status === "success" ? (
         <GSCVaultStatsBar
           accountMembership={data.gscStatus}
-          activeProposalCount={data.activeProposalCount}
           membersCount={data.members.length}
           requiredVotingPower={data.requiredVotingPower}
         />
@@ -73,7 +71,6 @@ export function GSCVaultDetails({
 
 interface GSCVaultDetailsData {
   gscStatus: GSCStatus;
-  activeProposalCount: number;
   descriptionURL: string | undefined;
   name: string | undefined;
   members: GSCMemberInfo[];
@@ -109,7 +106,6 @@ function useGSCVaultDetails({
           const gscVault = new GSCVault(vaultAddress, context);
 
           const requiredVotingPower = await gscVault.getRequiredVotingPower();
-          const activeProposalCount = await getActiveProposalCount(gscVoting);
           const members = await getGSCMembers(
             gscVault,
             coreVotingConfig.vaults.map((vault) => vault.address),
@@ -126,7 +122,6 @@ function useGSCVaultDetails({
             gscStatus,
             descriptionURL: vaultConfig.descriptionURL,
             name: vaultConfig.name,
-            activeProposalCount,
             members,
             requiredVotingPower,
           };
