@@ -101,16 +101,17 @@ export async function deployCouncil(signer: Wallet): Promise<
   const coreVoting = await deployCoreVoting({
     signer,
     timelockAddress: timelock.address,
-    gscCoreVotingAddress: gscCoreVoting.address,
     votingVaultAddresses: [lockingVaultProxy.address, vestingVault.address],
     // set quorum to 50 ELFI so any test account can pass a vote
     baseQuorum: "50",
     // set minProposalPower to 50 ELFI so any test account can make a proposal
     minProposalPower: "50",
+    // the GSC does not have a voting power requirement to submit a proposal
+    gscCoreVotingAddress: gscCoreVoting.address,
     // can execute a proposal 10 blocks after it gets created
     lockDuration: 10,
-    // can vote on a proposal up to 300k blocks ~ 1 week on goerli
-    extraVotingTime: 300000,
+    // can still vote on a proposal for this many blocks after it unlocks
+    extraVotingTime: 300000, // ~ 1 week on goerli
   });
 
   const gscVault = await deployGSCVault({
