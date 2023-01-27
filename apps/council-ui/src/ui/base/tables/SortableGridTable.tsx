@@ -139,7 +139,7 @@ function nextSortDirection(
   currentDirection?: SortDirection,
   defaultDirection: SortDirection = "DESC",
 ): SortDirection {
-  const secondDirection = oppositeDirection[defaultDirection];
+  const secondDirection = defaultDirection === "DESC" ? "ASC" : "DESC";
   switch (currentDirection) {
     case defaultDirection:
       return secondDirection;
@@ -149,11 +149,3 @@ function nextSortDirection(
       return defaultDirection;
   }
 }
-
-const oppositeDirection: Record<
-  Exclude<SortDirection, undefined>,
-  SortDirection
-> = {
-  ASC: "DESC",
-  DESC: "ASC",
-};
