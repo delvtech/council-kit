@@ -54,8 +54,9 @@ export function VoterList({
   return (
     <div className="min-w-[250px]">
       <SortableGridTable
+        headingRowClassName="grid-cols-[1.5fr_1fr_1fr_56px]"
+        bodyRowClassName="group grid-cols-[1.5fr_1fr_1fr_56px]"
         onSort={setSortOptions}
-        colRowClassName="grid-cols-[1.5fr_1fr_1fr_56px]"
         cols={[
           "Voter",
           {
@@ -68,7 +69,6 @@ export function VoterList({
           },
           "", // extra column for the chevron
         ]}
-        rowClassName="group grid-cols-[1.5fr_1fr_1fr_56px]"
         rows={sortedVoters
           .slice(0, size)
           .map(

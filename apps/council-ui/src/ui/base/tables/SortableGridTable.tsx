@@ -31,21 +31,22 @@ interface SortableGridTableProps<K extends string> {
   rows: Row[];
   onSort?: (sortOptions: SortOptions<K>) => void;
   className?: string;
-  colRowClassName?: string;
-  rowClassName?: string;
+  headingRowClassName?: string;
+  bodyRowClassName?: string;
 }
 
 /**
- * A div with `display: grid` pretending to be a table :).
- * To customize column widths use the `grid-cols-[<col-widths>]` className.
+ * A div with `display: grid` pretending to be a table with sortable columns :).
+ * To customize column widths use the `grid-cols-[<col-widths>]` class for
+ * `headingRowClassName` and `bodyRowClassName.
  * @see https://tailwindcss.com/docs/grid-template-columns#using-custom-values
  */
 export function SortableGridTable<K extends string>({
   cols,
   rows,
   onSort,
-  colRowClassName,
-  rowClassName,
+  headingRowClassName,
+  bodyRowClassName,
 }: SortableGridTableProps<K>): ReactElement {
   const [sortKey, setSortKey] = useState<K>();
   const [sortDirection, setSortDirection] = useState<SortDirection>();
@@ -69,7 +70,7 @@ export function SortableGridTable<K extends string>({
 
   return (
     <>
-      <GridTableHeader className={colRowClassName}>
+      <GridTableHeader className={headingRowClassName}>
         {cols.map((col, i) => {
           if (typeof col === "string") {
             return <span key={i}>{col}</span>;
@@ -105,7 +106,11 @@ export function SortableGridTable<K extends string>({
       {rows.map((row, i) => {
         if ("href" in row) {
           return (
-            <GridTableRowLink key={i} href={row.href} className={rowClassName}>
+            <GridTableRowLink
+              key={i}
+              href={row.href}
+              className={bodyRowClassName}
+            >
               {row.cells.map((cell, i) => {
                 if (typeof cell !== "object") {
                   return <span key={i}>{cell}</span>;
@@ -116,7 +121,7 @@ export function SortableGridTable<K extends string>({
           );
         }
         return (
-          <GridTableRow key={i} className={rowClassName}>
+          <GridTableRow key={i} className={bodyRowClassName}>
             {row}
           </GridTableRow>
         );
