@@ -11,8 +11,8 @@ import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ProposalStatsBar } from "src/ui/proposals/ProposalStatsBar";
 import { ProposalStatsBarSkeleton } from "src/ui/proposals/ProposalStatsBarSkeleton";
-import { QuorumBar } from "src/ui/proposals/QuorumBar";
-import { QuorumBarSkeleton } from "src/ui/proposals/QuorumBarSkeleton";
+import { Quorum } from "src/ui/proposals/Quorum";
+import { QuorumBarSkeleton } from "src/ui/proposals/QuorumSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTableSkeleton";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
@@ -86,10 +86,11 @@ export default function ProposalPage(): ReactElement {
 
         <div className="sm:ml-auto w-96 sm:w-72">
           {status === "success" ? (
-            <QuorumBar
+            <Quorum
               current={data.currentQuorum}
               required={data.requiredQuorum}
               votingEnds={data.endsAtDate}
+              proposalId={id}
             />
           ) : (
             <QuorumBarSkeleton />

@@ -36,9 +36,7 @@ export function GrantCard({
       <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
         <div className="text-2xl font-bold">Your Vesting Info</div>
 
-        <div className="font-semibold">
-          There is no grant allocated to this account.
-        </div>
+        <p>There is no grant allocated for this account.</p>
       </div>
     );
   }

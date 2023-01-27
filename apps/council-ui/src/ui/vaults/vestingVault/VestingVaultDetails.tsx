@@ -1,7 +1,6 @@
 import { getBlockDate, VestingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { Signer } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
@@ -32,11 +31,6 @@ export function VestingVaultDetails({
   const { data, status, error } = useVestingVaultDetailsData(address, account);
   const { mutate: changeDelegate } = useChangeDelegate(address);
 
-  const hasGrant = parseUnits(
-    data?.grantBalance || "0",
-    data?.tokenDecimals,
-  ).gt(0);
-
   if (status === "error") {
     return <ErrorMessage error={error} />;
   }
@@ -51,7 +45,6 @@ export function VestingVaultDetails({
 
       {status === "success" ? (
         <VestingVaultStatsBar
-          activeProposalCount={data.activeProposalCount}
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
           delegatedToAccount={data.delegatedToAccount}
@@ -94,7 +87,6 @@ export function VestingVaultDetails({
 interface VestingVaultDetailsData {
   accountPercentOfTVP: number;
   accountVotingPower: string;
-  activeProposalCount: number;
   delegate: string;
   delegatedToAccount: number;
   descriptionURL: string | undefined;
@@ -135,14 +127,6 @@ function useVestingVaultDetailsData(
       const grant = await vestingVault.getGrant(account);
       const accountVotingPower = await vestingVault.getVotingPower(account);
 
-      let activeProposalCount = 0;
-      const proposals = await coreVoting.getProposals();
-      for (const proposal of proposals) {
-        if (await proposal.getIsActive()) {
-          activeProposalCount++;
-        }
-      }
-
       return {
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
@@ -167,7 +151,6 @@ function useVestingVaultDetailsData(
         participants: (await vestingVault.getVoters()).length,
         delegatedToAccount: (await vestingVault.getDelegatorsTo(account))
           .length,
-        activeProposalCount,
         accountPercentOfTVP:
           (+accountVotingPower / +(await vestingVault.getTotalVotingPower())) *
           100,

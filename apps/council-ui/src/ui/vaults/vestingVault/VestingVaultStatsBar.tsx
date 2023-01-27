@@ -5,10 +5,13 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { TVP_TIP } from "src/ui/vaults/tooltips";
+import {
+  PARTICIPANTS_TIP,
+  TVP_TIP,
+  WALLETS_DELEGATED_TIP,
+} from "src/ui/vaults/tooltips";
 
 interface VestingVaultStatsBarProps {
-  activeProposalCount: number;
   accountVotingPower: string;
   accountPercentOfTVP: number;
   delegatedToAccount: number;
@@ -18,7 +21,6 @@ interface VestingVaultStatsBarProps {
 }
 
 export function VestingVaultStatsBar({
-  activeProposalCount,
   accountVotingPower,
   accountPercentOfTVP,
   delegatedToAccount,
@@ -28,10 +30,6 @@ export function VestingVaultStatsBar({
 }: VestingVaultStatsBarProps): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
-      {activeProposalCount >= 0 && (
-        <Stat label="Active Proposals" value={activeProposalCount} />
-      )}
-
       {accountVotingPower && (
         <Stat
           label="Your Voting Power"
@@ -52,10 +50,26 @@ export function VestingVaultStatsBar({
       )}
 
       {delegatedToAccount >= 0 && (
-        <Stat label="Wallets Delegated to You" value={delegatedToAccount} />
+        <Stat
+          label={
+            <DefinitionTooltip content={WALLETS_DELEGATED_TIP}>
+              Delegated to You
+            </DefinitionTooltip>
+          }
+          value={delegatedToAccount || "None"}
+        />
       )}
 
-      {participants >= 0 && <Stat label="Participants" value={participants} />}
+      {participants >= 0 && (
+        <Stat
+          label={
+            <DefinitionTooltip content={PARTICIPANTS_TIP}>
+              Participants
+            </DefinitionTooltip>
+          }
+          value={participants}
+        />
+      )}
 
       <Stat
         label="Vault token"

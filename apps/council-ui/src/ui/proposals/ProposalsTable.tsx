@@ -6,7 +6,7 @@ import { makeProposalURL } from "src/routes";
 import { ChevronRightSVG } from "src/ui/base/svg/ChevronRight";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
-import { MiniQuorumBar } from "src/ui/proposals/MiniQuorumBar";
+import { ProposalStatus } from "./ProposalStatus";
 
 export interface ProposalRowData {
   ballot: Ballot | null;
@@ -99,6 +99,7 @@ function ProposalTableRow({
   votingEnds,
 }: ProposalRowData) {
   const { push } = useRouter();
+
   return (
     <tr
       onClick={() => push(makeProposalURL(votingContractAddress, id))}
@@ -111,10 +112,11 @@ function ProposalTableRow({
       <td>{votingEnds?.toLocaleDateString() ?? <em>unknown</em>}</td>
 
       <td>
-        <MiniQuorumBar
+        <ProposalStatus
           currentQuorum={currentQuorum}
           requiredQuorum={requiredQuorum}
           votingEnds={votingEnds}
+          proposalId={id}
         />
       </td>
 
