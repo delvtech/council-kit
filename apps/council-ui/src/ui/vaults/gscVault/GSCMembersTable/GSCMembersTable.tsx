@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVoterURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { GSCMembersTableHeader } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTableHeader";
 import { GSCMemberInfo } from "src/vaults/gscVault";
@@ -18,19 +18,15 @@ export function GSCMembersTable({
 }: GSCMembersTableProps): ReactElement {
   return (
     <div className="w-full overflow-auto">
-      <table className="w-full daisy-table-zebra daisy-table">
-        <GSCMembersTableHeader />
+      <GSCMembersTableHeader />
 
-        <tbody className="overflow-auto">
-          {members.map((memberInfo) => (
-            <GSCMembersTableRow
-              key={memberInfo.member.address}
-              requiredVotingPower={requiredVotingPower}
-              member={memberInfo}
-            />
-          ))}
-        </tbody>
-      </table>
+      {members.map((memberInfo) => (
+        <GSCMembersTableRow
+          key={memberInfo.member.address}
+          requiredVotingPower={requiredVotingPower}
+          member={memberInfo}
+        />
+      ))}
     </div>
   );
 }
@@ -46,22 +42,28 @@ function GSCMembersTableRow({
 }: GSCMembersTableRow) {
   const isKickButtonDisabled = +qualifyingVotingPower > +requiredVotingPower;
   return (
-    <tr>
-      <td>
-        <Link
-          className="daisy-link daisy-link-hover flex items-center"
-          href={makeVoterURL(member.address)}
+    <GridTableRowLink href={makeVoterURL(member.address)}>
+      <span className="flex items-center">
+        <WalletIcon address={member.address} className="mr-2" />
+        {ensName ?? formatAddress(member.address)}
+      </span>
+      <span className="flex items-center">
+        {formatBalance(qualifyingVotingPower)}
+      </span>
+
+      <span className="flex items-center">
+        <button
+          className="daisy-btn"
+          disabled={isKickButtonDisabled}
+          onClick={(e) => {
+            // prevent clicking the button from navigating the user to the voter
+            // page, since this is a button inside of a link..
+            e.preventDefault();
+          }}
         >
-          <WalletIcon address={member.address} className="mr-2" />
-          {ensName ?? formatAddress(member.address)}
-        </Link>
-      </td>
-      <td>{formatBalance(qualifyingVotingPower)}</td>
-      <td>
-        <button className="daisy-btn" disabled={isKickButtonDisabled}>
           Kick Member
         </button>
-      </td>
-    </tr>
+      </span>
+    </GridTableRowLink>
   );
 }

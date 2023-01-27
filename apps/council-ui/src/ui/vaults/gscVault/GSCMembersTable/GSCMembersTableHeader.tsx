@@ -1,19 +1,18 @@
 import { ReactElement } from "react";
+import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
 
 export function GSCMembersTableHeader(): ReactElement {
   return (
-    <thead>
-      <tr>
-        <th className="w-72">Member</th>
-        <th>
-          {/* TODO: Add a tooltip explaing this comes from approved vaults on core voting */}
-          Qualifying Voting Power
-        </th>
-        <th>
-          {/* TODO: Add a tooltip explaing what makes a member kickable */}
-          Member Actions
-        </th>
-      </tr>
-    </thead>
+    <GridTableHeader>
+      <span>Member</span>
+      <span>
+        {/* TODO: Add a tooltip explaing this comes from approved vaults on core voting */}
+        Qualifying Voting Power
+      </span>
+      <span>
+        {/* TODO: Add a tooltip explaing what makes a member kickable */}
+        Member Actions
+      </span>
+    </GridTableHeader>
   );
 }
