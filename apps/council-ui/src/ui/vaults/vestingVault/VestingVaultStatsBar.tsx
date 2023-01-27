@@ -52,11 +52,9 @@ export function VestingVaultStatsBar({
       {delegatedToAccount >= 0 && (
         <Stat
           label={
-            <>
-              <DefinitionTooltip content={WALLETS_DELEGATED_TIP}>
-                Delegated to You
-              </DefinitionTooltip>
-            </>
+            <DefinitionTooltip content={WALLETS_DELEGATED_TIP}>
+              Delegated to You
+            </DefinitionTooltip>
           }
           value={delegatedToAccount || "None"}
         />
@@ -65,11 +63,9 @@ export function VestingVaultStatsBar({
       {participants >= 0 && (
         <Stat
           label={
-            <>
-              <DefinitionTooltip content={PARTICIPANTS_TIP}>
-                Participants
-              </DefinitionTooltip>
-            </>
+            <DefinitionTooltip content={PARTICIPANTS_TIP}>
+              Participants
+            </DefinitionTooltip>
           }
           value={participants}
         />
