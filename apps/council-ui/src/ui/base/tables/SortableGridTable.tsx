@@ -30,7 +30,6 @@ interface SortableGridTableProps<K extends string> {
   cols: Column<K>[];
   rows: Row[];
   onSort?: (sortOptions: SortOptions<K>) => void;
-  className?: string;
   headingRowClassName?: string;
   bodyRowClassName?: string;
 }
