@@ -90,9 +90,12 @@ export async function deployCouncil(signer: Wallet): Promise<
   // The Vesting Vault is similar to the Locking Vault, however the voting power
   // isn't 1:1 with the number of deposited voting tokens. There are also limits
   // on withdrawing tokens as defined by a vesting schedule.
-  const vestingVault = await deployVestingVault({
+  const { vestingVault, vestingVaultProxy } = await deployVestingVault({
     signer,
     votingTokenAddress: votingToken.address,
+    // Set the Timelock as the owner of the proxy contract so that upgrades must
+    // go through the normal proposal flow
+    proxyOwnerAddress: timelock.address,
     timelockAddress: timelock.address,
     // 300k blocks ~ 1 week on goerli
     staleBlockLag: 300_000,
@@ -101,7 +104,10 @@ export async function deployCouncil(signer: Wallet): Promise<
   const coreVoting = await deployCoreVoting({
     signer,
     timelockAddress: timelock.address,
-    votingVaultAddresses: [lockingVaultProxy.address, vestingVault.address],
+    votingVaultAddresses: [
+      lockingVaultProxy.address,
+      vestingVaultProxy.address,
+    ],
     // set quorum to 50 ELFI so any test account can pass a vote
     baseQuorum: "50",
     // set minProposalPower to 50 ELFI so any test account can make a proposal
@@ -153,5 +159,6 @@ export async function deployCouncil(signer: Wallet): Promise<
     timelock,
     treasury,
     vestingVault,
+    vestingVaultProxy,
   ];
 }
