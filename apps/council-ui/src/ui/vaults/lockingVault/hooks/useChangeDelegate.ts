@@ -2,7 +2,6 @@ interface ChangeDelegateArguments {
   signer: Signer;
   delegate: string;
 }
-
 import { LockingVault } from "@council/sdk";
 import {
   useMutation,

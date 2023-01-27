@@ -18,10 +18,8 @@ export function VoterStatsRow({
   return (
     <div className="flex flex-wrap gap-4">
       <Stat label="Total Voting Power" value={formatBalance(votingPower, 0)} />
-
-      {gscStatus && <Stat label="GSC Member" value={gscStatus} />}
-
       <Stat label="Proposals voted" value={proposalsVoted} />
+      {gscStatus && <Stat label="GSC Member" value={gscStatus} />}
     </div>
   );
 }
@@ -30,8 +28,8 @@ export function VoterStatsRowSkeleton(): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
       <Stat label="Total Voting Power" value={<Skeleton />} />
-      <Stat label="GSC Member" value={<Skeleton />} />
       <Stat label="Proposals voted" value={<Skeleton />} />
+      <Stat label="GSC Member" value={<Skeleton />} />
     </div>
   );
 }
