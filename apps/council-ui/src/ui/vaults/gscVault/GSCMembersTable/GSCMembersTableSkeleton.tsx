@@ -1,87 +1,20 @@
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
+import { GridTableRow } from "src/ui/base/tables/GridTableRow";
 import { GSCMembersTableHeader } from "./GSCMembersTableHeader";
 
 export function GSCMembersTableSkeleton(): ReactElement {
   return (
     <div className="w-full overflow-auto max-h-96">
-      <table className="w-full daisy-table-zebra daisy-table">
-        <GSCMembersTableHeader />
+      <GSCMembersTableHeader />
 
-        <tbody>
-          <tr>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-            <td>
-              <Skeleton />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {new Array(8).fill(null).map((_, i) => (
+        <GridTableRow key={i}>
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+        </GridTableRow>
+      ))}
     </div>
   );
 }
