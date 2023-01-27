@@ -78,39 +78,12 @@ export function VoterVaultsList({
                 >
                   {rowData.numDelegated}
                 </label>
-
-                <input
-                  type="checkbox"
-                  id={`delegator-modal-${rowData.vault.address}`}
-                  className="daisy-modal-toggle"
+                <DelegatorListModal
+                  delegators={rowData.votersDelegated ?? []}
+                  vaultAddress={rowData.vault.address}
+                  voterAddress={address}
+                  voterEns={ens}
                 />
-                <label
-                  htmlFor={`delegator-modal-${rowData.vault.address}`}
-                  className="cursor-pointer daisy-modal"
-                >
-                  <label
-                    className="relative space-y-6 daisy-modal-box"
-                    htmlFor={`delegator-modal-${rowData.vault.address}`}
-                  >
-                    {ens ? (
-                      <h3 className="flex items-center text-xl font-bold">
-                        Wallets delegated to
-                        <WalletIcon className="mx-1 ml-2" address={address} />
-                        {ens}:
-                      </h3>
-                    ) : (
-                      <h3 className="text-lg font-bold">
-                        Wallets delegated to {formatAddress(address)}
-                      </h3>
-                    )}
-
-                    <div className="overflow-x-auto max-h-72">
-                      {rowData.votersDelegated && (
-                        <VotersListCompact voters={rowData.votersDelegated} />
-                      )}
-                    </div>
-                  </label>
-                </label>
               </div>
             )}
 
@@ -124,6 +97,55 @@ export function VoterVaultsList({
         );
       })}
     </div>
+  );
+}
+
+interface DelegatorListModalProps {
+  delegators: Voter[];
+  vaultAddress: string;
+  voterEns: string | undefined | null;
+  voterAddress: string;
+}
+
+function DelegatorListModal({
+  delegators,
+  vaultAddress,
+  voterAddress,
+  voterEns,
+}: DelegatorListModalProps) {
+  return (
+    <>
+      <input
+        type="checkbox"
+        id={`delegator-modal-${vaultAddress}`}
+        className="daisy-modal-toggle"
+      />
+      <label
+        htmlFor={`delegator-modal-${vaultAddress}`}
+        className="cursor-pointer daisy-modal"
+      >
+        <label
+          className="relative space-y-6 daisy-modal-box"
+          htmlFor={`delegator-modal-${vaultAddress}`}
+        >
+          {voterEns ? (
+            <h3 className="flex items-center text-xl font-bold">
+              Wallets delegated to
+              <WalletIcon className="mx-1 ml-2" address={voterAddress} />
+              {voterEns}:
+            </h3>
+          ) : (
+            <h3 className="text-lg font-bold">
+              Wallets delegated to {formatAddress(voterAddress)}
+            </h3>
+          )}
+
+          <div className="overflow-x-auto max-h-72">
+            <VotersListCompact voters={delegators} />
+          </div>
+        </label>
+      </label>
+    </>
   );
 }
 
