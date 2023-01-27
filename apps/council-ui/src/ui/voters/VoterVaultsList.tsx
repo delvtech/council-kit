@@ -8,8 +8,8 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { WalletIcon } from "src/ui/base/WalletIcon";
-import { VoterDataByVault } from "src/ui/voters/utils/getVoterDataByVault";
 import { VotersListCompact } from "src/ui/voters/VotersListCompact";
+import { VoterDataByVault } from "src/vaults/getVoterDataByVault";
 import { useEnsName } from "wagmi";
 
 interface VoterVaultsListProps {
@@ -31,7 +31,7 @@ export function VoterVaultsList({
       {vaultData.map((rowData) => {
         return (
           <div
-            className="flex flex-col p-8 md:max-w-sm grow md:grow-0 gap-y-4 daisy-card bg-base-300 min-w-[360px]"
+            className="flex flex-col p-8 md:max-w-sm grow md:grow-0 gap-y-4 daisy-card bg-base-200 min-w-[360px]"
             key={rowData.vault.address}
           >
             <Link
@@ -67,7 +67,7 @@ export function VoterVaultsList({
               <CurrentDelegateInfo delegate={rowData.currentDelegate} />
             )}
 
-            {!!rowData.numDelegated && rowData.numDelegated > 0 && (
+            {!!rowData.numDelegated && (
               <div className="flex items-center w-full">
                 <p># of Delegators</p>
 
@@ -88,7 +88,7 @@ export function VoterVaultsList({
             )}
 
             <button
-              className="w-full daisy-btn daisy-btn-primary"
+              className="w-full daisy-btn"
               disabled={+rowData.votingPower <= 0}
             >
               Delegate

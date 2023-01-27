@@ -11,10 +11,6 @@ import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import {
-  getVoterDataByVault,
-  VoterDataByVault,
-} from "src/ui/voters/utils/getVoterDataByVault";
-import {
   VoterStatsRow,
   VoterStatsRowSkeleton,
 } from "src/ui/voters/VoterStatsRow";
@@ -22,6 +18,10 @@ import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
 import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
 import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
+import {
+  getVoterDataByVault,
+  VoterDataByVault,
+} from "src/vaults/getVoterDataByVault";
 import { GSCStatus } from "src/vaults/gscVault";
 import { useEnsName } from "wagmi";
 
@@ -70,19 +70,17 @@ export default function VoterDetailsPage(): ReactElement {
         </div>
       )}
 
-      <div className="flex flex-col items-start w-full gap-y-8">
-        <div className="flex flex-col w-full gap-y-4">
-          <h2 className="text-2xl font-bold">
-            Voting History ({data?.votingHistory.length ?? 0})
-          </h2>
-          {status === "success" ? (
-            <div className="overflow-x-auto">
-              <VotingHistoryTable history={data.votingHistory} />
-            </div>
-          ) : (
-            <VotingHistoryTableSkeleton />
-          )}
-        </div>
+      <div className="flex flex-col w-full gap-y-4">
+        <h2 className="text-2xl font-bold">
+          Voting History ({data?.votingHistory.length ?? 0})
+        </h2>
+        {status === "success" ? (
+          <div className="overflow-x-auto">
+            <VotingHistoryTable history={data.votingHistory} />
+          </div>
+        ) : (
+          <VotingHistoryTableSkeleton />
+        )}
       </div>
     </Page>
   );

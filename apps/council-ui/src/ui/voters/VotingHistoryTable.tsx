@@ -12,6 +12,10 @@ interface VotingHistoryTableProps {
 export function VotingHistoryTable({
   history,
 }: VotingHistoryTableProps): ReactElement {
+  if (history.length === 0) {
+    return <h2 className="text-lg">No voting history for this account.</h2>;
+  }
+
   return (
     <table className="w-full md:max-w-3xl daisy-table">
       <thead>

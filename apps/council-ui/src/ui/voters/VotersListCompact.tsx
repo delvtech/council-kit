@@ -2,9 +2,9 @@ import { Voter } from "@council/sdk";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVoterURL } from "src/routes";
-import { useBulkEnsRecords } from "src/ui/base/ens/useBulkEnsRecords";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { WalletIcon } from "src/ui/base/WalletIcon";
+import { useBulkEnsRecords } from "src/ui/ens/useBulkEnsRecords";
 
 interface VotersListCompactProps {
   voters: Voter[];
