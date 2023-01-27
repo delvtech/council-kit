@@ -1,17 +1,16 @@
 import { ReactElement } from "react";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
+import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 
 export function GSCMembersTableHeader(): ReactElement {
   return (
     <GridTableHeader>
       <span>Member</span>
+      <span>Voting Power</span>
       <span>
-        {/* TODO: Add a tooltip explaing this comes from approved vaults on core voting */}
-        Qualifying Voting Power
-      </span>
-      <span>
-        {/* TODO: Add a tooltip explaing what makes a member kickable */}
-        Member Actions
+        <DefinitionTooltip content="GSC Members can be kicked off the GSC if they fall below the voting power threshold.">
+          Member Actions
+        </DefinitionTooltip>
       </span>
     </GridTableHeader>
   );
