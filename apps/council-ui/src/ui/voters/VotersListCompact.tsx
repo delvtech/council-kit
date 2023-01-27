@@ -1,5 +1,7 @@
 import { Voter } from "@council/sdk";
+import Link from "next/link";
 import { ReactElement } from "react";
+import { makeVoterURL } from "src/routes";
 import { useBulkEnsRecords } from "src/ui/base/ens/useBulkEnsRecords";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { WalletIcon } from "src/ui/base/WalletIcon";
@@ -26,14 +28,17 @@ export function VotersListCompact({
         {voters.map((voter) => (
           <tr key={voter.address}>
             <th>
-              <div className="flex items-center gap-x-2">
+              <Link
+                href={makeVoterURL(voter.address)}
+                className="flex items-center gap-x-2 hover:underline"
+              >
                 <WalletIcon address={voter.address} />
                 {ensRecords && ensRecords[voter.address] ? (
                   <p>{ensRecords[voter.address]}</p>
                 ) : (
                   <p>{formatAddress(voter.address)}</p>
                 )}
-              </div>
+              </Link>
             </th>
           </tr>
         ))}
