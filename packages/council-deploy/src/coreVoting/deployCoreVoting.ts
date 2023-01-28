@@ -12,15 +12,22 @@ interface DeployCoreVotingOptions {
   timelockAddress: string;
   baseQuorum: string;
   minProposalPower: string;
+  /**
+   * the GSC does not have a voting power requirement to submit a proposal
+   */
   gscCoreVotingAddress: string;
+
   /**
    * Minimum number of blocks a proposal must be active for before executing
    * Default: 10 blocks
    */
   lockDuration?: number;
+
   /**
    * The number of blocks after the proposal is unlocked during which voting can
-   * continue.  Default: 15 blocks
+   * continue.
+   *
+   * Default: 15 blocks, this is reasonable for Goerli but probably not mainnet
    */
   extraVotingTime?: number;
 }
