@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { ReactElement, ReactNode, useState } from "react";
 import { SortDirectionStatus } from "src/ui/base/sorting/SortDirectionStatus";
 import { SortDirection } from "src/ui/base/sorting/types";
@@ -9,14 +8,10 @@ import { UrlObject } from "url";
 
 // Header cells should be uniform, so ReactNodes aren't accepted.
 export type Column<K extends string> =
-  | string
+  | ReactNode
   | {
-      name: string;
-      className?: string;
-      /**
-       * if defined, the column will be sortable
-       */
-      sortKey?: K;
+      cell: ReactNode;
+      sortKey: K;
     };
 
 export type LinkRow = {
@@ -71,22 +66,15 @@ export function SortableGridTable<K extends string>({
     <>
       <GridTableHeader className={headingRowClassName}>
         {cols.map((col, i) => {
-          if (typeof col === "string") {
-            return <span key={i}>{col}</span>;
-          }
-
-          if (col.sortKey) {
+          if (col && typeof col === "object" && "sortKey" in col) {
             return (
               <button
                 key={i}
-                className={classNames(
-                  "text-left flex items-center gap-1 hover:bg-base-300",
-                  col.className,
-                )}
+                className="text-left flex items-center gap-1 hover:bg-base-300"
                 // safe to cast since the truthiness has already been checked
-                onClick={() => handleSortChange(col.sortKey as K)}
+                onClick={() => handleSortChange(col.sortKey)}
               >
-                {col.name}
+                {col.cell}
                 {sortKey === col.sortKey && (
                   <SortDirectionStatus direction={sortDirection} />
                 )}
@@ -94,11 +82,7 @@ export function SortableGridTable<K extends string>({
             );
           }
 
-          return (
-            <span key={i} className={col.className}>
-              {col.name}
-            </span>
-          );
+          return <span key={i}>{col}</span>;
         })}
       </GridTableHeader>
 

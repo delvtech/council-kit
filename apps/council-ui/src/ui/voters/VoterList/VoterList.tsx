@@ -60,11 +60,11 @@ export function VoterList({
         cols={[
           "Voter",
           {
-            name: "# of Delegators",
+            cell: "# of Delegators",
             sortKey: "numberOfDelegators",
           },
           {
-            name: "Voting Power",
+            cell: "Voting Power",
             sortKey: "votingPower",
           },
           "", // extra column for the chevron
