@@ -6,21 +6,6 @@ import { GridTableRow } from "src/ui/base/tables/GridTableRow";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { UrlObject } from "url";
 
-// Header cells should be uniform, so ReactNodes aren't accepted.
-export type Column<K extends string> =
-  | ReactNode
-  | {
-      cell: ReactNode;
-      sortKey: K;
-    };
-
-export type LinkRow = {
-  cells: ReactNode[];
-  href: string | UrlObject;
-};
-
-export type Row = LinkRow | ReactNode[];
-
 interface SortableGridTableProps<K extends string> {
   cols: Column<K>[];
   rows: Row[];
@@ -112,6 +97,21 @@ export function SortableGridTable<K extends string>({
     </>
   );
 }
+
+// Header cells should be uniform, so ReactNodes aren't accepted.
+export type Column<K extends string> =
+  | ReactNode
+  | {
+      cell: ReactNode;
+      sortKey: K;
+    };
+
+export type LinkRow = {
+  cells: ReactNode[];
+  href: string | UrlObject;
+};
+
+export type Row = LinkRow | ReactNode[];
 
 export interface SortOptions<K extends string> {
   key?: K;
