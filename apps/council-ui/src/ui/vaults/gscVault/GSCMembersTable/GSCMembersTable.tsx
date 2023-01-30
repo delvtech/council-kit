@@ -5,7 +5,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { GSCMembersTableHeader } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTableHeader";
-import { GSCMemberInfo } from "src/vaults/gscVault";
+import { GSCMemberInfo } from "src/vaults/gscVault/getGSCMembers";
 
 interface GSCMembersTableProps {
   members: GSCMemberInfo[];
