@@ -15,7 +15,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
       {
         name: "Locking Vault",
         address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD",
-        type: "LockingVault",
+        type: "FrozenLockingVault",
         abi: {},
         descriptionURL: "https://moreinfo.com",
       },
