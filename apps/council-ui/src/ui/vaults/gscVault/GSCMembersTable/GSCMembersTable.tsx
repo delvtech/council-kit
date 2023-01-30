@@ -20,13 +20,17 @@ export function GSCMembersTable({
     <div className="w-full overflow-auto">
       <GSCMembersTableHeader />
 
-      {members.map((memberInfo) => (
-        <GSCMembersTableRow
-          key={memberInfo.member.address}
-          requiredVotingPower={requiredVotingPower}
-          member={memberInfo}
-        />
-      ))}
+      {members.length ? (
+        members.map((memberInfo) => (
+          <GSCMembersTableRow
+            key={memberInfo.member.address}
+            requiredVotingPower={requiredVotingPower}
+            member={memberInfo}
+          />
+        ))
+      ) : (
+        <div className="text-center p-8">No GSC Members</div>
+      )}
     </div>
   );
 }
