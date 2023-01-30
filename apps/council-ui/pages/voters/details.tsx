@@ -28,7 +28,6 @@ import { useEnsName } from "wagmi";
 export default function VoterDetailsPage(): ReactElement {
   const { query } = useRouter();
   const { address } = query as { address: string | undefined };
-
   const { data, status } = useVoterData(address);
 
   if (!address) {
@@ -58,7 +57,7 @@ export default function VoterDetailsPage(): ReactElement {
           </h2>
           <VoterVaultsList
             address={address}
-            vaultData={data.voterDataByVault}
+            vaultsData={data.voterDataByVault}
           />
         </div>
       ) : (
