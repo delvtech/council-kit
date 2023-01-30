@@ -1,47 +1,6 @@
-import {
-  GSCVault,
-  GSCVotingContract,
-  Voter,
-  VotingContract,
-} from "@council/sdk";
+import { GSCVault, Voter } from "@council/sdk";
 import { Provider } from "@ethersproject/providers";
-import { parseEther } from "ethers/lib/utils";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
-
-export type GSCStatus = "N/A" | "Idle" | "Member" | "Eligible" | "Ineligible";
-
-interface GetGSCStatusOptions {
-  coreVoting: VotingContract;
-  gscVoting?: GSCVotingContract;
-  address: string;
-}
-
-export async function getGSCStatus({
-  coreVoting,
-  gscVoting,
-  address,
-}: GetGSCStatusOptions): Promise<GSCStatus> {
-  if (!gscVoting) {
-    return "N/A";
-  }
-
-  if (await gscVoting.getIsIdle(address)) {
-    return "Idle";
-  }
-
-  if (await gscVoting.getIsMember(address)) {
-    return "Member";
-  }
-
-  const votingPower = await coreVoting.getVotingPower(address);
-  const requiredVotingPower = await gscVoting.getRequiredVotingPower();
-
-  if (parseEther(votingPower).gt(parseEther(requiredVotingPower))) {
-    return "Eligible";
-  }
-
-  return "Ineligible";
-}
 
 export interface GSCMemberInfo {
   member: Voter;

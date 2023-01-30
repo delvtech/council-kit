@@ -1,6 +1,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { getGSCStatus, GSCStatus } from "src/vaults/gscVault";
+import { getGSCStatus } from "src/vaults/gscVault/getGSCStatus";
+import { GSCStatus } from "src/vaults/gscVault/types";
 
 export function useGSCStatus(
   address: string | undefined,
