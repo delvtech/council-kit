@@ -1,3 +1,4 @@
+import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { Page } from "src/ui/base/Page";
@@ -25,7 +26,10 @@ export default function Vault(): ReactElement {
   return (
     <Page>
       {(() => {
-        switch (vaultConfig?.type) {
+        if (!vaultConfig) {
+          return;
+        }
+        switch (vaultConfig.type) {
           case "FrozenLockingVault":
             return <FrozenLockingVaultDetails address={address as string} />;
 
@@ -39,7 +43,7 @@ export default function Vault(): ReactElement {
             return <GSCVaultDetails vaultAddress={address as string} />;
 
           default:
-            return <></>;
+            assertNever(vaultConfig.type);
         }
       })()}
     </Page>

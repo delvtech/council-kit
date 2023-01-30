@@ -105,13 +105,15 @@ function useFrozenLockingVaultDetailsData(
   );
 
   return useQuery({
-    queryKey: ["lockingVaultDetails", address, account],
+    queryKey: ["frozenLockingVaultDetails", address, account],
     enabled: !!account,
     queryFn: async () => {
       // safe to cast because the enabled option is set
       account = account as string;
 
       const lockingVault = new LockingVault(address, context);
+      console.log("address", address);
+      console.log("lockingVault", lockingVault);
       const token = await lockingVault.getToken();
       const delegate = await lockingVault.getDelegate(account);
       const accountVotingPower = await lockingVault.getVotingPower(account);
