@@ -29,10 +29,10 @@ export function GSCVaultStatsBar({
         label={
           <DefinitionTooltip
             content={
-              "The amount of voting power an account must have delegated by others or self delegated to able to to join the GSC. "
+              "The amount of voting power an account must have to able to to join the GSC. "
             }
           >
-            VP Threshold to be on the GSC
+            Voting Power Required to be a GSC Member
           </DefinitionTooltip>
         }
         value={formatBalance(requiredVotingPower)}
