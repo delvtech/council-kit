@@ -8,12 +8,11 @@ import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { Address } from "src/ui/base/Address";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
+import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
-import {
-  VoterStatsRow,
-  VoterStatsRowSkeleton,
-} from "src/ui/voters/VoterStatsRow";
+import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
+import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";
 import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
 import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
 import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
@@ -43,6 +42,7 @@ export default function VoterDetailsPage(): ReactElement {
       {status === "success" ? (
         <VoterStatsRow
           gscStatus={data.gscStatus}
+          proposalsCreated={data.proposalsCreated}
           proposalsVoted={data.votingHistory.length}
           votingPower={data.votingPower}
         />
@@ -130,10 +130,11 @@ function VoterHeader({ address }: VoterHeaderProps) {
 }
 
 interface VoterData {
+  gscStatus: GSCStatus | null;
+  proposalsCreated: number;
+  voterDataByVault: VoterDataByTokenWithDelegationVault[];
   votingHistory: Vote[];
   votingPower: string;
-  gscStatus: GSCStatus | null;
-  voterDataByVault: VoterDataByTokenWithDelegationVault[];
 }
 
 export function useVoterData(
@@ -163,11 +164,21 @@ export function useVoterData(
             coreVoting,
           );
 
+          const coreVotingProposals = await coreVoting.getProposals();
+          const proposalsCreatedByAddress = await asyncFilter(
+            coreVotingProposals,
+            async (proposal) => {
+              const createdBy = await proposal.getCreatedBy();
+              return createdBy === address;
+            },
+          );
+
           return {
             votingHistory,
             votingPower,
             gscStatus: gscStatus ?? null,
             voterDataByVault,
+            proposalsCreated: proposalsCreatedByAddress.length,
           };
         }
       : undefined,
