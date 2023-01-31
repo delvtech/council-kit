@@ -19,16 +19,15 @@ import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
 import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import {
-  getVoterDataByVault,
-  VoterDataByVault,
-} from "src/vaults/getVoterDataByVault";
+  getVoterDataByTokenWithDelegationVault,
+  VoterDataByTokenWithDelegationVault,
+} from "src/vaults/getVoterDataByTokenWithDelegationVault";
 import { GSCStatus } from "src/vaults/gscVault/types";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {
   const { query } = useRouter();
   const { address } = query as { address: string | undefined };
-
   const { data, status } = useVoterData(address);
 
   if (!address) {
@@ -58,7 +57,7 @@ export default function VoterDetailsPage(): ReactElement {
           </h2>
           <VoterVaultsList
             address={address}
-            vaultData={data.voterDataByVault}
+            vaultsData={data.voterDataByVault}
           />
         </div>
       ) : (
@@ -111,20 +110,20 @@ function VoterHeader({ address }: VoterHeaderProps) {
   }
 
   return ens ? (
-    <div>
-      <h1 className="w-full text-5xl font-bold">{ens}</h1>
+    <div className="w-fit">
+      <h1 className="text-5xl font-bold">{ens}</h1>
       <a
         href={makeEtherscanAddressURL(address)}
         rel="noopener noreferrer"
         target="_blank"
       >
-        <h2 className="flex items-center w-full mt-2 text-2xl">
+        <h2 className="mt-2 text-2xl">
           <Address address={address} iconSize={24} />
         </h2>
       </a>
     </div>
   ) : (
-    <h1 className="w-full mt-2 text-5xl">
+    <h1 className="mt-2 text-5xl w-fit">
       <Address address={address} iconSize={36} />
     </h1>
   );
@@ -134,7 +133,7 @@ interface VoterData {
   votingHistory: Vote[];
   votingPower: string;
   gscStatus: GSCStatus | null;
-  voterDataByVault: VoterDataByVault[];
+  voterDataByVault: VoterDataByTokenWithDelegationVault[];
 }
 
 export function useVoterData(
@@ -159,7 +158,7 @@ export function useVoterData(
           const votingPower = await voter.getVotingPower(
             coreVoting.vaults.map((vault) => vault.address),
           );
-          const voterDataByVault = await getVoterDataByVault(
+          const voterDataByVault = await getVoterDataByTokenWithDelegationVault(
             address,
             coreVoting,
           );
