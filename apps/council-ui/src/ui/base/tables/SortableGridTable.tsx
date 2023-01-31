@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { ReactElement, ReactNode, useState } from "react";
 import { SortDirectionStatus } from "src/ui/base/sorting/SortDirectionStatus";
 import { SortDirection } from "src/ui/base/sorting/types";
@@ -51,19 +52,27 @@ export function SortableGridTable<K extends string>({
     <>
       <GridTableHeader className={headingRowClassName}>
         {cols.map((col, i) => {
-          if (col && typeof col === "object" && "sortKey" in col) {
+          // is column options object
+          if (col && typeof col === "object" && "cell" in col) {
+            if (col.sortKey) {
+              return (
+                <button
+                  key={i}
+                  className="text-left flex items-center gap-1 hover:bg-base-300"
+                  onClick={() => handleSortChange(col.sortKey as K)}
+                >
+                  {col.cell}
+                  {sortKey === col.sortKey && (
+                    <SortDirectionStatus direction={sortDirection} />
+                  )}
+                </button>
+              );
+            }
+
             return (
-              <button
-                key={i}
-                className="text-left flex items-center gap-1 hover:bg-base-300"
-                // safe to cast since the truthiness has already been checked
-                onClick={() => handleSortChange(col.sortKey)}
-              >
+              <span key={i} className={col.className}>
                 {col.cell}
-                {sortKey === col.sortKey && (
-                  <SortDirectionStatus direction={sortDirection} />
-                )}
-              </button>
+              </span>
             );
           }
 
@@ -72,22 +81,35 @@ export function SortableGridTable<K extends string>({
       </GridTableHeader>
 
       {rows.map((row, i) => {
-        if ("href" in row) {
+        // is row options object
+        if ("cells" in row) {
+          if (row.href) {
+            return (
+              <GridTableRowLink
+                key={i}
+                href={row.href}
+                className={classNames(bodyRowClassName, row.className)}
+              >
+                {row.cells.map((cell, i) => {
+                  if (typeof cell !== "object") {
+                    return <span key={i}>{cell}</span>;
+                  }
+                  return cell;
+                })}
+              </GridTableRowLink>
+            );
+          }
+
           return (
-            <GridTableRowLink
+            <GridTableRow
               key={i}
-              href={row.href}
-              className={bodyRowClassName}
+              className={classNames(bodyRowClassName, row.className)}
             >
-              {row.cells.map((cell, i) => {
-                if (typeof cell !== "object") {
-                  return <span key={i}>{cell}</span>;
-                }
-                return cell;
-              })}
-            </GridTableRowLink>
+              {row.cells}
+            </GridTableRow>
           );
         }
+
         return (
           <GridTableRow key={i} className={bodyRowClassName}>
             {row}
@@ -98,20 +120,21 @@ export function SortableGridTable<K extends string>({
   );
 }
 
-// Header cells should be uniform, so ReactNodes aren't accepted.
 export type Column<K extends string> =
   | ReactNode
   | {
       cell: ReactNode;
-      sortKey: K;
+      className?: string;
+      sortKey?: K;
     };
 
-export type LinkRow = {
-  cells: ReactNode[];
-  href: string | UrlObject;
-};
-
-export type Row = LinkRow | ReactNode[];
+export type Row =
+  | ReactNode[]
+  | {
+      cells: ReactNode[];
+      className?: string;
+      href?: string | UrlObject;
+    };
 
 export interface SortOptions<K extends string> {
   key?: K;
