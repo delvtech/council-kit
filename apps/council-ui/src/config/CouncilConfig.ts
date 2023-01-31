@@ -25,7 +25,7 @@ export interface VotingContractConfig extends ContractConfig {
 }
 
 export interface VaultConfig extends ContractConfig {
-  type: "LockingVault" | "VestingVault" | "GSCVault";
+  type: "LockingVault" | "FrozenLockingVault" | "VestingVault" | "GSCVault";
   name: string;
   descriptionURL: string;
 }
