@@ -9,10 +9,10 @@ import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
-import { ProposalStatsBar } from "src/ui/proposals/ProposalStatsBar";
-import { ProposalStatsBarSkeleton } from "src/ui/proposals/ProposalStatsBarSkeleton";
+import { ProposalStatsRow } from "src/ui/proposals/ProposalsStatsRow";
 import { Quorum } from "src/ui/proposals/Quorum";
 import { QuorumBarSkeleton } from "src/ui/proposals/QuorumSkeleton";
+import { ProposalStatsRowSkeleton } from "src/ui/proposals/skeletons/ProposalStatsRowSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTableSkeleton";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
@@ -99,7 +99,7 @@ export default function ProposalPage(): ReactElement {
       </div>
 
       {status === "success" ? (
-        <ProposalStatsBar
+        <ProposalStatsRow
           votingContractAddress={votingContractAddress}
           createdBy={data.createdBy}
           createdTransactionHash={data.createdTransactionHash}
@@ -109,7 +109,7 @@ export default function ProposalPage(): ReactElement {
           lastCallAtDate={data.lastCallAtDate}
         />
       ) : (
-        <ProposalStatsBarSkeleton />
+        <ProposalStatsRowSkeleton />
       )}
 
       <div className="flex flex-wrap w-full gap-10 sm:gap-y-0">

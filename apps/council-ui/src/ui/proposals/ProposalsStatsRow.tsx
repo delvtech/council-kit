@@ -7,9 +7,10 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
+import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 
-interface ProposalStatsBarProps {
+interface ProposalStatsRowProps {
   votingContractAddress: string;
   createdBy: string | null;
   createdTransactionHash: string | null;
@@ -19,7 +20,7 @@ interface ProposalStatsBarProps {
   lastCallAtDate: Date | null;
 }
 
-export function ProposalStatsBar({
+export function ProposalStatsRow({
   votingContractAddress,
   createdBy,
   createdAtDate,
@@ -27,7 +28,7 @@ export function ProposalStatsBar({
   endsAtDate,
   unlockAtDate,
   lastCallAtDate,
-}: ProposalStatsBarProps): ReactElement {
+}: ProposalStatsRowProps): ReactElement {
   const createdByDisplayName = useDisplayName(createdBy);
   return (
     <div className="flex flex-wrap gap-4">
@@ -38,7 +39,11 @@ export function ProposalStatsBar({
 
       {createdByDisplayName && createdBy && (
         <Stat
-          label="Created by"
+          label={
+            <DefinitionTooltip content="The creator of the on-chain proposal, which may or may not be the author.">
+              Created by
+            </DefinitionTooltip>
+          }
           value={
             <Link
               className="flex items-center hover:underline"
