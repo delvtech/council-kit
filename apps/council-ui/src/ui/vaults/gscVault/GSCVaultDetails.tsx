@@ -60,6 +60,7 @@ export function GSCVaultDetails({
           <GSCMembersTable
             members={data.members}
             requiredVotingPower={data.requiredVotingPower}
+            gscVaultAddress={vaultAddress}
           />
         ) : (
           <GSCMembersTableSkeleton />
