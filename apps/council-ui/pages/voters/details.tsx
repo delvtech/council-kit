@@ -110,20 +110,20 @@ function VoterHeader({ address }: VoterHeaderProps) {
   }
 
   return ens ? (
-    <div>
-      <h1 className="w-full text-5xl font-bold">{ens}</h1>
+    <div className="w-fit">
+      <h1 className="text-5xl font-bold">{ens}</h1>
       <a
         href={makeEtherscanAddressURL(address)}
         rel="noopener noreferrer"
         target="_blank"
       >
-        <h2 className="flex items-center w-full mt-2 text-2xl">
+        <h2 className="mt-2 text-2xl">
           <Address address={address} iconSize={24} />
         </h2>
       </a>
     </div>
   ) : (
-    <h1 className="w-full mt-2 text-5xl">
+    <h1 className="mt-2 text-5xl w-fit">
       <Address address={address} iconSize={36} />
     </h1>
   );
