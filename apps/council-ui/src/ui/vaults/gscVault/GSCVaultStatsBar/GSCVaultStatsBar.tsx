@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { GSCStatus } from "src/vaults/gscVault";
+import { GSCStatus } from "src/vaults/gscVault/types";
 
 interface GSCVaultStatsBarProps {
   accountMembership: GSCStatus;

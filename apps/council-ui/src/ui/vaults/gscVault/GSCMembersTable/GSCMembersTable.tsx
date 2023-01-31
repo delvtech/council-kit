@@ -5,7 +5,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { GSCMembersTableHeader } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTableHeader";
-import { GSCMemberInfo } from "src/vaults/gscVault";
+import { GSCMemberInfo } from "src/vaults/gscVault/getGSCMembers";
 
 interface GSCMembersTableProps {
   members: GSCMemberInfo[];
@@ -20,13 +20,17 @@ export function GSCMembersTable({
     <div className="w-full overflow-auto">
       <GSCMembersTableHeader />
 
-      {members.map((memberInfo) => (
-        <GSCMembersTableRow
-          key={memberInfo.member.address}
-          requiredVotingPower={requiredVotingPower}
-          member={memberInfo}
-        />
-      ))}
+      {members.length ? (
+        members.map((memberInfo) => (
+          <GSCMembersTableRow
+            key={memberInfo.member.address}
+            requiredVotingPower={requiredVotingPower}
+            member={memberInfo}
+          />
+        ))
+      ) : (
+        <div className="text-center p-8">No GSC Members</div>
+      )}
     </div>
   );
 }

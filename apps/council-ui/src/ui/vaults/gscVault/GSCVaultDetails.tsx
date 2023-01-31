@@ -14,10 +14,10 @@ import { GSCVaultStatsBarSkeleton } from "src/ui/vaults/gscVault/GSCVaultStatsBa
 import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
 import {
   getGSCMembers,
-  getGSCStatus,
   GSCMemberInfo,
-  GSCStatus,
-} from "src/vaults/gscVault";
+} from "src/vaults/gscVault/getGSCMembers";
+import { getGSCStatus } from "src/vaults/gscVault/getGSCStatus";
+import { GSCStatus } from "src/vaults/gscVault/types";
 import { useAccount } from "wagmi";
 
 interface GSCVaultDetailsProps {
