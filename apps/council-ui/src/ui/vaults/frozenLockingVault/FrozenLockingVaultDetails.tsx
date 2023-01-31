@@ -97,7 +97,7 @@ function useFrozenLockingVaultDetailsData(
   address: string,
   account: string | undefined,
 ): UseQueryResult<LockingVaultDetailsData> {
-  const { context, coreVoting } = useCouncil();
+  const { context } = useCouncil();
   const chainId = useChainId();
   const coreVotingConfig = councilConfigs[chainId].coreVoting;
   const vaultConfig = coreVotingConfig.vaults.find(
@@ -112,8 +112,6 @@ function useFrozenLockingVaultDetailsData(
       account = account as string;
 
       const lockingVault = new LockingVault(address, context);
-      console.log("address", address);
-      console.log("lockingVault", lockingVault);
       const token = await lockingVault.getToken();
       const delegate = await lockingVault.getDelegate(account);
       const accountVotingPower = await lockingVault.getVotingPower(account);
