@@ -1,4 +1,4 @@
-import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
+import { BuildingLibraryIcon, UserCircleIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { ReactElement, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
@@ -10,6 +10,7 @@ import {
 } from "src/ui/base/tables/SortableGridTable";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
+import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
 import { VoterRowData } from "src/ui/voters/types";
 
 type SortField = "numberOfDelegators" | "votingPower";
@@ -27,29 +28,43 @@ export function VoterList({
 }: VoterListProps): ReactElement {
   const [sortOptions, setSortOptions] = useState<SortOptions<SortField>>({});
 
+  const { data: delegatesByVault = {} } = useDelegatesByVault();
+  // Memoized to prevent invalidating sortedVoters on every render.
+  const delegateAddresses = useMemo(
+    () => Object.values(delegatesByVault).map(({ address }) => address),
+    [delegatesByVault],
+  );
+
   const sortedVoters = useMemo(() => {
+    let sorted = voters;
     const { key, direction } = sortOptions;
 
-    if (!direction) {
-      return voters;
+    if (direction) {
+      switch (key) {
+        case "numberOfDelegators":
+          sorted = voters
+            .slice()
+            .sort((a, b) => a.numberOfDelegators - b.numberOfDelegators);
+          break;
+
+        case "votingPower":
+        default:
+          sorted = voters
+            .slice()
+            .sort((a, b) => +a.votingPower - +b.votingPower);
+          break;
+      }
+
+      if (direction === "DESC") {
+        sorted.reverse();
+      }
     }
 
-    let sorted;
-    switch (key) {
-      case "numberOfDelegators":
-        sorted = voters
-          .slice()
-          .sort((a, b) => a.numberOfDelegators - b.numberOfDelegators);
-        break;
-
-      case "votingPower":
-      default:
-        sorted = voters.slice().sort((a, b) => +a.votingPower - +b.votingPower);
-        break;
-    }
-
-    return direction === "ASC" ? sorted : sorted.reverse();
-  }, [sortOptions, voters]);
+    return [
+      ...sorted.filter(({ address }) => delegateAddresses.includes(address)),
+      ...sorted.filter(({ address }) => !delegateAddresses.includes(address)),
+    ];
+  }, [sortOptions, voters, delegateAddresses]);
 
   return (
     <div className="min-w-[250px]">
@@ -78,25 +93,33 @@ export function VoterList({
               votingPower,
               numberOfDelegators,
               isGSCMember,
-            }) => ({
-              href: makeVoterURL(address),
-              cells: [
-                <span key={address} className="flex items-center">
-                  <WalletIcon address={address} className="mr-2" />
-                  {ensName ? ensName : formatAddress(address)}
-                  {isGSCMember && (
-                    <Tooltip content="GSC Member">
-                      <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />
-                    </Tooltip>
-                  )}
-                </span>,
-                numberOfDelegators,
-                formatBalance(votingPower, 0),
-                <span key={`${address}-chevron`}>
-                  <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
-                </span>,
-              ],
-            }),
+            }) => {
+              const isDelegate = delegateAddresses.includes(address);
+              return {
+                href: makeVoterURL(address),
+                cells: [
+                  <span key={address} className="flex items-center">
+                    <WalletIcon address={address} className="mr-2" />
+                    {ensName ? ensName : formatAddress(address)}
+                    {isGSCMember && (
+                      <Tooltip content="GSC Member">
+                        <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />
+                      </Tooltip>
+                    )}
+                    {isDelegate && (
+                      <Tooltip content="Current Delegate">
+                        <UserCircleIcon className="w-5 h-5 ml-1 fill-accent" />
+                      </Tooltip>
+                    )}
+                  </span>,
+                  numberOfDelegators,
+                  formatBalance(votingPower, 0),
+                  <span key={`${address}-chevron`}>
+                    <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
+                  </span>,
+                ],
+              };
+            },
           )}
       />
 

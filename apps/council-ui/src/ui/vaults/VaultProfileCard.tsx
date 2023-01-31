@@ -5,7 +5,7 @@ import { useChainId } from "src/ui/network/useChainId";
 import { LockingVaultProfileCard } from "src/ui/vaults/lockingVault/LockingVaultsProfileCard";
 import { VestingVaultProfileCard } from "src/ui/vaults/vestingVault/VestingVaultProfileCard";
 import { VoterDataByTokenWithDelegationVault } from "src/vaults/getVoterDataByTokenWithDelegationVault";
-import { getAllVaults } from "src/vaults/vaults";
+import { getAllVaultConfigs } from "src/vaults/vaults";
 
 interface VaultProfileCardProps {
   /** The address of the voting vault */
@@ -26,8 +26,10 @@ export function VaultProfileCard({
 }: VaultProfileCardProps): ReactElement {
   const { replace } = useRouter();
   const chainId = useChainId();
-  const allVaults = getAllVaults(chainId);
-  const vaultConfig = allVaults.find((vault) => vault.address === vaultAddress);
+  const allVaultConfigs = getAllVaultConfigs(chainId);
+  const vaultConfig = allVaultConfigs.find(
+    (vault) => vault.address === vaultAddress,
+  );
 
   if (!vaultConfig) {
     replace("/404");

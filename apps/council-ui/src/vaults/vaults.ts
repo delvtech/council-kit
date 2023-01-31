@@ -1,7 +1,7 @@
 import { councilConfigs, SupportedChainId } from "src/config/council.config";
 import { VaultConfig } from "src/config/CouncilConfig";
 
-export function getAllVaults(chainId: SupportedChainId): VaultConfig[] {
+export function getAllVaultConfigs(chainId: SupportedChainId): VaultConfig[] {
   const allVaults = [
     ...getCoreVotingVaults(chainId),
     ...getGSCCoreVotingVaults(chainId),
