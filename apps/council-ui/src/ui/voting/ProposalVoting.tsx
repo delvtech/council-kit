@@ -1,6 +1,8 @@
 import { Ballot } from "@council/sdk";
 import classNames from "classnames";
+import Link from "next/link";
 import { ReactElement } from "react";
+import { makeVaultURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import useVotingPowerByVault from "src/ui/vaults/hooks/useVotingPowerByVault";
 
@@ -26,8 +28,6 @@ export function ProposalVoting({
     0,
   );
 
-  console.log(votingPowerByVault);
-
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex">
@@ -37,7 +37,12 @@ export function ProposalVoting({
       <div className="flex flex-col overflow-y-auto max-h-64 gap-y-4">
         {votingPowerByVault?.map((vault) => (
           <div className="flex" key={vault.name}>
-            <h3>{vault.name}</h3>
+            <Link
+              href={makeVaultURL(vault.address)}
+              className="hover:underline"
+            >
+              <h3>{vault.name}</h3>
+            </Link>
             <p className="ml-auto">{formatBalance(vault.votingPower)}</p>
           </div>
         ))}
