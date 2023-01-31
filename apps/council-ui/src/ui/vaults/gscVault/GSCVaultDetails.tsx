@@ -25,7 +25,7 @@ interface GSCVaultDetailsProps {
 }
 
 export function GSCVaultDetails({
-  vaultAddress: vaultAddress,
+  vaultAddress,
 }: GSCVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
   const { data, status, error } = useGSCVaultDetails({
@@ -47,6 +47,7 @@ export function GSCVaultDetails({
 
       {status === "success" ? (
         <GSCVaultStatsBar
+          gscVaultAddress={vaultAddress}
           accountMembership={data.gscStatus}
           membersCount={data.members.length}
           requiredVotingPower={data.requiredVotingPower}

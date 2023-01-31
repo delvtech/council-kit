@@ -12,7 +12,6 @@ import { getCoreVotingVaults } from "src/vaults/vaults";
 
 interface JoinGSCOptions {
   signer: Signer;
-  memberAddress: string;
 }
 export function useJoinGSC(
   gscVaultAddress: string,
