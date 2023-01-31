@@ -13,12 +13,15 @@ interface VaultProfileCardProps {
   voterData: VoterDataByVault;
   /** The address of the voter profile */
   voterAddress: string;
+  /** The ens of the voter profile */
+  voterEns?: string;
 }
 
 export function VaultProfileCard({
   vaultAddress,
   voterData,
   voterAddress,
+  voterEns,
 }: VaultProfileCardProps): ReactElement {
   const { replace } = useRouter();
   const chainId = useChainId();
@@ -39,6 +42,7 @@ export function VaultProfileCard({
           userCurrentDelegate={voterData.currentDelegate}
           userBalance={voterData.balance}
           userVotersDelegated={voterData.votersDelegated}
+          userEns={voterEns}
         />
       );
 
@@ -51,6 +55,7 @@ export function VaultProfileCard({
           userCurrentDelegate={voterData.currentDelegate}
           userBalance={voterData.balance}
           userVotersDelegated={voterData.votersDelegated}
+          userEns={voterEns}
         />
       );
 

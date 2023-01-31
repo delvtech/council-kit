@@ -18,6 +18,7 @@ export function LockingVaultProfileCard({
   userCurrentDelegate,
   userBalance,
   userVotersDelegated,
+  userEns,
 }: LockingVaultProfileCardProps): ReactElement {
   const { mutate: changeDelegate } = useChangeDelegate(vaultAddress);
   const { data: signer } = useSigner();
@@ -31,6 +32,7 @@ export function LockingVaultProfileCard({
       userBalance={userBalance}
       userCurrentDelegate={userCurrentDelegate}
       userVotersDelegated={userVotersDelegated}
+      userEns={userEns}
       onDelegateChange={async () => {
         if (signer) {
           await changeDelegate({

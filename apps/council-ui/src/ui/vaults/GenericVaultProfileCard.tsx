@@ -19,7 +19,7 @@ export interface GenericVaultProfileCardProps {
   userVotersDelegated?: Voter[];
   userVotingPower: string;
   userAddress: string;
-  userENS?: string;
+  userEns?: string;
   onDelegateChange: (delegateAddress: string) => void;
 }
 
@@ -32,7 +32,7 @@ export function GenericVaultProfileCard({
   userAddress,
   userBalance,
   userCurrentDelegate,
-  userENS,
+  userEns,
 }: GenericVaultProfileCardProps): ReactElement {
   const { isConnected } = useAccount();
 
@@ -82,7 +82,7 @@ export function GenericVaultProfileCard({
             delegators={userVotersDelegated ?? []}
             vaultAddress={vaultAddress}
             voterAddress={userAddress}
-            voterEns={userENS}
+            voterEns={userEns}
           />
         </div>
       )}
