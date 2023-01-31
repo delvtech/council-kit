@@ -37,7 +37,7 @@ export function GenericVaultProfileCard({
   const { isConnected } = useAccount();
 
   return (
-    <div className="flex flex-col p-8 md:max-w-sm grow md:grow-0 gap-y-4 daisy-card bg-base-200 min-w-[360px]">
+    <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 daisy-card bg-base-200 min-w-[360px]">
       <Link
         className="flex items-center hover:underline gap-x-2"
         href={makeVaultURL(vaultAddress)}
