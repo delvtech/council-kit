@@ -37,11 +37,20 @@ export const mainnetCouncilConfig: CouncilConfig = {
         descriptionURL: "https://moreinfo.com",
         targets: [],
         calldatas: [],
+        sentenceSummary: "Increase the current GSC quroum threshold to 3.",
+      },
+      2: {
+        descriptionURL: "https://moreinfo.com",
+        targets: [],
+        calldatas: [],
+        sentenceSummary:
+          "Component is proposing a 274,414.06 ELFI voting token grant to build a fixed borrow protocol on top of Element Finance and for building the YTC tool.",
       },
       3: {
         descriptionURL: "https://moreinfo.com",
         targets: [],
         calldatas: [],
+        sentenceSummary: "Token grant for Component.",
       },
     },
   },

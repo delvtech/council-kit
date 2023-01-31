@@ -3,9 +3,11 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { parseEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
+import { councilConfigs } from "src/config/council.config";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { useChainId } from "src/ui/network/useChainId";
 import {
   ProposalRowData,
   ProposalsTable,
@@ -70,6 +72,8 @@ function useProposalsPageData(
   account: string | undefined,
 ): UseQueryResult<ProposalRowData[]> {
   const { context, coreVoting, gscVoting } = useCouncil();
+  const chainId = useChainId();
+  const proposalsConfig = councilConfigs[chainId].coreVoting.proposals;
   return useQuery({
     queryKey: ["proposalsPage", account],
     queryFn: async () => {
@@ -100,6 +104,7 @@ function useProposalsPageData(
             currentQuorum: await proposal.getCurrentQuorum(),
             requiredQuorum: await proposal.getRequiredQuorum(),
             ballot: vote && parseEther(vote.power).gt(0) ? vote.ballot : null,
+            sentenceSummary: proposalsConfig[proposal.id]?.sentenceSummary,
           };
         }),
       );

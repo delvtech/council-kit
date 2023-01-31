@@ -31,6 +31,11 @@ export interface VaultConfig extends ContractConfig {
 }
 
 export interface ProposalConfig {
+  /**
+   * A short one-liner that will show below the proposal name in the proposals
+   * list.
+   */
+  sentenceSummary?: string;
   descriptionURL: string;
   targets: string[];
   calldatas: string[];
