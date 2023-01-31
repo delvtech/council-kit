@@ -3,6 +3,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { GSCStatus } from "src/vaults/gscVault/types";
+import { GSCMembershipStatusStat } from "./GSCMembershipStatusStat";
 
 interface GSCVaultStatsBarProps {
   accountMembership: GSCStatus;
@@ -18,7 +19,7 @@ export function GSCVaultStatsBar({
   return (
     <div className="flex flex-wrap gap-4">
       {accountMembership && (
-        <Stat label="Your GSC Membership Status" value={accountMembership} />
+        <GSCMembershipStatusStat accountMembership={accountMembership} />
       )}
 
       {membersCount >= 0 && (
