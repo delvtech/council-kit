@@ -5,7 +5,7 @@ import { GSCStatus } from "src/vaults/gscVault/types";
 interface GetGSCStatusOptions {
   coreVoting: VotingContract;
   gscVoting?: GSCVotingContract;
-  address: string;
+  address: string | undefined;
 }
 
 export async function getGSCStatus({
@@ -13,7 +13,7 @@ export async function getGSCStatus({
   gscVoting,
   address,
 }: GetGSCStatusOptions): Promise<GSCStatus> {
-  if (!gscVoting) {
+  if (!gscVoting || !address) {
     return "N/A";
   }
 

@@ -1,6 +1,6 @@
 import { getBlockDate, VestingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { Signer } from "ethers";
+import { ethers, Signer } from "ethers";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
@@ -72,7 +72,7 @@ export function VestingVaultDetails({
         </div>
         {status === "success" && (
           <ChangeDelegateForm
-            currentDelegate={data.delegate}
+            currentDelegate={data.delegate || ethers.constants.AddressZero}
             disabled={!signer || !+data.accountVotingPower}
             onDelegate={(delegate) =>
               changeDelegate({ signer: signer as Signer, delegate })
@@ -87,7 +87,7 @@ export function VestingVaultDetails({
 interface VestingVaultDetailsData {
   accountPercentOfTVP: number;
   accountVotingPower: string;
-  delegate: string;
+  delegate?: string;
   delegatedToAccount: number;
   descriptionURL: string | undefined;
   expirationDate: Date | null;
@@ -116,41 +116,42 @@ function useVestingVaultDetailsData(
 
   return useQuery({
     queryKey: ["vestingVaultDetails", address, account],
-    enabled: !!account,
     queryFn: async (): Promise<VestingVaultDetailsData> => {
-      // safe to cast because of the enabled option
-      account = account as string;
-
       const vestingVault = new VestingVault(address, context);
       const token = await vestingVault.getToken();
       const tokenDecimals = await token.getDecimals();
-      const grant = await vestingVault.getGrant(account);
-      const accountVotingPower = await vestingVault.getVotingPower(account);
+      const grant = account ? await vestingVault.getGrant(account) : undefined;
+      const accountVotingPower = account
+        ? await vestingVault.getVotingPower(account)
+        : "0";
 
       return {
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
         tokenDecimals,
-        tokenBalance: await token.getBalanceOf(account),
-        grantBalance: grant.allocation,
-        grantBalanceWithdrawn: grant.withdrawn,
-        unlockDate: await getBlockDate(grant.unlockBlock, context.provider, {
-          estimateFutureDates: true,
-        }),
-        expirationDate: await getBlockDate(
-          grant.expirationBlock,
-          context.provider,
-          {
-            estimateFutureDates: true,
-          },
-        ),
-        delegate: (await vestingVault.getDelegate(account)).address,
+        tokenBalance: account ? await token.getBalanceOf(account) : "0",
+        grantBalance: grant?.allocation || "0",
+        grantBalanceWithdrawn: grant?.withdrawn || "0",
+        unlockDate: grant
+          ? await getBlockDate(grant.unlockBlock, context.provider, {
+              estimateFutureDates: true,
+            })
+          : null,
+        expirationDate: grant
+          ? await getBlockDate(grant.expirationBlock, context.provider, {
+              estimateFutureDates: true,
+            })
+          : null,
+        delegate: account
+          ? (await vestingVault.getDelegate(account)).address
+          : undefined,
         descriptionURL: vaultConfig?.descriptionURL,
         name: vaultConfig?.name,
         accountVotingPower,
         participants: (await vestingVault.getVoters()).length,
-        delegatedToAccount: (await vestingVault.getDelegatorsTo(account))
-          .length,
+        delegatedToAccount: account
+          ? (await vestingVault.getDelegatorsTo(account)).length
+          : 0,
         accountPercentOfTVP:
           (+accountVotingPower / +(await vestingVault.getTotalVotingPower())) *
           100,

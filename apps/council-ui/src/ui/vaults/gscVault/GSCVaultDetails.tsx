@@ -99,7 +99,7 @@ function useGSCVaultDetails({
     (vault) => vault.address === vaultAddress,
   ) as VaultConfig;
 
-  const queryEnabled = !!account && !!gscVoting;
+  const queryEnabled = !!gscVoting;
   return useQuery({
     queryKey: ["gscLockingVaultDetails", vaultAddress, account],
     enabled: queryEnabled,
