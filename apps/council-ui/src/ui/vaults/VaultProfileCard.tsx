@@ -66,6 +66,9 @@ export function VaultProfileCard({
     case "GSCVault":
       return <></>;
 
+    case "FrozenLockingVault":
+      return <></>;
+
     default:
       return assertNever(vaultConfig.type);
   }

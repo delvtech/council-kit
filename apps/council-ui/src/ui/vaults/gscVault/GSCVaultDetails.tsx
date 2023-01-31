@@ -14,10 +14,10 @@ import { GSCVaultStatsBarSkeleton } from "src/ui/vaults/gscVault/GSCVaultStatsBa
 import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
 import {
   getGSCMembers,
-  getGSCStatus,
   GSCMemberInfo,
-  GSCStatus,
-} from "src/vaults/gscVault";
+} from "src/vaults/gscVault/getGSCMembers";
+import { getGSCStatus } from "src/vaults/gscVault/getGSCStatus";
+import { GSCStatus } from "src/vaults/gscVault/types";
 import { useAccount } from "wagmi";
 
 interface GSCVaultDetailsProps {
@@ -25,7 +25,7 @@ interface GSCVaultDetailsProps {
 }
 
 export function GSCVaultDetails({
-  vaultAddress: vaultAddress,
+  vaultAddress,
 }: GSCVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
   const { data, status, error } = useGSCVaultDetails({
@@ -47,6 +47,7 @@ export function GSCVaultDetails({
 
       {status === "success" ? (
         <GSCVaultStatsBar
+          gscVaultAddress={vaultAddress}
           accountMembership={data.gscStatus}
           membersCount={data.members.length}
           requiredVotingPower={data.requiredVotingPower}
@@ -60,6 +61,7 @@ export function GSCVaultDetails({
           <GSCMembersTable
             members={data.members}
             requiredVotingPower={data.requiredVotingPower}
+            gscVaultAddress={vaultAddress}
           />
         ) : (
           <GSCMembersTableSkeleton />

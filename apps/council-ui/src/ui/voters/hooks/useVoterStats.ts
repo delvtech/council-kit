@@ -2,7 +2,7 @@ import { Vote, Voter } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
-import { GSCStatus } from "src/vaults/gscVault";
+import { GSCStatus } from "src/vaults/gscVault/types";
 
 interface VoterStatistics {
   votingHistory: Vote[];

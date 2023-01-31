@@ -1,7 +1,9 @@
+import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { Page } from "src/ui/base/Page";
 import { useChainId } from "src/ui/network/useChainId";
+import { FrozenLockingVaultDetails } from "src/ui/vaults/frozenLockingVault/FrozenLockingVaultDetails";
 import { GSCVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
 import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
@@ -24,7 +26,13 @@ export default function Vault(): ReactElement {
   return (
     <Page>
       {(() => {
-        switch (vaultConfig?.type) {
+        if (!vaultConfig) {
+          return;
+        }
+        switch (vaultConfig.type) {
+          case "FrozenLockingVault":
+            return <FrozenLockingVaultDetails address={address as string} />;
+
           case "LockingVault":
             return <LockingVaultDetails address={address as string} />;
 
@@ -35,7 +43,7 @@ export default function Vault(): ReactElement {
             return <GSCVaultDetails vaultAddress={address as string} />;
 
           default:
-            return <></>;
+            assertNever(vaultConfig.type);
         }
       })()}
     </Page>

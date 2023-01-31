@@ -22,8 +22,7 @@ import {
   getVoterDataByTokenWithDelegationVault,
   VoterDataByTokenWithDelegationVault,
 } from "src/vaults/getVoterDataByTokenWithDelegationVault";
-
-import { GSCStatus } from "src/vaults/gscVault";
+import { GSCStatus } from "src/vaults/gscVault/types";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {

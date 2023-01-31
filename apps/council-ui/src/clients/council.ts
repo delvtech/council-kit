@@ -5,8 +5,8 @@ import {
   LockingVault,
   VestingVault,
   VotingContract,
-  VotingVault,
 } from "@council/sdk";
+import assertNever from "assert-never";
 import { councilConfigs, SupportedChainId } from "src/config/council.config";
 import { provider as getProvider } from "src/provider";
 
@@ -29,12 +29,15 @@ export function getCouncilClient(chainId: SupportedChainId): CouncilClient {
 
   const coreVotingVaults = config.coreVoting.vaults.map(({ type, address }) => {
     switch (type) {
+      case "FrozenLockingVault":
       case "LockingVault":
         return new LockingVault(address, context);
       case "VestingVault":
         return new VestingVault(address, context);
+      case "GSCVault":
+        return new GSCVault(address, context);
       default:
-        return new VotingVault(address, context);
+        assertNever(type);
     }
   });
 

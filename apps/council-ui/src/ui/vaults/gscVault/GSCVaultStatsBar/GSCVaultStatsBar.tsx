@@ -2,15 +2,18 @@ import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { GSCStatus } from "src/vaults/gscVault";
+import { GSCStatus } from "src/vaults/gscVault/types";
+import { GSCMembershipStatusStat } from "./GSCMembershipStatusStat";
 
 interface GSCVaultStatsBarProps {
+  gscVaultAddress: string;
   accountMembership: GSCStatus;
   membersCount: number;
   requiredVotingPower: string;
 }
 
 export function GSCVaultStatsBar({
+  gscVaultAddress,
   accountMembership,
   membersCount,
   requiredVotingPower,
@@ -18,7 +21,10 @@ export function GSCVaultStatsBar({
   return (
     <div className="flex flex-wrap gap-4">
       {accountMembership && (
-        <Stat label="Your GSC Membership Status" value={accountMembership} />
+        <GSCMembershipStatusStat
+          gscVaultAddress={gscVaultAddress}
+          accountMembership={accountMembership}
+        />
       )}
 
       {membersCount >= 0 && (
@@ -29,10 +35,10 @@ export function GSCVaultStatsBar({
         label={
           <DefinitionTooltip
             content={
-              "The amount of voting power an account must have delegated by others or self delegated to able to to join the GSC. "
+              "The amount of voting power an account must have to able to to join the GSC. "
             }
           >
-            VP Threshold to be on the GSC
+            Voting Power Required to be a GSC Member
           </DefinitionTooltip>
         }
         value={formatBalance(requiredVotingPower)}
