@@ -3,8 +3,18 @@ import { VaultConfig } from "src/config/CouncilConfig";
 
 export function getAllVaults(chainId: SupportedChainId): VaultConfig[] {
   const allVaults = [
-    ...councilConfigs[chainId].coreVoting.vaults,
-    ...(councilConfigs[chainId].gscVoting?.vaults || []),
+    ...getCoreVotingVaults(chainId),
+    ...getGSCCoreVotingVaults(chainId),
   ];
   return allVaults;
+}
+
+export function getCoreVotingVaults(chainId: SupportedChainId): VaultConfig[] {
+  return councilConfigs[chainId].coreVoting.vaults;
+}
+
+export function getGSCCoreVotingVaults(
+  chainId: SupportedChainId,
+): VaultConfig[] {
+  return councilConfigs[chainId].gscVoting?.vaults || [];
 }
