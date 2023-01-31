@@ -1,13 +1,13 @@
 import { ReactElement } from "react";
 import {
-  GenericVaultProfileCard,
-  GenericVaultProfileCardProps,
-} from "src/ui/vaults/GenericVaultProfileCard";
+  TokenWithDelegationVaultProfileCard,
+  TokenWithDelegationVaultProfileCardProps,
+} from "src/ui/vaults/TokenWithDelegationVaultProfileCard";
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
 import { useSigner } from "wagmi";
 
 type VestingVaultProfileCardProps = Omit<
-  GenericVaultProfileCardProps,
+  TokenWithDelegationVaultProfileCardProps,
   "vaultName" | "onDelegateChange"
 >;
 
@@ -23,7 +23,7 @@ export function VestingVaultProfileCard({
   const { data: signer } = useSigner();
 
   return (
-    <GenericVaultProfileCard
+    <TokenWithDelegationVaultProfileCard
       vaultName="Vesting Vault"
       vaultAddress={vaultAddress}
       userVotingPower={userVotingPower}
@@ -33,7 +33,7 @@ export function VestingVaultProfileCard({
       userVotersDelegated={userVotersDelegated}
       onDelegateChange={async () => {
         if (signer) {
-          await changeDelegate({
+          changeDelegate({
             signer,
             delegate: userAddress,
           });

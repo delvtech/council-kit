@@ -1,16 +1,17 @@
+import assertNever from "assert-never";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { useChainId } from "src/ui/network/useChainId";
 import { LockingVaultProfileCard } from "src/ui/vaults/lockingVault/LockingVaultsProfileCard";
 import { VestingVaultProfileCard } from "src/ui/vaults/vestingVault/VestingVaultProfileCard";
-import { VoterDataByVault } from "src/vaults/getVoterDataByVault";
+import { VoterDataByTokenWithDelegationVault } from "src/vaults/getVoterDataByTokenWithDelegationVault";
 import { getAllVaults } from "src/vaults/vaults";
 
 interface VaultProfileCardProps {
   /** The address of the voting vault */
   vaultAddress: string;
   /** Voter data fetched from this specific vault */
-  voterData: VoterDataByVault;
+  voterData: VoterDataByTokenWithDelegationVault;
   /** The address of the voter profile */
   voterAddress: string;
   /** The ens of the voter profile */
@@ -30,9 +31,12 @@ export function VaultProfileCard({
 
   if (!vaultConfig) {
     replace("/404");
+    // User will go to 404 page if this block is reached
+    // Returning empty fragment is to remove the undefined type from vaultConfig below
+    return <></>;
   }
 
-  switch (vaultConfig?.type) {
+  switch (vaultConfig.type) {
     case "LockingVault":
       return (
         <LockingVaultProfileCard
@@ -63,6 +67,6 @@ export function VaultProfileCard({
       return <></>;
 
     default:
-      return <></>;
+      return assertNever(vaultConfig.type);
   }
 }

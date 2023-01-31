@@ -11,7 +11,7 @@ import { WalletIcon } from "src/ui/base/WalletIcon";
 import { VotersListCompact } from "src/ui/voters/VotersListCompact";
 import { useAccount } from "wagmi";
 
-export interface GenericVaultProfileCardProps {
+export interface TokenWithDelegationVaultProfileCardProps {
   vaultName: string;
   vaultAddress: string;
   userBalance?: string;
@@ -23,7 +23,7 @@ export interface GenericVaultProfileCardProps {
   onDelegateChange: (delegateAddress: string) => void;
 }
 
-export function GenericVaultProfileCard({
+export function TokenWithDelegationVaultProfileCard({
   vaultName,
   vaultAddress,
   onDelegateChange,
@@ -33,7 +33,7 @@ export function GenericVaultProfileCard({
   userBalance,
   userCurrentDelegate,
   userEns,
-}: GenericVaultProfileCardProps): ReactElement {
+}: TokenWithDelegationVaultProfileCardProps): ReactElement {
   const { isConnected } = useAccount();
 
   return (

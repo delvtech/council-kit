@@ -7,7 +7,7 @@ import {
   VotingVaultDataSource,
 } from "@council/sdk";
 
-export interface VoterDataByVault {
+export interface VoterDataByTokenWithDelegationVault {
   vault: VotingVault;
   votingPower: string;
   balance?: string;
@@ -16,10 +16,10 @@ export interface VoterDataByVault {
   currentDelegate?: Voter;
 }
 
-export async function getVoterDataByVault(
+export async function getVoterDataByTokenWithDelegationVault(
   address: string,
   coreVoting: VotingContract<VotingVault<VotingVaultDataSource>[]>,
-): Promise<VoterDataByVault[]> {
+): Promise<VoterDataByTokenWithDelegationVault[]> {
   return Promise.all(
     coreVoting.vaults.map(async (vault) => {
       const name = vault.name;

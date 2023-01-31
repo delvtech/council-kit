@@ -1,11 +1,11 @@
 import { getAddress } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
-import { VoterDataByVault } from "src/vaults/getVoterDataByVault";
+import { VoterDataByTokenWithDelegationVault } from "src/vaults/getVoterDataByTokenWithDelegationVault";
 import { useEnsName } from "wagmi";
 
 interface VoterVaultsListProps {
-  vaultsData: VoterDataByVault[];
+  vaultsData: VoterDataByTokenWithDelegationVault[];
   address: string;
 }
 

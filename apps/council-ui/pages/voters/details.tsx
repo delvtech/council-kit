@@ -19,9 +19,10 @@ import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
 import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import {
-  getVoterDataByVault,
-  VoterDataByVault,
-} from "src/vaults/getVoterDataByVault";
+  getVoterDataByTokenWithDelegationVault,
+  VoterDataByTokenWithDelegationVault,
+} from "src/vaults/getVoterDataByTokenWithDelegationVault";
+
 import { GSCStatus } from "src/vaults/gscVault";
 import { useEnsName } from "wagmi";
 
@@ -133,7 +134,7 @@ interface VoterData {
   votingHistory: Vote[];
   votingPower: string;
   gscStatus: GSCStatus | null;
-  voterDataByVault: VoterDataByVault[];
+  voterDataByVault: VoterDataByTokenWithDelegationVault[];
 }
 
 export function useVoterData(
@@ -158,7 +159,7 @@ export function useVoterData(
           const votingPower = await voter.getVotingPower(
             coreVoting.vaults.map((vault) => vault.address),
           );
-          const voterDataByVault = await getVoterDataByVault(
+          const voterDataByVault = await getVoterDataByTokenWithDelegationVault(
             address,
             coreVoting,
           );

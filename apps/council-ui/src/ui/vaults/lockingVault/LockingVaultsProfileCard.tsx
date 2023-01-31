@@ -1,13 +1,13 @@
 import { ReactElement } from "react";
-import {
-  GenericVaultProfileCard,
-  GenericVaultProfileCardProps,
-} from "src/ui/vaults/GenericVaultProfileCard";
 import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
+import {
+  TokenWithDelegationVaultProfileCard,
+  TokenWithDelegationVaultProfileCardProps,
+} from "src/ui/vaults/TokenWithDelegationVaultProfileCard";
 import { useSigner } from "wagmi";
 
 type LockingVaultProfileCardProps = Omit<
-  GenericVaultProfileCardProps,
+  TokenWithDelegationVaultProfileCardProps,
   "vaultName" | "onDelegateChange"
 >;
 
@@ -24,7 +24,7 @@ export function LockingVaultProfileCard({
   const { data: signer } = useSigner();
 
   return (
-    <GenericVaultProfileCard
+    <TokenWithDelegationVaultProfileCard
       vaultName="Locking Vault"
       vaultAddress={vaultAddress}
       userVotingPower={userVotingPower}
@@ -35,7 +35,7 @@ export function LockingVaultProfileCard({
       userEns={userEns}
       onDelegateChange={async () => {
         if (signer) {
-          await changeDelegate({
+          changeDelegate({
             signer,
             delegate: userAddress,
           });
