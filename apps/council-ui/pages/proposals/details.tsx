@@ -177,10 +177,7 @@ function useProposalDetailsPageData(
   const chainId = useChainId();
   const proposalConfig = councilConfigs[chainId].coreVoting.proposals;
 
-  const queryEnabled =
-    votingContractAddress !== undefined &&
-    id !== undefined &&
-    account !== undefined;
+  const queryEnabled = votingContractAddress !== undefined && id !== undefined;
   return useQuery<ProposalDetailsPageData>({
     queryKey: ["proposalDetailsPage", id],
     enabled: queryEnabled,
@@ -249,7 +246,9 @@ function useProposalDetailsPageData(
             votes: await proposal.getVotes(),
             voterEnsRecords,
             createdTransactionHash,
-            accountBallot: (await proposal.getVote(account))?.ballot,
+            accountBallot: account
+              ? (await proposal.getVote(account))?.ballot
+              : undefined,
             descriptionURL: proposalConfig[id.toString()]
               ? proposalConfig[id.toString()].descriptionURL
               : null,
