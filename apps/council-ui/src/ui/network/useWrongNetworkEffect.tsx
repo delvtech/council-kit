@@ -1,8 +1,11 @@
+import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { chains } from "src/provider";
 import { useChainId } from "src/ui/network/useChainId";
 import { useNetwork } from "wagmi";
+
+const TOAST_ID = "wrong-network";
 
 export function useWrongNetworkEffect(): void {
   const { chain: connectedChain } = useNetwork();
@@ -12,17 +15,26 @@ export function useWrongNetworkEffect(): void {
     if (connectedChain && !chains.find(({ id }) => id === connectedChain.id)) {
       const usedChain = chains.find(({ id }) => id === usedChainId);
       toast.error(
-        `Wrong network!${
-          usedChain ? `\nShowing data for ${usedChain.name}.` : ""
-        }`,
+        <div className="flex gap-4 items-center">
+          <div>
+            <p>Wrong network!</p>
+            {usedChain && <p>Showing data for {usedChain.name}</p>}
+          </div>
+          <button
+            onClick={() => toast.dismiss(TOAST_ID)}
+            className="daisy-btn daisy-btn-circle daisy-btn-sm daisy-btn-ghost group"
+          >
+            <XMarkIcon className="w-5 opacity-50 group-hover:opacity-100 transition-all" />
+          </button>
+        </div>,
         {
           position: "bottom-center",
           duration: Infinity,
-          id: "wrong-network",
+          id: TOAST_ID,
         },
       );
     } else {
-      toast.dismiss("wrong-network");
+      toast.dismiss(TOAST_ID);
     }
   }, [connectedChain, usedChainId]);
 }
