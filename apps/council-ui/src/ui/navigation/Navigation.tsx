@@ -4,11 +4,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { makeVoterURL, Routes } from "src/routes";
+import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
 import { useAccount } from "wagmi";
 
 export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
+
+  useWrongNetworkEffect();
 
   return (
     <div className="daisy-navbar bg-base-200 ">
