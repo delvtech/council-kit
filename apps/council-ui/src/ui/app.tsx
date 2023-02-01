@@ -21,11 +21,11 @@ function App({ Component, pageProps }: AppProps): ReactElement {
         <QueryClientProvider client={reactQueryClient}>
           <CouncilClientProvider>
             <TooltipProvider>
+              <Toaster />
               <Navigation />
               <main>
                 <Component {...pageProps} />
               </main>
-              <Toaster />
               {/* Share a single tooltip for the entire app to avoid nasty
               coupling of tooltip and the wrapped component via an `id` prop.
               This follows the recipe in
