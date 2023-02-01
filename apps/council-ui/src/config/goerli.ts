@@ -13,14 +13,13 @@ const goerliTimelockAddress = goerliContracts.find(
 const goerliCoreVotingAddress = goerliContracts.find(
   ({ name }) => name === "CoreVoting",
 )?.address as string;
-// Using the proxy address for the Locking vault
-const goerliLockingVaultAddress = goerliContracts.find(
+const lockingVaultProxyAddress = goerliContracts.find(
   ({ name }) => name === "LockingVaultProxy",
 )?.address as string;
-const goerliVestingVaultAddress = goerliContracts.find(
-  ({ name }) => name === "VestingVault",
+const vestingVaultProxyAddress = goerliContracts.find(
+  ({ name }) => name === "VestingVaultProxy",
 )?.address as string;
-const goerliGSCVotingAddress = goerliContracts.find(
+const gscVotingAddress = goerliContracts.find(
   ({ name }) => name === "GSCCoreVoting",
 )?.address as string;
 const goerliGSCVaultAddress = goerliContracts.find(
@@ -41,14 +40,14 @@ export const goerliCouncilConfig: CouncilConfig = {
     vaults: [
       {
         name: "Locking Vault",
-        address: goerliLockingVaultAddress,
+        address: lockingVaultProxyAddress,
         type: "LockingVault",
         abi: {},
         descriptionURL: "https://moreinfo.com",
       },
       {
         name: "Vesting Vault",
-        address: goerliVestingVaultAddress,
+        address: vestingVaultProxyAddress,
         type: "VestingVault",
         abi: {},
         descriptionURL: "https://moreinfo.com",
@@ -69,7 +68,7 @@ export const goerliCouncilConfig: CouncilConfig = {
   },
 
   gscVoting: {
-    address: goerliGSCVotingAddress,
+    address: gscVotingAddress,
     abi: {},
     descriptionURL: "https://moreinfo.com",
     vaults: [
