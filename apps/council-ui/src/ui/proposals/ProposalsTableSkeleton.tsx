@@ -1,98 +1,31 @@
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
+import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
+import { GridTableRow } from "src/ui/base/tables/GridTableRow";
 
 export function ProposalsTableSkeleton(): ReactElement {
   return (
-    <table className="w-full shadow-md daisy-table-zebra daisy-table min-w-fit">
-      <thead>
-        <tr>
-          <th className="w-72">Name</th>
+    <div className="min-w-[250px]">
+      <GridTableHeader className="grid-cols-[4fr_1fr_1fr_1fr_56px]">
+        <span>Name</span>
+        <span>Voting Ends</span>
+        <span>Quorum</span>
+        <span>Your Ballot</span>
+        <span className="col-span-1"></span>
+      </GridTableHeader>
 
-          <th className="w-32">Voting Ends</th>
-
-          <th className="w-32">
-            <span className="mr-1">Quorum</span>
-          </th>
-
-          <th className="w-16">Your Ballot</th>
-
-          <th className="w-16"></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <th>
-            <Skeleton />
-          </th>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            <Skeleton />
-          </th>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            <Skeleton />
-          </th>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            <Skeleton />
-          </th>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-          <td>
-            <Skeleton />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      {new Array(4).fill(null).map((_, i) => (
+        <GridTableRow key={i} className="grid-cols-[4fr_1fr_1fr_1fr_56px]">
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+          <span>
+            <ChevronRightIcon className="w-6 h-6 stroke-base-content opacity-40" />
+          </span>
+        </GridTableRow>
+      ))}
+    </div>
   );
 }

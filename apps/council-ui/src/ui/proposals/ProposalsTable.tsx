@@ -1,5 +1,5 @@
 import { Ballot } from "@council/sdk";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { ReactElement, useMemo, useState } from "react";
 import { makeProposalURL } from "src/routes";
 import {
@@ -38,7 +38,7 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
   return (
     <SortableGridTable
       headingRowClassName="grid-cols-[4fr_1fr_1fr_1fr_56px]"
-      bodyRowClassName="grid-cols-[4fr_1fr_1fr_1fr_56px] items-center"
+      bodyRowClassName="group grid-cols-[4fr_1fr_1fr_1fr_56px] items-center"
       onSort={setSortOptions}
       cols={[
         "Name",
