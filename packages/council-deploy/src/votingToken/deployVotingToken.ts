@@ -34,7 +34,6 @@ export async function deployVotingToken({
   return {
     address: votingToken.address,
     name: "VotingToken",
-    type: "ERC20",
     contract: votingToken,
     deploymentArgs,
   };

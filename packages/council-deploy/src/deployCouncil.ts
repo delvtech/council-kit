@@ -13,7 +13,6 @@ export async function deployCouncil(signer: Wallet): Promise<
     address: string;
     contract: Contract;
     name: string;
-    type: string;
     deploymentArgs: unknown[];
   }[]
 > {

@@ -31,9 +31,6 @@
                   "name": {
                     "type": "string"
                   },
-                  "type": {
-                    "type": "string"
-                  },
                   "deploymentArgs": {
                     "type": "array",
                     "items": {
@@ -53,7 +50,7 @@
                     }
                   }
                 },
-                "required": ["address", "name", "deploymentArgs", "type"]
+                "required": ["address", "name", "deploymentArgs"]
               }
             }
           },

@@ -52,7 +52,6 @@ export async function deployGSCVault({
   return {
     address: gscVault.address,
     name: "GSCVault",
-    type: "GSCVault",
     contract: gscVault,
     deploymentArgs,
   };
