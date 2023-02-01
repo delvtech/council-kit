@@ -33,17 +33,21 @@ export function SortableGridTable<K extends string>({
 
   function handleSortChange(key: K) {
     let newDirection: SortDirection;
+    let newKey: K | undefined = key;
 
     if (key === sortKey) {
       newDirection = nextSortDirection(sortDirection);
+      if (!newDirection) {
+        newKey = undefined;
+      }
     } else {
       newDirection = nextSortDirection();
-      setSortKey(key);
     }
+    setSortKey(newKey);
     setSortDirection(newDirection);
 
     onSort?.({
-      key,
+      key: newKey,
       direction: newDirection,
     });
   }
@@ -90,12 +94,9 @@ export function SortableGridTable<K extends string>({
                 href={row.href}
                 className={classNames(bodyRowClassName, row.className)}
               >
-                {row.cells.map((cell, i) => {
-                  if (typeof cell !== "object") {
-                    return <span key={i}>{cell}</span>;
-                  }
-                  return cell;
-                })}
+                {row.cells.map((cell, i) => (
+                  <span key={i}>{cell}</span>
+                ))}
               </GridTableRowLink>
             );
           }
@@ -112,7 +113,9 @@ export function SortableGridTable<K extends string>({
 
         return (
           <GridTableRow key={i} className={bodyRowClassName}>
-            {row}
+            {row.map((cell, i) => (
+              <span key={i}>{cell}</span>
+            ))}
           </GridTableRow>
         );
       })}
