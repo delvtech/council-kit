@@ -1,19 +1,13 @@
 import { PropsWithChildren, ReactElement, useMemo } from "react";
 import { getCouncilClient } from "src/clients/council";
-import { SupportedChainId } from "src/config/council.config";
-import { chains } from "src/provider";
-import { useNetwork } from "wagmi";
+import { useChainId } from "src/ui/network/useChainId";
 import { CouncilClientContext } from "./CouncilClientContext";
 
 export function CouncilClientProvider({
   children,
 }: PropsWithChildren): ReactElement {
-  const network = useNetwork();
-  const client = useMemo(
-    () =>
-      getCouncilClient((network.chain?.id || chains[0].id) as SupportedChainId),
-    [network],
-  );
+  const chainId = useChainId();
+  const client = useMemo(() => getCouncilClient(chainId), [chainId]);
   return (
     <CouncilClientContext.Provider value={client}>
       {children}
