@@ -8,6 +8,6 @@ export function getVotingTokens(
     .flat();
 
   return allDeployedContracts.filter(
-    (deployedContract) => deployedContract.type === "ERC20",
+    (deployedContract) => deployedContract.name === "VotingToken",
   );
 }
