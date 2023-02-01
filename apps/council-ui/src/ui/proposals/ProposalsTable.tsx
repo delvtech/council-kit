@@ -17,6 +17,7 @@ export interface ProposalRowData {
   votingContractAddress: string;
   votingContractName: string;
   votingEnds: Date | null;
+  sentenceSummary?: string;
 }
 
 interface ProposalsTableProps {
@@ -97,6 +98,7 @@ function ProposalTableRow({
   votingContractAddress,
   votingContractName,
   votingEnds,
+  sentenceSummary,
 }: ProposalRowData) {
   const { push } = useRouter();
 
@@ -107,6 +109,13 @@ function ProposalTableRow({
     >
       <td>
         {votingContractName} Proposal {id}
+        {sentenceSummary && (
+          <p className="opacity-60 text-sm">
+            {sentenceSummary.length > 80
+              ? `${sentenceSummary.slice(0, 80)}\u2026` // unicode for horizontal ellipses
+              : sentenceSummary}
+          </p>
+        )}
       </td>
 
       <td>{votingEnds?.toLocaleDateString() ?? <em>unknown</em>}</td>

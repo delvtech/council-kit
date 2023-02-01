@@ -37,11 +37,26 @@ export const mainnetCouncilConfig: CouncilConfig = {
         descriptionURL: "https://moreinfo.com",
         targets: [],
         calldatas: [],
+        sentenceSummary: "Increase the current GSC quroum threshold to 3.",
+        paragraphSummary:
+          "As of today (April 28, 2022) there has only been one delegate (myself) who has proven their membership to the GSC on-chain. In roughly five days I will be able to pass votes by myself with no further approval because the current quroum threshold on the GSC is one. I believe that no one person should be able to govern the GSC by themselves, and thus I am proposing to effectively lock the GSC until two other delegates join the GSC. Three was chosen as a starting point for one reason, to break a tie. As more delegates join, I'm sure this value will gradually increase but for the time being, a threshold of three will be adequate to ensure some level of participation.",
+      },
+      2: {
+        descriptionURL: "https://moreinfo.com",
+        targets: [],
+        calldatas: [],
+        sentenceSummary:
+          "Component is proposing a 274,414.06 ELFI voting token grant to build a fixed borrow protocol on top of Element Finance and for building the YTC tool.",
+        paragraphSummary:
+          "The proceeds of this grant will enable us to build a protocol offering competitive, low-cost, fixed-rate borrowing on Compound Finance and Aave. Component has been an active contributor to Element Finance since early 2021 and will continue to launch new integrations for fixed rates on Element Finance. This grant ensures a long term relationship where Component will be part of growing, generating revenue and decentralizing the Element DAO.",
       },
       3: {
         descriptionURL: "https://moreinfo.com",
         targets: [],
         calldatas: [],
+        sentenceSummary: "Token grant for Component.",
+        paragraphSummary:
+          "The proceeds of this grant will enable us to build a protocol offering competitive, low-cost, fixed-rate borrowing on Compound Finance and Aave. Component has been an active contributor to Element Finance since early 2021 and will continue to launch new integrations for fixed rates on Element Finance. This grant ensures a long term relationship where Component will be part of growing, generating revenue and decentralizing the Element DAO.",
       },
     },
   },
