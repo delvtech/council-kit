@@ -36,6 +36,11 @@ export interface ProposalConfig {
    * list.
    */
   sentenceSummary?: string;
+  /**
+   * A description for the proposal that will show above the voting activity on
+   * the proposal's details page.
+   */
+  paragraphSummary?: string;
   descriptionURL: string;
   targets: string[];
   calldatas: string[];

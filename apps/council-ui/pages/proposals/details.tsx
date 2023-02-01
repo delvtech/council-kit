@@ -2,6 +2,7 @@ import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import Skeleton from "react-loading-skeleton";
 import { councilConfigs } from "src/config/council.config";
 import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
@@ -107,13 +108,21 @@ export default function ProposalPage(): ReactElement {
           endsAtDate={data.endsAtDate}
           unlockAtDate={data.unlockedAtDate}
           lastCallAtDate={data.lastCallAtDate}
+          className="mb-2"
         />
       ) : (
         <ProposalStatsRowSkeleton />
       )}
 
-      <div className="flex flex-wrap w-full gap-10 sm:gap-y-0">
+      <div className="flex flex-wrap w-full gap-20 sm:gap-y-0">
         <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
+          {status === "success" ? (
+            data?.paragraphSummary && (
+              <p className="mb-5 text-lg">{data.paragraphSummary}</p>
+            )
+          ) : (
+            <Skeleton count={3} className="mb-5 text-lg" />
+          )}
           <h1 className="text-2xl font-medium">
             Voting Activity {data?.votes && `(${data.votes.length})`}
           </h1>
@@ -165,6 +174,7 @@ interface ProposalDetailsPageData {
   accountBallot?: Ballot;
   voterEnsRecords: EnsRecords;
   descriptionURL: string | null;
+  paragraphSummary: string | null;
 }
 
 function useProposalDetailsPageData(
@@ -249,9 +259,8 @@ function useProposalDetailsPageData(
             accountBallot: account
               ? (await proposal.getVote(account))?.ballot
               : undefined,
-            descriptionURL: proposalConfig[id.toString()]
-              ? proposalConfig[id.toString()].descriptionURL
-              : null,
+            descriptionURL: proposalConfig[id]?.descriptionURL ?? null,
+            paragraphSummary: proposalConfig[id]?.paragraphSummary ?? null,
           };
         }
       : undefined,

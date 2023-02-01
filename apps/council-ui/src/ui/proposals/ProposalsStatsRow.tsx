@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeEtherscanTransactionURL } from "src/etherscan/makeEtherscanTransactionURL";
@@ -18,6 +19,7 @@ interface ProposalStatsRowProps {
   endsAtDate: Date | null;
   unlockAtDate: Date | null;
   lastCallAtDate: Date | null;
+  className?: string;
 }
 
 export function ProposalStatsRow({
@@ -28,10 +30,11 @@ export function ProposalStatsRow({
   endsAtDate,
   unlockAtDate,
   lastCallAtDate,
+  className,
 }: ProposalStatsRowProps): ReactElement {
   const createdByDisplayName = useDisplayName(createdBy);
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className={classNames("flex flex-wrap gap-4", className)}>
       <Stat
         label="Voting contract"
         value={<Address address={votingContractAddress} />}
