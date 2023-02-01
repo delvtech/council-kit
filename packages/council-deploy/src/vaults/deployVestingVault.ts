@@ -60,14 +60,12 @@ export async function deployVestingVault({
     vestingVault: {
       address: vestingVault.address,
       name: "VestingVault",
-      type: "VestingVault",
       contract: vestingVault,
       deploymentArgs,
     },
     vestingVaultProxy: {
       address: vestingVaultProxy.address,
       name: "VestingVaultProxy",
-      type: "SimpleProxy",
       contract: vestingVaultProxy,
       deploymentArgs: vestingVaultProxyDeploymentArgs,
     },

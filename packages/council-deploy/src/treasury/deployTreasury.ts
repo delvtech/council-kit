@@ -25,7 +25,6 @@ export async function deployTreasury({
   return {
     address: treasury.address,
     name: "Treasury",
-    type: "Treasury",
     contract: treasury,
     deploymentArgs,
   };

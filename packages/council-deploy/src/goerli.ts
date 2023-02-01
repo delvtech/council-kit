@@ -37,10 +37,9 @@ async function deployGoerli() {
         timestamp: Date.now(),
         signer: signer.address,
         contracts: contractDeployments.map(
-          ({ address, name, type, deploymentArgs }) => ({
+          ({ address, name, deploymentArgs }) => ({
             address,
             name,
-            type,
             deploymentArgs,
           }),
         ),

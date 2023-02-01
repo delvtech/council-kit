@@ -6,7 +6,6 @@ export interface DeploymentsJsonFile {
 export interface ContractDeploymentInfo {
   address: string;
   name: string;
-  type: string;
   deploymentArgs: unknown[];
 }
 

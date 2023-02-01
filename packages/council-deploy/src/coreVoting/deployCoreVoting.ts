@@ -66,7 +66,6 @@ export async function deployCoreVoting({
   return {
     address: coreVoting.address,
     name: "CoreVoting",
-    type: "CoreVoting",
     contract: coreVoting,
     deploymentArgs,
   };
