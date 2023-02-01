@@ -18,7 +18,7 @@ const goerliLockingVaultAddress = goerliContracts.find(
   ({ name }) => name === "LockingVaultProxy",
 )?.address as string;
 const goerliVestingVaultAddress = goerliContracts.find(
-  ({ name }) => name === "VestingVault",
+  ({ name }) => name === "VestingVaultProxy",
 )?.address as string;
 const goerliGSCVotingAddress = goerliContracts.find(
   ({ name }) => name === "GSCCoreVoting",
