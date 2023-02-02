@@ -47,6 +47,16 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
   }
 
   /**
+   * Get this vault's unvested multiplier, a number that represents the voting
+   * power of each unvested token as a percentage of a vested token. For example
+   * if unvested tokens have 50% voting power compared to vested ones, this
+   * value would be 50.
+   */
+  getUnvestedMultiplier(): Promise<number> {
+    return this.dataSource.getUnvestedMultiplier();
+  }
+
+  /**
    * Get the grant data for a given address.
    */
   getGrant(address: string): Promise<GrantData> {
