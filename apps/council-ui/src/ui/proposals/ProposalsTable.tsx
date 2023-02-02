@@ -6,6 +6,7 @@ import {
   SortableGridTable,
   SortOptions,
 } from "src/ui/base/tables/SortableGridTable";
+import { useAccount } from "wagmi";
 import { ProposalStatus } from "./ProposalStatus";
 
 export interface ProposalRowData {
@@ -25,6 +26,7 @@ interface ProposalsTableProps {
 }
 
 export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
+  const { address: account } = useAccount();
   const [sortOptions, setSortOptions] = useState<SortOptions<SortField>>({
     direction: "DESC",
     key: "votingEnds",
@@ -87,7 +89,7 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
               proposalId={id}
             />,
 
-            ballot ?? <em>Not voted</em>,
+            ballot ?? account ? <em>Not voted</em> : <em>Not connected</em>,
 
             <ChevronRightIcon
               key={`${id}-chevron`}
