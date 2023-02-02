@@ -7,9 +7,9 @@ export function ProposalStatsRowSkeleton(): ReactElement {
     <div className="flex flex-wrap gap-4">
       <Stat label="Voting contract" value={<Skeleton />} />
       <Stat label="Created by" value={<Skeleton />} />
-      <Stat label="Created at" value={<Skeleton />} />
-      <Stat label="Executable on" value={<Skeleton />} />
+      <Stat label="Created transaction" value={<Skeleton />} />
       <Stat label="Voting ends" value={<Skeleton />} />
+      <Stat label="Executable on" value={<Skeleton />} />
       <Stat label="Execution deadline" value={<Skeleton />} />
     </div>
   );
