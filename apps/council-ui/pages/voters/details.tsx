@@ -45,6 +45,7 @@ export default function VoterDetailsPage(): ReactElement {
           proposalsCreated={data.proposalsCreated}
           proposalsVoted={data.votingHistory.length}
           votingPower={data.votingPower}
+          percentOfTVP={data.percentOfTVP}
         />
       ) : (
         <VoterStatsRowSkeleton />
@@ -135,6 +136,7 @@ interface VoterData {
   voterDataByVault: VoterDataByTokenWithDelegationVault[];
   votingHistory: Vote[];
   votingPower: string;
+  percentOfTVP: number;
 }
 
 export function useVoterData(
@@ -159,6 +161,8 @@ export function useVoterData(
           const votingPower = await voter.getVotingPower(
             coreVoting.vaults.map((vault) => vault.address),
           );
+          const tvp = await coreVoting.getTotalVotingPower();
+
           const voterDataByVault = await getVoterDataByTokenWithDelegationVault(
             address,
             coreVoting,
@@ -176,6 +180,7 @@ export function useVoterData(
           return {
             votingHistory,
             votingPower,
+            percentOfTVP: +((+votingPower / +tvp) * 100).toFixed(1),
             gscStatus: gscStatus ?? null,
             voterDataByVault,
             proposalsCreated: proposalsCreatedByAddress.length,
