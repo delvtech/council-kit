@@ -47,6 +47,7 @@ export function VestingVaultDetails({
         <VestingVaultStatsBar
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
+          unvestedMultiplier={data.unvestedMultiplier}
           delegatedToAccount={data.delegatedToAccount}
           participants={data.participants}
           tokenAddress={data.tokenAddress}
@@ -87,6 +88,7 @@ export function VestingVaultDetails({
 interface VestingVaultDetailsData {
   accountPercentOfTVP: number;
   accountVotingPower: string;
+  unvestedMultiplier: number;
   delegate?: string;
   delegatedToAccount: number;
   descriptionURL: string | undefined;
@@ -148,6 +150,7 @@ function useVestingVaultDetailsData(
         descriptionURL: vaultConfig?.descriptionURL,
         name: vaultConfig?.name,
         accountVotingPower,
+        unvestedMultiplier: await vestingVault.getUnvestedMultiplier(),
         participants: (await vestingVault.getVoters()).length,
         delegatedToAccount: account
           ? (await vestingVault.getDelegatorsTo(account)).length
