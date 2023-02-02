@@ -14,6 +14,7 @@ import {
 interface VestingVaultStatsBarProps {
   accountVotingPower: string;
   accountPercentOfTVP: number;
+  unvestedMultiplier: number;
   delegatedToAccount: number;
   participants: number;
   tokenAddress: string;
@@ -23,6 +24,7 @@ interface VestingVaultStatsBarProps {
 export function VestingVaultStatsBar({
   accountVotingPower,
   accountPercentOfTVP,
+  unvestedMultiplier,
   delegatedToAccount,
   participants,
   tokenAddress,
@@ -48,6 +50,15 @@ export function VestingVaultStatsBar({
           value={`${formatBalance(accountPercentOfTVP, 2)}%`}
         />
       )}
+
+      <Stat
+        label={
+          <DefinitionTooltip content="The voting power of each unvested token as a percentage of a vested token.">
+            Unvested multiplier
+          </DefinitionTooltip>
+        }
+        value={`${unvestedMultiplier}%`}
+      />
 
       {delegatedToAccount >= 0 && (
         <Stat
