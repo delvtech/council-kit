@@ -111,7 +111,7 @@ export class Proposal extends Model {
   }
 
   /**
-   * Returns the hash of the transaction that created the proposal, or null if
+   * Get the hash of the transaction that created the proposal, or null if
    * the Proposal doesn't exist.
    * @returns The transaction hash
    */
@@ -166,6 +166,17 @@ export class Proposal extends Model {
         atBlock,
       );
     return deletedIds.includes(this.id);
+  }
+
+  /**
+   * Get the hash of the transaction that executed the proposal, or null if
+   * the Proposal wasn't executed.
+   * @returns The transaction hash
+   */
+  getExecutedTransactionHash(): Promise<string | null> {
+    return this.votingContract.dataSource.getProposalExecutedTransactionHash(
+      this.id,
+    );
   }
 
   /**

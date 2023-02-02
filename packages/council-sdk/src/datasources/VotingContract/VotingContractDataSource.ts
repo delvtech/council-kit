@@ -70,6 +70,13 @@ export interface VotingContractDataSource extends DataSource {
   ) => Promise<number[]>;
 
   /**
+   * Get the hash of the transaction that executed the proposal, or null if
+   * the Proposal wasn't executed.
+   * @param id The proposal id.
+   */
+  getProposalExecutedTransactionHash: (id: number) => Promise<string | null>;
+
+  /**
    * Get a casted vote for a given address on
    * a given proposal id.
    */

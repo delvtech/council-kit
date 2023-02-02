@@ -1,20 +1,21 @@
 import { Ballot } from "@council/sdk";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import classNames from "classnames";
 import { ReactElement, useMemo, useState } from "react";
+import { ProposalStatus } from "src/proposals/getProposalStatus";
 import { makeProposalURL } from "src/routes";
 import {
   SortableGridTable,
   SortOptions,
 } from "src/ui/base/tables/SortableGridTable";
 import { useAccount } from "wagmi";
-import { ProposalStatus } from "./ProposalStatus";
 
 export interface ProposalRowData {
+  status: ProposalStatus;
   ballot: Ballot | null;
   created: Date | null;
   currentQuorum: string;
   id: number;
-  requiredQuorum: string | null;
   votingContractAddress: string;
   votingContractName: string;
   votingEnds: Date | null;
@@ -57,10 +58,9 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
       ]}
       rows={sortedData.map(
         ({
+          status,
           ballot,
-          currentQuorum,
           id,
-          requiredQuorum,
           votingContractAddress,
           votingContractName,
           votingEnds,
@@ -81,13 +81,17 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
 
             votingEnds?.toLocaleDateString() ?? <em>unknown</em>,
 
-            <ProposalStatus
+            <div
               key={`${id}-status`}
-              currentQuorum={currentQuorum}
-              requiredQuorum={requiredQuorum}
-              votingEnds={votingEnds}
-              proposalId={id}
-            />,
+              className={classNames("font-bold daisy-badge", {
+                "daisy-badge-error": status === "FAILED",
+                "daisy-badge-info": status === "IN PROGRESS",
+                "daisy-badge-success": status === "EXECUTED",
+                "daisy-badge-warning": status === "EXPIRED",
+              })}
+            >
+              {status}
+            </div>,
 
             ballot ?? account ? <em>Not voted</em> : <em>Not connected</em>,
 

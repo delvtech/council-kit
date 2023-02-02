@@ -1,5 +1,8 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
-import { ProposalCreatedEvent } from "@council/typechain/dist/contracts/CoreVoting";
+import {
+  ProposalCreatedEvent,
+  ProposalExecutedEvent,
+} from "@council/typechain/dist/contracts/CoreVoting";
 import { Signer } from "ethers";
 import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
@@ -158,22 +161,40 @@ export class CoreVotingContractDataSource
     return transaction.hash;
   }
 
-  getExecutedProposalIds(
+  getProposalExecutedEvents(
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<ProposalExecutedEvent[]> {
+    return this.cached(["getProposalExecutedEvents", fromBlock, toBlock], () =>
+      this.contract.queryFilter(
+        this.contract.filters.ProposalExecuted(),
+        fromBlock,
+        toBlock,
+      ),
+    );
+  }
+
+  async getExecutedProposalIds(
     fromBlock?: number,
     toBlock?: number,
   ): Promise<number[]> {
-    return this.cached(
-      ["getExecutedProposalIds", fromBlock, toBlock],
-      async () => {
-        const filter = this.contract.filters.ProposalExecuted();
-        const events = await this.contract.queryFilter(
-          filter,
-          fromBlock,
-          toBlock,
-        );
-        return events.map(({ args }) => args.proposalId.toNumber());
-      },
+    const proposalExecutedEvents = await this.getProposalExecutedEvents(
+      fromBlock,
+      toBlock,
     );
+    return proposalExecutedEvents.map(({ args }) => args.proposalId.toNumber());
+  }
+
+  async getProposalExecutedTransactionHash(id: number): Promise<string | null> {
+    const proposalExecutedEvents = await this.getProposalExecutedEvents();
+    const executedEvent = proposalExecutedEvents.find(
+      ({ args }) => args.proposalId.toNumber() === id,
+    );
+    if (!executedEvent) {
+      return null;
+    }
+
+    return executedEvent.transactionHash;
   }
 
   async getVote(address: string, proposalId: number): Promise<VoteData | null> {
