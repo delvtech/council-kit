@@ -5,8 +5,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { Signer } from "ethers";
-import toast from "react-hot-toast";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
+import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
+import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
+import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
 
 interface KickGSCMemberOptions {
@@ -18,7 +20,7 @@ export function useKickGSCMember(
 ): UseMutationResult<string, unknown, KickGSCMemberOptions> {
   const { context } = useCouncil();
   const queryClient = useQueryClient();
-  let toastId: string;
+  let transactionHash: string;
 
   return useMutation({
     mutationFn: ({
@@ -27,27 +29,26 @@ export function useKickGSCMember(
     }: KickGSCMemberOptions): Promise<string> => {
       const gscVault = new GSCVault(gscVaultAddress, context);
       return gscVault.kick(signer, memberAddress, {
-        onSubmitted: () =>
-          (toastId = toast.loading(
+        onSubmitted: (hash) => {
+          makeTransactionSubmittedToast(
             `Kicking GSC Member: ${formatAddress(memberAddress)}`,
-          )),
+            hash,
+          );
+          transactionHash = hash;
+        },
       });
     },
-    onSuccess: (_, { memberAddress }) => {
-      toast.success(
+    onSuccess: (hash, { memberAddress }) => {
+      makeTransactionSuccessToast(
         `Successfully kicked ${formatAddress(memberAddress)} from the GSC!`,
-        {
-          id: toastId,
-        },
+        hash,
       );
       queryClient.invalidateQueries();
     },
     onError(error, { memberAddress }) {
-      toast.error(
+      makeTransactionErrorToast(
         `Failed to kick ${formatAddress(memberAddress)} from the GSC.`,
-        {
-          id: toastId,
-        },
+        transactionHash,
       );
       console.error(error);
     },

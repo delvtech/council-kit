@@ -6,7 +6,8 @@ import {
 } from "@tanstack/react-query";
 import { ethers, Signer } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
-import toast from "react-hot-toast";
+import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
+import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
 
 interface ApproveArguments {
@@ -18,7 +19,7 @@ export function useApprove(
 ): UseMutationResult<string, unknown, ApproveArguments> {
   const { context } = useCouncil();
   const queryClient = useQueryClient();
-  let toastId: string;
+  let transactionHash: string;
   return useMutation(
     async ({ signer }: ApproveArguments): Promise<string> => {
       const vault = new LockingVault(vaultAddress, context);
@@ -29,21 +30,20 @@ export function useApprove(
         vault.address,
         formatUnits(ethers.constants.MaxUint256, decimals),
         {
-          onSubmitted: () => (toastId = toast.loading("Approving")),
+          onSubmitted: (hash) => {
+            makeTransactionSuccessToast("Approving", hash);
+            transactionHash = hash;
+          },
         },
       );
     },
     {
-      onSuccess: () => {
-        toast.success(`Successfully approved!`, {
-          id: toastId,
-        });
+      onSuccess: (hash) => {
+        makeTransactionSuccessToast("Successfully approved!", hash);
         queryClient.invalidateQueries();
       },
       onError(error) {
-        toast.error(`Failed to approve`, {
-          id: toastId,
-        });
+        makeTransactionErrorToast("Failed to approve", transactionHash);
         console.error(error);
       },
     },

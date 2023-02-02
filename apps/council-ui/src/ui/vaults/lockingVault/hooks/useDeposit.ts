@@ -5,7 +5,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { Signer } from "ethers";
-import toast from "react-hot-toast";
+import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
+import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
+import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
 
 interface DepositArguments {
@@ -18,26 +20,28 @@ export function useDeposit(
 ): UseMutationResult<string, unknown, DepositArguments> {
   const { context } = useCouncil();
   const queryClient = useQueryClient();
-  let toastId: string;
+  let transactionHash: string;
   return useMutation(
     async ({ signer, amount }: DepositArguments): Promise<string> => {
       const vault = new LockingVault(vaultAddress, context);
       const account = await signer.getAddress();
       return vault.deposit(signer, account, amount, account, {
-        onSubmitted: () => (toastId = toast.loading("Depositing")),
+        onSubmitted: (hash) => {
+          makeTransactionSubmittedToast("Depositing", hash);
+          transactionHash = hash;
+        },
       });
     },
     {
-      onSuccess: (_, { amount }) => {
-        toast.success(`Successfully deposited ${amount}!`, {
-          id: toastId,
-        });
+      onSuccess: (hash, { amount }) => {
+        makeTransactionSuccessToast(`Successfully deposited ${amount}!`, hash);
         queryClient.invalidateQueries();
       },
       onError(error, { amount }) {
-        toast.error(`Failed to deposit ${amount}`, {
-          id: toastId,
-        });
+        makeTransactionErrorToast(
+          `Failed to deposit ${amount}`,
+          transactionHash,
+        );
         console.error(error);
       },
     },

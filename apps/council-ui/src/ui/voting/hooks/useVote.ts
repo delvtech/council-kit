@@ -5,7 +5,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { Signer } from "ethers";
-import toast from "react-hot-toast";
+import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
+import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
+import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
 
 interface VoteArguments {
@@ -22,28 +24,30 @@ export function useVote(): UseMutationResult<
 > {
   const { coreVoting } = useCouncil();
   const queryClient = useQueryClient();
-  let toastId: string;
+  let transactionHash: string;
   return useMutation(
     async ({ signer, proposalId, ballot }: VoteArguments) => {
       const proposal = coreVoting.getProposal(proposalId);
       return proposal.vote(signer, ballot, {
-        onSubmitted: () => (toastId = toast.loading("Voting")),
+        onSubmitted: (hash) => {
+          makeTransactionSubmittedToast("Voting", hash);
+          transactionHash = hash;
+        },
       });
     },
     {
-      onSuccess: (_, { proposalId, ballot }) => {
-        toast.success(
+      onSuccess: (hash, { proposalId, ballot }) => {
+        makeTransactionSuccessToast(
           `Successfully voted ${ballot} on Proposal ${proposalId}!`,
-          {
-            id: toastId,
-          },
+          hash,
         );
         queryClient.invalidateQueries();
       },
       onError: (error, { proposalId, ballot }) => {
-        toast.error(`Failed to vote ${ballot} on Proposal ${proposalId}.`, {
-          id: toastId,
-        });
+        makeTransactionErrorToast(
+          `Failed to vote ${ballot} on Proposal ${proposalId}.`,
+          transactionHash,
+        );
         console.error(error);
       },
     },

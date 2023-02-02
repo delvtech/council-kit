@@ -5,7 +5,9 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { Signer } from "ethers";
-import toast from "react-hot-toast";
+import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
+import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
+import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
 
 interface VoteArguments {
@@ -22,7 +24,7 @@ export function useGSCVote(): UseMutationResult<
 > {
   const { gscVoting } = useCouncil();
   const queryClient = useQueryClient();
-  let toastId: string;
+  let transactionHash: string;
   return useMutation(
     async ({ signer, proposalId, ballot }: VoteArguments) => {
       if (!gscVoting) {
@@ -32,27 +34,25 @@ export function useGSCVote(): UseMutationResult<
       }
       const proposal = gscVoting.getProposal(proposalId);
       return proposal.vote(signer, ballot, {
-        onSubmitted: () => (toastId = toast.loading("Voting")),
+        onSubmitted: (hash) => {
+          makeTransactionSubmittedToast("Voting", hash);
+          transactionHash = hash;
+        },
       });
     },
     {
-      onSuccess: (_, { proposalId, ballot }) => {
-        toast.success(
-          // safe to cast since it won't reach this callback if proposal is undefined.
+      onSuccess: (hash, { proposalId, ballot }) => {
+        makeTransactionSuccessToast(
           `Successfully voted ${ballot} on GSC Proposal ${proposalId}!`,
-          {
-            id: toastId,
-          },
+          hash,
         );
         queryClient.invalidateQueries();
       },
 
       onError: (error, { proposalId, ballot }) => {
-        toast.error(
+        makeTransactionErrorToast(
           `Failed to vote ${ballot} on GSC Proposal ${proposalId}}.`,
-          {
-            id: toastId,
-          },
+          transactionHash,
         );
         console.error(error);
       },
