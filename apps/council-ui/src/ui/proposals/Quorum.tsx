@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { ReactElement } from "react";
+import { ProposalStatus } from "src/proposals/getProposalStatus";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { ProposalStatus } from "src/ui/proposals/types";
 
 interface QuorumProps {
   current: string;
