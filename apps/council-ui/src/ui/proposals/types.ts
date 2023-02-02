@@ -10,10 +10,3 @@ export interface ProposalRowData {
   requiredQuorum: string | null;
   ballot: Ballot | null;
 }
-
-export type ProposalStatus =
-  | "UNKNOWN"
-  | "IN PROGRESS"
-  | "EXPIRED"
-  | "FAILED"
-  | "EXECUTED";

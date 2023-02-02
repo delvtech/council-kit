@@ -4,6 +4,7 @@ import assertNever from "assert-never";
 import { parseEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
+import { getProposalStatus } from "src/proposals/getProposalStatus";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -88,21 +89,28 @@ function useProposalsPageData(
         allProposals.map(async (proposal) => {
           const createdBlock = await proposal.getCreatedBlock();
           const expirationBlock = await proposal.getExpirationBlock();
+          const votingEnds = expirationBlock
+            ? await getBlockDate(expirationBlock, context.provider, {
+                estimateFutureDates: true,
+              })
+            : null;
+          const currentQuorum = await proposal.getCurrentQuorum();
           const vote = account ? await proposal.getVote(account) : null;
           return {
+            status: getProposalStatus({
+              isExecuted: await proposal.getIsExecuted(),
+              currentQuorum,
+              endsAtDate: votingEnds,
+              requiredQuorum: await proposal.getRequiredQuorum(),
+            }),
             votingContractAddress: proposal.votingContract.address,
             votingContractName: proposal.votingContract.name,
             id: proposal.id,
             created:
               createdBlock &&
               (await getBlockDate(createdBlock, context.provider)),
-            votingEnds:
-              expirationBlock &&
-              (await getBlockDate(expirationBlock, context.provider, {
-                estimateFutureDates: true,
-              })),
-            currentQuorum: await proposal.getCurrentQuorum(),
-            requiredQuorum: await proposal.getRequiredQuorum(),
+            votingEnds,
+            currentQuorum,
             ballot: vote && parseEther(vote.power).gt(0) ? vote.ballot : null,
             sentenceSummary: proposalsConfig[proposal.id]?.sentenceSummary,
           };

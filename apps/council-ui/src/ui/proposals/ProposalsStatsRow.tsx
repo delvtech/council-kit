@@ -2,6 +2,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeEtherscanTransactionURL } from "src/etherscan/makeEtherscanTransactionURL";
+import { ProposalStatus } from "src/proposals/getProposalStatus";
 import { makeVoterURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
@@ -10,7 +11,6 @@ import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
-import { ProposalStatus } from "src/ui/proposals/types";
 
 interface ProposalStatsRowProps {
   votingContractAddress: string;
