@@ -1,44 +1,32 @@
 import classNames from "classnames";
 import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import {
-  ProposalStatus,
-  useProposalStatus,
-} from "src/ui/proposals/hooks/useProposalStatus";
+import { ProposalStatus } from "src/ui/proposals/types";
 
 interface QuorumProps {
   current: string;
   required: string | null;
-  votingEnds: Date | null;
-  proposalId: number;
+  status: ProposalStatus;
 }
 
 export function Quorum({
   current,
   required,
-  votingEnds,
-  proposalId,
+  status,
 }: QuorumProps): ReactElement {
-  const { data: proposalStatus } = useProposalStatus(
-    current,
-    required,
-    votingEnds,
-    proposalId,
-  );
-
   return (
     <div>
-      {votingEnds && (
+      {status && (
         <div className="flex">
           <h3 className="mr-6 font-medium">QUORUM</h3>
-          <div className="ml-auto font-bold daisy-badge">{proposalStatus}</div>
+          <div className="ml-auto font-bold daisy-badge">{status}</div>
         </div>
       )}
 
       <QuorumBar
         requiredQuorum={required}
         currentQuorum={current}
-        status={proposalStatus}
+        status={status}
       />
 
       {required && (

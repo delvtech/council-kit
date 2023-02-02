@@ -10,26 +10,29 @@ import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
+import { ProposalStatus } from "src/ui/proposals/types";
 
 interface ProposalStatsRowProps {
   votingContractAddress: string;
   createdBy: string | null;
   createdTransactionHash: string | null;
-  createdAtDate: Date | null;
   endsAtDate: Date | null;
   unlockAtDate: Date | null;
   lastCallAtDate: Date | null;
+  executedTransactionHash: string | null;
+  status: ProposalStatus;
   className?: string;
 }
 
 export function ProposalStatsRow({
   votingContractAddress,
   createdBy,
-  createdAtDate,
   createdTransactionHash,
   endsAtDate,
   unlockAtDate,
   lastCallAtDate,
+  executedTransactionHash,
+  status,
   className,
 }: ProposalStatsRowProps): ReactElement {
   const createdByDisplayName = useDisplayName(createdBy);
@@ -60,7 +63,7 @@ export function ProposalStatsRow({
       )}
       {createdTransactionHash && (
         <Stat
-          label="Created Transaction"
+          label="Created transaction"
           value={
             <Link
               className="flex items-center hover:underline"
@@ -73,22 +76,36 @@ export function ProposalStatsRow({
         />
       )}
 
-      {createdAtDate && (
-        <Stat label="Created at" value={createdAtDate.toLocaleDateString()} />
+      {endsAtDate && status !== "EXECUTED" && (
+        <Stat
+          label={status === "IN PROGRESS" ? "Voting ends" : "Voting ended on"}
+          value={endsAtDate.toLocaleDateString()}
+        />
       )}
 
-      {unlockAtDate && (
+      {unlockAtDate && status === "IN PROGRESS" && (
         <Stat label="Executable on" value={unlockAtDate.toLocaleDateString()} />
       )}
 
-      {endsAtDate && (
-        <Stat label="Voting ends" value={endsAtDate.toLocaleDateString()} />
+      {lastCallAtDate && status !== "EXECUTED" && (
+        <Stat
+          label={status === "IN PROGRESS" ? "Execution deadline" : "Expired on"}
+          value={lastCallAtDate.toLocaleDateString()}
+        />
       )}
 
-      {lastCallAtDate && (
+      {executedTransactionHash && (
         <Stat
-          label="Execution deadline"
-          value={lastCallAtDate.toLocaleDateString()}
+          label="Executed transaction"
+          value={
+            <Link
+              className="flex items-center hover:underline"
+              href={makeEtherscanTransactionURL(executedTransactionHash)}
+            >
+              {formatAddress(executedTransactionHash)}
+              <ExternalLinkSVG />
+            </Link>
+          }
         />
       )}
     </div>

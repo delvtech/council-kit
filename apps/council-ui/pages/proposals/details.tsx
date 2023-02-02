@@ -14,6 +14,7 @@ import { ProposalStatsRow } from "src/ui/proposals/ProposalsStatsRow";
 import { Quorum } from "src/ui/proposals/Quorum";
 import { QuorumBarSkeleton } from "src/ui/proposals/QuorumSkeleton";
 import { ProposalStatsRowSkeleton } from "src/ui/proposals/skeletons/ProposalStatsRowSkeleton";
+import { ProposalStatus } from "src/ui/proposals/types";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTableSkeleton";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
@@ -90,8 +91,7 @@ export default function ProposalPage(): ReactElement {
             <Quorum
               current={data.currentQuorum}
               required={data.requiredQuorum}
-              votingEnds={data.endsAtDate}
-              proposalId={id}
+              status={data.status}
             />
           ) : (
             <QuorumBarSkeleton />
@@ -104,10 +104,11 @@ export default function ProposalPage(): ReactElement {
           votingContractAddress={votingContractAddress}
           createdBy={data.createdBy}
           createdTransactionHash={data.createdTransactionHash}
-          createdAtDate={data.createdAtDate}
           endsAtDate={data.endsAtDate}
           unlockAtDate={data.unlockedAtDate}
           lastCallAtDate={data.lastCallAtDate}
+          executedTransactionHash={data.executedTransactionHash}
+          status={data.status}
           className="mb-2"
         />
       ) : (
@@ -175,6 +176,8 @@ interface ProposalDetailsPageData {
   voterEnsRecords: EnsRecords;
   descriptionURL: string | null;
   paragraphSummary: string | null;
+  status: ProposalStatus;
+  executedTransactionHash: string | null;
 }
 
 function useProposalDetailsPageData(
@@ -241,12 +244,29 @@ function useProposalDetailsPageData(
             provider,
           );
 
+          const currentQuorum = await proposal.getCurrentQuorum();
+          const requiredQuorum = await proposal.getRequiredQuorum();
+
+          let status: ProposalStatus = "IN PROGRESS";
+
+          if (await proposal.getIsExecuted()) {
+            status = "EXECUTED";
+          } else if (!endsAtDate || !requiredQuorum) {
+            status = "UNKNOWN";
+          } else if (new Date() > endsAtDate) {
+            if (+currentQuorum >= +requiredQuorum) {
+              status = "EXPIRED";
+            } else {
+              status = "FAILED";
+            }
+          }
+
           return {
             type,
             name: proposal.name,
             isActive: await proposal.getIsActive(),
-            currentQuorum: await proposal.getCurrentQuorum(),
-            requiredQuorum: await proposal.getRequiredQuorum(),
+            currentQuorum,
+            requiredQuorum,
             createdAtBlock,
             createdBy: await proposal.getCreatedBy(),
             createdAtDate,
@@ -261,6 +281,9 @@ function useProposalDetailsPageData(
               : undefined,
             descriptionURL: proposalConfig[id]?.descriptionURL ?? null,
             paragraphSummary: proposalConfig[id]?.paragraphSummary ?? null,
+            status,
+            executedTransactionHash:
+              await proposal.getExecutedTransactionHash(),
           };
         }
       : undefined,
