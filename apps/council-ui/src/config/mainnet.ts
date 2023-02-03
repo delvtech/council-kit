@@ -8,6 +8,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
     abi: {},
   },
   coreVoting: {
+    name: "Core Voting",
     address: "0xEaCD577C3F6c44C3ffA398baaD97aE12CDCFed4a",
     abi: {},
     descriptionURL: "https://moreinfo.com",
@@ -62,6 +63,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
   },
 
   gscVoting: {
+    name: "GSC",
     address: "0x40309f197e7f94B555904DF0f788a3F48cF326aB",
     abi: {},
     descriptionURL: "https://moreinfo.com",
