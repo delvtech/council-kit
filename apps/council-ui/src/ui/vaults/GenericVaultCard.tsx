@@ -21,7 +21,7 @@ export function GenericVaultCard({
   votingPower,
 }: GenericVaultCardProps): ReactElement {
   return (
-    <div className="w-full sm:max-w-[300px] daisy-card bg-base-300">
+    <div className="w-full sm:w-80 sm:h-72 daisy-card bg-base-300">
       <div className="daisy-card-body">
         <h2 className="text-2xl daisy-card-title">{name}</h2>
         <Address address={address} className="text-lg" />
@@ -55,7 +55,7 @@ export function GenericVaultCard({
 
 export function GenericVaultCardSkeleton(): ReactElement {
   return (
-    <div className="w-full sm:max-w-[300px] daisy-card bg-base-300">
+    <div className="w-full sm:w-96 daisy-card bg-base-300">
       <div className="daisy-card-body">
         <h2 className="w-32">
           <Skeleton count={2} />
