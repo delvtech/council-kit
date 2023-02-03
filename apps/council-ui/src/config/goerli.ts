@@ -34,6 +34,7 @@ export const goerliCouncilConfig: CouncilConfig = {
     abi: {},
   },
   coreVoting: {
+    name: "Core Voting",
     address: goerliCoreVotingAddress,
     abi: {},
     descriptionURL: "https://moreinfo.com",
@@ -68,6 +69,7 @@ export const goerliCouncilConfig: CouncilConfig = {
   },
 
   gscVoting: {
+    name: "GSC",
     address: gscVotingAddress,
     abi: {},
     descriptionURL: "https://moreinfo.com",

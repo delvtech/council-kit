@@ -7,6 +7,10 @@ import { WalletIcon } from "./WalletIcon";
 
 interface AddressProps {
   address: string;
+  /**
+   * If provided this will be rendered instead of the formatted address or ens.
+   */
+  label?: string;
   className?: string;
   iconSize?: number;
 }
@@ -14,6 +18,7 @@ interface AddressProps {
 export function Address({
   address,
   className,
+  label,
   iconSize,
 }: AddressProps): ReactElement {
   return (
@@ -23,9 +28,10 @@ export function Address({
       target="_blank"
       rel="noreferrer"
     >
-      <WalletIcon address={address} className="mr-2" size={iconSize ?? 16} />
+      <WalletIcon address={address} className="mr-1" size={iconSize ?? 16} />
 
-      {formatAddress(address)}
+      {label ? label : formatAddress(address)}
+
       <ExternalLinkSVG size={iconSize ?? 16} />
     </a>
   );

@@ -76,7 +76,7 @@ export default function ProposalPage(): ReactElement {
       <div className="flex flex-wrap w-full gap-4 whitespace-nowrap">
         <div className="flex flex-col gap-1">
           <h1 className="inline text-5xl font-bold">
-            {data?.name ?? `Proposal ${id}`}
+            {data?.proposalName ?? `Proposal ${id}`}
           </h1>
           {data?.descriptionURL && (
             <ExternalLink
@@ -104,6 +104,7 @@ export default function ProposalPage(): ReactElement {
 
       {status === "success" ? (
         <ProposalStatsRow
+          votingContractName={data.votingContractName}
           votingContractAddress={votingContractAddress}
           createdBy={data.createdBy}
           createdTransactionHash={data.createdTransactionHash}
@@ -163,7 +164,8 @@ export default function ProposalPage(): ReactElement {
 
 interface ProposalDetailsPageData {
   type: "core" | "gsc";
-  name: string;
+  proposalName: string;
+  votingContractName: string;
   status: ProposalStatus;
   isActive: boolean;
   currentQuorum: string;
@@ -192,6 +194,7 @@ function useProposalDetailsPageData(
   const provider = context.provider;
   const chainId = useChainId();
   const proposalConfig = councilConfigs[chainId].coreVoting.proposals;
+  const votingContractName = councilConfigs[chainId].coreVoting.name;
 
   const queryEnabled = votingContractAddress !== undefined && id !== undefined;
   return useQuery<ProposalDetailsPageData>({
@@ -252,7 +255,8 @@ function useProposalDetailsPageData(
 
           return {
             type,
-            name: proposal.name,
+            proposalName: proposal.name,
+            votingContractName,
             status: getProposalStatus({
               isExecuted: await proposal.getIsExecuted(),
               endsAtDate,

@@ -19,6 +19,7 @@ export interface ContractConfig {
 }
 
 export interface VotingContractConfig extends ContractConfig {
+  name: string;
   descriptionURL: string;
   vaults: VaultConfig[];
   proposals: Record<string /*proposal id*/, ProposalConfig>;
