@@ -13,6 +13,7 @@ import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 
 interface ProposalStatsRowProps {
+  votingContractName: string;
   votingContractAddress: string;
   createdBy: string | null;
   createdTransactionHash: string | null;
@@ -26,6 +27,7 @@ interface ProposalStatsRowProps {
 
 export function ProposalStatsRow({
   votingContractAddress,
+  votingContractName,
   createdBy,
   createdTransactionHash,
   endsAtDate,
@@ -40,7 +42,9 @@ export function ProposalStatsRow({
     <div className={classNames("flex flex-wrap gap-4", className)}>
       <Stat
         label="Voting contract"
-        value={<Address address={votingContractAddress} />}
+        value={
+          <Address address={votingContractAddress} label={votingContractName} />
+        }
       />
 
       {createdByDisplayName && createdBy && (
