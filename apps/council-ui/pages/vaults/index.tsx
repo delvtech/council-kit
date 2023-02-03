@@ -7,6 +7,7 @@ import {
   GenericVaultCard,
   GenericVaultCardSkeleton,
 } from "src/ui/vaults/GenericVaultCard";
+import { GSCVaultPreviewCard } from "src/ui/vaults/gscVault/GSCVaultPreviewCard/GSCVaultPreviewCard";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
@@ -27,15 +28,30 @@ export default function VaultsPage(): ReactElement {
 
       <div className="flex flex-wrap justify-center gap-6 lg:justify-start">
         {status === "success" ? (
-          data.map((vault) => (
-            <GenericVaultCard
-              key={vault.address}
-              address={vault.address}
-              name={vault.name}
-              tvp={vault.tvp}
-              votingPower={vault.votingPower}
-            />
-          ))
+          data.map((vault) => {
+            switch (vault.name) {
+              case "GSC Vault":
+                return (
+                  <GSCVaultPreviewCard
+                    key={vault.address}
+                    vaultAddress={vault.address}
+                  />
+                );
+
+              case "Locking Vault":
+              case "Vesting Vault":
+              default:
+                return (
+                  <GenericVaultCard
+                    key={vault.address}
+                    address={vault.address}
+                    name={vault.name}
+                    tvp={vault.tvp}
+                    votingPower={vault.votingPower}
+                  />
+                );
+            }
+          })
         ) : (
           <>
             <GenericVaultCardSkeleton />
