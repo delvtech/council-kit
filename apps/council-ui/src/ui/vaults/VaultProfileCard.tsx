@@ -40,6 +40,7 @@ export function VaultProfileCard({
 
   switch (vaultConfig.type) {
     case "LockingVault":
+    case "FrozenLockingVault":
       return (
         <LockingVaultProfileCard
           vaultAddress={vaultAddress}
@@ -66,9 +67,6 @@ export function VaultProfileCard({
       );
 
     case "GSCVault":
-      return <></>;
-
-    case "FrozenLockingVault":
       return <></>;
 
     default:
