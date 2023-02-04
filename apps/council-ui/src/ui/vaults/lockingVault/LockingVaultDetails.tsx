@@ -1,9 +1,11 @@
 import { LockingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ethers, Signer } from "ethers";
+import { isAddress } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 
@@ -44,6 +46,24 @@ export function LockingVaultDetails({
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
+  }
+
+  async function handleDelegate(delegate: string): Promise<void> {
+    let address: string | null | undefined = delegate;
+    if (!isAddress(delegate)) {
+      address = await signer?.provider?.resolveName(delegate);
+    }
+    if (!address) {
+      makeTransactionErrorToast(
+        `Could not find address for ${delegate}`,
+        undefined,
+      );
+      return;
+    }
+    return changeDelegate({
+      signer: signer as Signer,
+      delegate: address,
+    });
   }
 
   return (
@@ -91,9 +111,7 @@ export function LockingVaultDetails({
           <ChangeDelegateForm
             currentDelegate={data.delegate || ethers.constants.AddressZero}
             disabled={!signer || !+data.accountVotingPower}
-            onDelegate={(delegate) =>
-              changeDelegate({ signer: signer as Signer, delegate })
-            }
+            onDelegate={handleDelegate}
           />
         ) : (
           <ChangeDelegateFormSkeleton />
