@@ -1,17 +1,14 @@
-import { BuildingLibraryIcon, UserCircleIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { ReactElement, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import {
   SortableGridTable,
   SortOptions,
 } from "src/ui/base/tables/SortableGridTable";
-import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
-import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
 import { VoterRowData } from "src/ui/voters/types";
+import { VoterAddress } from "src/ui/voters/VoterAddress";
 
 type SortField = "numberOfDelegators" | "votingPower";
 
@@ -99,18 +96,12 @@ export function VoterList({
                 href: makeVoterURL(address),
                 cells: [
                   <span key={address} className="flex items-center">
-                    <WalletIcon address={address} className="mr-2" />
-                    {ensName ? ensName : formatAddress(address)}
-                    {isGSCMember && (
-                      <Tooltip content="GSC Member">
-                        <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />
-                      </Tooltip>
-                    )}
-                    {isDelegate && (
-                      <Tooltip content="Current Delegate">
-                        <UserCircleIcon className="w-5 h-5 ml-1 fill-accent" />
-                      </Tooltip>
-                    )}
+                    <VoterAddress
+                      address={address}
+                      ensName={ensName}
+                      isGSCMember={isGSCMember}
+                      isDelegate={isDelegate}
+                    />
                   </span>,
                   numberOfDelegators,
                   formatBalance(votingPower, 0),
