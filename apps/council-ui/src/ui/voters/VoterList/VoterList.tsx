@@ -83,34 +83,23 @@ export function VoterList({
         ]}
         rows={sortedVoters
           .slice(0, size)
-          .map(
-            ({
-              address,
-              ensName,
-              votingPower,
-              numberOfDelegators,
-              isGSCMember,
-            }) => {
-              const isDelegate = delegateAddresses.includes(address);
-              return {
-                href: makeVoterURL(address),
-                cells: [
-                  <VoterAddress
-                    key={address}
-                    address={address}
-                    ensName={ensName}
-                    isGSCMember={isGSCMember}
-                    isDelegate={isDelegate}
-                  />,
-                  numberOfDelegators,
-                  formatBalance(votingPower, 0),
-                  <span key={`${address}-chevron`}>
-                    <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
-                  </span>,
-                ],
-              };
-            },
-          )}
+          .map(({ address, ensName, votingPower, numberOfDelegators }) => {
+            return {
+              href: makeVoterURL(address),
+              cells: [
+                <VoterAddress
+                  key={address}
+                  address={address}
+                  ensName={ensName}
+                />,
+                numberOfDelegators,
+                formatBalance(votingPower, 0),
+                <span key={`${address}-chevron`}>
+                  <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
+                </span>,
+              ],
+            };
+          })}
       />
 
       {voters.length > size && (

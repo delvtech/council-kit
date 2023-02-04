@@ -7,7 +7,7 @@ import { GSCMembersTableHeader } from "src/ui/vaults/gscVault/GSCMembersTable/GS
 import { useKickGSCMember } from "src/ui/vaults/gscVault/useKickGSCMember";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 import { GSCMemberInfo } from "src/vaults/gscVault/getGSCMembers";
-import { useAccount, useSigner } from "wagmi";
+import { useSigner } from "wagmi";
 
 interface GSCMembersTableProps {
   gscVaultAddress: string;
@@ -52,7 +52,6 @@ function GSCMembersTableRow({
   requiredVotingPower,
 }: GSCMembersTableRow) {
   const { data: signer } = useSigner();
-  const { address: account } = useAccount();
   const isKickButtonDisabled =
     +qualifyingVotingPower > +requiredVotingPower && !!signer;
   const { mutate: kickGSCMember } = useKickGSCMember(gscVaultAddress);
