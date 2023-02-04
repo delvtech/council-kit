@@ -1,4 +1,5 @@
 import { Voter } from "@council/sdk";
+import classNames from "classnames";
 import { constants } from "ethers";
 import { getAddress } from "ethers/lib/utils";
 import Link from "next/link";
@@ -89,16 +90,22 @@ export function TokenWithDelegationVaultProfileCard({
           {/* The button to open modal */}
           <label
             htmlFor={`delegator-modal-${vaultAddress}`}
-            className="ml-auto font-bold hover:underline hover:cursor-pointer text-secondary"
+            className={classNames("ml-auto font-bold ", {
+              "underline hover:no-underline hover:cursor-pointer text-secondary":
+                userVotersDelegated.length,
+            })}
           >
             {userVotersDelegated.length}
           </label>
-          <DelegatorListModal
-            delegators={userVotersDelegated ?? []}
-            vaultAddress={vaultAddress}
-            voterAddress={userAddress}
-            voterEns={userEns}
-          />
+
+          {userVotersDelegated.length ? (
+            <DelegatorListModal
+              delegators={userVotersDelegated ?? []}
+              vaultAddress={vaultAddress}
+              voterAddress={userAddress}
+              voterEns={userEns}
+            />
+          ) : null}
         </div>
       )}
 
