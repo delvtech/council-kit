@@ -95,14 +95,13 @@ export function VoterList({
               return {
                 href: makeVoterURL(address),
                 cells: [
-                  <span key={address} className="flex items-center">
-                    <VoterAddress
-                      address={address}
-                      ensName={ensName}
-                      isGSCMember={isGSCMember}
-                      isDelegate={isDelegate}
-                    />
-                  </span>,
+                  <VoterAddress
+                    key={address}
+                    address={address}
+                    ensName={ensName}
+                    isGSCMember={isGSCMember}
+                    isDelegate={isDelegate}
+                  />,
                   numberOfDelegators,
                   formatBalance(votingPower, 0),
                   <span key={`${address}-chevron`}>
