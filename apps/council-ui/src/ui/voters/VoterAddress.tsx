@@ -3,12 +3,14 @@ import { ReactElement } from "react";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
+import { useChainId } from "src/ui/network/useChainId";
+import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
+import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
+import { getAllVaultConfigs } from "src/vaults/vaults";
 
 interface VoterAddressProps {
   address: string;
   ensName?: string | null;
-  isGSCMember?: boolean;
-  isDelegate?: boolean;
   /**
    * If provided this will be rendered instead of the formatted address or ens.
    */
@@ -21,24 +23,36 @@ export function VoterAddress({
   address,
   ensName,
   className,
-  isGSCMember,
-  isDelegate,
   iconSize,
 }: VoterAddressProps): ReactElement {
+  const chainId = useChainId();
+  const { data: gscStatus } = useGSCStatus(address);
+  const { data: delegatesByVault } = useDelegatesByVault();
+  const allVaults = getAllVaultConfigs(chainId);
+  const vaultNames = allVaults
+    .map((vaultConfig) => {
+      if (delegatesByVault?.[vaultConfig.address]) {
+        return vaultConfig.name;
+      }
+    })
+    .filter((v) => !!v) as string[];
+
   return (
     <span className={`flex items-center ${className}`}>
       <WalletIcon size={iconSize} address={address} className="mr-2" />
       {ensName ? ensName : formatAddress(address)}
-      {isGSCMember && (
+      {gscStatus === "Member" && (
         <Tooltip content="GSC Member">
           <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />
         </Tooltip>
       )}
-      {isDelegate && (
-        <Tooltip content="Current Delegate">
-          <UserCircleIcon className="w-5 h-5 ml-1 fill-accent" />
-        </Tooltip>
-      )}
+      {vaultNames.map((vaultName) => {
+        return (
+          <Tooltip key={vaultName} content={`Your Delegate (${vaultName})`}>
+            <UserCircleIcon className="w-5 h-5 ml-1 fill-accent" />
+          </Tooltip>
+        );
+      })}
     </span>
   );
 }
