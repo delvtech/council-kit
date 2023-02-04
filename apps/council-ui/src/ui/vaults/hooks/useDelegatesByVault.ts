@@ -1,5 +1,6 @@
 import { LockingVault, VestingVault, Voter } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import assertNever from "assert-never";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { getAllVaultConfigs } from "src/vaults/vaults";
@@ -34,12 +35,18 @@ export function useDelegatesByVault(): UseQueryResult<Record<string, Voter>> {
               undefined;
 
             switch (config.type) {
+              case "FrozenLockingVault":
               case "LockingVault":
                 typedDelegationVault = vault as LockingVault;
                 break;
               case "VestingVault":
                 typedDelegationVault = vault as VestingVault;
                 break;
+              case "GSCVault":
+                // GSCVault does not have delegation, do nothing
+                break;
+              default:
+                assertNever(config.type);
             }
 
             if (typedDelegationVault) {
