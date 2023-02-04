@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import { ReactElement } from "react";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
-import { formatAddress } from "./formatting/formatAddress";
-import { ExternalLinkSVG } from "./svg/ExternalLink";
-import { WalletIcon } from "./WalletIcon";
+import { formatAddress } from "src/ui/base/formatting/formatAddress";
+import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
+import { WalletIcon } from "src/ui/base/WalletIcon";
 
 interface AddressProps {
   address: string;

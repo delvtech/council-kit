@@ -2,9 +2,9 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
 import { makeVaultURL } from "src/routes";
-import { Address } from "src/ui/base/Address";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { Address } from "src/ui/ens/Address";
 import { TVP_TIP } from "src/ui/vaults/tooltips";
 
 interface GenericVaultCardProps {
