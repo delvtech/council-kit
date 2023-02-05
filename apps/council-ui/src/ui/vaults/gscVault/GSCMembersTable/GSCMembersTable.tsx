@@ -1,12 +1,11 @@
 import { Signer } from "ethers";
 import { ReactElement } from "react";
 import { makeVoterURL } from "src/routes";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
-import { WalletIcon } from "src/ui/base/WalletIcon";
 import { GSCMembersTableHeader } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTableHeader";
 import { useKickGSCMember } from "src/ui/vaults/gscVault/useKickGSCMember";
+import { VoterAddress } from "src/ui/voters/VoterAddress";
 import { GSCMemberInfo } from "src/vaults/gscVault/getGSCMembers";
 import { useSigner } from "wagmi";
 
@@ -58,10 +57,7 @@ function GSCMembersTableRow({
   const { mutate: kickGSCMember } = useKickGSCMember(gscVaultAddress);
   return (
     <GridTableRowLink href={makeVoterURL(member.address)}>
-      <span className="flex items-center">
-        <WalletIcon address={member.address} className="mr-2" />
-        {ensName ?? formatAddress(member.address)}
-      </span>
+      <VoterAddress address={member.address} ensName={ensName} />
       <span className="flex items-center">
         {formatBalance(qualifyingVotingPower)}
       </span>
