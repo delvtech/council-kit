@@ -1,4 +1,5 @@
 import {
+  CoreVotingQueries,
   CouncilContext,
   GSCVault,
   GSCVotingContract,
@@ -7,12 +8,14 @@ import {
   VotingContract,
 } from "@council/sdk";
 import assertNever from "assert-never";
+import { reactQueryClient } from "src/clients/reactQuery";
 import { councilConfigs, SupportedChainId } from "src/config/council.config";
 import { provider as getProvider } from "src/provider";
 
 export interface CouncilClient {
   context: CouncilContext;
   coreVoting: VotingContract;
+  experimental_coreVotingQueries: CoreVotingQueries;
   gscVoting?: GSCVotingContract;
 }
 
@@ -47,6 +50,13 @@ export function getCouncilClient(chainId: SupportedChainId): CouncilClient {
       config.coreVoting.address,
       coreVotingVaults,
       context,
+    ),
+
+    experimental_coreVotingQueries: new CoreVotingQueries(
+      config.coreVoting.address,
+      config.coreVoting.vaults.map((v) => v.address),
+      reactQueryClient,
+      provider,
     ),
   };
 
