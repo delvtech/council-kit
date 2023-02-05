@@ -1,4 +1,5 @@
 import { Voter } from "@council/sdk";
+import classNames from "classnames";
 import { constants } from "ethers";
 import { getAddress } from "ethers/lib/utils";
 import Link from "next/link";
@@ -8,6 +9,7 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { WalletIcon } from "src/ui/base/WalletIcon";
+import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
 import { VotersListCompact } from "src/ui/voters/VotersListCompact";
 import { useAccount } from "wagmi";
 
@@ -34,12 +36,26 @@ export function TokenWithDelegationVaultProfileCard({
   userCurrentDelegate,
   userEns,
 }: TokenWithDelegationVaultProfileCardProps): ReactElement {
-  const { isConnected } = useAccount();
+  const { isConnected, address: account } = useAccount();
+
+  const { data: delegatesByVault } = useDelegatesByVault();
+  const hasTokens = !!userBalance && +userBalance > 0;
+
+  const isOwnProfileAndSelfDelegated =
+    userAddress === account &&
+    userCurrentDelegate &&
+    userCurrentDelegate.address === account;
+
+  const isProfileTheAccountDelegate =
+    isOwnProfileAndSelfDelegated ||
+    !!userVotersDelegated?.some(
+      (voter) => voter.address === delegatesByVault?.[vaultAddress].address,
+    );
 
   return (
     <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 daisy-card bg-base-200 min-w-[360px]">
       <Link
-        className="flex items-center hover:underline gap-x-2"
+        className="flex items-center underline hover:no-underline gap-x-2"
         href={makeVaultURL(vaultAddress)}
       >
         <WalletIcon address={vaultAddress} />
@@ -67,32 +83,39 @@ export function TokenWithDelegationVaultProfileCard({
         <CurrentDelegateInfo delegate={userCurrentDelegate} />
       )}
 
-      {userVotersDelegated && (
+      {userVotersDelegated?.length ? (
         <div className="flex items-center w-full">
           <p># of Delegators</p>
 
           {/* The button to open modal */}
           <label
             htmlFor={`delegator-modal-${vaultAddress}`}
-            className="ml-auto font-bold hover:underline hover:cursor-pointer text-secondary"
+            className={classNames("ml-auto font-bold", {
+              "underline hover:no-underline hover:cursor-pointer text-secondary":
+                userVotersDelegated.length,
+            })}
           >
             {userVotersDelegated.length}
           </label>
+
           <DelegatorListModal
-            delegators={userVotersDelegated ?? []}
+            delegators={userVotersDelegated}
             vaultAddress={vaultAddress}
             voterAddress={userAddress}
             voterEns={userEns}
           />
         </div>
-      )}
+      ) : null}
 
       <button
         className="w-full daisy-btn"
-        disabled={!isConnected}
+        disabled={!isConnected || isProfileTheAccountDelegate || !hasTokens}
         onClick={() => onDelegateChange(userAddress)}
       >
-        Delegate
+        {getDelegateButtonLabel({
+          isAccountDelegate: isProfileTheAccountDelegate,
+          hasTokens,
+        })}
       </button>
     </div>
   );
@@ -100,6 +123,22 @@ export function TokenWithDelegationVaultProfileCard({
 
 interface CurrentDelegateInfoProps {
   delegate: Voter;
+}
+
+function getDelegateButtonLabel({
+  isAccountDelegate,
+  hasTokens,
+}: {
+  isAccountDelegate: boolean;
+  hasTokens: boolean;
+}) {
+  if (!hasTokens) {
+    return "Nothing to delegate";
+  }
+  if (!isAccountDelegate) {
+    return "Delegate";
+  }
+  return "Already delegated to this user";
 }
 
 function CurrentDelegateInfo({
