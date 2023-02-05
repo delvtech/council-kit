@@ -1,5 +1,6 @@
 import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
+import { formatEther } from "ethers/lib/utils";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -190,7 +191,8 @@ function useProposalDetailsPageData(
   id?: number,
   account?: string,
 ) {
-  const { context, coreVoting, gscVoting } = useCouncil();
+  const { context, coreVoting, gscVoting, experimental_coreVotingQueries } =
+    useCouncil();
   const provider = context.provider;
   const chainId = useChainId();
   const proposalConfig = councilConfigs[chainId].coreVoting.proposals;
@@ -216,28 +218,30 @@ function useProposalDetailsPageData(
             );
           }
 
-          const createdTransactionHash =
-            await proposal.getCreatedTransactionHash();
-          const createdAtBlock = await proposal.getCreatedBlock();
+          const proposal2 = await experimental_coreVotingQueries
+            .getProposalMetadata(id)
+            .fetch();
+          const createdTransactionHash = await proposal2.createdTransactionHash;
+          const createdAtBlock = proposal2.created;
           const createdAtDate = createdAtBlock
             ? await getBlockDate(createdAtBlock, provider)
             : null;
 
-          const endsAtBlock = await proposal.getExpirationBlock();
+          const endsAtBlock = proposal2.expiration;
           const endsAtDate = endsAtBlock
             ? await getBlockDate(endsAtBlock, provider, {
                 estimateFutureDates: true,
               })
             : null;
 
-          const unlockedAtBlock = await proposal.getUnlockBlock();
+          const unlockedAtBlock = proposal2.unlock;
           const unlockedAtDate = unlockedAtBlock
             ? await getBlockDate(unlockedAtBlock, provider, {
                 estimateFutureDates: true,
               })
             : null;
 
-          const lastCallAtBlock = await proposal.getLastCallBlock();
+          const lastCallAtBlock = proposal2.lastCall;
           const lastCallAtDate = lastCallAtBlock
             ? await getBlockDate(lastCallAtBlock, provider, {
                 estimateFutureDates: true,
@@ -250,8 +254,11 @@ function useProposalDetailsPageData(
             provider,
           );
 
-          const currentQuorum = await proposal.getCurrentQuorum();
-          const requiredQuorum = await proposal.getRequiredQuorum();
+          const proposalQuorum = await experimental_coreVotingQueries
+            .getProposalQuorum(id)
+            .fetch();
+          const currentQuorum = formatEther(proposalQuorum.currentQuorum);
+          const requiredQuorum = formatEther(proposalQuorum.requiredQuorum);
 
           return {
             type,
