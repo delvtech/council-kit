@@ -39,7 +39,7 @@ export function TokenWithDelegationVaultProfileCard({
   const { isConnected, address: account } = useAccount();
 
   const { data: delegatesByVault } = useDelegatesByVault();
-  const hasTokens = !!+(userBalance || "0");
+  const hasTokens = !!userBalance && +userBalance > 0;
 
   const isOwnProfileAndSelfDelegated =
     userAddress === account &&
@@ -83,14 +83,14 @@ export function TokenWithDelegationVaultProfileCard({
         <CurrentDelegateInfo delegate={userCurrentDelegate} />
       )}
 
-      {userVotersDelegated && (
+      {userVotersDelegated?.length ? (
         <div className="flex items-center w-full">
           <p># of Delegators</p>
 
           {/* The button to open modal */}
           <label
             htmlFor={`delegator-modal-${vaultAddress}`}
-            className={classNames("ml-auto font-bold ", {
+            className={classNames("ml-auto font-bold", {
               "underline hover:no-underline hover:cursor-pointer text-secondary":
                 userVotersDelegated.length,
             })}
@@ -98,16 +98,14 @@ export function TokenWithDelegationVaultProfileCard({
             {userVotersDelegated.length}
           </label>
 
-          {userVotersDelegated.length ? (
-            <DelegatorListModal
-              delegators={userVotersDelegated ?? []}
-              vaultAddress={vaultAddress}
-              voterAddress={userAddress}
-              voterEns={userEns}
-            />
-          ) : null}
+          <DelegatorListModal
+            delegators={userVotersDelegated}
+            vaultAddress={vaultAddress}
+            voterAddress={userAddress}
+            voterEns={userEns}
+          />
         </div>
-      )}
+      ) : null}
 
       <button
         className="w-full daisy-btn"
