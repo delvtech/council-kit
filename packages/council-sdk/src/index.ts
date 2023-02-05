@@ -27,6 +27,7 @@ export * from "./models/VotingVault/GSCVault";
 export * from "./models/VotingVault/LockingVault";
 export * from "./models/VotingVault/VestingVault";
 export * from "./models/VotingVault/VotingVault";
+export * from "./prototypes/v2";
 export * from "./utils/cached";
 export * from "./utils/getBlockDate";
 export * from "./utils/getVaultsWithPower";
