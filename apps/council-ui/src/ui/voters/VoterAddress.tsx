@@ -1,4 +1,5 @@
 import { BuildingLibraryIcon, UserCircleIcon } from "@heroicons/react/20/solid";
+import classNames from "classnames";
 import { ReactElement } from "react";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
@@ -38,7 +39,7 @@ export function VoterAddress({
     .filter((v) => !!v) as string[];
 
   return (
-    <span className={`flex items-center ${className}`}>
+    <span className={classNames("flex items-center", className)}>
       <WalletIcon size={iconSize} address={address} className="mr-2" />
       {ensName ? ensName : formatAddress(address)}
       {gscStatus === "Member" && (
