@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@council/typechain": "*",
+    "@ethersproject/abstract-provider": "^5.7.0",
+    "@tanstack/query-core": "^4.24.4",
     "fast-json-stable-stringify": "^2.1.0",
     "lodash.uniqby": "^4.7.0",
     "lru-cache": "^7.14.1"
