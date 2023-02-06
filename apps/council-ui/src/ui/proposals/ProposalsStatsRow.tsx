@@ -10,7 +10,7 @@ import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
-import { Address } from "src/ui/ens/Address";
+import { AddressWithEtherscan } from "src/ui/ens/Address";
 
 interface ProposalStatsRowProps {
   votingContractName: string;
@@ -43,7 +43,10 @@ export function ProposalStatsRow({
       <Stat
         label="Voting contract"
         value={
-          <Address address={votingContractAddress} label={votingContractName} />
+          <AddressWithEtherscan
+            address={votingContractAddress}
+            label={votingContractName}
+          />
         }
       />
 

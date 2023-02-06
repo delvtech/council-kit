@@ -6,7 +6,7 @@ import { makeVaultURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { Address } from "src/ui/ens/Address";
+import { AddressWithEtherscan } from "src/ui/ens/Address";
 import { useChainId } from "src/ui/network/useChainId";
 import { GenericVaultCardSkeleton } from "src/ui/vaults/GenericVaultCard";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
@@ -38,7 +38,10 @@ export function GSCVaultPreviewCard({
           <div className="daisy-card-body justify-between">
             <div>
               <h2 className="daisy-card-title text-2xl ">{vaultName}</h2>
-              <Address address={vaultAddress} className="text-lg" />
+              <AddressWithEtherscan
+                address={vaultAddress}
+                className="text-lg"
+              />
             </div>
 
             <div className="daisy-card-actions flex-col gap-y-2">

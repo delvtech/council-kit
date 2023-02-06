@@ -15,7 +15,7 @@ interface AddressProps {
   iconSize?: number;
 }
 
-export function Address({
+export function AddressWithEtherscan({
   address,
   className,
   label,
