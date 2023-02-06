@@ -67,6 +67,10 @@ export function VaultProfileCard({
       );
 
     case "GSCVault":
+      // Here for exhaustiveness, a GSCVault profile card is rendered in
+      // VoterVaultsList.tsx directly since it's different than the other
+      // vaults.
+      // TODO: Rename this to TokenWithDelegationVaultProfileCard.tsx
       return <></>;
 
     default:

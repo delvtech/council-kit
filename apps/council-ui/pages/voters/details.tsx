@@ -35,6 +35,11 @@ export default function VoterDetailsPage(): ReactElement {
     );
   }
 
+  const numVotingVaults = !data
+    ? 0
+    : data.voterDataByVault.length +
+      (["Member", "Idle"].includes(data.gscStatus as string) ? 1 : 0);
+
   return (
     <Page>
       <VoterHeader address={address} />
@@ -54,7 +59,7 @@ export default function VoterDetailsPage(): ReactElement {
       {status === "success" ? (
         <div className="flex flex-col gap-y-4">
           <h2 className="text-2xl font-bold">
-            Voting Vaults ({data.voterDataByVault.length})
+            Voting Vaults ({numVotingVaults})
           </h2>
           <VoterVaultsList
             address={address}
@@ -145,9 +150,9 @@ export function useVoterData(
   const { context, coreVoting } = useCouncil();
   const { data: gscStatus } = useGSCStatus(address);
 
-  const queryEnabled = !!address;
+  const queryEnabled = !!address && !!gscStatus;
   return useQuery({
-    queryKey: ["voter-stats", address, gscStatus],
+    queryKey: ["voter-details", address, gscStatus],
     enabled: queryEnabled,
     queryFn: queryEnabled
       ? async (): Promise<VoterData> => {
@@ -181,7 +186,7 @@ export function useVoterData(
             votingHistory,
             votingPower,
             percentOfTVP: +((+votingPower / +tvp) * 100).toFixed(1),
-            gscStatus: gscStatus ?? null,
+            gscStatus,
             voterDataByVault,
             proposalsCreated: proposalsCreatedByAddress.length,
           };
