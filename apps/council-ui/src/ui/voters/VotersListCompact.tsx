@@ -2,9 +2,8 @@ import { Voter } from "@council/sdk";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVoterURL } from "src/routes";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
-import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useBulkEnsRecords } from "src/ui/ens/useBulkEnsRecords";
+import { VoterAddress } from "src/ui/voters/VoterAddress";
 
 interface VotersListCompactProps {
   voters: Voter[];
@@ -25,23 +24,21 @@ export function VotersListCompact({
         </tr>
       </thead>
       <tbody>
-        {voters.map((voter) => (
-          <tr key={voter.address}>
-            <th>
-              <Link
-                href={makeVoterURL(voter.address)}
-                className="flex items-center gap-x-2 hover:underline"
-              >
-                <WalletIcon address={voter.address} />
-                {ensRecords && ensRecords[voter.address] ? (
-                  <p>{ensRecords[voter.address]}</p>
-                ) : (
-                  <p>{formatAddress(voter.address)}</p>
-                )}
-              </Link>
-            </th>
-          </tr>
-        ))}
+        {voters.map((voter) => {
+          const ensName = ensRecords?.[voter.address];
+          return (
+            <tr key={voter.address}>
+              <th>
+                <Link
+                  href={makeVoterURL(voter.address)}
+                  className="flex items-center gap-x-2 hover:underline"
+                >
+                  <VoterAddress address={voter.address} ensName={ensName} />
+                </Link>
+              </th>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
