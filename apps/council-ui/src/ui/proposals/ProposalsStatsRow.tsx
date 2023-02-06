@@ -9,8 +9,8 @@ import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { WalletIcon } from "src/ui/base/WalletIcon";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
+import { VoterAddress } from "src/ui/voters/VoterAddress";
 
 interface ProposalStatsRowProps {
   votingContractName: string;
@@ -62,8 +62,11 @@ export function ProposalStatsRow({
               className="flex items-center hover:underline"
               href={makeVoterURL(createdBy)}
             >
-              <WalletIcon address={createdBy} size={16} className="mr-1" />
-              {createdByDisplayName}
+              <VoterAddress
+                iconSize={16}
+                address={createdBy}
+                ensName={createdByDisplayName}
+              />
             </Link>
           }
         />
