@@ -34,3 +34,9 @@ export async function getGSCStatus({
 
   return "Ineligible";
 }
+
+export function getIsGSCMember(voterGSCStatus: GSCStatus): boolean {
+  // "Idle" means you're a member that has recently joined and are currently in
+  // your idleDuration phase.
+  return voterGSCStatus === "Member" || voterGSCStatus === "Idle";
+}

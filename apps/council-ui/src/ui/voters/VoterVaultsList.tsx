@@ -7,6 +7,7 @@ import { GSCVaultProfileCard } from "src/ui/vaults/gscVault/GSCVaultProfileCard/
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VoterDataByTokenWithDelegationVault } from "src/vaults/getVoterDataByTokenWithDelegationVault";
+import { getIsGSCMember } from "src/vaults/gscVault/getGSCStatus";
 import { getGSCCoreVotingVaults } from "src/vaults/vaults";
 import { useEnsName } from "wagmi";
 
@@ -32,8 +33,7 @@ export function VoterVaultsList({
   const showGSCVaultProfileCard =
     gscVaultConfig &&
     gscVaultMembershipStatus &&
-    (gscVaultMembershipStatus === "Member" ||
-      gscVaultMembershipStatus === "Idle") &&
+    getIsGSCMember(gscVaultMembershipStatus) &&
     voterVaultsListData &&
     +(voterVaultsListData.qualifyingVotingPowerForGSC || "0");
 

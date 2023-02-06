@@ -10,9 +10,10 @@ import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import { useKickGSCMember } from "src/ui/vaults/gscVault/useKickGSCMember";
+import { getIsGSCMember } from "src/vaults/gscVault/getGSCStatus";
 import { useAccount, useSigner } from "wagmi";
 
-interface GSCVaultProfileCard {
+interface GSCVaultProfileCardProps {
   vaultConfig: VaultConfig;
   /** The address of the voter profile */
   voterAddress: string;
@@ -21,17 +22,18 @@ interface GSCVaultProfileCard {
 export function GSCVaultProfileCard({
   vaultConfig: { address, name },
   voterAddress,
-}: GSCVaultProfileCard): ReactElement | null {
+}: GSCVaultProfileCardProps): ReactElement {
   const { isConnected } = useAccount();
   const { data: signer } = useSigner();
   const { data } = useGSCVaultProfileCard(address, voterAddress);
   const { mutate: kickGSCMember } = useKickGSCMember(address);
 
-  const isGSCMember =
-    data?.voterGSCStatus === "Member" || data?.voterGSCStatus === "Idle";
+  const isGSCMember = data?.voterGSCStatus
+    ? getIsGSCMember(data?.voterGSCStatus)
+    : false;
 
   const isKickButtonDisabled =
-    !isConnected || !signer || !isGSCMember || !data.isBelowThreshold;
+    !isConnected || !signer || !isGSCMember || !data?.isBelowThreshold;
 
   return (
     <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 daisy-card bg-base-200 min-w-[360px]">
