@@ -9,7 +9,7 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { AddressWithEtherscan } from "src/ui/ens/Address";
+import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
 import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";

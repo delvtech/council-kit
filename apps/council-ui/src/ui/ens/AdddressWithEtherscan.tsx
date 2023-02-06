@@ -1,11 +1,10 @@
 import classNames from "classnames";
 import { ReactElement } from "react";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
+import { Address } from "src/ui/base/Address";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import { WalletIcon } from "src/ui/base/WalletIcon";
 
-interface AddressProps {
+interface AddressWithEtherscanProps {
   address: string;
   /**
    * If provided this will be rendered instead of the formatted address or ens.
@@ -20,7 +19,7 @@ export function AddressWithEtherscan({
   className,
   label,
   iconSize,
-}: AddressProps): ReactElement {
+}: AddressWithEtherscanProps): ReactElement {
   return (
     <a
       className={classNames("hover:underline  flex items-center", className)}
@@ -28,10 +27,7 @@ export function AddressWithEtherscan({
       target="_blank"
       rel="noreferrer"
     >
-      <WalletIcon address={address} className="mr-1" size={iconSize ?? 16} />
-
-      {label ? label : formatAddress(address)}
-
+      <Address address={address} label={label} iconSize={iconSize} />
       <ExternalLinkSVG size={iconSize ?? 16} />
     </a>
   );

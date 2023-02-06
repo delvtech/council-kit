@@ -10,7 +10,7 @@ import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
-import { AddressWithEtherscan } from "src/ui/ens/Address";
+import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 
 interface ProposalStatsRowProps {
   votingContractName: string;

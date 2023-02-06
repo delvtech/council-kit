@@ -6,7 +6,7 @@ import { makeVaultURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { AddressWithEtherscan } from "src/ui/ens/Address";
+import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useChainId } from "src/ui/network/useChainId";
 import { GenericVaultCardSkeleton } from "src/ui/vaults/GenericVaultCard";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
