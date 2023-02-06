@@ -23,6 +23,7 @@ interface VoterAddressProps {
 export function VoterAddress({
   address,
   ensName,
+  label,
   className,
   iconSize,
 }: VoterAddressProps): ReactElement {
@@ -38,10 +39,16 @@ export function VoterAddress({
     })
     .filter((v) => !!v) as string[];
 
+  let addressLabel = formatAddress(address);
+  if (label) {
+    addressLabel = label;
+  } else if (ensName) {
+    addressLabel = ensName;
+  }
   return (
     <span className={classNames("flex items-center", className)}>
       <WalletIcon size={iconSize} address={address} className="mr-2" />
-      {ensName ? ensName : formatAddress(address)}
+      {addressLabel}
       {gscStatus === "Member" && (
         <Tooltip content="GSC Member">
           <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />

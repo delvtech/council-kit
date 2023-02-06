@@ -4,11 +4,10 @@ import Link from "next/link";
 import { ChangeEvent, ReactElement, useMemo, useState } from "react";
 import { EnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
-import { WalletIcon } from "src/ui/base/WalletIcon";
+import { VoterAddress } from "src/ui/voters/VoterAddress";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 import { useFilterVotesByGSCOnlyEffect } from "./hooks/useFilterVotesByGSCOnlyEffect";
 
@@ -126,8 +125,7 @@ function VotingActivityTableRow({
           className="flex items-center daisy-link daisy-link-hover"
           href={makeVoterURL(address)}
         >
-          <WalletIcon address={address} className="mr-2" />
-          {displayName ?? formatAddress(address)}
+          <VoterAddress address={address} label={displayName || undefined} />
         </Link>
       </th>
       <td>{formatBalance(votePower)}</td>
