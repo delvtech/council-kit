@@ -32,7 +32,7 @@ export function VoterAddress({
   const allVaults = getAllVaultConfigs(chainId);
   const vaultNames = allVaults
     .map((vaultConfig) => {
-      if (delegatesByVault?.[vaultConfig.address]) {
+      if (delegatesByVault?.[vaultConfig.address]?.address === address) {
         return vaultConfig.name;
       }
     })
