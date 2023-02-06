@@ -9,7 +9,7 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { Address } from "src/ui/ens/Address";
+import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
 import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";
@@ -119,13 +119,13 @@ function VoterHeader({ address }: VoterHeaderProps) {
         target="_blank"
       >
         <h2 className="mt-2 text-2xl">
-          <Address address={address} iconSize={24} />
+          <AddressWithEtherscan address={address} iconSize={24} />
         </h2>
       </a>
     </div>
   ) : (
     <h1 className="mt-2 text-5xl w-fit">
-      <Address address={address} iconSize={36} />
+      <AddressWithEtherscan address={address} iconSize={36} />
     </h1>
   );
 }

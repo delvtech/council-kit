@@ -3,10 +3,10 @@ import assertNever from "assert-never";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVaultURL } from "src/routes";
+import { Address } from "src/ui/base/Address";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { Address } from "src/ui/ens/Address";
 import { useChainId } from "src/ui/network/useChainId";
 import { GenericVaultCardSkeleton } from "src/ui/vaults/GenericVaultCard";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
@@ -34,37 +34,39 @@ export function GSCVaultPreviewCard({
       const { vaultName, memberCount, connectedAccountMembershipStatus } =
         gscVaultPreviewCardData;
       return (
-        <div className="daisy-card w-full sm:w-80 sm:h-72 bg-base-300">
-          <div className="daisy-card-body justify-between">
-            <div>
-              <h2 className="daisy-card-title text-2xl ">{vaultName}</h2>
-              <Address address={vaultAddress} className="text-lg" />
-            </div>
-
-            <div className="daisy-card-actions flex-col gap-y-2">
-              {/* GSC Members */}
-              <div className="flex justify-between w-full">
-                <span>GSC members:</span>
-                <span className="font-bold text-right">
-                  <DefinitionTooltip content="The number of members currently residing on the Governance Steering Council.">
-                    {memberCount ? formatBalance(memberCount) : "None"}
-                  </DefinitionTooltip>
-                </span>
+        <Link href={makeVaultURL(vaultAddress)}>
+          <div className="w-full sm:w-80 sm:h-72 daisy-card bg-base-300 hover:shadow-xl transition-shadow">
+            <div className="daisy-card-body justify-between">
+              <div>
+                <h2 className="daisy-card-title text-2xl ">{vaultName}</h2>
+                <Address address={vaultAddress} className="text-lg" />
               </div>
 
-              {/* Your status */}
-              <div className="flex justify-between w-full">
-                <span>Your status:</span>
-                <span className="font-bold">
-                  {connectedAccountMembershipStatus}
-                </span>
+              <div className="daisy-card-actions flex-col gap-y-2">
+                {/* GSC Members */}
+                <div className="flex justify-between w-full">
+                  <span>GSC members:</span>
+                  <span className="font-bold text-right">
+                    <DefinitionTooltip content="The number of members currently residing on the Governance Steering Council.">
+                      {memberCount ? formatBalance(memberCount) : "None"}
+                    </DefinitionTooltip>
+                  </span>
+                </div>
+
+                {/* Your status */}
+                <div className="flex justify-between w-full">
+                  <span>Your status:</span>
+                  <span className="font-bold">
+                    {connectedAccountMembershipStatus}
+                  </span>
+                </div>
+              </div>
+              <div>
+                <button className="daisy-btn daisy-btn-primary">Open</button>
               </div>
             </div>
-            <Link href={makeVaultURL(vaultAddress)}>
-              <button className="daisy-btn daisy-btn-primary">Open</button>
-            </Link>
           </div>
-        </div>
+        </Link>
       );
     }
     default:

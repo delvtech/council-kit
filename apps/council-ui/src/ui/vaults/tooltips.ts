@@ -1,4 +1,4 @@
-export const TVP_TIP = "Total Voting Power";
+export const TVP_TIP = "The total voting power held in this vault";
 export const WALLETS_DELEGATED_TIP =
   "The total number of wallets delegated to you in this voting vault.";
 export const PARTICIPANTS_TIP =
