@@ -2,9 +2,9 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
 import { makeVaultURL } from "src/routes";
+import { Address } from "src/ui/base/Address";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { TVP_TIP } from "src/ui/vaults/tooltips";
 
 interface GenericVaultCardProps {
@@ -22,11 +22,11 @@ export function GenericVaultCard({
 }: GenericVaultCardProps): ReactElement {
   return (
     <Link href={makeVaultURL(address)}>
-      <div className="w-full sm:w-80 sm:h-72 daisy-card bg-base-300 hover:shadow-xl">
+      <div className="w-full sm:w-80 sm:h-72 daisy-card bg-base-300 hover:shadow-xl transition-shadow">
         <div className="daisy-card-body justify-between">
           <div>
             <h2 className="text-2xl daisy-card-title">{name}</h2>
-            <AddressWithEtherscan address={address} className="text-lg" />
+            <Address address={address} className="text-lg" />
           </div>
 
           <div className="flex-col daisy-card-actions gap-y-2">
@@ -60,24 +60,16 @@ export function GenericVaultCard({
 
 export function GenericVaultCardSkeleton(): ReactElement {
   return (
-    <div className="w-full sm:w-96 daisy-card bg-base-300">
-      <div className="daisy-card-body">
+    <div className="w-full sm:w-80 sm:h-72 daisy-card bg-base-300">
+      <div className="daisy-card-body gap-6">
         <h2 className="w-32">
           <Skeleton count={2} />
         </h2>
 
         <div className="flex-col daisy-card-actions gap-y-6">
-          <div className="flex flex-row items-start mr-auto text-lg gap-x-6">
-            <div className="w-24">
-              <Skeleton count={2} />
-            </div>
-            <div className="w-24">
-              <Skeleton count={2} />
-            </div>
+          <div className="w-full">
+            <Skeleton count={6} />
           </div>
-          <button className="daisy-btn daisy-btn-disabled daisy-btn-primary">
-            Open
-          </button>
         </div>
       </div>
     </div>
