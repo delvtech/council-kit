@@ -26,8 +26,8 @@ interface LockingVaultDetailsProps {
 export function FrozenLockingVaultDetails({
   address,
 }: LockingVaultDetailsProps): ReactElement {
-  const { address: account } = useAccount();
   const { data: signer } = useSigner();
+  const { address: account } = useAccount();
   const { data, status, error } = useFrozenLockingVaultDetailsData(
     address,
     account,
@@ -64,7 +64,7 @@ export function FrozenLockingVaultDetails({
         {status === "success" ? (
           <ChangeDelegateForm
             currentDelegate={data.delegate || ethers.constants.AddressZero}
-            disabled={!signer || !+data.accountVotingPower}
+            depositedBalance={data.depositedBalance}
             onDelegate={(delegate) =>
               changeDelegate({ signer: signer as Signer, delegate })
             }

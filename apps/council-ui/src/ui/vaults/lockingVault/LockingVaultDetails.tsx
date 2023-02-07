@@ -110,7 +110,7 @@ export function LockingVaultDetails({
         {status === "success" ? (
           <ChangeDelegateForm
             currentDelegate={data.delegate || ethers.constants.AddressZero}
-            disabled={!signer || !+data.accountVotingPower}
+            depositedBalance={data.depositedBalance}
             onDelegate={handleDelegate}
           />
         ) : (

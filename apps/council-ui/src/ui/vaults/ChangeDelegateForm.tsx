@@ -6,22 +6,30 @@ import { makeVoterURL } from "src/routes";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Input } from "src/ui/base/forms/Input";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
+import { useSigner } from "wagmi";
 
 interface ChangeDelegateFormProps {
   currentDelegate: string;
   onDelegate: (delegate: string) => void;
-  disabled?: boolean;
+  depositedBalance: string;
 }
 
 export function ChangeDelegateForm({
   currentDelegate,
   onDelegate,
-  disabled = false,
+  depositedBalance,
 }: ChangeDelegateFormProps): ReactElement {
+  const { data: signer } = useSigner();
   const [newDelegate, setNewDelegate] = useState("");
   const delegateName = useDisplayName(currentDelegate);
   const isDelegateZeroAddress =
     currentDelegate === ethers.constants.AddressZero;
+
+  const disabled = !signer || !+depositedBalance;
+  let buttonLabel = "Delegate";
+  if (!+depositedBalance) {
+    buttonLabel = "No voting power to delegate";
+  }
 
   return (
     <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-300 h-fit">
@@ -55,7 +63,7 @@ export function ChangeDelegateForm({
         onClick={() => onDelegate(newDelegate)}
         disabled={disabled}
       >
-        Delegate
+        {buttonLabel}
       </button>
     </div>
   );
