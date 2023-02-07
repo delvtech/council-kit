@@ -14,11 +14,13 @@ import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErro
 import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
 import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { useChainId } from "src/ui/network/useChainId";
 
 export function useChangeDelegate(
   vaultAddress: string,
 ): UseMutationResult<string, unknown, ChangeDelegateArguments> {
   const { context } = useCouncil();
+  const chainId = useChainId();
   const queryClient = useQueryClient();
   let transactionHash: string;
   return useMutation(
@@ -26,7 +28,7 @@ export function useChangeDelegate(
       const vault = new LockingVault(vaultAddress, context);
       return vault.changeDelegate(signer, delegate, {
         onSubmitted: (hash) => {
-          makeTransactionSubmittedToast("Delegating", hash);
+          makeTransactionSubmittedToast("Delegating", hash, chainId);
           transactionHash = hash;
         },
       });
@@ -36,6 +38,7 @@ export function useChangeDelegate(
         makeTransactionSuccessToast(
           `Successfully delegated to ${formatAddress(delegate)}!`,
           hash,
+          chainId,
         );
         queryClient.invalidateQueries();
       },
@@ -43,6 +46,7 @@ export function useChangeDelegate(
         makeTransactionErrorToast(
           `Failed to delegate to ${formatAddress(delegate)}`,
           transactionHash,
+          chainId,
         );
         console.error(error);
       },

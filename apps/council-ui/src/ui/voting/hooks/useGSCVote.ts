@@ -9,6 +9,7 @@ import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErro
 import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
 import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { useChainId } from "src/ui/network/useChainId";
 
 interface VoteArguments {
   signer: Signer;
@@ -23,6 +24,7 @@ export function useGSCVote(): UseMutationResult<
   unknown
 > {
   const { gscVoting } = useCouncil();
+  const chainId = useChainId();
   const queryClient = useQueryClient();
   let transactionHash: string;
   return useMutation(
@@ -35,7 +37,7 @@ export function useGSCVote(): UseMutationResult<
       const proposal = gscVoting.getProposal(proposalId);
       return proposal.vote(signer, ballot, {
         onSubmitted: (hash) => {
-          makeTransactionSubmittedToast("Voting", hash);
+          makeTransactionSubmittedToast("Voting", hash, chainId);
           transactionHash = hash;
         },
       });
@@ -45,6 +47,7 @@ export function useGSCVote(): UseMutationResult<
         makeTransactionSuccessToast(
           `Successfully voted ${ballot} on GSC Proposal ${proposalId}!`,
           hash,
+          chainId,
         );
         queryClient.invalidateQueries();
       },
@@ -53,6 +56,7 @@ export function useGSCVote(): UseMutationResult<
         makeTransactionErrorToast(
           `Failed to vote ${ballot} on GSC Proposal ${proposalId}}.`,
           transactionHash,
+          chainId,
         );
         console.error(error);
       },

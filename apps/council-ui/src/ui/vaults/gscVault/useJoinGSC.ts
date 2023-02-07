@@ -50,7 +50,11 @@ export function useJoinGSC(
       });
     },
     onSuccess: (hash) => {
-      makeTransactionSuccessToast("Successfully joined the GSC!", hash);
+      makeTransactionSuccessToast(
+        "Successfully joined the GSC!",
+        hash,
+        chainId,
+      );
       queryClient.invalidateQueries();
     },
     onError(error) {

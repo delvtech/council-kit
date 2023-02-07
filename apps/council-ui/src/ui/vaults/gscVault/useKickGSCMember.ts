@@ -10,6 +10,7 @@ import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErro
 import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
 import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { useChainId } from "src/ui/network/useChainId";
 
 interface KickGSCMemberOptions {
   signer: Signer;
@@ -19,6 +20,7 @@ export function useKickGSCMember(
   gscVaultAddress: string,
 ): UseMutationResult<string, unknown, KickGSCMemberOptions> {
   const { context } = useCouncil();
+  const chainId = useChainId();
   const queryClient = useQueryClient();
   let transactionHash: string;
 
@@ -33,6 +35,7 @@ export function useKickGSCMember(
           makeTransactionSubmittedToast(
             `Kicking GSC Member: ${formatAddress(memberAddress)}`,
             hash,
+            chainId,
           );
           transactionHash = hash;
         },
@@ -42,6 +45,7 @@ export function useKickGSCMember(
       makeTransactionSuccessToast(
         `Successfully kicked ${formatAddress(memberAddress)} from the GSC!`,
         hash,
+        chainId,
       );
       queryClient.invalidateQueries();
     },
@@ -49,6 +53,7 @@ export function useKickGSCMember(
       makeTransactionErrorToast(
         `Failed to kick ${formatAddress(memberAddress)} from the GSC.`,
         transactionHash,
+        chainId,
       );
       console.error(error);
     },
