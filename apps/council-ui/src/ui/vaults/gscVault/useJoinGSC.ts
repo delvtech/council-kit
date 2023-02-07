@@ -43,6 +43,7 @@ export function useJoinGSC(
           makeTransactionSubmittedToast(
             "Transaction submitted to join the GSC...",
             hash,
+            chainId,
           );
           transactionHash = hash;
         },
@@ -56,6 +57,7 @@ export function useJoinGSC(
       makeTransactionErrorToast(
         "Failed to join the GSC. Please make sure you have the requisite voting power to become a member first.",
         transactionHash,
+        chainId,
       );
       console.error(error);
     },

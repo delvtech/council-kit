@@ -5,6 +5,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { useChainId } from "src/ui/network/useChainId";
 import {
   PARTICIPANTS_TIP,
   TVP_TIP,
@@ -28,6 +29,7 @@ export function LockingVaultStatsBar({
   tokenAddress,
   tokenSymbol,
 }: LockingVaultStatsBarProps): ReactElement {
+  const chainId = useChainId();
   return (
     <div className="flex flex-wrap gap-4">
       {accountVotingPower && (
@@ -76,7 +78,7 @@ export function LockingVaultStatsBar({
       <Stat
         label="Vault token"
         value={
-          <ExternalLink href={makeEtherscanAddressURL(tokenAddress)}>
+          <ExternalLink href={makeEtherscanAddressURL(tokenAddress, chainId)}>
             {tokenSymbol}
           </ExternalLink>
         }

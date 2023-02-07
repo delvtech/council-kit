@@ -10,6 +10,7 @@ import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
+import { useChainId } from "src/ui/network/useChainId";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 
 interface ProposalStatsRowProps {
@@ -38,6 +39,7 @@ export function ProposalStatsRow({
   className,
 }: ProposalStatsRowProps): ReactElement {
   const createdByDisplayName = useDisplayName(createdBy);
+  const chainId = useChainId();
   return (
     <div className={classNames("flex flex-wrap gap-4", className)}>
       <Stat
@@ -77,7 +79,10 @@ export function ProposalStatsRow({
           value={
             <Link
               className="flex items-center hover:underline"
-              href={makeEtherscanTransactionURL(createdTransactionHash)}
+              href={makeEtherscanTransactionURL(
+                createdTransactionHash,
+                chainId,
+              )}
             >
               {formatAddress(createdTransactionHash)}
               <ExternalLinkSVG />
@@ -110,7 +115,10 @@ export function ProposalStatsRow({
           value={
             <Link
               className="flex items-center hover:underline"
-              href={makeEtherscanTransactionURL(executedTransactionHash)}
+              href={makeEtherscanTransactionURL(
+                executedTransactionHash,
+                chainId,
+              )}
             >
               {formatAddress(executedTransactionHash)}
               <ExternalLinkSVG />

@@ -3,6 +3,7 @@ import { ReactElement } from "react";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { Address } from "src/ui/base/Address";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
+import { useChainId } from "src/ui/network/useChainId";
 
 interface AddressWithEtherscanProps {
   address: string;
@@ -20,10 +21,11 @@ export function AddressWithEtherscan({
   label,
   iconSize,
 }: AddressWithEtherscanProps): ReactElement {
+  const chainId = useChainId();
   return (
     <a
       className={classNames("hover:underline  flex items-center", className)}
-      href={makeEtherscanAddressURL(address)}
+      href={makeEtherscanAddressURL(address, chainId)}
       target="_blank"
       rel="noreferrer"
     >

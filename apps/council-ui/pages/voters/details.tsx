@@ -10,6 +10,7 @@ import { Page } from "src/ui/base/Page";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
+import { useChainId } from "src/ui/network/useChainId";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
 import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";
@@ -96,6 +97,7 @@ interface VoterHeaderProps {
 }
 
 function VoterHeader({ address }: VoterHeaderProps) {
+  const chainId = useChainId();
   const { data: ens, isLoading: ensLoading } = useEnsName({
     address: getAddress(address as string),
     enabled: !!address,
@@ -119,7 +121,7 @@ function VoterHeader({ address }: VoterHeaderProps) {
     <div className="w-fit">
       <h1 className="text-5xl font-bold">{ens}</h1>
       <a
-        href={makeEtherscanAddressURL(address)}
+        href={makeEtherscanAddressURL(address, chainId)}
         rel="noopener noreferrer"
         target="_blank"
       >

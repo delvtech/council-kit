@@ -1,5 +1,11 @@
+import { SupportedChainId } from "src/config/council.config";
+
 export function makeEtherscanAddressURL(
   address: string,
-): `https://etherscan.io/address/${string}` {
-  return `https://etherscan.io/address/${address}`;
+  chainId: SupportedChainId,
+): string {
+  if (chainId === 1) {
+    return `https://etherscan.io/address/${address}`;
+  }
+  return `https://goerli.etherscan.io/address/${address}`;
 }
