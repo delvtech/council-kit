@@ -68,6 +68,9 @@ export function VoterList({
       <SortableGridTable
         headingRowClassName="grid-cols-[1.5fr_1fr_1fr_56px]"
         bodyRowClassName="group grid-cols-[1.5fr_1fr_1fr_56px]"
+        emptyTableElement={
+          <h2 className="text-lg text-center mt-4">No voters to show</h2>
+        }
         onSort={setSortOptions}
         cols={[
           "Voter",
