@@ -35,7 +35,7 @@ export function GSCVaultPreviewCard({
         gscVaultPreviewCardData;
       return (
         <Link href={makeVaultURL(vaultAddress)}>
-          <div className="w-full sm:w-80 sm:h-72 daisy-card bg-base-300 hover:shadow-xl transition-shadow">
+          <div className="w-80 h-72 daisy-card bg-base-300 hover:shadow-xl transition-shadow ">
             <div className="daisy-card-body justify-between">
               <div>
                 <h2 className="daisy-card-title text-2xl ">{vaultName}</h2>
