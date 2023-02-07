@@ -1,5 +1,16 @@
+import assertNever from "assert-never";
+import { SupportedChainId } from "src/config/council.config";
+
 export function makeEtherscanAddressURL(
   address: string,
-): `https://etherscan.io/address/${string}` {
-  return `https://etherscan.io/address/${address}`;
+  chainId: SupportedChainId,
+): string {
+  switch (chainId) {
+    case 1:
+      return `https://etherscan.io/address/${address}`;
+    case 5:
+      return `https://goerli.etherscan.io/address/${address}`;
+    default:
+      assertNever(chainId);
+  }
 }

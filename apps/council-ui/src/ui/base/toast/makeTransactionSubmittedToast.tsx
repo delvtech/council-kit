@@ -1,17 +1,22 @@
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import toast from "react-hot-toast";
+import { SupportedChainId } from "src/config/council.config";
 import { makeEtherscanTransactionURL } from "src/etherscan/makeEtherscanTransactionURL";
 
 export function makeTransactionSubmittedToast(
   message: string,
   hash: string,
+  chainId: SupportedChainId,
 ): void {
   toast.loading(
     <div className="flex gap-4 items-center">
       <div>
         <p>{message}</p>
         <p>
-          <a href={makeEtherscanTransactionURL(hash)} className="underline">
+          <a
+            href={makeEtherscanTransactionURL(hash, chainId)}
+            className="underline"
+          >
             View on Etherscan
           </a>
         </p>
