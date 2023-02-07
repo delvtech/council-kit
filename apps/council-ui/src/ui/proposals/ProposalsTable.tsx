@@ -8,6 +8,7 @@ import {
   SortableGridTable,
   SortOptions,
 } from "src/ui/base/tables/SortableGridTable";
+import FormattedBallot from "src/ui/voting/FormattedBallot";
 import { useAccount } from "wagmi";
 
 export interface ProposalRowData {
@@ -93,7 +94,13 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
               {status}
             </div>,
 
-            ballot ?? account ? <em>Not voted</em> : <em>Not connected</em>,
+            ballot ? (
+              <FormattedBallot ballot={ballot} />
+            ) : account ? (
+              <em>Not voted</em>
+            ) : (
+              <em>Not connected</em>
+            ),
 
             <ChevronRightIcon
               key={`${id}-chevron`}
