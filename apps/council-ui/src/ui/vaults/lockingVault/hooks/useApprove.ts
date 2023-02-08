@@ -9,6 +9,7 @@ import { formatUnits } from "ethers/lib/utils";
 import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
 import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { useChainId } from "src/ui/network/useChainId";
 
 interface ApproveArguments {
   signer: Signer;
@@ -18,6 +19,7 @@ export function useApprove(
   vaultAddress: string,
 ): UseMutationResult<string, unknown, ApproveArguments> {
   const { context } = useCouncil();
+  const chainId = useChainId();
   const queryClient = useQueryClient();
   let transactionHash: string;
   return useMutation(
@@ -31,7 +33,7 @@ export function useApprove(
         formatUnits(ethers.constants.MaxUint256, decimals),
         {
           onSubmitted: (hash) => {
-            makeTransactionSuccessToast("Approving", hash);
+            makeTransactionSuccessToast("Approving", hash, chainId);
             transactionHash = hash;
           },
         },
@@ -39,11 +41,15 @@ export function useApprove(
     },
     {
       onSuccess: (hash) => {
-        makeTransactionSuccessToast("Successfully approved!", hash);
+        makeTransactionSuccessToast("Successfully approved!", hash, chainId);
         queryClient.invalidateQueries();
       },
       onError(error) {
-        makeTransactionErrorToast("Failed to approve", transactionHash);
+        makeTransactionErrorToast(
+          "Failed to approve",
+          transactionHash,
+          chainId,
+        );
         console.error(error);
       },
     },

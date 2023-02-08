@@ -36,6 +36,7 @@ export function LockingVaultDetails({
   address,
 }: LockingVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
+  const chainId = useChainId();
   const { data: signer } = useSigner();
   const { data, status, error } = useLockingVaultDetailsData(address, account);
 
@@ -57,6 +58,7 @@ export function LockingVaultDetails({
       makeTransactionErrorToast(
         `Could not find address for ${delegate}`,
         undefined,
+        chainId,
       );
       return;
     }
