@@ -150,9 +150,6 @@ export function useVoterData(
           };
         }
       : undefined,
-
-    // Query settings
-    refetchOnWindowFocus: false,
   });
 }
 
