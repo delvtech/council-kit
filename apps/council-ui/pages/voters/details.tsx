@@ -9,14 +9,12 @@ import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
-import {
-  VoterStatsRow,
-  VoterStatsRowSkeleton,
-  VoterVaultsList,
-  VoterVaultsListSkeleton,
-  VotingHistoryTable,
-  VotingHistoryTableSkeleton,
-} from "src/ui/voters";
+import { VoterStatsRow } from "src/ui/voters/VoterStatsRow/VoterStatsRow";
+import { VoterStatsRowSkeleton } from "src/ui/voters/VoterStatsRow/VoterStatsRowSkeleton";
+import { VoterVaultsList } from "src/ui/voters/VoterVaultsList/VoterVaultsList";
+import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsList/VoterVaultsListSkeleton";
+import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable/VotingHistoryTable";
+import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistoryTable/VotingHistoryTableSkeleton";
 import {
   getVoterDataByTokenWithDelegationVault,
   VoterDataByTokenWithDelegationVault,
