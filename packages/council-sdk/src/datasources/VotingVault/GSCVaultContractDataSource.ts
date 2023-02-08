@@ -70,9 +70,16 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
       // Ignore addresses that were kicked after their latest join date.
       for (const { args } of kickEvents) {
         const { who, when } = args;
+        // NOTE: the kickEvents store block numbers for the `when` field, so we
+        // must convert them to timestamps so we can compare them with the join
+        // events which store `when` as a timestamp.
+        const kickedEventBlock = await this.context.provider.getBlock(
+          when.toNumber(),
+        );
         if (
           latestJoinTimestampByMember[who] &&
-          when.gt(latestJoinTimestampByMember[who])
+          kickedEventBlock.timestamp >
+            latestJoinTimestampByMember[who]?.toNumber()
         ) {
           delete latestJoinTimestampByMember[who];
         }
