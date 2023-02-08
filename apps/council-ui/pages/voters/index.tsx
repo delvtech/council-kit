@@ -7,9 +7,9 @@ import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
+import { VoterListSkeleton } from "src/ui/voters/skeletons/VoterListSkeleton";
 import { VoterRowData } from "src/ui/voters/types";
-import { VoterList } from "src/ui/voters/VoterList/VoterList";
-import { VoterListSkeleton } from "src/ui/voters/VoterList/VoterListSkeleton";
+import { VoterList } from "src/ui/voters/VoterList";
 
 const DEFAULT_LIST_SIZE = 100;
 
@@ -41,7 +41,7 @@ export default function Voters(): ReactElement {
           </p>
         </div>
 
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <input
             type="text"
             placeholder="Search by ENS or address"
@@ -51,9 +51,9 @@ export default function Voters(): ReactElement {
             }}
             disabled={status !== "success"}
           />
-          <label className="cursor-pointer daisy-label w-min whitespace-nowrap flex items-center gap-1">
+          <label className="flex items-center gap-1 cursor-pointer daisy-label w-min whitespace-nowrap">
             <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
-            <span className="font-medium daisy-label-text mr-1">GSC Only</span>
+            <span className="mr-1 font-medium daisy-label-text">GSC Only</span>
             <input
               type="checkbox"
               className="daisy-toggle daisy-toggle-warning"
