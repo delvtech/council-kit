@@ -24,7 +24,7 @@ export function AddressWithEtherscan({
   const chainId = useChainId();
   return (
     <a
-      className={classNames("hover:underline  flex items-center", className)}
+      className={classNames("hover:underline flex items-center", className)}
       href={makeEtherscanAddressURL(address, chainId)}
       target="_blank"
       rel="noreferrer"

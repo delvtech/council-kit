@@ -4,12 +4,10 @@ import { getAddress } from "ethers/lib/utils";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
-import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { Page } from "src/ui/base/Page";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
-import { useChainId } from "src/ui/network/useChainId";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
 import { VoterVaultsListSkeleton } from "src/ui/voters/skeletons/VoterVaultsListSkeleton";
@@ -96,7 +94,6 @@ interface VoterHeaderProps {
 }
 
 function VoterHeader({ address }: VoterHeaderProps) {
-  const chainId = useChainId();
   const { data: ens, isLoading: ensLoading } = useEnsName({
     address: getAddress(address as string),
     enabled: !!address,
@@ -117,20 +114,18 @@ function VoterHeader({ address }: VoterHeaderProps) {
   }
 
   return ens ? (
-    <div className="w-fit">
+    <div className="w-min">
       <h1 className="text-5xl font-bold">{ens}</h1>
-      <a
-        href={makeEtherscanAddressURL(address, chainId)}
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        <h2 className="mt-2 text-2xl">
-          <AddressWithEtherscan address={address} iconSize={24} />
-        </h2>
-      </a>
+      <h2 className="mt-2 text-2xl">
+        <AddressWithEtherscan
+          className="w-min"
+          address={address}
+          iconSize={24}
+        />
+      </h2>
     </div>
   ) : (
-    <h1 className="mt-2 text-5xl w-fit">
+    <h1 className="text-5xl font-bold w-min">
       <AddressWithEtherscan address={address} iconSize={36} />
     </h1>
   );
