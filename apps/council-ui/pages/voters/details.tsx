@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
-import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -13,10 +12,10 @@ import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useChainId } from "src/ui/network/useChainId";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
+import { VoterVaultsListSkeleton } from "src/ui/voters/skeletons/VoterVaultsListSkeleton";
+import { VotingHistoryTableSkeleton } from "src/ui/voters/skeletons/VotingHistorySkeleton";
 import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";
 import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
-import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
-import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import {
   getVoterDataByTokenWithDelegationVault,
@@ -26,20 +25,18 @@ import { GSCStatus } from "src/vaults/gscVault/types";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {
-  const { query } = useRouter();
+  const { query, replace } = useRouter();
   const { address } = query as { address: string | undefined };
-  const { data, status } = useVoterData(address);
+  const { data: voterData, status } = useVoterData(address);
 
   if (!address) {
-    return (
-      <ErrorMessage error="No address provided or address is malformed." />
-    );
+    // Replace pushes the user to another page. In this case the 404 page.
+    replace("/404");
+    // We return a jsx fragment in this block for correct typing of address.
+    return <></>;
   }
 
-  const numVotingVaults = !data
-    ? 0
-    : data.voterDataByVault.length +
-      (["Member", "Idle"].includes(data.gscStatus as string) ? 1 : 0);
+  const numVotingVaults = calculateNumOfVotingVaults(voterData);
 
   return (
     <Page>
@@ -47,42 +44,44 @@ export default function VoterDetailsPage(): ReactElement {
 
       {status === "success" ? (
         <VoterStatsRow
-          gscStatus={data.gscStatus}
-          proposalsCreated={data.proposalsCreated}
-          proposalsVoted={data.votingHistory.length}
-          votingPower={data.votingPower}
-          percentOfTVP={data.percentOfTVP}
+          gscStatus={voterData.gscStatus}
+          proposalsCreated={voterData.proposalsCreated}
+          proposalsVoted={voterData.votingHistory.length}
+          votingPower={voterData.votingPower}
+          percentOfTVP={voterData.percentOfTVP}
         />
       ) : (
         <VoterStatsRowSkeleton />
       )}
 
-      {status === "success" ? (
-        <div className="flex flex-col gap-y-4">
-          <h2 className="text-2xl font-bold">
-            Voting Vaults ({numVotingVaults})
-          </h2>
-          <VoterVaultsList
-            address={address}
-            vaultsData={data.voterDataByVault}
-          />
-        </div>
-      ) : (
-        <div className="flex flex-col gap-y-4">
-          <h2 className="w-64 text-2xl">
-            <Skeleton />
-          </h2>
-          <VoterVaultsListSkeleton />
-        </div>
-      )}
+      <div className="flex flex-col gap-y-4">
+        {status === "success" ? (
+          <>
+            <h2 className="text-2xl font-bold">
+              Voting Vaults ({numVotingVaults})
+            </h2>
+            <VoterVaultsList
+              address={address}
+              vaultsData={voterData.voterDataByVault}
+            />
+          </>
+        ) : (
+          <>
+            <h2 className="w-64 text-2xl">
+              <Skeleton />
+            </h2>
+            <VoterVaultsListSkeleton />
+          </>
+        )}
+      </div>
 
       <div className="flex flex-col w-full gap-y-4">
         <h2 className="text-2xl font-bold">
-          Voting History ({data?.votingHistory.length ?? 0})
+          Voting History ({voterData?.votingHistory.length ?? 0})
         </h2>
         {status === "success" ? (
           <div className="overflow-x-auto">
-            <VotingHistoryTable history={data.votingHistory} />
+            <VotingHistoryTable history={voterData.votingHistory} />
           </div>
         ) : (
           <VotingHistoryTableSkeleton />
@@ -196,4 +195,17 @@ export function useVoterData(
       : undefined,
     refetchOnWindowFocus: false,
   });
+}
+
+// Utility functions for this page
+function calculateNumOfVotingVaults(data?: VoterData) {
+  if (!data) {
+    return 0;
+  }
+
+  const addGSCVault = data.gscStatus
+    ? Number(["Member", "Idle"].includes(data.gscStatus as string))
+    : 0;
+
+  return data.voterDataByVault.length + addGSCVault;
 }
