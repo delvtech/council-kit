@@ -7,9 +7,9 @@ import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
-import { VoterListSkeleton } from "src/ui/voters/skeletons/VoterListSkeleton";
 import { VoterRowData } from "src/ui/voters/types";
-import { VoterList } from "src/ui/voters/VoterList";
+import { VoterList } from "src/ui/voters/VoterList/VoterList";
+import { VoterListSkeleton } from "src/ui/voters/VoterList/VoterListSkeleton";
 
 const DEFAULT_LIST_SIZE = 100;
 

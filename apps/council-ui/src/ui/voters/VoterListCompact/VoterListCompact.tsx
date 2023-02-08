@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVoterURL } from "src/routes";
 import { useBulkEnsRecords } from "src/ui/ens/useBulkEnsRecords";
-import { VoterAddress } from "src/ui/voters/VoterAddress";
+import { VoterAddress } from "src/ui/voters/VoterAddress/VoterAddress";
 
 interface VotersListCompactProps {
   voters: Voter[];

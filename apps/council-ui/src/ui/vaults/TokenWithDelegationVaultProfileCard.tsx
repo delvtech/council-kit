@@ -10,7 +10,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
-import { VotersListCompact } from "src/ui/voters/VotersListCompact";
+import { VotersListCompact } from "src/ui/voters/VoterListCompact/VoterListCompact";
 import { useAccount } from "wagmi";
 
 export interface TokenWithDelegationVaultProfileCardProps {

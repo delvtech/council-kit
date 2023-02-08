@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import { makeVoterURL } from "src/routes";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Input } from "src/ui/base/forms/Input";
-import { VoterAddress } from "src/ui/voters/VoterAddress";
+import { VoterAddress } from "src/ui/voters/VoterAddress/VoterAddress";
 import { useSigner } from "wagmi";
 
 interface ChangeDelegateFormProps {

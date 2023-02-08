@@ -8,7 +8,7 @@ import {
 } from "src/ui/base/tables/SortableGridTable";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
 import { VoterRowData } from "src/ui/voters/types";
-import { VoterAddress } from "src/ui/voters/VoterAddress";
+import { VoterAddress } from "src/ui/voters/VoterAddress/VoterAddress";
 
 type SortField = "numberOfDelegators" | "votingPower";
 

@@ -5,7 +5,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { GSCMembersTableHeader } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTableHeader";
 import { useKickGSCMember } from "src/ui/vaults/gscVault/useKickGSCMember";
-import { VoterAddress } from "src/ui/voters/VoterAddress";
+import { VoterAddress } from "src/ui/voters/VoterAddress/VoterAddress";
 import { GSCMemberInfo } from "src/vaults/gscVault/getGSCMembers";
 import { useSigner } from "wagmi";
 

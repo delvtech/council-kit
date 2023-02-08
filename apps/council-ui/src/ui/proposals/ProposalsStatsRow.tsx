@@ -11,7 +11,7 @@ import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useChainId } from "src/ui/network/useChainId";
-import { VoterAddress } from "src/ui/voters/VoterAddress";
+import { VoterAddress } from "src/ui/voters/VoterAddress/VoterAddress";
 
 interface ProposalStatsRowProps {
   votingContractName: string;
