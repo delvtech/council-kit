@@ -73,10 +73,11 @@ export default function VoterDetailsPage(): ReactElement {
         )}
       </div>
 
-      <div className="flex flex-col w-full gap-y-4">
-        <h2 className="text-2xl font-bold">
+      <div className="w-full">
+        <h2 className="mb-4 text-2xl font-bold">
           Voting History ({voterData?.votingHistory.length ?? 0})
         </h2>
+
         {status === "success" ? (
           <div className="overflow-x-auto">
             <VotingHistoryTable history={voterData.votingHistory} />
@@ -87,6 +88,72 @@ export default function VoterDetailsPage(): ReactElement {
       </div>
     </Page>
   );
+}
+
+interface VoterData {
+  gscStatus: GSCStatus | null;
+  percentOfTVP: number;
+  proposalsCreated: number;
+  voterDataByVault: VoterDataByTokenWithDelegationVault[];
+  votingHistory: Vote[];
+  votingPower: string;
+}
+
+export function useVoterData(
+  address: string | undefined,
+): UseQueryResult<VoterData> {
+  const { context, coreVoting } = useCouncil();
+  const { data: gscStatus } = useGSCStatus(address);
+
+  const queryEnabled = !!address && !!gscStatus;
+  return useQuery({
+    queryKey: ["voter-details", address, gscStatus],
+    enabled: queryEnabled,
+    queryFn: queryEnabled
+      ? async (): Promise<VoterData> => {
+          const voter = new Voter(address, context);
+          // display voting history in reverse chronological order
+          // i.e. most recent proposals first
+          const votingHistory = [
+            ...(await voter.getVotes(coreVoting.address)),
+          ].reverse();
+
+          // Sum voting power from each voting vault
+          const votingPower = await voter.getVotingPower(
+            coreVoting.vaults.map((vault) => vault.address),
+          );
+
+          // Get total voting power in the core voting system
+          const tvp = await coreVoting.getTotalVotingPower();
+
+          // Get voter data specific to each voting vault
+          const voterDataByVault = await getVoterDataByTokenWithDelegationVault(
+            address,
+            coreVoting,
+          );
+
+          // Get all proposals in the core voting system
+          const coreVotingProposals = await coreVoting.getProposals();
+          // Get all proposals created by this voter
+          const proposalsCreatedByAddress = await asyncFilter(
+            coreVotingProposals,
+            async (proposal) => (await proposal.getCreatedBy()) === address,
+          );
+
+          return {
+            gscStatus,
+            percentOfTVP: +((+votingPower / +tvp) * 100).toFixed(1),
+            proposalsCreated: proposalsCreatedByAddress.length,
+            voterDataByVault,
+            votingHistory,
+            votingPower,
+          };
+        }
+      : undefined,
+
+    // Query settings
+    refetchOnWindowFocus: false,
+  });
 }
 
 interface VoterHeaderProps {
@@ -131,68 +198,6 @@ function VoterHeader({ address }: VoterHeaderProps) {
   );
 }
 
-interface VoterData {
-  gscStatus: GSCStatus | null;
-  proposalsCreated: number;
-  voterDataByVault: VoterDataByTokenWithDelegationVault[];
-  votingHistory: Vote[];
-  votingPower: string;
-  percentOfTVP: number;
-}
-
-export function useVoterData(
-  address: string | undefined,
-): UseQueryResult<VoterData> {
-  const { context, coreVoting } = useCouncil();
-  const { data: gscStatus } = useGSCStatus(address);
-
-  const queryEnabled = !!address && !!gscStatus;
-  return useQuery({
-    queryKey: ["voter-details", address, gscStatus],
-    enabled: queryEnabled,
-    queryFn: queryEnabled
-      ? async (): Promise<VoterData> => {
-          const voter = new Voter(address, context);
-          // display voting history in reverse chronological order, ie: most
-          // recent proposals first
-          // TODO: Where does GSC Voting history fit in this?
-          const votingHistory = [
-            ...(await voter.getVotes(coreVoting.address)),
-          ].reverse();
-          const votingPower = await voter.getVotingPower(
-            coreVoting.vaults.map((vault) => vault.address),
-          );
-          const tvp = await coreVoting.getTotalVotingPower();
-
-          const voterDataByVault = await getVoterDataByTokenWithDelegationVault(
-            address,
-            coreVoting,
-          );
-
-          const coreVotingProposals = await coreVoting.getProposals();
-          const proposalsCreatedByAddress = await asyncFilter(
-            coreVotingProposals,
-            async (proposal) => {
-              const createdBy = await proposal.getCreatedBy();
-              return createdBy === address;
-            },
-          );
-
-          return {
-            votingHistory,
-            votingPower,
-            percentOfTVP: +((+votingPower / +tvp) * 100).toFixed(1),
-            gscStatus,
-            voterDataByVault,
-            proposalsCreated: proposalsCreatedByAddress.length,
-          };
-        }
-      : undefined,
-    refetchOnWindowFocus: false,
-  });
-}
-
-// Utility functions for this page
 function calculateNumOfVotingVaults(data?: VoterData) {
   if (!data) {
     return 0;
