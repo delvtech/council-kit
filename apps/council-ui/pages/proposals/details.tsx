@@ -14,12 +14,12 @@ import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
-import { ProposalStatsRow } from "src/ui/proposals/ProposalsStatsRow";
-import { Quorum } from "src/ui/proposals/Quorum";
-import { QuorumBarSkeleton } from "src/ui/proposals/QuorumSkeleton";
-import { ProposalStatsRowSkeleton } from "src/ui/proposals/skeletons/ProposalStatsRowSkeleton";
-import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable";
-import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTableSkeleton";
+import { ProposalStatsRow } from "src/ui/proposals/ProposalStatsRow/ProposalStatsRow";
+import { ProposalStatsRowSkeleton } from "src/ui/proposals/ProposalStatsRow/ProposalStatsRowSkeleton";
+import { Quorum } from "src/ui/proposals/Quorum/Quorum";
+import { QuorumBarSkeleton } from "src/ui/proposals/Quorum/QuorumSkeleton";
+import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable/VotingActivityTable";
+import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTable/VotingActivityTableSkeleton";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
 import { ProposalVoting } from "src/ui/voting/ProposalVoting";
@@ -28,31 +28,25 @@ import { useAccount, useBlockNumber, useSigner } from "wagmi";
 
 export default function ProposalPage(): ReactElement {
   const { query, replace } = useRouter();
+  const { id: idParam, votingContract: votingContractAddressParam } = query;
 
-  // TODO: handle and validate the query strings
-  const id = +(query.id as string);
-  const votingContractAddress = query.votingContract as string;
+  const id = +(idParam as string);
+  const votingContractAddress = votingContractAddressParam as string;
 
   const { data: signer } = useSigner();
   const { address } = useAccount();
+  const { data: blockNumber } = useBlockNumber();
 
-  // Data fetching
   const { data, error, status } = useProposalDetailsPageData(
     votingContractAddress,
     id,
     address,
   );
-  const { data: blockNumber } = useBlockNumber();
 
-  // Mutations
   const { mutate: vote } = useVote();
   const { mutate: gscVote } = useGSCVote();
 
-  if (id < 0 || !votingContractAddress) {
-    replace("/404");
-  }
-
-  function handleVote(ballot: Ballot) {
+  const handleVote = (ballot: Ballot) => {
     if (!data || !signer) {
       return;
     }
@@ -65,6 +59,13 @@ export default function ProposalPage(): ReactElement {
       return gscVote(voteArgs);
     }
     return vote(voteArgs);
+  };
+
+  if (!votingContractAddressParam || !idParam) {
+    replace("/404");
+    // User will go to 404 page if this block is reached
+    // Returning empty fragment is to remove the undefined type from the query params.
+    return <></>;
   }
 
   if (status === "error") {
@@ -73,23 +74,19 @@ export default function ProposalPage(): ReactElement {
 
   return (
     <Page>
-      <div className="flex flex-wrap w-full gap-4 whitespace-nowrap">
-        <div className="flex flex-col gap-1">
-          <h1 className="inline text-5xl font-bold">
+      <div className="flex flex-wrap w-full gap-y-8">
+        <div className="flex flex-col">
+          <h1 className="mb-1 text-5xl font-bold">
             {data?.proposalName ?? `Proposal ${id}`}
           </h1>
           {data?.descriptionURL && (
-            <ExternalLink
-              href={data.descriptionURL}
-              iconSize={18}
-              className="self-start"
-            >
-              <span>Learn more about this proposal</span>
+            <ExternalLink href={data.descriptionURL} iconSize={18}>
+              Learn more about this proposal
             </ExternalLink>
           )}
         </div>
 
-        <div className="sm:ml-auto w-96 sm:w-72">
+        <div className="w-full sm:ml-auto sm:w-96">
           {status === "success" ? (
             <Quorum
               current={data.currentQuorum}
