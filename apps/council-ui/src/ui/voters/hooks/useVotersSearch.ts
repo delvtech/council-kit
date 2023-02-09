@@ -9,14 +9,19 @@ const voterSearchFuseOptions = {
   keys: ["address", "ensName"],
 };
 
-export function useVotersSearch(voters: VoterRowData[] | undefined): {
+interface VoterSearch {
   results: VoterRowData[];
   reset: () => void;
   search: (i: string) => void;
-} {
-  const [input, setInput] = useState("");
+}
 
+export function useVotersSearch(
+  voters: VoterRowData[] | undefined,
+): VoterSearch {
+  const [input, setInput] = useState("");
   const searchCache = useRef<Record<string, VoterRowData[]>>({});
+
+  // Reset the cache when the provided data changes.
   useEffect(() => {
     searchCache.current = {};
   }, [voters]);
