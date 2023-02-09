@@ -23,7 +23,10 @@ export function VoterList({
   size,
   onSizeChange,
 }: VoterListProps): ReactElement {
-  const [sortOptions, setSortOptions] = useState<SortOptions<SortField>>({});
+  const [sortOptions, setSortOptions] = useState<SortOptions<SortField>>({
+    key: "votingPower",
+    direction: "DESC",
+  });
 
   const { data: delegatesByVault = {} } = useDelegatesByVault();
   // Memoized to prevent invalidating sortedVoters on every render.
@@ -69,9 +72,10 @@ export function VoterList({
         headingRowClassName="grid-cols-[1.5fr_1fr_1fr_56px]"
         bodyRowClassName="group grid-cols-[1.5fr_1fr_1fr_56px]"
         emptyTableElement={
-          <h2 className="text-lg text-center mt-4">No voters to show</h2>
+          <h2 className="mt-4 text-lg text-center">No voters to show</h2>
         }
         onSort={setSortOptions}
+        defaultSortOptions={sortOptions}
         cols={[
           "Voter",
           {

@@ -14,6 +14,7 @@ interface SortableGridTableProps<K extends string> {
   emptyTableElement: ReactNode;
   headingRowClassName?: string;
   bodyRowClassName?: string;
+  defaultSortOptions?: SortOptions<K>;
 }
 
 /**
@@ -29,9 +30,14 @@ export function SortableGridTable<K extends string>({
   headingRowClassName,
   emptyTableElement,
   bodyRowClassName,
+  defaultSortOptions,
 }: SortableGridTableProps<K>): ReactElement {
-  const [sortKey, setSortKey] = useState<K>();
-  const [sortDirection, setSortDirection] = useState<SortDirection>();
+  const [sortKey, setSortKey] = useState<K | undefined>(
+    defaultSortOptions?.key,
+  );
+  const [sortDirection, setSortDirection] = useState<SortDirection | undefined>(
+    defaultSortOptions?.direction,
+  );
 
   function handleSortChange(key: K) {
     let newDirection: SortDirection;
@@ -64,7 +70,7 @@ export function SortableGridTable<K extends string>({
               return (
                 <button
                   key={i}
-                  className="text-left flex items-center gap-1 hover:bg-base-300"
+                  className="flex items-center gap-1 text-left hover:bg-base-300"
                   onClick={() => handleSortChange(col.sortKey as K)}
                 >
                   {col.cell}
