@@ -7,9 +7,9 @@ import { makeVoterURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
 import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
+import { useFilterVotesByGSCOnlyEffect } from "src/ui/proposals/hooks/useFilterVotesByGSCOnlyEffect";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
-import { useFilterVotesByGSCOnlyEffect } from "./hooks/useFilterVotesByGSCOnlyEffect";
 
 interface VotingActivityTableProps {
   votes: Vote[];

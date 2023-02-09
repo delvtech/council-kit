@@ -12,8 +12,8 @@ import { useChainId } from "src/ui/network/useChainId";
 import {
   ProposalRowData,
   ProposalsTable,
-} from "src/ui/proposals/ProposalsTable";
-import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalsTableSkeleton";
+} from "src/ui/proposals/ProposalTable/ProposalsTable";
+import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalTable/ProposalsTableSkeleton";
 import { useAccount } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {
