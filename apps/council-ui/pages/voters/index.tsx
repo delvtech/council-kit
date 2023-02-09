@@ -31,49 +31,45 @@ export default function Voters(): ReactElement {
   }
 
   return (
-    <Page>
-      <div className="flex flex-col max-w-3xl mx-auto gap-y-8">
-        <div className="flex flex-col">
-          <h1 className="text-5xl font-bold">Voters</h1>
-          <p className="mt-6 text-lg">
-            Voters are accounts that currently have voting power. You can search
-            by partial keywords using ENS names or addresses.
-          </p>
-        </div>
+    <Page className="max-w-3xl">
+      <div>
+        <h1 className="text-5xl font-bold">Voters</h1>
+        <p className="mt-6 text-lg">
+          Voters are accounts that currently have voting power. You can search
+          by partial keywords using ENS names or addresses.
+        </p>
+      </div>
 
-        <div className="flex gap-4 items-center">
+      <div className="flex items-center gap-4">
+        <input
+          type="text"
+          placeholder="Search by ENS or address"
+          className="w-full daisy-input-bordered daisy-input"
+          onChange={(e) => search(e.target.value as string)}
+          disabled={status !== "success"}
+        />
+        <label className="flex items-center gap-1 cursor-pointer daisy-label w-min whitespace-nowrap">
+          <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
+          <span className="mr-1 font-medium daisy-label-text">GSC Only</span>
           <input
-            type="text"
-            placeholder="Search by ENS or address"
-            className="w-full daisy-input-bordered daisy-input"
-            onChange={(e) => {
-              search(e.target.value as string);
-            }}
+            type="checkbox"
+            className="daisy-toggle daisy-toggle-warning"
+            checked={gscOnly}
+            onChange={({ target }) => setGscOnly(target.checked)}
             disabled={status !== "success"}
           />
-          <label className="cursor-pointer daisy-label w-min whitespace-nowrap flex items-center gap-1">
-            <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
-            <span className="font-medium daisy-label-text mr-1">GSC Only</span>
-            <input
-              type="checkbox"
-              className="daisy-toggle daisy-toggle-warning"
-              checked={gscOnly}
-              onChange={({ target }) => setGscOnly(target.checked)}
-              disabled={status !== "success"}
-            />
-          </label>
-        </div>
-
-        {status === "success" ? (
-          <VoterList
-            voters={filteredResults}
-            size={listSize}
-            onSizeChange={(newSize) => setListSize(newSize)}
-          />
-        ) : (
-          <VoterListSkeleton />
-        )}
+        </label>
       </div>
+
+      {status === "success" ? (
+        <VoterList
+          voters={filteredResults}
+          size={listSize}
+          onSizeChange={(newSize) => setListSize(newSize)}
+        />
+      ) : (
+        <VoterListSkeleton />
+      )}
     </Page>
   );
 }
@@ -105,6 +101,8 @@ function useVoterPageData(): UseQueryResult<VoterRowData[]> {
         isGSCMember: gscMemberAddresses.includes(voter.address),
       }));
     },
+
+    // This is an expensive query and do not want to refetch.
     refetchOnWindowFocus: false,
     staleTime: Infinity,
   });
