@@ -1,170 +1,92 @@
 import { Ballot, Vote } from "@council/sdk";
 import { FixedNumber } from "ethers";
-import Link from "next/link";
-import { ChangeEvent, ReactElement, useMemo, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { EnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { DownArrowSVG } from "src/ui/base/svg/DownArrow";
-import { UpArrowSVG } from "src/ui/base/svg/UpArrow";
-import { useFilterVotesByGSCOnlyEffect } from "src/ui/proposals/hooks/useFilterVotesByGSCOnlyEffect";
+import {
+  SortableGridTable,
+  SortOptions,
+} from "src/ui/base/tables/SortableGridTable";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
+
+type SortField = "votingPower" | "ballot";
 
 interface VotingActivityTableProps {
   votes: Vote[];
   voterEnsRecords: EnsRecords;
 }
 
-const SortFieldOptions = ["VotingPower"] as const;
-type SortField = typeof SortFieldOptions[number];
-
-const SortDirectionOptions = ["ASC", "DESC"] as const;
-type SortDirection = typeof SortDirectionOptions[number];
-
-interface SortOptions {
-  field: SortField;
-  direction: SortDirection;
-}
-
 export function VotingActivityTable({
   votes,
   voterEnsRecords,
 }: VotingActivityTableProps): ReactElement {
-  const [sortOptions, setSortOptions] = useState<SortOptions>({
-    field: "VotingPower",
+  const [sortOptions, setSortOptions] = useState<SortOptions<SortField>>({
+    key: "votingPower",
     direction: "ASC",
   });
 
-  const [gscOnly, setGscOnly] = useState(false);
-
-  const [filteredVotes, setFilteredVotes] = useState(votes);
-
   const sortedData = useMemo(
-    () => sortVotes(sortOptions, filteredVotes),
-    [sortOptions, filteredVotes],
+    () => sortVotes(sortOptions, votes),
+    [sortOptions, votes],
   );
 
-  useFilterVotesByGSCOnlyEffect(votes, gscOnly, setFilteredVotes);
-
-  const handleSortOptionsChange = (field: SortField) =>
-    setSortOptions({
-      field,
-      direction: sortToggleStates[sortOptions.direction],
-    });
-
   return (
-    <div className="flex flex-col gap-y-2">
-      <label className="mb-2 cursor-pointer daisy-label w-fit">
-        <span className="mr-2 font-medium daisy-label-text">GSC Only</span>
-        <input
-          type="checkbox"
-          className="daisy-toggle daisy-toggle-warning"
-          checked={gscOnly}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            setGscOnly(event.target.checked);
-          }}
-        />
-      </label>
-
-      <div className="w-full overflow-auto max-h-96">
-        <table className="w-full daisy-table-zebra daisy-table">
-          <thead>
-            <tr>
-              <th>Voter</th>
-              <th
-                className="cursor-pointer"
-                onClick={() => handleSortOptionsChange("VotingPower")}
-              >
-                <span className="mr-1 select-none hover:underline">
-                  Voting Power
-                </span>
-                <SortDirectionStatus
-                  direction={sortOptions.direction}
-                  enabled={sortOptions.field === "VotingPower"}
-                />
-              </th>
-              <th>Ballot</th>
-            </tr>
-          </thead>
-
-          <tbody className="h-24 overflow-auto">
-            {sortedData.map((vote, i) => (
-              <VotingActivityTableRow
-                key={`${vote.voter.address}-${vote.ballot}-${i}`}
-                address={vote.voter.address}
-                displayName={voterEnsRecords[vote.voter.address]}
-                votePower={vote.power}
-                voteBallot={vote.ballot}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="w-full overflow-auto max-h-96">
+      <SortableGridTable
+        headingRowClassName="grid-cols-[2fr-1fr-1fr]"
+        bodyRowClassName="grid-cols-[2fr-1fr-1fr]"
+        onSort={setSortOptions}
+        cols={[
+          "Voter",
+          {
+            cell: "Voting Power",
+            sortKey: "votingPower",
+          },
+          {
+            cell: "Ballot",
+            sortKey: "ballot",
+          },
+        ]}
+        rows={sortedData.map(({ voter, power, ballot }, i) => {
+          return {
+            href: makeVoterURL(voter.address),
+            cells: [
+              <VoterAddress
+                key={`${i}-address`}
+                address={voter.address}
+                label={voterEnsRecords[voter.address] || undefined}
+              />,
+              formatBalance(power),
+              <FormattedBallot key={`${i}-ballot`} ballot={ballot} />,
+            ],
+          };
+        })}
+      />
     </div>
   );
 }
 
-interface VotingActivityTableRowProps {
-  address: string;
-  votePower: string;
-  voteBallot: Ballot;
-  displayName?: string | null;
-}
-
-function VotingActivityTableRow({
-  address,
-  votePower,
-  voteBallot,
-  displayName,
-}: VotingActivityTableRowProps) {
-  return (
-    <tr>
-      <th>
-        <Link
-          className="flex items-center daisy-link daisy-link-hover"
-          href={makeVoterURL(address)}
-        >
-          <VoterAddress address={address} label={displayName || undefined} />
-        </Link>
-      </th>
-      <td>{formatBalance(votePower)}</td>
-      <td>
-        <FormattedBallot ballot={voteBallot} />
-      </td>
-    </tr>
-  );
-}
-
-interface SortDirectionProps {
-  direction: SortDirection;
-  enabled: boolean;
-}
-
-function SortDirectionStatus({ direction, enabled }: SortDirectionProps) {
-  if (!enabled) {
-    return null;
-  }
-
-  switch (direction) {
-    case "ASC":
-      return <DownArrowSVG />;
-    case "DESC":
-      return <UpArrowSVG />;
-    default:
-      return null;
-  }
-}
-
-// simple state machine for sort state transitions
-const sortToggleStates: Record<SortDirection, SortDirection> = {
-  ["ASC"]: "DESC",
-  ["DESC"]: "ASC",
+// Descending will go from positive -> negative sentiment
+const ballotSortIndexes: Record<Ballot, number> = {
+  yes: 2,
+  maybe: 1,
+  no: 0,
 };
 
-function sortVotes(sort: SortOptions, data: Vote[]) {
-  if (sort.field === "VotingPower") {
-    if (sort.direction === "ASC") {
+function sortVotes({ key, direction }: SortOptions<SortField>, data: Vote[]) {
+  switch (key) {
+    case "votingPower":
+      if (direction === "ASC") {
+        return data
+          .slice()
+          .sort((a, b) =>
+            FixedNumber.from(a.power)
+              .subUnsafe(FixedNumber.from(b.power))
+              .toUnsafeFloat(),
+          );
+      }
       return data
         .slice()
         .sort((a, b) =>
@@ -172,16 +94,20 @@ function sortVotes(sort: SortOptions, data: Vote[]) {
             .subUnsafe(FixedNumber.from(a.power))
             .toUnsafeFloat(),
         );
-    }
-
-    return data
-      .slice()
-      .sort((a, b) =>
-        FixedNumber.from(a.power)
-          .subUnsafe(FixedNumber.from(b.power))
-          .toUnsafeFloat(),
-      );
+    case "ballot":
+      if (direction === "ASC") {
+        return data
+          .slice()
+          .sort(
+            (a, b) => ballotSortIndexes[a.ballot] - ballotSortIndexes[b.ballot],
+          );
+      }
+      return data
+        .slice()
+        .sort(
+          (a, b) => ballotSortIndexes[b.ballot] - ballotSortIndexes[a.ballot],
+        );
+    default:
+      return data;
   }
-
-  return data;
 }

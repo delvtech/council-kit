@@ -1,7 +1,8 @@
 import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
+import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { ReactElement } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { councilConfigs } from "src/config/council.config";
 import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
@@ -20,6 +21,7 @@ import { Quorum } from "src/ui/proposals/Quorum/Quorum";
 import { QuorumBarSkeleton } from "src/ui/proposals/Quorum/QuorumSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTable/VotingActivityTableSkeleton";
+import { useGSCMemberAddresses } from "src/ui/vaults/gscVault/useGSCMembers";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
 import { ProposalVoting } from "src/ui/voting/ProposalVoting";
@@ -42,6 +44,18 @@ export default function ProposalPage(): ReactElement {
     id,
     address,
   );
+  const { data: gscMemberAddresses } = useGSCMemberAddresses();
+
+  // voting activity filtering
+  const [gscOnly, setGscOnly] = useState(false);
+  const filteredVotes = useMemo(() => {
+    if (data && gscOnly && gscMemberAddresses) {
+      return data.votes.filter(({ voter }) =>
+        gscMemberAddresses.includes(voter.address),
+      );
+    }
+    return data?.votes;
+  }, [data, gscOnly, gscMemberAddresses]);
 
   const { mutate: vote } = useVote();
   const { mutate: gscVote } = useGSCVote();
@@ -119,19 +133,37 @@ export default function ProposalPage(): ReactElement {
       <div className="flex flex-wrap w-full gap-20 sm:gap-y-0">
         <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
           {status === "success" ? (
-            data?.paragraphSummary && (
+            data.paragraphSummary && (
               <p className="mb-5 text-lg">{data.paragraphSummary}</p>
             )
           ) : (
             <Skeleton count={3} className="mb-5 text-lg" />
           )}
-          <h1 className="text-2xl font-medium">
-            Voting Activity {data?.votes && `(${data.votes.length})`}
-          </h1>
+          <div className="flex">
+            <h1 className="text-2xl font-medium">
+              Voting Activity {filteredVotes && `(${filteredVotes.length})`}
+            </h1>
 
-          {status === "success" ? (
+            {gscMemberAddresses && (
+              <label className="ml-auto flex items-center gap-1 cursor-pointer daisy-label w-min whitespace-nowrap">
+                <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
+                <span className="mr-1 font-medium daisy-label-text">
+                  GSC Only
+                </span>
+                <input
+                  type="checkbox"
+                  className="daisy-toggle daisy-toggle-warning"
+                  checked={gscOnly}
+                  onChange={({ target }) => setGscOnly(target.checked)}
+                  disabled={status !== "success"}
+                />
+              </label>
+            )}
+          </div>
+
+          {status === "success" && filteredVotes ? (
             <VotingActivityTable
-              votes={data.votes}
+              votes={filteredVotes}
               voterEnsRecords={data.voterEnsRecords}
             />
           ) : (
