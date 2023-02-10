@@ -1,5 +1,4 @@
 import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
-import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement, useMemo, useState } from "react";
@@ -22,6 +21,7 @@ import { QuorumBarSkeleton } from "src/ui/proposals/Quorum/QuorumSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTable/VotingActivityTableSkeleton";
 import { useGSCMemberAddresses } from "src/ui/vaults/gscVault/useGSCMembers";
+import { GSCOnlyToggle } from "src/ui/voters/GSCOnlyToggle";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
 import { ProposalVoting } from "src/ui/voting/ProposalVoting";
@@ -145,19 +145,12 @@ export default function ProposalPage(): ReactElement {
             </h1>
 
             {gscMemberAddresses && (
-              <label className="ml-auto flex items-center gap-1 cursor-pointer daisy-label w-min whitespace-nowrap">
-                <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
-                <span className="mr-1 font-medium daisy-label-text">
-                  GSC Only
-                </span>
-                <input
-                  type="checkbox"
-                  className="daisy-toggle daisy-toggle-warning"
-                  checked={gscOnly}
-                  onChange={({ target }) => setGscOnly(target.checked)}
-                  disabled={status !== "success"}
-                />
-              </label>
+              <GSCOnlyToggle
+                on={gscOnly}
+                onToggle={setGscOnly}
+                disabled={status !== "success"}
+                className="ml-auto"
+              />
             )}
           </div>
 

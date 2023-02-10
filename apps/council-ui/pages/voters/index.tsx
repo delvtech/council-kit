@@ -1,4 +1,3 @@
-import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement, useMemo, useState } from "react";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
@@ -6,6 +5,7 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
+import { GSCOnlyToggle } from "src/ui/voters/GSCOnlyToggle";
 import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
 import { VoterRowData } from "src/ui/voters/types";
 import { VoterList } from "src/ui/voters/VoterList/VoterList";
@@ -49,17 +49,11 @@ export default function Voters(): ReactElement {
             onChange={(e) => search(e.target.value as string)}
             disabled={status !== "success"}
           />
-          <label className="flex items-center gap-1 cursor-pointer daisy-label w-min whitespace-nowrap">
-            <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
-            <span className="mr-1 font-medium daisy-label-text">GSC Only</span>
-            <input
-              type="checkbox"
-              className="daisy-toggle daisy-toggle-warning"
-              checked={gscOnly}
-              onChange={({ target }) => setGscOnly(target.checked)}
-              disabled={status !== "success"}
-            />
-          </label>
+          <GSCOnlyToggle
+            on={gscOnly}
+            onToggle={setGscOnly}
+            disabled={status !== "success"}
+          />
         </div>
 
         {status === "success" ? (
