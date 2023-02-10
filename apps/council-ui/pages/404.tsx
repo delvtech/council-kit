@@ -5,7 +5,7 @@ export default function Custom404(): ReactElement {
     <div className="flex items-center justify-center h-96">
       <h1 className="text-2xl text-center">
         <svg
-          className="fill-base-content ml-4 mb-2"
+          className="fill-base-content ml-7 mb-2"
           width="227"
           height="186"
           viewBox="0 0 227 186"
