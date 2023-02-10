@@ -53,8 +53,8 @@ export async function createGoerliProposal(
   // get the callhash, this is how Timelock determines if the call is valid before it executes it
   const targetsTimelock = [timelock.address];
   const callHash = await createProposalCallHash(
-    calldatasTimelock,
     targetsTimelock,
+    calldatasTimelock,
   );
 
   // calldata for the coreVoting contract

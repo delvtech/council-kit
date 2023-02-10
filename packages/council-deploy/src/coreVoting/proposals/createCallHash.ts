@@ -1,8 +1,8 @@
 import { BytesLike, ethers } from "ethers";
 
 export async function createProposalCallHash(
-  calldata: BytesLike[],
   targets: string[],
+  calldata: BytesLike[],
 ): Promise<string> {
   const toBeHashed = ethers.utils.defaultAbiCoder.encode(
     ["address[]", "bytes[]"],
