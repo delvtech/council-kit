@@ -51,7 +51,7 @@ export function SortableGridTable<K extends string>({
   rows,
   onSort,
   headingRowClassName,
-  emptyTableElement,
+  emptyTableElement = <DefaultEmptyTableElement />,
   bodyRowClassName,
   defaultSortOptions,
 }: SortableGridTableProps<K>): ReactElement {
@@ -191,4 +191,12 @@ function nextSortDirection(
     default:
       return defaultDirection;
   }
+}
+
+function DefaultEmptyTableElement() {
+  return (
+    <div className="bg-base-300 p-10 text-center rounded-b-lg">
+      <p className="text-lg">Nothing to show.</p>
+    </div>
+  );
 }
