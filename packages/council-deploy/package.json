@@ -48,6 +48,8 @@
     "watch": "parcel watch",
     "load-contracts": "sh scripts/load-contracts.sh",
     "goerli:deploy-contracts": "cross-env TS_NODE_TRANSPILE_ONLY=1 npx hardhat run src/goerli.ts --network goerli --no-compile",
+    "goerli:propose-remove-vesting-vault": "cross-env TS_NODE_TRANSPILE_ONLY=1 npx hardhat run src/coreVoting/proposals/createProposalRemoveVestingVault.ts --network goerli --no-compile",
+    "goerli:propose-one-second-timelock-wait-time": "cross-env TS_NODE_TRANSPILE_ONLY=1 npx hardhat run src/coreVoting/proposals/createProposalSetWaitTime.ts --network goerli --no-compile",
     "goerli:mint-voting-tokens": "cross-env TS_NODE_TRANSPILE_ONLY=1 npx hardhat run src/votingToken/promptMintFromListOfVotingTokens.ts --network goerli --no-compile",
     "goerli:deposit-voting-tokens-into-locking-vault": "cross-env TS_NODE_TRANSPILE_ONLY=1 npx hardhat run src/vaults/lockingVault/promptChooseLockingVaultAndDepositTokens.ts --network goerli --no-compile"
   }
