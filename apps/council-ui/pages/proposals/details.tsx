@@ -20,7 +20,7 @@ import { Quorum } from "src/ui/proposals/Quorum/Quorum";
 import { QuorumBarSkeleton } from "src/ui/proposals/Quorum/QuorumSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTable/VotingActivityTableSkeleton";
-import { useGSCMemberAddresses } from "src/ui/vaults/gscVault/useGSCMembers";
+import { useGSCMemberAddresses } from "src/ui/vaults/gscVault/useGSCMemberAddresses";
 import { GSCOnlyToggle } from "src/ui/voters/GSCOnlyToggle";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
