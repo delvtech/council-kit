@@ -56,11 +56,19 @@ export const goerliCouncilConfig: CouncilConfig = {
     ],
     proposals: {
       0: {
+        sentenceSummary:
+          "The GSC should have 1 second to decide whether to intervene on a proposal before it can be finalized on-chain.",
+        paragraphSummary:
+          "This will set the waitTime for Timelock execution to 1 second. This will give GSC members little to no time to react to malicious proposals that pass a core vote. At the same time, proposals that would seek to change the structure or other properties of the GSC could become difficult to pass due to GSC intervention.",
         descriptionURL: "https://moreinfo.com",
         targets: [],
         calldatas: [],
       },
       1: {
+        sentenceSummary:
+          "Vesting Vault participants should not be allowed to vote on core proposals.",
+        paragraphSummary:
+          "It is not enough for the vesting vault to have an unvestedMultiplier applied to the voting power it holds. The vault itself should not be approved for voting on core proposals at all. This will help balance incentives, where vesting participants might try to alter the vesting agreement themselves through a core vote.",
         descriptionURL: "https://moreinfo.com",
         targets: [],
         calldatas: [],
