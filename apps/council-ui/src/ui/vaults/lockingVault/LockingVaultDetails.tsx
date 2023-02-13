@@ -43,7 +43,7 @@ export function LockingVaultDetails({
   const { mutate: changeDelegate } = useChangeDelegate(address);
   const { mutate: deposit } = useDeposit(address);
   const { mutate: withdraw } = useWithdraw(address);
-  const { mutate: approve } = useApprove(address);
+  const { mutate: approve, isLoading: isApproving } = useApprove(address);
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
@@ -96,7 +96,7 @@ export function LockingVaultDetails({
             balance={data.tokenBalance}
             allowance={data.tokenAllowance}
             depositedBalance={data.depositedBalance}
-            disabled={!signer}
+            disabled={!signer || isApproving}
             onApprove={() => approve({ signer: signer as Signer })}
             onDeposit={(amount) =>
               deposit({ signer: signer as Signer, amount })
