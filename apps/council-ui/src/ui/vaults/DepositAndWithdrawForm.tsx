@@ -103,10 +103,14 @@ export function DepositAndWithdrawForm({
                   value={withdrawAmount}
                   maxButtonValue={depositedBalance}
                   onChange={setWithdrawAmount}
-                  infoText={`Deposited: ${formatBalance(
-                    depositedBalance,
-                    4,
-                  )} ${symbol}`}
+                  infoText={
+                    <span className="text-lg">
+                      Deposited:{" "}
+                      <span className="text-lg font-bold">
+                        {formatBalance(depositedBalance, 4)} {symbol}
+                      </span>
+                    </span>
+                  }
                 />
                 <button
                   className="daisy-btn daisy-btn-primary"
