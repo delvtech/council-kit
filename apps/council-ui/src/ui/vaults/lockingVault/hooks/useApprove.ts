@@ -7,6 +7,7 @@ import {
 import { ethers, Signer } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
+import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
 import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
@@ -33,7 +34,7 @@ export function useApprove(
         formatUnits(ethers.constants.MaxUint256, decimals),
         {
           onSubmitted: (hash) => {
-            makeTransactionSuccessToast("Approving", hash, chainId);
+            makeTransactionSubmittedToast("Approving", hash, chainId);
             transactionHash = hash;
           },
         },
