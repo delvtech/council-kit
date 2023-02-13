@@ -23,7 +23,7 @@ export function GSCOnlyToggle({
       )}
     >
       <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
-      <span className="mr-1 font-medium daisy-label-text">GSC Only</span>
+      <span className="mr-1 font-medium daisy-label-text">Show GSC Only</span>
       <input
         type="checkbox"
         className="daisy-toggle daisy-toggle-warning"
