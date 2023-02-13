@@ -98,7 +98,7 @@ function useGSCVaultProfileCard(vaultAddress: string, userAddress: string) {
           );
           const requiredVotingPower = await gscVoting?.getRequiredVotingPower();
           const isBelowThreshold =
-            +requiredVotingPower > +qualifyingVotingPower;
+            +qualifyingVotingPower < +requiredVotingPower;
 
           return {
             isBelowThreshold,
