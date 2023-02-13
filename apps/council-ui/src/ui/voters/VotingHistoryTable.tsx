@@ -1,8 +1,11 @@
 import { Vote } from "@council/sdk";
-import Link from "next/link";
 import { ReactElement } from "react";
+import { councilConfigs } from "src/config/council.config";
 import { makeProposalURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
+import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
+import { useChainId } from "src/ui/network/useChainId";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingHistoryTableProps {
@@ -17,42 +20,44 @@ export function VotingHistoryTable({
   }
 
   return (
-    <table className="w-full md:max-w-3xl daisy-table">
-      <thead>
-        <tr>
-          <th>Proposal</th>
-          <th>Voting Power</th>
-          <th>Vote</th>
-        </tr>
-      </thead>
-      <tbody>
-        {history.map((vote) => {
-          return <VoteHistoryRow vote={vote} key={vote.proposal.id} />;
-        })}
-      </tbody>
-    </table>
+    <div>
+      <GridTableHeader className="grid-cols-[3fr_1fr_1fr]">
+        <span>Proposal</span>
+        <span>Voting Power</span>
+        <span>Vote</span>
+      </GridTableHeader>
+      {history.map((vote, i) => (
+        <VoteHistoryRow key={i} vote={vote} />
+      ))}
+    </div>
   );
 }
 
 function VoteHistoryRow({ vote }: { vote: Vote }): ReactElement {
-  const id = vote.proposal.id;
-  const votingPower = vote.power;
-  const coreVotingName = vote.proposal.votingContract.name;
-
+  const chainId = useChainId();
+  const proposalsConfig = councilConfigs[chainId].coreVoting.proposals;
+  const proposal = vote.proposal;
+  const votingContract = proposal.votingContract;
+  const sentenceSummary = proposalsConfig[proposal.id]?.sentenceSummary;
   return (
-    <tr>
-      <td>
-        <Link
-          className="hover:underline hover:cursor-pointer"
-          href={makeProposalURL(vote.proposal.votingContract.address, id)}
-        >
-          {coreVotingName} Proposal {id}
-        </Link>
-      </td>
-      <td>{formatBalance(votingPower)}</td>
-      <td>
+    <GridTableRowLink
+      className="grid-cols-[3fr_1fr_1fr]"
+      href={makeProposalURL(votingContract.address, proposal.id)}
+    >
+      <span>
+        {votingContract.name} Proposal {proposal.id}
+        {sentenceSummary && (
+          <p className="opacity-60 text-sm">
+            {sentenceSummary.length > 80
+              ? `${sentenceSummary.slice(0, 80)}\u2026` // unicode for horizontal ellipses
+              : sentenceSummary}
+          </p>
+        )}
+      </span>
+      <span>{formatBalance(vote.power)}</span>
+      <span>
         <FormattedBallot ballot={vote.ballot} />
-      </td>
-    </tr>
+      </span>
+    </GridTableRowLink>
   );
 }
