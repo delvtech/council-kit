@@ -1,4 +1,3 @@
-import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement, useMemo, useState } from "react";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
@@ -6,6 +5,7 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
+import { GSCOnlyToggle } from "src/ui/voters/GSCOnlyToggle";
 import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
 import { VoterRowData } from "src/ui/voters/types";
 import { VoterList } from "src/ui/voters/VoterList/VoterList";
@@ -31,45 +31,41 @@ export default function Voters(): ReactElement {
   }
 
   return (
-    <Page className="max-w-3xl">
-      <div>
-        <h1 className="text-5xl font-bold">Voters</h1>
-        <p className="mt-6 text-lg">
-          Voters are accounts that currently have voting power. You can search
-          by partial keywords using ENS names or addresses.
-        </p>
-      </div>
+    <Page>
+      <div className="max-w-3xl px-4 m-auto space-y-10">
+        <div>
+          <h1 className="text-5xl font-bold">Voters</h1>
+          <p className="mt-6 text-lg">
+            Voters are accounts that currently have voting power. You can search
+            by partial keywords using ENS names or addresses.
+          </p>
+        </div>
 
-      <div className="flex items-center gap-4">
-        <input
-          type="text"
-          placeholder="Search by ENS or address"
-          className="w-full daisy-input-bordered daisy-input"
-          onChange={(e) => search(e.target.value as string)}
-          disabled={status !== "success"}
-        />
-        <label className="flex items-center gap-1 cursor-pointer daisy-label w-min whitespace-nowrap">
-          <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
-          <span className="mr-1 font-medium daisy-label-text">GSC Only</span>
+        <div className="flex items-center gap-4">
           <input
-            type="checkbox"
-            className="daisy-toggle daisy-toggle-warning"
-            checked={gscOnly}
-            onChange={({ target }) => setGscOnly(target.checked)}
+            type="text"
+            placeholder="Search by ENS or address"
+            className="w-full daisy-input-bordered daisy-input"
+            onChange={(e) => search(e.target.value as string)}
             disabled={status !== "success"}
           />
-        </label>
-      </div>
+          <GSCOnlyToggle
+            on={gscOnly}
+            onToggle={setGscOnly}
+            disabled={status !== "success"}
+          />
+        </div>
 
-      {status === "success" ? (
-        <VoterList
-          voters={filteredResults}
-          size={listSize}
-          onSizeChange={(newSize) => setListSize(newSize)}
-        />
-      ) : (
-        <VoterListSkeleton />
-      )}
+        {status === "success" ? (
+          <VoterList
+            voters={filteredResults}
+            size={listSize}
+            onSizeChange={(newSize) => setListSize(newSize)}
+          />
+        ) : (
+          <VoterListSkeleton />
+        )}
+      </div>
     </Page>
   );
 }

@@ -11,7 +11,7 @@ interface SortableGridTableProps<K extends string> {
   cols: Column<K>[];
   rows: Row[];
   onSort?: (sortOptions: SortOptions<K>) => void;
-  emptyTableElement: ReactNode;
+  emptyTableElement?: ReactNode;
   headingRowClassName?: string;
   bodyRowClassName?: string;
   defaultSortOptions?: SortOptions<K>;
@@ -20,15 +20,38 @@ interface SortableGridTableProps<K extends string> {
 /**
  * A div with `display: grid` pretending to be a table with sortable columns :).
  * To customize column widths use the `grid-cols-[<col-widths>]` class for
- * `headingRowClassName` and `bodyRowClassName.
+ * `headingRowClassName` and `bodyRowClassName`.
  * @see https://tailwindcss.com/docs/grid-template-columns#using-custom-values
+ *
+ * @example
+ * ```tsx
+ * // A table with a first column that takes of half the space, then 2 columns
+ * // that take up a quarter of the space.
+ * <SortableGridTable
+ *   headingRowClassName="grid-cols-[2fr_1fr_1fr]"
+ *   bodyRowClassName="group grid-cols-[2fr_1fr_1fr]"
+ *   cols={[
+ *     "Voter",
+ *     {
+ *       cell: "Voting Power",
+ *       sortKey: "votingPower"
+ *     },
+ *     "Ballot"
+ *    ]}
+ *   rows={[
+ *     ["Voter 1", "100", "YES"],
+ *     ["Voter 2", "200", "YES"],
+ *     ["Voter 3", "150", "NO"],
+ *   ]}
+ * />
+ * ```
  */
 export function SortableGridTable<K extends string>({
   cols,
   rows,
   onSort,
   headingRowClassName,
-  emptyTableElement,
+  emptyTableElement = <DefaultEmptyTableElement />,
   bodyRowClassName,
   defaultSortOptions,
 }: SortableGridTableProps<K>): ReactElement {
@@ -168,4 +191,12 @@ function nextSortDirection(
     default:
       return defaultDirection;
   }
+}
+
+function DefaultEmptyTableElement() {
+  return (
+    <div className="bg-base-300 p-10 text-center rounded-b-lg">
+      <p className="text-lg">Nothing to show.</p>
+    </div>
+  );
 }

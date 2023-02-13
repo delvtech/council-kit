@@ -44,9 +44,6 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
       headingRowClassName="grid-cols-[4fr_1fr_1fr_1fr_56px]"
       bodyRowClassName="group grid-cols-[4fr_1fr_1fr_1fr_56px] items-center"
       onSort={setSortOptions}
-      emptyTableElement={
-        <h2 className="text-lg text-center mt-4">No proposals to show</h2>
-      }
       cols={[
         "Name",
         {
