@@ -53,7 +53,7 @@ function GSCMembersTableRow({
 }: GSCMembersTableRow) {
   const { data: signer } = useSigner();
   const isKickButtonDisabled =
-    +qualifyingVotingPower > +requiredVotingPower && !!signer;
+    +qualifyingVotingPower >= +requiredVotingPower && !!signer;
   const { mutate: kickGSCMember } = useKickGSCMember(gscVaultAddress);
   return (
     <GridTableRowLink href={makeVoterURL(member.address)}>
