@@ -317,7 +317,8 @@ function useProposalDetailsPageData(
 /**
  * Dedupe a list of votes by only keeping the latest instance
  */
-function dedupeVotes<T extends Vote[] | undefined>(votes: T): T {
+function dedupeVotes<T extends Vote[] | undefined>(votes: T): T;
+function dedupeVotes(votes: Vote[] | undefined): Vote[] | undefined {
   if (!votes) {
     return votes;
   }
@@ -325,5 +326,5 @@ function dedupeVotes<T extends Vote[] | undefined>(votes: T): T {
   for (const vote of votes) {
     byVoterAddress[vote.voter.address] = vote;
   }
-  return Object.values(byVoterAddress) as T;
+  return Object.values(byVoterAddress);
 }
