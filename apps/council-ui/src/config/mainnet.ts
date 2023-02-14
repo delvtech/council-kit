@@ -15,7 +15,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
     vaults: [
       {
         name: "Locking Vault",
-        sentenceSummary:
+        paragraphSummary:
           "Allows users to deposit their tokens in exchange for voting power, which can also be delegated to a different user.",
         address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD",
         type: "FrozenLockingVault",
@@ -25,7 +25,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
       {
         name: "Vesting Vault",
         address: "0x6De73946eab234F1EE61256F10067D713aF0e37A",
-        sentenceSummary:
+        paragraphSummary:
           "Allows locked / vesting positions to still have voting power in the governance system by using a defined multiplier for the vested tokens over unvested.",
         type: "VestingVault",
         abi: {},

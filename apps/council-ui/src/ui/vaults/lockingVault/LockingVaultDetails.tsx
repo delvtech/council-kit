@@ -22,9 +22,9 @@ import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDel
 import { useDeposit } from "src/ui/vaults/lockingVault/hooks/useDeposit";
 import { useWithdraw } from "src/ui/vaults/lockingVault/hooks/useWithdraw";
 import {
-  LockingVaultStatsBar,
-  VaultStatsBarSkeleton,
-} from "src/ui/vaults/lockingVault/LockingVaultStatsBar";
+  LockingVaultStatsRow,
+  LockingVaultStatsRowSkeleton,
+} from "src/ui/vaults/lockingVault/LockingVaultStatsRow";
 import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
 import { useAccount, useSigner } from "wagmi";
 
@@ -78,7 +78,7 @@ export function LockingVaultDetails({
       )}
 
       {status === "success" ? (
-        <LockingVaultStatsBar
+        <LockingVaultStatsRow
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
           delegatedToAccount={data.delegatedToAccount}
@@ -87,7 +87,7 @@ export function LockingVaultDetails({
           tokenSymbol={data.tokenSymbol}
         />
       ) : (
-        <VaultStatsBarSkeleton />
+        <LockingVaultStatsRowSkeleton />
       )}
 
       <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
