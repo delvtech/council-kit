@@ -5,7 +5,7 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useChainId } from "src/ui/network/useChainId";
-import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
+import { useIsGSCMember } from "src/ui/vaults/gscVault/useIsGSCMember";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
 import { getAllVaultConfigs } from "src/vaults/vaults";
 
@@ -28,7 +28,7 @@ export function VoterAddress({
   iconSize,
 }: VoterAddressProps): ReactElement {
   const chainId = useChainId();
-  const { data: gscStatus } = useGSCStatus(address);
+  const { data: isGSCMember } = useIsGSCMember(address);
   const { data: delegatesByVault } = useDelegatesByVault();
   const allVaults = getAllVaultConfigs(chainId);
   const vaultNames = allVaults
@@ -49,7 +49,7 @@ export function VoterAddress({
     <span className={classNames("flex items-center", className)}>
       <WalletIcon size={iconSize} address={address} className="mr-2" />
       {addressLabel}
-      {gscStatus === "Member" && (
+      {isGSCMember && (
         <Tooltip content="GSC Member">
           <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />
         </Tooltip>
