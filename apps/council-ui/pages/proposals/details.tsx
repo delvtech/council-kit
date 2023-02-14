@@ -21,6 +21,7 @@ import { QuorumBarSkeleton } from "src/ui/proposals/Quorum/QuorumSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTable/VotingActivityTableSkeleton";
 import { useGSCMemberAddresses } from "src/ui/vaults/gscVault/useGSCMemberAddresses";
+import { useVotingPower } from "src/ui/vaults/hooks/useVotingPower";
 import { GSCOnlyToggle } from "src/ui/voters/GSCOnlyToggle";
 import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
@@ -57,6 +58,7 @@ export default function ProposalPage(): ReactElement {
     return data?.votes;
   }, [data, gscOnly, gscMemberAddresses]);
 
+  const { data: votingPower } = useVotingPower(address);
   const { mutate: vote } = useVote();
   const { mutate: gscVote } = useGSCVote();
 
@@ -172,7 +174,9 @@ export default function ProposalPage(): ReactElement {
               atBlock={data.createdAtBlock || blockNumber}
               account={address}
               accountBallot={data?.accountBallot}
-              disabled={!signer || !data?.isActive}
+              disabled={
+                !signer || !data?.isActive || !votingPower || !+votingPower
+              }
               onVote={handleVote}
             />
           ) : (
