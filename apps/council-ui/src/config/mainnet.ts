@@ -78,9 +78,9 @@ export const mainnetCouncilConfig: CouncilConfig = {
         type: "GSCVault",
 
         sentenceSummary:
-          "The Governance Steering Council (GSC) vault provides one vote to each member who have surpassed a pre-established threshold of delegated Voting Power defined by the DAO.",
+          "The Governance Steering Council (GSC) vault provides one vote to each member that has surpassed a pre-established threshold of delegated Voting Power defined by the DAO.",
         paragraphSummary:
-          "The Governance Steering Council (GSC) vault provides one vote to each member who have surpassed a pre-established threshold of delegated Voting Power defined by the DAO. Members of the council can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
+          "The Governance Steering Council (GSC) vault provides one vote to each member that has surpassed a pre-established threshold of delegated Voting Power defined by the DAO. Members of the council can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
         abi: {},
         descriptionURL: "https://moreinfo.com",
       },
