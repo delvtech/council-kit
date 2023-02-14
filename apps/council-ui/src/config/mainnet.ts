@@ -34,12 +34,13 @@ export const mainnetCouncilConfig: CouncilConfig = {
     ],
     proposals: {
       0: {
-        descriptionURL: "https://moreinfo.com",
+        descriptionURL: "",
         targets: [],
         calldatas: [],
       },
       1: {
-        descriptionURL: "https://moreinfo.com",
+        descriptionURL:
+          "ipfs://bafybeibadlecyuat3quqrlh66srcsmllwhfwy6qqlfybsxw5jy75qtaehu/#/elfi.eth/proposal/0x46785a4b78a9d03aeb5cdeb1c3ca4ae02cf9e5aca508e59bef405d16a7c8b4a6",
         targets: [],
         calldatas: [],
         title: "EGP-2: Increase GSC quorum threshold",
@@ -48,7 +49,8 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "As of today (April 28, 2022) there has only been one delegate (myself) who has proven their membership to the GSC on-chain. In roughly five days I will be able to pass votes by myself with no further approval because the current quroum threshold on the GSC is one. I believe that no one person should be able to govern the GSC by themselves, and thus I am proposing to effectively lock the GSC until two other delegates join the GSC. Three was chosen as a starting point for one reason, to break a tie. As more delegates join, I'm sure this value will gradually increase but for the time being, a threshold of three will be adequate to ensure some level of participation.",
       },
       2: {
-        descriptionURL: "https://moreinfo.com",
+        descriptionURL:
+          "ipfs://bafybeibadlecyuat3quqrlh66srcsmllwhfwy6qqlfybsxw5jy75qtaehu/#/elfi.eth/proposal/0x132d4d3e0580349d938d22c844ce088ba2e5f394fc28b41f2927856746b125d7",
         targets: [],
         calldatas: [],
         title: "EGP-15: Element Fixed Borrow Protocol Grant Proposal (Old)",
@@ -58,7 +60,8 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "The proceeds of this grant will enable us to build a protocol offering competitive, low-cost, fixed-rate borrowing on Compound Finance and Aave. Component has been an active contributor to Element Finance since early 2021 and will continue to launch new integrations for fixed rates on Element Finance. This grant ensures a long term relationship where Component will be part of growing, generating revenue and decentralizing the Element DAO.",
       },
       3: {
-        descriptionURL: "https://moreinfo.com",
+        descriptionURL:
+          "ipfs://bafybeibadlecyuat3quqrlh66srcsmllwhfwy6qqlfybsxw5jy75qtaehu/#/elfi.eth/proposal/0x132d4d3e0580349d938d22c844ce088ba2e5f394fc28b41f2927856746b125d7",
         targets: [],
         calldatas: [],
         title: "EGP-15: Element Fixed Borrow Protocol Grant Proposal",
