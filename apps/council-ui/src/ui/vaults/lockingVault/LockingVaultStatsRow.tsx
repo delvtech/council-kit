@@ -11,7 +11,7 @@ import {
   WALLETS_DELEGATED_TIP,
 } from "src/ui/vaults/tooltips";
 
-interface LockingVaultStatsBarProps {
+interface LockingVaultStatsRowProps {
   accountVotingPower: string;
   accountPercentOfTVP: number;
   delegatedToAccount: number;
@@ -27,7 +27,7 @@ export function LockingVaultStatsRow({
   participants,
   tokenAddress,
   tokenSymbol,
-}: LockingVaultStatsBarProps): ReactElement {
+}: LockingVaultStatsRowProps): ReactElement {
   const chainId = useChainId();
   return (
     <div className="flex flex-wrap gap-4">

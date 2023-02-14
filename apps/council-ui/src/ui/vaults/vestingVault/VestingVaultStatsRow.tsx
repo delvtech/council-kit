@@ -11,7 +11,7 @@ import {
   WALLETS_DELEGATED_TIP,
 } from "src/ui/vaults/tooltips";
 
-interface VestingVaultStatsBarProps {
+interface VestingVaultStatsRowProps {
   accountVotingPower: string;
   accountPercentOfTVP: number;
   unvestedMultiplier: number;
@@ -21,7 +21,7 @@ interface VestingVaultStatsBarProps {
   tokenSymbol: string;
 }
 
-export function VestingVaultStatsBar({
+export function VestingVaultStatsRow({
   accountVotingPower,
   accountPercentOfTVP,
   unvestedMultiplier,
@@ -29,7 +29,7 @@ export function VestingVaultStatsBar({
   participants,
   tokenAddress,
   tokenSymbol,
-}: VestingVaultStatsBarProps): ReactElement {
+}: VestingVaultStatsRowProps): ReactElement {
   const chainId = useChainId();
   return (
     <div className="flex flex-wrap gap-4">

@@ -12,7 +12,7 @@ import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSke
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { GrantCard } from "src/ui/vaults/vestingVault/GrantCard";
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
-import { VestingVaultStatsBar } from "src/ui/vaults/vestingVault/VestingVaultStatsBar";
+import { VestingVaultStatsRow } from "src/ui/vaults/vestingVault/VestingVaultStatsRow";
 import { useAccount, useSigner } from "wagmi";
 
 interface VestingVaultDetailsProps {
@@ -41,7 +41,7 @@ export function VestingVaultDetails({
         <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
       }
       statsRow={
-        <VestingVaultStatsBar
+        <VestingVaultStatsRow
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
           unvestedMultiplier={data.unvestedMultiplier}
