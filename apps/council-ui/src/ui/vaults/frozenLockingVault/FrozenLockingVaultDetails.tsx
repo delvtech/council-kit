@@ -2,22 +2,17 @@ import { LockingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ethers, Signer } from "ethers";
 import { ReactElement } from "react";
-import Skeleton from "react-loading-skeleton";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 
-import {
-  ChangeDelegateForm,
-  ChangeDelegateFormSkeleton,
-} from "src/ui/vaults/ChangeDelegateForm";
+import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
-import {
-  LockingVaultStatsRow,
-  LockingVaultStatsRowSkeleton,
-} from "src/ui/vaults/lockingVault/LockingVaultStatsRow";
-import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
+import { LockingVaultStatsRow } from "src/ui/vaults/lockingVault/LockingVaultStatsRow";
+import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
+import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
+import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultDetailsProps {
@@ -40,15 +35,17 @@ export function FrozenLockingVaultDetails({
     return <ErrorMessage error={error} />;
   }
 
-  return (
-    <>
-      {status === "success" ? (
-        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
-      ) : (
-        <VaultHeaderSkeleton />
-      )}
+  if (status !== "success") {
+    return <VaultDetailsSkeleton />;
+  }
 
-      {status === "success" ? (
+  return (
+    <VaultDetails
+      paragraphSummary={data.paragraphSummary}
+      header={
+        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+      }
+      statsRow={
         <LockingVaultStatsRow
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
@@ -57,31 +54,17 @@ export function FrozenLockingVaultDetails({
           tokenAddress={data.tokenAddress}
           tokenSymbol={data.tokenSymbol}
         />
-      ) : (
-        <LockingVaultStatsRowSkeleton />
-      )}
-      {status === "success" ? (
-        data.paragraphSummary && (
-          <p className="mb-5 text-lg">{data.paragraphSummary}</p>
-        )
-      ) : (
-        <Skeleton count={3} className="mb-5 text-lg" />
-      )}
-
-      <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
-        {status === "success" ? (
-          <ChangeDelegateForm
-            currentDelegate={data.delegate || ethers.constants.AddressZero}
-            depositedBalance={data.depositedBalance}
-            onDelegate={(delegate) =>
-              changeDelegate({ signer: signer as Signer, delegate })
-            }
-          />
-        ) : (
-          <ChangeDelegateFormSkeleton />
-        )}
-      </div>
-    </>
+      }
+      actions={
+        <ChangeDelegateForm
+          currentDelegate={data.delegate || ethers.constants.AddressZero}
+          depositedBalance={data.depositedBalance}
+          onDelegate={(delegate) =>
+            changeDelegate({ signer: signer as Signer, delegate })
+          }
+        />
+      }
+    />
   );
 }
 
