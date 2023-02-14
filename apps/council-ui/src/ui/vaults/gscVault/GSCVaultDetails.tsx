@@ -7,11 +7,11 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { GSCMembersTable } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTable";
-import { GSCMembersTableSkeleton } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTableSkeleton";
 import { GSCVaultStatsBar } from "src/ui/vaults/gscVault/GSCVaultStatsBar/GSCVaultStatsBar";
-import { GSCVaultStatsBarSkeleton } from "src/ui/vaults/gscVault/GSCVaultStatsBar/GSCVaultStatsBarSkeleton";
+import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
+import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 
-import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
+import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import {
   getGSCMembers,
   GSCMemberInfo,
@@ -37,42 +37,40 @@ export function GSCVaultDetails({
     return <ErrorMessage error={error} />;
   }
 
-  return (
-    <>
-      {status === "success" ? (
-        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
-      ) : (
-        <VaultHeaderSkeleton />
-      )}
+  if (status !== "success") {
+    return <VaultDetailsSkeleton />;
+  }
 
-      {status === "success" ? (
+  return (
+    <VaultDetails
+      paragraphSummary={data.paragraphSummary}
+      header={
+        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+      }
+      statsRow={
         <GSCVaultStatsBar
           gscVaultAddress={vaultAddress}
           accountMembership={data.gscStatus}
           membersCount={data.members.length}
           requiredVotingPower={data.requiredVotingPower}
         />
-      ) : (
-        <GSCVaultStatsBarSkeleton />
-      )}
-
-      <div className="flex flex-col w-full gap-8 sm:flex-row">
-        {status === "success" ? (
+      }
+      actions={
+        <div className="flex flex-col w-full  gap-8 sm:flex-row">
           <GSCMembersTable
             members={data.members}
             requiredVotingPower={data.requiredVotingPower}
             gscVaultAddress={vaultAddress}
           />
-        ) : (
-          <GSCMembersTableSkeleton />
-        )}
-      </div>
-    </>
+        </div>
+      }
+    />
   );
 }
 
 interface GSCVaultDetailsData {
   gscStatus: GSCStatus;
+  paragraphSummary: string | undefined;
   descriptionURL: string | undefined;
   name: string | undefined;
   members: GSCMemberInfo[];
@@ -123,6 +121,7 @@ function useGSCVaultDetails({
           return {
             gscStatus,
             descriptionURL: vaultConfig.descriptionURL,
+            paragraphSummary: vaultConfig.paragraphSummary,
             name: vaultConfig.name,
             members,
             requiredVotingPower,
