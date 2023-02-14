@@ -51,11 +51,11 @@ export default function ProposalPage(): ReactElement {
   const [gscOnly, setGscOnly] = useState(false);
   const filteredVotes = useMemo(() => {
     if (data && gscOnly && gscMemberAddresses) {
-      return data.votes.filter(({ voter }) =>
+      return dedupeVotes(data.votes).filter(({ voter }) =>
         gscMemberAddresses.includes(voter.address),
       );
     }
-    return data?.votes;
+    return dedupeVotes(data?.votes);
   }, [data, gscOnly, gscMemberAddresses]);
 
   const { data: votingPower } = useVotingPower(address);
@@ -312,4 +312,18 @@ function useProposalDetailsPageData(
         }
       : undefined,
   });
+}
+
+/**
+ * Dedupe a list of votes by only keeping the latest instance
+ */
+function dedupeVotes<T extends Vote[] | undefined>(votes: T): T {
+  if (!votes) {
+    return votes;
+  }
+  const byVoterAddress: Record<string, Vote> = {};
+  for (const vote of votes) {
+    byVoterAddress[vote.voter.address] = vote;
+  }
+  return Object.values(byVoterAddress) as T;
 }
