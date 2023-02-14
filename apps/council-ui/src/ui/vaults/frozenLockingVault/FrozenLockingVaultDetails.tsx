@@ -2,6 +2,7 @@ import { LockingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ethers, Signer } from "ethers";
 import { ReactElement } from "react";
+import Skeleton from "react-loading-skeleton";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -59,6 +60,13 @@ export function FrozenLockingVaultDetails({
       ) : (
         <LockingVaultStatsRowSkeleton />
       )}
+      {status === "success" ? (
+        data.paragraphSummary && (
+          <p className="mb-5 text-lg">{data.paragraphSummary}</p>
+        )
+      ) : (
+        <Skeleton count={3} className="mb-5 text-lg" />
+      )}
 
       <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
         {status === "success" ? (
@@ -84,6 +92,7 @@ interface LockingVaultDetailsData {
   delegate?: string;
   delegatedToAccount: number;
   depositedBalance: string;
+  paragraphSummary: string | undefined;
   descriptionURL: string | undefined;
   name: string | undefined;
   participants: number;
@@ -134,6 +143,7 @@ function useFrozenLockingVaultDetailsData(
 
         delegate: delegate?.address,
         descriptionURL: vaultConfig?.descriptionURL,
+        paragraphSummary: vaultConfig?.paragraphSummary,
         name: vaultConfig?.name,
         participants: (await lockingVault.getVoters()).length,
         delegatedToAccount: account
