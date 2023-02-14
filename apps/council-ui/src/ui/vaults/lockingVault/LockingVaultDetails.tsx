@@ -9,23 +9,16 @@ import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErro
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 
-import {
-  ChangeDelegateForm,
-  ChangeDelegateFormSkeleton,
-} from "src/ui/vaults/ChangeDelegateForm";
-import {
-  DepositAndWithdrawForm,
-  DepositAndWithdrawFormSkeleton,
-} from "src/ui/vaults/DepositAndWithdrawForm";
+import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
+import { DepositAndWithdrawForm } from "src/ui/vaults/DepositAndWithdrawForm";
 import { useApprove } from "src/ui/vaults/lockingVault/hooks/useApprove";
 import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
 import { useDeposit } from "src/ui/vaults/lockingVault/hooks/useDeposit";
 import { useWithdraw } from "src/ui/vaults/lockingVault/hooks/useWithdraw";
-import {
-  LockingVaultStatsBar,
-  VaultStatsBarSkeleton,
-} from "src/ui/vaults/lockingVault/LockingVaultStatsBar";
-import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
+import { LockingVaultStatsRow } from "src/ui/vaults/lockingVault/LockingVaultStatsRow";
+import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
+import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
+import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultDetailsProps {
@@ -49,6 +42,9 @@ export function LockingVaultDetails({
   if (status === "error") {
     return <ErrorMessage error={error} />;
   }
+  if (status !== "success") {
+    return <VaultDetailsSkeleton />;
+  }
 
   async function handleDelegate(delegate: string): Promise<void> {
     let address: string | null | undefined = delegate;
@@ -70,15 +66,13 @@ export function LockingVaultDetails({
   }
 
   return (
-    <>
-      {status === "success" ? (
+    <VaultDetails
+      paragraphSummary={data.paragraphSummary}
+      header={
         <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
-      ) : (
-        <VaultHeaderSkeleton />
-      )}
-
-      {status === "success" ? (
-        <LockingVaultStatsBar
+      }
+      statsRow={
+        <LockingVaultStatsRow
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
           delegatedToAccount={data.delegatedToAccount}
@@ -86,12 +80,9 @@ export function LockingVaultDetails({
           tokenAddress={data.tokenAddress}
           tokenSymbol={data.tokenSymbol}
         />
-      ) : (
-        <VaultStatsBarSkeleton />
-      )}
-
-      <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
-        {status === "success" ? (
+      }
+      actions={
+        <>
           <DepositAndWithdrawForm
             symbol={data.tokenSymbol}
             balance={data.tokenBalance}
@@ -106,22 +97,16 @@ export function LockingVaultDetails({
               withdraw({ signer: signer as Signer, amount })
             }
           />
-        ) : (
-          <DepositAndWithdrawFormSkeleton />
-        )}
 
-        {status === "success" ? (
           <ChangeDelegateForm
             currentDelegate={data.delegate || ethers.constants.AddressZero}
             depositedBalance={data.depositedBalance}
             onDelegate={handleDelegate}
             disabled={!signer || !+data.depositedBalance || isDelegating}
           />
-        ) : (
-          <ChangeDelegateFormSkeleton />
-        )}
-      </div>
-    </>
+        </>
+      }
+    />
   );
 }
 
@@ -133,6 +118,7 @@ interface LockingVaultDetailsData {
   delegatedToAccount: number;
   depositedBalance: string;
   descriptionURL: string | undefined;
+  paragraphSummary: string | undefined;
   name: string | undefined;
   participants: number;
   tokenAddress: string;
@@ -182,6 +168,7 @@ function useLockingVaultDetailsData(
 
         delegate: delegate?.address,
         descriptionURL: vaultConfig?.descriptionURL,
+        paragraphSummary: vaultConfig?.paragraphSummary,
         name: vaultConfig?.name,
         participants: (await lockingVault.getVoters()).length,
         delegatedToAccount: account

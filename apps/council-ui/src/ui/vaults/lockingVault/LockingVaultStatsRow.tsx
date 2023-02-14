@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-import Skeleton from "react-loading-skeleton";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
@@ -12,32 +11,32 @@ import {
   WALLETS_DELEGATED_TIP,
 } from "src/ui/vaults/tooltips";
 
-interface VestingVaultStatsBarProps {
+interface LockingVaultStatsRowProps {
   accountVotingPower: string;
   accountPercentOfTVP: number;
-  unvestedMultiplier: number;
   delegatedToAccount: number;
   participants: number;
   tokenAddress: string;
   tokenSymbol: string;
 }
 
-export function VestingVaultStatsBar({
+export function LockingVaultStatsRow({
   accountVotingPower,
   accountPercentOfTVP,
-  unvestedMultiplier,
   delegatedToAccount,
   participants,
   tokenAddress,
   tokenSymbol,
-}: VestingVaultStatsBarProps): ReactElement {
+}: LockingVaultStatsRowProps): ReactElement {
   const chainId = useChainId();
   return (
     <div className="flex flex-wrap gap-4">
       {accountVotingPower && (
         <Stat
           label="Your Voting Power"
-          value={formatBalance(accountVotingPower)}
+          value={
+            +accountVotingPower ? formatBalance(accountVotingPower) : "None"
+          }
         />
       )}
 
@@ -52,15 +51,6 @@ export function VestingVaultStatsBar({
           value={`${formatBalance(accountPercentOfTVP, 2)}%`}
         />
       )}
-
-      <Stat
-        label={
-          <DefinitionTooltip content="The voting power of each unvested token as a percentage of a vested token.">
-            Unvested multiplier
-          </DefinitionTooltip>
-        }
-        value={`${unvestedMultiplier}%`}
-      />
 
       {delegatedToAccount >= 0 && (
         <Stat
@@ -92,29 +82,6 @@ export function VestingVaultStatsBar({
           </ExternalLink>
         }
       />
-    </div>
-  );
-}
-
-// ================ Skeletons ================
-
-export function VaultStatsBarSkeleton(): ReactElement {
-  return (
-    <div className="flex flex-wrap gap-4">
-      <Stat label="Active Proposals" value={<Skeleton width={90} />} />
-      <Stat
-        label={
-          <>
-            % of Total{" "}
-            <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
-          </>
-        }
-        value={<Skeleton width={90} />}
-      />
-      <Stat label="Your Voting Power" value={<Skeleton width={90} />} />
-      <Stat label="Wallets Delegated to You" value={<Skeleton width={90} />} />
-      <Stat label="Participants" value={<Skeleton width={90} />} />
-      <Stat label="Vault token" value={<Skeleton width={90} />} />
     </div>
   );
 }

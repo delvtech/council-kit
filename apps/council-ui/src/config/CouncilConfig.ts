@@ -28,18 +28,24 @@ export interface VotingContractConfig extends ContractConfig {
 export interface VaultConfig extends ContractConfig {
   type: "LockingVault" | "FrozenLockingVault" | "VestingVault" | "GSCVault";
   name: string;
+  /**
+   * A short one-liner to show below the vault name.
+   */
+  sentenceSummary?: string;
+  /**
+   * A description to show on the vault's details page.
+   */
+  paragraphSummary?: string;
   descriptionURL: string;
 }
 
 export interface ProposalConfig {
   /**
-   * A short one-liner that will show below the proposal name in the proposals
-   * list.
+   * A short one-liner to show below the proposal name.
    */
   sentenceSummary?: string;
   /**
-   * A description for the proposal that will show above the voting activity on
-   * the proposal's details page.
+   * A description to show on the proposal's details page.
    */
   paragraphSummary?: string;
   descriptionURL: string;

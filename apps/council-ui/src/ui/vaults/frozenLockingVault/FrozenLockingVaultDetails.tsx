@@ -7,16 +7,12 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 
-import {
-  ChangeDelegateForm,
-  ChangeDelegateFormSkeleton,
-} from "src/ui/vaults/ChangeDelegateForm";
+import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
-import {
-  LockingVaultStatsBar,
-  VaultStatsBarSkeleton,
-} from "src/ui/vaults/lockingVault/LockingVaultStatsBar";
-import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
+import { LockingVaultStatsRow } from "src/ui/vaults/lockingVault/LockingVaultStatsRow";
+import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
+import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
+import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultDetailsProps {
@@ -39,16 +35,18 @@ export function FrozenLockingVaultDetails({
     return <ErrorMessage error={error} />;
   }
 
-  return (
-    <>
-      {status === "success" ? (
-        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
-      ) : (
-        <VaultHeaderSkeleton />
-      )}
+  if (status !== "success") {
+    return <VaultDetailsSkeleton />;
+  }
 
-      {status === "success" ? (
-        <LockingVaultStatsBar
+  return (
+    <VaultDetails
+      paragraphSummary={data.paragraphSummary}
+      header={
+        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+      }
+      statsRow={
+        <LockingVaultStatsRow
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
           delegatedToAccount={data.delegatedToAccount}
@@ -56,24 +54,17 @@ export function FrozenLockingVaultDetails({
           tokenAddress={data.tokenAddress}
           tokenSymbol={data.tokenSymbol}
         />
-      ) : (
-        <VaultStatsBarSkeleton />
-      )}
-
-      <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
-        {status === "success" ? (
-          <ChangeDelegateForm
-            currentDelegate={data.delegate || ethers.constants.AddressZero}
-            depositedBalance={data.depositedBalance}
-            onDelegate={(delegate) =>
-              changeDelegate({ signer: signer as Signer, delegate })
-            }
-          />
-        ) : (
-          <ChangeDelegateFormSkeleton />
-        )}
-      </div>
-    </>
+      }
+      actions={
+        <ChangeDelegateForm
+          currentDelegate={data.delegate || ethers.constants.AddressZero}
+          depositedBalance={data.depositedBalance}
+          onDelegate={(delegate) =>
+            changeDelegate({ signer: signer as Signer, delegate })
+          }
+        />
+      }
+    />
   );
 }
 
@@ -84,6 +75,7 @@ interface LockingVaultDetailsData {
   delegate?: string;
   delegatedToAccount: number;
   depositedBalance: string;
+  paragraphSummary: string | undefined;
   descriptionURL: string | undefined;
   name: string | undefined;
   participants: number;
@@ -134,6 +126,7 @@ function useFrozenLockingVaultDetailsData(
 
         delegate: delegate?.address,
         descriptionURL: vaultConfig?.descriptionURL,
+        paragraphSummary: vaultConfig?.paragraphSummary,
         name: vaultConfig?.name,
         participants: (await lockingVault.getVoters()).length,
         delegatedToAccount: account
