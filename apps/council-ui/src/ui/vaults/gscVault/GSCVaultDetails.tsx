@@ -7,7 +7,7 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { GSCMembersTable } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTable";
-import { GSCVaultStatsBar } from "src/ui/vaults/gscVault/GSCVaultStatsBar/GSCVaultStatsBar";
+import { GSCVaultsStatsRow } from "src/ui/vaults/gscVault/GSCVaultStatsRow/GSCVaultStatsRow";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 
@@ -48,7 +48,7 @@ export function GSCVaultDetails({
         <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
       }
       statsRow={
-        <GSCVaultStatsBar
+        <GSCVaultsStatsRow
           gscVaultAddress={vaultAddress}
           accountMembership={data.gscStatus}
           membersCount={data.members.length}

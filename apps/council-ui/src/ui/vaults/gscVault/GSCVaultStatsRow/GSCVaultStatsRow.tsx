@@ -5,19 +5,19 @@ import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { GSCStatus } from "src/vaults/gscVault/types";
 import { GSCMembershipStatusStat } from "./GSCMembershipStatusStat";
 
-interface GSCVaultStatsBarProps {
+interface GSCVaultStatsRowProps {
   gscVaultAddress: string;
   accountMembership: GSCStatus;
   membersCount: number;
   requiredVotingPower: string;
 }
 
-export function GSCVaultStatsBar({
+export function GSCVaultsStatsRow({
   gscVaultAddress,
   accountMembership,
   membersCount,
   requiredVotingPower,
-}: GSCVaultStatsBarProps): ReactElement {
+}: GSCVaultStatsRowProps): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
       {accountMembership && (
