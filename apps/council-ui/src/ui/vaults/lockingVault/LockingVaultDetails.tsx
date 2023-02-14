@@ -40,10 +40,11 @@ export function LockingVaultDetails({
   const { data: signer } = useSigner();
   const { data, status, error } = useLockingVaultDetailsData(address, account);
 
-  const { mutate: changeDelegate } = useChangeDelegate(address);
-  const { mutate: deposit } = useDeposit(address);
-  const { mutate: withdraw } = useWithdraw(address);
-  const { mutate: approve } = useApprove(address);
+  const { mutate: changeDelegate, isLoading: isDelegating } =
+    useChangeDelegate(address);
+  const { mutate: deposit, isLoading: isDepositing } = useDeposit(address);
+  const { mutate: withdraw, isLoading: isWithdrawing } = useWithdraw(address);
+  const { mutate: approve, isLoading: isApproving } = useApprove(address);
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
@@ -96,7 +97,7 @@ export function LockingVaultDetails({
             balance={data.tokenBalance}
             allowance={data.tokenAllowance}
             depositedBalance={data.depositedBalance}
-            disabled={!signer}
+            disabled={!signer || isApproving || isDepositing || isWithdrawing}
             onApprove={() => approve({ signer: signer as Signer })}
             onDeposit={(amount) =>
               deposit({ signer: signer as Signer, amount })
@@ -114,6 +115,7 @@ export function LockingVaultDetails({
             currentDelegate={data.delegate || ethers.constants.AddressZero}
             depositedBalance={data.depositedBalance}
             onDelegate={handleDelegate}
+            disabled={!signer || !+data.depositedBalance || isDelegating}
           />
         ) : (
           <ChangeDelegateFormSkeleton />
