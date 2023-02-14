@@ -7,14 +7,12 @@ import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useChainId } from "src/ui/network/useChainId";
 import {
   PARTICIPANTS_TIP,
-  TVP_TIP,
   WALLETS_DELEGATED_TIP,
   YOUR_VOTING_POWER_TIP,
 } from "src/ui/vaults/tooltips";
 
 interface VestingVaultStatsRowProps {
   accountVotingPower: string;
-  accountPercentOfTVP: number;
   unvestedMultiplier: number;
   delegatedToAccount: number;
   participants: number;
@@ -24,7 +22,6 @@ interface VestingVaultStatsRowProps {
 
 export function VestingVaultStatsRow({
   accountVotingPower,
-  accountPercentOfTVP,
   unvestedMultiplier,
   delegatedToAccount,
   participants,
@@ -42,18 +39,6 @@ export function VestingVaultStatsRow({
             </DefinitionTooltip>
           }
           value={formatBalance(accountVotingPower)}
-        />
-      )}
-
-      {accountPercentOfTVP >= 0 && (
-        <Stat
-          label={
-            <>
-              % of total{" "}
-              <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
-            </>
-          }
-          value={`${formatBalance(accountPercentOfTVP, 2)}%`}
         />
       )}
 
