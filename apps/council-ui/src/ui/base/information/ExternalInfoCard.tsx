@@ -13,15 +13,16 @@ export function ExternalInfoCard({
   href,
 }: ExternalInfoCardProps): ReactElement {
   return (
-    <div className="p-4 border border-gray-300 rounded-xl w-fit hover:opacity-50 cursor-pointer select-text flex-1">
-      <div className="mb-1">
-        <a href={href}>
-          <h2 className="font-bold whitespace-nowrap">
-            {header} <ExternalLinkSVG size={16} />
-          </h2>
-        </a>
-      </div>
-      <h2>{body}</h2>
-    </div>
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="p-4 border border-gray-300 rounded-xl w-fit hover:opacity-50 cursor-pointer select-text flex-1"
+    >
+      <h2 className="font-bold whitespace-nowrap mb-1">
+        {header} <ExternalLinkSVG size={16} />
+      </h2>
+      <p>{body}</p>
+    </a>
   );
 }

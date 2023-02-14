@@ -2,7 +2,7 @@
 	"eslint.workingDirectories": [
 		"./apps/council-ui"
 	],
-	"dotenv.enableAutocloaking": true,
+	"dotenv.enableAutocloaking": false,
 	"json.schemas": [
 		{
 			"fileMatch": [
