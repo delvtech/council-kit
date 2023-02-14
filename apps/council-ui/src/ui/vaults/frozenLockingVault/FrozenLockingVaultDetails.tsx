@@ -48,7 +48,6 @@ export function FrozenLockingVaultDetails({
       statsRow={
         <LockingVaultStatsRow
           accountVotingPower={data.accountVotingPower}
-          accountPercentOfTVP={data.accountPercentOfTVP}
           delegatedToAccount={data.delegatedToAccount}
           participants={data.participants}
           tokenAddress={data.tokenAddress}
@@ -69,7 +68,6 @@ export function FrozenLockingVaultDetails({
 }
 
 interface LockingVaultDetailsData {
-  accountPercentOfTVP: number;
   accountVotingPower: string;
   activeProposalCount: number;
   delegate?: string;
@@ -109,11 +107,7 @@ function useFrozenLockingVaultDetailsData(
         : "0";
 
       return {
-        accountPercentOfTVP:
-          (+accountVotingPower / +(await lockingVault.getTotalVotingPower())) *
-          100,
         accountVotingPower,
-
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
         tokenBalance: account ? await token.getBalanceOf(account) : "0",

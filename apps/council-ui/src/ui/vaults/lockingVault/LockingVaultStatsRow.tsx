@@ -7,14 +7,12 @@ import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useChainId } from "src/ui/network/useChainId";
 import {
   PARTICIPANTS_TIP,
-  TVP_TIP,
   WALLETS_DELEGATED_TIP,
   YOUR_VOTING_POWER_TIP,
 } from "src/ui/vaults/tooltips";
 
 interface LockingVaultStatsRowProps {
   accountVotingPower: string;
-  accountPercentOfTVP: number;
   delegatedToAccount: number;
   participants: number;
   tokenAddress: string;
@@ -23,7 +21,6 @@ interface LockingVaultStatsRowProps {
 
 export function LockingVaultStatsRow({
   accountVotingPower,
-  accountPercentOfTVP,
   delegatedToAccount,
   participants,
   tokenAddress,
@@ -42,18 +39,6 @@ export function LockingVaultStatsRow({
           value={
             +accountVotingPower ? formatBalance(accountVotingPower) : "None"
           }
-        />
-      )}
-
-      {accountPercentOfTVP >= 0 && (
-        <Stat
-          label={
-            <>
-              % of total{" "}
-              <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
-            </>
-          }
-          value={`${formatBalance(accountPercentOfTVP, 2)}%`}
         />
       )}
 

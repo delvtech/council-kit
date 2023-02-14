@@ -43,7 +43,6 @@ export function VestingVaultDetails({
       statsRow={
         <VestingVaultStatsRow
           accountVotingPower={data.accountVotingPower}
-          accountPercentOfTVP={data.accountPercentOfTVP}
           unvestedMultiplier={data.unvestedMultiplier}
           delegatedToAccount={data.delegatedToAccount}
           participants={data.participants}
@@ -76,7 +75,6 @@ export function VestingVaultDetails({
 }
 
 interface VestingVaultDetailsData {
-  accountPercentOfTVP: number;
   accountVotingPower: string;
   unvestedMultiplier: number;
   delegate?: string;
@@ -142,9 +140,6 @@ function useVestingVaultDetailsData(
         delegatedToAccount: account
           ? (await vestingVault.getDelegatorsTo(account)).length
           : 0,
-        accountPercentOfTVP:
-          (+accountVotingPower / +(await vestingVault.getTotalVotingPower())) *
-          100,
       };
     },
   });
