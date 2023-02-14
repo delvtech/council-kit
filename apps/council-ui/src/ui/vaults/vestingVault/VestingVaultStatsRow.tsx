@@ -9,6 +9,7 @@ import {
   PARTICIPANTS_TIP,
   TVP_TIP,
   WALLETS_DELEGATED_TIP,
+  YOUR_VOTING_POWER_TIP,
 } from "src/ui/vaults/tooltips";
 
 interface VestingVaultStatsRowProps {
@@ -35,7 +36,11 @@ export function VestingVaultStatsRow({
     <div className="flex flex-wrap gap-4">
       {accountVotingPower && (
         <Stat
-          label="Your Voting Power"
+          label={
+            <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
+              Your voting power
+            </DefinitionTooltip>
+          }
           value={formatBalance(accountVotingPower)}
         />
       )}
@@ -44,7 +49,7 @@ export function VestingVaultStatsRow({
         <Stat
           label={
             <>
-              % of Total{" "}
+              % of total{" "}
               <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
             </>
           }
@@ -65,7 +70,7 @@ export function VestingVaultStatsRow({
         <Stat
           label={
             <DefinitionTooltip content={WALLETS_DELEGATED_TIP}>
-              Delegated to You
+              Wallets delegated to you
             </DefinitionTooltip>
           }
           value={delegatedToAccount || "None"}
@@ -84,7 +89,11 @@ export function VestingVaultStatsRow({
       )}
 
       <Stat
-        label="Vault token"
+        label={
+          <DefinitionTooltip content="The specific token native to this vault">
+            Vault token
+          </DefinitionTooltip>
+        }
         value={
           <ExternalLink href={makeEtherscanAddressURL(tokenAddress, chainId)}>
             {tokenSymbol}
