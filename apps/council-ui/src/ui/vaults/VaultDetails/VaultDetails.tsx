@@ -17,10 +17,8 @@ export function VaultDetails({
     <>
       {header}
       {statsRow}
-      {paragraphSummary && <p className="mb-5 text-lg">{paragraphSummary}</p>}
-      <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
-        {actions}
-      </div>
+      {paragraphSummary && <p className="mb-1 text-lg">{paragraphSummary}</p>}
+      <div className="flex flex-col w-full gap-8 sm:flex-row">{actions}</div>
     </>
   );
 }
