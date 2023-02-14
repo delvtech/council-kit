@@ -74,12 +74,13 @@ export function DepositAndWithdrawForm({
                       </span>
                     </span>
                   }
+                  disabled={disabled || !+balance}
                 />
                 {isApproved ? (
                   <button
                     className="daisy-btn daisy-btn-primary"
                     onClick={() => onDeposit(depositAmount)}
-                    disabled={disabled}
+                    disabled={disabled || !+balance}
                   >
                     Deposit
                   </button>
@@ -111,11 +112,12 @@ export function DepositAndWithdrawForm({
                       </span>
                     </span>
                   }
+                  disabled={disabled || !+depositedBalance}
                 />
                 <button
                   className="daisy-btn daisy-btn-primary"
                   onClick={() => onWithdraw(withdrawAmount)}
-                  disabled={disabled}
+                  disabled={disabled || !+depositedBalance}
                 >
                   Withdraw
                 </button>
