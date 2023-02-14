@@ -9,6 +9,7 @@ import {
   PARTICIPANTS_TIP,
   TVP_TIP,
   WALLETS_DELEGATED_TIP,
+  YOUR_VOTING_POWER_TIP,
 } from "src/ui/vaults/tooltips";
 
 interface LockingVaultStatsRowProps {
@@ -34,7 +35,7 @@ export function LockingVaultStatsRow({
       {accountVotingPower && (
         <Stat
           label={
-            <DefinitionTooltip content="Your voting power attributed to this particular vault (not your total aggregate voting power across all vaults)">
+            <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
               Your voting power
             </DefinitionTooltip>
           }
