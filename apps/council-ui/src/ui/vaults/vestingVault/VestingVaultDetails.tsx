@@ -7,16 +7,12 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
-import { VaultHeader, VaultHeaderSkeleton } from "src/ui/vaults/VaultHeader";
-import {
-  GrantCard,
-  GrantCardSkeleton,
-} from "src/ui/vaults/vestingVault/GrantCard";
+import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
+import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
+import { VaultHeader } from "src/ui/vaults/VaultHeader";
+import { GrantCard } from "src/ui/vaults/vestingVault/GrantCard";
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
-import {
-  VaultStatsBarSkeleton,
-  VestingVaultStatsBar,
-} from "src/ui/vaults/vestingVault/VestingVaultStatsBar";
+import { VestingVaultStatsBar } from "src/ui/vaults/vestingVault/VestingVaultStatsBar";
 import { useAccount, useSigner } from "wagmi";
 
 interface VestingVaultDetailsProps {
@@ -35,15 +31,16 @@ export function VestingVaultDetails({
     return <ErrorMessage error={error} />;
   }
 
+  if (status !== "success") {
+    return <VaultDetailsSkeleton />;
+  }
   return (
-    <>
-      {status === "success" ? (
+    <VaultDetails
+      paragraphSummary={data.paragraphSummary}
+      header={
         <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
-      ) : (
-        <VaultHeaderSkeleton />
-      )}
-
-      {status === "success" ? (
+      }
+      statsRow={
         <VestingVaultStatsBar
           accountVotingPower={data.accountVotingPower}
           accountPercentOfTVP={data.accountPercentOfTVP}
@@ -53,13 +50,10 @@ export function VestingVaultDetails({
           tokenAddress={data.tokenAddress}
           tokenSymbol={data.tokenSymbol}
         />
-      ) : (
-        <VaultStatsBarSkeleton />
-      )}
-
-      <div className="flex flex-col w-full h-48 gap-8 sm:flex-row">
-        <div className="basis-1/2">
-          {status === "success" ? (
+      }
+      actions={
+        <>
+          <div className="basis-1/2">
             <GrantCard
               vestingVaultAddress={address}
               grantBalance={data.grantBalance}
@@ -67,11 +61,7 @@ export function VestingVaultDetails({
               expirationDate={data.expirationDate}
               unlockDate={data.unlockDate}
             />
-          ) : (
-            <GrantCardSkeleton />
-          )}
-        </div>
-        {status === "success" && (
+          </div>
           <ChangeDelegateForm
             currentDelegate={data.delegate || ethers.constants.AddressZero}
             depositedBalance={data.grantBalance}
@@ -79,9 +69,9 @@ export function VestingVaultDetails({
               changeDelegate({ signer: signer as Signer, delegate })
             }
           />
-        )}
-      </div>
-    </>
+        </>
+      }
+    />
   );
 }
 
@@ -92,14 +82,13 @@ interface VestingVaultDetailsData {
   delegate?: string;
   delegatedToAccount: number;
   descriptionURL: string | undefined;
+  paragraphSummary: string | undefined;
   expirationDate: Date | null;
   grantBalance: string;
   grantBalanceWithdrawn: string;
   name: string | undefined;
   participants: number;
   tokenAddress: string;
-  tokenBalance: string;
-  tokenDecimals: number;
   tokenSymbol: string;
   unlockDate: Date | null;
 }
@@ -108,7 +97,7 @@ function useVestingVaultDetailsData(
   address: string,
   account: string | undefined,
 ): UseQueryResult<VestingVaultDetailsData> {
-  const { context, coreVoting } = useCouncil();
+  const { context } = useCouncil();
 
   const chainId = useChainId();
   const coreVotingConfig = councilConfigs[chainId].coreVoting;
@@ -121,7 +110,6 @@ function useVestingVaultDetailsData(
     queryFn: async (): Promise<VestingVaultDetailsData> => {
       const vestingVault = new VestingVault(address, context);
       const token = await vestingVault.getToken();
-      const tokenDecimals = await token.getDecimals();
       const grant = account ? await vestingVault.getGrant(account) : undefined;
       const accountVotingPower = account
         ? await vestingVault.getVotingPower(account)
@@ -130,10 +118,9 @@ function useVestingVaultDetailsData(
       return {
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
-        tokenDecimals,
-        tokenBalance: account ? await token.getBalanceOf(account) : "0",
         grantBalance: grant?.allocation || "0",
         grantBalanceWithdrawn: grant?.withdrawn || "0",
+        paragraphSummary: vaultConfig?.paragraphSummary,
         unlockDate: grant
           ? await getBlockDate(grant.unlockBlock, context.provider, {
               estimateFutureDates: true,
