@@ -1,6 +1,11 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
 
+/**
+ * GSC Status (which includes eligible, ineligible statuses) is an expensive
+ * lookup, but just checking if someone is a member is cheap. Prefer this
+ * instead of the heavier useGSCStatus hook whenever possible.
+ */
 export function useIsGSCMember(
   address: string | undefined,
 ): UseQueryResult<boolean> {
