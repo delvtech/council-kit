@@ -51,8 +51,8 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
           sortKey: "votingEnds",
         },
         {
-          cell: "Quorum",
-          sortKey: "quorum",
+          cell: "Status",
+          sortKey: "status",
         },
         "Your Ballot",
         "", // extra column for the chevron
@@ -113,13 +113,13 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
   );
 }
 
-type SortField = "votingEnds" | "quorum";
+type SortField = "votingEnds" | "status";
 
 function sortProposalRowData(
   { direction = "DESC", key = "votingEnds" }: SortOptions<SortField>,
   data: ProposalRowData[],
 ) {
-  if (key === "quorum") {
+  if (key === "status") {
     if (direction === "ASC") {
       return data.slice().sort((a, b) => +a.currentQuorum - +b.currentQuorum);
     } else {

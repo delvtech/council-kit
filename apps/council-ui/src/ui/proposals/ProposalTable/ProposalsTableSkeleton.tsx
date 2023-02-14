@@ -10,7 +10,7 @@ export function ProposalsTableSkeleton(): ReactElement {
       <GridTableHeader className="grid-cols-[4fr_1fr_1fr_1fr_56px]">
         <span>Name</span>
         <span>Voting Ends</span>
-        <span>Quorum</span>
+        <span>Status</span>
         <span>Your Ballot</span>
         <span className="col-span-1"></span>
       </GridTableHeader>
