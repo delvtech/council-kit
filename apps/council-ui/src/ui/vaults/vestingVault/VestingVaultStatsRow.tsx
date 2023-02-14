@@ -35,7 +35,11 @@ export function VestingVaultStatsRow({
     <div className="flex flex-wrap gap-4">
       {accountVotingPower && (
         <Stat
-          label="Your Voting Power"
+          label={
+            <DefinitionTooltip content="Your voting power attributed to this particular vault (not your total aggregate voting power across all vaults)">
+              Your voting power
+            </DefinitionTooltip>
+          }
           value={formatBalance(accountVotingPower)}
         />
       )}
@@ -44,7 +48,7 @@ export function VestingVaultStatsRow({
         <Stat
           label={
             <>
-              % of Total{" "}
+              % of total{" "}
               <DefinitionTooltip content={TVP_TIP}>TVP</DefinitionTooltip>
             </>
           }
@@ -65,7 +69,7 @@ export function VestingVaultStatsRow({
         <Stat
           label={
             <DefinitionTooltip content={WALLETS_DELEGATED_TIP}>
-              Delegated to You
+              Wallets delegated to you
             </DefinitionTooltip>
           }
           value={delegatedToAccount || "None"}
@@ -84,7 +88,11 @@ export function VestingVaultStatsRow({
       )}
 
       <Stat
-        label="Vault token"
+        label={
+          <DefinitionTooltip content="The specific token native to this vault">
+            Vault token
+          </DefinitionTooltip>
+        }
         value={
           <ExternalLink href={makeEtherscanAddressURL(tokenAddress, chainId)}>
             {tokenSymbol}
