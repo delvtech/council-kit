@@ -10,7 +10,7 @@ interface StatProps {
 export function Stat({ label, value }: StatProps): ReactElement {
   return (
     <div className="daisy-stats">
-      <div className="daisy-stat bg-base-300">
+      <div className="daisy-stat bg-base-200">
         <div className="daisy-stat-title">{label}</div>
         <div className="text-sm daisy-stat-value">{value}</div>
       </div>
