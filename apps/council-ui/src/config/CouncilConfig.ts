@@ -41,6 +41,10 @@ export interface VaultConfig extends ContractConfig {
 
 export interface ProposalConfig {
   /**
+   * Title of the proposal.
+   */
+  title?: string;
+  /**
    * A short one-liner to show below the proposal name.
    */
   sentenceSummary?: string;
