@@ -21,7 +21,7 @@ This monorepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It
 | Name                                                                                                | Description                                                                 |
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | [council-sdk](https://github.com/element-fi/council-kit/tree/main/packages/council-sdk)             | A TypeScript SDK for interfacing with the Council protocol.                 |
-| [council-deploy](https://github.com/element-fi/council-kit/tree/main/packages/council-deploy)       | A interactive CLI for deploying council contracts on Goerli.                |
+| [council-deploy](https://github.com/element-fi/council-kit/tree/main/packages/council-deploy)       | A template for deploying council contracts on Goerli.                |
 | [council-typechain](https://github.com/element-fi/council-kit/tree/main/packages/council-typechain) | Type classes generated from the council protocol contracts using Typechain. |
 
 ### Utility Packages
