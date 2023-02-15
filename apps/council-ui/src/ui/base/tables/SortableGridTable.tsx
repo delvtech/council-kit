@@ -195,7 +195,7 @@ function nextSortDirection(
 
 function DefaultEmptyTableElement() {
   return (
-    <div className="bg-base-300 p-10 text-center rounded-b-lg">
+    <div className="bg-base-200 p-10 text-center rounded-b-lg">
       <p className="text-lg">Nothing to show.</p>
     </div>
   );
