@@ -86,7 +86,7 @@ export function Navigation(): ReactElement {
           </ul>
         </div>
         <div className="ml-2 whitespace-nowrap text-xl text-base-content">
-          Element DAO
+          council-reference-ui
         </div>
       </div>
       <div className="daisy-navbar-center hidden lg:flex">
