@@ -30,7 +30,7 @@ export default function Index(): ReactElement {
         </div>
       </div>
 
-      <div className="w-full p-24 bg-base-300">
+      <div className="w-full p-24 bg-base-200">
         <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
             <div className="text-4xl font-bold">Get Started</div>
@@ -104,7 +104,7 @@ export default function Index(): ReactElement {
         </div>
       </div>
 
-      <div className="w-full p-24 bg-base-300">
+      <div className="w-full p-24 bg-base-200">
         <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
             <div className="text-4xl font-medium">Council 🤝 DAOs </div>

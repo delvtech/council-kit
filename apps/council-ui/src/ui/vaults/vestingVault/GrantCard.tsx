@@ -32,7 +32,7 @@ export function GrantCard({
 
   if (!grantExist) {
     return (
-      <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
+      <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-200 h-fit">
         <div className="text-2xl font-bold">Your Vesting Info</div>
 
         <p>There is no grant allocated for this account.</p>
@@ -41,7 +41,7 @@ export function GrantCard({
   }
 
   return (
-    <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-300 h-fit">
+    <div className="flex flex-col p-4 gap-y-4 daisy-card bg-base-200 h-fit">
       <div className="text-2xl font-bold">Your Vesting Info</div>
 
       <div className="flex flex-col gap-y-2">
