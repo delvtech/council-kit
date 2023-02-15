@@ -87,6 +87,7 @@ function useProposalsPageData(
 
       return await Promise.all(
         allProposals.map(async (proposal) => {
+          const proposalConfig = proposalsConfig[proposal.id];
           const createdBlock = await proposal.getCreatedBlock();
           const expirationBlock = await proposal.getExpirationBlock();
           const votingEnds = expirationBlock
@@ -112,7 +113,8 @@ function useProposalsPageData(
             votingEnds,
             currentQuorum,
             ballot: vote && parseEther(vote.power).gt(0) ? vote.ballot : null,
-            sentenceSummary: proposalsConfig[proposal.id]?.sentenceSummary,
+            sentenceSummary: proposalConfig?.sentenceSummary,
+            title: proposalConfig?.title,
           };
         }),
       );

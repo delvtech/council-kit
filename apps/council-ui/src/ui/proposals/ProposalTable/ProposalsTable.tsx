@@ -21,6 +21,7 @@ export interface ProposalRowData {
   votingContractName: string;
   votingEnds: Date | null;
   sentenceSummary?: string;
+  title?: string;
 }
 
 interface ProposalsTableProps {
@@ -66,13 +67,14 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
           votingContractName,
           votingEnds,
           sentenceSummary,
+          title,
         }) => ({
           href: makeProposalURL(votingContractAddress, id),
           cells: [
             <span key={`${id}-name`}>
-              {votingContractName} Proposal {id}
+              {title ?? `${votingContractName} Proposal ${id}`}
               {sentenceSummary && (
-                <p className="opacity-60 text-sm">
+                <p className="text-sm opacity-60">
                   {sentenceSummary.length > 80
                     ? `${sentenceSummary.slice(0, 80)}\u2026` // unicode for horizontal ellipses
                     : sentenceSummary}
