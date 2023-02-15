@@ -10,26 +10,26 @@ Requires `Node 14+`.
 
 This monorepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It includes the following packages/apps:
 
-| Name                    | Description                                                 |
-| ----------------------- | ----------------------------------------------------------- |
-| [council-ui]()          | A TypeScript SDK for interfacing with the Council protocol. |
-| [council-sdk-starter]() | A TypeScript SDK for interfacing with the Council protocol. |
+| Name                                                                                                | Description                                                 |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [council-ui](https://github.com/element-fi/council-kit/tree/main/apps/council-ui)                   | A TypeScript SDK for interfacing with the Council protocol. |
+| [council-sdk-starter](https://github.com/element-fi/council-kit/tree/main/apps/council-sdk-starter) | A TypeScript SDK for interfacing with the Council protocol. |
 
 ### Packages
 
-| Name                  | Description                                                 |
-| --------------------- | ----------------------------------------------------------- |
-| [council-sdk]()       | A TypeScript SDK for interfacing with the Council protocol. |
-| [council-deploy]()    | A TypeScript SDK for interfacing with the Council protocol. |
-| [council-typechain]() | A TypeScript SDK for interfacing with the Council protocol. |
+| Name                                                                                                | Description                                                 |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [council-sdk](https://github.com/element-fi/council-kit/tree/main/packages/council-sdk)             | A TypeScript SDK for interfacing with the Council protocol. |
+| [council-deploy](https://github.com/element-fi/council-kit/tree/main/packages/council-deploy)       | A TypeScript SDK for interfacing with the Council protocol. |
+| [council-typechain](https://github.com/element-fi/council-kit/tree/main/packages/council-typechain) | A TypeScript SDK for interfacing with the Council protocol. |
 
 ### Utility Packages
 
-| Name                | Description                          |
-| ------------------- | ------------------------------------ |
-| [eslint-config]()   | Package for static type checking.    |
-| [prettier-config]() | Package for code formatting.         |
-| [tsconfig]()        | Package for TypeScript configuation. |
+| Name                                                                                            | Description                          |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------ |
+| [eslint-config](https://github.com/element-fi/council-kit/tree/main/packages/eslint-config)     | Package for static type checking.    |
+| [prettier-config](https://github.com/element-fi/council-kit/tree/main/packages/prettier-config) | Package for code formatting.         |
+| [tsconfig](https://github.com/element-fi/council-kit/tree/main/packages/tsconfig)               | Package for TypeScript configuation. |
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -45,10 +45,6 @@ yarn build
 # build only packages (useful for app development)
 yarn build:packages
 
-```
-
-```bash
-yarn build:packages
 ```
 
 ### Develop
@@ -123,12 +119,12 @@ yarn workspace <workspace-name> <package.json script>
 Example
 
 ```bash
-yarn workspace elf-council-frontend start
+yarn workspace council-ui start
 ```
 
 ## Turborepo
 
-This package uses the [turborepo](https://turbo.build/) monorepo framework. Turborepo provides additional features compared to traditional monorepo setups such as local/remote command caching and parallel npm script execution.
+This package uses the [turborepo](https://turbo.build/) monorepo framework. Turborepo provides additional features compared to a plain monorepo such as local/remote command caching and parallel npm script execution.
 
 ### Remote Caching
 
@@ -149,7 +145,7 @@ Next, you can link your Turborepo to your Remote Cache by running the following 
 npx turbo link
 ```
 
-## Useful Links
+### Resources
 
 Learn more about the power of Turborepo:
 
@@ -159,7 +155,3 @@ Learn more about the power of Turborepo:
 - [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
 - [Configuration Options](https://turborepo.org/docs/reference/configuration)
 - [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
-
-## Contributions
-
-This package uses the [turborepo]() monorepo framework. Turborepo provides additional features compared to traditional monorepo setups such as local/remote command caching and parallel npm script execution.
