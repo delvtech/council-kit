@@ -10,6 +10,7 @@ Requires `Node 14+`.
 
 This monorepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It includes the following packages/apps:
 
+### Apps
 | Name                                                                                                | Description                                                     |
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | [council-ui](https://github.com/element-fi/council-kit/tree/main/apps/council-ui)                   | A reference user interface built with NextJS and using the SDK. |
