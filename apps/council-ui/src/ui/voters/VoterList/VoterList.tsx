@@ -35,7 +35,7 @@ export function VoterList({
     [delegatesByVault],
   );
 
-  const sortedVoters = useMemo(() => {
+  const { sortedDelegates, sortedVoters } = useMemo(() => {
     let sorted = voters;
     const { key, direction } = sortOptions;
 
@@ -60,10 +60,14 @@ export function VoterList({
       }
     }
 
-    return [
-      ...sorted.filter(({ address }) => delegateAddresses.includes(address)),
-      ...sorted.filter(({ address }) => !delegateAddresses.includes(address)),
-    ];
+    return {
+      sortedDelegates: sorted.filter(({ address }) =>
+        delegateAddresses.includes(address),
+      ),
+      sortedVoters: sorted.filter(
+        ({ address }) => !delegateAddresses.includes(address),
+      ),
+    };
   }, [sortOptions, voters, delegateAddresses]);
 
   return (
@@ -88,25 +92,51 @@ export function VoterList({
           },
           "", // extra column for the chevron
         ]}
-        rows={sortedVoters
-          .slice(0, size)
-          .map(({ address, ensName, votingPower, numberOfDelegators }) => {
-            return {
-              href: makeVoterURL(address),
-              cells: [
-                <VoterAddress
-                  key={address}
-                  address={address}
-                  ensName={ensName}
-                />,
-                numberOfDelegators,
-                formatBalance(votingPower, 0),
-                <span key={`${address}-chevron`}>
-                  <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
-                </span>,
-              ],
-            };
-          })}
+        rows={[
+          ...sortedDelegates.map(
+            ({ address, ensName, votingPower, numberOfDelegators }, i) => {
+              const isLastDelegate = i === sortedDelegates.length - 1;
+              return {
+                href: makeVoterURL(address),
+                cells: [
+                  <VoterAddress
+                    key={address}
+                    address={address}
+                    ensName={ensName}
+                  />,
+                  numberOfDelegators,
+                  formatBalance(votingPower, 0),
+                  <span key={`${address}-chevron`}>
+                    <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
+                  </span>,
+                ],
+                className: isLastDelegate
+                  ? "border-b border-accent"
+                  : undefined,
+              };
+            },
+          ),
+
+          ...sortedVoters
+            .slice(0, size - sortedDelegates.length)
+            .map(({ address, ensName, votingPower, numberOfDelegators }) => {
+              return {
+                href: makeVoterURL(address),
+                cells: [
+                  <VoterAddress
+                    key={address}
+                    address={address}
+                    ensName={ensName}
+                  />,
+                  numberOfDelegators,
+                  formatBalance(votingPower, 0),
+                  <span key={`${address}-chevron`}>
+                    <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
+                  </span>,
+                ],
+              };
+            }),
+        ]}
       />
 
       {voters.length > size && (
