@@ -1,46 +1,130 @@
-# Turborepo starter
+![Council Kit Logo](https://i.imgur.com/I26rUIV.png)
 
-This is an official Yarn v1 starter turborepo.
+# Council-Kit
+
+Council kit is the complete toolkit for scaffolding your own DAO using the council protocol. This repository is designed to be forkable for your own council protocol variant.
+
+Requires `Node 14+`.
 
 ## What's inside?
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It includes the following packages/apps:
+This monorepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It includes the following packages/apps:
 
-### Apps and Packages
+| Name                                                                                                | Description                                                     |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [council-ui](https://github.com/element-fi/council-kit/tree/main/apps/council-ui)                   | A reference user interface built with NextJS and using the SDK. |
+| [council-sdk-starter](https://github.com/element-fi/council-kit/tree/main/apps/council-sdk-starter) | A boilerplate TypeScript project that uses the SDK.             |
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+### Packages
+
+| Name                                                                                                | Description                                                                 |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [council-sdk](https://github.com/element-fi/council-kit/tree/main/packages/council-sdk)             | A TypeScript SDK for interfacing with the Council protocol.                 |
+| [council-deploy](https://github.com/element-fi/council-kit/tree/main/packages/council-deploy)       | A interactive CLI for deploying council contracts on Goerli.                |
+| [council-typechain](https://github.com/element-fi/council-kit/tree/main/packages/council-typechain) | Type classes generated from the council protocol contracts using Typechain. |
+
+### Utility Packages
+
+| Name                                                                                            | Description                          |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------ |
+| [eslint-config](https://github.com/element-fi/council-kit/tree/main/packages/eslint-config)     | Package for static type checking.    |
+| [prettier-config](https://github.com/element-fi/council-kit/tree/main/packages/prettier-config) | Package for code formatting.         |
+| [tsconfig](https://github.com/element-fi/council-kit/tree/main/packages/tsconfig)               | Package for TypeScript configuation. |
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### Utilities
-
-This turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## Monorepo commands
 
 ### Build
 
 To build all apps and packages, run the following command:
 
-```
-cd my-turborepo
-yarn run build
+```bash
+yarn build
+
+# build only packages (useful for app development)
+yarn build:packages
+
 ```
 
 ### Develop
 
-To develop all apps and packages, run the following command:
+To run the development server for all apps, run the following command:
+
+```bash
+yarn dev
+```
+
+### Linting
+
+To run linting on all apps and packages, run the following command:
+
+```bash
+yarn lint
+```
+
+### Formatting
+
+To run formatting on all apps and packages, run the following command:
+
+```bash
+yarn format:check
+
+# write formatting changes to files
+yarn format
 
 ```
-cd my-turborepo
-yarn run dev
+
+## Development
+
+1. Clone the repo: `git clone git@github.com:element-fi/council-kit.git`
+2. Run `yarn` at the top-level to install all packages across every workspace
+
+### Installing new packages
+
+Here are a few examples of how to install packages in this repo:
+
+```bash
+# Install prettier for the top-level package.json, useful for tooling that
+# runs against the entire monorepo
+yarn add prettier
+
+# Install lodash for the packages/council-sdk workspace.
+# Note: specify the workspace by the name in its `package.json`, ie: `@council/sdk` not `council-sdk`
+yarn workspace @council/sdk add lodash
 ```
+
+### Installing a workspace package
+
+To install a project from the packages/ directory as a dependency, copy it
+directly into your app package.json like this, then run `yarn`.
+
+```json
+{
+  "dependencies": {
+    "@council/sdk": "*",
+    "@council/typechain": "*"
+  }
+}
+```
+
+### Running workspace scripts
+
+To run scripts in workspaces, use the following command:
+
+```bash
+yarn workspace <workspace-name> <package.json script>
+```
+
+Example
+
+```bash
+yarn workspace council-ui start
+```
+
+## Turborepo
+
+This package uses the [turborepo](https://turbo.build/) monorepo framework. Turborepo provides additional features compared to a plain monorepo such as local/remote command caching and parallel npm script execution.
 
 ### Remote Caching
 
@@ -61,7 +145,7 @@ Next, you can link your Turborepo to your Remote Cache by running the following 
 npx turbo link
 ```
 
-## Useful Links
+### Resources
 
 Learn more about the power of Turborepo:
 
