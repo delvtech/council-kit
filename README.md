@@ -10,18 +10,18 @@ Requires `Node 14+`.
 
 This monorepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It includes the following packages/apps:
 
-| Name                                                                                                | Description                                                 |
-| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| [council-ui](https://github.com/element-fi/council-kit/tree/main/apps/council-ui)                   | A TypeScript SDK for interfacing with the Council protocol. |
-| [council-sdk-starter](https://github.com/element-fi/council-kit/tree/main/apps/council-sdk-starter) | A TypeScript SDK for interfacing with the Council protocol. |
+| Name                                                                                                | Description                                                     |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [council-ui](https://github.com/element-fi/council-kit/tree/main/apps/council-ui)                   | A reference user interface built with NextJS and using the SDK. |
+| [council-sdk-starter](https://github.com/element-fi/council-kit/tree/main/apps/council-sdk-starter) | A boilerplate TypeScript project that uses the SDK.             |
 
 ### Packages
 
-| Name                                                                                                | Description                                                 |
-| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| [council-sdk](https://github.com/element-fi/council-kit/tree/main/packages/council-sdk)             | A TypeScript SDK for interfacing with the Council protocol. |
-| [council-deploy](https://github.com/element-fi/council-kit/tree/main/packages/council-deploy)       | A TypeScript SDK for interfacing with the Council protocol. |
-| [council-typechain](https://github.com/element-fi/council-kit/tree/main/packages/council-typechain) | A TypeScript SDK for interfacing with the Council protocol. |
+| Name                                                                                                | Description                                                                 |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [council-sdk](https://github.com/element-fi/council-kit/tree/main/packages/council-sdk)             | A TypeScript SDK for interfacing with the Council protocol.                 |
+| [council-deploy](https://github.com/element-fi/council-kit/tree/main/packages/council-deploy)       | A interactive CLI for deploying council contracts on Goerli.                |
+| [council-typechain](https://github.com/element-fi/council-kit/tree/main/packages/council-typechain) | Type classes generated from the council protocol contracts using Typechain. |
 
 ### Utility Packages
 
@@ -49,7 +49,7 @@ yarn build:packages
 
 ### Develop
 
-To develop all apps, run the following command:
+To run the development server for all apps, run the following command:
 
 ```bash
 yarn dev
@@ -89,9 +89,9 @@ Here are a few examples of how to install packages in this repo:
 # runs against the entire monorepo
 yarn add prettier
 
-# Install lodash for the packages/base workspace.
-# Note: specify the workspace by the name in its `package.json`, ie: `base` not `packages/base`
-yarn workspace council-sdk add lodash
+# Install lodash for the packages/council-sdk workspace.
+# Note: specify the workspace by the name in its `package.json`, ie: `@council/sdk` not `council-sdk`
+yarn workspace @council/sdk add lodash
 ```
 
 ### Installing a workspace package
@@ -102,8 +102,8 @@ directly into your app package.json like this, then run `yarn`.
 ```json
 {
   "dependencies": {
-    "council-sdk": "*",
-    "council-typechain": "*"
+    "@council/sdk": "*",
+    "@council/typechain": "*"
   }
 }
 ```
