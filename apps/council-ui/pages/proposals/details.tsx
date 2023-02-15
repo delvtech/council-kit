@@ -91,9 +91,9 @@ export default function ProposalPage(): ReactElement {
   return (
     <Page>
       <div className="flex flex-wrap w-full gap-y-8">
-        <div className="flex flex-col">
+        <div className="flex flex-col max-w-[50%]">
           <h1 className="mb-1 text-5xl font-bold">
-            {data?.proposalName ?? `Proposal ${id}`}
+            {data?.title ?? `Proposal ${id}`}
           </h1>
           {data?.descriptionURL && (
             <ExternalLink href={data.descriptionURL} iconSize={18}>
@@ -190,7 +190,6 @@ export default function ProposalPage(): ReactElement {
 
 interface ProposalDetailsPageData {
   type: "core" | "gsc";
-  proposalName: string;
   votingContractName: string;
   status: ProposalStatus;
   isActive: boolean;
@@ -207,6 +206,7 @@ interface ProposalDetailsPageData {
   accountBallot?: Ballot;
   voterEnsRecords: EnsRecords;
   descriptionURL: string | null;
+  title?: string;
   paragraphSummary: string | null;
   executedTransactionHash: string | null;
 }
@@ -219,7 +219,7 @@ function useProposalDetailsPageData(
   const { context, coreVoting, gscVoting } = useCouncil();
   const provider = context.provider;
   const chainId = useChainId();
-  const proposalConfig = councilConfigs[chainId].coreVoting.proposals;
+  const proposalConfigs = councilConfigs[chainId].coreVoting.proposals;
   const votingContractName = councilConfigs[chainId].coreVoting.name;
 
   const queryEnabled = votingContractAddress !== undefined && id !== undefined;
@@ -279,9 +279,10 @@ function useProposalDetailsPageData(
           const currentQuorum = await proposal.getCurrentQuorum();
           const requiredQuorum = await proposal.getRequiredQuorum();
 
+          const proposalConfig = proposalConfigs[id];
+
           return {
             type,
-            proposalName: proposal.name,
             votingContractName,
             status: getProposalStatus({
               isExecuted: await proposal.getIsExecuted(),
@@ -304,8 +305,9 @@ function useProposalDetailsPageData(
             accountBallot: account
               ? (await proposal.getVote(account))?.ballot
               : undefined,
-            descriptionURL: proposalConfig[id]?.descriptionURL ?? null,
-            paragraphSummary: proposalConfig[id]?.paragraphSummary ?? null,
+            descriptionURL: proposalConfig?.descriptionURL ?? null,
+            paragraphSummary: proposalConfig?.paragraphSummary ?? null,
+            title: proposalConfig?.title,
             executedTransactionHash:
               await proposal.getExecutedTransactionHash(),
           };
