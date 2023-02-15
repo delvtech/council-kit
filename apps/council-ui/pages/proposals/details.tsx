@@ -90,8 +90,8 @@ export default function ProposalPage(): ReactElement {
 
   return (
     <Page>
-      <div className="flex flex-wrap w-full gap-y-8">
-        <div className="flex flex-col max-w-[50%]">
+      <div className="flex flex-col w-full md:flex-row gap-y-8">
+        <div className="flex flex-col md:max-w-lg">
           <h1 className="mb-1 text-5xl font-bold">
             {data?.title ?? `Proposal ${id}`}
           </h1>
@@ -102,7 +102,7 @@ export default function ProposalPage(): ReactElement {
           )}
         </div>
 
-        <div className="w-full sm:ml-auto sm:w-96">
+        <div className="w-full sm:ml-auto md:w-96">
           {status === "success" ? (
             <Quorum
               current={data.currentQuorum}
