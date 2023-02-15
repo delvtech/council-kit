@@ -92,7 +92,7 @@ export default function ProposalPage(): ReactElement {
     <Page>
       <div className="flex flex-col w-full md:flex-row gap-y-8">
         <div className="flex flex-col md:max-w-lg">
-          <h1 className="mb-1 text-5xl font-bold">
+          <h1 className="mb-1 text-4xl font-bold">
             {data?.title ?? `Proposal ${id}`}
           </h1>
           {data?.descriptionURL && (
