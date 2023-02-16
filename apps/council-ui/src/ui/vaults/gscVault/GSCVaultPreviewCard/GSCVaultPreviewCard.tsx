@@ -31,8 +31,12 @@ export function GSCVaultPreviewCard({
       // TODO: render an error card instead
       return <GenericVaultCardSkeleton />;
     case "success": {
-      const { vaultName, memberCount, connectedAccountMembershipStatus } =
-        gscVaultPreviewCardData;
+      const {
+        vaultName,
+        memberCount,
+        connectedAccountMembershipStatus,
+        sentenceSummary,
+      } = gscVaultPreviewCardData;
       return (
         <Link href={makeVaultURL(vaultAddress)}>
           <div className="w-80 h-72 daisy-card bg-base-200 hover:shadow-xl transition-shadow ">
@@ -40,6 +44,10 @@ export function GSCVaultPreviewCard({
               <div>
                 <h2 className="daisy-card-title text-2xl ">{vaultName}</h2>
                 <Address address={vaultAddress} className="text-lg" />
+                {/* Description */}
+                <span className="mt-4 line-clamp-3" title={sentenceSummary}>
+                  {sentenceSummary}
+                </span>
               </div>
 
               <div className="daisy-card-actions flex-col gap-y-2">
@@ -61,9 +69,6 @@ export function GSCVaultPreviewCard({
                   </span>
                 </div>
               </div>
-              <div>
-                <button className="daisy-btn daisy-btn-primary">Open</button>
-              </div>
             </div>
           </div>
         </Link>
@@ -78,6 +83,7 @@ interface GSCVaultPreviewData {
   vaultName: string;
   memberCount: number;
   connectedAccountMembershipStatus: GSCStatus;
+  sentenceSummary?: string;
 }
 function useGSCVaultPreviewCard(gscVaultAddress: string) {
   const { gscVoting } = useCouncil();
@@ -103,6 +109,7 @@ function useGSCVaultPreviewCard(gscVaultAddress: string) {
             vaultName: gscVaultConfig.name,
             memberCount: await (await gscVaultModel.getMembers()).length,
             connectedAccountMembershipStatus: gscStatus,
+            sentenceSummary: gscVaultConfig.sentenceSummary,
           };
         }
       : undefined,

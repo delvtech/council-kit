@@ -12,6 +12,7 @@ interface GenericVaultCardProps {
   name: string;
   tvp?: string;
   votingPower?: string;
+  sentenceSummary?: string;
 }
 
 export function GenericVaultCard({
@@ -19,6 +20,7 @@ export function GenericVaultCard({
   name,
   tvp,
   votingPower,
+  sentenceSummary,
 }: GenericVaultCardProps): ReactElement {
   return (
     <Link href={makeVaultURL(address)}>
@@ -27,6 +29,10 @@ export function GenericVaultCard({
           <div>
             <h2 className="text-2xl daisy-card-title">{name}</h2>
             <Address address={address} className="text-lg" />
+            {/* Description */}
+            <span className="mt-4 line-clamp-3" title={sentenceSummary}>
+              {sentenceSummary}
+            </span>
           </div>
 
           <div className="flex-col daisy-card-actions gap-y-2">
@@ -48,9 +54,6 @@ export function GenericVaultCard({
                 {votingPower ? formatBalance(votingPower) : "None"}
               </span>
             </div>
-          </div>
-          <div>
-            <button className="daisy-btn daisy-btn-primary">Open</button>
           </div>
         </div>
       </div>
