@@ -77,9 +77,13 @@ export default function ProposalPage(): ReactElement {
     return vote(voteArgs);
   };
 
-  if (!votingContractAddressParam || !idParam) {
-    replace("/404");
-    // User will go to 404 page if this block is reached
+  const { coreVoting, gscVoting } = useCouncil();
+  if (
+    ![coreVoting.address, gscVoting?.address].includes(votingContractAddress) ||
+    !votingContractAddressParam ||
+    !idParam
+  ) {
+    replace("/proposals");
     // Returning empty fragment is to remove the undefined type from the query params.
     return <></>;
   }
