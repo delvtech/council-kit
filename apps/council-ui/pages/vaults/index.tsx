@@ -1,13 +1,16 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
+import { VaultConfig } from "src/config/CouncilConfig";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { useChainId } from "src/ui/network/useChainId";
 import {
   GenericVaultCard,
   GenericVaultCardSkeleton,
 } from "src/ui/vaults/GenericVaultCard";
 import { GSCVaultPreviewCard } from "src/ui/vaults/gscVault/GSCVaultPreviewCard/GSCVaultPreviewCard";
+import { getAllVaultConfigs } from "src/vaults/vaults";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
@@ -48,6 +51,7 @@ export default function VaultsPage(): ReactElement {
                     name={vault.name}
                     tvp={vault.tvp}
                     votingPower={vault.votingPower}
+                    sentenceSummary={vault.sentenceSummary}
                   />
                 );
             }
@@ -82,12 +86,15 @@ interface VaultData {
   name: string;
   tvp: string | undefined;
   votingPower: string | undefined;
+  sentenceSummary: string | undefined;
 }
 
 function useVaultsPageData(
   account: string | undefined,
 ): UseQueryResult<VaultData[]> {
   const { coreVoting, gscVoting } = useCouncil();
+  const chainId = useChainId();
+  const vaultConfigs = getAllVaultConfigs(chainId);
 
   return useQuery({
     queryKey: ["vaultsPage", account],
@@ -99,11 +106,16 @@ function useVaultsPageData(
 
       return Promise.all(
         allVaults.map(async (vault) => {
+          const vaultConfig = vaultConfigs.find(
+            ({ address }) => vault.address === address,
+          ) as VaultConfig;
+
           return {
             address: vault.address,
             name: vault.name,
             tvp: await vault.getTotalVotingPower?.(),
             votingPower: account && (await vault.getVotingPower(account)),
+            sentenceSummary: vaultConfig.sentenceSummary,
           };
         }),
       );
