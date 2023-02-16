@@ -14,7 +14,7 @@ Council UI is a reference user interface for the Council protocol. This project 
 
 ## Getting started
 
-This guide is under the assumption of being in the `@council-kit `monorepo.
+This guide is under the assumption of being in the `council-kit `monorepo.
 
 ### Install dependencies
 
@@ -79,15 +79,18 @@ Each supported network has it's own configuration file. Each configuration file 
 When a new proposal is added on chain the metadata for the proposal needs to be added to the `proposals` value in the respective voting contract object. This is an object that is keyed by the proposal id (assigned on-chain).
 
 ```ts
-1: {
+{
+  // other proposals here...
+  5: {
   descriptionURL: "https://moreinfo.com",
   targets: [], // not used for now
   calldatas: [], // not used for now
-  title: "EGP-2: Increase GSC quorum threshold",
-  sentenceSummary: "Increase the current GSC quroum threshold to 3.",
+  title: "EGP-69: Proposal to do the new cool thing!",
+  sentenceSummary: "We like to be cutting edge so here is the next big thing.",
   paragraphSummary:
-    "As of today (April 28, 2022) there has only been one delegate (myself) who has proven their membership to the GSC on-chain...",
+    "As of today, it is the best interested in the DAO to become cool. This proposal will achieve making is cool again...",
 },
+}
 ```
 
 ### Adding new voting vault
@@ -96,23 +99,15 @@ When a new voting vault is approved by a voting contract it must be added to the
 
 ```ts
 vaults: [
+  // other vaults here...
   {
-    name: "Locking Vault", // name displayed in the app
-    paragraphSummary:
-      "Allows users to deposit their tokens in exchange for voting power...",
-    address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD", // address of proxy contract
-    type: "FrozenLockingVault", // used to identify custom vaults since some may need custom logic for reading and writing data.
-    abi: {}, // not used at the moment
-    descriptionURL: "https://moreinfo.com", // optional
-  },
-  {
-    name: "Vesting Vault",
-    address: "0x6De73946eab234F1EE61256F10067D713aF0e37A",
-    paragraphSummary:
-      "Allows locked / vesting positions to still have voting power in the governance system by using a defined multiplier...",
+    name: "New Vault",
+    paragraphSummary: "A New Vault that does the approved thing...",
+    address: "0x...",
+    type: "NewVault",
     abi: {},
     descriptionURL: "https://moreinfo.com",
-  },
+  }
 ],
 ```
 
