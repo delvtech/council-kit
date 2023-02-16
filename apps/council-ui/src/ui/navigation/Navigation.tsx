@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { makeVoterURL, Routes } from "src/routes";
+import { makeImgSrc } from "src/ui/base/imgSrc";
 import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
 import { useAccount } from "wagmi";
 
@@ -86,7 +87,12 @@ export function Navigation(): ReactElement {
           </ul>
         </div>
         <div className="ml-2 whitespace-nowrap text-xl text-base-content">
-          council-reference-ui
+          <img
+            src={makeImgSrc("elementIcon.svg")}
+            height="48"
+            width="48"
+            alt="Element DAO"
+          />
         </div>
       </div>
       <div className="daisy-navbar-center hidden lg:flex">
