@@ -6,6 +6,7 @@ import { ReactElement } from "react";
 import { makeVoterURL, Routes } from "src/routes";
 import PushIcon from "src/ui/base/svg/PushLogo";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
+import { makeImgSrc } from "src/ui/base/imgSrc";
 import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
 import { usePushSubscribe } from "src/ui/push/usePushSubscribe";
 import { useAccount } from "wagmi";
@@ -89,7 +90,12 @@ export function Navigation(): ReactElement {
           </ul>
         </div>
         <div className="ml-2 whitespace-nowrap text-xl text-base-content">
-          council-reference-ui
+          <img
+            src={makeImgSrc("elementIcon.svg")}
+            height="48"
+            width="48"
+            alt="Element DAO"
+          />
         </div>
       </div>
       <div className="daisy-navbar-center hidden lg:flex">
