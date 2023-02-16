@@ -40,7 +40,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
       },
       1: {
         descriptionURL:
-          "ipfs://bafybeibadlecyuat3quqrlh66srcsmllwhfwy6qqlfybsxw5jy75qtaehu/#/elfi.eth/proposal/0x46785a4b78a9d03aeb5cdeb1c3ca4ae02cf9e5aca508e59bef405d16a7c8b4a6",
+          "https://snapshot.org/#/elfi.eth/proposal/0x46785a4b78a9d03aeb5cdeb1c3ca4ae02cf9e5aca508e59bef405d16a7c8b4a6",
         targets: [],
         calldatas: [],
         title: "EGP-2: Increase GSC quorum threshold",
@@ -50,7 +50,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
       },
       2: {
         descriptionURL:
-          "ipfs://bafybeibadlecyuat3quqrlh66srcsmllwhfwy6qqlfybsxw5jy75qtaehu/#/elfi.eth/proposal/0x132d4d3e0580349d938d22c844ce088ba2e5f394fc28b41f2927856746b125d7",
+          "https://snapshot.org/#/elfi.eth/proposal/0x132d4d3e0580349d938d22c844ce088ba2e5f394fc28b41f2927856746b125d7",
         targets: [],
         calldatas: [],
         title: "EGP-15: Element Fixed Borrow Protocol Grant Proposal (Old)",
@@ -61,7 +61,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
       },
       3: {
         descriptionURL:
-          "ipfs://bafybeibadlecyuat3quqrlh66srcsmllwhfwy6qqlfybsxw5jy75qtaehu/#/elfi.eth/proposal/0x132d4d3e0580349d938d22c844ce088ba2e5f394fc28b41f2927856746b125d7",
+          "https://snapshot.org/#/elfi.eth/proposal/0x132d4d3e0580349d938d22c844ce088ba2e5f394fc28b41f2927856746b125d7",
         targets: [],
         calldatas: [],
         title: "EGP-15: Element Fixed Borrow Protocol Grant Proposal",
@@ -94,7 +94,6 @@ export const mainnetCouncilConfig: CouncilConfig = {
     ],
     proposals: {
       0: { descriptionURL: "", targets: [], calldatas: [] },
-      1: { descriptionURL: "", targets: [], calldatas: [] },
     },
   },
 };
