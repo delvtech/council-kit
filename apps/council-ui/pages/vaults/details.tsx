@@ -20,7 +20,7 @@ export default function Vault(): ReactElement {
   const vaultConfig = allVaults.find((vault) => vault.address === address);
 
   if (!address || !vaultConfig) {
-    replace("/404");
+    replace("/vaults");
   }
 
   return (
