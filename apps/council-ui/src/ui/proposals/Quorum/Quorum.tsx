@@ -18,8 +18,16 @@ export function Quorum({
     <div>
       {status && (
         <div className="flex">
-          <h3 className="mr-6 font-medium">QUORUM</h3>
-          <div className="ml-auto font-bold daisy-badge">{status}</div>
+          <div
+            className={classNames("font-bold ml-auto daisy-badge", {
+              "daisy-badge-error": status === "FAILED",
+              "daisy-badge-info": status === "IN PROGRESS",
+              "daisy-badge-success": status === "EXECUTED",
+              "daisy-badge-warning": status === "EXPIRED",
+            })}
+          >
+            {status}
+          </div>
         </div>
       )}
 
@@ -29,13 +37,17 @@ export function Quorum({
         status={status}
       />
 
-      {required && (
-        <div className="flex justify-end gap-x-1">
-          <p>{formatBalance(current, 0)}</p>
-          <span>/</span>
-          <p className="font-bold"> {formatBalance(required, 0)}</p>
+      {status === "EXECUTED" ? (
+        <p className="font-bold uppercase text-right">Quorum met</p>
+      ) : required ? (
+        <div className="flex justify-between gap-x-1">
+          <h3 className="mr-6 font-medium uppercase">Quorum</h3>
+          <span>
+            {formatBalance(current, 0)} /
+            <span className="font-bold"> {formatBalance(required, 0)}</span>
+          </span>{" "}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
