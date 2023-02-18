@@ -19,6 +19,10 @@ export function VoterStatsRow({
   votingPower,
   percentOfTVP,
 }: VoterStatsRowProps): ReactElement {
+  let percentOfTVPLabel = percentOfTVP > 0.1 ? `${percentOfTVP}%` : "< 0.1%";
+  if (!percentOfTVP) {
+    percentOfTVPLabel = "0";
+  }
   return (
     <div className="flex flex-wrap gap-4">
       <Stat label="Voting Power" value={formatBalance(votingPower, 0)} />
@@ -31,7 +35,7 @@ export function VoterStatsRow({
             </DefinitionTooltip>
           </span>
         }
-        value={percentOfTVP > 0.1 ? `${percentOfTVP}%` : "< 0.1%"}
+        value={percentOfTVPLabel}
       />
       <Stat label="Proposals voted" value={proposalsVoted} />
       <Stat label="Proposals created" value={proposalsCreated} />
