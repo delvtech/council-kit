@@ -21,10 +21,10 @@ export default function VaultsPage(): ReactElement {
       <div className="px-4">
         <h1 className="text-5xl font-bold">Voting Vaults</h1>
         <p className="mt-6 text-lg">
-          Voting Vaults provide the ability to assign voting power to specific
-          types of tokens/positions. The result is beautiful — governance users
-          can maximize capital efficiency while maintaining the ability to
-          delegate or vote when the time comes.
+          Voting Vaults enable Element DAO to make governance participation more
+          inclusive and capital efficient. Vaults can be created by defining
+          strategies for assigning voting power to different use cases and
+          getting them voted in and accepted.
         </p>
       </div>
 
@@ -67,12 +67,16 @@ export default function VaultsPage(): ReactElement {
       <div className="flex flex-wrap gap-4 mb-2 sm:flex-nowrap">
         <ExternalInfoCard
           header="Learn more about voting vaults"
-          body="Read our intro post to learn more about voting vaults and the vision behind them."
+          body="Check out this blog post to learn about various types of Voting
+          Vaults available today and how this governance primitive can be
+          extended to serve many more use cases."
           href="https://blog.element.fi/voting-vaults-a-new-defi-and-governance-primitive-2/"
         />
         <ExternalInfoCard
-          header="Read the docs"
-          body="Check out our documentation on voting vaults and other parts of the council protocol."
+          header="Want to dive deeper? Read the docs."
+          body="Learn about the mechanics behind the current vault types,
+          details on the underlying smart contracts, and how to create and
+          propose new vaults."
           href="https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults"
         />
       </div>
