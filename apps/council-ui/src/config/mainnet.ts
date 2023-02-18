@@ -19,7 +19,9 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "Allows users to deposit their tokens in exchange for voting power, which can also be delegated to a different user.",
         address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD",
         type: "FrozenLockingVault",
-        descriptionURL: "https://moreinfo.com",
+        abi: {},
+        descriptionURL:
+          "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/locking-vault",
       },
       {
         name: "Vesting Vault",
@@ -29,7 +31,9 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "Allows locked / vesting positions to still have voting power in the governance system by using a defined multiplier for the vested tokens over unvested.",
         type: "VestingVault",
-        descriptionURL: "https://moreinfo.com",
+        abi: {},
+        descriptionURL:
+          "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/vesting-vault",
       },
     ],
     proposals: {
@@ -87,7 +91,9 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "The Governance Steering Council (GSC) vault gives one vote to each member that has surpassed a pre-established threshold of delegated Voting Power defined by the DAO.",
         paragraphSummary:
           "The Governance Steering Council (GSC) vault gives one vote to each member that has surpassed a pre-established threshold of delegated Voting Power defined by the DAO. Members of the council can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
-        descriptionURL: "https://moreinfo.com",
+        abi: {},
+        descriptionURL:
+          "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/governance-steering-council-gsc-vault",
       },
     ],
     proposals: {
