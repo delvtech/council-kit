@@ -36,8 +36,9 @@ export default function Voters(): ReactElement {
         <div>
           <h1 className="text-5xl font-bold">Voters</h1>
           <p className="mt-6 text-lg">
-            Voters are accounts that currently have voting power. You can search
-            by partial keywords using ENS names or addresses.
+            Voters are accounts that currently have voting power in the
+            governance system. You can search by partial keywords using ENS
+            names or Ethereum addresses.
           </p>
         </div>
 
