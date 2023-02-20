@@ -40,7 +40,7 @@ export async function getVoterDataByTokenWithDelegationVault(
       }
 
       if (vault instanceof VestingVault) {
-        const balance = await (await vault.getGrant(address)).votingPower;
+        const balance = (await vault.getGrant(address)).votingPower;
         const votersDelegated = await vault.getDelegatorsTo(address);
         const currentDelegate = await vault.getDelegate(address);
         return {
