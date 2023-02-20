@@ -29,7 +29,7 @@ export default function VaultsPage(): ReactElement {
         </p>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-6 lg:justify-start">
+      <div className="grid grid-cols-3 grid-flow-row gap-6">
         {status === "success" ? (
           data.map((vault) => {
             switch (vault.name) {

@@ -24,7 +24,7 @@ export function GenericVaultCard({
 }: GenericVaultCardProps): ReactElement {
   return (
     <Link href={makeVaultURL(address)}>
-      <div className="w-80 h-72 daisy-card bg-base-200 hover:shadow-xl transition-shadow">
+      <div className="h-72 daisy-card bg-base-200 hover:shadow-xl transition-shadow">
         <div className="daisy-card-body justify-between">
           <div>
             <h2 className="text-2xl daisy-card-title">{name}</h2>
