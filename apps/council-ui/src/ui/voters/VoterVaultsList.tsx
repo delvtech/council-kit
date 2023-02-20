@@ -38,7 +38,7 @@ export function VoterVaultsList({
     +(voterVaultsListData.qualifyingVotingPowerForGSC || "0");
 
   return (
-    <div className="flex flex-wrap w-full gap-6">
+    <div className="grid grid-cols-3 grid-flow-row w-full gap-6">
       {/* core voting vaults */}
       {vaultsData.map((voterData) => {
         return (
