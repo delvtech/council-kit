@@ -15,7 +15,6 @@ export interface CouncilConfig {
 
 export interface ContractConfig {
   address: string;
-  abi: Record<string, any>;
 }
 
 export interface VotingContractConfig extends ContractConfig {
