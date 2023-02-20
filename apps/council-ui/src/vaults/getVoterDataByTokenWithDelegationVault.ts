@@ -11,7 +11,6 @@ export interface VoterDataByTokenWithDelegationVault {
   vault: VotingVault;
   votingPower: string;
   balance?: string;
-  numDelegated?: number;
   votersDelegated?: Voter[];
   currentDelegate?: Voter;
 }
@@ -34,7 +33,6 @@ export async function getVoterDataByTokenWithDelegationVault(
           votingPower,
           balance,
           votersDelegated,
-          numDelegated: votersDelegated.length,
           currentDelegate,
         };
       }
@@ -48,7 +46,6 @@ export async function getVoterDataByTokenWithDelegationVault(
           votingPower,
           balance,
           votersDelegated,
-          numDelegated: votersDelegated.length,
           currentDelegate,
         };
       }
