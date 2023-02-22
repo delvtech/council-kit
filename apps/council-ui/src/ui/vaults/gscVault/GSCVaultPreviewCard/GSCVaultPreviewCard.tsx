@@ -98,8 +98,7 @@ function useGSCVaultPreviewCard(gscVaultAddress: string) {
     ({ address }) => gscVaultAddress === address,
   );
 
-  const queryEnabled =
-    !!gscVaultModel && !!account && !!gscVaultConfig && !!gscStatus;
+  const queryEnabled = !!gscVaultModel && !!gscVaultConfig;
   return useQuery<GSCVaultPreviewData>({
     queryKey: ["GSCVaultPreviewCard", gscVaultConfig?.address, account],
     enabled: queryEnabled,
@@ -108,7 +107,7 @@ function useGSCVaultPreviewCard(gscVaultAddress: string) {
           return {
             vaultName: gscVaultConfig.name,
             memberCount: await (await gscVaultModel.getMembers()).length,
-            connectedAccountMembershipStatus: gscStatus,
+            connectedAccountMembershipStatus: gscStatus ?? "N/A",
             sentenceSummary: gscVaultConfig.sentenceSummary,
           };
         }
