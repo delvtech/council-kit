@@ -21,8 +21,7 @@
   "dependencies": {
     "sinon": "^15.0.1",
     "@types/sinon": "^10.0.13",
-    "@wagmi/connectors": "^0.2.6",
-    "@wagmi/core": "^0.9.6"
+    "@wagmi/connectors": "^0.2.6"
   },
   "devDependencies": {
     "@council/eslint-config": "*",

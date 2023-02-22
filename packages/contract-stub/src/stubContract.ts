@@ -5,7 +5,7 @@ type StubbedOverwrite<
   F extends
     | Contract["callStatic"]
     | Contract["functions"]
-    | Contract["estimateGas"]
+    | Contract["estimateGas"],
 > = {
   [K in keyof F]: SinonStub<Parameters<F[K]>, ReturnType<F[K]>>;
 };
@@ -21,32 +21,32 @@ type StubbedContract<C extends Contract> = C & {
 };
 
 export function stubContract<TContract extends Contract>(
-  contract: TContract
+  contract: TContract,
 ): StubbedContract<TContract> {
   const callStatic: Record<string, () => SinonStub> = {};
   const functions: Record<string, () => SinonStub> = {};
   const estimateGas: Record<string, () => SinonStub> = {};
 
   Object.keys(contract.callStatic).forEach((methodName) => {
-    callStatic[methodName] = stub().callsFake((...args) => {
+    callStatic[methodName] = stub().callsFake(() => {
       throw new Error(
-        `This is an unhandled error calling "callStatic.${methodName}" in the test.`
+        `This is an unhandled error calling "callStatic.${methodName}" in the test.`,
       );
     });
   });
 
   Object.keys(contract.functions).forEach((methodName) => {
-    functions[methodName] = stub().callsFake((...args) => {
+    functions[methodName] = stub().callsFake(() => {
       throw new Error(
-        `This is an unhandled error calling "functions.${methodName}" in the test.`
+        `This is an unhandled error calling "functions.${methodName}" in the test.`,
       );
     });
   });
 
   Object.keys(contract.estimateGas).forEach((methodName) => {
-    estimateGas[methodName] = stub().callsFake((...args) => {
+    estimateGas[methodName] = stub().callsFake(() => {
       throw new Error(
-        `This is an unhandled error calling "estimateGas.${methodName}" in the test.`
+        `This is an unhandled error calling "estimateGas.${methodName}" in the test.`,
       );
     });
   });
@@ -57,9 +57,9 @@ export function stubContract<TContract extends Contract>(
     estimateGas,
     functions,
     // TODO: populateTransaction
-    queryFilter: stub().callsFake((...args) => {
+    queryFilter: stub().callsFake(() => {
       throw new Error(
-        `This is an unhandled error calling "queryFilter" in the test.`
+        `This is an unhandled error calling "queryFilter" in the test.`,
       );
     }),
   } as StubbedContract<TContract>;

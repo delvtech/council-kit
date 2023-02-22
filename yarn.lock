@@ -3400,12 +3400,7 @@
     picocolors "^1.0.0"
     pretty-format "^27.5.1"
 
-"@wagmi/chains@0.2.8":
-  version "0.2.8"
-  resolved "https://registry.yarnpkg.com/@wagmi/chains/-/chains-0.2.8.tgz#eece43702f719d7de4193dc993668e0d783937b5"
-  integrity sha512-owGdAL75bE0JOzVTm5SOci458RrdD+FTJ6D238A+0VV9SQCz5N8vK9VBxhcEKXexjhzMM+CJZqFBTyxNsmNlLw==
-
-"@wagmi/connectors@0.2.6", "@wagmi/connectors@^0.2.6":
+"@wagmi/connectors@^0.2.6":
   version "0.2.6"
   resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-0.2.6.tgz#b96025ebf8f0ec33fea12fa643afe7269f833de4"
   integrity sha512-I7tsKgbwF6o5aUu6gQk4YMo7fe3iLAgmbFT06/FHlSLKIxI16qkKwjTt04k9WhdDRDYaJH+DqUEyam1jP+jvIg==
@@ -3428,17 +3423,6 @@
     abitype "^0.1.7"
     eventemitter3 "^4.0.7"
     zustand "^4.1.1"
-
-"@wagmi/core@^0.9.6":
-  version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.9.6.tgz#19969e3f1711071d594754c08c82f0705c585dab"
-  integrity sha512-TGAnA9sNjm3s8evBVxN3yRjZqKGBlhFW1Bk2nX1C1UtlrA5uTIPDWGxHw0CAPmSnE4MLL89Um4JA12jubNqLZg==
-  dependencies:
-    "@wagmi/chains" "0.2.8"
-    "@wagmi/connectors" "0.2.6"
-    abitype "^0.3.0"
-    eventemitter3 "^4.0.7"
-    zustand "^4.3.1"
 
 "@walletconnect/browser-utils@^1.8.0":
   version "1.8.0"
@@ -3911,11 +3895,6 @@ abitype@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.3.0.tgz#75150e337d88cc0b2423ed0d3fc36935f139d04c"
   integrity sha512-0YokyAV4hKMcy97Pl+6QgZBlBdZJN2llslOs7kiFY+cu7kMlVXDBpxMExfv0krzBCQt2t7hNovpQ3y/zvEm18A==
-
-abitype@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.4.1.tgz#2412618d2790d5b52a008b9f62a2b2c149145138"
-  integrity sha512-gqGF9K8DwD1LgpztUoSEFtb8UBWdaWI36Ck8wSibMbEp/cKpv3SK4ymGlPIXofQ3x+940qfFb9BY6bBcB8bFuA==
 
 abort-controller@^3.0.0:
   version "3.0.0"
@@ -16737,12 +16716,5 @@ zustand@^4.1.1:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.1.4.tgz#b0286da4cc9edd35e91c96414fa54bfa4652a54d"
   integrity sha512-k2jVOlWo8p4R83mQ+/uyB8ILPO2PCJOf+QVjcL+1PbMCk1w5OoPYpAIxy9zd93FSfmJqoH6lGdwzzjwqJIRU5A==
-  dependencies:
-    use-sync-external-store "1.2.0"
-
-zustand@^4.3.1:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.3.tgz#c9113499074dde2d6d99c1b5f591e9329572c224"
-  integrity sha512-x2jXq8S0kfLGNwGh87nhRfEc2eZy37tSatpSoSIN+O6HIaBhgQHSONV/F9VNrNcBcKQu/E80K1DeHDYQC/zCrQ==
   dependencies:
     use-sync-external-store "1.2.0"

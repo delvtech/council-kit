@@ -1,6 +1,6 @@
 import { BigNumber, ethers, Wallet } from "ethers";
 import { stubContract } from "./stubContract";
-import { MockProvider } from "@wagmi/core/connectors/mock";
+import { MockProvider } from "@wagmi/connectors/mock";
 import { ApprovalEvent } from "@council/typechain/dist/contracts/interfaces/IERC20";
 import { stub } from "sinon";
 import { ERC20, ERC20__factory } from "src/types";
@@ -32,13 +32,13 @@ test("Stubs estimateGas methods correctly", async () => {
 
   // should throw an error if stub's resolve value was never set
   expect(() =>
-    stubbedContract.estimateGas.approve(ethers.constants.AddressZero, 100)
+    stubbedContract.estimateGas.approve(ethers.constants.AddressZero, 100),
   ).toThrow();
 
   stubbedContract.estimateGas.approve.resolves(BigNumber.from(555));
   const gasToBurn100Tokens = await stubbedContract.estimateGas.approve(
     ethers.constants.AddressZero,
-    100
+    100,
   );
   expect(gasToBurn100Tokens).toEqual(BigNumber.from(555));
 });
@@ -72,11 +72,11 @@ function setupMockERC20() {
   const mockProvider = new MockProvider({
     chainId: 1,
     signer: new Wallet(
-      "d1b0c40a9943d53459302ccf9003ef9666b9235dfc3220ea1f0422a886615511"
+      "d1b0c40a9943d53459302ccf9003ef9666b9235dfc3220ea1f0422a886615511",
     ),
   });
 
   return stubContract<ERC20>(
-    ERC20__factory.connect(ethers.constants.AddressZero, mockProvider)
+    ERC20__factory.connect(ethers.constants.AddressZero, mockProvider),
   );
 }
