@@ -29,7 +29,7 @@ export function GSCVaultPreviewCard({
       return <GenericVaultCardSkeleton />;
     case "error":
       // TODO: render an error card instead
-      return <p>Error</p>;
+      return <GenericVaultCardSkeleton />;
     case "success": {
       const {
         vaultName,
