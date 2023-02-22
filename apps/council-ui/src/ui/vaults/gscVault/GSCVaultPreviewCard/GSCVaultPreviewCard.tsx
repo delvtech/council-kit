@@ -21,15 +21,22 @@ interface GSCVaultPreviewCardProps {
 export function GSCVaultPreviewCard({
   vaultAddress,
 }: GSCVaultPreviewCardProps): ReactElement {
-  const { data: gscVaultPreviewCardData, status } =
-    useGSCVaultPreviewCard(vaultAddress);
+  const {
+    data: gscVaultPreviewCardData,
+    status,
+    error,
+  } = useGSCVaultPreviewCard(vaultAddress);
+
+  if (status === "error") {
+    console.log(error);
+  }
 
   switch (status) {
     case "loading":
       return <GenericVaultCardSkeleton />;
     case "error":
       // TODO: render an error card instead
-      return <GenericVaultCardSkeleton />;
+      return <p>Error</p>;
     case "success": {
       const {
         vaultName,
@@ -98,8 +105,7 @@ function useGSCVaultPreviewCard(gscVaultAddress: string) {
     ({ address }) => gscVaultAddress === address,
   );
 
-  const queryEnabled =
-    !!gscVaultModel && !!account && !!gscVaultConfig && !!gscStatus;
+  const queryEnabled = !!gscVaultModel && !!gscVaultConfig;
   return useQuery<GSCVaultPreviewData>({
     queryKey: ["GSCVaultPreviewCard", gscVaultConfig?.address, account],
     enabled: queryEnabled,
@@ -108,7 +114,7 @@ function useGSCVaultPreviewCard(gscVaultAddress: string) {
           return {
             vaultName: gscVaultConfig.name,
             memberCount: await (await gscVaultModel.getMembers()).length,
-            connectedAccountMembershipStatus: gscStatus,
+            connectedAccountMembershipStatus: gscStatus ?? "N/A",
             sentenceSummary: gscVaultConfig.sentenceSummary,
           };
         }
