@@ -27,7 +27,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
         name: "Vesting Vault",
         address: "0x6De73946eab234F1EE61256F10067D713aF0e37A",
         sentenceSummary:
-          "Allows locked / vesting tokens to have voting power by using a DAO-defined multiplier for vested over unvested tokens.",
+          "Allows vesting tokens to have voting power in proportion to a DAO-defined multiplier.",
         paragraphSummary:
           "Allows locked / vesting positions to still have voting power in the governance system by using a defined multiplier for the vested tokens over unvested.",
         type: "VestingVault",
