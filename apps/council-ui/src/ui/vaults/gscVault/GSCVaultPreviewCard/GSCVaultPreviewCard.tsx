@@ -21,15 +21,8 @@ interface GSCVaultPreviewCardProps {
 export function GSCVaultPreviewCard({
   vaultAddress,
 }: GSCVaultPreviewCardProps): ReactElement {
-  const {
-    data: gscVaultPreviewCardData,
-    status,
-    error,
-  } = useGSCVaultPreviewCard(vaultAddress);
-
-  if (status === "error") {
-    console.log(error);
-  }
+  const { data: gscVaultPreviewCardData, status } =
+    useGSCVaultPreviewCard(vaultAddress);
 
   switch (status) {
     case "loading":
