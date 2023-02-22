@@ -1,11 +1,9 @@
 import { CouncilConfig } from "src/config/CouncilConfig";
 import { mainnetCouncilConfig } from "src/config/mainnet";
 
-// Uncomment this to test things on goerli
-// export type SupportedChainId = 1 | 5;
-export type SupportedChainId = 1;
+export type SupportedChainId = 1 | 5;
 
-export const councilConfigs: Record<SupportedChainId, CouncilConfig> = {
+export const councilConfigs: Record<number, CouncilConfig> = {
   1: mainnetCouncilConfig,
   // Uncomment this to test things on goerli
   // 5: goerliCouncilConfig,
