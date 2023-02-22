@@ -109,13 +109,10 @@ export function TokenWithDelegationVaultProfileCard({
 
       <button
         className="w-full daisy-btn"
-        disabled={!isConnected || isProfileTheAccountDelegate || !hasTokens}
+        disabled={!isConnected || isProfileTheAccountDelegate}
         onClick={() => onDelegateChange(userAddress)}
       >
-        {getDelegateButtonLabel({
-          isAccountDelegate: isProfileTheAccountDelegate,
-          hasTokens,
-        })}
+        {getDelegateButtonLabel(isProfileTheAccountDelegate)}
       </button>
     </div>
   );
@@ -125,16 +122,7 @@ interface CurrentDelegateInfoProps {
   delegate: Voter;
 }
 
-function getDelegateButtonLabel({
-  isAccountDelegate,
-  hasTokens,
-}: {
-  isAccountDelegate: boolean;
-  hasTokens: boolean;
-}) {
-  if (!hasTokens) {
-    return "Nothing to delegate";
-  }
+function getDelegateButtonLabel(isAccountDelegate: boolean) {
   if (!isAccountDelegate) {
     return "Delegate";
   }

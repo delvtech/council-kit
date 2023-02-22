@@ -5,12 +5,10 @@ export const mainnetCouncilConfig: CouncilConfig = {
   chainId: 1,
   timelock: {
     address: "0x81758f3361A769016eae4844072FA6d7f828a651",
-    abi: {},
   },
   coreVoting: {
     name: "Core Voting",
     address: "0xEaCD577C3F6c44C3ffA398baaD97aE12CDCFed4a",
-    abi: {},
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
@@ -21,7 +19,6 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "Allows users to deposit their tokens in exchange for voting power, which can also be delegated to a different user.",
         address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD",
         type: "FrozenLockingVault",
-        abi: {},
         descriptionURL:
           "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/locking-vault",
       },
@@ -33,7 +30,6 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "Allows locked / vesting positions to still have voting power in the governance system by using a defined multiplier for the vested tokens over unvested.",
         type: "VestingVault",
-        abi: {},
         descriptionURL:
           "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/vesting-vault",
       },
@@ -82,7 +78,6 @@ export const mainnetCouncilConfig: CouncilConfig = {
   gscVoting: {
     name: "GSC",
     address: "0x40309f197e7f94B555904DF0f788a3F48cF326aB",
-    abi: {},
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
@@ -94,7 +89,6 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "The Governance Steering Council (GSC) vault gives one vote to each member that has reached an established threshold of delegated voting power defined by the DAO.",
         paragraphSummary:
           "The Governance Steering Council (GSC) vault gives one vote to each member that has reached an established threshold of delegated voting power defined by the DAO. Council members can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
-        abi: {},
         descriptionURL:
           "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/governance-steering-council-gsc-vault",
       },

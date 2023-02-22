@@ -31,26 +31,22 @@ export const goerliCouncilConfig: CouncilConfig = {
   chainId: 5,
   timelock: {
     address: goerliTimelockAddress,
-    abi: {},
   },
   coreVoting: {
     name: "Core Voting",
     address: goerliCoreVotingAddress,
-    abi: {},
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
         name: "Locking Vault",
         address: lockingVaultProxyAddress,
         type: "LockingVault",
-        abi: {},
         descriptionURL: "https://moreinfo.com",
       },
       {
         name: "Vesting Vault",
         address: vestingVaultProxyAddress,
         type: "VestingVault",
-        abi: {},
         descriptionURL: "https://moreinfo.com",
       },
     ],
@@ -79,14 +75,12 @@ export const goerliCouncilConfig: CouncilConfig = {
   gscVoting: {
     name: "GSC",
     address: gscVotingAddress,
-    abi: {},
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
         name: "GSC Vault",
         address: goerliGSCVaultAddress,
         type: "GSCVault",
-        abi: {},
         descriptionURL: "https://moreinfo.com",
       },
     ],
