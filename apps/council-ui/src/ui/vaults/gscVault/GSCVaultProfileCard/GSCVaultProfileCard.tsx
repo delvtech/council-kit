@@ -36,7 +36,7 @@ export function GSCVaultProfileCard({
     !isConnected || !signer || !isGSCMember || !data?.isBelowThreshold;
 
   return (
-    <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 daisy-card bg-base-200 min-w-[360px]">
+    <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 daisy-card bg-base-200 justify-between min-w-[360px]">
       <Link
         className="flex items-center underline hover:no-underline gap-x-2"
         href={makeVaultURL(address)}
@@ -46,25 +46,27 @@ export function GSCVaultProfileCard({
         <h3 className="text-2xl font-semibold">{name}</h3>
       </Link>
 
-      <div className="flex items-center w-full">
-        <p>Membership status</p>
-        <p className="ml-auto font-bold">
-          {data ? data.voterGSCStatus : <Skeleton />}
-        </p>
-      </div>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center w-full">
+          <p>Membership status</p>
+          <p className="ml-auto font-bold">
+            {data ? data.voterGSCStatus : <Skeleton />}
+          </p>
+        </div>
 
-      <div className="flex items-center w-full">
-        <p>Required voting power</p>
-        <p className="ml-auto font-bold">
-          {data ? formatBalance(data.requiredVotingPower) : <Skeleton />}
-        </p>
-      </div>
+        <div className="flex items-center w-full">
+          <p>Required voting power</p>
+          <p className="ml-auto font-bold">
+            {data ? formatBalance(data.requiredVotingPower) : <Skeleton />}
+          </p>
+        </div>
 
-      <div className="flex items-center w-full">
-        <p>Qualifying voting power</p>
-        <p className="ml-auto font-bold">
-          {data ? formatBalance(data.qualifyingVotingPower) : <Skeleton />}
-        </p>
+        <div className="flex items-center w-full">
+          <p>Qualifying voting power</p>
+          <p className="ml-auto font-bold">
+            {data ? formatBalance(data.qualifyingVotingPower) : <Skeleton />}
+          </p>
+        </div>
       </div>
 
       <button
