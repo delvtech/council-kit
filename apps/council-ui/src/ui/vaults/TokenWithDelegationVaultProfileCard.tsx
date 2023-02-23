@@ -53,59 +53,61 @@ export function TokenWithDelegationVaultProfileCard({
     );
 
   return (
-    <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 daisy-card bg-base-200 min-w-[360px]">
-      <Link
-        className="flex items-center underline hover:no-underline gap-x-2"
-        href={makeVaultURL(vaultAddress)}
-      >
-        <WalletIcon address={vaultAddress} />
+    <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 justify-between daisy-card bg-base-200 min-w-[360px]">
+      <div className="flex flex-col gap-4">
+        <Link
+          className="flex items-center underline hover:no-underline gap-x-2"
+          href={makeVaultURL(vaultAddress)}
+        >
+          <WalletIcon address={vaultAddress} />
 
-        <h3 className="text-2xl font-semibold">{vaultName}</h3>
-      </Link>
+          <h3 className="text-2xl font-semibold">{vaultName}</h3>
+        </Link>
 
-      {userBalance && (
+        {userBalance && (
+          <div className="flex items-center w-full">
+            <p>Tokens Deposited</p>
+            <p className="ml-auto font-bold">
+              {+userBalance ? `${formatBalance(userBalance)} ELFI` : "None"}
+            </p>
+          </div>
+        )}
+
         <div className="flex items-center w-full">
-          <p>Tokens Deposited</p>
+          <p>Voting Power</p>
           <p className="ml-auto font-bold">
-            {+userBalance ? `${formatBalance(userBalance)} ELFI` : "None"}
+            {+userVotingPower ? formatBalance(userVotingPower) : "None"}
           </p>
         </div>
-      )}
 
-      <div className="flex items-center w-full">
-        <p>Voting Power</p>
-        <p className="ml-auto font-bold">
-          {+userVotingPower ? formatBalance(userVotingPower) : "None"}
-        </p>
+        {userCurrentDelegate && (
+          <CurrentDelegateInfo delegate={userCurrentDelegate} />
+        )}
+
+        {userVotersDelegated?.length ? (
+          <div className="flex items-center w-full">
+            <p># of Delegators</p>
+
+            {/* The button to open modal */}
+            <label
+              htmlFor={`delegator-modal-${vaultAddress}`}
+              className={classNames("ml-auto font-bold", {
+                "underline hover:no-underline hover:cursor-pointer text-secondary":
+                  userVotersDelegated.length,
+              })}
+            >
+              {userVotersDelegated.length}
+            </label>
+
+            <DelegatorListModal
+              delegators={userVotersDelegated}
+              vaultAddress={vaultAddress}
+              voterAddress={userAddress}
+              voterEns={userEns}
+            />
+          </div>
+        ) : null}
       </div>
-
-      {userCurrentDelegate && (
-        <CurrentDelegateInfo delegate={userCurrentDelegate} />
-      )}
-
-      {userVotersDelegated?.length ? (
-        <div className="flex items-center w-full">
-          <p># of Delegators</p>
-
-          {/* The button to open modal */}
-          <label
-            htmlFor={`delegator-modal-${vaultAddress}`}
-            className={classNames("ml-auto font-bold", {
-              "underline hover:no-underline hover:cursor-pointer text-secondary":
-                userVotersDelegated.length,
-            })}
-          >
-            {userVotersDelegated.length}
-          </label>
-
-          <DelegatorListModal
-            delegators={userVotersDelegated}
-            vaultAddress={vaultAddress}
-            voterAddress={userAddress}
-            voterEns={userEns}
-          />
-        </div>
-      ) : null}
 
       <button
         className="w-full daisy-btn"
