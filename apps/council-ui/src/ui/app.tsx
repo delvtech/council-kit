@@ -24,6 +24,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
             <TooltipProvider>
               <Toaster />
               <Head>
+                <link rel="shortcut icon" href="/favicon.ico" />
                 <link
                   rel="icon"
                   type="image/svg+xml"
