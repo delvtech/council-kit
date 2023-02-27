@@ -19,7 +19,7 @@ export function ExternalInfoCard({
       rel="noreferrer"
       className="p-4 border border-gray-300 hover:border-black rounded-xl w-fit hover:text-black cursor-pointer select-text flex-1"
     >
-      <h2 className="font-bold whitespace-nowrap mb-1">
+      <h2 className="font-bold mb-1">
         {header} <ExternalLinkSVG size={16} />
       </h2>
       <p>{body}</p>
