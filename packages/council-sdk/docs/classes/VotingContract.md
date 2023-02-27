@@ -34,6 +34,7 @@ A model of a CoreVoting contract.
 
 ### Methods
 
+- [createProposal](VotingContract.md#createproposal)
 - [getParticipation](VotingContract.md#getparticipation)
 - [getProposal](VotingContract.md#getproposal)
 - [getProposals](VotingContract.md#getproposals)
@@ -41,6 +42,7 @@ A model of a CoreVoting contract.
 - [getVoters](VotingContract.md#getvoters)
 - [getVotes](VotingContract.md#getvotes)
 - [getVotingPower](VotingContract.md#getvotingpower)
+- [getVotingPowerBreakdown](VotingContract.md#getvotingpowerbreakdown)
 
 ## Constructors
 
@@ -71,7 +73,7 @@ Create a new VotingContract model instance.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:42](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L42)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:51](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L51)
 
 ## Properties
 
@@ -81,7 +83,7 @@ Create a new VotingContract model instance.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:32](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L32)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:41](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L41)
 
 ___
 
@@ -95,7 +97,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -105,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:33](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L33)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:42](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L42)
 
 ___
 
@@ -119,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Model.ts#L20)
 
 ___
 
@@ -129,9 +131,39 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:34](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L34)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:43](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L43)
 
 ## Methods
+
+### createProposal
+
+▸ **createProposal**(`signer`, `vaults`, `targets`, `calldatas`, `lastCall`, `ballot`, `options?`): `Promise`<`string`\>
+
+Create a new proposal.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `signer` | `Signer` | An ethers Signer instance for the voter. |
+| `vaults` | `string`[] | The addresses of the approved vaults to draw voting power from. |
+| `targets` | `string`[] | The targets (contract addresses) to call. |
+| `calldatas` | `BytesLike`[] | The calldatas to call each target with. |
+| `lastCall` | `number` | - |
+| `ballot` | [`Ballot`](../modules.md#ballot) | - |
+| `options?` | [`TransactionOptions`](../interfaces/TransactionOptions.md) & { `extraVaultData?`: `BytesLike`[]  } | - |
+
+#### Returns
+
+`Promise`<`string`\>
+
+The transaction hash.
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:106](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L106)
+
+___
 
 ### getParticipation
 
@@ -153,7 +185,7 @@ the address has voted on every proposal they were able to.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:161](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L161)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:303](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L303)
 
 ___
 
@@ -175,7 +207,7 @@ Get a proposal by id.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:69](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L69)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:78](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L78)
 
 ___
 
@@ -198,7 +230,7 @@ Get all proposals ever created.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:78](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L78)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:87](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L87)
 
 ___
 
@@ -220,7 +252,7 @@ Get the sum of voting power held by all voters in this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:89](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L89)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:134](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L134)
 
 ___
 
@@ -236,7 +268,7 @@ Get all participants that have voting power in this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:119](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L119)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:164](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L164)
 
 ___
 
@@ -261,7 +293,7 @@ Get all casted votes on proposals in this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:132](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L132)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:274](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L274)
 
 ___
 
@@ -285,4 +317,31 @@ Get the voting power owned by a given address in this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingContract/VotingContract.ts:103](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L103)
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:148](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L148)
+
+___
+
+### getVotingPowerBreakdown
+
+▸ **getVotingPowerBreakdown**(`fromBlock?`, `toBlock?`): `Promise`<`VoterPowerBreakdown`[]\>
+
+Get all participants that have voting power in this voting contract along
+with their voting power, the amount of voting power being delegated to
+them, and the amount of power delegated to them by each delegator. This is
+a convenience method to fetch voting power and delegation data for a large
+number of voters in a single call.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `fromBlock?` | `number` | Include all voters that had power on or after this block number. |
+| `toBlock?` | `number` | Include all voters that had power on or before this block number. |
+
+#### Returns
+
+`Promise`<`VoterPowerBreakdown`[]\>
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingContract/VotingContract.ts:183](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingContract/VotingContract.ts#L183)

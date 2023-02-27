@@ -52,7 +52,7 @@ https://github.com/isaacs/node-lru-cache
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:15](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L15)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:15](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L15)
 
 ## Properties
 
@@ -62,7 +62,7 @@ https://github.com/isaacs/node-lru-cache
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
 
 ## Methods
 
@@ -108,7 +108,7 @@ The cached result of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
 
 ___
 
@@ -124,13 +124,13 @@ Delete all entries from the cache.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
 
 ___
 
 ### deleteCached
 
-▸ **deleteCached**(`cacheKey?`): `boolean`
+▸ **deleteCached**(`cacheKey`): `boolean`
 
 Delete a single entry from the cache.
 
@@ -138,7 +138,7 @@ Delete a single entry from the cache.
 
 | Name | Type |
 | :------ | :------ |
-| `cacheKey?` | `any` |
+| `cacheKey` | `any` |
 
 #### Returns
 
@@ -148,4 +148,4 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)

@@ -24,9 +24,9 @@
 
 • `Optional` **name**: `string`
 
-An arbitrary name for the instance. This is for convenience only and has no
-affect on the model's behavior.
+An arbitrary name for the instance. This is for convenience only (e.g.,
+display name, debugging) and has no affect on the model's behavior.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L11)
+[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Model.ts#L11)

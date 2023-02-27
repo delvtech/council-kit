@@ -61,7 +61,7 @@ from the Council protocol.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:14](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L14)
+[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:14](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L14)
 
 ## Properties
 
@@ -75,7 +75,7 @@ from the Council protocol.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
 
 ## Methods
 
@@ -153,7 +153,7 @@ The cached result of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
 
 ___
 
@@ -172,7 +172,7 @@ https://docs.ethers.org/v5/api/contract/contract/#Contract-functionsCall
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends ``"deployed"`` \| ``"_deployed"`` \| ``"fallback"`` \| ``"connect"`` \| ``"attach"`` \| ``"_checkRunningEvents"`` \| ``"_wrapEvent"`` \| ``"queryFilter"`` \| ``"on"`` \| ``"once"`` \| ``"emit"`` \| ``"listenerCount"`` \| ``"listeners"`` \| ``"removeAllListeners"`` \| ``"off"`` \| ``"removeListener"`` \| ``"queryVotePower(address,uint256,bytes)"`` \| ``"queryVotePower"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"coreVoting()"`` \| ``"deauthorize(address)"`` \| ``"getUserVaults(address)"`` \| ``"idleDuration()"`` \| ``"isAuthorized(address)"`` \| ``"kick(address,bytes[])"`` \| ``"members(address)"`` \| ``"owner()"`` \| ``"proveMembership(address[],bytes[])"`` \| ``"setCoreVoting(address)"`` \| ``"setIdleDuration(uint256)"`` \| ``"setOwner(address)"`` \| ``"setVotePowerBound(uint256)"`` \| ``"votingPowerBound()"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"coreVoting"`` \| ``"deauthorize"`` \| ``"getUserVaults"`` \| ``"idleDuration"`` \| ``"isAuthorized"`` \| ``"kick"`` \| ``"members"`` \| ``"owner"`` \| ``"proveMembership"`` \| ``"setCoreVoting"`` \| ``"setIdleDuration"`` \| ``"setOwner"`` \| ``"setVotePowerBound"`` \| ``"votingPowerBound"`` |
+| `K` | extends ``"deployed"`` \| ``"_deployed"`` \| ``"fallback"`` \| ``"connect"`` \| ``"attach"`` \| ``"_checkRunningEvents"`` \| ``"_wrapEvent"`` \| ``"queryFilter"`` \| ``"on"`` \| ``"once"`` \| ``"emit"`` \| ``"listenerCount"`` \| ``"listeners"`` \| ``"removeAllListeners"`` \| ``"off"`` \| ``"removeListener"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"deauthorize(address)"`` \| ``"isAuthorized(address)"`` \| ``"owner()"`` \| ``"setOwner(address)"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"deauthorize"`` \| ``"isAuthorized"`` \| ``"owner"`` \| ``"setOwner"`` \| ``"queryVotePower(address,uint256,bytes)"`` \| ``"queryVotePower"`` \| ``"coreVoting()"`` \| ``"getUserVaults(address)"`` \| ``"idleDuration()"`` \| ``"kick(address,bytes[])"`` \| ``"members(address)"`` \| ``"proveMembership(address[],bytes[])"`` \| ``"setCoreVoting(address)"`` \| ``"setIdleDuration(uint256)"`` \| ``"setVotePowerBound(uint256)"`` \| ``"votingPowerBound()"`` \| ``"coreVoting"`` \| ``"getUserVaults"`` \| ``"idleDuration"`` \| ``"kick"`` \| ``"members"`` \| ``"proveMembership"`` \| ``"setCoreVoting"`` \| ``"setIdleDuration"`` \| ``"setVotePowerBound"`` \| ``"votingPowerBound"`` |
 
 #### Parameters
 
@@ -193,7 +193,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
 
 ___
 
@@ -212,7 +212,7 @@ https://docs.ethers.org/v5/api/contract/contract/#contract-callStatic
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends ``"queryVotePower(address,uint256,bytes)"`` \| ``"queryVotePower"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"coreVoting()"`` \| ``"deauthorize(address)"`` \| ``"getUserVaults(address)"`` \| ``"idleDuration()"`` \| ``"isAuthorized(address)"`` \| ``"kick(address,bytes[])"`` \| ``"members(address)"`` \| ``"owner()"`` \| ``"proveMembership(address[],bytes[])"`` \| ``"setCoreVoting(address)"`` \| ``"setIdleDuration(uint256)"`` \| ``"setOwner(address)"`` \| ``"setVotePowerBound(uint256)"`` \| ``"votingPowerBound()"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"coreVoting"`` \| ``"deauthorize"`` \| ``"getUserVaults"`` \| ``"idleDuration"`` \| ``"isAuthorized"`` \| ``"kick"`` \| ``"members"`` \| ``"owner"`` \| ``"proveMembership"`` \| ``"setCoreVoting"`` \| ``"setIdleDuration"`` \| ``"setOwner"`` \| ``"setVotePowerBound"`` \| ``"votingPowerBound"`` |
+| `K` | extends ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"deauthorize(address)"`` \| ``"isAuthorized(address)"`` \| ``"owner()"`` \| ``"setOwner(address)"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"deauthorize"`` \| ``"isAuthorized"`` \| ``"owner"`` \| ``"setOwner"`` \| ``"queryVotePower(address,uint256,bytes)"`` \| ``"queryVotePower"`` \| ``"coreVoting()"`` \| ``"getUserVaults(address)"`` \| ``"idleDuration()"`` \| ``"kick(address,bytes[])"`` \| ``"members(address)"`` \| ``"proveMembership(address[],bytes[])"`` \| ``"setCoreVoting(address)"`` \| ``"setIdleDuration(uint256)"`` \| ``"setVotePowerBound(uint256)"`` \| ``"votingPowerBound()"`` \| ``"coreVoting"`` \| ``"getUserVaults"`` \| ``"idleDuration"`` \| ``"kick"`` \| ``"members"`` \| ``"proveMembership"`` \| ``"setCoreVoting"`` \| ``"setIdleDuration"`` \| ``"setVotePowerBound"`` \| ``"votingPowerBound"`` |
 
 #### Parameters
 
@@ -233,7 +233,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
 
 ___
 
@@ -248,7 +248,7 @@ transaction to resolve. If the transaction fails, this will throw an error.
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends ``"fallback"`` \| ``"authorize(address)"`` \| ``"deauthorize(address)"`` \| ``"kick(address,bytes[])"`` \| ``"proveMembership(address[],bytes[])"`` \| ``"setCoreVoting(address)"`` \| ``"setIdleDuration(uint256)"`` \| ``"setOwner(address)"`` \| ``"setVotePowerBound(uint256)"`` \| ``"authorize"`` \| ``"deauthorize"`` \| ``"kick"`` \| ``"proveMembership"`` \| ``"setCoreVoting"`` \| ``"setIdleDuration"`` \| ``"setOwner"`` \| ``"setVotePowerBound"`` |
+| `K` | extends ``"fallback"`` \| ``"authorize(address)"`` \| ``"deauthorize(address)"`` \| ``"setOwner(address)"`` \| ``"authorize"`` \| ``"deauthorize"`` \| ``"setOwner"`` \| ``"kick(address,bytes[])"`` \| ``"proveMembership(address[],bytes[])"`` \| ``"setCoreVoting(address)"`` \| ``"setIdleDuration(uint256)"`` \| ``"setVotePowerBound(uint256)"`` \| ``"kick"`` \| ``"proveMembership"`` \| ``"setCoreVoting"`` \| ``"setIdleDuration"`` \| ``"setVotePowerBound"`` |
 
 #### Parameters
 
@@ -271,7 +271,7 @@ A promise that resolves to the `ContractTransaction`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
 
 ___
 
@@ -291,13 +291,13 @@ Delete all entries from the cache.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
 
 ___
 
 ### deleteCached
 
-▸ **deleteCached**(`cacheKey?`): `boolean`
+▸ **deleteCached**(`cacheKey`): `boolean`
 
 Delete a single entry from the cache.
 
@@ -305,7 +305,7 @@ Delete a single entry from the cache.
 
 | Name | Type |
 | :------ | :------ |
-| `cacheKey?` | `any` |
+| `cacheKey` | `any` |
 
 #### Returns
 
@@ -319,7 +319,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
 
 ___
 
@@ -333,7 +333,7 @@ Delete the cache entry for a call to a given method with the given args.
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends ``"deployed"`` \| ``"_deployed"`` \| ``"fallback"`` \| ``"connect"`` \| ``"attach"`` \| ``"_checkRunningEvents"`` \| ``"_wrapEvent"`` \| ``"queryFilter"`` \| ``"on"`` \| ``"once"`` \| ``"emit"`` \| ``"listenerCount"`` \| ``"listeners"`` \| ``"removeAllListeners"`` \| ``"off"`` \| ``"removeListener"`` \| ``"queryVotePower(address,uint256,bytes)"`` \| ``"queryVotePower"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"coreVoting()"`` \| ``"deauthorize(address)"`` \| ``"getUserVaults(address)"`` \| ``"idleDuration()"`` \| ``"isAuthorized(address)"`` \| ``"kick(address,bytes[])"`` \| ``"members(address)"`` \| ``"owner()"`` \| ``"proveMembership(address[],bytes[])"`` \| ``"setCoreVoting(address)"`` \| ``"setIdleDuration(uint256)"`` \| ``"setOwner(address)"`` \| ``"setVotePowerBound(uint256)"`` \| ``"votingPowerBound()"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"coreVoting"`` \| ``"deauthorize"`` \| ``"getUserVaults"`` \| ``"idleDuration"`` \| ``"isAuthorized"`` \| ``"kick"`` \| ``"members"`` \| ``"owner"`` \| ``"proveMembership"`` \| ``"setCoreVoting"`` \| ``"setIdleDuration"`` \| ``"setOwner"`` \| ``"setVotePowerBound"`` \| ``"votingPowerBound"`` |
+| `K` | extends ``"deployed"`` \| ``"_deployed"`` \| ``"fallback"`` \| ``"connect"`` \| ``"attach"`` \| ``"_checkRunningEvents"`` \| ``"_wrapEvent"`` \| ``"queryFilter"`` \| ``"on"`` \| ``"once"`` \| ``"emit"`` \| ``"listenerCount"`` \| ``"listeners"`` \| ``"removeAllListeners"`` \| ``"off"`` \| ``"removeListener"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"deauthorize(address)"`` \| ``"isAuthorized(address)"`` \| ``"owner()"`` \| ``"setOwner(address)"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"deauthorize"`` \| ``"isAuthorized"`` \| ``"owner"`` \| ``"setOwner"`` \| ``"queryVotePower(address,uint256,bytes)"`` \| ``"queryVotePower"`` \| ``"coreVoting()"`` \| ``"getUserVaults(address)"`` \| ``"idleDuration()"`` \| ``"kick(address,bytes[])"`` \| ``"members(address)"`` \| ``"proveMembership(address[],bytes[])"`` \| ``"setCoreVoting(address)"`` \| ``"setIdleDuration(uint256)"`` \| ``"setVotePowerBound(uint256)"`` \| ``"votingPowerBound()"`` \| ``"coreVoting"`` \| ``"getUserVaults"`` \| ``"idleDuration"`` \| ``"kick"`` \| ``"members"`` \| ``"proveMembership"`` \| ``"setCoreVoting"`` \| ``"setIdleDuration"`` \| ``"setVotePowerBound"`` \| ``"votingPowerBound"`` |
 
 #### Parameters
 
@@ -354,7 +354,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
 
 ___
 
@@ -371,7 +371,7 @@ they can vote.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:30](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L30)
+[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:30](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L30)
 
 ___
 
@@ -393,7 +393,7 @@ Get a timestamp (in MS) of the join date of a given address.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:88](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L88)
+[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:95](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L95)
 
 ___
 
@@ -416,7 +416,7 @@ the minimum voting power requirement.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:98](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L98)
+[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:105](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L105)
 
 ___
 
@@ -439,7 +439,7 @@ Get the addresses of all current members of this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:40](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L40)
+[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:40](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L40)
 
 ___
 
@@ -455,13 +455,13 @@ Get the amount of voting power required to join this GSC vault.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:21](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L21)
+[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:21](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L21)
 
 ___
 
 ### getVotingPower
 
-▸ **getVotingPower**(`this`, `address`, `atBlock`, `extraData?`): `Promise`<`string`\>
+▸ **getVotingPower**(`this`, `address`, `atBlock?`, `extraData?`): `Promise`<`string`\>
 
 Get the voting power owned by a given address in this vault. Returns "0" if
 the voting power is unable to be fetched.
@@ -472,7 +472,7 @@ the voting power is unable to be fetched.
 | :------ | :------ | :------ | :------ |
 | `this` | [`ContractDataSource`](ContractDataSource.md)<`IVotingVault`\> | `undefined` | - |
 | `address` | `string` | `undefined` | - |
-| `atBlock` | `number` | `undefined` | - |
+| `atBlock?` | `number` | `undefined` | - |
 | `extraData` | `BytesLike` | `"0x00"` | ABI encoded optional extra data used by some vaults, such as merkle proofs. |
 
 #### Returns
@@ -485,7 +485,7 @@ the voting power is unable to be fetched.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts:44](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts#L44)
+[packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts:44](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts#L44)
 
 ___
 
@@ -511,7 +511,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:112](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L112)
+[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:119](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L119)
 
 ___
 
@@ -539,4 +539,4 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:140](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L140)
+[packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts:147](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/GSCVaultContractDataSource.ts#L147)

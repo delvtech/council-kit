@@ -35,11 +35,17 @@ from the Council protocol.
 - [callStatic](CoreVotingContractDataSource.md#callstatic)
 - [callWithSigner](CoreVotingContractDataSource.md#callwithsigner)
 - [clearCached](CoreVotingContractDataSource.md#clearcached)
+- [createProposal](CoreVotingContractDataSource.md#createproposal)
 - [deleteCached](CoreVotingContractDataSource.md#deletecached)
 - [deleteCall](CoreVotingContractDataSource.md#deletecall)
 - [getExecutedProposalIds](CoreVotingContractDataSource.md#getexecutedproposalids)
 - [getProposal](CoreVotingContractDataSource.md#getproposal)
 - [getProposalCount](CoreVotingContractDataSource.md#getproposalcount)
+- [getProposalCreatedBy](CoreVotingContractDataSource.md#getproposalcreatedby)
+- [getProposalCreatedEvents](CoreVotingContractDataSource.md#getproposalcreatedevents)
+- [getProposalCreatedTransactionHash](CoreVotingContractDataSource.md#getproposalcreatedtransactionhash)
+- [getProposalExecutedEvents](CoreVotingContractDataSource.md#getproposalexecutedevents)
+- [getProposalExecutedTransactionHash](CoreVotingContractDataSource.md#getproposalexecutedtransactionhash)
 - [getProposals](CoreVotingContractDataSource.md#getproposals)
 - [getResults](CoreVotingContractDataSource.md#getresults)
 - [getVote](CoreVotingContractDataSource.md#getvote)
@@ -65,7 +71,7 @@ from the Council protocol.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:31](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L31)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:35](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L35)
 
 ## Properties
 
@@ -83,7 +89,7 @@ from the Council protocol.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
 
 ___
 
@@ -97,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
 
 ___
 
@@ -115,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
 
 ___
 
@@ -129,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
 
 ## Methods
 
@@ -165,7 +171,7 @@ The cached result of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
 
 ___
 
@@ -205,7 +211,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
 
 ___
 
@@ -245,7 +251,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
 
 ___
 
@@ -283,7 +289,7 @@ A promise that resolves to the `ContractTransaction`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
 
 ___
 
@@ -303,13 +309,47 @@ Delete all entries from the cache.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
+
+___
+
+### createProposal
+
+▸ **createProposal**(`signer`, `vaults`, `targets`, `calldatas`, `lastCall`, `ballot`, `options?`): `Promise`<`string`\>
+
+Create a new proposal.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `signer` | `Signer` | An ethers Signer instance for the voter. |
+| `vaults` | `string`[] | The addresses of the approved vaults to draw voting power from. |
+| `targets` | `string`[] | The targets (contract addresses) to call. |
+| `calldatas` | `BytesLike`[] | The calldatas to call each target with. |
+| `lastCall` | `number` | - |
+| `ballot` | [`Ballot`](../modules.md#ballot) | - |
+| `options?` | [`TransactionOptions`](../interfaces/TransactionOptions.md) & { `extraVaultData?`: `BytesLike`[]  } | - |
+
+#### Returns
+
+`Promise`<`string`\>
+
+The transaction hash.
+
+#### Implementation of
+
+VotingContractDataSource.createProposal
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:134](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L134)
 
 ___
 
 ### deleteCached
 
-▸ **deleteCached**(`cacheKey?`): `boolean`
+▸ **deleteCached**(`cacheKey`): `boolean`
 
 Delete a single entry from the cache.
 
@@ -317,7 +357,7 @@ Delete a single entry from the cache.
 
 | Name | Type |
 | :------ | :------ |
-| `cacheKey?` | `any` |
+| `cacheKey` | `any` |
 
 #### Returns
 
@@ -331,7 +371,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
 
 ___
 
@@ -366,7 +406,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
 
 ___
 
@@ -393,7 +433,7 @@ VotingContractDataSource.getExecutedProposalIds
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:77](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L77)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:177](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L177)
 
 ___
 
@@ -419,7 +459,7 @@ VotingContractDataSource.getProposal
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:39](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L39)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:88](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L88)
 
 ___
 
@@ -439,7 +479,129 @@ VotingContractDataSource.getProposalCount
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:35](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L35)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:39](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L39)
+
+___
+
+### getProposalCreatedBy
+
+▸ **getProposalCreatedBy**(`id`): `Promise`<``null`` \| `string`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+`Promise`<``null`` \| `string`\>
+
+#### Implementation of
+
+VotingContractDataSource.getProposalCreatedBy
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L43)
+
+___
+
+### getProposalCreatedEvents
+
+▸ **getProposalCreatedEvents**(`fromBlock?`, `toBlock?`): `Promise`<`ProposalCreatedEvent`[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fromBlock?` | `number` |
+| `toBlock?` | `number` |
+
+#### Returns
+
+`Promise`<`ProposalCreatedEvent`[]\>
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:57](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L57)
+
+___
+
+### getProposalCreatedTransactionHash
+
+▸ **getProposalCreatedTransactionHash**(`id`): `Promise`<``null`` \| `string`\>
+
+Returns the hash of the transaction that created the proposal. Returns null
+if the id passed does not correspond to a valid proposal.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `number` | The id of the proposal |
+
+#### Returns
+
+`Promise`<``null`` \| `string`\>
+
+The transaction hash
+
+#### Implementation of
+
+VotingContractDataSource.getProposalCreatedTransactionHash
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:76](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L76)
+
+___
+
+### getProposalExecutedEvents
+
+▸ **getProposalExecutedEvents**(`fromBlock?`, `toBlock?`): `Promise`<`ProposalExecutedEvent`[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fromBlock?` | `number` |
+| `toBlock?` | `number` |
+
+#### Returns
+
+`Promise`<`ProposalExecutedEvent`[]\>
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:164](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L164)
+
+___
+
+### getProposalExecutedTransactionHash
+
+▸ **getProposalExecutedTransactionHash**(`id`): `Promise`<``null`` \| `string`\>
+
+Get the hash of the transaction that executed the proposal, or null if
+the Proposal wasn't executed.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `number` | The proposal id. |
+
+#### Returns
+
+`Promise`<``null`` \| `string`\>
+
+#### Implementation of
+
+VotingContractDataSource.getProposalExecutedTransactionHash
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:188](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L188)
 
 ___
 
@@ -466,7 +628,7 @@ VotingContractDataSource.getProposals
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:55](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L55)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:106](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L106)
 
 ___
 
@@ -493,7 +655,7 @@ VotingContractDataSource.getResults
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:137](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L137)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:242](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L242)
 
 ___
 
@@ -521,7 +683,7 @@ VotingContractDataSource.getVote
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:95](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L95)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:200](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L200)
 
 ___
 
@@ -550,7 +712,7 @@ VotingContractDataSource.getVotes
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:110](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L110)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:215](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L215)
 
 ___
 
@@ -582,4 +744,4 @@ VotingContractDataSource.vote
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:149](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L149)
+[packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts:254](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/CoreVotingContractDataSource.ts#L254)

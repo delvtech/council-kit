@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:18](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L18)
+[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:18](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L18)
 
 ## Properties
 
@@ -78,7 +78,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
 
 ## Methods
 
@@ -155,7 +155,7 @@ TokenDataSource.approve
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:71](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L71)
+[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:71](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L71)
 
 ___
 
@@ -191,7 +191,7 @@ The cached result of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
 
 ___
 
@@ -210,7 +210,7 @@ https://docs.ethers.org/v5/api/contract/contract/#Contract-functionsCall
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends ``"symbol"`` \| ``"deployed"`` \| ``"_deployed"`` \| ``"fallback"`` \| ``"connect"`` \| ``"attach"`` \| ``"_checkRunningEvents"`` \| ``"_wrapEvent"`` \| ``"queryFilter"`` \| ``"on"`` \| ``"once"`` \| ``"emit"`` \| ``"listenerCount"`` \| ``"listeners"`` \| ``"removeAllListeners"`` \| ``"off"`` \| ``"removeListener"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"deauthorize(address)"`` \| ``"isAuthorized(address)"`` \| ``"owner()"`` \| ``"setOwner(address)"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"deauthorize"`` \| ``"isAuthorized"`` \| ``"owner"`` \| ``"setOwner"`` \| ``"name"`` \| ``"DOMAIN_SEPARATOR()"`` \| ``"PERMIT_TYPEHASH()"`` \| ``"allowance(address,address)"`` \| ``"approve(address,uint256)"`` \| ``"balanceOf(address)"`` \| ``"burn(address,uint256)"`` \| ``"decimals()"`` \| ``"mint(address,uint256)"`` \| ``"name()"`` \| ``"nonces(address)"`` \| ``"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"`` \| ``"setAllowance(address,address,uint256)"`` \| ``"setBalance(address,uint256)"`` \| ``"symbol()"`` \| ``"totalSupply()"`` \| ``"transfer(address,uint256)"`` \| ``"transferFrom(address,address,uint256)"`` \| ``"DOMAIN_SEPARATOR"`` \| ``"PERMIT_TYPEHASH"`` \| ``"allowance"`` \| ``"approve"`` \| ``"balanceOf"`` \| ``"burn"`` \| ``"decimals"`` \| ``"mint"`` \| ``"nonces"`` \| ``"permit"`` \| ``"setAllowance"`` \| ``"setBalance"`` \| ``"totalSupply"`` \| ``"transfer"`` \| ``"transferFrom"`` |
+| `K` | extends ``"symbol"`` \| ``"deployed"`` \| ``"_deployed"`` \| ``"fallback"`` \| ``"connect"`` \| ``"attach"`` \| ``"_checkRunningEvents"`` \| ``"_wrapEvent"`` \| ``"queryFilter"`` \| ``"on"`` \| ``"once"`` \| ``"emit"`` \| ``"listenerCount"`` \| ``"listeners"`` \| ``"removeAllListeners"`` \| ``"off"`` \| ``"removeListener"`` \| ``"DOMAIN_SEPARATOR()"`` \| ``"PERMIT_TYPEHASH()"`` \| ``"allowance(address,address)"`` \| ``"approve(address,uint256)"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"balanceOf(address)"`` \| ``"burn(address,uint256)"`` \| ``"deauthorize(address)"`` \| ``"decimals()"`` \| ``"isAuthorized(address)"`` \| ``"mint(address,uint256)"`` \| ``"name()"`` \| ``"nonces(address)"`` \| ``"owner()"`` \| ``"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"`` \| ``"setAllowance(address,address,uint256)"`` \| ``"setBalance(address,uint256)"`` \| ``"setOwner(address)"`` \| ``"symbol()"`` \| ``"totalSupply()"`` \| ``"transfer(address,uint256)"`` \| ``"transferFrom(address,address,uint256)"`` \| ``"DOMAIN_SEPARATOR"`` \| ``"PERMIT_TYPEHASH"`` \| ``"allowance"`` \| ``"approve"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"balanceOf"`` \| ``"burn"`` \| ``"deauthorize"`` \| ``"decimals"`` \| ``"isAuthorized"`` \| ``"mint"`` \| ``"name"`` \| ``"nonces"`` \| ``"owner"`` \| ``"permit"`` \| ``"setAllowance"`` \| ``"setBalance"`` \| ``"setOwner"`` \| ``"totalSupply"`` \| ``"transfer"`` \| ``"transferFrom"`` |
 
 #### Parameters
 
@@ -231,7 +231,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
 
 ___
 
@@ -250,7 +250,7 @@ https://docs.ethers.org/v5/api/contract/contract/#contract-callStatic
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends ``"symbol"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"deauthorize(address)"`` \| ``"isAuthorized(address)"`` \| ``"owner()"`` \| ``"setOwner(address)"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"deauthorize"`` \| ``"isAuthorized"`` \| ``"owner"`` \| ``"setOwner"`` \| ``"name"`` \| ``"DOMAIN_SEPARATOR()"`` \| ``"PERMIT_TYPEHASH()"`` \| ``"allowance(address,address)"`` \| ``"approve(address,uint256)"`` \| ``"balanceOf(address)"`` \| ``"burn(address,uint256)"`` \| ``"decimals()"`` \| ``"mint(address,uint256)"`` \| ``"name()"`` \| ``"nonces(address)"`` \| ``"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"`` \| ``"setAllowance(address,address,uint256)"`` \| ``"setBalance(address,uint256)"`` \| ``"symbol()"`` \| ``"totalSupply()"`` \| ``"transfer(address,uint256)"`` \| ``"transferFrom(address,address,uint256)"`` \| ``"DOMAIN_SEPARATOR"`` \| ``"PERMIT_TYPEHASH"`` \| ``"allowance"`` \| ``"approve"`` \| ``"balanceOf"`` \| ``"burn"`` \| ``"decimals"`` \| ``"mint"`` \| ``"nonces"`` \| ``"permit"`` \| ``"setAllowance"`` \| ``"setBalance"`` \| ``"totalSupply"`` \| ``"transfer"`` \| ``"transferFrom"`` |
+| `K` | extends ``"symbol"`` \| ``"DOMAIN_SEPARATOR()"`` \| ``"PERMIT_TYPEHASH()"`` \| ``"allowance(address,address)"`` \| ``"approve(address,uint256)"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"balanceOf(address)"`` \| ``"burn(address,uint256)"`` \| ``"deauthorize(address)"`` \| ``"decimals()"`` \| ``"isAuthorized(address)"`` \| ``"mint(address,uint256)"`` \| ``"name()"`` \| ``"nonces(address)"`` \| ``"owner()"`` \| ``"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"`` \| ``"setAllowance(address,address,uint256)"`` \| ``"setBalance(address,uint256)"`` \| ``"setOwner(address)"`` \| ``"symbol()"`` \| ``"totalSupply()"`` \| ``"transfer(address,uint256)"`` \| ``"transferFrom(address,address,uint256)"`` \| ``"DOMAIN_SEPARATOR"`` \| ``"PERMIT_TYPEHASH"`` \| ``"allowance"`` \| ``"approve"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"balanceOf"`` \| ``"burn"`` \| ``"deauthorize"`` \| ``"decimals"`` \| ``"isAuthorized"`` \| ``"mint"`` \| ``"name"`` \| ``"nonces"`` \| ``"owner"`` \| ``"permit"`` \| ``"setAllowance"`` \| ``"setBalance"`` \| ``"setOwner"`` \| ``"totalSupply"`` \| ``"transfer"`` \| ``"transferFrom"`` |
 
 #### Parameters
 
@@ -271,7 +271,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
 
 ___
 
@@ -286,7 +286,7 @@ transaction to resolve. If the transaction fails, this will throw an error.
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends ``"fallback"`` \| ``"authorize(address)"`` \| ``"deauthorize(address)"`` \| ``"setOwner(address)"`` \| ``"authorize"`` \| ``"deauthorize"`` \| ``"setOwner"`` \| ``"approve(address,uint256)"`` \| ``"burn(address,uint256)"`` \| ``"mint(address,uint256)"`` \| ``"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"`` \| ``"setAllowance(address,address,uint256)"`` \| ``"setBalance(address,uint256)"`` \| ``"transfer(address,uint256)"`` \| ``"transferFrom(address,address,uint256)"`` \| ``"approve"`` \| ``"burn"`` \| ``"mint"`` \| ``"permit"`` \| ``"setAllowance"`` \| ``"setBalance"`` \| ``"transfer"`` \| ``"transferFrom"`` |
+| `K` | extends ``"fallback"`` \| ``"approve(address,uint256)"`` \| ``"authorize(address)"`` \| ``"burn(address,uint256)"`` \| ``"deauthorize(address)"`` \| ``"mint(address,uint256)"`` \| ``"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"`` \| ``"setAllowance(address,address,uint256)"`` \| ``"setBalance(address,uint256)"`` \| ``"setOwner(address)"`` \| ``"transfer(address,uint256)"`` \| ``"transferFrom(address,address,uint256)"`` \| ``"approve"`` \| ``"authorize"`` \| ``"burn"`` \| ``"deauthorize"`` \| ``"mint"`` \| ``"permit"`` \| ``"setAllowance"`` \| ``"setBalance"`` \| ``"setOwner"`` \| ``"transfer"`` \| ``"transferFrom"`` |
 
 #### Parameters
 
@@ -309,7 +309,7 @@ A promise that resolves to the `ContractTransaction`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
 
 ___
 
@@ -329,13 +329,13 @@ Delete all entries from the cache.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
 
 ___
 
 ### deleteCached
 
-▸ **deleteCached**(`cacheKey?`): `boolean`
+▸ **deleteCached**(`cacheKey`): `boolean`
 
 Delete a single entry from the cache.
 
@@ -343,7 +343,7 @@ Delete a single entry from the cache.
 
 | Name | Type |
 | :------ | :------ |
-| `cacheKey?` | `any` |
+| `cacheKey` | `any` |
 
 #### Returns
 
@@ -357,7 +357,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
 
 ___
 
@@ -371,7 +371,7 @@ Delete the cache entry for a call to a given method with the given args.
 
 | Name | Type |
 | :------ | :------ |
-| `K` | extends ``"symbol"`` \| ``"deployed"`` \| ``"_deployed"`` \| ``"fallback"`` \| ``"connect"`` \| ``"attach"`` \| ``"_checkRunningEvents"`` \| ``"_wrapEvent"`` \| ``"queryFilter"`` \| ``"on"`` \| ``"once"`` \| ``"emit"`` \| ``"listenerCount"`` \| ``"listeners"`` \| ``"removeAllListeners"`` \| ``"off"`` \| ``"removeListener"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"deauthorize(address)"`` \| ``"isAuthorized(address)"`` \| ``"owner()"`` \| ``"setOwner(address)"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"deauthorize"`` \| ``"isAuthorized"`` \| ``"owner"`` \| ``"setOwner"`` \| ``"name"`` \| ``"DOMAIN_SEPARATOR()"`` \| ``"PERMIT_TYPEHASH()"`` \| ``"allowance(address,address)"`` \| ``"approve(address,uint256)"`` \| ``"balanceOf(address)"`` \| ``"burn(address,uint256)"`` \| ``"decimals()"`` \| ``"mint(address,uint256)"`` \| ``"name()"`` \| ``"nonces(address)"`` \| ``"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"`` \| ``"setAllowance(address,address,uint256)"`` \| ``"setBalance(address,uint256)"`` \| ``"symbol()"`` \| ``"totalSupply()"`` \| ``"transfer(address,uint256)"`` \| ``"transferFrom(address,address,uint256)"`` \| ``"DOMAIN_SEPARATOR"`` \| ``"PERMIT_TYPEHASH"`` \| ``"allowance"`` \| ``"approve"`` \| ``"balanceOf"`` \| ``"burn"`` \| ``"decimals"`` \| ``"mint"`` \| ``"nonces"`` \| ``"permit"`` \| ``"setAllowance"`` \| ``"setBalance"`` \| ``"totalSupply"`` \| ``"transfer"`` \| ``"transferFrom"`` |
+| `K` | extends ``"symbol"`` \| ``"deployed"`` \| ``"_deployed"`` \| ``"fallback"`` \| ``"connect"`` \| ``"attach"`` \| ``"_checkRunningEvents"`` \| ``"_wrapEvent"`` \| ``"queryFilter"`` \| ``"on"`` \| ``"once"`` \| ``"emit"`` \| ``"listenerCount"`` \| ``"listeners"`` \| ``"removeAllListeners"`` \| ``"off"`` \| ``"removeListener"`` \| ``"DOMAIN_SEPARATOR()"`` \| ``"PERMIT_TYPEHASH()"`` \| ``"allowance(address,address)"`` \| ``"approve(address,uint256)"`` \| ``"authorize(address)"`` \| ``"authorized(address)"`` \| ``"balanceOf(address)"`` \| ``"burn(address,uint256)"`` \| ``"deauthorize(address)"`` \| ``"decimals()"`` \| ``"isAuthorized(address)"`` \| ``"mint(address,uint256)"`` \| ``"name()"`` \| ``"nonces(address)"`` \| ``"owner()"`` \| ``"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)"`` \| ``"setAllowance(address,address,uint256)"`` \| ``"setBalance(address,uint256)"`` \| ``"setOwner(address)"`` \| ``"symbol()"`` \| ``"totalSupply()"`` \| ``"transfer(address,uint256)"`` \| ``"transferFrom(address,address,uint256)"`` \| ``"DOMAIN_SEPARATOR"`` \| ``"PERMIT_TYPEHASH"`` \| ``"allowance"`` \| ``"approve"`` \| ``"authorize"`` \| ``"authorized"`` \| ``"balanceOf"`` \| ``"burn"`` \| ``"deauthorize"`` \| ``"decimals"`` \| ``"isAuthorized"`` \| ``"mint"`` \| ``"name"`` \| ``"nonces"`` \| ``"owner"`` \| ``"permit"`` \| ``"setAllowance"`` \| ``"setBalance"`` \| ``"setOwner"`` \| ``"totalSupply"`` \| ``"transfer"`` \| ``"transferFrom"`` |
 
 #### Parameters
 
@@ -392,7 +392,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
 
 ___
 
@@ -420,7 +420,7 @@ TokenDataSource.getAllowance
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:58](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L58)
+[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:58](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L58)
 
 ___
 
@@ -446,7 +446,7 @@ TokenDataSource.getBalanceOf
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:48](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L48)
+[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:48](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L48)
 
 ___
 
@@ -468,7 +468,7 @@ TokenDataSource.getDecimals
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:41](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L41)
+[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:41](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L41)
 
 ___
 
@@ -488,7 +488,7 @@ TokenDataSource.getName
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:25](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L25)
+[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:25](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L25)
 
 ___
 
@@ -508,4 +508,4 @@ TokenDataSource.getSymbol
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:32](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L32)
+[packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts:32](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/Token/ERC20ContractDataSource.ts#L32)
