@@ -39,15 +39,16 @@ contract from the Council protocol.
 - [clearCached](VestingVaultContractDataSource.md#clearcached)
 - [deleteCached](VestingVaultContractDataSource.md#deletecached)
 - [deleteCall](VestingVaultContractDataSource.md#deletecall)
-- [getAllVotersWithPower](VestingVaultContractDataSource.md#getallvoterswithpower)
 - [getDelegate](VestingVaultContractDataSource.md#getdelegate)
 - [getDelegatorsTo](VestingVaultContractDataSource.md#getdelegatorsto)
 - [getGrant](VestingVaultContractDataSource.md#getgrant)
 - [getHistoricalVotingPower](VestingVaultContractDataSource.md#gethistoricalvotingpower)
 - [getStaleBlockLag](VestingVaultContractDataSource.md#getstaleblocklag)
 - [getToken](VestingVaultContractDataSource.md#gettoken)
+- [getUnvestedMultiplier](VestingVaultContractDataSource.md#getunvestedmultiplier)
 - [getVoteChangeEvents](VestingVaultContractDataSource.md#getvotechangeevents)
 - [getVotingPower](VestingVaultContractDataSource.md#getvotingpower)
+- [getVotingPowerBreakdown](VestingVaultContractDataSource.md#getvotingpowerbreakdown)
 
 ## Constructors
 
@@ -68,7 +69,7 @@ contract from the Council protocol.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:20](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L20)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:20](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L20)
 
 ## Properties
 
@@ -86,7 +87,7 @@ contract from the Council protocol.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
 
 ___
 
@@ -100,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
 
 ___
 
@@ -118,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
 
 ___
 
@@ -132,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
 
 ## Methods
 
@@ -168,7 +169,7 @@ The cached result of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
 
 ___
 
@@ -208,7 +209,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
 
 ___
 
@@ -248,7 +249,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
 
 ___
 
@@ -286,7 +287,7 @@ A promise that resolves to the `ContractTransaction`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
 
 ___
 
@@ -312,7 +313,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:178](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L178)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:246](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L246)
 
 ___
 
@@ -337,7 +338,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:198](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L198)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:266](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L266)
 
 ___
 
@@ -357,13 +358,13 @@ Delete all entries from the cache.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
 
 ___
 
 ### deleteCached
 
-▸ **deleteCached**(`cacheKey?`): `boolean`
+▸ **deleteCached**(`cacheKey`): `boolean`
 
 Delete a single entry from the cache.
 
@@ -371,7 +372,7 @@ Delete a single entry from the cache.
 
 | Name | Type |
 | :------ | :------ |
-| `cacheKey?` | `any` |
+| `cacheKey` | `any` |
 
 #### Returns
 
@@ -385,7 +386,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
 
 ___
 
@@ -420,31 +421,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
-
-___
-
-### getAllVotersWithPower
-
-▸ **getAllVotersWithPower**(`fromBlock?`, `toBlock?`): `Promise`<`VoterWithPower`[]\>
-
-Get the address and voting power of all participants that have voting power
-in this vault.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `fromBlock?` | `number` | The block number to start searching for voters from. |
-| `toBlock?` | `number` | The block number to stop searching for voters at. |
-
-#### Returns
-
-`Promise`<`VoterWithPower`[]\>
-
-#### Defined in
-
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:125](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L125)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
 
 ___
 
@@ -466,13 +443,13 @@ Get the address of the current delegate of a given address.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:60](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L60)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:71](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L71)
 
 ___
 
 ### getDelegatorsTo
 
-▸ **getDelegatorsTo**(`address`, `atBlock?`): `Promise`<`VoterWithPower`[]\>
+▸ **getDelegatorsTo**(`address`, `atBlock?`): `Promise`<`VoterAddressWithPower`[]\>
 
 Get the addresses of all voters delegated to a given address in this vault.
 
@@ -485,11 +462,11 @@ Get the addresses of all voters delegated to a given address in this vault.
 
 #### Returns
 
-`Promise`<`VoterWithPower`[]\>
+`Promise`<`VoterAddressWithPower`[]\>
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:68](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L68)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:79](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L79)
 
 ___
 
@@ -511,13 +488,13 @@ Get the grant data for a given address.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:34](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L34)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:45](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L45)
 
 ___
 
 ### getHistoricalVotingPower
 
-▸ **getHistoricalVotingPower**(`address`, `atBlock`): `Promise`<`string`\>
+▸ **getHistoricalVotingPower**(`address`, `atBlock?`): `Promise`<`string`\>
 
 Get the voting power for a given address at a given block without
 accounting for the stale block lag.
@@ -527,7 +504,7 @@ accounting for the stale block lag.
 | Name | Type |
 | :------ | :------ |
 | `address` | `string` |
-| `atBlock` | `number` |
+| `atBlock?` | `number` |
 
 #### Returns
 
@@ -535,7 +512,7 @@ accounting for the stale block lag.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:108](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L108)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:122](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L122)
 
 ___
 
@@ -553,7 +530,7 @@ stale block lag.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:99](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L99)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:113](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L113)
 
 ___
 
@@ -569,7 +546,26 @@ Get the address of the associated token for this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:27](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L27)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:27](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L27)
+
+___
+
+### getUnvestedMultiplier
+
+▸ **getUnvestedMultiplier**(): `Promise`<`number`\>
+
+Get this vault's unvested multiplier, a number that represents the voting
+power of each unvested token as a percentage of a vested token. For example
+if unvested tokens have 50% voting power compared to vested ones, this
+value would be 50.
+
+#### Returns
+
+`Promise`<`number`\>
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:37](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L37)
 
 ___
 
@@ -594,13 +590,13 @@ Get all emitted `VoteChange` events.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:160](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L160)
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:228](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L228)
 
 ___
 
 ### getVotingPower
 
-▸ **getVotingPower**(`this`, `address`, `atBlock`, `extraData?`): `Promise`<`string`\>
+▸ **getVotingPower**(`this`, `address`, `atBlock?`, `extraData?`): `Promise`<`string`\>
 
 Get the voting power owned by a given address in this vault. Returns "0" if
 the voting power is unable to be fetched.
@@ -611,7 +607,7 @@ the voting power is unable to be fetched.
 | :------ | :------ | :------ | :------ |
 | `this` | [`ContractDataSource`](ContractDataSource.md)<`IVotingVault`\> | `undefined` | - |
 | `address` | `string` | `undefined` | - |
-| `atBlock` | `number` | `undefined` | - |
+| `atBlock?` | `number` | `undefined` | - |
 | `extraData` | `BytesLike` | `"0x00"` | ABI encoded optional extra data used by some vaults, such as merkle proofs. |
 
 #### Returns
@@ -628,4 +624,31 @@ VotingVaultDataSource.getVotingPower
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts:44](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts#L44)
+[packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts:44](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts#L44)
+
+___
+
+### getVotingPowerBreakdown
+
+▸ **getVotingPowerBreakdown**(`fromBlock?`, `toBlock?`): `Promise`<`VoterAddressPowerBreakdown`[]\>
+
+Get the address of all participants that have voting power in this vault
+along with their voting power, the amount of voting power being delegated
+to them, and the amount of power delegated to them by each delegator. This
+is a convenience method to fetch voting power and delegation data for a
+large number of voters in a single call.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `fromBlock?` | `number` | Include all voters that had power on or after this block number. |
+| `toBlock?` | `number` | Include all voters that had power on or before this block number. |
+
+#### Returns
+
+`Promise`<`VoterAddressPowerBreakdown`[]\>
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:156](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L156)

@@ -131,6 +131,6 @@ const estimatedDate = getBlockDate(futureBlockNumber, provider, {
 ### Utils
 
 - [`cached`](docs/modules.md#cached)
-- [`cachedkey`](docs/modules.md#cachedkey)
-- [`getblockdate`](docs/modules.md#getblockdate)
-- [`sumstrings`](docs/modules.md#sumstrings)
+- [`cachedKey`](docs/modules.md#cachedkey)
+- [`getBlockDate`](docs/modules.md#getblockdate)
+- [`sumStrings`](docs/modules.md#sumstrings)

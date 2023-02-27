@@ -39,7 +39,7 @@ with the `context` to make it available to other models and data sources.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:19](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L19)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:20](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L20)
 
 ___
 
@@ -47,8 +47,8 @@ ___
 
 • `Optional` **name**: `string`
 
-An arbitrary name for the instance. This is for convenience only and has no
-affect on the model's behavior.
+An arbitrary name for the instance. This is for convenience only (e.g.,
+display name, debugging) and has no affect on the model's behavior.
 
 #### Inherited from
 
@@ -56,4 +56,4 @@ affect on the model's behavior.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L11)
+[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Model.ts#L11)

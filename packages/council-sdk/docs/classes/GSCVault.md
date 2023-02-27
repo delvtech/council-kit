@@ -37,6 +37,7 @@ voting vaults to remain eligible.
 - [getTotalVotingPower](GSCVault.md#gettotalvotingpower)
 - [getVoters](GSCVault.md#getvoters)
 - [getVotingPower](GSCVault.md#getvotingpower)
+- [getVotingPowerBreakdown](GSCVault.md#getvotingpowerbreakdown)
 - [join](GSCVault.md#join)
 - [kick](GSCVault.md#kick)
 
@@ -60,7 +61,7 @@ voting vaults to remain eligible.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:19](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L19)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:19](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L19)
 
 ## Properties
 
@@ -74,7 +75,7 @@ voting vaults to remain eligible.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:47](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L47)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:51](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L51)
 
 ___
 
@@ -88,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -102,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:48](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L48)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:52](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L52)
 
 ___
 
@@ -116,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -133,7 +134,7 @@ they can vote.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:81](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L81)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:81](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L81)
 
 ___
 
@@ -156,7 +157,7 @@ Idle members cannot vote.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:89](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L89)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:89](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L89)
 
 ___
 
@@ -178,7 +179,7 @@ Get a boolean indicating whether a given address is a current member.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:73](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L73)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:73](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L73)
 
 ___
 
@@ -200,7 +201,7 @@ Get the join date of a given address.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:65](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L65)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:65](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L65)
 
 ___
 
@@ -223,7 +224,7 @@ the minimum voting power requirement.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:102](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L102)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:102](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L102)
 
 ___
 
@@ -246,7 +247,7 @@ Get all current members of this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:48](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L48)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:48](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L48)
 
 ___
 
@@ -262,7 +263,7 @@ Get the amount of voting power required to join this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:39](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L39)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:39](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L39)
 
 ___
 
@@ -286,7 +287,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:31](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L31)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:33](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L33)
 
 ___
 
@@ -313,7 +314,7 @@ Get all voters with voting power in this vault (alias for `getMembers`).
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:58](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L58)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:58](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L58)
 
 ___
 
@@ -341,7 +342,31 @@ Get the usable voting power owned by a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:74](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L74)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:78](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L78)
+
+___
+
+### getVotingPowerBreakdown
+
+▸ `Optional` **getVotingPowerBreakdown**(`...args`): `Promise`<`VoterPowerBreakdown`[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...args` | `any`[] |
+
+#### Returns
+
+`Promise`<`VoterPowerBreakdown`[]\>
+
+#### Inherited from
+
+[VotingVault](VotingVault.md).[getVotingPowerBreakdown](VotingVault.md#getvotingpowerbreakdown)
+
+#### Defined in
+
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:32](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L32)
 
 ___
 
@@ -367,7 +392,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:116](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L116)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:116](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L116)
 
 ___
 
@@ -395,4 +420,4 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/GSCVault.ts:137](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L137)
+[packages/council-sdk/src/models/VotingVault/GSCVault.ts:137](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/VotingVault/GSCVault.ts#L137)

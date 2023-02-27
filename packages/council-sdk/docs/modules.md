@@ -45,7 +45,8 @@
 - [TransactionReplacedError](interfaces/TransactionReplacedError.md)
 - [VestingVaultOptions](interfaces/VestingVaultOptions.md)
 - [VoteData](interfaces/VoteData.md)
-- [VoterWithPower](interfaces/VoterWithPower.md)
+- [VoterAddressPowerBreakdown](interfaces/VoterAddressPowerBreakdown.md)
+- [VoterAddressWithPower](interfaces/VoterAddressWithPower.md)
 - [VotingContractDataSource](interfaces/VotingContractDataSource.md)
 - [VotingContractOptions](interfaces/VotingContractOptions.md)
 - [VotingVaultDataSource](interfaces/VotingVaultDataSource.md)
@@ -66,6 +67,7 @@
 - [cached](modules.md#cached)
 - [cachedKey](modules.md#cachedkey)
 - [getBlockDate](modules.md#getblockdate)
+- [getVaultsWithPower](modules.md#getvaultswithpower)
 - [sumStrings](modules.md#sumstrings)
 
 ## Data Sources
@@ -78,7 +80,7 @@ A valid ballot option.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:115](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L115)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:151](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L151)
 
 ___
 
@@ -96,7 +98,7 @@ Get a union of all keys/properties on T that are functions.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:168](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L168)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:168](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L168)
 
 ___
 
@@ -115,7 +117,7 @@ Get a union of all keys/properties on T that are functions and return a
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:184](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L184)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:184](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L184)
 
 ___
 
@@ -127,7 +129,7 @@ The amount of voting power casted by ballot.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:132](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L132)
+[packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts:168](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/VotingContract/VotingContractDataSource.ts#L168)
 
 ## Utils
 
@@ -165,7 +167,7 @@ The return value of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/utils/cached.ts:21](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/cached.ts#L21)
+[packages/council-sdk/src/utils/cached.ts:21](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/utils/cached.ts#L21)
 
 ___
 
@@ -189,7 +191,7 @@ This will not modify strings so
 
 #### Defined in
 
-[packages/council-sdk/src/utils/cached.ts:51](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/cached.ts#L51)
+[packages/council-sdk/src/utils/cached.ts:51](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/utils/cached.ts#L51)
 
 ___
 
@@ -219,7 +221,7 @@ Get the date of a given block by it's block number
 
 #### Defined in
 
-[packages/council-sdk/src/utils/getBlockDate.ts:30](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/getBlockDate.ts#L30)
+[packages/council-sdk/src/utils/getBlockDate.ts:30](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/utils/getBlockDate.ts#L30)
 
 ___
 
@@ -246,7 +248,7 @@ https://docs.ethers.org/v5/api/utils/bignumber
 
 #### Defined in
 
-[packages/council-sdk/src/utils/sumStrings.ts:10](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/sumStrings.ts#L10)
+[packages/council-sdk/src/utils/sumStrings.ts:10](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/utils/sumStrings.ts#L10)
 
 ## Other
 
@@ -270,7 +272,7 @@ https://docs.ethers.org/v5/api/utils/bignumber
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:162](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L162)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:162](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L162)
 
 ___
 
@@ -280,7 +282,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/utils/cached.ts:4](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/utils/cached.ts#L4)
+[packages/council-sdk/src/utils/cached.ts:4](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/utils/cached.ts#L4)
 
 ___
 
@@ -304,4 +306,25 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:175](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/datasources/ContractDataSource.ts#L175)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:175](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/datasources/ContractDataSource.ts#L175)
+
+___
+
+### getVaultsWithPower
+
+▸ **getVaultsWithPower**(`account`, `vaults`): `Promise`<[`VotingVault`](classes/VotingVault.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `account` | `string` |
+| `vaults` | [`VotingVault`](classes/VotingVault.md)<[`VotingVaultDataSource`](interfaces/VotingVaultDataSource.md)\>[] |
+
+#### Returns
+
+`Promise`<[`VotingVault`](classes/VotingVault.md)[]\>
+
+#### Defined in
+
+[packages/council-sdk/src/utils/getVaultsWithPower.ts:3](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/utils/getVaultsWithPower.ts#L3)

@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:28](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L28)
+[packages/council-sdk/src/models/Token.ts:28](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L28)
 
 ## Properties
 
@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:25](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L25)
+[packages/council-sdk/src/models/Token.ts:25](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L25)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:26](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L26)
+[packages/council-sdk/src/models/Token.ts:26](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L26)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -125,7 +125,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:86](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L86)
+[packages/council-sdk/src/models/Token.ts:86](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L86)
 
 ___
 
@@ -149,7 +149,7 @@ token.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:68](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L68)
+[packages/council-sdk/src/models/Token.ts:68](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L68)
 
 ___
 
@@ -171,7 +171,7 @@ Get the token balance of a given address
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:75](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L75)
+[packages/council-sdk/src/models/Token.ts:75](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L75)
 
 ___
 
@@ -187,7 +187,7 @@ Get the number of decimal places this token uses.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:53](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L53)
+[packages/council-sdk/src/models/Token.ts:53](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L53)
 
 ___
 
@@ -203,7 +203,7 @@ Get the name of this token
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:60](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L60)
+[packages/council-sdk/src/models/Token.ts:60](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L60)
 
 ___
 
@@ -219,4 +219,4 @@ Get the symbol for this token.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:46](https://github.com/element-fi/council-monorepo/blob/cfb8869/packages/council-sdk/src/models/Token.ts#L46)
+[packages/council-sdk/src/models/Token.ts:46](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/models/Token.ts#L46)
