@@ -282,6 +282,7 @@ function useProposalDetailsPageData(
 
           const currentQuorum = await proposal.getCurrentQuorum();
           const requiredQuorum = await proposal.getRequiredQuorum();
+          const results = await proposal.getResults();
 
           const proposalConfig = proposalConfigs[id];
 
@@ -293,6 +294,7 @@ function useProposalDetailsPageData(
               endsAtDate,
               currentQuorum,
               requiredQuorum,
+              results,
             }),
             isActive: await proposal.getIsActive(),
             currentQuorum,

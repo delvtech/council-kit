@@ -1,3 +1,6 @@
+import { VoteResults } from "@council/sdk";
+import { parseEther } from "ethers/lib/utils";
+
 export type ProposalStatus =
   | "UNKNOWN"
   | "IN PROGRESS"
@@ -10,6 +13,7 @@ export interface GetProposalStatusOptions {
   endsAtDate: Date | null;
   currentQuorum: string;
   requiredQuorum: string | null;
+  results: VoteResults;
 }
 
 export function getProposalStatus({
@@ -17,6 +21,7 @@ export function getProposalStatus({
   endsAtDate,
   currentQuorum,
   requiredQuorum,
+  results,
 }: GetProposalStatusOptions): ProposalStatus {
   if (isExecuted) {
     return "EXECUTED";
@@ -27,7 +32,10 @@ export function getProposalStatus({
   }
 
   if (new Date() > endsAtDate) {
-    if (+currentQuorum >= +requiredQuorum) {
+    if (
+      +currentQuorum >= +requiredQuorum &&
+      parseEther(results.yes).gt(parseEther(results.no))
+    ) {
       return "EXPIRED";
     } else {
       return "FAILED";
