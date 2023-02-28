@@ -39,7 +39,7 @@ Create a new CouncilContext instance.
 
 #### Defined in
 
-[packages/council-sdk/src/context.ts:36](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/context.ts#L36)
+[packages/council-sdk/src/context.ts:36](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/context.ts#L36)
 
 ## Properties
 
@@ -53,7 +53,7 @@ missing data source instances it requires to this list.
 
 #### Defined in
 
-[packages/council-sdk/src/context.ts:29](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/context.ts#L29)
+[packages/council-sdk/src/context.ts:29](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/context.ts#L29)
 
 ___
 
@@ -66,7 +66,7 @@ being used by data sources to fetch data from the blockchain.
 
 #### Defined in
 
-[packages/council-sdk/src/context.ts:22](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/context.ts#L22)
+[packages/council-sdk/src/context.ts:22](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/context.ts#L22)
 
 ## Methods
 
@@ -97,7 +97,7 @@ matches the `filter`, or `null` if no match is found.
 
 #### Defined in
 
-[packages/council-sdk/src/context.ts:48](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/context.ts#L48)
+[packages/council-sdk/src/context.ts:48](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/context.ts#L48)
 
 ___
 
@@ -129,4 +129,4 @@ The matching `DataSource` if found, else the added `DataSource`.
 
 #### Defined in
 
-[packages/council-sdk/src/context.ts:69](https://github.com/element-fi/council-monorepo/blob/d38feb9/packages/council-sdk/src/context.ts#L69)
+[packages/council-sdk/src/context.ts:69](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/context.ts#L69)
