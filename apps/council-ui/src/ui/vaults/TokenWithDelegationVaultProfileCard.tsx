@@ -39,7 +39,6 @@ export function TokenWithDelegationVaultProfileCard({
   const { isConnected, address: account } = useAccount();
 
   const { data: delegatesByVault } = useDelegatesByVault();
-  const hasTokens = !!userBalance && +userBalance > 0;
 
   const isOwnProfileAndSelfDelegated =
     userAddress === account &&
