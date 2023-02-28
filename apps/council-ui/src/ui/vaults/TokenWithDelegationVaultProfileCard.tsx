@@ -1,4 +1,5 @@
 import { Voter } from "@council/sdk";
+import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import { constants } from "ethers";
 import { getAddress } from "ethers/lib/utils";
@@ -8,10 +9,12 @@ import { makeVaultURL, makeVoterURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
+import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
 import { VotersListCompact } from "src/ui/voters/VotersListCompact";
 import { useAccount } from "wagmi";
+import { useIsGSCMember } from "./gscVault/useIsGSCMember";
 
 export interface TokenWithDelegationVaultProfileCardProps {
   vaultName: string;
@@ -135,6 +138,7 @@ function CurrentDelegateInfo({
 }: CurrentDelegateInfoProps): ReactElement {
   const name = useDisplayName(getAddress(delegate.address));
   const isDelegateZeroAddress = delegate.address === constants.AddressZero;
+  const { data: isGSCMember } = useIsGSCMember(delegate.address);
 
   return (
     <div className="flex w-full gap-x-6">
@@ -148,6 +152,11 @@ function CurrentDelegateInfo({
         >
           <WalletIcon className="mr-1" address={delegate.address} size={16} />
           {name}
+          {isGSCMember && (
+            <Tooltip content="GSC Member">
+              <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />
+            </Tooltip>
+          )}
         </Link>
       )}
     </div>

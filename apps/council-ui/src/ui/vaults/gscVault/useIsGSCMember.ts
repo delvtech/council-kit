@@ -12,7 +12,7 @@ export function useIsGSCMember(
   const { gscVoting } = useCouncil();
   const queryEnabled = !!address;
   return useQuery({
-    queryKey: ["gsc-status", address],
+    queryKey: ["is-gsc-member", address],
     enabled: queryEnabled,
     queryFn: queryEnabled
       ? async (): Promise<boolean> => {
