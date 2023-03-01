@@ -5,7 +5,10 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
+import { Routes } from "src/routes";
+import { Breadcrumbs } from "src/ui/base/Breadcrumbs";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Page } from "src/ui/base/Page";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -29,6 +32,7 @@ export default function VoterDetailsPage(): ReactElement {
   const { query } = useRouter();
   const { address } = query as { address: string | undefined };
   const { data, status } = useVoterData(address);
+  const displayName = useDisplayName(address);
 
   if (!address) {
     return (
@@ -43,7 +47,13 @@ export default function VoterDetailsPage(): ReactElement {
 
   return (
     <Page>
-      <VoterHeader address={address} />
+      <div className="space-y-2">
+        <Breadcrumbs
+          crumbs={[{ href: Routes.VOTERS, content: "All proposals" }]}
+          currentPage={displayName}
+        />
+        <VoterHeader address={address} />
+      </div>
 
       {status === "success" ? (
         <VoterStatsRow
