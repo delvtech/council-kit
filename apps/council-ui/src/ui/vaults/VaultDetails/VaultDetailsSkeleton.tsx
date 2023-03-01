@@ -5,6 +5,7 @@ import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 export function VaultDetailsSkeleton(): ReactElement {
   return (
     <VaultDetails
+      name={undefined}
       header={
         <div className="w-80">
           <Skeleton className="h-12" />
