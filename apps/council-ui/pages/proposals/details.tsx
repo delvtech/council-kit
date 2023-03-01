@@ -9,6 +9,8 @@ import {
   getProposalStatus,
   ProposalStatus,
 } from "src/proposals/getProposalStatus";
+import { Routes } from "src/routes";
+import { Breadcrumbs } from "src/ui/base/Breadcrumbs";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
@@ -92,30 +94,36 @@ export default function ProposalPage(): ReactElement {
     return <ErrorMessage error={error} />;
   }
 
+  const proposalTitle = data?.title ?? `Proposal ${id}`;
+
   return (
     <Page>
-      <div className="flex flex-col w-full md:flex-row gap-y-8">
-        <div className="flex flex-col md:max-w-lg">
-          <h1 className="mb-1 text-4xl font-bold">
-            {data?.title ?? `Proposal ${id}`}
-          </h1>
-          {data?.descriptionURL && (
-            <ExternalLink href={data.descriptionURL} iconSize={18}>
-              Learn more about this proposal
-            </ExternalLink>
-          )}
-        </div>
+      <div className="space-y-2">
+        <Breadcrumbs
+          crumbs={[{ href: Routes.PROPOSALS, content: "All proposals" }]}
+          currentPage={proposalTitle}
+        />
+        <div className="flex flex-col w-full md:flex-row gap-y-8">
+          <div className="flex flex-col md:max-w-lg">
+            <h1 className="mb-1 text-4xl font-bold">{proposalTitle}</h1>
+            {data?.descriptionURL && (
+              <ExternalLink href={data.descriptionURL} iconSize={18}>
+                Learn more about this proposal
+              </ExternalLink>
+            )}
+          </div>
 
-        <div className="w-full sm:ml-auto md:w-96">
-          {status === "success" ? (
-            <Quorum
-              current={data.currentQuorum}
-              required={data.requiredQuorum}
-              status={data.status}
-            />
-          ) : (
-            <QuorumBarSkeleton />
-          )}
+          <div className="w-full sm:ml-auto md:w-96">
+            {status === "success" ? (
+              <Quorum
+                current={data.currentQuorum}
+                required={data.requiredQuorum}
+                status={data.status}
+              />
+            ) : (
+              <QuorumBarSkeleton />
+            )}
+          </div>
         </div>
       </div>
 
