@@ -49,7 +49,7 @@ export default function VoterDetailsPage(): ReactElement {
     <Page>
       <div className="space-y-2">
         <Breadcrumbs
-          crumbs={[{ href: Routes.VOTERS, content: "All proposals" }]}
+          crumbs={[{ href: Routes.VOTERS, content: "All voters" }]}
           currentPage={displayName}
         />
         <VoterHeader address={address} />
