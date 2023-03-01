@@ -55,8 +55,8 @@ export function ProposalStatsRow({
       {createdByDisplayName && createdBy && (
         <Stat
           label={
-            <DefinitionTooltip content="The creator of the on-chain proposal, which may or may not be the author.">
-              Created by
+            <DefinitionTooltip content="The creator of the on-chain proposal, which may or may not be the original author.">
+              Put on chain by
             </DefinitionTooltip>
           }
           value={
