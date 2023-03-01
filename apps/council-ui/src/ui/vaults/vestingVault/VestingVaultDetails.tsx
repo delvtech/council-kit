@@ -36,6 +36,7 @@ export function VestingVaultDetails({
   }
   return (
     <VaultDetails
+      name={data.name}
       paragraphSummary={data.paragraphSummary}
       header={
         <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
