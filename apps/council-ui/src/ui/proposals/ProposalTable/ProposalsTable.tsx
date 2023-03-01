@@ -9,6 +9,8 @@ import {
   SortableGridTable,
   SortOptions,
 } from "src/ui/base/tables/SortableGridTable";
+import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
+import { tooltipByStatus } from "src/ui/proposals/tooltips";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 import { useAccount } from "wagmi";
 
@@ -196,15 +198,17 @@ function sortProposalRowData(
 
 function StatusBadge({ status }: { status: ProposalStatus }) {
   return (
-    <div
-      className={classNames("font-bold daisy-badge", {
-        "daisy-badge-error": status === "FAILED",
-        "daisy-badge-info": status === "IN PROGRESS",
-        "daisy-badge-success": status === "EXECUTED",
-        "daisy-badge-warning": status === "EXPIRED",
-      })}
-    >
-      {status}
-    </div>
+    <Tooltip content={tooltipByStatus[status]}>
+      <div
+        className={classNames("font-bold daisy-badge", {
+          "daisy-badge-error": status === "FAILED",
+          "daisy-badge-info": status === "IN PROGRESS",
+          "daisy-badge-success": status === "EXECUTED",
+          "daisy-badge-warning": status === "EXPIRED",
+        })}
+      >
+        {status}
+      </div>
+    </Tooltip>
   );
 }

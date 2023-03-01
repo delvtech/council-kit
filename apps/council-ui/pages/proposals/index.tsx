@@ -103,6 +103,7 @@ function useProposalsPageData(
               currentQuorum,
               endsAtDate: votingEnds,
               requiredQuorum: await proposal.getRequiredQuorum(),
+              results: await proposal.getResults(),
             }),
             votingContractAddress: proposal.votingContract.address,
             votingContractName: proposal.votingContract.name,

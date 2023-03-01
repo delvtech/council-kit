@@ -2,6 +2,8 @@ import classNames from "classnames";
 import { ReactElement } from "react";
 import { ProposalStatus } from "src/proposals/getProposalStatus";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
+import { tooltipByStatus } from "src/ui/proposals/tooltips";
 
 interface QuorumProps {
   current: string;
@@ -18,16 +20,18 @@ export function Quorum({
     <div>
       {status && (
         <div className="flex">
-          <div
-            className={classNames("font-bold ml-auto daisy-badge", {
-              "daisy-badge-error": status === "FAILED",
-              "daisy-badge-info": status === "IN PROGRESS",
-              "daisy-badge-success": status === "EXECUTED",
-              "daisy-badge-warning": status === "EXPIRED",
-            })}
-          >
-            {status}
-          </div>
+          <Tooltip content={tooltipByStatus[status]} className="ml-auto">
+            <div
+              className={classNames("font-bold daisy-badge", {
+                "daisy-badge-error": status === "FAILED",
+                "daisy-badge-info": status === "IN PROGRESS",
+                "daisy-badge-success": status === "EXECUTED",
+                "daisy-badge-warning": status === "EXPIRED",
+              })}
+            >
+              {status}
+            </div>
+          </Tooltip>
         </div>
       )}
 

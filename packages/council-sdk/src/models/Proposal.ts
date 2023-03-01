@@ -1,4 +1,5 @@
 import { BytesLike, Signer } from "ethers";
+import { parseEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
@@ -244,8 +245,9 @@ export class Proposal extends Model {
 
   /**
    * Get a boolean indicating whether this proposal can be executed. Proposals
-   * can only be executed if the quorum requirement has been met and the current
-   * block is between the unlock and last call blocks.
+   * can only be executed if the quorum requirement has been met, there are more
+   * yes votes than no votes, and the current block is between the unlock and
+   * last call blocks.
    */
   async getIsExecutable(): Promise<boolean> {
     const unlockBlock = await this.getUnlockBlock();
@@ -254,11 +256,17 @@ export class Proposal extends Model {
     if (!unlockBlock || !requiredQuorum || !lastCallBlock) {
       return false;
     }
+
     const latestBlock = await this.context.provider.getBlockNumber();
+    if (latestBlock < unlockBlock || latestBlock > lastCallBlock) {
+      return false;
+    }
+
+    const currentQuorum = await this.getCurrentQuorum();
+    const results = await this.getResults();
     return (
-      latestBlock >= unlockBlock &&
-      latestBlock <= lastCallBlock &&
-      (await this.getCurrentQuorum()) >= requiredQuorum
+      currentQuorum >= requiredQuorum &&
+      parseEther(results.yes).gt(parseEther(results.no))
     );
   }
 
