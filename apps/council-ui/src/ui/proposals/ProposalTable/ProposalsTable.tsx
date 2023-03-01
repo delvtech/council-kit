@@ -3,6 +3,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
+import { formatTimeLeft } from "src/dates/formatTimeLeft";
 import { ProposalStatus } from "src/proposals/getProposalStatus";
 import { makeProposalURL } from "src/routes";
 import {
@@ -87,7 +88,7 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
                   )}
                 </span>,
 
-                votingEnds?.toLocaleDateString() ?? <em>unknown</em>,
+                votingEnds ? formatTimeLeft(votingEnds) : <em>unknown</em>,
 
                 <StatusBadge key={`${id}-status`} status={status} />,
 
