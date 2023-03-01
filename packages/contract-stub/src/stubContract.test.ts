@@ -43,6 +43,25 @@ test("Stubs estimateGas methods correctly", async () => {
   expect(gasToApprove100Tokens).toEqual(BigNumber.from(555));
 });
 
+test("Stubs popoulateTransaction methods correctly", async () => {
+  const stubbedContract = setupMockERC20();
+
+  // should throw an error if stub's resolve value was never set
+  expect(() =>
+    stubbedContract.populateTransaction.approve(
+      ethers.constants.AddressZero,
+      100,
+    ),
+  ).toThrow();
+
+  stubbedContract.populateTransaction.approve.resolves({});
+  const approveTx = await stubbedContract.populateTransaction.approve(
+    ethers.constants.AddressZero,
+    100,
+  );
+  expect(approveTx).toEqual({});
+});
+
 test("Stubs queryFilter correctly", async () => {
   const stubbedContract = setupMockERC20();
 
