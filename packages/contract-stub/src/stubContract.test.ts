@@ -36,11 +36,11 @@ test("Stubs estimateGas methods correctly", async () => {
   ).toThrow();
 
   stubbedContract.estimateGas.approve.resolves(BigNumber.from(555));
-  const gasToBurn100Tokens = await stubbedContract.estimateGas.approve(
+  const gasToApprove100Tokens = await stubbedContract.estimateGas.approve(
     ethers.constants.AddressZero,
     100,
   );
-  expect(gasToBurn100Tokens).toEqual(BigNumber.from(555));
+  expect(gasToApprove100Tokens).toEqual(BigNumber.from(555));
 });
 
 test("Stubs queryFilter correctly", async () => {
