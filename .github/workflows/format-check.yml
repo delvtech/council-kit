@@ -1,12 +1,12 @@
 # https://turbo.build/repo/docs/ci/github-actions
 
-name: Format
+name: Format Check
 
 on: [pull_request]
 
 jobs:
-  format:
-    name: Format
+  format-check:
+    name: Format Check
     runs-on: ubuntu-latest
 
     steps:
@@ -27,5 +27,5 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Format files
-        run: yarn format
+      - name: Check file formatting
+        run: yarn format:check
