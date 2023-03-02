@@ -1,10 +1,10 @@
 import { Signer } from "ethers";
-import { CouncilContext } from "src/context";
+import { parseUnits } from "ethers/lib/utils";
+import { CouncilContext } from "src/context/context";
+import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { ERC20ContractDataSource } from "src/datasources/Token/ERC20ContractDataSource";
 import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { Model, ModelOptions } from "./Model";
-import { parseUnits } from "ethers/lib/utils";
 
 /**
  * @category Models

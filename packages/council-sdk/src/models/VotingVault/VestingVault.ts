@@ -1,5 +1,5 @@
 import { FixedNumber, Signer } from "ethers";
-import { CouncilContext } from "src/context";
+import { CouncilContext } from "src/context/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import {
   GrantData,

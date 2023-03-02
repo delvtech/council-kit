@@ -1,7 +1,7 @@
 import { Signer } from "ethers";
 import { BytesLike, parseEther } from "ethers/lib/utils";
 import uniqBy from "lodash.uniqby";
-import { CouncilContext } from "src/context";
+import { CouncilContext } from "src/context/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
 import {

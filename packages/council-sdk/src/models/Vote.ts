@@ -1,4 +1,4 @@
-import { CouncilContext } from "src/context";
+import { CouncilContext } from "src/context/context";
 import { Ballot } from "src/datasources/VotingContract/VotingContractDataSource";
 import { Model, ModelOptions } from "./Model";
 import { Proposal } from "./Proposal";

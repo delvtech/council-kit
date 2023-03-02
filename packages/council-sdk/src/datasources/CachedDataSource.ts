@@ -1,6 +1,6 @@
 import LRUCache from "lru-cache";
+import { CouncilContext } from "src/context/context";
 import { cached, cachedKey } from "src/utils/cached";
-import { CouncilContext } from "src/context";
 import { DataSource } from "./DataSource";
 
 /**

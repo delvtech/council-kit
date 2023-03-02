@@ -1,5 +1,5 @@
 import { BytesLike, Signer } from "ethers";
-import { CouncilContext } from "src/context";
+import { CouncilContext } from "src/context/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { GSCVaultContractDataSource } from "src/datasources/VotingVault/GSCVaultContractDataSource";
 import { Voter } from "src/models/Voter";

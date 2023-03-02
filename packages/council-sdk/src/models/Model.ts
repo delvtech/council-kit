@@ -1,4 +1,4 @@
-import { CouncilContext } from "src/context";
+import { CouncilContext } from "src/context/context";
 
 /**
  * @category Models
