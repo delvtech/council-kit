@@ -37,14 +37,11 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
    * @param fromBlock - The block number to start searching for members from.
    * @param toBlock - The block number to stop searching for members at.
    */
-  async getMembers(
-    fromBlock?: string | number,
-    toBlock?: string | number,
-  ): Promise<string[]> {
+  async getMembers(fromBlock?: number, toBlock?: number): Promise<string[]> {
     return this.cached(["getMembers", fromBlock, toBlock], async () => {
       const latestJoinTimestampByMember: Record<string, BigNumber> = {};
 
-      const joinEvents = await this.contract.queryFilter(
+      const joinEvents = await this.getEvents(
         this.contract.filters.MembershipProved(),
         fromBlock,
         toBlock,
@@ -61,7 +58,7 @@ export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GS
         }
       }
 
-      const kickEvents = await this.contract.queryFilter(
+      const kickEvents = await this.getEvents(
         this.contract.filters.Kicked(),
         fromBlock,
         toBlock,

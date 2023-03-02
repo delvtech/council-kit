@@ -1,8 +1,5 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
-import {
-  ProposalCreatedEvent,
-  ProposalExecutedEvent,
-} from "@council/typechain/dist/contracts/CoreVoting";
+import { ProposalExecutedEvent } from "@council/typechain/dist/contracts/CoreVoting";
 import { Signer } from "ethers";
 import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
@@ -41,7 +38,8 @@ export class CoreVotingContractDataSource
   }
 
   async getProposalCreatedBy(id: number): Promise<string | null> {
-    const proposalCreatedEvents = await this.getProposalCreatedEvents();
+    const eventFilter = this.contract.filters.ProposalCreated();
+    const proposalCreatedEvents = await this.getEvents(eventFilter);
     const createdEvent = proposalCreatedEvents.find(
       ({ args }) => args.proposalId.toNumber() === id,
     );
@@ -54,19 +52,6 @@ export class CoreVotingContractDataSource
     return createdBy;
   }
 
-  async getProposalCreatedEvents(
-    fromBlock?: number,
-    toBlock?: number,
-  ): Promise<ProposalCreatedEvent[]> {
-    return this.cached(
-      ["getProposalCreatedEvents", fromBlock, toBlock],
-      async () => {
-        const filter = this.contract.filters.ProposalCreated();
-        return this.contract.queryFilter(filter, fromBlock, toBlock);
-      },
-    );
-  }
-
   /**
    * Returns the hash of the transaction that created the proposal. Returns null
    * if the id passed does not correspond to a valid proposal.
@@ -74,7 +59,8 @@ export class CoreVotingContractDataSource
    * @returns The transaction hash
    */
   async getProposalCreatedTransactionHash(id: number): Promise<string | null> {
-    const proposalCreatedEvents = await this.getProposalCreatedEvents();
+    const eventFilter = this.contract.filters.ProposalCreated();
+    const proposalCreatedEvents = await this.getEvents(eventFilter);
     const createdEvent = proposalCreatedEvents.find(
       ({ args }) => args.proposalId.toNumber() === id,
     );
@@ -108,7 +94,8 @@ export class CoreVotingContractDataSource
     toBlock?: number,
   ): Promise<ProposalDataPreview[]> {
     return this.cached(["getProposals", fromBlock, toBlock], async () => {
-      const events = await this.getProposalCreatedEvents(fromBlock, toBlock);
+      const eventFilter = this.contract.filters.ProposalCreated();
+      const events = await this.getEvents(eventFilter, fromBlock, toBlock);
       return events.map(({ args }) => {
         return {
           id: args.proposalId.toNumber(),
@@ -166,7 +153,7 @@ export class CoreVotingContractDataSource
     toBlock?: number,
   ): Promise<ProposalExecutedEvent[]> {
     return this.cached(["getProposalExecutedEvents", fromBlock, toBlock], () =>
-      this.contract.queryFilter(
+      this.getEvents(
         this.contract.filters.ProposalExecuted(),
         fromBlock,
         toBlock,
@@ -222,11 +209,7 @@ export class CoreVotingContractDataSource
       ["getVotes", address, proposalId, fromBlock, toBlock],
       async () => {
         const eventFilter = this.contract.filters.Voted(address, proposalId);
-        const events = await this.contract.queryFilter(
-          eventFilter,
-          fromBlock,
-          toBlock,
-        );
+        const events = await this.getEvents(eventFilter, fromBlock, toBlock);
         return events.map(({ args }) => {
           return {
             address: args.voter,
