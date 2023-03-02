@@ -1,6 +1,8 @@
+import { TypedEvent, TypedEventFilter } from "@council/typechain/dist/common";
 import {
   BaseContract,
   ContractReceipt,
+  ethers,
   Signer,
   type ContractTransaction,
 } from "ethers";
@@ -133,6 +135,47 @@ export class ContractDataSource<
     args: T[K] extends AnyFunction ? Parameters<T[K]> : never,
   ): boolean {
     return this.deleteCached([method, ...args]);
+  }
+
+  /**
+   * Get events from the contract and cache the results with a key made from the
+   * filter and block range. If the request fails, the block range will be split
+   * in 2 recursively until all events within the requested range are fetched.
+   * @param filter - The TypedEventFilter of the event to fetch.
+   * @param fromBlock - Include all events on or after this block.
+   * @param toBlock - Include all events on or before this block.
+   */
+  getEvents<TEvent extends TypedEvent>(
+    filter: TypedEventFilter<TEvent>,
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<TEvent[]> {
+    return this.cached(["getEvents", filter, fromBlock, toBlock], async () => {
+      const start = fromBlock ?? 0;
+      const end = toBlock ?? (await this.context.provider.getBlockNumber());
+      const blockRange = end - start;
+      try {
+        // TODO: find a better solution for this.
+        // ethers.js will spit out an error message that we can't disable without turning off the
+        // logger.  because the smart contract code for queryVotePower returns an error if the
+        // account is not found, it can flood the console with errors.  this is a workaround until a
+        // better solution is found.
+        ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.OFF);
+        const events = await this.contract.queryFilter(
+          filter,
+          fromBlock,
+          toBlock,
+        );
+        ethers.utils.Logger.setLogLevel(ethers.utils.Logger.levels.WARNING);
+        return events as TEvent[];
+      } catch (err) {
+        const midPoint = start + Math.floor(blockRange / 2);
+        const firstHalf = await this.getEvents(filter, start, midPoint);
+        const secondHalf = await this.getEvents(filter, midPoint + 1, end);
+
+        return [...firstHalf, ...secondHalf] as TEvent[];
+      }
+    });
   }
 }
 
