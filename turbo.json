@@ -23,6 +23,9 @@
       "outputs": ["dist/**"],
       "env": ["PROVIDER_URI", "WALLET_PRIVATE_KEY", "NODE_ENV"]
     },
+    "@council/contract-stub": {
+      "env": ["MOCK_WALLET_PRIVATE_KEY"]
+    },
     "@council/sdk#build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],

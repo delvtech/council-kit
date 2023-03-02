@@ -1,31 +1,41 @@
-import { Contract } from "ethers";
+import { Contract, ContractFunction } from "ethers";
 import { stub, SinonStub } from "sinon";
 
-type StubbedOverwrite<
-  F extends
-    | Contract["callStatic"]
-    | Contract["functions"]
-    | Contract["estimateGas"],
-> = {
+// TODO: refactor for ethers v6
+
+interface ContractMethodBucket {
+  [name: string]: ContractFunction;
+}
+
+type StubbedMethodBucket<F extends ContractMethodBucket> = {
   [K in keyof F]: SinonStub<Parameters<F[K]>, ReturnType<F[K]>>;
 };
 
-type StubbedContract<C extends Contract> = C & {
-  callStatic: StubbedOverwrite<C["callStatic"]>;
-  functions: StubbedOverwrite<C["functions"]>;
-  estimateGas: StubbedOverwrite<C["estimateGas"]>;
+type StubbedContract<C extends Contract> = Omit<
+  C,
+  | "callStatic"
+  | "functions"
+  | "estimateGas"
+  | "populateTransaction"
+  | "queryFilter"
+> & {
+  callStatic: StubbedMethodBucket<C["callStatic"]>;
+  functions: StubbedMethodBucket<C["functions"]>;
+  estimateGas: StubbedMethodBucket<C["estimateGas"]>;
+  populateTransaction: StubbedMethodBucket<C["populateTransaction"]>;
   queryFilter: SinonStub<
     Parameters<C["queryFilter"]>,
     ReturnType<C["queryFilter"]>
   >;
 };
 
-export function stubContract<TContract extends Contract>(
-  contract: TContract,
-): StubbedContract<TContract> {
+export function stubContract<C extends Contract>(
+  contract: C,
+): StubbedContract<C> {
   const callStatic: Record<string, () => SinonStub> = {};
   const functions: Record<string, () => SinonStub> = {};
   const estimateGas: Record<string, () => SinonStub> = {};
+  const populateTransaction: Record<string, () => SinonStub> = {};
 
   Object.keys(contract.callStatic).forEach((methodName) => {
     callStatic[methodName] = stub().callsFake(() => {
@@ -51,16 +61,26 @@ export function stubContract<TContract extends Contract>(
     });
   });
 
+  Object.keys(contract.populateTransaction).forEach((methodName) => {
+    populateTransaction[methodName] = stub().callsFake(() => {
+      throw new Error(
+        `This is an unhandled error calling "populateTransaction.${methodName}" in the test.`,
+      );
+    });
+  });
+
   return {
     ...contract,
-    callStatic,
-    estimateGas,
-    functions,
-    // TODO: populateTransaction
+    callStatic: callStatic as StubbedMethodBucket<C["callStatic"]>,
+    functions: functions as StubbedMethodBucket<C["functions"]>,
+    estimateGas: estimateGas as StubbedMethodBucket<C["estimateGas"]>,
+    populateTransaction: populateTransaction as StubbedMethodBucket<
+      C["populateTransaction"]
+    >,
     queryFilter: stub().callsFake(() => {
       throw new Error(
         `This is an unhandled error calling "queryFilter" in the test.`,
       );
-    }),
-  } as StubbedContract<TContract>;
+    }) as SinonStub<Parameters<C["queryFilter"]>, ReturnType<C["queryFilter"]>>,
+  };
 }
