@@ -50,6 +50,7 @@ protocol.
 - [clearCached](VotingVaultContractDataSource.md#clearcached)
 - [deleteCached](VotingVaultContractDataSource.md#deletecached)
 - [deleteCall](VotingVaultContractDataSource.md#deletecall)
+- [getEvents](VotingVaultContractDataSource.md#getevents)
 - [getVotingPower](VotingVaultContractDataSource.md#getvotingpower)
 
 ## Constructors
@@ -79,7 +80,7 @@ Create a new `VotingVaultContractDataSource` instance.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts:29](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts#L29)
+[packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts:29](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts#L29)
 
 ## Properties
 
@@ -97,7 +98,7 @@ Create a new `VotingVaultContractDataSource` instance.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/ContractDataSource.ts#L22)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:24](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/ContractDataSource.ts#L24)
 
 ___
 
@@ -111,7 +112,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/CachedDataSource.ts#L13)
 
 ___
 
@@ -129,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/CachedDataSource.ts#L12)
 
 ___
 
@@ -143,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/ContractDataSource.ts#L23)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:25](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/ContractDataSource.ts#L25)
 
 ## Methods
 
@@ -179,7 +180,7 @@ The cached result of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/CachedDataSource.ts#L28)
 
 ___
 
@@ -219,7 +220,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/ContractDataSource.ts#L43)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:45](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/ContractDataSource.ts#L45)
 
 ___
 
@@ -259,7 +260,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/ContractDataSource.ts#L62)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:64](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/ContractDataSource.ts#L64)
 
 ___
 
@@ -297,7 +298,7 @@ A promise that resolves to the `ContractTransaction`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/ContractDataSource.ts#L83)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:85](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/ContractDataSource.ts#L85)
 
 ___
 
@@ -317,7 +318,7 @@ Delete all entries from the cache.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/CachedDataSource.ts#L42)
 
 ___
 
@@ -345,7 +346,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
+[packages/council-sdk/src/datasources/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/CachedDataSource.ts#L50)
 
 ___
 
@@ -380,7 +381,43 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/ContractDataSource.ts#L131)
+[packages/council-sdk/src/datasources/ContractDataSource.ts:133](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/ContractDataSource.ts#L133)
+
+___
+
+### getEvents
+
+▸ **getEvents**<`TEvent`\>(`filter`, `fromBlock?`, `toBlock?`): `Promise`<`TEvent`[]\>
+
+Get events from the contract and cache the results with a key made from the
+filter and block range. If the request fails, the block range will be split
+in 2 recursively until all events within the requested range are fetched.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TEvent` | extends `TypedEvent`<`any`, `any`, `TEvent`\> |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `filter` | `TypedEventFilter`<`TEvent`\> | The TypedEventFilter of the event to fetch. |
+| `fromBlock?` | `number` | Include all events on or after this block. |
+| `toBlock?` | `number` | Include all events on or before this block. |
+
+#### Returns
+
+`Promise`<`TEvent`[]\>
+
+#### Inherited from
+
+[ContractDataSource](ContractDataSource.md).[getEvents](ContractDataSource.md#getevents)
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/ContractDataSource.ts:148](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/ContractDataSource.ts#L148)
 
 ___
 
@@ -410,4 +447,4 @@ VotingVaultDataSource.getVotingPower
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts:44](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts#L44)
+[packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts:44](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VotingVaultContractDataSource.ts#L44)

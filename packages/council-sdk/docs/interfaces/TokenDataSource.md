@@ -35,7 +35,7 @@ An interface for fetching data from any token.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:10](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L10)
+[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:10](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L10)
 
 ___
 
@@ -66,7 +66,7 @@ Sets approval of token access up to a certain amount
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:47](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L47)
+[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:47](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L47)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/DataSource.ts:8](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/DataSource.ts#L8)
+[packages/council-sdk/src/datasources/DataSource.ts:8](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/DataSource.ts#L8)
 
 ___
 
@@ -108,7 +108,7 @@ token.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:33](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L33)
+[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:33](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L33)
 
 ___
 
@@ -134,7 +134,7 @@ Get the amount of tokens owned by a given address.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:38](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L38)
+[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:38](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L38)
 
 ___
 
@@ -156,7 +156,7 @@ displayed as `5.05` (`505 / 10 ** 2`).
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:27](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L27)
+[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:27](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L27)
 
 ___
 
@@ -176,7 +176,7 @@ Get the name of this token.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:20](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L20)
+[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:20](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L20)
 
 ___
 
@@ -196,4 +196,4 @@ Get the symbol of this token, usually a shorter version of the name.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:15](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L15)
+[packages/council-sdk/src/datasources/Token/TokenDataSource.ts:15](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/Token/TokenDataSource.ts#L15)
