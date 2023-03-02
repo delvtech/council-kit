@@ -1,5 +1,4 @@
 import { VestingVault, VestingVault__factory } from "@council/typechain";
-import { VoteChangeEvent } from "@council/typechain/dist/contracts/vaults/VestingVault.sol/VestingVault";
 import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
@@ -81,9 +80,9 @@ export class VestingVaultContractDataSource
     atBlock?: number,
   ): Promise<VoterAddressWithPower[]> {
     return this.cached(["getDelegatorsTo", address, atBlock], async () => {
-      const voteChangeEvents = await this.getVoteChangeEvents(
-        undefined,
-        address,
+      const eventFilter = this.contract.filters.VoteChange(undefined, address);
+      const voteChangeEvents = await this.getEvents(
+        eventFilter,
         undefined,
         atBlock,
       );
@@ -160,9 +159,12 @@ export class VestingVaultContractDataSource
     return this.cached(
       ["getVotingPowerBreakdown", fromBlock, toBlock],
       async () => {
-        const voteChangeEvents = await this.getVoteChangeEvents(
+        const eventFilter = this.contract.filters.VoteChange(
           undefined,
           undefined,
+        );
+        const voteChangeEvents = await this.getEvents(
+          eventFilter,
           fromBlock,
           toBlock,
         );
@@ -216,25 +218,6 @@ export class VestingVaultContractDataSource
           }));
       },
     );
-  }
-
-  /**
-   * Get all emitted `VoteChange` events.
-   * @param from - The address that the voting power is coming from.
-   * @param to - The address that the voting power is going to.
-   * @param fromBlock - The block to start searching for events from.
-   * @param toBlock - The block to stop searching for events at.
-   */
-  getVoteChangeEvents(
-    from?: string,
-    to?: string,
-    fromBlock?: number,
-    toBlock?: number,
-  ): Promise<VoteChangeEvent[]> {
-    return this.cached(["VoteChange", to, from, fromBlock, toBlock], () => {
-      const filter = this.contract.filters.VoteChange(to, from);
-      return this.contract.queryFilter(filter, fromBlock, toBlock);
-    });
   }
 
   /**
