@@ -4,7 +4,7 @@ import { MockProvider } from "@wagmi/connectors/mock";
 import { ApprovalEvent } from "@council/typechain/dist/contracts/interfaces/IERC20";
 import { stub } from "sinon";
 import { ERC20, ERC20__factory } from "src/types";
-import { test, expect } from "vitest";
+import { test, expect } from "@jest/globals";
 
 test("Stubs callStatic methods correctly", async () => {
   const stubbedContract = setupMockERC20();
@@ -88,11 +88,13 @@ test("Stubs queryFilter correctly", async () => {
 });
 
 function setupMockERC20() {
+  const privateKey = process.env.MOCK_WALLET_PRIVATE_KEY;
+  if (!privateKey) {
+    throw "Missing environment variable: MOCK_WALLET_PRIVATE_KEY";
+  }
   const mockProvider = new MockProvider({
     chainId: 1,
-    signer: new Wallet(
-      "d1b0c40a9943d53459302ccf9003ef9666b9235dfc3220ea1f0422a886615511",
-    ),
+    signer: new Wallet(privateKey),
   });
 
   return stubContract<ERC20>(
