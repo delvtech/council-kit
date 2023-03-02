@@ -12,6 +12,8 @@ module.exports = {
     "^.+\\.ts$": [
       "ts-jest",
       {
+        // use a tsconfig with an es5 target
+        tsconfig: "tsconfig.test.json",
         useESM: true,
       },
     ],
