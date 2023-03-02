@@ -3,11 +3,11 @@ import { stub, SinonStub } from "sinon";
 
 // TODO: refactor for ethers v6
 
-interface ContractFunctionsBucket {
+interface ContractMethodBucket {
   [name: string]: ContractFunction;
 }
 
-type StubbedFunctionBucket<F extends ContractFunctionsBucket> = {
+type StubbedMethodBucket<F extends ContractMethodBucket> = {
   [K in keyof F]: SinonStub<Parameters<F[K]>, ReturnType<F[K]>>;
 };
 
@@ -19,10 +19,10 @@ type StubbedContract<C extends Contract> = Omit<
   | "populateTransaction"
   | "queryFilter"
 > & {
-  callStatic: StubbedFunctionBucket<C["callStatic"]>;
-  functions: StubbedFunctionBucket<C["functions"]>;
-  estimateGas: StubbedFunctionBucket<C["estimateGas"]>;
-  populateTransaction: StubbedFunctionBucket<C["populateTransaction"]>;
+  callStatic: StubbedMethodBucket<C["callStatic"]>;
+  functions: StubbedMethodBucket<C["functions"]>;
+  estimateGas: StubbedMethodBucket<C["estimateGas"]>;
+  populateTransaction: StubbedMethodBucket<C["populateTransaction"]>;
   queryFilter: SinonStub<
     Parameters<C["queryFilter"]>,
     ReturnType<C["queryFilter"]>
@@ -71,10 +71,10 @@ export function stubContract<C extends Contract>(
 
   return {
     ...contract,
-    callStatic: callStatic as StubbedFunctionBucket<C["callStatic"]>,
-    functions: functions as StubbedFunctionBucket<C["functions"]>,
-    estimateGas: estimateGas as StubbedFunctionBucket<C["estimateGas"]>,
-    populateTransaction: populateTransaction as StubbedFunctionBucket<
+    callStatic: callStatic as StubbedMethodBucket<C["callStatic"]>,
+    functions: functions as StubbedMethodBucket<C["functions"]>,
+    estimateGas: estimateGas as StubbedMethodBucket<C["estimateGas"]>,
+    populateTransaction: populateTransaction as StubbedMethodBucket<
       C["populateTransaction"]
     >,
     queryFilter: stub().callsFake(() => {
