@@ -1,7 +1,7 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
 import { ProposalExecutedEvent } from "@council/typechain/dist/contracts/CoreVoting";
-import { Signer } from "ethers";
-import { BytesLike, formatEther } from "ethers/lib/utils";
+import { BigNumber, Signer } from "ethers";
+import { BytesLike, formatEther, parseEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context";
 import {
   ContractDataSource,
@@ -223,14 +223,34 @@ export class CoreVotingContractDataSource
   }
 
   async getResults(proposalId: number): Promise<VoteResults> {
-    const [yesBigNumber, noBigNumber, maybeBigNumber] = await this.call(
-      "getProposalVotingPower",
-      [proposalId],
-    );
+    const executedIds = await this.getExecutedProposalIds();
+    const powerByBallot: Record<Ballot, BigNumber> = {
+      yes: BigNumber.from(0),
+      no: BigNumber.from(0),
+      maybe: BigNumber.from(0),
+    };
+
+    // The proposal voting power is deleted when the proposal is executed, so we
+    // have to get the results from vote events.
+    if (executedIds.includes(proposalId)) {
+      const votes = await this.getVotes();
+      for (const { ballot, power } of votes) {
+        const powerBN = parseEther(power);
+        powerByBallot[ballot] = powerByBallot[ballot].add(powerBN);
+      }
+    } else {
+      const [yes, no, maybe] = await this.call("getProposalVotingPower", [
+        proposalId,
+      ]);
+      powerByBallot.yes = yes;
+      powerByBallot.no = no;
+      powerByBallot.maybe = maybe;
+    }
+
     return {
-      yes: formatEther(yesBigNumber),
-      no: formatEther(noBigNumber),
-      maybe: formatEther(maybeBigNumber),
+      yes: formatEther(powerByBallot.yes),
+      no: formatEther(powerByBallot.no),
+      maybe: formatEther(powerByBallot.maybe),
     };
   }
 

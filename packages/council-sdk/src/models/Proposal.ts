@@ -228,7 +228,6 @@ export class Proposal extends Model {
 
   /**
    * Get the total voting power of all votes on this proposal by their ballot.
-   * Not available on executed proposals.
    */
   getResults(): Promise<VoteResults> {
     return this.votingContract.dataSource.getResults(this.id);
