@@ -1,4 +1,4 @@
-export * from "./context";
+export * from "./context/context";
 export * from "./datasources/CachedDataSource";
 export * from "./datasources/ContractDataSource";
 export * from "./datasources/DataSource";

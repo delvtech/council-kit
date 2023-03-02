@@ -1,4 +1,4 @@
-import { CouncilContext } from "src/context";
+import { CouncilContext } from "src/context/context";
 
 /**
  * The base DataSource interface which simply requires a context instance.

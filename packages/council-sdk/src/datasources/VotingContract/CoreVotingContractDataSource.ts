@@ -2,7 +2,7 @@ import { CoreVoting, CoreVoting__factory } from "@council/typechain";
 import { ProposalExecutedEvent } from "@council/typechain/dist/contracts/CoreVoting";
 import { BigNumber, Signer } from "ethers";
 import { BytesLike, formatEther, parseEther } from "ethers/lib/utils";
-import { CouncilContext } from "src/context";
+import { CouncilContext } from "src/context/context";
 import {
   ContractDataSource,
   TransactionOptions,

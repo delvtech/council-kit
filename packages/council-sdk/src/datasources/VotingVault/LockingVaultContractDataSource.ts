@@ -1,7 +1,7 @@
 import { LockingVault, LockingVault__factory } from "@council/typechain";
 import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
-import { CouncilContext } from "src/context";
+import { CouncilContext } from "src/context/context";
 import { CachedDataSource } from "src/datasources/CachedDataSource";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { TokenDataSource } from "src/datasources/Token/TokenDataSource";

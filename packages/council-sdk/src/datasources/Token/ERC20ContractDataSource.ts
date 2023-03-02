@@ -1,12 +1,12 @@
+import { MockERC20, MockERC20__factory } from "@council/typechain";
 import { BigNumber, Signer } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
+import { CouncilContext } from "src/context/context";
 import {
   ContractDataSource,
   TransactionOptions,
 } from "src/datasources/ContractDataSource";
 import { TokenDataSource } from "./TokenDataSource";
-import { MockERC20, MockERC20__factory } from "@council/typechain";
-import { CouncilContext } from "src/context";
 
 /**
  * @category Data Sources
