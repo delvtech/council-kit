@@ -59,7 +59,7 @@ A VotingVault that gives voting power for depositing tokens.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:21](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L21)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:21](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L21)
 
 ## Properties
 
@@ -73,7 +73,7 @@ A VotingVault that gives voting power for depositing tokens.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:51](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L51)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:51](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L51)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:52](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L52)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:52](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L52)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -141,7 +141,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:155](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L155)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:155](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L155)
 
 ___
 
@@ -169,7 +169,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:172](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L172)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:172](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L172)
 
 ___
 
@@ -191,7 +191,7 @@ Get the current delegate of a given address.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:136](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L136)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:136](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L136)
 
 ___
 
@@ -214,7 +214,7 @@ Get all voters delegated to a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:144](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L144)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:144](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L144)
 
 ___
 
@@ -237,7 +237,7 @@ vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:50](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L50)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:50](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L50)
 
 ___
 
@@ -261,7 +261,7 @@ accounting for the stale block lag.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:114](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L114)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:114](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L114)
 
 ___
 
@@ -279,7 +279,7 @@ stale block lag.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:106](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L106)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:106](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L106)
 
 ___
 
@@ -295,7 +295,7 @@ Get the associated token for this LockingVault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:41](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L41)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:41](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L41)
 
 ___
 
@@ -321,7 +321,7 @@ Get the sum of voting power held by all voters in this Vesting Vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:125](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L125)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:125](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L125)
 
 ___
 
@@ -348,7 +348,7 @@ Get all participants with voting power in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:59](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L59)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:59](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L59)
 
 ___
 
@@ -376,7 +376,7 @@ Get the usable voting power owned by a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/VotingVault.ts:78](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L78)
+[packages/council-sdk/src/models/VotingVault/VotingVault.ts:78](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/VotingVault.ts#L78)
 
 ___
 
@@ -407,7 +407,7 @@ voters in a single call.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:80](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L80)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:80](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L80)
 
 ___
 
@@ -433,4 +433,4 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/VotingVault/LockingVault.ts:196](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L196)
+[packages/council-sdk/src/models/VotingVault/LockingVault.ts:196](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/VotingVault/LockingVault.ts#L196)

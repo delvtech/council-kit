@@ -46,7 +46,7 @@ Base model class extended by all others
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:22](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/Model.ts#L22)
+[packages/council-sdk/src/models/Model.ts:22](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L22)
 
 ## Properties
 
@@ -56,7 +56,7 @@ Base model class extended by all others
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -66,4 +66,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/1bac428/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L20)
