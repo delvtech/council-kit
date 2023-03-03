@@ -105,7 +105,7 @@ export class VotingContract<
    */
   createProposal(
     signer: Signer,
-    vaults: string[],
+    vaults: (string | VotingVault)[],
     targets: string[],
     calldatas: BytesLike[],
     lastCall: number,
@@ -117,9 +117,12 @@ export class VotingContract<
       extraVaultData?: BytesLike[];
     },
   ): Promise<string> {
+    const vaultAddresses = vaults.map((vault) =>
+      vault instanceof VotingVault ? vault.address : vault,
+    );
     return this.dataSource.createProposal(
       signer,
-      vaults,
+      vaultAddresses,
       targets,
       calldatas,
       lastCall,

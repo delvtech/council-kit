@@ -1,5 +1,4 @@
 import { formatEther, parseEther } from "ethers/lib/utils";
-import type { ethers } from "ethers";
 
 /**
  * Takes a group of numbers represented as strings and sums them together using

@@ -3,6 +3,7 @@ import { CouncilContext } from "src/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
 import { Voter } from "src/models/Voter";
 import { GSCVault } from "src/models/VotingVault/GSCVault";
+import { VotingVault } from "src/models/VotingVault/VotingVault";
 import { VotingContract, VotingContractOptions } from "./VotingContract";
 
 /**
@@ -87,7 +88,7 @@ export class GSCVotingContract extends VotingContract<[GSCVault]> {
    * Get the voting vaults a member joined with. Used to prove the member meets
    * the minimum voting power requirement.
    */
-  getMemberVaults(address: string): Promise<string[]> {
+  getMemberVaults(address: string): Promise<VotingVault[]> {
     return this.vaults[0].getMemberVaults(address);
   }
 
