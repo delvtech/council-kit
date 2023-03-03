@@ -118,7 +118,7 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
    */
   async join(
     signer: Signer,
-    vaults: string[],
+    vaults: (string | VotingVault)[],
     options?: TransactionOptions & {
       /**
        * Extra data given to the vaults to help calculation
@@ -126,7 +126,10 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
       extraVaultData?: BytesLike[];
     },
   ): Promise<string> {
-    return this.dataSource.join(signer, vaults, options);
+    const vaultAddresses = vaults.map((vault) =>
+      vault instanceof VotingVault ? vault.address : vault,
+    );
+    return this.dataSource.join(signer, vaultAddresses, options);
   }
 
   /**

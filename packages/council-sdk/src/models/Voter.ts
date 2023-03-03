@@ -1,10 +1,10 @@
+import { BytesLike } from "ethers";
 import { CouncilContext } from "src/context";
 import { sumStrings } from "src/utils/sumStrings";
 import { Model, ModelOptions } from "./Model";
 import { Vote } from "./Vote";
 import { VotingContract } from "./VotingContract/VotingContract";
 import { VotingVault } from "./VotingVault/VotingVault";
-import { BytesLike } from "ethers";
 
 /**
  * A participant in Council
@@ -28,12 +28,14 @@ export class Voter extends Model {
    *   as merkle proofs.
    */
   async getVotingPower(
-    vaults: string[],
+    vaults: (string | VotingVault)[],
     atBlock?: number,
     extraData?: BytesLike[],
   ): Promise<string> {
-    const vaultPowers = vaults.map((address, i) => {
-      const vault = new VotingVault(address, this.context);
+    const vaultPowers = vaults.map((vault, i) => {
+      if (typeof vault === "string") {
+        vault = new VotingVault(vault, this.context);
+      }
       return vault.getVotingPower(this.address, atBlock, extraData?.[i]);
     });
     return sumStrings(await Promise.all(vaultPowers));
@@ -58,11 +60,11 @@ export class Voter extends Model {
    */
   async getParticipation(
     votingContractAddress: string,
-    votingVaultAddresses: string[],
+    vaults: (string | VotingVault)[],
   ): Promise<[number, number]> {
     const votingContract = new VotingContract(
       votingContractAddress,
-      votingVaultAddresses,
+      vaults,
       this.context,
     );
     return await votingContract.getParticipation(this.address);
