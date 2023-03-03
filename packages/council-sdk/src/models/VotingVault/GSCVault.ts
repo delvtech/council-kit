@@ -99,8 +99,11 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
    * Get the voting vaults a member joined with. Used to prove the member meets
    * the minimum voting power requirement.
    */
-  getMemberVaults(address: string): Promise<string[]> {
-    return this.dataSource.getMemberVaults(address);
+  async getMemberVaults(address: string): Promise<VotingVault[]> {
+    const vaultAddresses = await this.dataSource.getMemberVaults(address);
+    return vaultAddresses.map(
+      (address) => new VotingVault(address, this.context),
+    );
   }
 
   /**
