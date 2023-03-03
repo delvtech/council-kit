@@ -1,9 +1,15 @@
 # council-sdk-starter
 
-A reference project using the council sdk.
+A reference project with example scripts using the council sdk.
 
 - [Installation](#installation)
 - [Getting started](#getting-started)
+  - [Environment](#environment)
+  - [Starting](#starting)
+    - [Get Proposal Results](#get-proposal-results)
+    - [Get GSC Members](#get-gsc-members)
+    - [Create a Proposal](#create-a-proposal)
+  - [Building](#building)
 
 ## Installation
 
@@ -17,12 +23,30 @@ The Council SDK isn't currently available as a stand alone package but can be in
 
 ### Environment
 
-Create your own `.env`. An example template is included in the project in `.env.example`. Provide an RPC url and the private key for an account (Be careful to not use a personal account with any funds).
+Create your own `.env`. An example template is included in the project in `.env.example`. Provide an RPC url and a private key to sign and pay for transactions.
 
 ### Starting
 
-```bash
-yarn workspace council-sdk-starter start
+Multiple example scripts are included in [`src/scripts`](src/scripts). Each one has a corresponding npm script to run it.
+
+#### Get Proposal Results
+
+```
+yarn workspace council-sdk-start getProposalResults
+```
+
+#### Get GSC Members
+
+```
+yarn workspace council-sdk-start getGSCMembers
+```
+
+#### Create a Proposal
+
+_Caution! this will require paying gas._
+
+```
+yarn workspace council-sdk-start createProposal
 ```
 
 ### Building
@@ -30,7 +54,3 @@ yarn workspace council-sdk-starter start
 ```bash
 yarn workspace council-sdk-starter build
 ```
-
-## Demo
-
-This project has one entry file, `index.ts`. This file is configured as the entry point for the project build and example script. Currenly the file uses some of the sdk's models to read some data from the council protocol on mainnet.
