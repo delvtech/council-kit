@@ -14,4 +14,5 @@ module.exports = {
     "tailwindcss/classnames-order": "off",
     "tailwindcss/no-custom-classname": "off",
   },
+  ignorePatterns: ["**/*.cjs"]
 };
