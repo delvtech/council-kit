@@ -15,7 +15,7 @@ function App(): ReactElement {
       <img src={cornerLinesLeft} className="absolute top-0 left-0 opacity-30" />
 
       {/* MAIN */}
-      <div className="bg-dark text-white min-h-screen overflow-hidden">
+      <div className="min-h-screen overflow-hidden text-white bg-dark">
         {/* HERO */}
         <div className="relative">
           <img
@@ -24,11 +24,11 @@ function App(): ReactElement {
           />
           <div className="max-w-6xl box-content box-content px-[4vw] mx-auto grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] items-center py-10 md:pt-28 md:pb-40 gap-20 justify-items-center">
             <div className="flex flex-col justify-center">
-              <h1 className="text-6xl mb-6">
+              <h1 className="mb-6 text-6xl">
                 Build adaptable governance systems with{" "}
                 <span className="text-primary-text">Council</span>
               </h1>
-              <p className="text-2xl mb-10">
+              <p className="mb-10 text-2xl">
                 A governance framework to create and manage DAOs
               </p>
               <div className="flex gap-4">
@@ -45,15 +45,19 @@ function App(): ReactElement {
                 </LinkButton>
               </div>
             </div>
-            <img src="/hero-image.png" className="w-96 lg:w-auto" />
+            <img
+              src="/hero-image.png"
+              alt="Council hero image"
+              className="w-96 lg:w-auto"
+            />
           </div>
         </div>
 
         {/* WHAT IS COUNCIL? */}
         <div className="relative">
-          <div className="absolute bg-gradient-to-b from-black inset-x-0 top-0 h-96"></div>
+          <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-black h-96"></div>
           <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto py-20">
-            <div className="md:max-w-xl flex flex-col gap-6 md:items-center mx-auto mb-10 md:mb-20">
+            <div className="flex flex-col gap-6 mx-auto mb-10 md:max-w-xl md:items-center md:mb-20">
               <h2 className="text-4xl">What is Council?</h2>
               <p className="text-lg">
                 Council represents the next evolution of on-chain governance by
@@ -64,8 +68,8 @@ function App(): ReactElement {
               </p>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-10 md:gap-20">
-              <div className="flex flex-col gap-8 md:gap-14 pt-2 py-6">
+            <div className="flex flex-col gap-10 md:flex-row md:gap-20">
+              <div className="flex flex-col gap-8 py-6 pt-2 md:gap-14">
                 <div className="flex flex-col gap-6 md:items-center">
                   <h3 className="text-2xl font-semibold">Council Protocol</h3>
                   <p>
@@ -76,10 +80,10 @@ function App(): ReactElement {
                 </div>
                 <div className="flex gap-4 pb-8 border-b border-b-primary-20 md:border-none md:pb-0">
                   <div>
-                    <div className="text-3xl w-9 text-center">&#9878;</div>
+                    <div className="text-3xl text-center w-9">&#9878;</div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-primary-text text-xl leading-9 font-medium">
+                    <h4 className="text-xl font-medium leading-9 text-primary-text">
                       Core Voting
                     </h4>
                     <p>
@@ -90,10 +94,10 @@ function App(): ReactElement {
                 </div>
                 <div className="flex gap-4 pb-8 border-b border-b-primary-20 md:border-none md:pb-0">
                   <div>
-                    <div className="text-3xl w-9 text-center">&#x1f5f3;</div>
+                    <div className="text-3xl text-center w-9">&#x1f5f3;</div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-primary-text text-xl leading-9 font-medium">
+                    <h4 className="text-xl font-medium leading-9 text-primary-text">
                       Voting Vaults
                     </h4>
                     <p>
@@ -104,10 +108,10 @@ function App(): ReactElement {
                 </div>
                 <div className="flex gap-4">
                   <div>
-                    <div className="text-3xl w-9 text-center">&#127963;</div>
+                    <div className="text-3xl text-center w-9">&#127963;</div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-primary-text text-xl leading-9 font-medium">
+                    <h4 className="text-xl font-medium leading-9 text-primary-text">
                       GSC
                     </h4>
                     <p>
@@ -120,7 +124,7 @@ function App(): ReactElement {
 
               <div className="bg-primary-text opacity-30 w-[1px] hidden md:block"></div>
 
-              <div className="flex flex-col gap-8 md:gap-14 pt-2 pb-6">
+              <div className="flex flex-col gap-8 pt-2 pb-6 md:gap-14">
                 <div className="flex flex-col gap-6 md:items-center">
                   <h3 className="text-2xl font-semibold">Council Kit</h3>
                   <p>
@@ -132,10 +136,10 @@ function App(): ReactElement {
 
                 <div className="flex gap-4 pb-8 border-b border-b-primary-20 md:border-none md:pb-0">
                   <div>
-                    <div className="text-3xl w-9 text-center">&#128640;</div>
+                    <div className="text-3xl text-center w-9">&#128640;</div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-primary-text text-xl leading-9 font-medium">
+                    <h4 className="text-xl font-medium leading-9 text-primary-text">
                       Deploy Template
                     </h4>
                     <p>
@@ -147,10 +151,10 @@ function App(): ReactElement {
 
                 <div className="flex gap-4 pb-8 border-b border-b-primary-20 md:border-none md:pb-0">
                   <div>
-                    <div className="text-3xl w-9 text-center">&#127899;</div>
+                    <div className="text-3xl text-center w-9">&#127899;</div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-primary-text text-xl leading-9 font-medium">
+                    <h4 className="text-xl font-medium leading-9 text-primary-text">
                       Reference UI
                     </h4>
                     <p>
@@ -162,10 +166,10 @@ function App(): ReactElement {
 
                 <div className="flex gap-4">
                   <div>
-                    <div className="text-3xl w-9 text-center">&#128736;</div>
+                    <div className="text-3xl text-center w-9">&#128736;</div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <h4 className="text-primary-text text-xl leading-9 font-medium">
+                    <h4 className="text-xl font-medium leading-9 text-primary-text">
                       SDK
                     </h4>
                     <p>
@@ -181,24 +185,24 @@ function App(): ReactElement {
 
         {/* GET STARTED */}
         <div className="relative">
-          <div className="absolute bg-gradient-to-b from-primary-dim inset-x-0 top-0 h-96 opacity-10"></div>
+          <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-primary-dim h-96 opacity-10"></div>
           <div className="relative flex flex-col gap-11 items-center max-w-[280px] box-content px-[4vw] mx-auto lg:mx-auto py-20">
             <h2 className="text-5xl">Get started</h2>
-            <ol className="text-xl flex flex-col gap-3">
+            <ol className="flex flex-col gap-3 text-xl">
               <li className="flex gap-1">
-                <div className="text-primary-text-light opacity-50 w-6">1.</div>
+                <div className="w-6 opacity-50 text-primary-text-light">1.</div>
                 Deploy the contracts
               </li>
               <li className="flex gap-1">
-                <div className="text-primary-text-light opacity-50 w-6">2.</div>
+                <div className="w-6 opacity-50 text-primary-text-light">2.</div>
                 Deploy the UI
               </li>
               <li className="flex gap-1">
-                <div className="text-primary-text-light opacity-50 w-6">3.</div>
+                <div className="w-6 opacity-50 text-primary-text-light">3.</div>
                 Govern!
               </li>
             </ol>
-            <div className="flex flex-col gap-4 items-stretch w-full mt-3">
+            <div className="flex flex-col items-stretch w-full gap-4 mt-3">
               <LinkButton href="#" variant="primary">
                 <RocketLaunchIcon className="w-5" />
                 View the guide
@@ -226,19 +230,21 @@ function App(): ReactElement {
         {/* PROJECTS USING COUNCIL */}
         <div className="relative">
           <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto pt-20 pb-28 border-t border-primary-text/30">
-            <h2 className="text-4xl text-center mb-16">
+            <h2 className="mb-16 text-4xl text-center">
               Projects using Council
             </h2>
-            <div className="grid grid-cols-2 justify-center gap-14 max-w-2xl mx-auto">
-              <a
-                href="https://governance.element.fi"
-                target="_blank"
-                rel="noreferrer"
-                className="transition-all hover:scale-105 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#1567ca] rounded-2xl"
-              >
-                <img src={elementLogo} alt="Element Finance" />
-              </a>
-              <div>
+            <div className="grid justify-center max-w-2xl grid-cols-1 mx-auto sm:grid-cols-2 gap-14">
+              <div className="min-w-max">
+                <a
+                  href="https://governance.element.fi"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-all hover:scale-105 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#1567ca] rounded-2xl"
+                >
+                  <img src={elementLogo} alt="Element Finance logo" />
+                </a>
+              </div>
+              <div className="min-w-max">
                 <a
                   href="https://twitter.com/GyroStable/status/1629157857097654275?s=20"
                   target="_blank"
@@ -255,11 +261,11 @@ function App(): ReactElement {
 
         {/* FEATURED BLOG POSTS */}
         <div className="relative">
-          <div className="absolute bg-gradient-to-b from-primary-dim inset-x-0 top-0 h-96 opacity-10"></div>
-          {/* <div className="absolute bg-gradient-to-b from-black inset-x-0 top-0 h-96"></div> */}
+          <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-primary-dim h-96 opacity-10"></div>
+          {/* <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-black h-96"></div> */}
           <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto pt-20 pb-28">
-            <h2 className="text-4xl mb-16">Featured blog posts</h2>
-            <div className="grid grid-cols-4 gap-8">
+            <h2 className="mb-16 text-4xl">Featured blog posts</h2>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
               <a
                 href="https://messari.io/report/governor-note-evolving-on-chain-governance-with-element-council?referrer=all-research"
                 target="_blank"
@@ -269,7 +275,7 @@ function App(): ReactElement {
                 <div className="flex items-center justify-center h-44 bg-[#080A0C] rounded-t-[15px] relative">
                   {/* image effects */}
                   {/* <div className="absolute inset-0 shadow-[inset_0_0_40px_currentColor] text-dark opacity-40 transition-all group-hover:opacity-0"></div> */}
-                  {/* <div className="absolute inset-0 bg-primary mix-blend-hue opacity-50 group-hover:opacity-0"></div> */}
+                  {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
                   <img
                     src="/messari-logo.png"
                     alt="Messari"
@@ -290,12 +296,15 @@ function App(): ReactElement {
                 <div className="flex items-center justify-center h-44 rounded-t-[15px] overflow-hidden relative">
                   {/* image effects */}
                   {/* <div className="absolute inset-0 shadow-[inset_0_0_40px_currentColor] text-dark opacity-40 transition-all group-hover:opacity-0"></div> */}
-                  {/* <div className="absolute inset-0 bg-primary mix-blend-hue opacity-50 group-hover:opacity-0"></div> */}
+                  {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
 
-                  <img
-                    src="/voting-vaults-banner.png"
-                    className="max-w-none h-full"
-                  />
+                  <div className="w-full h-full lg:max-w-none lg:w-auto">
+                    <img
+                      src="/voting-vaults-banner.png"
+                      alt="Voting vaults banner"
+                      className="object-cover w-full h-full lg:max-w-none"
+                    />
+                  </div>
                 </div>
                 <p className="px-6 pt-4 pb-5 font-semibold">
                   Voting Vaults: A New DeFi and Governance Primitive
@@ -310,12 +319,15 @@ function App(): ReactElement {
                 <div className="flex items-center justify-center h-44 rounded-t-[15px] overflow-hidden relative">
                   {/* image effects */}
                   {/* <div className="absolute inset-0 shadow-[inset_0_0_40px_currentColor] text-dark opacity-40 transition-all group-hover:opacity-0"></div> */}
-                  {/* <div className="absolute inset-0 bg-primary mix-blend-hue opacity-50 group-hover:opacity-0"></div> */}
+                  {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
 
-                  <img
-                    src="/gsc-article-banner.png"
-                    className="max-w-none h-full"
-                  />
+                  <div className="w-full h-full lg:max-w-none lg:w-auto">
+                    <img
+                      src="/gsc-article-banner.png"
+                      alt="Governance steering council article banner"
+                      className="object-cover w-full h-full lg:max-w-none"
+                    />
+                  </div>
                 </div>
                 <p className="px-6 pt-4 pb-5 font-semibold">
                   Overview of the Governance Steering Council
@@ -330,12 +342,14 @@ function App(): ReactElement {
                 <div className="flex items-center justify-center h-44 rounded-t-[15px] overflow-hidden relative">
                   {/* image effects */}
                   {/* <div className="absolute inset-0 shadow-[inset_0_0_40px_currentColor] text-dark opacity-40 transition-all group-hover:opacity-0"></div> */}
-                  {/* <div className="absolute inset-0 bg-primary mix-blend-hue opacity-50 group-hover:opacity-0"></div> */}
-
-                  <img
-                    src="/element-governance-banner.jpg"
-                    className="max-w-none h-full"
-                  />
+                  {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
+                  <div className="w-full h-full lg:max-w-none lg:w-auto">
+                    <img
+                      src="/element-governance-banner.jpg"
+                      alt="element governance banner"
+                      className="object-cover w-full h-full lg:max-w-none"
+                    />
+                  </div>
                 </div>
                 <p className="px-6 pt-4 pb-5 font-semibold">
                   An Introduction to Element’s Governance Model
