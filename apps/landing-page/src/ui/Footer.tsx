@@ -7,7 +7,7 @@ import { YouTubeIcon } from "src/ui/svg/YouTubeIcon";
 export function Footer(): ReactElement {
   return (
     <div className="relative bg-black overflow-hidden">
-      <div className="relative max-w-6xl box-border px-[4vw] mx-auto lg:mx-auto py-20 flex gap-20 justify-between">
+      <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto py-20 flex gap-20 justify-between">
         <div className="flex flex-col justify-between gap-6">
           <img src={councilLogo} width={160} />
           <p>

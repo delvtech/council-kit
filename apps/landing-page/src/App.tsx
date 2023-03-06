@@ -22,7 +22,7 @@ function App(): ReactElement {
             src={cornerLinesRight}
             className="absolute bottom-0 right-0 opacity-20"
           />
-          <div className="max-w-6xl box-content px-[4vw] mx-auto grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] items-center py-10 md:pt-28 md:pb-40 gap-20 justify-items-center">
+          <div className="max-w-6xl box-content box-content px-[4vw] mx-auto grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] items-center py-10 md:pt-28 md:pb-40 gap-20 justify-items-center">
             <div className="flex flex-col justify-center">
               <h1 className="text-6xl mb-6">
                 Build adaptable governance systems with{" "}
@@ -52,7 +52,7 @@ function App(): ReactElement {
         {/* WHAT IS COUNCIL? */}
         <div className="relative">
           <div className="absolute bg-gradient-to-b from-black inset-x-0 top-0 h-96"></div>
-          <div className="relative max-w-6xl box-border px-[4vw] mx-auto lg:mx-auto py-20">
+          <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto py-20">
             <div className="md:max-w-xl flex flex-col gap-6 md:items-center mx-auto mb-10 md:mb-20">
               <h2 className="text-4xl">What is Council?</h2>
               <p className="text-lg">
@@ -182,7 +182,7 @@ function App(): ReactElement {
         {/* GET STARTED */}
         <div className="relative">
           <div className="absolute bg-gradient-to-b from-primary-dim inset-x-0 top-0 h-96 opacity-10"></div>
-          <div className="relative flex flex-col gap-11 items-center max-w-[280px] box-border px-[4vw] mx-auto lg:mx-auto py-20">
+          <div className="relative flex flex-col gap-11 items-center max-w-[280px] box-content px-[4vw] mx-auto lg:mx-auto py-20">
             <h2 className="text-5xl">Get started</h2>
             <ol className="text-xl flex flex-col gap-3">
               <li className="flex gap-1">
@@ -225,7 +225,7 @@ function App(): ReactElement {
 
         {/* PROJECTS USING COUNCIL */}
         <div className="relative">
-          <div className="relative max-w-6xl box-border px-[4vw] mx-auto lg:mx-auto pt-20 pb-28 border-t border-primary-text/30">
+          <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto pt-20 pb-28 border-t border-primary-text/30">
             <h2 className="text-4xl text-center mb-16">
               Projects using Council
             </h2>
@@ -257,7 +257,7 @@ function App(): ReactElement {
         <div className="relative">
           <div className="absolute bg-gradient-to-b from-primary-dim inset-x-0 top-0 h-96 opacity-10"></div>
           {/* <div className="absolute bg-gradient-to-b from-black inset-x-0 top-0 h-96"></div> */}
-          <div className="relative max-w-6xl box-border px-[4vw] mx-auto lg:mx-auto pt-20 pb-28">
+          <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto pt-20 pb-28">
             <h2 className="text-4xl mb-16">Featured blog posts</h2>
             <div className="grid grid-cols-4 gap-8">
               <a
