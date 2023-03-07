@@ -6,7 +6,7 @@ import {
 import { ethers } from "ethers";
 import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
-import { ContractDataSource } from "src/datasources/ContractDataSource";
+import { ContractDataSource } from "src/datasources/base/contract/ContractDataSource";
 import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
 /**

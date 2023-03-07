@@ -1,7 +1,7 @@
 import { Signer } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { LockingVaultContractDataSource } from "src/datasources/votingVault/LockingVaultContractDataSource";
 import { Token } from "src/models/Token";
 import { Voter } from "src/models/Voter";

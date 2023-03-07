@@ -2,7 +2,7 @@ import { GSCVault, GSCVault__factory } from "@council/typechain";
 import { BigNumber, Signer } from "ethers";
 import { BytesLike, formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
 /**

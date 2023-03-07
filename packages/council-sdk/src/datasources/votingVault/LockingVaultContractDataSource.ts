@@ -2,8 +2,8 @@ import { LockingVault, LockingVault__factory } from "@council/typechain";
 import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
-import { CachedDataSource } from "src/datasources/CachedDataSource";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { CachedDataSource } from "src/datasources/base/cached/CachedDataSource";
+import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { TokenDataSource } from "src/datasources/token/TokenDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 

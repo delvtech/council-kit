@@ -1,5 +1,5 @@
 import { providers } from "ethers";
-import { DataSource } from "src/datasources/DataSource";
+import { DataSource } from "src/datasources/base/DataSource";
 
 /**
  * @category Context

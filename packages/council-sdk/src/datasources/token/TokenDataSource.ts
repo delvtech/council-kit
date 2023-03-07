@@ -1,6 +1,6 @@
 import { BigNumber, Signer } from "ethers";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
-import { DataSource } from "src/datasources/DataSource";
+import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
+import { DataSource } from "src/datasources/base/DataSource";
 
 /**
  * An interface for fetching data from any token.

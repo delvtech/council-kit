@@ -1,5 +1,5 @@
 import { BytesLike } from "ethers";
-import { DataSource } from "src/datasources/DataSource";
+import { DataSource } from "src/datasources/base/DataSource";
 
 /**
  * An interface for fetching data from any voting vault.
