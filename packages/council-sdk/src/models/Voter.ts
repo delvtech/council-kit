@@ -3,8 +3,8 @@ import { CouncilContext } from "src/context/context";
 import { sumStrings } from "src/utils/sumStrings";
 import { Model, ModelOptions } from "./Model";
 import { Vote } from "./Vote";
-import { VotingContract } from "./VotingContract/VotingContract";
-import { VotingVault } from "./VotingVault/VotingVault";
+import { VotingContract } from "./votingContract/VotingContract";
+import { VotingVault } from "./votingVault/VotingVault";
 
 /**
  * A participant in Council

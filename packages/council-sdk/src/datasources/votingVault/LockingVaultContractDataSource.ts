@@ -4,7 +4,7 @@ import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
 import { CachedDataSource } from "src/datasources/CachedDataSource";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
-import { TokenDataSource } from "src/datasources/Token/TokenDataSource";
+import { TokenDataSource } from "src/datasources/token/TokenDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
 /**
