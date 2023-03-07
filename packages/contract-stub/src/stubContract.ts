@@ -20,16 +20,7 @@ type StubbedMethodBucket<F extends ContractMethodBucket> = {
 /**
  * Get a stubbed version of a contract where every method is a `SinonStub`
  */
-type StubbedContract<C extends Contract> = Omit<
-  C,
-  // Omit all methods from the original contract type
-  | keyof StubbedMethodBucket<C["functions"]>
-  | "callStatic"
-  | "functions"
-  | "estimateGas"
-  | "populateTransaction"
-  | "queryFilter"
-> & {
+type StubbedContract<C extends Contract> = C & {
   // Replace all direct method types with a typed `SinonStub`
   [K in keyof StubbedMethodBucket<C["functions"]>]: SinonStub<
     Parameters<StubbedMethodBucket<C["functions"]>[K]>,
@@ -97,7 +88,7 @@ export function stubContract<C extends Contract>(
 
   return {
     ...contract,
-    ...functions,
+    // ...functions,
     callStatic: callStatic as StubbedMethodBucket<C["callStatic"]>,
     functions: functions as StubbedMethodBucket<C["functions"]>,
     estimateGas: estimateGas as StubbedMethodBucket<C["estimateGas"]>,
