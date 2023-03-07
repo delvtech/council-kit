@@ -1,11 +1,10 @@
 import { expect, test } from "@jest/globals";
-import { MockProvider } from "@wagmi/connectors/mock";
-import { Wallet } from "ethers";
 import { MockDataSource } from "src/datasources/mocks/MockDataSource";
+import { mockProvider } from "src/testing/mockProvider";
 import { CouncilContext } from "./context";
 
 test("gets data sources correctly", () => {
-  const context = setupContext();
+  const context = new CouncilContext(mockProvider);
   const dataSource = new MockDataSource(0, context);
   context.registerDataSource({}, dataSource);
   const fetchedDataSource = context.getDataSource<MockDataSource>({
@@ -16,7 +15,7 @@ test("gets data sources correctly", () => {
 });
 
 test("registers data sources correctly", () => {
-  const context = setupContext();
+  const context = new CouncilContext(mockProvider);
   expect(context.dataSources.length).toBe(0);
 
   const dataSource0 = new MockDataSource(0, context);
@@ -33,15 +32,3 @@ test("registers data sources correctly", () => {
 
   expect(fetchedDataSource).toEqual(dataSource0);
 });
-
-function setupContext() {
-  const privateKey = process.env.MOCK_WALLET_PRIVATE_KEY;
-  if (!privateKey) {
-    throw "Missing environment variable: MOCK_WALLET_PRIVATE_KEY";
-  }
-  const mockProvider = new MockProvider({
-    chainId: 1,
-    signer: new Wallet(privateKey),
-  });
-  return new CouncilContext(mockProvider);
-}
