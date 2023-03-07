@@ -12,9 +12,13 @@ export function Footer(): ReactElement {
           <img src={councilLogo} width={160} />
           <p>
             Built with 💜 by{" "}
-            <span className="font-semibold text-primary-text">Delve</span>
+            <span className="font-semibold text-primary-text">
+              Element Finance
+            </span>
           </p>
-          <p className="text-sm">&copy; 2023 Delve Inc. All rights reserved</p>
+          <p className="text-sm">
+            &copy; 2023 Element Finance Inc. All rights reserved
+          </p>
         </div>
         <div className="flex flex-wrap gap-24">
           <div>
@@ -51,8 +55,10 @@ export function Footer(): ReactElement {
               </li>
               <li>
                 <a
-                  href="https://www.youtube.com/@elementfinance5026/featured"
+                  href="https://www.youtube.com/playlist?list=PLUz3k1KZhOta3D_1_G2OMTNxczvfXk5jn"
                   className="transition-all text-primary-text hover:text-white"
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   Videos
                 </a>
