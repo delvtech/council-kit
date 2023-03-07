@@ -6,6 +6,17 @@ import { stub } from "sinon";
 import { ERC20, ERC20__factory } from "src/types";
 import { test, expect } from "@jest/globals";
 
+test("Stubs methods correctly", async () => {
+  const stubbedContract = setupMockERC20();
+
+  // should throw an error if stub's resolve value was never set
+  expect(() => stubbedContract.decimals()).toThrow();
+
+  stubbedContract.decimals.resolves([18]);
+  const decimals = await stubbedContract.decimals();
+  expect(decimals).toEqual([18]);
+});
+
 test("Stubs callStatic methods correctly", async () => {
   const stubbedContract = setupMockERC20();
   // should throw an error if stub's resolve value was never set
