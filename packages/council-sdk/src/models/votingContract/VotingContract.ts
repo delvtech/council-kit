@@ -3,11 +3,11 @@ import { BytesLike, parseEther } from "ethers/lib/utils";
 import uniqBy from "lodash.uniqby";
 import { CouncilContext } from "src/context/context";
 import { TransactionOptions } from "src/datasources/ContractDataSource";
-import { CoreVotingContractDataSource } from "src/datasources/VotingContract/CoreVotingContractDataSource";
+import { CoreVotingContractDataSource } from "src/datasources/votingContract/CoreVotingContractDataSource";
 import {
   Ballot,
   VotingContractDataSource,
-} from "src/datasources/VotingContract/VotingContractDataSource";
+} from "src/datasources/votingContract/VotingContractDataSource";
 import { Model, ModelOptions } from "src/models/Model";
 import { Proposal } from "src/models/Proposal";
 import { Vote } from "src/models/Vote";
@@ -15,8 +15,8 @@ import { Voter } from "src/models/Voter";
 import {
   VoterPowerBreakdown,
   VoterWithPower,
-} from "src/models/VotingVault/types";
-import { VotingVault } from "src/models/VotingVault/VotingVault";
+} from "src/models/votingVault/types";
+import { VotingVault } from "src/models/votingVault/VotingVault";
 import { sumStrings } from "src/utils/sumStrings";
 
 /**

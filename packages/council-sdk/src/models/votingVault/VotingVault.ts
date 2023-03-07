@@ -1,10 +1,10 @@
 import { BytesLike } from "ethers";
 import { CouncilContext } from "src/context/context";
-import { VotingVaultContractDataSource } from "src/datasources/VotingVault/VotingVaultContractDataSource";
-import { VotingVaultDataSource } from "src/datasources/VotingVault/VotingVaultDataSource";
+import { VotingVaultContractDataSource } from "src/datasources/votingVault/VotingVaultContractDataSource";
+import { VotingVaultDataSource } from "src/datasources/votingVault/VotingVaultDataSource";
 import { Model, ModelOptions } from "src/models/Model";
 import { Voter } from "src/models/Voter";
-import { VoterPowerBreakdown } from "src/models/VotingVault/types";
+import { VoterPowerBreakdown } from "src/models/votingVault/types";
 
 /**
  * @category Models
