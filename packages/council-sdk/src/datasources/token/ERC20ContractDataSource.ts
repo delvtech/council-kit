@@ -5,7 +5,7 @@ import { CouncilContext } from "src/context/context";
 import {
   ContractDataSource,
   TransactionOptions,
-} from "src/datasources/ContractDataSource";
+} from "src/datasources/base/contract/ContractDataSource";
 import { TokenDataSource } from "./TokenDataSource";
 
 /**

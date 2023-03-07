@@ -1,5 +1,5 @@
-import { CouncilContext } from "..";
-import { CachedDataSource } from "./CachedDataSource";
+import { CouncilContext } from "src/context/context";
+import { CachedDataSource } from "src/datasources/base/cached/CachedDataSource";
 
 /**
  * A DataSource with methods for caching requests to an HTTP API.

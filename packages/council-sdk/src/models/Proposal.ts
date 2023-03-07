@@ -1,7 +1,7 @@
 import { BytesLike, Signer } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import {
   Ballot,
   ProposalData,

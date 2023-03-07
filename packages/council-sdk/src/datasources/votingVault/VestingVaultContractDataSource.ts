@@ -2,9 +2,8 @@ import { VestingVault, VestingVault__factory } from "@council/typechain";
 import { BigNumber, Signer } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
-import { VotingVaultDataSource } from "./VotingVaultDataSource";
 
 /**
  * A DataSource with methods for making cached calls to a `VestingVault`
@@ -12,10 +11,7 @@ import { VotingVaultDataSource } from "./VotingVaultDataSource";
  * @category Data Sources
  */
 
-export class VestingVaultContractDataSource
-  extends VotingVaultContractDataSource<VestingVault>
-  implements VotingVaultDataSource
-{
+export class VestingVaultContractDataSource extends VotingVaultContractDataSource<VestingVault> {
   constructor(address: string, context: CouncilContext) {
     super(VestingVault__factory.connect(address, context.provider), context);
   }
