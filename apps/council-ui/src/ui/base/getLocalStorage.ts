@@ -3,7 +3,7 @@ export type LocalStorage = {
   setItem: (key: string, value: string) => boolean;
   clear: () => void;
 };
-export function useLocalStorage(): LocalStorage {
+export function getLocalStorage(): LocalStorage {
   const isBrowser: boolean = typeof window !== "undefined";
 
   const getItem = (key: string): string => {
