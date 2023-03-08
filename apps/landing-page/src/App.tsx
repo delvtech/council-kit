@@ -32,7 +32,11 @@ function App(): ReactElement {
                 A governance framework to create and manage DAOs
               </p>
               <div className="flex gap-4">
-                <LinkButton href="#" variant="primary">
+                <LinkButton
+                  href="https://github.com/element-fi/council-kit/wiki/Getting-Started"
+                  target="_blank"
+                  variant="primary"
+                >
                   <RocketLaunchIcon className="w-5" />
                   Get started
                 </LinkButton>
