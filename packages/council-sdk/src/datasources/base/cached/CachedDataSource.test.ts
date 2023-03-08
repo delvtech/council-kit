@@ -3,7 +3,7 @@ import { CouncilContext } from "src/context/context";
 import { mockProvider } from "src/testing/mockProvider";
 import { CachedDataSource } from "./CachedDataSource";
 
-test("caches values correctly", () => {
+test("Caches values correctly", () => {
   const { dataSource, key, callBack, returnValue } = setup();
 
   const value = dataSource.cached(key, callBack);
@@ -15,7 +15,7 @@ test("caches values correctly", () => {
   expect(valueAgain).toEqual(returnValue);
 });
 
-test("deletes cache entries correctly", () => {
+test("Deletes cache entries correctly", () => {
   const { dataSource, key, callBack } = setup();
 
   dataSource.cached(key, callBack);
@@ -25,7 +25,7 @@ test("deletes cache entries correctly", () => {
   expect(callBack.mock.calls).toHaveLength(2);
 });
 
-test("clears cache correctly", () => {
+test("Clears cache correctly", () => {
   const { dataSource, key, callBack } = setup();
 
   const key2 = "key2";
@@ -33,7 +33,7 @@ test("clears cache correctly", () => {
   const callBack2 = jest.fn(() => returnValue2);
 
   dataSource.cached(key, callBack);
-  dataSource.cached(key2, () => "foo");
+  dataSource.cached(key2, callBack2);
 
   dataSource.clearCached();
 

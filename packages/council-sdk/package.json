@@ -18,7 +18,8 @@
     "watch:docs": "typedoc --watch",
     "example": "ts-node -r dotenv/config -r tsconfig-paths/register src/example/index.ts",
     "watch:example": "nodemon -r dotenv/config -r tsconfig-paths/register src/example/index.ts",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "dependencies": {
     "@council/typechain": "*",
