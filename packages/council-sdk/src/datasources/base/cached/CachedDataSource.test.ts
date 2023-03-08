@@ -13,6 +13,7 @@ test("Caches values correctly", () => {
 
   expect(value).toEqual(returnValue);
   expect(valueAgain).toEqual(returnValue);
+  expect(valueAgain).toBe(value);
 });
 
 test("Deletes cache entries correctly", () => {
@@ -49,7 +50,7 @@ function setup() {
   const dataSource = new CachedDataSource(context);
 
   const key = ["foo", 0, ["foo"], { foo: "baz" }];
-  const returnValue = "foo";
+  const returnValue = { foo: "foo" };
   const callBack = jest.fn(() => returnValue);
 
   return {
