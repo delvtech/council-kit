@@ -64,11 +64,15 @@ function App(): ReactElement {
             <div className="flex flex-col gap-6 mx-auto mb-10 md:max-w-xl md:items-center md:mb-20">
               <h2 className="text-4xl">What is Council?</h2>
               <p className="text-lg">
-                Council represents the next evolution of on-chain governance by
-                building a smart contract-based modular governance framework.
-                These contracts enable builders to use the security of on-chain
-                governance while allowing for unprecedented contract
-                flexibility.
+                Council represents the next evolution of on-chain governance,
+                allowing anyone to build adaptable governance systems that meet
+                both the practical needs of day-to-day activities and the
+                required flexibility of long-term governance.
+              </p>
+              <p className="text-lg">
+                The Council Protocol and Kit enable builders to use the security
+                of on-chain governance while allowing for unprecedented
+                modularity and flexibility.
               </p>
             </div>
 
@@ -77,9 +81,14 @@ function App(): ReactElement {
                 <div className="flex flex-col gap-6 md:items-center">
                   <h3 className="text-2xl font-semibold">Council Protocol</h3>
                   <p>
-                    Council Kit goes beyond the smart contracts and positions
-                    Council as an all-in-one governance framework. The Council
-                    Kit provides smart contract deployment templates and a full.
+                    Council Protocol is a modular, upgradeable, and flexible
+                    governance system.
+                  </p>
+                  <p>
+                    The modularity of the system provides optionality for DAOs
+                    to choose their own path or develop new modules that best
+                    serve their needs. A new era of governance innovation is
+                    waiting for you.
                   </p>
                 </div>
                 <div className="flex gap-4 pb-8 border-b border-b-primary-20 md:border-none md:pb-0">
@@ -91,8 +100,12 @@ function App(): ReactElement {
                       Core Voting
                     </h4>
                     <p>
-                      This system begins with the core…and the core is all that
-                      is needed at the base layer. Nothing more, nothing less.
+                      This system begins with the core which is all that is
+                      needed at the base layer. All additional functionality can
+                      be added by selecting desired modules. The Core defines
+                      the voting process for those with governance power, tracks
+                      proposals, and retrieves user voting power from approved
+                      Voting Vaults.
                     </p>
                   </div>
                 </div>
@@ -105,8 +118,10 @@ function App(): ReactElement {
                       Voting Vaults
                     </h4>
                     <p>
-                      Grow your DAOs Inclusivity. Assign voting power to any use
-                      case.
+                      Voting Vaults enable governance participation to be more
+                      inclusive and capital efficient. Vaults can be created by
+                      defining strategies for assigning voting power to
+                      different use cases.
                     </p>
                   </div>
                 </div>
@@ -119,8 +134,13 @@ function App(): ReactElement {
                       GSC
                     </h4>
                     <p>
-                      Scale Decision Making with the Governance Steering
-                      Council, elected through a delegation threshold.
+                      The Governance Steering Council (GSC) enables scalable
+                      decision-making for DAOs. The GSC is a group of
+                      representatives elected on a rolling-basis model of
+                      delegation and must maintain a minimum level of voting
+                      power to remain on the Council. Council members can
+                      create, vote, and execute proposals and can be assigned
+                      further duties through the governance process.
                     </p>
                   </div>
                 </div>
@@ -147,8 +167,8 @@ function App(): ReactElement {
                       Deploy Template
                     </h4>
                     <p>
-                      This system begins with the core…and the core is all that
-                      is needed at the base layer. Nothing more, nothing less.
+                      Select, configure, and deploy the smart contracts in a
+                      guided walk-through with the deployment template.
                     </p>
                   </div>
                 </div>
@@ -162,8 +182,9 @@ function App(): ReactElement {
                       Reference UI
                     </h4>
                     <p>
-                      This system begins with the core…and the core is all that
-                      is needed at the base layer. Nothing more, nothing less.
+                      Make the creation of your governance portal simple with a
+                      fully customizable reference UI built with React,
+                      TypeScript, and NextJS.
                     </p>
                   </div>
                 </div>
@@ -177,8 +198,9 @@ function App(): ReactElement {
                       SDK
                     </h4>
                     <p>
-                      This system begins with the core…and the core is all that
-                      is needed at the base layer. Nothing more, nothing less.
+                      A TypeScript SDK which interfaces with the Council
+                      Protocol smart contracts and unlocks the ability to create
+                      custom scripts.
                     </p>
                   </div>
                 </div>
@@ -195,7 +217,7 @@ function App(): ReactElement {
             <ol className="flex flex-col gap-3 text-xl">
               <li className="flex gap-1">
                 <div className="w-6 opacity-50 text-primary-text-light">1.</div>
-                Deploy the contracts
+                Select module(s) & Deploy smart contracts
               </li>
               <li className="flex gap-1">
                 <div className="w-6 opacity-50 text-primary-text-light">2.</div>
