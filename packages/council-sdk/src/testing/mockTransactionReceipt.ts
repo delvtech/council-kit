@@ -1,6 +1,6 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ContractReceipt, ethers } from "ethers";
 
-export const mockTransactionReceipt = {
+export const mockTransactionReceipt: ContractReceipt = {
   to: ethers.constants.AddressZero,
   from: ethers.constants.AddressZero,
   transactionIndex: 0,

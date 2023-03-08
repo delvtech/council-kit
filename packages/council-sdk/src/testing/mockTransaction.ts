@@ -1,7 +1,7 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ContractTransaction, ethers } from "ethers";
 import { mockTransactionReceipt } from "./mockTransactionReceipt";
 
-export const mockTransaction = {
+export const mockTransaction: ContractTransaction = {
   wait: (): Promise<typeof mockTransactionReceipt> =>
     Promise.resolve(mockTransactionReceipt),
   hash: "",
