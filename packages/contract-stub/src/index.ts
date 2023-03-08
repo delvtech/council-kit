@@ -1,1 +1,1 @@
-export { stubContract } from "./stubContract";
+export * from "./stubContract";
