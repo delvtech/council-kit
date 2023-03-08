@@ -12,9 +12,9 @@ test("Stubs methods correctly", async () => {
   // should throw an error if stub's resolve value was never set
   expect(stubbedContract.decimals).toThrow();
 
-  stubbedContract.decimals.resolves([18]);
+  stubbedContract.decimals.resolves(18);
   const decimals = await stubbedContract.decimals();
-  expect(decimals).toEqual([18]);
+  expect(decimals).toEqual(18);
 });
 
 test("Stubs functions methods correctly", async () => {
@@ -97,13 +97,13 @@ test("Stubs queryFilter correctly", async () => {
 
 test("Stubs connect correctly", async () => {
   const stubbedContract = setupMockERC20();
-  stubbedContract.decimals.resolves([18]);
+  stubbedContract.decimals.resolves(18);
 
   const newInstance = stubbedContract.connect(mockProvider);
   const newInstanceDecimals = await newInstance.decimals();
 
   // should keep mocks from original
-  expect(newInstanceDecimals).toEqual([18]);
+  expect(newInstanceDecimals).toEqual(18);
 
   // shouldn't be affected by changes to non-mock properties on the original
   // instance
