@@ -77,18 +77,15 @@ function App(): ReactElement {
             </div>
 
             <div className="flex flex-col gap-10 md:flex-row md:gap-20">
-              <div className="flex flex-col gap-8 py-6 pt-2 md:gap-14">
+              <div className="flex flex-col gap-8 py-6 pt-2 md:gap-14  md:max-w-[50%]">
                 <div className="flex flex-col gap-6 md:items-center">
                   <h3 className="text-2xl font-semibold">Council Protocol</h3>
                   <p>
                     Council Protocol is a modular, upgradeable, and flexible
-                    governance system.
-                  </p>
-                  <p>
-                    The modularity of the system provides optionality for DAOs
-                    to choose their own path or develop new modules that best
-                    serve their needs. A new era of governance innovation is
-                    waiting for you.
+                    governance system. The modularity of the system provides
+                    optionality for DAOs to choose their own path or develop new
+                    modules that best serve their needs. A new era of governance
+                    innovation is waiting for you.
                   </p>
                 </div>
                 <div className="flex gap-4 pb-8 border-b border-b-primary-20 md:border-none md:pb-0">
@@ -278,6 +275,21 @@ function App(): ReactElement {
                   className="transition-all hover:scale-105 hover:opacity-100 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833]/40 rounded-2xl relative overflow-hidden before:content-[''] before:absolute before:border-[6px] before:border-dashed before:border-primary-text-light/50 before:rounded-[22px] before:inset-[-5px] opacity-50"
                 >
                   <img src="/gyroscope-logo.png" width={180} alt="Gyroscope" />
+                </a>
+                <p className="mt-3 text-center">COMING SOON!</p>
+              </div>
+              <div className="min-w-max">
+                <a
+                  href="https://discord.gg/srgcTGccGe"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-all hover:scale-105 hover:opacity-100 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833]/40 rounded-2xl relative overflow-hidden before:content-[''] before:absolute before:border-[6px] before:border-dashed before:border-primary-text-light/50 before:rounded-[22px] before:inset-[-5px] opacity-50"
+                >
+                  <p className="max-w-xs text-center">
+                    Join the next evolution of on-chain governance! Get in touch
+                    🤝
+                  </p>
+                  {/* <LockClosedIcon className="w-8" /> */}
                 </a>
                 <p className="mt-3 text-center">COMING SOON!</p>
               </div>
