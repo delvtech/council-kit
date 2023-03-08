@@ -8,7 +8,7 @@ module.exports = {
     "src/(.*)": "<rootDir>/src/$1",
   },
   transform: {
-    // transform .ts files into es modules.
+    // transform .ts files into es modules
     "^.+\\.ts$": [
       "ts-jest",
       {
@@ -18,4 +18,6 @@ module.exports = {
       },
     ],
   },
+  // get coverage for all of source except the example dir
+  collectCoverageFrom: ["./src/{!(example),}/**/*.ts"],
 };

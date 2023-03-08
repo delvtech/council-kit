@@ -1,6 +1,6 @@
 import { TypedEvent, TypedEventFilter } from "@council/typechain/dist/common";
 import {
-  BaseContract,
+  Contract,
   ContractReceipt,
   ethers,
   Signer,
@@ -18,9 +18,7 @@ import { CachedDataSource } from "src/datasources/base/cached/CachedDataSource";
  * @category Data Sources
  */
 // TODO: add a method for event queries
-export class ContractDataSource<
-  T extends BaseContract,
-> extends CachedDataSource {
+export class ContractDataSource<T extends Contract> extends CachedDataSource {
   address: string;
   contract: T;
 

@@ -12,8 +12,17 @@ import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
  */
 
 export class VestingVaultContractDataSource extends VotingVaultContractDataSource<VestingVault> {
-  constructor(address: string, context: CouncilContext) {
-    super(VestingVault__factory.connect(address, context.provider), context);
+  /**
+   * Create a new `VestingVaultContractDataSource` instance.
+   * @param vault - A `VestingVault` instance from the `@council/typechain`
+   *   package or the address of the vesting vault contract.
+   */
+  constructor(vault: string | VestingVault, context: CouncilContext) {
+    const contract =
+      typeof vault === "string"
+        ? VestingVault__factory.connect(vault, context.provider)
+        : vault;
+    super(contract, context);
   }
 
   /**

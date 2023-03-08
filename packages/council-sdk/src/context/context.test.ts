@@ -3,7 +3,7 @@ import { MockDataSource } from "src/datasources/mocks/MockDataSource";
 import { mockProvider } from "src/testing/mockProvider";
 import { CouncilContext } from "./context";
 
-test("gets data sources correctly", () => {
+test("Gets data sources correctly", () => {
   const context = new CouncilContext(mockProvider);
   const dataSource = new MockDataSource(0, context);
   context.registerDataSource({}, dataSource);
@@ -14,7 +14,7 @@ test("gets data sources correctly", () => {
   expect(fetchedDataSource).toEqual(dataSource);
 });
 
-test("registers data sources correctly", () => {
+test("Registers data sources correctly", () => {
   const context = new CouncilContext(mockProvider);
   expect(context.dataSources.length).toBe(0);
 
