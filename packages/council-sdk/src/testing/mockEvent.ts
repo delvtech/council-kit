@@ -1,9 +1,9 @@
-import { Event } from "ethers";
+import { TypedEvent } from "@council/typechain/dist/common";
 import { mockBlock } from "./mockBlock";
 import { mockTransaction } from "./mockTransaction";
 import { mockTransactionReceipt } from "./mockTransactionReceipt";
 
-export const mockEvent: Event = {
+export const mockEvent: TypedEvent = {
   args: [],
   removeListener: (): null => null,
   getBlock: (): Promise<typeof mockBlock> => Promise.resolve(mockBlock),
