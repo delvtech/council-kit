@@ -22,10 +22,7 @@ export type StubbedMethodBucket<F extends ContractMethodBucket> = {
  */
 export type StubbedContract<C extends Contract = Contract> = C & {
   // Replace all direct method types with a typed `SinonStub`
-  [K in keyof StubbedMethodBucket<C["functions"]>]: SinonStub<
-    Parameters<C[K]>,
-    ReturnType<C[K]>
-  >;
+  [K in keyof C["functions"]]: SinonStub<Parameters<C[K]>, ReturnType<C[K]>>;
 } & {
   // Replace the method types in method buckets
   callStatic: StubbedMethodBucket<C["callStatic"]>;
