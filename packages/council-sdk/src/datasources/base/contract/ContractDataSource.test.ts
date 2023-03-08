@@ -4,8 +4,10 @@ import { MockERC20__factory } from "@council/typechain";
 import { expect, test } from "@jest/globals";
 import { BigNumber, ethers } from "ethers";
 import { CouncilContext } from "src/context/context";
+import { mockEvent } from "src/testing/mockEvent";
 import { mockProvider } from "src/testing/mockProvider";
 import { mockSigner } from "src/testing/mockSigner";
+import { mockTransaction } from "src/testing/mockTransaction";
 import { ContractDataSource } from "./ContractDataSource";
 
 test("Makes calls correctly", async () => {
@@ -84,64 +86,3 @@ function setupMockERC20() {
     MockERC20__factory.connect(ethers.constants.AddressZero, mockProvider),
   );
 }
-
-const mockTransactionReceipt = {
-  to: ethers.constants.AddressZero,
-  from: ethers.constants.AddressZero,
-  transactionIndex: 0,
-  contractAddress: ethers.constants.AddressZero,
-  gasUsed: BigNumber.from(0),
-  logsBloom: "",
-  blockHash: "",
-  transactionHash: "",
-  logs: [],
-  blockNumber: 0,
-  confirmations: 1,
-  cumulativeGasUsed: BigNumber.from(0),
-  effectiveGasPrice: BigNumber.from(0),
-  byzantium: false,
-  type: 0,
-};
-
-const mockTransaction = {
-  wait: () => Promise.resolve(mockTransactionReceipt),
-  hash: "",
-  confirmations: 0,
-  from: ethers.constants.AddressZero,
-  nonce: 0,
-  gasLimit: BigNumber.from(0),
-  data: "",
-  value: BigNumber.from(0),
-  chainId: 1,
-};
-
-const mockEvent = {
-  args: {},
-  removeListener: () => null,
-  getBlock: () =>
-    Promise.resolve({
-      transactions: [],
-      hash: "",
-      parentHash: "",
-      number: 0,
-      timestamp: 0,
-      nonce: "",
-      difficulty: 0,
-      _difficulty: BigNumber.from(0),
-      gasLimit: BigNumber.from(0),
-      gasUsed: BigNumber.from(0),
-      miner: "",
-      extraData: "",
-    }),
-  getTransaction: () => Promise.resolve(mockTransaction),
-  getTransactionReceipt: () => Promise.resolve(mockTransactionReceipt),
-  blockNumber: 0,
-  blockHash: "",
-  transactionIndex: 0,
-  removed: false,
-  address: "",
-  data: "",
-  topics: [],
-  transactionHash: "",
-  logIndex: 0,
-};
