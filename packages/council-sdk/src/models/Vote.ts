@@ -1,5 +1,5 @@
-import { CouncilContext } from "src/context";
-import { Ballot } from "src/datasources/VotingContract/VotingContractDataSource";
+import { CouncilContext } from "src/context/context";
+import { Ballot } from "src/datasources/votingContract/VotingContractDataSource";
 import { Model, ModelOptions } from "./Model";
 import { Proposal } from "./Proposal";
 import { Voter } from "./Voter";

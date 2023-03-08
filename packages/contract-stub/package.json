@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/main.js",
+  "main": "dist/main.cjs",
+  "module": "dist/main.mjs",
   "types": "dist/types.d.ts",
   "files": [
     "dist"
@@ -15,7 +16,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "build:typechain": "typechain --target=ethers-v5 src/abis/* --out-dir src/types"
+    "build:typechain": "typechain --target=ethers-v5 src/testing/abis/* --out-dir src/types"
   },
   "dependencies": {
     "sinon": "^15.0.1"

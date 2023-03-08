@@ -1,18 +1,18 @@
 import { BytesLike, Signer } from "ethers";
 import { parseEther } from "ethers/lib/utils";
-import { CouncilContext } from "src/context";
-import { TransactionOptions } from "src/datasources/ContractDataSource";
+import { CouncilContext } from "src/context/context";
+import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import {
   Ballot,
   ProposalData,
   VoteResults,
-} from "src/datasources/VotingContract/VotingContractDataSource";
+} from "src/datasources/votingContract/VotingContractDataSource";
 import { getVaultsWithPower } from "src/utils/getVaultsWithPower";
 import { sumStrings } from "src/utils/sumStrings";
 import { Model, ModelOptions } from "./Model";
 import { Vote } from "./Vote";
 import { Voter } from "./Voter";
-import { VotingContract } from "./VotingContract/VotingContract";
+import { VotingContract } from "./votingContract/VotingContract";
 
 /**
  * A model of a Proposal in Council
