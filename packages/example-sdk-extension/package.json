@@ -1,12 +1,29 @@
 {
   "name": "@example/sdk-extension",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/main.js",
+  "types": "dist/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "alias": {
+    "src": "./src"
+  },
+  "scripts": {
+    "build": "parcel build"
+  },
   "dependencies": {
     "@council/sdk": "*",
     "@council/typechain": "*",
     "@example/typechain": "*",
     "abitype": "^0.6.7"
+  },
+  "devDependencies": {
+    "parcel": "^2.8.0"
+  },
+  "peerDependencies": {
+    "ethers": ">=5.6"
   }
 }

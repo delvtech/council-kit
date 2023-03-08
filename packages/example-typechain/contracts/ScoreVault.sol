@@ -18,7 +18,11 @@ abstract contract AbstractScoreVault is Authorizable, IVotingVault {
         int256 newScore
     );
 
-    function addResult(address user, Result result, uint256 points) external {
+    function addResult(
+        address user,
+        Result result,
+        uint256 points
+    ) external onlyAuthorized {
         if (result == Result.WIN) {
             scores[user] += points;
         } else {

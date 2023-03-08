@@ -1,16 +1,21 @@
-import { CouncilContext, VotingVaultContractDataSource } from "@council/sdk";
+import {
+  CouncilContext,
+  TransactionOptions,
+  VotingVaultContractDataSource,
+} from "@council/sdk";
 import { ScoreVault, ScoreVault__factory } from "@example/typechain";
-import { ScoreChangeEvent } from "@example/typechain/dist/ScoreVault";
+import { ScoreChangeEvent } from "@example/typechain/dist/ScoreVault.sol/ScoreVault";
+import { BigNumber, Signer } from "ethers";
 
 const RESULTS = ["WIN", "LOSS"] as const;
-type Result = typeof RESULTS[number];
+export type Result = typeof RESULTS[number];
 
 export class ScoreVaultDataSource extends VotingVaultContractDataSource<ScoreVault> {
   constructor(address: string, context: CouncilContext) {
     super(ScoreVault__factory.connect(address, context.provider), context);
   }
 
-  async getScore(address: string): Promise<string> {
+  async getScore(address: string) {
     const scoreBigNumber = await this.call("scores", [address]);
     return scoreBigNumber.toString();
   }
@@ -20,13 +25,7 @@ export class ScoreVaultDataSource extends VotingVaultContractDataSource<ScoreVau
     result?: Result,
     fromBlock?: number,
     toBlock?: number
-  ): Promise<
-    {
-      user: string;
-      result: Result;
-      newScore: string;
-    }[]
-  > {
+  ) {
     const resultIndex = result && RESULTS.indexOf(result);
     const eventFilter = this.contract.filters.ScoreChange(address, resultIndex);
     const scoreChangeEvents: ScoreChangeEvent[] = await this.getEvents(
@@ -41,5 +40,22 @@ export class ScoreVaultDataSource extends VotingVaultContractDataSource<ScoreVau
         newScore: event.args.newScore.toString(),
       };
     });
+  }
+
+  async addResult(
+    signer: Signer,
+    address: string,
+    result: Result,
+    points: Number,
+    options?: TransactionOptions
+  ) {
+    const transaction = await this.callWithSigner(
+      "addResult",
+      [address, RESULTS.indexOf(result), BigNumber.from(points)],
+      signer,
+      options
+    );
+    this.clearCached();
+    return transaction.hash;
   }
 }
