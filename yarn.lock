@@ -4647,6 +4647,11 @@ abitype@^0.3.0:
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.3.0.tgz#75150e337d88cc0b2423ed0d3fc36935f139d04c"
   integrity sha512-0YokyAV4hKMcy97Pl+6QgZBlBdZJN2llslOs7kiFY+cu7kMlVXDBpxMExfv0krzBCQt2t7hNovpQ3y/zvEm18A==
 
+abitype@^0.6.7:
+  version "0.6.8"
+  resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.6.8.tgz#48b6fbbf603b59fd17e5dad46c6253d8df464182"
+  integrity sha512-eEBArafvVXdPoCNcdG7FYX3U5lhAXAH3QE8dj7RncsNm4N5Rv5PpWctUNDVu/oxjsuQOTLcjOxIdOwhcbkKk0Q==
+
 abort-controller@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/abort-controller/-/abort-controller-3.0.0.tgz#eaf54d53b62bae4138e809ca225c8439a6efb392"

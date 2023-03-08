@@ -17,6 +17,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IVotingVault__factory>;
     getContractFactory(
+      name: "Authorizable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Authorizable__factory>;
+    getContractFactory(
+      name: "AbstractScoreVault",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AbstractScoreVault__factory>;
+    getContractFactory(
       name: "ScoreVault",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ScoreVault__factory>;
@@ -26,6 +34,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IVotingVault>;
+    getContractAt(
+      name: "Authorizable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Authorizable>;
+    getContractAt(
+      name: "AbstractScoreVault",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AbstractScoreVault>;
     getContractAt(
       name: "ScoreVault",
       address: string,

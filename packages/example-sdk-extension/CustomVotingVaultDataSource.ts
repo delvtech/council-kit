@@ -3,6 +3,7 @@ import { ScoreVault, ScoreVault__factory } from "@example/typechain";
 import { ScoreChangeEvent } from "@example/typechain/dist/ScoreVault";
 
 const RESULTS = ["WIN", "LOSS"] as const;
+type Result = typeof RESULTS[number];
 
 export class ScoreVaultDataSource extends VotingVaultContractDataSource<ScoreVault> {
   constructor(address: string, context: CouncilContext) {
@@ -16,16 +17,18 @@ export class ScoreVaultDataSource extends VotingVaultContractDataSource<ScoreVau
 
   async getResults(
     address?: string,
+    result?: Result,
     fromBlock?: number,
     toBlock?: number
   ): Promise<
     {
       user: string;
-      result: typeof RESULTS[number];
+      result: Result;
       newScore: string;
     }[]
   > {
-    const eventFilter = this.contract.filters.ScoreChange(address);
+    const resultIndex = result && RESULTS.indexOf(result);
+    const eventFilter = this.contract.filters.ScoreChange(address, resultIndex);
     const scoreChangeEvents: ScoreChangeEvent[] = await this.getEvents(
       eventFilter,
       fromBlock,
