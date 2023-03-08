@@ -78,7 +78,9 @@ export function Footer(): ReactElement {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="https://discord.gg/7NB7D5uN"
+                  href="https://discord.gg/srgcTGccGe"
+                  target="_blank"
+                  rel="noreferrer"
                   className="flex items-center gap-3 transition-all group text-primary-text hover:text-white"
                 >
                   <DiscordIcon className="w-5 transition-all fill-primary-text group-hover:fill-white" />
