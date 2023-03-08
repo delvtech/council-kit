@@ -33,6 +33,7 @@ test("Fetches unvested multiplier correctly", async () => {
 
 test("Fetches grants correctly", async () => {
   const vaultContract = setupMockVault();
+  const mockGrant = setupMockGrant();
   vaultContract.getGrant.resolves(mockGrant);
 
   const context = new CouncilContext(mockProvider);
@@ -53,6 +54,7 @@ test("Fetches grants correctly", async () => {
 
 test("Fetches delegate correctly", async () => {
   const vaultContract = setupMockVault();
+  const mockGrant = setupMockGrant();
   vaultContract.getGrant.resolves(mockGrant);
 
   const context = new CouncilContext(mockProvider);
@@ -68,22 +70,26 @@ function setupMockVault() {
   );
 }
 
-const mockGrant = [
-  BigNumber.from(0),
-  BigNumber.from(0),
-  BigNumber.from(0),
-  BigNumber.from(0),
-  BigNumber.from(0),
-  BigNumber.from(0),
-  "0x0000000000000000000000000000000000000000",
-  [[BigNumber], [BigNumber]],
-] as unknown as VestingVaultStorage.GrantStructOutput;
+function setupMockGrant() {
+  const mockGrant = [
+    BigNumber.from(0),
+    BigNumber.from(0),
+    BigNumber.from(0),
+    BigNumber.from(0),
+    BigNumber.from(0),
+    BigNumber.from(0),
+    "0x0000000000000000000000000000000000000000",
+    [[BigNumber], [BigNumber]],
+  ] as unknown as VestingVaultStorage.GrantStructOutput;
 
-mockGrant.allocation = BigNumber.from(0);
-mockGrant.withdrawn = BigNumber.from(0);
-mockGrant.created = BigNumber.from(0);
-mockGrant.expiration = BigNumber.from(0);
-mockGrant.cliff = BigNumber.from(0);
-mockGrant.latestVotingPower = BigNumber.from(0);
-mockGrant.delegatee = "0x0000000000000000000000000000000000000000";
-mockGrant.range = [BigNumber.from(0), BigNumber.from(0)];
+  mockGrant.allocation = mockGrant[0];
+  mockGrant.withdrawn = mockGrant[1];
+  mockGrant.created = mockGrant[2];
+  mockGrant.expiration = mockGrant[3];
+  mockGrant.cliff = mockGrant[4];
+  mockGrant.latestVotingPower = mockGrant[5];
+  mockGrant.delegatee = mockGrant[6];
+  mockGrant.range = mockGrant[7];
+
+  return mockGrant;
+}
