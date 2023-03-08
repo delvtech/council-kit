@@ -1,9 +1,10 @@
+import { Event } from "ethers";
 import { mockBlock } from "./mockBlock";
 import { mockTransaction } from "./mockTransaction";
 import { mockTransactionReceipt } from "./mockTransactionReceipt";
 
-export const mockEvent = {
-  args: {},
+export const mockEvent: Event = {
+  args: [],
   removeListener: (): null => null,
   getBlock: (): Promise<typeof mockBlock> => Promise.resolve(mockBlock),
   getTransaction: (): Promise<typeof mockTransaction> =>

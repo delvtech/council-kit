@@ -1,6 +1,6 @@
-import { BigNumber } from "ethers";
+import { BigNumber, providers } from "ethers";
 
-export const mockBlock = {
+export const mockBlock: providers.Block = {
   transactions: [],
   hash: "",
   parentHash: "",
