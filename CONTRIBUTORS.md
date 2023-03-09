@@ -1,6 +1,6 @@
 # Contributing
 
-We encourage community submissions to improve the quality of this codebase.
+Building Council has been an absolute pleasure and we couldn't have done it without the feedback and support from you all. We're always looking to make Council better and would love to see community submissions to improve the quality of the codebase.
 
 ## Getting Started
 
@@ -24,6 +24,11 @@ Confirm that your PR targets the 'main' branch. Your branch must be prefixed by 
 * All PRs will need to be reviewed by a core maintainer before being squashes
   and merged.
 * Persons qualified to merge and review PRs are likely busy and thus for some PRs it may take several weeks for review, we ask you to remain patient and respectful throughout that process. 
+
+## Create an Issue (Bug, Feature, Tutorial Request)
+
+- Create a [new issue](https://github.com/element-fi/council-kit/issues/new/choose).
+- Comment on the issue (if you'd like to be assigned to it) - [that way our team can assign the issue to you.](https://github.blog/2019-06-25-assign-issues-to-issue-commenters/)
 
 ## Code of Conduct
 
