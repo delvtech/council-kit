@@ -44,7 +44,7 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <a
-              href="https://www.youtube.com/@elementfinance5026/featured"
+              href="https://www.youtube.com/playlist?list=PLUz3k1KZhOta3D_1_G2OMTNxczvfXk5jn"
               target="_blank"
               rel="noreferrer"
               className="whitespace-nowrap flex gap-2 items-center px-8 h-11 text-black transition-all hover:bg-primary hover:text-white [&>*]:hover:fill-white"

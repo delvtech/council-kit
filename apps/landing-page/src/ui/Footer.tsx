@@ -98,7 +98,7 @@ export function Footer(): ReactElement {
               </li>
               <li>
                 <a
-                  href="https://www.youtube.com/@elementfinance5026"
+                  href="https://www.youtube.com/playlist?list=PLUz3k1KZhOta3D_1_G2OMTNxczvfXk5jn"
                   className="flex items-center gap-3 transition-all group text-primary-text hover:text-white"
                 >
                   <YouTubeIcon className="w-5 transition-all fill-primary-text group-hover:fill-white" />
