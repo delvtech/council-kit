@@ -11,7 +11,7 @@
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
     "build:src": "npm run clean && npm run compile",
-    "build": "npm run compile && tsc --project tsconfig.build.json"
+    "build": "npm run build:src && tsc --project tsconfig.build.json"
   },
   "devDependencies": {
     "@council/tsconfig": "*",
