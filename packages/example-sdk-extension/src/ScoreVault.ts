@@ -13,30 +13,26 @@ export class ScoreVault extends VotingVault<ScoreVaultDataSource> {
       name: "Score Vault",
       dataSource: context.registerDataSource(
         { address },
-        new ScoreVaultDataSource(address, context)
+        new ScoreVaultDataSource(address, context),
       ),
     });
-  }
-
-  getScore(address: string) {
-    return this.dataSource.getScore(address);
   }
 
   async getResults(
     address?: string,
     result?: Result,
     fromBlock?: number,
-    toBlock?: number
+    toBlock?: number,
   ) {
     const results = await this.dataSource.getResults(
       address,
       result,
       fromBlock,
-      toBlock
+      toBlock,
     );
-    return results.map(({ newScore, result, user }) => {
+    return results.map(({ points, result, user }) => {
       return {
-        newScore,
+        points,
         result,
         user: new Voter(user, this.context),
       };
@@ -48,7 +44,7 @@ export class ScoreVault extends VotingVault<ScoreVaultDataSource> {
     address: string,
     result: Result,
     points: Number,
-    options?: TransactionOptions
+    options?: TransactionOptions,
   ) {
     return this.dataSource.addResult(signer, address, result, points, options);
   }

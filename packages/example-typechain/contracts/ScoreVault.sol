@@ -1,42 +1,52 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.3;
 
+import "./libraries/History.sol";
+import "./libraries/Storage.sol";
 import "./interfaces/IVotingVault.sol";
 import "./libraries/Authorizable.sol";
 
 abstract contract AbstractScoreVault is Authorizable, IVotingVault {
-    mapping(address => uint256) public scores;
+    using History for *;
+    using Storage for *;
 
     enum Result {
         WIN,
         LOSS
     }
 
-    event ScoreChange(
-        address indexed user,
-        Result indexed result,
-        int256 newScore
-    );
+    event NewResult(address indexed user, Result indexed result, int256 points);
+
+    function _votingPower()
+        internal
+        pure
+        returns (History.HistoricalBalances memory)
+    {
+        return (History.load("votingPower"));
+    }
 
     function addResult(
         address user,
         Result result,
         uint256 points
     ) external onlyAuthorized {
+        History.HistoricalBalances memory votingPower = _votingPower();
+        uint256 currentVotes = votingPower.loadTop(msg.sender);
         if (result == Result.WIN) {
-            scores[user] += points;
+            votingPower.push(msg.sender, currentVotes + points);
         } else {
-            scores[user] -= points;
+            votingPower.push(msg.sender, currentVotes - points);
         }
-        emit ScoreChange(user, result, int256(scores[user]));
+        emit NewResult(user, result, int256(points));
     }
 
     function queryVotePower(
         address user,
         uint256 blockNumber,
-        bytes calldata extraData
+        bytes calldata
     ) external override returns (uint256) {
-        return scores[user];
+        History.HistoricalBalances memory votingPower = _votingPower();
+        return votingPower.find(user, blockNumber);
     }
 }
 
