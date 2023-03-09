@@ -259,7 +259,7 @@ function App(): ReactElement {
             </h2>
 
             {/* Project tiles */}
-            <div className="grid justify-center grid-cols-1 mx-auto sm:grid-cols-2 gap-8 md:grid-cols-3 lg:gap-x-14 mb-20">
+            <div className="grid justify-center grid-cols-1 mx-auto sm:grid-cols-2 gap-8 md:grid-cols-3 lg:gap-x-14 mb-16">
               <div>
                 <a
                   href="https://governance.element.fi"
