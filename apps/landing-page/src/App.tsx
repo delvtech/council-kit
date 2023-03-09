@@ -150,8 +150,8 @@ function App(): ReactElement {
                   <h3 className="text-2xl font-semibold">Council Kit</h3>
                   <p>
                     Council Kit goes beyond the smart contracts and positions
-                    Council as an all-in-one governance framework. The Council
-                    Kit provides smart contract deployment templates and a full.
+                    Council as an all-in-one governance framework. The Kit comes
+                    with a suite of tools to create and bootstrap DAOs.
                   </p>
                 </div>
 
