@@ -34,7 +34,6 @@ function App(): ReactElement {
               <div className="flex gap-4">
                 <LinkButton
                   href="https://github.com/element-fi/council-kit/wiki/Getting-Started"
-                  target="_blank"
                   variant="primary"
                 >
                   <RocketLaunchIcon className="w-5" />
@@ -77,7 +76,7 @@ function App(): ReactElement {
             </div>
 
             <div className="flex flex-col gap-10 md:flex-row md:gap-20">
-              <div className="flex flex-col gap-8 py-6 pt-2 md:gap-14  md:max-w-[50%]">
+              <div className="flex flex-col gap-8 py-6 pt-2 md:gap-14 md:basis-1/2">
                 <div className="flex flex-col gap-6 md:items-center">
                   <h3 className="text-2xl font-semibold">Council Protocol</h3>
                   <p>
@@ -128,14 +127,13 @@ function App(): ReactElement {
                   </div>
                   <div className="flex flex-col gap-1">
                     <h4 className="text-xl font-medium leading-9 text-primary-text">
-                      GSC
+                      Governance Steering Council (GSC)
                     </h4>
                     <p>
-                      The Governance Steering Council (GSC) enables scalable
-                      decision-making for DAOs. The GSC is a group of
-                      representatives elected on a rolling-basis model of
-                      delegation and must maintain a minimum level of voting
-                      power to remain on the Council. Council members can
+                      The GSC enables scalable decision-making for DAOs. The GSC
+                      is a group of representatives elected on a rolling-basis
+                      model of delegation and must maintain a minimum level of
+                      voting power to remain on the Council. Council members can
                       create, vote, and execute proposals and can be assigned
                       further duties through the governance process.
                     </p>
@@ -143,9 +141,9 @@ function App(): ReactElement {
                 </div>
               </div>
 
-              <div className="bg-primary-text opacity-30 w-[1px] hidden md:block"></div>
+              <div className="bg-primary-text opacity-30 w-[1px] hidden basis-px md:block"></div>
 
-              <div className="flex flex-col gap-8 pt-2 pb-6 md:gap-14">
+              <div className="flex flex-col gap-8 pt-2 pb-6 md:gap-14 md:basis-1/2">
                 <div className="flex flex-col gap-6 md:items-center">
                   <h3 className="text-2xl font-semibold">Council Kit</h3>
                   <p>
@@ -226,7 +224,10 @@ function App(): ReactElement {
               </li>
             </ol>
             <div className="flex flex-col items-stretch w-full gap-4 mt-3">
-              <LinkButton href="#" variant="primary">
+              <LinkButton
+                href="https://github.com/element-fi/council-kit/wiki/Getting-Started"
+                variant="primary"
+              >
                 <RocketLaunchIcon className="w-5" />
                 View the guide
               </LinkButton>
@@ -252,12 +253,14 @@ function App(): ReactElement {
 
         {/* PROJECTS USING COUNCIL */}
         <div className="relative">
-          <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto pt-20 pb-28 border-t border-primary-text/30">
+          <div className="relative max-w-6xl box-content px-[4vw] mx-auto py-20 border-t border-primary-text/30">
             <h2 className="mb-16 text-4xl text-center">
               Projects using Council
             </h2>
-            <div className="grid justify-center max-w-2xl grid-cols-1 mx-auto sm:grid-cols-2 gap-14">
-              <div className="min-w-max">
+
+            {/* Project tiles */}
+            <div className="grid justify-center grid-cols-1 mx-auto sm:grid-cols-2 gap-8 md:grid-cols-3 lg:gap-x-14 mb-16">
+              <div>
                 <a
                   href="https://governance.element.fi"
                   target="_blank"
@@ -267,7 +270,7 @@ function App(): ReactElement {
                   <img src={elementLogo} alt="Element Finance logo" />
                 </a>
               </div>
-              <div className="min-w-max">
+              <div>
                 <a
                   href="https://twitter.com/GyroStable/status/1629157857097654275?s=20"
                   target="_blank"
@@ -276,24 +279,31 @@ function App(): ReactElement {
                 >
                   <img src="/gyroscope-logo.png" width={180} alt="Gyroscope" />
                 </a>
-                <p className="mt-3 text-center">COMING SOON!</p>
+                <p className="mt-3 text-center text-primary-text-light">
+                  COMING SOON!
+                </p>
               </div>
-              <div className="min-w-max">
-                <a
-                  href="https://discord.gg/srgcTGccGe"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition-all hover:scale-105 hover:opacity-100 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833]/40 rounded-2xl relative overflow-hidden before:content-[''] before:absolute before:border-[6px] before:border-dashed before:border-primary-text-light/50 before:rounded-[22px] before:inset-[-5px] opacity-50"
-                >
-                  <p className="max-w-xs text-center">
-                    Join the next evolution of on-chain governance! Get in touch
-                    🤝
-                  </p>
-                  {/* <LockClosedIcon className="w-8" /> */}
-                </a>
-                <p className="mt-3 text-center">COMING SOON!</p>
+              <div>
+                <p className="transition-all text-5xl hover:scale-105 hover:opacity-100 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833]/40 rounded-2xl relative overflow-hidden before:content-[''] before:absolute before:border-[6px] before:border-dashed before:border-primary-text-light/50 before:rounded-[22px] before:inset-[-5px] opacity-50">
+                  🥷
+                </p>
+                <p className="mt-3 text-center text-primary-text-light">
+                  COMING SOON!
+                </p>
               </div>
             </div>
+
+            {/* Get in touch */}
+            <p className="flex flex-col gap-4 items-center justify-center">
+              Join the next evolution of on-chain governance!
+              <LinkButton
+                href="https://discord.gg/srgcTGccGe"
+                target="_blank"
+                variant="stroke"
+              >
+                Get in touch <span>🤝</span>
+              </LinkButton>
+            </p>
           </div>
         </div>
 
