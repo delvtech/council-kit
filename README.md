@@ -2,7 +2,11 @@
 
 # Council-Kit
 
-Council kit is the complete toolkit for scaffolding your own DAO using the council protocol. This repository is designed to be forkable for your own council protocol variant.
+Council kit is the complete toolkit for scaffolding your own DAO using the
+council protocol. This repository is designed to be forkable for your own
+council protocol variant.
+
+Get started with the [Docs](https://github.com/element-fi/council-kit/wiki).
 
 Requires `Node 14+`.
 
