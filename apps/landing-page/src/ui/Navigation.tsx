@@ -92,7 +92,7 @@ export function Navigation(): ReactElement {
         </li>
         <li>
           <LinkButton
-            href="https://www.youtube.com/@elementfinance5026/featured"
+            href="https://www.youtube.com/playlist?list=PLUz3k1KZhOta3D_1_G2OMTNxczvfXk5jn"
             target="_blank"
             variant="stroke"
           >
