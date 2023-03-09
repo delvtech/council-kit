@@ -34,7 +34,6 @@ function App(): ReactElement {
               <div className="flex gap-4">
                 <LinkButton
                   href="https://github.com/element-fi/council-kit/wiki/Getting-Started"
-                  target="_blank"
                   variant="primary"
                 >
                   <RocketLaunchIcon className="w-5" />
@@ -225,7 +224,10 @@ function App(): ReactElement {
               </li>
             </ol>
             <div className="flex flex-col items-stretch w-full gap-4 mt-3">
-              <LinkButton href="#" variant="primary">
+              <LinkButton
+                href="https://github.com/element-fi/council-kit/wiki/Getting-Started"
+                variant="primary"
+              >
                 <RocketLaunchIcon className="w-5" />
                 View the guide
               </LinkButton>
