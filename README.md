@@ -1,4 +1,4 @@
-![Council Kit Logo](https://i.imgur.com/I26rUIV.png)
+![Council Kit Logo](https://i.imgur.com/2n9k3Rv.png)
 
 # Council-Kit
 
