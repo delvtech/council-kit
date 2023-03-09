@@ -1,6 +1,8 @@
 # Council SDK
 
-A TypeScript SDK for interfacing with the [Council protocol](https://github.com/element-fi/council).
+A TypeScript SDK built with [ethers v5](https://docs.ethers.org/v5/) for interfacing with the [Council protocol](https://github.com/element-fi/council).
+
+> _[Ethers v6](https://docs.ethers.org/v6/) and/or [viem](https://github.com/wagmi-dev/viem) support TBD soon._
 
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
@@ -124,13 +126,76 @@ For more info, checkout the [Utils reference](#utils-1).
 
 ## Extending
 
-The Council SDK is purpose built to be extended and modified in a number of ways. For example, you could change the data sources for your models, add new model variations (e.g., new vault types), extend existing models with custom methods, or even modify the way context manages shared data sources.
+The Council SDK is purpose built to be extended and modified in a number of ways. Some examples of what you could do:
 
-We'll cover a few common extensions/modifications we anticipate builders making here.
+- Initiate models with a custom data source
+- Add new model variations (e.g., new vault types)
+- Extend existing models with custom properties or methods
+- Modify the way context manages shared data sources.
+
+
+The Council Kit monorepo is a great starting point to get all the src code including packages that haven't been published to a registry yet. However, making modifications directly to the source code can make it difficult to upgrade to newer versions. Extensions should be made either in a new package such as `@myprotocol/council-vaults` or inside app code.
+
+Once version 1.0.0 of the sdk has been published to NPM, this package can be removed from the monorepo and the version updated in dependent apps and packages from `*` to `^1.0.0`.
 
 ### Adding a new Voting Vault
 
+For this guide we'll assume you've already generated an [ethers v5 typechain](https://github.com/dethcrypto/TypeChain/tree/@typechain/ethers-v5@10.2.0/packages/target-ethers-v5) instances for your voting vault. See [@council/typechain](https://github.com/element-fi/council-kit/tree/main/packages/council-typechain) for an example.
 
+**1. Create a new DataSource class**
+
+To fetch data from the custom vault, add a new `DataSource` class for it.
+
+```ts
+import { FooVault, FooVault__factory } from "@foo/typechain";
+import { CouncilContext, VotingVaultContractDataSource } from "@council/sdk";
+
+// Extend the `VotingVaultContractDataSource` class to get data from on chain
+// and inherit the `queryVotePower` method.
+export class FooVaultDataSource extends VotingVaultContractDataSource<FooVault> {
+  constructor(address: string, context: CouncilContext) {
+    super(FooVault__factory.connect(address, context.provider), context);
+  }
+
+  // Add some custom data fetching methods taking advantage of util methods on
+  // the super class like `this.call()` and `this.getEvents()`
+  getFoo() {
+    return this.call("foo", []);
+  }
+}
+```
+
+**2. Create the Model class**
+
+Create a new `Model` class to transform some values into other `Model` instances and make it possible to initiate many model instances in different parts of the code that will all share the same data source instance and its cached data.
+
+```ts
+import { Voter } from "@council.typechain";
+import { FooVaultDataSouce } from ".FooVaultDataSouce";
+
+export class FooVault extends VotingVault<FooVaultDataSource> {
+  constructor(address: string, context: CouncilContext) {
+    super(address, context, {
+      name: "Foo Vault",
+      dataSource: context.registerDataSource(
+        { address },
+        new FooVaultDataSource(address, context),
+      ),
+    });
+  }
+
+  // add some methods to use in an app
+  async getFoo() {
+    const results = this.dataSource.getFoo();
+    return results.map((user, amount) => {
+      return {
+        amount: amount.toString(),
+        user: new Voter(user, this.context.provider),
+      };
+    });
+  }
+}
+```
 
 ## Reference
 
