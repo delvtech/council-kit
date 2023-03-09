@@ -289,20 +289,6 @@ function App(): ReactElement {
                   COMING SOON!
                 </p>
               </div>
-              {/* <div>
-                <a
-                  href="https://discord.gg/srgcTGccGe"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition-all hover:scale-105 hover:opacity-100 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833]/40 rounded-2xl relative overflow-hidden before:content-[''] before:absolute before:border-[6px] before:border-dashed before:border-primary-text-light/50 before:rounded-[22px] before:inset-[-5px] opacity-50"
-                >
-                  <p className="max-w-xs text-center">
-                    Join the next evolution of on-chain governance! Get in touch
-                    🤝
-                  </p>
-                </a>
-                <p className="mt-3 text-center">COMING SOON!</p>
-              </div> */}
             </div>
 
             {/* Get in touch */}
@@ -311,10 +297,9 @@ function App(): ReactElement {
               <LinkButton
                 href="https://discord.gg/srgcTGccGe"
                 target="_blank"
-                className="max-w-xs text-center"
                 variant="stroke"
               >
-                Get in touch 🤝
+                Get in touch <span>🤝</span>
               </LinkButton>
             </p>
           </div>
