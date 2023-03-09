@@ -253,7 +253,7 @@ function App(): ReactElement {
 
         {/* PROJECTS USING COUNCIL */}
         <div className="relative">
-          <div className="relative max-w-6xl box-content px-[4vw] mx-auto pt-20 pb-28 border-t border-primary-text/30">
+          <div className="relative max-w-6xl box-content px-[4vw] mx-auto py-20 border-t border-primary-text/30">
             <h2 className="mb-16 text-4xl text-center">
               Projects using Council
             </h2>
