@@ -60,18 +60,13 @@ function App(): ReactElement {
         <div className="relative">
           <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-black h-96"></div>
           <div className="relative max-w-6xl box-content px-[4vw] mx-auto lg:mx-auto py-20">
-            <div className="flex flex-col gap-6 mx-auto mb-10 md:max-w-xl md:items-center md:mb-20">
+            <div className="flex flex-col gap-6 mx-auto mb-10 md:max-w-lg md:items-center md:mb-20">
               <h2 className="text-4xl">What is Council?</h2>
               <p className="text-lg">
                 Council represents the next evolution of on-chain governance,
                 allowing anyone to build adaptable governance systems that meet
                 both the practical needs of day-to-day activities and the
                 required flexibility of long-term governance.
-              </p>
-              <p className="text-lg">
-                The Council Protocol and Kit enable builders to use the security
-                of on-chain governance while allowing for unprecedented
-                modularity and flexibility.
               </p>
             </div>
 
