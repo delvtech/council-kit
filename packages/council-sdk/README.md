@@ -159,7 +159,7 @@ export class FooVaultDataSource extends VotingVaultContractDataSource<FooVault> 
   // Add some custom data fetching methods taking advantage of util methods on
   // the super class like `this.call()` and `this.getEvents()`
   getAmount(address: string) {
-    const = [amount, delegate] this.call("amount", [address]);
+    const [amount, delegate] = this.call("amount", [address]);
     return {
       amount: amount.toString(),
       delegate,
