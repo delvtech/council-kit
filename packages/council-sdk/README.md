@@ -133,7 +133,6 @@ The Council SDK is purpose built to be extended and modified in a number of ways
 - Extend existing models with custom properties or methods
 - Modify the way context manages shared data sources.
 
-
 The Council Kit monorepo is a great starting point to get all the src code including packages that haven't been published to a registry yet. However, making modifications directly to the source code can make it difficult to upgrade to newer versions. Extensions should be made either in a new package such as `@myprotocol/council-vaults` or inside app code.
 
 Once version 1.0.0 of the sdk has been published to NPM, this package can be removed from the monorepo and the version updated in dependent apps and packages from `*` to `^1.0.0`.
@@ -159,8 +158,12 @@ export class FooVaultDataSource extends VotingVaultContractDataSource<FooVault> 
 
   // Add some custom data fetching methods taking advantage of util methods on
   // the super class like `this.call()` and `this.getEvents()`
-  getFoo() {
-    return this.call("foo", []);
+  getAmount(address: string) {
+    const = [amount, delegate] this.call("amount", [address]);
+    return {
+      amount: amount.toString(),
+      delegate,
+    };
   }
 }
 ```
@@ -185,14 +188,12 @@ export class FooVault extends VotingVault<FooVaultDataSource> {
   }
 
   // add some methods to use in an app
-  async getFoo() {
-    const results = this.dataSource.getFoo();
-    return results.map(({ user, amount }) => {
-      return {
-        amount: amount.toString(),
-        user: new Voter(user, this.context.provider),
-      };
-    });
+  async getAmount() {
+    const { amount, delegate } = this.dataSource.getAmount();
+    return {
+      amount,
+      delegate: new Voter(delegate, this.context.provider),
+    };
   }
 }
 ```
