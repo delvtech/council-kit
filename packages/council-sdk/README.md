@@ -171,7 +171,7 @@ Create a new `Model` class to transform some values into other `Model` instances
 
 ```ts
 import { Voter } from "@council.typechain";
-import { FooVaultDataSouce } from ".FooVaultDataSouce";
+import { FooVaultDataSouce } from "./FooVaultDataSouce";
 
 export class FooVault extends VotingVault<FooVaultDataSource> {
   constructor(address: string, context: CouncilContext) {
@@ -187,7 +187,7 @@ export class FooVault extends VotingVault<FooVaultDataSource> {
   // add some methods to use in an app
   async getFoo() {
     const results = this.dataSource.getFoo();
-    return results.map((user, amount) => {
+    return results.map(({ user, amount }) => {
       return {
         amount: amount.toString(),
         user: new Voter(user, this.context.provider),
