@@ -48,7 +48,7 @@ A participant in Council
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:16](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Voter.ts#L16)
+[packages/council-sdk/src/models/Voter.ts:16](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Voter.ts#L16)
 
 ## Properties
 
@@ -58,7 +58,7 @@ A participant in Council
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:14](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Voter.ts#L14)
+[packages/council-sdk/src/models/Voter.ts:14](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Voter.ts#L14)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -86,13 +86,13 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
 ### getParticipation
 
-▸ **getParticipation**(`votingContractAddress`, `votingVaultAddresses`): `Promise`<[`number`, `number`]\>
+▸ **getParticipation**(`votingContractAddress`, `vaults`): `Promise`<[`number`, `number`]\>
 
 Get the number of proposals this Voter has voted on and the number of
 proposals that they were able to vote on. If the numbers are the same, then
@@ -103,7 +103,7 @@ this Voter has voted on every proposal they were able to.
 | Name | Type |
 | :------ | :------ |
 | `votingContractAddress` | `string` |
-| `votingVaultAddresses` | `string`[] |
+| `vaults` | (`string` \| [`VotingVault`](VotingVault.md)<[`VotingVaultDataSource`](../interfaces/VotingVaultDataSource.md)\>)[] |
 
 #### Returns
 
@@ -111,7 +111,7 @@ this Voter has voted on every proposal they were able to.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:59](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Voter.ts#L59)
+[packages/council-sdk/src/models/Voter.ts:61](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Voter.ts#L61)
 
 ___
 
@@ -133,7 +133,7 @@ Get the casted votes for this Voter in a given Voting Contract
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:45](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Voter.ts#L45)
+[packages/council-sdk/src/models/Voter.ts:47](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Voter.ts#L47)
 
 ___
 
@@ -147,7 +147,7 @@ Get the total voting power for this Voter from a given list of vaults.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `vaults` | `string`[] | - |
+| `vaults` | (`string` \| [`VotingVault`](VotingVault.md)<[`VotingVaultDataSource`](../interfaces/VotingVaultDataSource.md)\>)[] | - |
 | `atBlock?` | `number` | - |
 | `extraData?` | `BytesLike`[] | ABI encoded optional extra data used by some vaults, such as merkle proofs. |
 
@@ -157,4 +157,4 @@ Get the total voting power for this Voter from a given list of vaults.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:30](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Voter.ts#L30)
+[packages/council-sdk/src/models/Voter.ts:30](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Voter.ts#L30)
