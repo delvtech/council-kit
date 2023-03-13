@@ -27,7 +27,7 @@ The total amount of tokens granted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:264](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L264)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:269](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L269)
 
 ___
 
@@ -39,7 +39,7 @@ The address that can vote with this grant's voting power.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:295](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L295)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:300](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L300)
 
 ___
 
@@ -52,7 +52,7 @@ remaining balance can be withdrawn.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:280](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L280)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:285](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L285)
 
 ___
 
@@ -65,7 +65,7 @@ grant. This is set when a grant is accepted with the `acceptGrant` method.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:301](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L301)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:306](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L306)
 
 ___
 
@@ -77,7 +77,7 @@ The block number of when the grant starts.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:274](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L274)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:279](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L279)
 
 ___
 
@@ -89,7 +89,7 @@ The block number after which any withdrawable tokens can be withdrawn.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:285](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L285)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:290](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L290)
 
 ___
 
@@ -101,7 +101,7 @@ The voting power provided by the grant.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:290](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L290)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:295](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L295)
 
 ___
 
@@ -113,4 +113,4 @@ The amount of tokens that have been withdrawn.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts:269](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/datasources/VotingVault/VestingVaultContractDataSource.ts#L269)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:274](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L274)
