@@ -7,12 +7,21 @@ import { TransactionOptions } from "src/datasources/base/contract/ContractDataSo
 import { TokenDataSource } from "src/datasources/token/TokenDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
+const TYPE = "LockingVault";
+
 /**
  * A DataSource with methods for making cached calls to a `LockingVault`
  * contract from the Council protocol.
  * @category Data Sources
  */
 export class LockingVaultContractDataSource extends VotingVaultContractDataSource<LockingVault> {
+  /**
+   * A field that can be used for more specific filtering when registering an
+   * instance of this data source with the council context.
+   */
+  static type = TYPE;
+  type = TYPE;
+
   constructor(address: string, context: CouncilContext) {
     super(LockingVault__factory.connect(address, context.provider), context);
     this.context = context;

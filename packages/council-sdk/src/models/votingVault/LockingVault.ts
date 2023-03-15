@@ -29,7 +29,7 @@ export class LockingVault extends VotingVault<LockingVaultContractDataSource> {
       dataSource:
         options?.dataSource ??
         context.registerDataSource(
-          { address },
+          { address, type: LockingVaultContractDataSource.type },
           new LockingVaultContractDataSource(address, context),
         ),
     });
