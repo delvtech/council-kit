@@ -32,7 +32,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
       dataSource:
         options?.dataSource ??
         context.registerDataSource(
-          { address },
+          { address, type: VestingVaultContractDataSource.type },
           new VestingVaultContractDataSource(address, context),
         ),
     });
