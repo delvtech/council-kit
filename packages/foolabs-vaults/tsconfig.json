@@ -1,0 +1,13 @@
+{
+  "extends": "@council/tsconfig/base.json",
+  "include": ["src"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["src/*"]
+    },
+    "resolveJsonModule": true
+  }
+}

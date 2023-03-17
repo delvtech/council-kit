@@ -1,0 +1,30 @@
+{
+  "name": "@foolabs/vaults",
+  "version": "1.0.0",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/main.js",
+  "types": "dist/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "alias": {
+    "src": "./src"
+  },
+  "scripts": {
+    "build": "parcel build"
+  },
+  "dependencies": {
+    "@council/typechain": "*",
+    "@foolabs/typechain": "*"
+  },
+  "devDependencies": {
+    "@council/sdk": "*",
+    "ethers": "^5.7.2",
+    "parcel": "^2.8.0"
+  },
+  "peerDependencies": {
+    "@council/sdk": "*",
+    "ethers": ">=5.6"
+  }
+}
