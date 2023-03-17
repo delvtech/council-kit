@@ -4,7 +4,11 @@
   "description": "",
   "scripts": {
     "start": "hardhat node",
-    "deploy": "hardhat run scripts/deploy.ts --network localhost"
+    "deploy": "hardhat run scripts/deploy.ts --network localhost",
+    "addWin": "hardhat run --network localhost scripts/addWin.ts",
+    "addLoss": "hardhat run scripts/addLoss.ts --network localhost",
+    "getResults": "hardhat run scripts/getResults.ts --network localhost",
+    "getVotingPower": "hardhat run scripts/getVotingPower.ts --network localhost"
   },
   "dependencies": {
     "@council/sdk": "*",
