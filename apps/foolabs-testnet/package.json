@@ -1,0 +1,21 @@
+{
+  "name": "foolabs-testnet",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "hardhat node",
+    "deploy": "hardhat run scripts/deploy.ts --network localhost"
+  },
+  "dependencies": {
+    "@council/sdk": "*",
+    "@foolabs/typechain": "*",
+    "@nomiclabs/hardhat-ethers": "^2.2.2",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.13.0"
+  },
+  "devDependencies": {
+    "@council/tsconfig": "*",
+    "tsc": "^2.0.4",
+    "typescript": "^4.9.5"
+  }
+}
