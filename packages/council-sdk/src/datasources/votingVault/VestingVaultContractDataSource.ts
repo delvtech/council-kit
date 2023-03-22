@@ -5,6 +5,8 @@ import { CouncilContext } from "src/context/context";
 import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
+const TYPE = "VestingVault";
+
 /**
  * A DataSource with methods for making cached calls to a `VestingVault`
  * contract from the Council protocol.
@@ -12,6 +14,13 @@ import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
  */
 
 export class VestingVaultContractDataSource extends VotingVaultContractDataSource<VestingVault> {
+  /**
+   * A field that can be used for more specific filtering when registering an
+   * instance of this data source with the council context.
+   */
+  static type = TYPE;
+  type = TYPE;
+
   /**
    * Create a new `VestingVaultContractDataSource` instance.
    * @param vault - A `VestingVault` instance from the `@council/typechain`

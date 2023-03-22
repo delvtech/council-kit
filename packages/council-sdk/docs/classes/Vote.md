@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/models/Vote.ts:16](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Vote.ts#L16)
+[packages/council-sdk/src/models/Vote.ts:16](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Vote.ts#L16)
 
 ## Properties
 
@@ -56,7 +56,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/models/Vote.ts:12](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Vote.ts#L12)
+[packages/council-sdk/src/models/Vote.ts:12](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Vote.ts#L12)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Model.ts#L20)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Vote.ts:11](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Vote.ts#L11)
+[packages/council-sdk/src/models/Vote.ts:11](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Vote.ts#L11)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Vote.ts:13](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Vote.ts#L13)
+[packages/council-sdk/src/models/Vote.ts:13](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Vote.ts#L13)
 
 ___
 
@@ -114,4 +114,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Vote.ts:14](https://github.com/element-fi/council-monorepo/blob/887341f/packages/council-sdk/src/models/Vote.ts#L14)
+[packages/council-sdk/src/models/Vote.ts:14](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Vote.ts#L14)

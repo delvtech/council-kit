@@ -27,7 +27,7 @@ export class GSCVault extends VotingVault<GSCVaultContractDataSource> {
       dataSource:
         options?.dataSource ??
         context.registerDataSource(
-          { address },
+          { address, type: GSCVaultContractDataSource.type },
           new GSCVaultContractDataSource(address, context),
         ),
     });

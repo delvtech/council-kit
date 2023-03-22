@@ -5,12 +5,21 @@ import { CouncilContext } from "src/context/context";
 import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { VotingVaultContractDataSource } from "./VotingVaultContractDataSource";
 
+const TYPE = "GSCVault";
+
 /**
  * A DataSource with methods for making cached calls to a `GSCVault` contract
  * from the Council protocol.
  * @category Data Sources
  */
 export class GSCVaultContractDataSource extends VotingVaultContractDataSource<GSCVault> {
+  /**
+   * A field that can be used for more specific filtering when registering an
+   * instance of this data source with the council context.
+   */
+  static type = TYPE;
+  type = TYPE;
+
   constructor(address: string, context: CouncilContext) {
     super(GSCVault__factory.connect(address, context.provider), context);
   }
