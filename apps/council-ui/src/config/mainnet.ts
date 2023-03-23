@@ -19,7 +19,6 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "Allows users to deposit their tokens in exchange for voting power, which can also be delegated to a different user.",
         address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD",
         type: "FrozenLockingVault",
-        abi: {},
         descriptionURL:
           "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/locking-vault",
       },
@@ -31,7 +30,6 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "Allows locked / vesting positions to still have voting power in the governance system by using a defined multiplier for the vested tokens over unvested.",
         type: "VestingVault",
-        abi: {},
         descriptionURL:
           "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/vesting-vault",
       },
@@ -74,6 +72,43 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "The proceeds of this grant will enable us to build a protocol offering competitive, low-cost, fixed-rate borrowing on Compound Finance and Aave. Component has been an active contributor to Element Finance since early 2021 and will continue to launch new integrations for fixed rates on Element Finance. This grant ensures a long term relationship where Component will be part of growing, generating revenue and decentralizing the Element DAO.",
       },
+      4: {
+        descriptionURL:
+          "https://snapshot.org/#/elfi.eth/proposal/0xcedbf99283b0dc2c32184cc04a66839ff483621ee661da75a421931297ac7788",
+        targets: [],
+        calldatas: [],
+        title:
+          "EGP-22: Removal of Non-Contributor Grants from the Vesting Vault",
+        sentenceSummary:
+          "Removing the Element Finance team-allocated token grants for those who left Element Finance before their vesting cliffs, for team members who partially vested, or for team members who left before the vesting dates were reached.",
+        paragraphSummary:
+          "This proposal formalizes a solution for the removal/reclaiming of Element Finance team members-allocated token grants who departed prior to reaching the vesting vault smart contract-defined vesting cliffs, partially vested, and/or before the vesting dates were reached.",
+      },
+      5: {
+        descriptionURL:
+          "https://snapshot.org/#/elfi.eth/proposal/0x7c35f280e01513b65fe0a3f2abdf2d8cd28eb019c14ad732b1cf25386a52a451",
+        targets: [],
+        calldatas: [],
+        title:
+          "EGP-23: Convert timestamps to blocknumbers in Deployed Vesting Vault",
+        sentenceSummary:
+          "Fix an identified bug within the deployed Vesting Vault Contract regarding the token grant configurations for core contributors, advisors, and investors.",
+        paragraphSummary:
+          "It was identified that the grants in the Vesting vault contract were misconfigured during deployment last March 31, 2022. The time in which the grants will start vesting was set up using Unix time stamps in seconds instead of block numbers. The contract expects block numbers as the threshold when funds will start dispersing. The difference between block numbers and time stamps is on an order of magnitude. This has caused all grants to not start until the year ~2630.",
+      },
+      // TODO: Uncomment this once this goes live
+      // 6: {
+      //   descriptionURL:
+      //     "https://snapshot.org/#/elfi.eth/proposal/0x0bebfeaada03ab21c52917ff5f0347fa29ce7a45a0a55a48b5382bf02963331f",
+      //   targets: [],
+      //   calldatas: [],
+      //   title:
+      //     "EGP-24: Reclaim (Clawback) unclaimed voting rights that have been distributed",
+      //   sentenceSummary:
+      //     "Reclaim the unclaimed voting rights (ELFI) from the initial distribution event and direct it back to the DAO Treasury.",
+      //   paragraphSummary:
+      //     "On March 31st, 2022 the Element Labs team distributed voting rights to various different parties, users, and individuals deemed qualified to participate in the DAO operations and voting of the newly formed Element DAO. Close to a year later, a decent % of the distributed voting rights have still not been claimed and utilized as intended. This proposal is to suggest that the unclaimed voting rights ought to be reclaimed by the Element DAO to be re-distributed into the right hands via grants, participants, DAO contributors, liquidity programs, rewards, bounties, etc.",
+      // },
     },
   },
 
@@ -91,7 +126,6 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "The Governance Steering Council (GSC) vault gives one vote to each member that has reached an established threshold of delegated voting power defined by the DAO.",
         paragraphSummary:
           "The Governance Steering Council (GSC) vault gives one vote to each member that has reached an established threshold of delegated voting power defined by the DAO. Council members can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
-        abi: {},
         descriptionURL:
           "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/governance-steering-council-gsc-vault",
       },
