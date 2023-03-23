@@ -96,18 +96,19 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "It was identified that the grants in the Vesting vault contract were misconfigured during deployment last March 31, 2022. The time in which the grants will start vesting was set up using Unix time stamps in seconds instead of block numbers. The contract expects block numbers as the threshold when funds will start dispersing. The difference between block numbers and time stamps is on an order of magnitude. This has caused all grants to not start until the year ~2630.",
       },
-      6: {
-        descriptionURL:
-          "https://snapshot.org/#/elfi.eth/proposal/0x0bebfeaada03ab21c52917ff5f0347fa29ce7a45a0a55a48b5382bf02963331f",
-        targets: [],
-        calldatas: [],
-        title:
-          "EGP-24: Reclaim (Clawback) unclaimed voting rights that have been distributed",
-        sentenceSummary:
-          "Reclaim the unclaimed voting rights (ELFI) from the initial distribution event and direct it back to the DAO Treasury.",
-        paragraphSummary:
-          "On March 31st, 2022 the Element Labs team distributed voting rights to various different parties, users, and individuals deemed qualified to participate in the DAO operations and voting of the newly formed Element DAO. Close to a year later, a decent % of the distributed voting rights have still not been claimed and utilized as intended. This proposal is to suggest that the unclaimed voting rights ought to be reclaimed by the Element DAO to be re-distributed into the right hands via grants, participants, DAO contributors, liquidity programs, rewards, bounties, etc.",
-      },
+      // TODO: Uncomment this once this goes live
+      // 6: {
+      //   descriptionURL:
+      //     "https://snapshot.org/#/elfi.eth/proposal/0x0bebfeaada03ab21c52917ff5f0347fa29ce7a45a0a55a48b5382bf02963331f",
+      //   targets: [],
+      //   calldatas: [],
+      //   title:
+      //     "EGP-24: Reclaim (Clawback) unclaimed voting rights that have been distributed",
+      //   sentenceSummary:
+      //     "Reclaim the unclaimed voting rights (ELFI) from the initial distribution event and direct it back to the DAO Treasury.",
+      //   paragraphSummary:
+      //     "On March 31st, 2022 the Element Labs team distributed voting rights to various different parties, users, and individuals deemed qualified to participate in the DAO operations and voting of the newly formed Element DAO. Close to a year later, a decent % of the distributed voting rights have still not been claimed and utilized as intended. This proposal is to suggest that the unclaimed voting rights ought to be reclaimed by the Element DAO to be re-distributed into the right hands via grants, participants, DAO contributors, liquidity programs, rewards, bounties, etc.",
+      // },
     },
   },
 
