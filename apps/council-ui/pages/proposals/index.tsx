@@ -95,13 +95,19 @@ function useProposalsPageData(
                 estimateFutureDates: true,
               })
             : null;
+          const lastCall = await proposal.getLastCallBlock();
+          const lastCallDate = lastCall
+            ? await getBlockDate(lastCall, context.provider, {
+                estimateFutureDates: true,
+              })
+            : null;
           const currentQuorum = await proposal.getCurrentQuorum();
           const vote = account ? await proposal.getVote(account) : null;
           return {
             status: getProposalStatus({
               isExecuted: await proposal.getIsExecuted(),
               currentQuorum,
-              endsAtDate: votingEnds,
+              lastCallDate,
               requiredQuorum: await proposal.getRequiredQuorum(),
               results: await proposal.getResults(),
             }),

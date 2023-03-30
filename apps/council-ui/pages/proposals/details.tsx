@@ -99,13 +99,23 @@ export default function ProposalPage(): ReactElement {
   return (
     <Page>
       <div className="space-y-2">
-        <Breadcrumbs
-          crumbs={[{ href: Routes.PROPOSALS, content: "All proposals" }]}
-          currentPage={proposalTitle}
-        />
+        {status === "loading" ? (
+          <Skeleton containerClassName="block w-1/3" />
+        ) : (
+          <Breadcrumbs
+            crumbs={[{ href: Routes.PROPOSALS, content: "All proposals" }]}
+            currentPage={proposalTitle}
+          />
+        )}
         <div className="flex flex-col w-full md:flex-row gap-y-8">
-          <div className="flex flex-col md:max-w-lg">
-            <h1 className="mb-1 text-4xl font-bold">{proposalTitle}</h1>
+          <div className="flex flex-col w-full md:max-w-lg">
+            <h1 className="mb-1 text-4xl font-bold w-full">
+              {status === "loading" ? (
+                <Skeleton className="w-full h-16" />
+              ) : (
+                proposalTitle
+              )}
+            </h1>
             {data?.descriptionURL && (
               <ExternalLink href={data.descriptionURL} iconSize={18}>
                 Learn more about this proposal
@@ -261,9 +271,9 @@ function useProposalDetailsPageData(
             ? await getBlockDate(createdAtBlock, provider)
             : null;
 
-          const endsAtBlock = await proposal.getExpirationBlock();
-          const endsAtDate = endsAtBlock
-            ? await getBlockDate(endsAtBlock, provider, {
+          const expirationBlock = await proposal.getExpirationBlock();
+          const endsAtDate = expirationBlock
+            ? await getBlockDate(expirationBlock, context.provider, {
                 estimateFutureDates: true,
               })
             : null;
@@ -275,9 +285,9 @@ function useProposalDetailsPageData(
               })
             : null;
 
-          const lastCallAtBlock = await proposal.getLastCallBlock();
-          const lastCallAtDate = lastCallAtBlock
-            ? await getBlockDate(lastCallAtBlock, provider, {
+          const lastCallBlock = await proposal.getLastCallBlock();
+          const lastCallAtDate = lastCallBlock
+            ? await getBlockDate(lastCallBlock, provider, {
                 estimateFutureDates: true,
               })
             : null;
@@ -299,7 +309,7 @@ function useProposalDetailsPageData(
             votingContractName,
             status: getProposalStatus({
               isExecuted: await proposal.getIsExecuted(),
-              endsAtDate,
+              lastCallDate: lastCallAtDate,
               currentQuorum,
               requiredQuorum,
               results,
@@ -312,7 +322,7 @@ function useProposalDetailsPageData(
             createdAtDate,
             endsAtDate,
             unlockedAtDate,
-            lastCallAtDate,
+            lastCallAtDate: lastCallAtDate,
             votes: await proposal.getVotes(),
             voterEnsRecords,
             createdTransactionHash,
