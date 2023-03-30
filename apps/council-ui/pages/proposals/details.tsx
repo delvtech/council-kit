@@ -99,13 +99,23 @@ export default function ProposalPage(): ReactElement {
   return (
     <Page>
       <div className="space-y-2">
-        <Breadcrumbs
-          crumbs={[{ href: Routes.PROPOSALS, content: "All proposals" }]}
-          currentPage={proposalTitle}
-        />
+        {status === "loading" ? (
+          <Skeleton containerClassName="block w-1/3" />
+        ) : (
+          <Breadcrumbs
+            crumbs={[{ href: Routes.PROPOSALS, content: "All proposals" }]}
+            currentPage={proposalTitle}
+          />
+        )}
         <div className="flex flex-col w-full md:flex-row gap-y-8">
-          <div className="flex flex-col md:max-w-lg">
-            <h1 className="mb-1 text-4xl font-bold">{proposalTitle}</h1>
+          <div className="flex flex-col w-full md:max-w-lg">
+            <h1 className="mb-1 text-4xl font-bold w-full">
+              {status === "loading" ? (
+                <Skeleton className="w-full h-16" />
+              ) : (
+                proposalTitle
+              )}
+            </h1>
             {data?.descriptionURL && (
               <ExternalLink href={data.descriptionURL} iconSize={18}>
                 Learn more about this proposal
