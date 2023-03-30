@@ -261,9 +261,9 @@ function useProposalDetailsPageData(
             ? await getBlockDate(createdAtBlock, provider)
             : null;
 
-          const lastCallBlock = await proposal.getLastCallBlock();
-          const endsAtDate = lastCallBlock
-            ? await getBlockDate(lastCallBlock, provider, {
+          const expirationBlock = await proposal.getExpirationBlock();
+          const endsAtDate = expirationBlock
+            ? await getBlockDate(expirationBlock, context.provider, {
                 estimateFutureDates: true,
               })
             : null;
@@ -275,9 +275,9 @@ function useProposalDetailsPageData(
               })
             : null;
 
-          const lastCallAtBlock = await proposal.getLastCallBlock();
-          const lastCallAtDate = lastCallAtBlock
-            ? await getBlockDate(lastCallAtBlock, provider, {
+          const lastCallBlock = await proposal.getLastCallBlock();
+          const lastCallAtDate = lastCallBlock
+            ? await getBlockDate(lastCallBlock, provider, {
                 estimateFutureDates: true,
               })
             : null;
@@ -299,7 +299,7 @@ function useProposalDetailsPageData(
             votingContractName,
             status: getProposalStatus({
               isExecuted: await proposal.getIsExecuted(),
-              lastCallDate: endsAtDate,
+              lastCallDate: lastCallAtDate,
               currentQuorum,
               requiredQuorum,
               results,
@@ -312,7 +312,7 @@ function useProposalDetailsPageData(
             createdAtDate,
             endsAtDate,
             unlockedAtDate,
-            lastCallAtDate,
+            lastCallAtDate: lastCallAtDate,
             votes: await proposal.getVotes(),
             voterEnsRecords,
             createdTransactionHash,
