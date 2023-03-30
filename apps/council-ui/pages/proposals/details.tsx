@@ -94,7 +94,7 @@ export default function ProposalPage(): ReactElement {
     return <ErrorMessage error={error} />;
   }
 
-  const proposalTitle = getProposalTitle(data, status, id);
+  const proposalTitle = data?.title ?? `Proposal ${id}`;
 
   return (
     <Page>
@@ -109,7 +109,13 @@ export default function ProposalPage(): ReactElement {
         )}
         <div className="flex flex-col w-full md:flex-row gap-y-8">
           <div className="flex flex-col w-full md:max-w-lg">
-            <h1 className="mb-1 text-4xl font-bold w-full">{proposalTitle}</h1>
+            <h1 className="mb-1 text-4xl font-bold w-full">
+              {status === "loading" ? (
+                <Skeleton className="w-full h-16" />
+              ) : (
+                proposalTitle
+              )}
+            </h1>
             {data?.descriptionURL && (
               <ExternalLink href={data.descriptionURL} iconSize={18}>
                 Learn more about this proposal
@@ -225,22 +231,6 @@ interface ProposalDetailsPageData {
   title?: string;
   paragraphSummary: string | null;
   executedTransactionHash: string | null;
-}
-
-function getProposalTitle(
-  data: ProposalDetailsPageData | undefined,
-  status: "error" | "success" | "loading",
-  id: number,
-) {
-  if (status === "loading") {
-    return <Skeleton className="w-full h-16" />;
-  }
-
-  if (data?.title) {
-    return data.title;
-  }
-
-  return `Proposal ${id}`;
 }
 
 function useProposalDetailsPageData(
