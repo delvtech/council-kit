@@ -299,7 +299,7 @@ function useProposalDetailsPageData(
             votingContractName,
             status: getProposalStatus({
               isExecuted: await proposal.getIsExecuted(),
-              endsAtDate,
+              lastCallDate: endsAtDate,
               currentQuorum,
               requiredQuorum,
               results,

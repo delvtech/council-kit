@@ -101,7 +101,7 @@ function useProposalsPageData(
             status: getProposalStatus({
               isExecuted: await proposal.getIsExecuted(),
               currentQuorum,
-              endsAtDate: endsAtDate,
+              lastCallDate: endsAtDate,
               requiredQuorum: await proposal.getRequiredQuorum(),
               results: await proposal.getResults(),
             }),

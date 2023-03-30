@@ -10,7 +10,7 @@ export type ProposalStatus =
 
 export interface GetProposalStatusOptions {
   isExecuted: boolean;
-  endsAtDate: Date | null;
+  lastCallDate: Date | null;
   currentQuorum: string;
   requiredQuorum: string | null;
   results: VoteResults;
@@ -18,7 +18,7 @@ export interface GetProposalStatusOptions {
 
 export function getProposalStatus({
   isExecuted,
-  endsAtDate,
+  lastCallDate,
   currentQuorum,
   requiredQuorum,
   results,
@@ -27,11 +27,11 @@ export function getProposalStatus({
     return "EXECUTED";
   }
 
-  if (!endsAtDate || !requiredQuorum) {
+  if (!lastCallDate || !requiredQuorum) {
     return "UNKNOWN";
   }
 
-  if (new Date() > endsAtDate) {
+  if (new Date() > lastCallDate) {
     if (
       +currentQuorum >= +requiredQuorum &&
       parseEther(results.yes).gt(parseEther(results.no))
