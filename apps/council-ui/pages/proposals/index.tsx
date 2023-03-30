@@ -89,9 +89,9 @@ function useProposalsPageData(
         allProposals.map(async (proposal) => {
           const proposalConfig = proposalsConfig[proposal.id];
           const createdBlock = await proposal.getCreatedBlock();
-          const expirationBlock = await proposal.getExpirationBlock();
-          const votingEnds = expirationBlock
-            ? await getBlockDate(expirationBlock, context.provider, {
+          const lastCall = await proposal.getLastCallBlock();
+          const endsAtDate = lastCall
+            ? await getBlockDate(lastCall, context.provider, {
                 estimateFutureDates: true,
               })
             : null;
@@ -101,7 +101,7 @@ function useProposalsPageData(
             status: getProposalStatus({
               isExecuted: await proposal.getIsExecuted(),
               currentQuorum,
-              endsAtDate: votingEnds,
+              endsAtDate: endsAtDate,
               requiredQuorum: await proposal.getRequiredQuorum(),
               results: await proposal.getResults(),
             }),
@@ -111,7 +111,7 @@ function useProposalsPageData(
             created:
               createdBlock &&
               (await getBlockDate(createdBlock, context.provider)),
-            votingEnds,
+            votingEnds: endsAtDate,
             currentQuorum,
             ballot: vote && parseEther(vote.power).gt(0) ? vote.ballot : null,
             sentenceSummary: proposalConfig?.sentenceSummary,

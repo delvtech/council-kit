@@ -261,9 +261,9 @@ function useProposalDetailsPageData(
             ? await getBlockDate(createdAtBlock, provider)
             : null;
 
-          const endsAtBlock = await proposal.getExpirationBlock();
-          const endsAtDate = endsAtBlock
-            ? await getBlockDate(endsAtBlock, provider, {
+          const lastCallBlock = await proposal.getLastCallBlock();
+          const endsAtDate = lastCallBlock
+            ? await getBlockDate(lastCallBlock, provider, {
                 estimateFutureDates: true,
               })
             : null;
