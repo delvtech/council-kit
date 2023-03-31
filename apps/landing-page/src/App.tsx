@@ -327,7 +327,7 @@ function App(): ReactElement {
                 </p>
               </a>
               <a
-                href="https://blog.element.fi/voting-vaults-a-new-defi-and-governance-primitive-2/"
+                href="https://blog.delv.tech/voting-vaults-a-new-defi-and-governance-primitive-2/"
                 target="_blank"
                 rel="noreferrer"
                 className="group border border-primary-text-light/20 p-[1px] rounded-2xl bg-[#51466F]/20 hover:border-primary-text-light/50 hover:bg-[#51466F]/40 transition-all"
@@ -350,7 +350,7 @@ function App(): ReactElement {
                 </p>
               </a>
               <a
-                href="https://blog.element.fi/the-governance-steering-council/"
+                href="https://blog.delv.tech/the-governance-steering-council/"
                 target="_blank"
                 rel="noreferrer"
                 className="group border border-primary-text-light/20 p-[1px] rounded-2xl bg-[#51466F]/20 hover:border-primary-text-light/50 hover:bg-[#51466F]/40 transition-all"
@@ -373,7 +373,7 @@ function App(): ReactElement {
                 </p>
               </a>
               <a
-                href="https://blog.element.fi/an-introduction-to-elements-governance-model/"
+                href="https://blog.delv.tech/an-introduction-to-elements-governance-model/"
                 target="_blank"
                 rel="noreferrer"
                 className="group border border-primary-text-light/20 p-[1px] rounded-2xl bg-[#51466F]/20 hover:border-primary-text-light/50 hover:bg-[#51466F]/40 transition-all"

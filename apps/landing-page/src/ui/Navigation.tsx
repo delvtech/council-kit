@@ -55,7 +55,7 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <a
-              href="https://blog.element.fi/"
+              href="https://blog.delv.tech/"
               target="_blank"
               rel="noreferrer"
               className="whitespace-nowrap flex gap-2 items-center px-8 h-11 text-black transition-all hover:bg-primary hover:text-white [&>*]:hover:fill-white"
@@ -102,7 +102,7 @@ export function Navigation(): ReactElement {
         </li>
         <li>
           <LinkButton
-            href="https://blog.element.fi/"
+            href="https://blog.delv.tech/"
             target="_blank"
             variant="stroke"
           >
