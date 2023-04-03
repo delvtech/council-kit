@@ -119,6 +119,18 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "This EGP is focused on enabling the transferability of ELFI to allow for the changing of hands of voters. It has been close to 1 year since the release of ELFI, and sufficient (necessary) progress has been made in the development of the DAO. Now is the time for all of the participants within the DAO and the users outside of the DAO looking in to be given the ability to freely choose how they want to express their form of participation.",
       },
+      8: {
+        descriptionURL:
+          "https://snapshot.org/#/elfi.eth/proposal/0x38b141145f27e23753978ebe8987059c49986579d1b7dcbe1a6d6f8743bff8f7",
+        targets: [],
+        calldatas: [],
+        title:
+          "EGP-5: Enable Temporary Protocol Incentives for Liquidity Providers",
+        sentenceSummary:
+          "Enable protocol incentives to keep TVL in the protocol, and increase network distribution to more users prior to ELFI unlock.",
+        paragraphSummary:
+          "Discussing a fair short term incentive program before enabling transferability of ELFI. As Element’s vaults begin to expire, the necessity of incentivizing rollover is getting more and more important to help retain liquidity in the protocol. The fixed income markets require liquidity to create the opportunity for fixed rate purchasers to earn a fixed rate with minimal slippage.",
+      },
     },
   },
 
