@@ -12,10 +12,10 @@ export function Footer(): ReactElement {
           <img src={councilLogo} width={160} />
           <p>
             Built with 💜 by{" "}
-            <span className="font-semibold text-primary-text">Delv</span>
+            <span className="font-semibold text-primary-text">DELV</span>
           </p>
           <p className="text-sm">
-            &copy; Element Finance, Inc., dba Delv. All rights reserved.
+            &copy; Element Finance, Inc., dba DELV. All rights reserved.
           </p>
         </div>
         <div className="flex flex-wrap gap-24">
