@@ -15,7 +15,7 @@ export function Footer(): ReactElement {
             <span className="font-semibold text-primary-text">DELV</span>
           </p>
           <p className="text-sm">
-            &copy; 2023 Element Finance Inc., dba Delv. All rights reserved
+            &copy; 2023 Element Finance Inc., dba DELV. All rights reserved
           </p>
         </div>
         <div className="flex flex-wrap gap-24">
