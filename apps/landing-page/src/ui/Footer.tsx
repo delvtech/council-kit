@@ -15,7 +15,7 @@ export function Footer(): ReactElement {
             <span className="font-semibold text-primary-text">DELV</span>
           </p>
           <p className="text-sm">
-            &copy; Element Finance, Inc., dba DELV. All rights reserved.
+            &copy; 2023 Element Finance Inc., dba DELV. All rights reserved
           </p>
         </div>
         <div className="flex flex-wrap gap-24">
@@ -63,7 +63,7 @@ export function Footer(): ReactElement {
               </li>
               <li>
                 <a
-                  href="https://blog.element.fi/"
+                  href="https://blog.delv.tech/"
                   className="transition-all text-primary-text hover:text-white"
                 >
                   Articles
@@ -87,7 +87,7 @@ export function Footer(): ReactElement {
               </li>
               <li>
                 <a
-                  href="https://twitter.com/element_fi"
+                  href="https://twitter.com/delv_tech"
                   className="flex items-center gap-3 transition-all group text-primary-text hover:text-white"
                 >
                   <TwitterIcon className="w-5 transition-all fill-primary-text group-hover:fill-white" />
