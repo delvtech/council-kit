@@ -12,7 +12,9 @@
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
     "build:src": "npm run load-contracts && npm run clean && npm run compile",
-    "build": "tsc --project tsconfig.build.json"
+    "build": "tsc --project tsconfig.build.json",
+    "format": "prettier --write '**/*.{gql,graphql,js,jsx,ts,tsx,json,md,yaml,yml}'",
+    "format:check": "prettier --check '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'"
   },
   "devDependencies": {
     "@council/eslint-config": "*",

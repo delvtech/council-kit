@@ -12,6 +12,8 @@ export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
 export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
 export type { CoreVoting } from "./contracts/CoreVoting";
 export { CoreVoting__factory } from "./factories/contracts/CoreVoting__factory";
+export type { Airdrop } from "./contracts/features/Airdrop";
+export { Airdrop__factory } from "./factories/contracts/features/Airdrop__factory";
 export type { OptimisticGrants } from "./contracts/features/OptimisticGrants";
 export { OptimisticGrants__factory } from "./factories/contracts/features/OptimisticGrants__factory";
 export type { Spender } from "./contracts/features/Spender";
