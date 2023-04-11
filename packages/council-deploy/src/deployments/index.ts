@@ -15,10 +15,17 @@ export async function getDeploymentsFile(
   const fileName = getDeploymentsFileName(networkName);
 
   const fileImport = await import(`src/deployments/${fileName}`).catch(() => {
-    writeFile<DeploymentsJsonFile>(`./src/deployments/${fileName}`, {
+    const defaultDeploymentsFile = {
       chainId: chainId ?? 0,
       deployments: [],
-    });
+    };
+    writeFile<DeploymentsJsonFile>(
+      `./src/deployments/${fileName}`,
+      defaultDeploymentsFile,
+    );
+    return {
+      default: defaultDeploymentsFile,
+    };
   });
 
   return fileImport.default;
