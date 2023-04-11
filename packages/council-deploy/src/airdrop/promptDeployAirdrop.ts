@@ -45,7 +45,7 @@ async function airdropDeployPrompt() {
 
   const tokenDecimals = await token.decimals();
   const tokenSymbol = await token.symbol();
-  const merkleRoot = await promptMerkleProof(tokenDecimals, tokenSymbol);
+  const merkleRoot = await promptMerkleRoot(tokenDecimals, tokenSymbol);
 
   const expirationTimestamp = await promptNumber({
     message: "Expiration Timestamp (unix timestamp in seconds)",
@@ -147,7 +147,7 @@ async function promptAirdropVault(
   return { token, tokenAddress, vault, vaultAddress };
 }
 
-async function promptMerkleProof(
+async function promptMerkleRoot(
   tokenDecimals: number,
   tokenSymbol: string,
 ): Promise<string> {
