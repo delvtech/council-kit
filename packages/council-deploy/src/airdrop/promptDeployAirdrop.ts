@@ -31,8 +31,6 @@ async function airdropDeployPrompt() {
 
   const deploymentsFile = await getDeploymentsFile(network.name, chainId);
 
-  console.log(deploymentsFile);
-
   prompt.start();
 
   const { token, tokenAddress, vaultAddress } = await promptAirdropVault(
