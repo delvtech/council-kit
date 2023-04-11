@@ -30,6 +30,7 @@ export async function deployGSCVault({
 }: DeployGSCVaultOptions): Promise<
   ContractWithDeploymentArgs<GSCVault__factory>
 > {
+  console.log("Deploying GSCVault...");
   const gscVaultFactory = new GSCVault__factory(signer);
   const deploymentArgs: DeployArguments<GSCVault__factory> = [
     coreVotingAddress,
@@ -47,7 +48,7 @@ export async function deployGSCVault({
   // Finalize the deployment by setting the owner
   await gscVault.setOwner(ownerAddress);
 
-  console.log("Deployed GSCVault");
+  console.log(`Deployed GSCVault @ ${gscVault.address}`);
 
   return {
     address: gscVault.address,

@@ -28,6 +28,7 @@ export async function deployLockingVault({
   lockingVault: ContractWithDeploymentArgs<LockingVault__factory>;
   lockingVaultProxy: ContractWithDeploymentArgs<SimpleProxy__factory>;
 }> {
+  console.log("Deploying LockingVault...");
   const lockingVaultFactory = new LockingVault__factory(signer);
   const lockingVaultDeploymentArgs: DeployArguments<LockingVault__factory> = [
     votingTokenAddress,
@@ -37,9 +38,10 @@ export async function deployLockingVault({
     ...lockingVaultDeploymentArgs,
   );
   await lockingVault.deployTransaction.wait(1);
-  console.log("Deployed LockingVault");
+  console.log(`Deployed LockingVault @ ${lockingVault.address}`);
 
   // deploy locking vault behind a proxy so it's upgradeable
+  console.log("Deploying LockingVault proxy...");
   const simpleProxyFactory = new SimpleProxy__factory(signer);
   const lockingVaultProxyDeploymentArgs: DeployArguments<SimpleProxy__factory> =
     [proxyOwnerAddress, lockingVault.address];
@@ -48,20 +50,18 @@ export async function deployLockingVault({
     ...lockingVaultProxyDeploymentArgs,
   );
   await lockingVaultProxy.deployTransaction.wait(1);
-  console.log("Deployed LockingVault proxy");
+  console.log(`Deployed LockingVault proxy @ ${lockingVaultProxy.address}`);
 
   return {
     lockingVault: {
       address: lockingVault.address,
       name: "LockingVault",
-      type: "LockingVault",
       contract: lockingVault,
       deploymentArgs: lockingVaultDeploymentArgs,
     },
     lockingVaultProxy: {
       address: lockingVaultProxy.address,
       name: "LockingVaultProxy",
-      type: "SimpleProxy",
       contract: lockingVaultProxy,
       deploymentArgs: lockingVaultProxyDeploymentArgs,
     },
