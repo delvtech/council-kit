@@ -1,7 +1,28 @@
+import { writeFile } from "src/base/writeFile";
+import { DeploymentInfo, DeploymentsJsonFile } from "src/deployments/types";
 import goerli from "src/deployments/goerli.deployments.json";
-import { DeploymentInfo } from "src/deployments/types";
 
 export const goerliDeployments = goerli.deployments;
+
+export function getDeploymentsFileName(networkName: string): string {
+  return `${networkName}.deployments.json`;
+}
+
+export async function getDeploymentsFile(
+  networkName: string,
+  chainId: number | undefined,
+): Promise<DeploymentsJsonFile> {
+  const fileName = getDeploymentsFileName(networkName);
+
+  const fileImport = await import(`src/deployments/${fileName}`).catch(() => {
+    writeFile<DeploymentsJsonFile>(`./src/deployments/${fileName}`, {
+      chainId: chainId ?? 0,
+      deployments: [],
+    });
+  });
+
+  return fileImport.default;
+}
 
 /**
  * Finds the deployment that the given contract is in.

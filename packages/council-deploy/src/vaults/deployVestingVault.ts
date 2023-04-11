@@ -2,14 +2,14 @@ import {
   SimpleProxy__factory,
   VestingVault__factory,
 } from "@council/typechain";
-import { Wallet } from "ethers";
+import { Signer } from "ethers";
 import {
   ContractWithDeploymentArgs,
   DeployArguments,
 } from "src/base/contractFactory";
 
 interface DeployVestingVaultOptions {
-  signer: Wallet;
+  signer: Signer;
   votingTokenAddress: string;
   proxyOwnerAddress: string;
   timelockAddress: string;
@@ -30,6 +30,7 @@ export async function deployVestingVault({
   vestingVault: ContractWithDeploymentArgs<VestingVault__factory>;
   vestingVaultProxy: ContractWithDeploymentArgs<SimpleProxy__factory>;
 }> {
+  const signerAddress = await signer.getAddress();
   const vestingVaultFactory = new VestingVault__factory(signer);
   const deploymentArgs: DeployArguments<VestingVault__factory> = [
     votingTokenAddress,

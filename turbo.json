@@ -34,7 +34,13 @@
     "@council/deploy#build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],
-      "env": ["GOERLI_DEPLOYER_PRIVATE_KEY", "GOERLI_URI", "ETHERSCAN_API_KEY"]
+      "env": [
+        "MAINNET_DEPLOYER_PRIVATE_KEY",
+        "GOERLI_DEPLOYER_PRIVATE_KEY",
+        "MAINNET_URI",
+        "GOERLI_URI",
+        "ETHERSCAN_API_KEY"
+      ]
     },
     "lint": {
       "dependsOn": ["^build"],

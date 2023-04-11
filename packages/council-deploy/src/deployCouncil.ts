@@ -6,9 +6,9 @@ import { deployGSCVault } from "src/vaults/deployGSCVault";
 import { deployLockingVault } from "src/vaults/lockingVault/deployLockingVault";
 import { deployVestingVault } from "src/vaults/deployVestingVault";
 import { deployGSCCoreVoting } from "src/coreVoting/deployGSCCoreVoting";
-import { Contract, Wallet } from "ethers";
+import { Contract, Signer } from "ethers";
 
-export async function deployCouncil(signer: Wallet): Promise<
+export async function deployCouncil(signer: Signer): Promise<
   {
     address: string;
     contract: Contract;
@@ -16,7 +16,8 @@ export async function deployCouncil(signer: Wallet): Promise<
     deploymentArgs: unknown[];
   }[]
 > {
-  console.log("Signer:", signer.address);
+  const signerAddress = await signer.getAddress();
+  console.log("Signer:", signerAddress);
 
   // The voting token is used to determine voting power in the Locking Vault and
   // Vesting Vault. It has no dependencies on any of the council contracts.
@@ -40,7 +41,7 @@ export async function deployCouncil(signer: Wallet): Promise<
     // the GSC Voting Vault once it's been created. At the end, we'll reassign
     // the owner to the Timelock so upgrades to this contract have to go through
     // the normal proposal flow.
-    ownerAddress: signer.address,
+    ownerAddress: signerAddress,
     // base quorum is 1 so it only takes 1 gsc member to pass a proposal
     baseQuorum: "1",
     lockDuration: 10,
@@ -59,7 +60,7 @@ export async function deployCouncil(signer: Wallet): Promise<
     // Temporarily set the owner as the current signer. We will reassign the
     // owner to CoreVoting at the end so that only community votes can govern
     // the system.
-    ownerAddress: signer.address,
+    ownerAddress: signerAddress,
     // The GSC has one special privilege in the Timelock. They can invoke a
     // "speedbump" method to increase the waitTimeInBlocks for a given
     // registered call. This is a security feature.

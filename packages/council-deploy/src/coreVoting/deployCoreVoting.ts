@@ -1,5 +1,5 @@
 import { CoreVoting__factory } from "@council/typechain";
-import { Wallet } from "ethers";
+import { Signer } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import {
   ContractWithDeploymentArgs,
@@ -7,7 +7,7 @@ import {
 } from "src/base/contractFactory";
 
 interface DeployCoreVotingOptions {
-  signer: Wallet;
+  signer: Signer;
   votingVaultAddresses: string[];
   timelockAddress: string;
   baseQuorum: string;

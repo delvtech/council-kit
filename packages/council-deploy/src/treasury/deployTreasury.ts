@@ -1,12 +1,12 @@
 import { Treasury__factory } from "@council/typechain";
-import { Wallet } from "ethers";
+import { Signer } from "ethers";
 import {
   ContractWithDeploymentArgs,
   DeployArguments,
 } from "src/base/contractFactory";
 
 interface DeployTreasuryOptions {
-  signer: Wallet;
+  signer: Signer;
   ownerAddress: string;
 }
 
