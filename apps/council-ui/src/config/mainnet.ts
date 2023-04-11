@@ -18,7 +18,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "Allows users to deposit their tokens in exchange for voting power, which can also be delegated to a different user.",
         address: "0x02Bd4A3b1b95b01F2Aa61655415A5d3EAAcaafdD",
-        type: "FrozenLockingVault",
+        type: "LockingVault",
         descriptionURL:
           "https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults/locking-vault",
       },
