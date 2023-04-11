@@ -19,7 +19,7 @@ export async function etherscanVerifyContracts(
   );
 }
 
-async function etherscanVerifyContract<T extends ContractFactory>(
+export async function etherscanVerifyContract<T extends ContractFactory>(
   contract: Contract,
   constructorArguments: DeployArguments<T>,
 ): Promise<void> {
