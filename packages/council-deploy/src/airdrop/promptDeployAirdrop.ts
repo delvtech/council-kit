@@ -84,7 +84,13 @@ async function airdropDeployPrompt() {
       name: `Airdrop deploy for ${vaultAddress}`,
       timestamp: Date.now(),
       signer: signer.address,
-      contracts: [],
+      contracts: [
+        {
+          address,
+          deploymentArgs,
+          name,
+        },
+      ],
     });
   }
 
