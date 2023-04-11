@@ -9,6 +9,7 @@ export async function promptYesNo({
     name: "yesNo",
     pattern: /y[es]*|n[o]?/,
     required: true,
+    default: "y",
   };
 
   const { yesNo } = await prompt.get(schema);
