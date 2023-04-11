@@ -25,6 +25,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.CoreVoting__factory>;
     getContractFactory(
+      name: "Airdrop",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.Airdrop__factory>;
+    getContractFactory(
       name: "OptimisticGrants",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.OptimisticGrants__factory>;
@@ -188,6 +192,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer,
     ): Promise<Contracts.CoreVoting>;
+    getContractAt(
+      name: "Airdrop",
+      address: string,
+      signer?: ethers.Signer,
+    ): Promise<Contracts.Airdrop>;
     getContractAt(
       name: "OptimisticGrants",
       address: string,
