@@ -4,7 +4,10 @@ import prompt from "prompt";
 import { DeploymentsJsonFile } from "src/deployments/types";
 import { writeFile } from "src/base/writeFile";
 import { etherscanVerifyContracts } from "src/etherscan/verifyContract";
-import { getDeploymentsFile, getDeploymentsFileName } from "./deployments";
+import {
+  getDeploymentsFile,
+  getDeploymentsFileName,
+} from "./deployments/getDeployments";
 
 async function promptDeploy() {
   const signers = await hre.ethers.getSigners();
