@@ -1,5 +1,5 @@
 import { CoreVoting__factory } from "@council/typechain";
-import { ethers, Wallet } from "ethers";
+import { ethers, Signer } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import {
   ContractWithDeploymentArgs,
@@ -7,7 +7,7 @@ import {
 } from "src/base/contractFactory";
 
 interface DeployGSCCoreVotingOptions {
-  signer: Wallet;
+  signer: Signer;
   ownerAddress: string;
   votingVaultAddresses: string[];
   /**

@@ -1,5 +1,5 @@
 import { MockERC20__factory } from "@council/typechain";
-import { Wallet } from "ethers";
+import { Signer } from "ethers";
 import {
   ContractWithDeploymentArgs,
   DeployArguments,
@@ -8,7 +8,7 @@ import {
 interface DeployVotingTokenOptions {
   tokenName: string;
   tokenSymbol: string;
-  signer: Wallet;
+  signer: Signer;
 }
 
 export async function deployVotingToken({
@@ -18,13 +18,14 @@ export async function deployVotingToken({
 }: DeployVotingTokenOptions): Promise<
   ContractWithDeploymentArgs<MockERC20__factory>
 > {
+  const signerAddress = await signer.getAddress();
   const votingTokenFactory = new MockERC20__factory(signer);
   const deploymentArgs: DeployArguments<MockERC20__factory> = [
     tokenName,
     tokenSymbol,
     // setting the owner to the Signer so that it's possible to mint tokens at
     // any time using whatever wallet deployed the token.
-    signer.address,
+    signerAddress,
   ];
 
   const votingToken = await votingTokenFactory.deploy(...deploymentArgs);

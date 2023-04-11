@@ -8,3 +8,5 @@ compiled
 .env
 
 dist
+
+localhost.deployments.json
