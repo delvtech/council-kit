@@ -51,7 +51,6 @@ async function airdropDeployPrompt() {
     message: "Expiration Timestamp (unix timestamp in seconds)",
   });
 
-  // confirm the token of the locking vault
   const isConfirmed = await promptYesNo({
     message: `Set expiration date to ${new Date(+expirationTimestamp * 1000)}?`,
   });
@@ -169,7 +168,6 @@ async function promptMerkleRoot(
     BigNumber.from(0),
   );
 
-  // confirm the token of the locking vault
   const isConfirmed = await promptYesNo({
     message: `Deploy airdrop for ${
       uniqueAddresses.size
