@@ -18,6 +18,7 @@ export async function deployVotingToken({
 }: DeployVotingTokenOptions): Promise<
   ContractWithDeploymentArgs<MockERC20__factory>
 > {
+  console.log("Deploying VotingToken...");
   const signerAddress = await signer.getAddress();
   const votingTokenFactory = new MockERC20__factory(signer);
   const deploymentArgs: DeployArguments<MockERC20__factory> = [
@@ -30,7 +31,7 @@ export async function deployVotingToken({
 
   const votingToken = await votingTokenFactory.deploy(...deploymentArgs);
   await votingToken.deployTransaction.wait(1);
-  console.log("Deployed VotingToken");
+  console.log(`Deployed VotingToken @ ${votingToken.address}`);
 
   return {
     address: votingToken.address,

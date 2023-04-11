@@ -30,6 +30,7 @@ export async function deployVestingVault({
   vestingVault: ContractWithDeploymentArgs<VestingVault__factory>;
   vestingVaultProxy: ContractWithDeploymentArgs<SimpleProxy__factory>;
 }> {
+  console.log("Deploying VestingVault...");
   const signerAddress = await signer.getAddress();
   const vestingVaultFactory = new VestingVault__factory(signer);
   const deploymentArgs: DeployArguments<VestingVault__factory> = [
@@ -38,15 +39,17 @@ export async function deployVestingVault({
   ];
   const vestingVault = await vestingVaultFactory.deploy(...deploymentArgs);
   await vestingVault.deployTransaction.wait(1);
-  console.log("Deployed VestingVault");
+  console.log(`Deployed VestingVault @ ${vestingVault.address}`);
 
-  await vestingVault.initialize(signer.address, signer.address);
+  console.log("Initializing VestingVault...");
+  await vestingVault.initialize(signerAddress, signerAddress);
 
   // Only the Timelock can update things like the unvestedMultiplier.
+  console.log("Setting timelock permissions on VestingVault...");
   await vestingVault.setTimelock(timelockAddress);
-  console.log("Set Timelock permissions on VestingVault");
 
   // deploy vesting vault behind a proxy so it's upgradeable
+  console.log("Deploying VestingVault proxy...");
   const simpleProxyFactory = new SimpleProxy__factory(signer);
   const vestingVaultProxyDeploymentArgs: DeployArguments<SimpleProxy__factory> =
     [proxyOwnerAddress, vestingVault.address];
@@ -55,7 +58,7 @@ export async function deployVestingVault({
     ...vestingVaultProxyDeploymentArgs,
   );
   await vestingVaultProxy.deployTransaction.wait(1);
-  console.log("Deployed VestingVault proxy");
+  console.log(`Deployed VestingVault proxy @ ${vestingVaultProxy.address}`);
 
   return {
     vestingVault: {

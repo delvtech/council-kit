@@ -20,6 +20,7 @@ export async function deployTimelock({
 }: DeployTimelockOptions): Promise<
   ContractWithDeploymentArgs<Timelock__factory>
 > {
+  console.log("Deploying Timelock...");
   const timeLockFactory = new Timelock__factory(signer);
   const deploymentArgs: DeployArguments<Timelock__factory> = [
     waitTimeInBlocks,
@@ -28,7 +29,7 @@ export async function deployTimelock({
   ];
   const timelock = await timeLockFactory.deploy(...deploymentArgs);
   await timelock.deployTransaction.wait(1);
-  console.log("Deployed Timelock");
+  console.log(`Deployed Timelock @ ${timelock.address}`);
 
   // gsc is authorized so that it can use its special privilege of being able
   // to delay the execution of proposals in the timelock
