@@ -68,7 +68,7 @@ Create a new iGSCVotingContract model instance.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:20](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L20)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:20](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L20)
 
 ## Properties
 
@@ -82,7 +82,7 @@ Create a new iGSCVotingContract model instance.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:41](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L41)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:41](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L41)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:42](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L42)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:42](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L42)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/Model.ts#L20)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:43](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L43)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:43](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L43)
 
 ## Methods
 
@@ -172,7 +172,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:106](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L106)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:106](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L106)
 
 ___
 
@@ -189,7 +189,7 @@ they can vote.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:75](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L75)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:75](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L75)
 
 ___
 
@@ -212,7 +212,7 @@ Idle members cannot vote.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:83](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L83)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:83](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L83)
 
 ___
 
@@ -234,7 +234,7 @@ Get a boolean indicating whether a given address is a current member.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:67](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L67)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:67](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L67)
 
 ___
 
@@ -256,7 +256,7 @@ Get the join date of a given member.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:60](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L60)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:60](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L60)
 
 ___
 
@@ -279,7 +279,7 @@ the minimum voting power requirement.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:91](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L91)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:91](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L91)
 
 ___
 
@@ -307,7 +307,7 @@ the address has voted on every proposal they were able to.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:306](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L306)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:306](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L306)
 
 ___
 
@@ -333,7 +333,7 @@ Get a proposal by id.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:78](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L78)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:78](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L78)
 
 ___
 
@@ -360,7 +360,7 @@ Get all proposals ever created.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:87](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L87)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:87](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L87)
 
 ___
 
@@ -376,7 +376,7 @@ Get the amount of voting power required to join this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:53](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L53)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:53](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L53)
 
 ___
 
@@ -402,7 +402,7 @@ Get the sum of voting power held by all voters in this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:137](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L137)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:137](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L137)
 
 ___
 
@@ -429,7 +429,7 @@ Get all participants that have voting power in this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:46](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L46)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:46](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L46)
 
 ___
 
@@ -458,7 +458,7 @@ Get all casted votes on proposals in this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:277](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L277)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:277](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L277)
 
 ___
 
@@ -486,13 +486,13 @@ Get the voting power owned by a given address in this voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:151](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L151)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:151](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L151)
 
 ___
 
 ### getVotingPowerBreakdown
 
-▸ **getVotingPowerBreakdown**(`fromBlock?`, `toBlock?`): `Promise`<`VoterPowerBreakdown`[]\>
+▸ **getVotingPowerBreakdown**(`fromBlock?`, `toBlock?`): `Promise`<[`VoterPowerBreakdown`](../interfaces/VoterPowerBreakdown.md)[]\>
 
 Get all participants that have voting power in this voting contract along
 with their voting power, the amount of voting power being delegated to
@@ -509,7 +509,7 @@ number of voters in a single call.
 
 #### Returns
 
-`Promise`<`VoterPowerBreakdown`[]\>
+`Promise`<[`VoterPowerBreakdown`](../interfaces/VoterPowerBreakdown.md)[]\>
 
 #### Inherited from
 
@@ -517,7 +517,7 @@ number of voters in a single call.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:186](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/VotingContract.ts#L186)
+[packages/council-sdk/src/models/votingContract/VotingContract.ts:186](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/VotingContract.ts#L186)
 
 ___
 
@@ -543,7 +543,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:105](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L105)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:105](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L105)
 
 ___
 
@@ -571,4 +571,4 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:126](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L126)
+[packages/council-sdk/src/models/votingContract/GSCVotingContract.ts:126](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingContract/GSCVotingContract.ts#L126)

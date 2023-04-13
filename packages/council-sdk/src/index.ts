@@ -25,6 +25,7 @@ export * from "./models/votingContract/GSCVotingContract";
 export * from "./models/votingContract/VotingContract";
 export * from "./models/votingVault/GSCVault";
 export * from "./models/votingVault/LockingVault";
+export * from "./models/votingVault/types";
 export * from "./models/votingVault/VestingVault";
 export * from "./models/votingVault/VotingVault";
 export * from "./utils/cached";

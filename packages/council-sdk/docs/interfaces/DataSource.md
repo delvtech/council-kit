@@ -32,4 +32,4 @@ The base DataSource interface which simply requires a context instance.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/DataSource.ts:8](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/base/DataSource.ts#L8)
+[packages/council-sdk/src/datasources/base/DataSource.ts:8](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/DataSource.ts#L8)

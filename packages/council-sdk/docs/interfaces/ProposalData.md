@@ -34,7 +34,7 @@ A proposal as it's stored in the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L131)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L131)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:133](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L133)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:133](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L133)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:141](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L141)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:141](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L141)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:130](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L130)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:130](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L130)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:143](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L143)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:143](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L143)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:142](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L142)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:142](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L142)
 
 ___
 
@@ -106,4 +106,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:132](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L132)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:132](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L132)
