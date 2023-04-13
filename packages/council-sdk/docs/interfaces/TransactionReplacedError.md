@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:247](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L247)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:247](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L247)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:236](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L236)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:236](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L236)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:244](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L244)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:244](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L244)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:251](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L251)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:251](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L251)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:249](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L249)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:249](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L249)
 
 ___
 

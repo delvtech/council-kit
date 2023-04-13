@@ -74,7 +74,7 @@ A vault which stores voting power by address
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:54](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingVault/VotingVault.ts#L54)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:54](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L54)
 
 ## Properties
 
@@ -88,7 +88,7 @@ IVotingVault.address
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:51](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingVault/VotingVault.ts#L51)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:51](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L51)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -116,7 +116,7 @@ IVotingVault.dataSource
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:52](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingVault/VotingVault.ts#L52)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:52](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L52)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -154,7 +154,7 @@ IVotingVault.getTotalVotingPower
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:33](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingVault/VotingVault.ts#L33)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:33](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L33)
 
 ___
 
@@ -178,7 +178,7 @@ IVotingVault.getVoters
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:31](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingVault/VotingVault.ts#L31)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:31](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L31)
 
 ___
 
@@ -202,13 +202,13 @@ Get the usable voting power owned by a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:78](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingVault/VotingVault.ts#L78)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:78](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L78)
 
 ___
 
 ### getVotingPowerBreakdown
 
-▸ `Optional` **getVotingPowerBreakdown**(`...args`): `Promise`<`VoterPowerBreakdown`[]\>
+▸ `Optional` **getVotingPowerBreakdown**(`...args`): `Promise`<[`VoterPowerBreakdown`](../interfaces/VoterPowerBreakdown.md)[]\>
 
 #### Parameters
 
@@ -218,7 +218,7 @@ ___
 
 #### Returns
 
-`Promise`<`VoterPowerBreakdown`[]\>
+`Promise`<[`VoterPowerBreakdown`](../interfaces/VoterPowerBreakdown.md)[]\>
 
 #### Inherited from
 
@@ -226,4 +226,4 @@ IVotingVault.getVotingPowerBreakdown
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:32](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/models/votingVault/VotingVault.ts#L32)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:32](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L32)

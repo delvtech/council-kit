@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:281](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L281)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:290](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L290)
 
 ___
 
@@ -42,7 +42,7 @@ not include self-delegation.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:298](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L298)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:307](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L307)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:282](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L282)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:291](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L291)
 
 ___
 
@@ -69,4 +69,4 @@ include self-delegation.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:293](https://github.com/element-fi/council-monorepo/blob/c567f01/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L293)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:302](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L302)
