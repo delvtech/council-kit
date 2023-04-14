@@ -45,7 +45,7 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "start-node": "hardhat node",
+    "start-node": "rm src/deployments/localhost.deployments.json && hardhat node",
     "build": "parcel build",
     "watch": "parcel watch",
     "load-contracts": "sh scripts/load-contracts.sh",
