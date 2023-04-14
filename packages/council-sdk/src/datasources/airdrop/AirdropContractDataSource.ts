@@ -10,7 +10,7 @@ import { ERC20ContractDataSource } from "src/datasources/token/ERC20ContractData
 import { TokenDataSource } from "src/datasources/token/TokenDataSource";
 import { AirdropDataSource } from "./AirdropDataSource";
 
-type TokenDataSourceFactory = (
+type TokenDataSourceGetter = (
   address: string,
   context: CouncilContext,
 ) => TokenDataSource;
@@ -20,14 +20,14 @@ export interface AirdropContractDataSourceOptions {
    * A function to get a token data source which will be used by methods that
    * require data from the the airdrop token (e.g., decimals).
    */
-  tokenDataSourceGetter?: TokenDataSourceFactory;
+  tokenDataSourceGetter?: TokenDataSourceGetter;
 }
 
 export class AirdropContractDataSource
   extends ContractDataSource<Airdrop>
   implements AirdropDataSource
 {
-  private tokenDataSourceGetter: TokenDataSourceFactory;
+  private tokenDataSourceGetter: TokenDataSourceGetter;
 
   constructor(
     address: string,
@@ -37,7 +37,7 @@ export class AirdropContractDataSource
     super(Airdrop__factory.connect(address, context.provider), context);
 
     this.tokenDataSourceGetter =
-      options?.tokenDataSourceGetter || defaultTokenDataSourceFactory;
+      options?.tokenDataSourceGetter || defaultTokenDataSourceGetter;
   }
 
   private async getTokenDecimals(): Promise<number> {
@@ -144,7 +144,7 @@ export class AirdropContractDataSource
   }
 }
 
-function defaultTokenDataSourceFactory(
+function defaultTokenDataSourceGetter(
   address: string,
   context: CouncilContext,
 ) {
