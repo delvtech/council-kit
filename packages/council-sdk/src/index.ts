@@ -1,4 +1,6 @@
 export * from "./context/context";
+export * from "./datasources/airdrop/AirdropContractDataSource";
+export * from "./datasources/airdrop/AirdropDataSource";
 export * from "./datasources/base/cached/CachedDataSource";
 export * from "./datasources/base/contract/ContractDataSource";
 export * from "./datasources/base/DataSource";
