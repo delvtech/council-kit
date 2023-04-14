@@ -47,24 +47,14 @@ async function airdropDeployPrompt() {
   const tokenSymbol = await token.symbol();
   const merkleRoot = await promptMerkleRoot(tokenDecimals, tokenSymbol);
 
-  const expirationTimestamp = await promptNumber({
-    message: "Expiration Timestamp (unix timestamp in seconds)",
-  });
-
-  const isConfirmed = await promptYesNo({
-    message: `Set expiration date to ${new Date(+expirationTimestamp * 1000)}?`,
-  });
-
-  if (!isConfirmed) {
-    return;
-  }
+  const expirationTimestamp = await promptExpirationTimestamp();
 
   const { contract, address, deploymentArgs, name } = await deployAirdrop({
     signer,
     ownerAddress,
     merkleRoot,
     tokenAddress,
-    expirationTimeStamp: +expirationTimestamp,
+    expirationTimestamp,
     lockingVaultAddress: vaultAddress,
   });
 
@@ -211,6 +201,22 @@ function hashAccount({ address, value }: Account, tokenDecimals: number) {
 
 function merkleHashFn(bytes: Buffer) {
   return ethers.utils.solidityKeccak256(["bytes"], [bytes]);
+}
+
+async function promptExpirationTimestamp(): Promise<number> {
+  const timestamp = await promptNumber({
+    message: "Expiration Timestamp (unix timestamp in seconds)",
+  });
+
+  const isConfirmed = await promptYesNo({
+    message: `Set expiration date to ${new Date(+timestamp * 1000)}?`,
+  });
+
+  if (!isConfirmed) {
+    return promptExpirationTimestamp();
+  }
+
+  return +timestamp;
 }
 
 airdropDeployPrompt()
