@@ -17,17 +17,17 @@ type TokenDataSourceFactory = (
 
 export interface AirdropContractDataSourceOptions {
   /**
-   * A function to create a token data source which will be used by methods that
+   * A function to get a token data source which will be used by methods that
    * require data from the the airdrop token (e.g., decimals).
    */
-  tokenDataSourceFactory?: TokenDataSourceFactory;
+  tokenDataSourceGetter?: TokenDataSourceFactory;
 }
 
 export class AirdropContractDataSource
   extends ContractDataSource<Airdrop>
   implements AirdropDataSource
 {
-  private tokenDataSourceFactory: TokenDataSourceFactory;
+  private tokenDataSourceGetter: TokenDataSourceFactory;
 
   constructor(
     address: string,
@@ -36,15 +36,15 @@ export class AirdropContractDataSource
   ) {
     super(Airdrop__factory.connect(address, context.provider), context);
 
-    this.tokenDataSourceFactory =
-      options?.tokenDataSourceFactory || defaultTokenDataSourceFactory;
+    this.tokenDataSourceGetter =
+      options?.tokenDataSourceGetter || defaultTokenDataSourceFactory;
   }
 
   private async getTokenDecimals(): Promise<number> {
     const tokenAddress = await this.getToken();
     const tokenDataSource = this.context.registerDataSource(
       { address: tokenAddress },
-      this.tokenDataSourceFactory(tokenAddress, this.context),
+      this.tokenDataSourceGetter(tokenAddress, this.context),
     );
     return tokenDataSource.getDecimals();
   }
