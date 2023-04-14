@@ -10,7 +10,7 @@ interface DeployAirdropOptions {
   ownerAddress: string;
   merkleRoot: string;
   tokenAddress: string;
-  expirationTimeStamp: number;
+  expirationTimestamp: number;
   lockingVaultAddress: string;
 }
 
@@ -19,7 +19,7 @@ export async function deployAirdrop({
   ownerAddress,
   merkleRoot,
   tokenAddress,
-  expirationTimeStamp,
+  expirationTimestamp,
   lockingVaultAddress,
 }: DeployAirdropOptions): Promise<
   ContractWithDeploymentArgs<Airdrop__factory>
@@ -30,7 +30,7 @@ export async function deployAirdrop({
     ownerAddress,
     merkleRoot,
     tokenAddress,
-    expirationTimeStamp,
+    expirationTimestamp,
     lockingVaultAddress,
   ];
   const airdrop = await airdropFactory.deploy(...deploymentArgs);
