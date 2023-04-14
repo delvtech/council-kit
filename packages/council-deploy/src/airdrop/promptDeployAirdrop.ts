@@ -159,8 +159,8 @@ async function promptMerkleRoot(
   const accounts = accountsImport.default;
 
   const uniqueAddresses = new Set(accounts.map(({ address }) => address));
-  const valueTotal = accounts.reduce(
-    (sum, { value }) => sum.add(parseUnits(value, tokenDecimals)),
+  const amountTotal = accounts.reduce(
+    (sum, { amount }) => sum.add(parseUnits(amount, tokenDecimals)),
     BigNumber.from(0),
   );
 
@@ -168,7 +168,7 @@ async function promptMerkleRoot(
     message: `Deploy airdrop for ${
       uniqueAddresses.size
     } accounts totaling ${commify(
-      formatUnits(valueTotal, tokenDecimals),
+      formatUnits(amountTotal, tokenDecimals),
     )} ${tokenSymbol}?`,
   });
 
@@ -181,7 +181,7 @@ async function promptMerkleRoot(
 
 export interface Account {
   address: string;
-  value: string;
+  amount: string;
 }
 
 function getMerkleTree(accounts: Account[], tokenDecimals: number) {
@@ -192,10 +192,10 @@ function getMerkleTree(accounts: Account[], tokenDecimals: number) {
   });
 }
 
-function hashAccount({ address, value }: Account, tokenDecimals: number) {
+function hashAccount({ address, amount }: Account, tokenDecimals: number) {
   return ethers.utils.solidityKeccak256(
     ["address", "uint256"],
-    [address, parseUnits(value, tokenDecimals)],
+    [address, parseUnits(amount, tokenDecimals)],
   );
 }
 
