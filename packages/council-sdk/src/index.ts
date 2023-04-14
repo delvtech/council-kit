@@ -1,4 +1,6 @@
 export * from "./context/context";
+export * from "./datasources/airdrop/AirdropContractDataSource";
+export * from "./datasources/airdrop/AirdropDataSource";
 export * from "./datasources/base/cached/CachedDataSource";
 export * from "./datasources/base/contract/ContractDataSource";
 export * from "./datasources/base/DataSource";
@@ -16,6 +18,7 @@ export type {
 export * from "./datasources/votingVault/VestingVaultContractDataSource";
 export * from "./datasources/votingVault/VotingVaultContractDataSource";
 export * from "./datasources/votingVault/VotingVaultDataSource";
+export * from "./models/Airdrop";
 export * from "./models/Model";
 export * from "./models/Proposal";
 export * from "./models/Token";
