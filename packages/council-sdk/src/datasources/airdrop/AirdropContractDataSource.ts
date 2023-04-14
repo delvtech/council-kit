@@ -42,9 +42,9 @@ export class AirdropContractDataSource
 
   private async getTokenDecimals(): Promise<number> {
     const tokenAddress = await this.getToken();
-    const tokenDataSource = this.context.registerDataSource(
-      { address: tokenAddress },
-      this.tokenDataSourceGetter(tokenAddress, this.context),
+    const tokenDataSource = this.tokenDataSourceGetter(
+      tokenAddress,
+      this.context,
     );
     return tokenDataSource.getDecimals();
   }
@@ -148,5 +148,8 @@ function defaultTokenDataSourceGetter(
   address: string,
   context: CouncilContext,
 ) {
-  return new ERC20ContractDataSource(address, context);
+  return context.registerDataSource(
+    { address },
+    new ERC20ContractDataSource(address, context),
+  );
 }
