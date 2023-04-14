@@ -28,7 +28,7 @@ not include self-delegation.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:18](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L18)
+[packages/council-sdk/src/models/votingVault/types.ts:18](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/models/votingVault/types.ts#L18)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:4](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L4)
+[packages/council-sdk/src/models/votingVault/types.ts:4](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/models/votingVault/types.ts#L4)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:5](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L5)
+[packages/council-sdk/src/models/votingVault/types.ts:5](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/models/votingVault/types.ts#L5)
 
 ___
 
@@ -69,4 +69,4 @@ include self-delegation.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:13](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L13)
+[packages/council-sdk/src/models/votingVault/types.ts:13](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/models/votingVault/types.ts#L13)

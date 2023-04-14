@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[packages/council-sdk/src/context/context.ts:8](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/context/context.ts#L8)
+[packages/council-sdk/src/context/context.ts:8](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/context/context.ts#L8)

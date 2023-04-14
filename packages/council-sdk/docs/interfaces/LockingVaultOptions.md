@@ -31,7 +31,7 @@ with the `context` to make it available to other models and data sources.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/LockingVault.ts:13](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/LockingVault.ts#L13)
+[packages/council-sdk/src/models/votingVault/LockingVault.ts:13](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/models/votingVault/LockingVault.ts#L13)
 
 ___
 
@@ -48,4 +48,4 @@ display name, debugging) and has no affect on the model's behavior.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/Model.ts#L11)
+[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/models/Model.ts#L11)

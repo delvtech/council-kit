@@ -61,7 +61,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:18](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L18)
+[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:18](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L18)
 
 ## Properties
 
@@ -79,7 +79,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L22)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:22](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L22)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L13)
+[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:13](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L13)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L12)
+[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:12](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L12)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L23)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L23)
 
 ## Methods
 
@@ -156,7 +156,7 @@ TokenDataSource.approve
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:71](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L71)
+[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:71](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L71)
 
 ___
 
@@ -192,7 +192,7 @@ The cached result of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L28)
+[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:28](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L28)
 
 ___
 
@@ -232,7 +232,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L43)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:43](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L43)
 
 ___
 
@@ -272,7 +272,7 @@ The value returned from the contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L62)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:62](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L62)
 
 ___
 
@@ -310,7 +310,7 @@ A promise that resolves to the `ContractTransaction`.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L83)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L83)
 
 ___
 
@@ -330,7 +330,7 @@ Delete all entries from the cache.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L42)
+[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:42](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L42)
 
 ___
 
@@ -358,7 +358,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L50)
+[packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/cached/CachedDataSource.ts#L50)
 
 ___
 
@@ -393,7 +393,7 @@ A boolean indicating whether the entry was successfully deleted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L131)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:131](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L131)
 
 ___
 
@@ -421,7 +421,7 @@ TokenDataSource.getAllowance
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:58](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L58)
+[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:58](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L58)
 
 ___
 
@@ -447,7 +447,7 @@ TokenDataSource.getBalanceOf
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:48](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L48)
+[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:48](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L48)
 
 ___
 
@@ -469,7 +469,7 @@ TokenDataSource.getDecimals
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:41](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L41)
+[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:41](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L41)
 
 ___
 
@@ -505,7 +505,7 @@ in 2 recursively until all events within the requested range are fetched.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:146](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L146)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:146](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L146)
 
 ___
 
@@ -525,7 +525,7 @@ TokenDataSource.getName
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:25](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L25)
+[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:25](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L25)
 
 ___
 
@@ -545,4 +545,4 @@ TokenDataSource.getSymbol
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:32](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L32)
+[packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts:32](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/token/ERC20ContractDataSource.ts#L32)

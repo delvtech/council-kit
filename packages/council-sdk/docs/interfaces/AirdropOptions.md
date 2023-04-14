@@ -1,25 +1,25 @@
-[@council/sdk](../README.md) / [Exports](../modules.md) / TokenOptions
+[@council/sdk](../README.md) / [Exports](../modules.md) / AirdropOptions
 
-# Interface: TokenOptions
+# Interface: AirdropOptions
 
 ## Hierarchy
 
 - [`ModelOptions`](ModelOptions.md)
 
-  ↳ **`TokenOptions`**
+  ↳ **`AirdropOptions`**
 
 ## Table of contents
 
 ### Properties
 
-- [dataSource](TokenOptions.md#datasource)
-- [name](TokenOptions.md#name)
+- [dataSource](AirdropOptions.md#datasource)
+- [name](AirdropOptions.md#name)
 
 ## Properties
 
 ### dataSource
 
-• `Optional` **dataSource**: [`TokenDataSource`](TokenDataSource.md)
+• `Optional` **dataSource**: [`AirdropDataSource`](AirdropDataSource.md)
 
 A data source to use instead of registering one with the `context`. If you
 pass in a data source, you take over the responsibility of registering it
@@ -27,7 +27,7 @@ with the `context` to make it available to other models and data sources.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Token.ts:18](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/models/Token.ts#L18)
+[packages/council-sdk/src/models/Airdrop.ts:19](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/models/Airdrop.ts#L19)
 
 ___
 

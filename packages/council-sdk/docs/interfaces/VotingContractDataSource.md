@@ -41,7 +41,7 @@ An interface for fetching data from any voting contract.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:10](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L10)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:10](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L10)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/DataSource.ts:8](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/base/DataSource.ts#L8)
+[packages/council-sdk/src/datasources/base/DataSource.ts:8](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/base/DataSource.ts#L8)
 
 ___
 
@@ -89,7 +89,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:36](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L36)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:36](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L36)
 
 ___
 
@@ -116,7 +116,7 @@ Get the id of all executed proposals.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:67](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L67)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:67](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L67)
 
 ___
 
@@ -142,7 +142,7 @@ Get a proposal's `ProposalData` by `id` if it exists.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L23)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:23](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L23)
 
 ___
 
@@ -162,7 +162,7 @@ Get the total number of proposals created in this voting contract
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:15](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L15)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:15](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L15)
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:17](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L17)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:17](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L17)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:18](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L18)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:18](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L18)
 
 ___
 
@@ -237,7 +237,7 @@ the Proposal wasn't executed.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:77](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L77)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:77](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L77)
 
 ___
 
@@ -264,7 +264,7 @@ Get the `ProposalDataPreview` of all proposals ever created.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:56](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L56)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:56](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L56)
 
 ___
 
@@ -290,7 +290,7 @@ Get the total voting power of all votes on this proposal by their ballot.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:100](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L100)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:100](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L100)
 
 ___
 
@@ -318,7 +318,7 @@ a given proposal id.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L83)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:83](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L83)
 
 ___
 
@@ -347,7 +347,7 @@ Get all casted votes on this proposal
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:90](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L90)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:90](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L90)
 
 ___
 
@@ -379,4 +379,4 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:111](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L111)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:111](https://github.com/element-fi/council-monorepo/blob/c3de473/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L111)
