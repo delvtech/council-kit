@@ -176,7 +176,19 @@ async function promptMerkleRoot(
     process.exit(0);
   }
 
-  return getMerkleTree(accounts, tokenDecimals).getHexRoot();
+  const merkleTree = getMerkleTree(accounts, tokenDecimals);
+
+  writeFile(
+    path.resolve(__dirname, `./accounts/leavesWithProofs.json`),
+    accounts.map((account) => {
+      return {
+        leaf: account,
+        proof: merkleTree.getHexProof(hashAccount(account, tokenDecimals)),
+      };
+    }),
+  );
+
+  return merkleTree.getHexRoot();
 }
 
 export interface Account {
