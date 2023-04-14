@@ -100,6 +100,22 @@ export interface VotingContractDataSource extends DataSource {
   ) => Promise<string>;
 
   /**
+   * Execute a proposal.
+   * @param signer - An ethers Signer instance.
+   * @param proposalId - The id of the proposal to execute.
+   * @param targets - The targets (contract addresses) to call.
+   * @param calldatas - The calldatas to call each target with.
+   * @returns The transaction hash.
+   */
+  executeProposal: (
+    signer: Signer,
+    proposalId: number,
+    targets: string[],
+    calldatas: (string | number[])[],
+    options?: TransactionOptions,
+  ) => Promise<string>;
+
+  /**
    * Vote on this proposal.
    * @param signer - An ethers Signer instance for the voter.
    * @param vaults - The addresses of the approved vaults to draw voting power
