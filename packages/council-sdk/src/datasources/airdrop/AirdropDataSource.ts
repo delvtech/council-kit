@@ -3,7 +3,7 @@ import { TransactionOptions } from "src/datasources/base/contract/ContractDataSo
 import { DataSource } from "src/datasources/base/DataSource";
 
 /**
- * An interface for fetching data from any token.
+ * An interface for fetching data from any airdrop.
  * @category Data Sources
  */
 export interface AirdropDataSource extends DataSource {
