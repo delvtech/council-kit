@@ -79,7 +79,7 @@ function setupMockGrant() {
     BigNumber.from(0),
     BigNumber.from(0),
     "0x0000000000000000000000000000000000000000",
-    [[BigNumber], [BigNumber]],
+    [BigNumber.from(0), BigNumber.from(1)],
   ] as unknown as VestingVaultStorage.GrantStructOutput;
 
   mockGrant.allocation = mockGrant[0];
