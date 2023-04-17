@@ -171,7 +171,7 @@ export class VestingVaultContractDataSource extends VotingVaultContractDataSourc
     address?: string,
     fromBlock?: number,
     toBlock?: number,
-  ): Promise<VoterAddressPowerBreakdown[]> {
+  ): Promise<VoterPowerBreakdown[]> {
     return this.cached(
       ["getVotingPowerBreakdown", address, fromBlock, toBlock],
       async () => {
@@ -328,7 +328,7 @@ export interface VoterAddressWithPower {
 /**
  * @category Data Sources
  */
-export interface VoterAddressPowerBreakdown extends VoterAddressWithPower {
+export interface VoterPowerBreakdown extends VoterAddressWithPower {
   /**
    * The total voting power from all wallets delegated to this voter. Does not
    * include self-delegation.
