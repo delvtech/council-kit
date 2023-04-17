@@ -243,6 +243,23 @@ export class CoreVotingContractDataSource
     return transaction.hash;
   }
 
+  async executeProposal(
+    signer: Signer,
+    proposalId: number,
+    targets: string[],
+    calldatas: (string | number[])[],
+    options?: TransactionOptions,
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "execute",
+      [proposalId, targets, calldatas],
+      signer,
+      options,
+    );
+    this.clearCached();
+    return transaction.hash;
+  }
+
   async vote(
     signer: Signer,
     vaults: string[],
