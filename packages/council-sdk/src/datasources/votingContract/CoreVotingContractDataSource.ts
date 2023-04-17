@@ -1,5 +1,4 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
-import { ProposalExecutedEvent } from "@council/typechain/dist/contracts/CoreVoting";
 import { BigNumber, Signer } from "ethers";
 import { BytesLike, formatEther, parseEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
@@ -107,24 +106,12 @@ export class CoreVotingContractDataSource
     });
   }
 
-  getProposalExecutedEvents(
-    fromBlock?: number,
-    toBlock?: number,
-  ): Promise<ProposalExecutedEvent[]> {
-    return this.cached(["getProposalExecutedEvents", fromBlock, toBlock], () =>
-      this.getEvents(
-        this.contract.filters.ProposalExecuted(),
-        fromBlock,
-        toBlock,
-      ),
-    );
-  }
-
   async getExecutedProposalIds(
     fromBlock?: number,
     toBlock?: number,
   ): Promise<number[]> {
-    const proposalExecutedEvents = await this.getProposalExecutedEvents(
+    const proposalExecutedEvents = await this.getEvents(
+      this.contract.filters.ProposalExecuted(),
       fromBlock,
       toBlock,
     );
@@ -132,7 +119,9 @@ export class CoreVotingContractDataSource
   }
 
   async getProposalExecutedTransactionHash(id: number): Promise<string | null> {
-    const proposalExecutedEvents = await this.getProposalExecutedEvents();
+    const proposalExecutedEvents = await this.getEvents(
+      this.contract.filters.ProposalExecuted(),
+    );
     const executedEvent = proposalExecutedEvents.find(
       ({ args }) => args.proposalId.toNumber() === id,
     );
