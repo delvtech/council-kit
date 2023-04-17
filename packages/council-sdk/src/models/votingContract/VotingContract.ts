@@ -178,19 +178,22 @@ export class VotingContract<
    * them, and the amount of power delegated to them by each delegator. This is
    * a convenience method to fetch voting power and delegation data for a large
    * number of voters in a single call.
+   * @param address - Get a breakdown for a specific address.
    * @param fromBlock - Include all voters that had power on or after this block
    * number.
    * @param toBlock - Include all voters that had power on or before this block
    * number.
    */
   async getVotingPowerBreakdown(
+    address?: string,
     fromBlock?: number,
     toBlock?: number,
   ): Promise<VoterPowerBreakdown[]> {
     // get a list of breakdowns for each vault
     const vaultBreakdowns = await Promise.all(
       this.vaults.map(
-        (vault) => vault.getVotingPowerBreakdown?.(fromBlock, toBlock) || [],
+        (vault) =>
+          vault.getVotingPowerBreakdown?.(address, fromBlock, toBlock) || [],
       ),
     );
 

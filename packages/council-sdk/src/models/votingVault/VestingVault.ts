@@ -104,6 +104,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
    */
   async getVoters(fromBlock?: number, toBlock?: number): Promise<Voter[]> {
     const votersWithPower = await this.dataSource.getVotingPowerBreakdown(
+      undefined,
       fromBlock,
       toBlock,
     );
@@ -118,16 +119,19 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
    * amount of power delegated to them by each delegator. This is a convenience
    * method to fetch voting power and delegation data for a large number of
    * voters in a single call.
+   * @param address - Get a breakdown for a specific address.
    * @param fromBlock - Include all voters that had power on or after this block
    * number.
    * @param toBlock - Include all voters that had power on or before this block
    * number.
    */
   async getVotingPowerBreakdown(
+    address?: string,
     fromBlock?: number,
     toBlock?: number,
   ): Promise<VoterPowerBreakdown[]> {
     const voterPowerBreakdowns = await this.dataSource.getVotingPowerBreakdown(
+      address,
       fromBlock,
       toBlock,
     );
@@ -173,6 +177,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
    */
   async getTotalVotingPower(atBlock?: number): Promise<string> {
     const allVotersWithPower = await this.dataSource.getVotingPowerBreakdown(
+      undefined,
       undefined,
       atBlock,
     );
