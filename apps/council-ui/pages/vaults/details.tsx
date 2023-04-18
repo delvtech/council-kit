@@ -7,7 +7,7 @@ import { FrozenLockingVaultDetails } from "src/ui/vaults/frozenLockingVault/Froz
 import { GSCVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
 import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
-import { getAllVaultConfigs } from "src/vaults/vaults";
+import { getVaultConfig } from "src/vaults/vaults";
 
 export default function Vault(): ReactElement {
   const {
@@ -16,8 +16,7 @@ export default function Vault(): ReactElement {
   } = useRouter();
 
   const chainId = useChainId();
-  const allVaults = getAllVaultConfigs(chainId);
-  const vaultConfig = allVaults.find((vault) => vault.address === address);
+  const vaultConfig = getVaultConfig(address?.toString() || "", chainId);
 
   if (!address || !vaultConfig) {
     replace("/vaults");

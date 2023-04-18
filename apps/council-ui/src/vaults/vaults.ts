@@ -18,3 +18,10 @@ export function getGSCCoreVotingVaults(
 ): VaultConfig[] {
   return councilConfigs[chainId].gscVoting?.vaults || [];
 }
+
+export function getVaultConfig(
+  address: string,
+  chainId: SupportedChainId,
+): VaultConfig | undefined {
+  return getAllVaultConfigs(chainId).find((vault) => vault.address === address);
+}
