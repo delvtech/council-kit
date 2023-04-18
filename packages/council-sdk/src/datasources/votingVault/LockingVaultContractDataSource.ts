@@ -126,21 +126,23 @@ export class LockingVaultContractDataSource extends VotingVaultContractDataSourc
    * to them, and the amount of power delegated to them by each delegator. This
    * is a convenience method to fetch voting power and delegation data for a
    * large number of voters in a single call.
+   * @param address - Get a breakdown for a specific address.
    * @param fromBlock - Include all voters that had power on or after this block
    * number.
    * @param toBlock - Include all voters that had power on or before this block
    * number.
    */
   async getVotingPowerBreakdown(
+    address?: string,
     fromBlock?: number,
     toBlock?: number,
-  ): Promise<VoterAddressPowerBreakdown[]> {
+  ): Promise<VoterPowerBreakdown[]> {
     return this.cached(
-      ["getVotingPowerBreakdown", fromBlock, toBlock],
+      ["getVotingPowerBreakdown", address, fromBlock, toBlock],
       async () => {
         const eventFilter = this.contract.filters.VoteChange(
           undefined,
-          undefined,
+          address,
         );
         const voteChangeEvents = await this.getEvents(
           eventFilter,
@@ -294,7 +296,7 @@ export interface VoterAddressWithPower {
 /**
  * @category Data Sources
  */
-export interface VoterAddressPowerBreakdown extends VoterAddressWithPower {
+export interface VoterPowerBreakdown extends VoterAddressWithPower {
   /**
    * The total voting power from all wallets delegated to this voter. Does not
    * include self-delegation.

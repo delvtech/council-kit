@@ -12,8 +12,8 @@ export * from "./datasources/votingContract/VotingContractDataSource";
 export * from "./datasources/votingVault/GSCVaultContractDataSource";
 export * from "./datasources/votingVault/LockingVaultContractDataSource";
 export type {
-  VoterAddressPowerBreakdown,
   VoterAddressWithPower,
+  VoterPowerBreakdown,
 } from "./datasources/votingVault/LockingVaultContractDataSource";
 export * from "./datasources/votingVault/VestingVaultContractDataSource";
 export * from "./datasources/votingVault/VotingVaultContractDataSource";

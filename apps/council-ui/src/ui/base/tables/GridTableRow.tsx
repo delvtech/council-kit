@@ -1,6 +1,14 @@
 import classNames from "classnames";
 import { PropsWithChildren, ReactElement } from "react";
 
+export interface GridTableRowProps {
+  className?: string;
+  /**
+   * Add a bg to odd rows.
+   */
+  striped?: boolean;
+}
+
 /**
  * A div with `display: grid` pretending to be a table row :).
  * To customize column widths use the `grid-cols-[<col-widths>]` className.
@@ -9,13 +17,16 @@ import { PropsWithChildren, ReactElement } from "react";
 export function GridTableRow({
   className,
   children,
-}: PropsWithChildren<{
-  className?: string;
-}>): ReactElement {
+  striped = true,
+}: PropsWithChildren<GridTableRowProps>): ReactElement {
   return (
     <div
       className={classNames(
-        "grid grid-flow-col auto-cols-fr odd:bg-base-200 last:rounded-b-lg [&>*]:p-4 [&>*]:overflow-hidden [&>*]:text-ellipsis",
+        "grid grid-flow-col auto-cols-fr last:rounded-b-lg [&>*]:p-4 [&>*]:overflow-hidden [&>*]:text-ellipsis",
+        {
+          "odd:bg-base-200": striped,
+          "border-b border-base-200": !striped,
+        },
         className,
       )}
     >

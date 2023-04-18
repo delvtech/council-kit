@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 export function VotingActivityTableSkeleton(): ReactElement {
   return (
     <div className="w-full overflow-auto max-h-96">
-      <table className="w-full daisy-table-zebra daisy-table">
+      <table className="w-full daisy-table-striped daisy-table">
         <thead>
           <tr>
             <th className="w-72">Voter</th>

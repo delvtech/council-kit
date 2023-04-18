@@ -3,7 +3,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { useChainId } from "src/ui/network/useChainId";
-import { getAllVaultConfigs } from "src/vaults/vaults";
+import { getVaultConfig } from "src/vaults/vaults";
 import { useAccount } from "wagmi";
 
 /**
@@ -15,17 +15,14 @@ export function useDelegatesByVault(): UseQueryResult<Record<string, Voter>> {
   const chainId = useChainId();
 
   return useQuery({
-    queryKey: [address, chainId],
+    queryKey: ["delegates-by-vault", address, chainId],
     enabled: !!address,
     queryFn: !!address
       ? async () => {
           const delegatesByVault: Record<string, Voter> = {};
-          const allConfigs = getAllVaultConfigs(chainId);
 
           for (const vault of coreVoting.vaults) {
-            const config = allConfigs.find(
-              ({ address }) => address === vault.address,
-            );
+            const config = getVaultConfig(vault.address, chainId);
 
             if (!config) {
               continue;

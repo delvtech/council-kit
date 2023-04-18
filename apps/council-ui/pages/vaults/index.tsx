@@ -1,6 +1,5 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
-import { VaultConfig } from "src/config/CouncilConfig";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncil } from "src/ui/council/useCouncil";
@@ -10,7 +9,7 @@ import {
   GenericVaultCardSkeleton,
 } from "src/ui/vaults/GenericVaultCard";
 import { GSCVaultPreviewCard } from "src/ui/vaults/gscVault/GSCVaultPreviewCard/GSCVaultPreviewCard";
-import { getAllVaultConfigs } from "src/vaults/vaults";
+import { getVaultConfig } from "src/vaults/vaults";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
@@ -94,7 +93,6 @@ function useVaultsPageData(
 ): UseQueryResult<VaultData[]> {
   const { coreVoting, gscVoting } = useCouncil();
   const chainId = useChainId();
-  const vaultConfigs = getAllVaultConfigs(chainId);
 
   return useQuery({
     queryKey: ["vaultsPage", account],
@@ -106,16 +104,14 @@ function useVaultsPageData(
 
       return Promise.all(
         allVaults.map(async (vault) => {
-          const vaultConfig = vaultConfigs.find(
-            ({ address }) => vault.address === address,
-          ) as VaultConfig;
+          const vaultConfig = getVaultConfig(vault.address, chainId);
 
           return {
             address: vault.address,
             name: vault.name,
             tvp: await vault.getTotalVotingPower?.(),
             votingPower: account && (await vault.getVotingPower(account)),
-            sentenceSummary: vaultConfig.sentenceSummary,
+            sentenceSummary: vaultConfig?.sentenceSummary,
           };
         }),
       );

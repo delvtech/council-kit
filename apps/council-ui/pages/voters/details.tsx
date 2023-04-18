@@ -21,16 +21,13 @@ import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
 import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
 import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
-import {
-  getVoterDataByTokenWithDelegationVault,
-  VoterDataByTokenWithDelegationVault,
-} from "src/vaults/getVoterDataByTokenWithDelegationVault";
 import { GSCStatus } from "src/vaults/gscVault/types";
 import { useEnsName } from "wagmi";
 
 export default function VoterDetailsPage(): ReactElement {
   const { query } = useRouter();
   const { address } = query as { address: string | undefined };
+  const { coreVoting } = useCouncil();
   const { data, status } = useVoterData(address);
   const displayName = useDisplayName(address);
 
@@ -40,10 +37,9 @@ export default function VoterDetailsPage(): ReactElement {
     );
   }
 
-  const numVotingVaults = !data
-    ? 0
-    : data.voterDataByVault.length +
-      (["Member", "Idle"].includes(data.gscStatus as string) ? 1 : 0);
+  const numVotingVaults =
+    coreVoting.vaults.length +
+    (["Member", "Idle"].includes(data?.gscStatus as string) ? 1 : 0);
 
   return (
     <Page>
@@ -72,10 +68,7 @@ export default function VoterDetailsPage(): ReactElement {
           <h2 className="text-2xl font-bold">
             Voting Vaults ({numVotingVaults})
           </h2>
-          <VoterVaultsList
-            address={address}
-            vaultsData={data.voterDataByVault}
-          />
+          <VoterVaultsList address={address} />
         </div>
       ) : (
         <div className="flex flex-col gap-y-4">
@@ -150,7 +143,6 @@ function VoterHeader({ address }: VoterHeaderProps) {
 interface VoterData {
   gscStatus: GSCStatus | null;
   proposalsCreated: number;
-  voterDataByVault: VoterDataByTokenWithDelegationVault[];
   votingHistory: Vote[];
   votingPower: string;
   percentOfTVP: number;
@@ -180,11 +172,6 @@ export function useVoterData(
           );
           const tvp = await coreVoting.getTotalVotingPower();
 
-          const voterDataByVault = await getVoterDataByTokenWithDelegationVault(
-            address,
-            coreVoting,
-          );
-
           const coreVotingProposals = await coreVoting.getProposals();
           const proposalsCreatedByAddress = await asyncFilter(
             coreVotingProposals,
@@ -199,7 +186,6 @@ export function useVoterData(
             votingPower,
             percentOfTVP: +((+votingPower / +tvp) * 100).toFixed(1),
             gscStatus,
-            voterDataByVault,
             proposalsCreated: proposalsCreatedByAddress.length,
           };
         }
