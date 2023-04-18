@@ -23,14 +23,19 @@ export interface VotingVaultOptions<
 // Adds common methods as optional. This makes it possible to loop through a
 // list of VotingVaults and conditionally call these methods without TypeScript
 // complaining that the methods don't exist on type VotingVault.
+// TODO: Find a better solution for this.
 interface IVotingVault<
   TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
 > {
   address: string;
   dataSource: TDataSource;
-  getVoters?(...args: any[]): Promise<Voter[]>;
-  getVotingPowerBreakdown?(...args: any[]): Promise<VoterPowerBreakdown[]>;
-  getTotalVotingPower?(...args: any[]): Promise<string>;
+  getVoters?(fromBlock?: number, toBlock?: number): Promise<Voter[]>;
+  getVotingPowerBreakdown?(
+    address?: string,
+    fromBlock?: number,
+    toBlock?: number,
+  ): Promise<VoterPowerBreakdown[]>;
+  getTotalVotingPower?(atBlock?: number): Promise<string>;
 }
 
 // Include the common optional methods in the `VotingVault` export. The original
