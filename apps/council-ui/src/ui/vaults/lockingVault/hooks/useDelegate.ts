@@ -7,7 +7,7 @@ export function useDelegate(vaultAddress: string): UseQueryResult<Voter> {
   const { context } = useCouncil();
   const { address } = useAccount();
   return useQuery({
-    queryKey: [address],
+    queryKey: ["delegate", vaultAddress, address],
     enabled: !!address,
     queryFn: !!address
       ? async () => {

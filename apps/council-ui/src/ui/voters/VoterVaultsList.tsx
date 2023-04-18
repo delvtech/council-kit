@@ -50,10 +50,12 @@ export function VoterVaultsList({
               />
             );
           default:
-            <DefaultVaultProfileCard
-              address={address}
-              profileAddress={address}
-            />;
+            return (
+              <DefaultVaultProfileCard
+                address={address}
+                profileAddress={address}
+              />
+            );
         }
       })}
 

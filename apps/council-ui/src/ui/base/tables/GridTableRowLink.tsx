@@ -7,9 +7,9 @@ export interface GridTableRowLinkProps {
   href: string | UrlObject;
   className?: string;
   /**
-   * Add a bg to odd rows (zebra striping).
+   * Add a bg to odd rows.
    */
-  zebra?: boolean;
+  striped?: boolean;
 }
 
 /**
@@ -21,7 +21,7 @@ export function GridTableRowLink({
   href,
   className,
   children,
-  zebra = true,
+  striped = true,
 }: PropsWithChildren<GridTableRowLinkProps>): ReactElement {
   return (
     <Link
@@ -29,8 +29,8 @@ export function GridTableRowLink({
       className={classNames(
         "grid grid-flow-col auto-cols-fr last:rounded-b-lg [&>*]:p-4 [&>*]:overflow-hidden [&>*]:text-ellipsis hover:bg-base-300 transition-all",
         {
-          "odd:bg-base-200": zebra,
-          "border-b border-base-200 last:border-none": !zebra,
+          "odd:bg-base-200": striped,
+          "border-b border-base-200 last:border-none": !striped,
         },
         className,
       )}

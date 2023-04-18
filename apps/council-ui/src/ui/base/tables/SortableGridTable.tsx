@@ -16,9 +16,9 @@ interface SortableGridTableProps<K extends string> {
   bodyRowClassName?: string;
   defaultSortOptions?: SortOptions<K>;
   /**
-   * Add a bg to odd rows (zebra striping).
+   * Add a bg to odd rows.
    */
-  zebra?: boolean;
+  striped?: boolean;
 }
 
 /**
@@ -58,7 +58,7 @@ export function SortableGridTable<K extends string>({
   emptyTableElement = <DefaultEmptyTableElement />,
   bodyRowClassName,
   defaultSortOptions,
-  zebra,
+  striped,
 }: SortableGridTableProps<K>): ReactElement {
   const [sortKey, setSortKey] = useState<K | undefined>(
     defaultSortOptions?.key,
@@ -130,7 +130,7 @@ export function SortableGridTable<K extends string>({
                     key={i}
                     href={row.href}
                     className={classNames(bodyRowClassName, row.className)}
-                    zebra={zebra}
+                    striped={striped}
                   >
                     {row.cells.map((cell, i) => (
                       <span key={i}>{cell}</span>
@@ -143,7 +143,7 @@ export function SortableGridTable<K extends string>({
                 <GridTableRow
                   key={i}
                   className={classNames(bodyRowClassName, row.className)}
-                  zebra={zebra}
+                  striped={striped}
                 >
                   {row.cells}
                 </GridTableRow>
@@ -151,7 +151,11 @@ export function SortableGridTable<K extends string>({
             }
 
             return (
-              <GridTableRow key={i} className={bodyRowClassName} zebra={zebra}>
+              <GridTableRow
+                key={i}
+                className={bodyRowClassName}
+                striped={striped}
+              >
                 {row.map((cell, i) => (
                   <span key={i}>{cell}</span>
                 ))}

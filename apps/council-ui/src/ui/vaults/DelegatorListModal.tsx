@@ -17,7 +17,6 @@ export function DelegatorListModal({
   delegateName,
   delegateAddress,
 }: DelegatorListModalProps): ReactElement {
-  console.log({ delegateName, delegateAddress });
   return (
     <>
       <input type="checkbox" id={id} className="daisy-modal-toggle" />

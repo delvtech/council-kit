@@ -22,7 +22,7 @@ export function VotersListCompact({
   });
 
   const sortedVoters = useMemo(() => {
-    let sorted = voters;
+    let sorted = voters.slice();
     const { key, direction } = sortOptions;
 
     if (direction) {
@@ -51,7 +51,7 @@ export function VotersListCompact({
     <SortableGridTable
       headingRowClassName="[&>*]:px-4 [&>*]:py-2"
       bodyRowClassName="[&>*]:px-4 [&>*]:py-2 text-sm font-semibold"
-      zebra={false}
+      striped={false}
       cols={[
         "wallet",
         {

@@ -4,9 +4,9 @@ import { PropsWithChildren, ReactElement } from "react";
 export interface GridTableRowProps {
   className?: string;
   /**
-   * Add a bg to odd rows (zebra striping).
+   * Add a bg to odd rows.
    */
-  zebra?: boolean;
+  striped?: boolean;
 }
 
 /**
@@ -17,15 +17,15 @@ export interface GridTableRowProps {
 export function GridTableRow({
   className,
   children,
-  zebra = true,
+  striped = true,
 }: PropsWithChildren<GridTableRowProps>): ReactElement {
   return (
     <div
       className={classNames(
         "grid grid-flow-col auto-cols-fr last:rounded-b-lg [&>*]:p-4 [&>*]:overflow-hidden [&>*]:text-ellipsis",
         {
-          "odd:bg-base-200": zebra,
-          "border-b border-base-200": !zebra,
+          "odd:bg-base-200": striped,
+          "border-b border-base-200": !striped,
         },
         className,
       )}
