@@ -1,79 +1,64 @@
-import assertNever from "assert-never";
-import { useRouter } from "next/router";
-import { ReactElement } from "react";
-import { useChainId } from "src/ui/network/useChainId";
-import { LockingVaultProfileCard } from "src/ui/vaults/lockingVault/LockingVaultsProfileCard";
-import { VestingVaultProfileCard } from "src/ui/vaults/vestingVault/VestingVaultProfileCard";
-import { VoterDataByTokenWithDelegationVault } from "src/vaults/getVoterDataByTokenWithDelegationVault";
-import { getAllVaultConfigs } from "src/vaults/vaults";
+import Link from "next/link";
+import { ReactElement, ReactNode } from "react";
+import { makeVaultURL } from "src/routes";
+import { WalletIcon } from "src/ui/base/WalletIcon";
+
+interface Stat {
+  label: ReactNode;
+  value: ReactNode;
+}
+
+interface ButtonOptions {
+  text: ReactNode;
+  onClick: () => void;
+  disabled?: boolean;
+}
 
 interface VaultProfileCardProps {
-  /** The address of the voting vault */
-  vaultAddress: string;
-  /** Voter data fetched from this specific vault */
-  voterData: VoterDataByTokenWithDelegationVault;
-  /** The address of the voter profile */
-  voterAddress: string;
-  /** The ens of the voter profile */
-  voterEns?: string;
+  name: ReactNode;
+  address: string;
+  stats: (Stat | undefined)[];
+  button?: ButtonOptions;
 }
 
 export function VaultProfileCard({
-  vaultAddress,
-  voterData,
-  voterAddress,
-  voterEns,
+  name,
+  address,
+  stats,
+  button,
 }: VaultProfileCardProps): ReactElement {
-  const { replace } = useRouter();
-  const chainId = useChainId();
-  const allVaultConfigs = getAllVaultConfigs(chainId);
-  const vaultConfig = allVaultConfigs.find(
-    (vault) => vault.address === vaultAddress,
+  return (
+    <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 justify-between daisy-card bg-base-200 min-w-[360px]">
+      <div className="flex flex-col gap-4">
+        <Link
+          className="flex items-center underline hover:no-underline gap-x-2"
+          href={makeVaultURL(address)}
+        >
+          <WalletIcon address={address} />
+
+          <h3 className="text-2xl font-semibold">{name}</h3>
+        </Link>
+      </div>
+
+      {stats.map(
+        (stat, i) =>
+          stat && (
+            <div key={i} className="flex items-center w-full">
+              <p>{stat.label}</p>
+              <p className="ml-auto font-bold">{stat.value}</p>
+            </div>
+          ),
+      )}
+
+      {button && (
+        <button
+          className="w-full daisy-btn"
+          disabled={button.disabled}
+          onClick={() => button.onClick()}
+        >
+          {button.text}
+        </button>
+      )}
+    </div>
   );
-
-  if (!vaultConfig) {
-    replace("/404");
-    // User will go to 404 page if this block is reached
-    // Returning empty fragment is to remove the undefined type from vaultConfig below
-    return <></>;
-  }
-
-  switch (vaultConfig.type) {
-    case "LockingVault":
-    case "FrozenLockingVault":
-      return (
-        <LockingVaultProfileCard
-          vaultAddress={vaultAddress}
-          userAddress={voterAddress}
-          userVotingPower={voterData.votingPower}
-          userCurrentDelegate={voterData.currentDelegate}
-          userBalance={voterData.balance}
-          userVotersDelegated={voterData.votersDelegated}
-          userEns={voterEns}
-        />
-      );
-
-    case "VestingVault":
-      return (
-        <VestingVaultProfileCard
-          vaultAddress={vaultAddress}
-          userAddress={voterAddress}
-          userVotingPower={voterData.votingPower}
-          userCurrentDelegate={voterData.currentDelegate}
-          userBalance={voterData.balance}
-          userVotersDelegated={voterData.votersDelegated}
-          userEns={voterEns}
-        />
-      );
-
-    case "GSCVault":
-      // Here for exhaustiveness, a GSCVault profile card is rendered in
-      // VoterVaultsList.tsx directly since it's different than the other
-      // vaults.
-      // TODO: Rename this to TokenWithDelegationVaultProfileCard.tsx
-      return <></>;
-
-    default:
-      return assertNever(vaultConfig.type);
-  }
 }

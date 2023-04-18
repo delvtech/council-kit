@@ -1,93 +1,86 @@
 import { useQuery } from "@tanstack/react-query";
-import { Signer } from "ethers";
-import Link from "next/link";
 import { ReactElement } from "react";
-import Skeleton from "react-loading-skeleton";
-import { VaultConfig } from "src/config/CouncilConfig";
-import { makeVaultURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { WalletIcon } from "src/ui/base/WalletIcon";
 import { useCouncil } from "src/ui/council/useCouncil";
+import { useChainId } from "src/ui/network/useChainId";
 import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
 import { useKickGSCMember } from "src/ui/vaults/gscVault/useKickGSCMember";
+import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
+import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { getIsGSCMember } from "src/vaults/gscVault/getGSCStatus";
-import { useAccount, useSigner } from "wagmi";
+import { getVaultConfig } from "src/vaults/vaults";
+import { useSigner } from "wagmi";
 
 interface GSCVaultProfileCardProps {
-  vaultConfig: VaultConfig;
-  /** The address of the voter profile */
-  voterAddress: string;
+  address: string;
+  profileAddress: string;
 }
 
 export function GSCVaultProfileCard({
-  vaultConfig: { address, name },
-  voterAddress,
+  address,
+  profileAddress,
 }: GSCVaultProfileCardProps): ReactElement {
-  const { isConnected } = useAccount();
+  const { data } = useGSCVaultProfileCardData(address, profileAddress);
+
+  // config
+  const chainId = useChainId();
+  const config = getVaultConfig(address, chainId);
+  const name = config?.name || "GSC Vault";
+
+  // kick transaction
   const { data: signer } = useSigner();
-  const { data } = useGSCVaultProfileCard(address, voterAddress);
   const { mutate: kickGSCMember } = useKickGSCMember(address);
 
-  const isGSCMember = data?.voterGSCStatus
-    ? getIsGSCMember(data?.voterGSCStatus)
-    : false;
+  if (!data) {
+    return <VaultProfileCardSkeleton address={address} name={name} />;
+  }
 
-  const isKickButtonDisabled =
-    !isConnected || !signer || !isGSCMember || !data?.isBelowThreshold;
+  const {
+    gscStatus,
+    isBelowThreshold,
+    requiredVotingPower,
+    qualifyingVotingPower,
+  } = data;
 
   return (
-    <div className="flex flex-col p-8 md:max-w-md grow md:grow-0 gap-y-4 daisy-card bg-base-200 justify-between min-w-[360px]">
-      <Link
-        className="flex items-center underline hover:no-underline gap-x-2"
-        href={makeVaultURL(address)}
-      >
-        <WalletIcon address={address} />
-
-        <h3 className="text-2xl font-semibold">{name}</h3>
-      </Link>
-
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center w-full">
-          <p>Membership status</p>
-          <p className="ml-auto font-bold">
-            {data ? data.voterGSCStatus : <Skeleton />}
-          </p>
-        </div>
-
-        <div className="flex items-center w-full">
-          <p>Required voting power</p>
-          <p className="ml-auto font-bold">
-            {data ? formatBalance(data.requiredVotingPower) : <Skeleton />}
-          </p>
-        </div>
-
-        <div className="flex items-center w-full">
-          <p>Qualifying voting power</p>
-          <p className="ml-auto font-bold">
-            {data ? formatBalance(data.qualifyingVotingPower) : <Skeleton />}
-          </p>
-        </div>
-      </div>
-
-      <button
-        className="w-full daisy-btn"
-        disabled={isKickButtonDisabled}
-        onClick={() =>
+    <VaultProfileCard
+      address={address}
+      name={name}
+      stats={[
+        {
+          label: "Membership status",
+          value: gscStatus,
+        },
+        {
+          label: "Required voting power",
+          value: formatBalance(requiredVotingPower),
+        },
+        {
+          label: "Qualifying voting power",
+          value: formatBalance(qualifyingVotingPower),
+        },
+      ]}
+      button={{
+        text: "Kick Member",
+        disabled:
+          !signer ||
+          !gscStatus ||
+          !getIsGSCMember(gscStatus) ||
+          !isBelowThreshold,
+        onClick: () =>
+          signer &&
           kickGSCMember({
-            memberAddress: voterAddress,
-            signer: signer as Signer, // safe to cast because button is disabled when signer is undefined
-          })
-        }
-      >
-        Kick member
-      </button>
-    </div>
+            memberAddress: profileAddress,
+            signer,
+          }),
+      }}
+    />
   );
 }
 
-function useGSCVaultProfileCard(vaultAddress: string, userAddress: string) {
+function useGSCVaultProfileCardData(vaultAddress: string, userAddress: string) {
   const { coreVoting, gscVoting } = useCouncil();
-  const { data: voterGSCStatus } = useGSCStatus(userAddress);
+  const { data: gscStatus } = useGSCStatus(userAddress);
   const queryEnabled = !!gscVoting;
 
   return useQuery({
@@ -106,7 +99,7 @@ function useGSCVaultProfileCard(vaultAddress: string, userAddress: string) {
             isBelowThreshold,
             requiredVotingPower,
             qualifyingVotingPower,
-            voterGSCStatus,
+            gscStatus,
           };
         }
       : undefined,

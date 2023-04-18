@@ -1,6 +1,6 @@
 import { GSCVotingContract, VotingContract } from "@council/sdk";
-import { parseEther } from "ethers/lib/utils";
 import { GSCStatus } from "src/vaults/gscVault/types";
+import { getIsGSCEligible } from "./getIsGSCEligible";
 
 interface GetGSCStatusOptions {
   coreVoting: VotingContract;
@@ -8,6 +8,12 @@ interface GetGSCStatusOptions {
   address: string | undefined;
 }
 
+/**
+ * Get a specific GSC status for a voter. This method makes multiple calls for
+ * multiple different scenarios. Prefer more specific methods over this one for
+ * inferring specific information like whether the voter is a member or
+ * eligible.
+ */
 export async function getGSCStatus({
   coreVoting,
   gscVoting,
@@ -25,14 +31,13 @@ export async function getGSCStatus({
     return "Member";
   }
 
-  const votingPower = await coreVoting.getVotingPower(address);
-  const requiredVotingPower = await gscVoting.getRequiredVotingPower();
+  const eligible = await getIsGSCEligible({
+    address,
+    coreVoting,
+    gscVoting,
+  });
 
-  if (parseEther(votingPower).gt(parseEther(requiredVotingPower))) {
-    return "Eligible";
-  }
-
-  return "Ineligible";
+  return eligible ? "Eligible" : "Ineligible";
 }
 
 export function getIsGSCMember(voterGSCStatus: GSCStatus): boolean {
