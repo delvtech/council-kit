@@ -176,8 +176,8 @@ export class VestingVaultContractDataSource extends VotingVaultContractDataSourc
       ["getVotingPowerBreakdown", address, fromBlock, toBlock],
       async () => {
         const eventFilter = this.contract.filters.VoteChange(
-          undefined,
           address,
+          undefined,
         );
         const voteChangeEvents = await this.getEvents(
           eventFilter,
