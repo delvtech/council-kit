@@ -29,9 +29,9 @@ export function WalletIcon({
   }, [address, size]);
 
   return (
-    <div
+    <span
       className={classNames("inline-flex", className)}
       ref={jazziconRef}
-    ></div>
+    ></span>
   );
 }
