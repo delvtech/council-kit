@@ -136,9 +136,7 @@ export class VotingContract<
    */
   async getTotalVotingPower(atBlock?: number): Promise<string> {
     const vaultPowers = await Promise.all(
-      this.vaults.map(
-        (vault) => vault.getTotalVotingPower?.(undefined, atBlock) || "0",
-      ),
+      this.vaults.map((vault) => vault.getTotalVotingPower?.(atBlock) || "0"),
     );
     return sumStrings(vaultPowers);
   }
