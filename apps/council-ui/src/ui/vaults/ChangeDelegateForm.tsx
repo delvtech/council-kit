@@ -5,7 +5,6 @@ import { makeVoterURL } from "src/routes";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Input } from "src/ui/base/forms/Input";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
-import { useEnsResolver } from "wagmi";
 
 interface ChangeDelegateFormProps {
   currentDelegate: string;
@@ -22,13 +21,11 @@ export function ChangeDelegateForm({
   buttonText = "Delegate",
 }: ChangeDelegateFormProps): ReactElement {
   const [newDelegate, setNewDelegate] = useState("");
-  const { data: newDelegateENS } = useEnsResolver({ name: newDelegate });
   const delegateName = useDisplayName(currentDelegate);
   const isDelegateZeroAddress =
     currentDelegate === ethers.constants.AddressZero;
 
-  const isNotNew =
-    newDelegate === currentDelegate || newDelegateENS?.name === delegateName;
+  const isNotNew = newDelegate === currentDelegate;
 
   return (
     <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-200 h-fit">
