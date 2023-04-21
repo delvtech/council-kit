@@ -33,6 +33,12 @@ export interface VotingContractDataSource extends DataSource {
   ) => Promise<ProposalDataPreview[]>;
 
   /**
+   * Get the array of addresses that will be called (targets) and the data
+   * they'll be called with (calldatas) by this proposal.
+   */
+  getTargetsAndCalldatas: (proposalId: number) => Promise<Actions | null>;
+
+  /**
    * Get the id of all executed proposals.
    * @param fromBlock - Include all proposals executed on or after this block number.
    * @param toBlock - Include all proposals executed on or before this block number.
@@ -103,15 +109,11 @@ export interface VotingContractDataSource extends DataSource {
    * Execute a proposal.
    * @param signer - An ethers Signer instance.
    * @param proposalId - The id of the proposal to execute.
-   * @param targets - The targets (contract addresses) to call.
-   * @param calldatas - The calldatas to call each target with.
    * @returns The transaction hash.
    */
   executeProposal: (
     signer: Signer,
-    proposalId: number,
-    targets: string[],
-    calldatas: (string | number[])[],
+    id: number,
     options?: TransactionOptions,
   ) => Promise<string>;
 
@@ -157,6 +159,14 @@ export interface ProposalData extends ProposalDataPreview {
   hash: string;
   requiredQuorum: string;
   lastCallBlock: number;
+}
+
+/**
+ * The actions a proposal will perform.
+ */
+export interface Actions {
+  targets: string[];
+  calldatas: string[];
 }
 
 /**

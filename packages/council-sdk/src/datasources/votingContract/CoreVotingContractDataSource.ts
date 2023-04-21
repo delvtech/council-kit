@@ -1,12 +1,18 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
 import { BigNumber, Signer } from "ethers";
-import { BytesLike, formatEther, parseEther } from "ethers/lib/utils";
+import {
+  BytesLike,
+  formatEther,
+  Interface,
+  parseEther,
+} from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
 import {
   ContractDataSource,
   TransactionOptions,
 } from "src/datasources/base/contract/ContractDataSource";
 import {
+  Actions,
   Ballot,
   ProposalData,
   ProposalDataPreview,
@@ -132,6 +138,28 @@ export class CoreVotingContractDataSource
     return executedEvent.transactionHash;
   }
 
+  getTargetsAndCalldatas(proposalId: number): Promise<Actions | null> {
+    return this.cached(["getTargetsAndCalldatas", proposalId], async () => {
+      const createdTransactionHash =
+        await this.getProposalCreatedTransactionHash(proposalId);
+
+      if (!createdTransactionHash) {
+        return null;
+      }
+
+      const createdTransaction = await this.context.provider.getTransaction(
+        createdTransactionHash,
+      );
+
+      const coreVotingInterface = new Interface(CoreVoting__factory.abi);
+      const { targets, calldatas } = coreVotingInterface.decodeFunctionData(
+        "proposal",
+        createdTransaction.data,
+      );
+      return { targets, calldatas };
+    });
+  }
+
   async getVote(address: string, proposalId: number): Promise<VoteData | null> {
     const [power, ballotIndex] = await this.call("votes", [
       address,
@@ -245,18 +273,24 @@ export class CoreVotingContractDataSource
 
   async executeProposal(
     signer: Signer,
-    proposalId: number,
-    targets: string[],
-    calldatas: (string | number[])[],
+    id: number,
     options?: TransactionOptions,
   ): Promise<string> {
+    const actions = await this.getTargetsAndCalldatas(id);
+
+    if (!actions) {
+      throw `Cannot execute proposal ${id} because it doesn't exist.`;
+    }
+
     const transaction = await this.callWithSigner(
       "execute",
-      [proposalId, targets, calldatas],
+      [id, actions.targets, actions.calldatas],
       signer,
       options,
     );
+
     this.clearCached();
+
     return transaction.hash;
   }
 
