@@ -3,6 +3,7 @@ import { parseEther } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
 import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import {
+  Actions,
   Ballot,
   ProposalData,
   VoteResults,
@@ -67,6 +68,14 @@ export class Proposal extends Model {
       unlockBlock: dataPreview?.unlockBlock,
       expirationBlock: dataPreview?.expirationBlock,
     };
+  }
+
+  /**
+   * Get the array of addresses that will be called (targets) and the data
+   * they'll be called with (calldatas) by a proposal.
+   */
+  getTargetsAndCalldatas(): Promise<Actions | null> {
+    return this.votingContract.dataSource.getTargetsAndCalldatas(this.id);
   }
 
   /**
@@ -266,6 +275,19 @@ export class Proposal extends Model {
     return (
       currentQuorum >= requiredQuorum &&
       parseEther(results.yes).gt(parseEther(results.no))
+    );
+  }
+
+  /**
+   * Execute a proposal.
+   * @param signer - An ethers Signer instance.
+   * @returns The transaction hash.
+   */
+  execute(signer: Signer, options?: TransactionOptions): Promise<string> {
+    return this.votingContract.dataSource.executeProposal(
+      signer,
+      this.id,
+      options,
     );
   }
 
