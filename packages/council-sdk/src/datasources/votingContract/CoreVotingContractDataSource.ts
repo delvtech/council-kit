@@ -1,13 +1,18 @@
 import { CoreVoting, CoreVoting__factory } from "@council/typechain";
-import { ProposalExecutedEvent } from "@council/typechain/dist/contracts/CoreVoting";
 import { BigNumber, Signer } from "ethers";
-import { BytesLike, formatEther, parseEther } from "ethers/lib/utils";
+import {
+  BytesLike,
+  formatEther,
+  Interface,
+  parseEther,
+} from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
 import {
   ContractDataSource,
   TransactionOptions,
 } from "src/datasources/base/contract/ContractDataSource";
 import {
+  Actions,
   Ballot,
   ProposalData,
   ProposalDataPreview,
@@ -107,65 +112,12 @@ export class CoreVotingContractDataSource
     });
   }
 
-  /**
-   * Create a new proposal.
-   * @param signer - An ethers Signer instance for the voter.
-   * @param vaults - The addresses of the approved vaults to draw voting power
-   *   from.
-   * @param targets - The targets (contract addresses) to call.
-   * @param calldatas - The calldatas to call each target with.
-   * @param lastCall: A block number that limits when the proposal can be executed.
-   * @param ballot: The vote for the proposal from the signer's account.
-   * @returns The transaction hash.
-   */
-  async createProposal(
-    signer: Signer,
-    vaults: string[],
-    targets: string[],
-    calldatas: BytesLike[],
-    lastCall: number,
-    ballot: Ballot,
-    options?: TransactionOptions & {
-      /**
-       * Extra data given to the vaults to help calculation
-       */
-      extraVaultData?: BytesLike[];
-    },
-  ): Promise<string> {
-    const transaction = await this.callWithSigner(
-      "proposal",
-      [
-        vaults,
-        options?.extraVaultData || vaults.map(() => "0x00"),
-        targets,
-        calldatas,
-        lastCall,
-        BALLOTS.indexOf(ballot),
-      ],
-      signer,
-    );
-    this.clearCached();
-    return transaction.hash;
-  }
-
-  getProposalExecutedEvents(
-    fromBlock?: number,
-    toBlock?: number,
-  ): Promise<ProposalExecutedEvent[]> {
-    return this.cached(["getProposalExecutedEvents", fromBlock, toBlock], () =>
-      this.getEvents(
-        this.contract.filters.ProposalExecuted(),
-        fromBlock,
-        toBlock,
-      ),
-    );
-  }
-
   async getExecutedProposalIds(
     fromBlock?: number,
     toBlock?: number,
   ): Promise<number[]> {
-    const proposalExecutedEvents = await this.getProposalExecutedEvents(
+    const proposalExecutedEvents = await this.getEvents(
+      this.contract.filters.ProposalExecuted(),
       fromBlock,
       toBlock,
     );
@@ -173,7 +125,9 @@ export class CoreVotingContractDataSource
   }
 
   async getProposalExecutedTransactionHash(id: number): Promise<string | null> {
-    const proposalExecutedEvents = await this.getProposalExecutedEvents();
+    const proposalExecutedEvents = await this.getEvents(
+      this.contract.filters.ProposalExecuted(),
+    );
     const executedEvent = proposalExecutedEvents.find(
       ({ args }) => args.proposalId.toNumber() === id,
     );
@@ -182,6 +136,28 @@ export class CoreVotingContractDataSource
     }
 
     return executedEvent.transactionHash;
+  }
+
+  getTargetsAndCalldatas(proposalId: number): Promise<Actions | null> {
+    return this.cached(["getTargetsAndCalldatas", proposalId], async () => {
+      const createdTransactionHash =
+        await this.getProposalCreatedTransactionHash(proposalId);
+
+      if (!createdTransactionHash) {
+        return null;
+      }
+
+      const createdTransaction = await this.context.provider.getTransaction(
+        createdTransactionHash,
+      );
+
+      const coreVotingInterface = new Interface(CoreVoting__factory.abi);
+      const { targets, calldatas } = coreVotingInterface.decodeFunctionData(
+        "proposal",
+        createdTransaction.data,
+      );
+      return { targets, calldatas };
+    });
   }
 
   async getVote(address: string, proposalId: number): Promise<VoteData | null> {
@@ -252,6 +228,70 @@ export class CoreVotingContractDataSource
       no: formatEther(powerByBallot.no),
       maybe: formatEther(powerByBallot.maybe),
     };
+  }
+
+  /**
+   * Create a new proposal.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param vaults - The addresses of the approved vaults to draw voting power
+   *   from.
+   * @param targets - The targets (contract addresses) to call.
+   * @param calldatas - The calldatas to call each target with.
+   * @param lastCall: A block number that limits when the proposal can be executed.
+   * @param ballot: The vote for the proposal from the signer's account.
+   * @returns The transaction hash.
+   */
+  async createProposal(
+    signer: Signer,
+    vaults: string[],
+    targets: string[],
+    calldatas: BytesLike[],
+    lastCall: number,
+    ballot: Ballot,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "proposal",
+      [
+        vaults,
+        options?.extraVaultData || vaults.map(() => "0x00"),
+        targets,
+        calldatas,
+        lastCall,
+        BALLOTS.indexOf(ballot),
+      ],
+      signer,
+    );
+    this.clearCached();
+    return transaction.hash;
+  }
+
+  async executeProposal(
+    signer: Signer,
+    id: number,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    const actions = await this.getTargetsAndCalldatas(id);
+
+    if (!actions) {
+      throw `Cannot execute proposal ${id} because it doesn't exist.`;
+    }
+
+    const transaction = await this.callWithSigner(
+      "execute",
+      [id, actions.targets, actions.calldatas],
+      signer,
+      options,
+    );
+
+    this.clearCached();
+
+    return transaction.hash;
   }
 
   async vote(

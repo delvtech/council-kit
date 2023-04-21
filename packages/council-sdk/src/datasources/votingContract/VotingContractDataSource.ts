@@ -23,32 +23,6 @@ export interface VotingContractDataSource extends DataSource {
   getProposal: (id: number) => Promise<ProposalData | null>;
 
   /**
-   * Create a new proposal.
-   * @param signer - An ethers Signer instance for the voter.
-   * @param vaults - The addresses of the approved vaults to draw voting power
-   *   from.
-   * @param targets - The targets (contract addresses) to call.
-   * @param calldatas - The calldatas to call each target with.
-   * @param lastCall: A block number that limits when the proposal can be executed.
-   * @param ballot: The vote for the proposal from the signer's account.
-   * @returns The transaction hash.
-   */
-  createProposal: (
-    signer: Signer,
-    vaults: string[],
-    targets: string[],
-    calldatas: BytesLike[],
-    lastCall: number,
-    ballot: Ballot,
-    options?: TransactionOptions & {
-      /**
-       * Extra data given to the vaults to help calculation
-       */
-      extraVaultData?: BytesLike[];
-    },
-  ) => Promise<string>;
-
-  /**
    * Get the `ProposalDataPreview` of all proposals ever created.
    * @param fromBlock - Include all proposals created on or after this block number.
    * @param toBlock - Include all proposals created on or before this block number.
@@ -57,6 +31,12 @@ export interface VotingContractDataSource extends DataSource {
     fromBlock?: number,
     toBlock?: number,
   ) => Promise<ProposalDataPreview[]>;
+
+  /**
+   * Get the array of addresses that will be called (targets) and the data
+   * they'll be called with (calldatas) by this proposal.
+   */
+  getTargetsAndCalldatas: (proposalId: number) => Promise<Actions | null>;
 
   /**
    * Get the id of all executed proposals.
@@ -100,6 +80,44 @@ export interface VotingContractDataSource extends DataSource {
   getResults: (proposalId: number) => Promise<VoteResults>;
 
   /**
+   * Create a new proposal.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param vaults - The addresses of the approved vaults to draw voting power
+   *   from.
+   * @param targets - The targets (contract addresses) to call.
+   * @param calldatas - The calldatas to call each target with.
+   * @param lastCall: A block number that limits when the proposal can be executed.
+   * @param ballot: The vote for the proposal from the signer's account.
+   * @returns The transaction hash.
+   */
+  createProposal: (
+    signer: Signer,
+    vaults: string[],
+    targets: string[],
+    calldatas: BytesLike[],
+    lastCall: number,
+    ballot: Ballot,
+    options?: TransactionOptions & {
+      /**
+       * Extra data given to the vaults to help calculation
+       */
+      extraVaultData?: BytesLike[];
+    },
+  ) => Promise<string>;
+
+  /**
+   * Execute a proposal.
+   * @param signer - An ethers Signer instance.
+   * @param proposalId - The id of the proposal to execute.
+   * @returns The transaction hash.
+   */
+  executeProposal: (
+    signer: Signer,
+    id: number,
+    options?: TransactionOptions,
+  ) => Promise<string>;
+
+  /**
    * Vote on this proposal.
    * @param signer - An ethers Signer instance for the voter.
    * @param vaults - The addresses of the approved vaults to draw voting power
@@ -141,6 +159,14 @@ export interface ProposalData extends ProposalDataPreview {
   hash: string;
   requiredQuorum: string;
   lastCallBlock: number;
+}
+
+/**
+ * The actions a proposal will perform.
+ */
+export interface Actions {
+  targets: string[];
+  calldatas: string[];
 }
 
 /**
