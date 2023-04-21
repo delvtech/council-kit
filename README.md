@@ -1,6 +1,6 @@
 ![Council Kit Logo](https://i.imgur.com/2n9k3Rv.png)
 
-# Council-Kit
+# Council-Kit 
 
 Council kit is the complete toolkit for scaffolding your own DAO using the
 council protocol. This repository is designed to be forkable for your own
