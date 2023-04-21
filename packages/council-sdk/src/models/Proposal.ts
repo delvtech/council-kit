@@ -273,7 +273,7 @@ export class Proposal extends Model {
     const currentQuorum = await this.getCurrentQuorum();
     const results = await this.getResults();
     return (
-      currentQuorum >= requiredQuorum &&
+      parseEther(currentQuorum).gte(parseEther(requiredQuorum)) &&
       parseEther(results.yes).gt(parseEther(results.no))
     );
   }
