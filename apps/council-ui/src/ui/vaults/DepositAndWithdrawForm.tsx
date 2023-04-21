@@ -30,7 +30,9 @@ export function DepositAndWithdrawForm({
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
 
-  const isApproved = parseEther(allowance).gt(parseEther(depositAmount || "0"));
+  const isApproved = parseEther(allowance).gte(
+    parseEther(depositAmount || "0"),
+  );
 
   return (
     <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-200 h-fit">
