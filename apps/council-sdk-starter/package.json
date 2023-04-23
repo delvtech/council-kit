@@ -17,6 +17,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "createProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/createProposal.ts",
+    "executeProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/executeProposal.ts",
     "getGSCMembers": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/getGSCMembers.ts",
     "getProposalResults": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/getProposalResults.ts"
   },
