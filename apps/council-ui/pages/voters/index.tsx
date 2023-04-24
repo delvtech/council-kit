@@ -44,7 +44,7 @@ export default function Voters(): ReactElement {
         </div>
 
         <a
-          className="flex items-center gap-2 px-5 py-3 bg-[#222432] border border-[#1A1D2D] rounded-lg"
+          className="flex items-center gap-2 pl-4 pr-3 py-3 bg-[#222432] border border-[#1A1D2D] rounded-lg"
           href="https://element.karmahq.xyz/"
           target="_blank"
           rel="noreferrer"
