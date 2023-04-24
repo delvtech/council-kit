@@ -30,7 +30,6 @@ export default function VoterDetailsPage(): ReactElement {
   const { address } = query as { address: string | undefined };
   const { coreVoting } = useCouncil();
   const { data, status } = useVoterData(address);
-
   const displayName = useDisplayName(address);
 
   if (!address) {

@@ -50,7 +50,7 @@ export default function Voters(): ReactElement {
           rel="noreferrer"
         >
           <span className="grow text-[#C7CADF] text-sm">
-            See more details including snapshot and forum activity on Karma!
+            See more details including snapshot and forum activity on Karma
           </span>
           <Image
             src="/karma-logo-dark.svg"

@@ -43,7 +43,7 @@ export function VoterStatsRow({
       <Stat label="Proposals created" value={proposalsCreated} />
       {gscStatus && <Stat label="GSC Member" value={gscStatus} />}
       {karmaProfile && (
-        <Stat label="Karma Profile" value={karmaProfile} />
+        <Stat label="Karma Stats" value={karmaProfile} />
         // <div className="daisy-stats">
         //   <div className="daisy-stat bg-[#222432] text-[#C7CADF]">
         //     <div className="daisy-stat-title text-[#C7CADF] opacity-100">Profile</div>
