@@ -1,7 +1,7 @@
 export function ExternalLinkSVG({ size = 16 }: { size?: number }): JSX.Element {
   return (
     <svg
-      className="fill-base-content inline ml-1"
+      className="fill-current inline ml-1"
       width={size}
       height={size}
       viewBox="0 0 24 24"

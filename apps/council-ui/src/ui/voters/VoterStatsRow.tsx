@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
@@ -10,6 +10,7 @@ interface VoterStatsRowProps {
   proposalsVoted: number;
   votingPower: string;
   percentOfTVP: number;
+  karmaProfile?: ReactNode;
 }
 
 export function VoterStatsRow({
@@ -18,6 +19,7 @@ export function VoterStatsRow({
   proposalsVoted,
   votingPower,
   percentOfTVP,
+  karmaProfile,
 }: VoterStatsRowProps): ReactElement {
   let percentOfTVPLabel = percentOfTVP > 0.1 ? `${percentOfTVP}%` : "< 0.1%";
   if (!percentOfTVP) {
@@ -40,6 +42,30 @@ export function VoterStatsRow({
       <Stat label="Proposals voted" value={proposalsVoted} />
       <Stat label="Proposals created" value={proposalsCreated} />
       {gscStatus && <Stat label="GSC Member" value={gscStatus} />}
+      {karmaProfile && (
+        <Stat label="Karma Profile" value={karmaProfile} />
+        // <div className="daisy-stats">
+        //   <div className="daisy-stat bg-[#222432] text-[#C7CADF]">
+        //     <div className="daisy-stat-title text-[#C7CADF] opacity-100">Profile</div>
+        //     <div className="text-sm daisy-stat-value">
+        //       <a
+        //         href={karmaProfile}
+        //         target="_blank"
+        //         rel="noreferrer"
+        //         className="flex items-center gap-1"
+        //       >
+        //         <Image
+        //           src="/karma-logo-dark.svg"
+        //           alt="Karma"
+        //           width={64}
+        //           height={16}
+        //         />
+        //         <ExternalLinkSVG />
+        //       </a>
+        //     </div>
+        //   </div>
+        // </div>
+      )}
     </div>
   );
 }

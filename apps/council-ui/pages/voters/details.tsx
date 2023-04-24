@@ -10,6 +10,7 @@ import { Breadcrumbs } from "src/ui/base/Breadcrumbs";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Page } from "src/ui/base/Page";
+import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
@@ -58,6 +59,17 @@ export default function VoterDetailsPage(): ReactElement {
           proposalsVoted={data.votingHistory.length}
           votingPower={data.votingPower}
           percentOfTVP={data.percentOfTVP}
+          karmaProfile={
+            <a
+              href={`https://www.karmahq.xyz/profile/${address}#elementfinance`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center"
+            >
+              {displayName}
+              <ExternalLinkSVG />
+            </a>
+          }
         />
       ) : (
         <VoterStatsRowSkeleton />
@@ -120,23 +132,36 @@ function VoterHeader({ address }: VoterHeaderProps) {
     );
   }
 
-  return ens ? (
-    <div className="w-fit">
-      <h1 className="text-5xl font-bold">{ens}</h1>
-      <a
-        href={makeEtherscanAddressURL(address, chainId)}
-        rel="noopener noreferrer"
+  return (
+    <div className="flex items-center justify-between">
+      {ens ? (
+        <div className="w-fit">
+          <h1 className="text-5xl font-bold">{ens}</h1>
+          <a
+            href={makeEtherscanAddressURL(address, chainId)}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <h2 className="mt-2 text-2xl">
+              <AddressWithEtherscan address={address} iconSize={24} />
+            </h2>
+          </a>
+        </div>
+      ) : (
+        <h1 className="mt-2 text-5xl w-fit">
+          <AddressWithEtherscan address={address} iconSize={36} />
+        </h1>
+      )}
+      {/* <a
+        className="flex items-center gap-3 pl-4 pr-2 py-3 bg-[#222432] border border-[#1A1D2D] rounded-lg"
+        href={`https://www.karmahq.xyz/profile/${address}#elementfinance`}
         target="_blank"
+        rel="noreferrer"
       >
-        <h2 className="mt-2 text-2xl">
-          <AddressWithEtherscan address={address} iconSize={24} />
-        </h2>
-      </a>
+        <Image src="/karma-logo-dark.svg" alt="Karma" width={80} height={20} />
+        <ChevronRightIcon fill="#626890" width={24} />
+      </a> */}
     </div>
-  ) : (
-    <h1 className="mt-2 text-5xl w-fit">
-      <AddressWithEtherscan address={address} iconSize={36} />
-    </h1>
   );
 }
 
