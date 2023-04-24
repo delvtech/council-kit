@@ -1,4 +1,6 @@
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import Image from "next/image";
 import { ReactElement, useMemo, useState } from "react";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
@@ -40,6 +42,24 @@ export default function Voters(): ReactElement {
             by partial keywords using ENS names or addresses.
           </p>
         </div>
+
+        <a
+          className="flex items-center gap-2 px-5 py-3 bg-[#222432] border border-[#1A1D2D] rounded-lg"
+          href="https://element.karmahq.xyz/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="grow text-[#C7CADF] text-sm">
+            See more details including snapshot and forum activity on Karma!
+          </span>
+          <Image
+            src="/karma-logo-dark.svg"
+            alt="Karma"
+            width={80}
+            height={20}
+          />
+          <ChevronRightIcon fill="#626890" width={24} />
+        </a>
 
         <div className="flex items-center gap-4">
           <input
