@@ -1,6 +1,7 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Stat } from "src/ui/base/Stat";
+import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { GSCStatus } from "src/vaults/gscVault/types";
 
@@ -10,7 +11,10 @@ interface VoterStatsRowProps {
   proposalsVoted: number;
   votingPower: string;
   percentOfTVP: number;
-  karmaProfile?: ReactNode;
+  karmaProfile?: {
+    name: string;
+    url: string;
+  };
 }
 
 export function VoterStatsRow({
@@ -43,7 +47,20 @@ export function VoterStatsRow({
       <Stat label="Proposals created" value={proposalsCreated} />
       {gscStatus && <Stat label="GSC Member" value={gscStatus} />}
       {karmaProfile && (
-        <Stat label="Karma Stats" value={karmaProfile} />
+        <Stat
+          label="Karma Stats"
+          value={
+            <a
+              href={karmaProfile.url}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center"
+            >
+              {karmaProfile.name}
+              <ExternalLinkSVG />
+            </a>
+          }
+        />
         // <div className="daisy-stats">
         //   <div className="daisy-stat bg-[#222432] text-[#C7CADF]">
         //     <div className="daisy-stat-title text-[#C7CADF] opacity-100">Profile</div>

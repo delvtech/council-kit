@@ -8,9 +8,9 @@ import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
 import { Routes } from "src/routes";
 import { Breadcrumbs } from "src/ui/base/Breadcrumbs";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Page } from "src/ui/base/Page";
-import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useCouncil } from "src/ui/council/useCouncil";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
@@ -59,17 +59,10 @@ export default function VoterDetailsPage(): ReactElement {
           proposalsVoted={data.votingHistory.length}
           votingPower={data.votingPower}
           percentOfTVP={data.percentOfTVP}
-          karmaProfile={
-            <a
-              href={`https://www.karmahq.xyz/profile/${address}#elementfinance`}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center"
-            >
-              {displayName}
-              <ExternalLinkSVG />
-            </a>
-          }
+          karmaProfile={{
+            name: displayName || formatAddress(address),
+            url: `https://element.karmahq.xyz/profile/${address}#votinghistory`,
+          }}
         />
       ) : (
         <VoterStatsRowSkeleton />
