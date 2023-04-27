@@ -7,6 +7,8 @@ import { deployLockingVault } from "src/vaults/lockingVault/deployLockingVault";
 import { deployVestingVault } from "src/vaults/deployVestingVault";
 import { deployGSCCoreVoting } from "src/coreVoting/deployGSCCoreVoting";
 import { Contract, Signer } from "ethers";
+import { config } from "dotenv";
+config();
 
 export async function deployCouncil(signer: Signer): Promise<
   {
@@ -22,13 +24,21 @@ export async function deployCouncil(signer: Signer): Promise<
   const chainId = await signer.getChainId();
   const isLocalHost = chainId === 31337;
 
+  // Return all of the contracts that get deployed
+  const ret = [];
+
   // The voting token is used to determine voting power in the Locking Vault and
   // Vesting Vault. It has no dependencies on any of the council contracts.
-  const votingToken = await deployVotingToken({
-    tokenName: "Council Voting Token",
-    tokenSymbol: "CVT",
-    signer,
-  });
+  let votingTokenAddress = process.env.VOTING_TOKEN_ADDRESS;
+  if (!votingTokenAddress) {
+    const votingToken = await deployVotingToken({
+      tokenName: "Council Voting Token",
+      tokenSymbol: "CVT",
+      signer,
+    });
+    votingTokenAddress = votingToken.address;
+    ret.push(votingToken);
+  }
 
   // The GSC Core Voting is a privileged voting contract which enables a small
   // number of people to create proposals and pass them without a general
@@ -82,7 +92,7 @@ export async function deployCouncil(signer: Signer): Promise<
   // Locking Vault contract can be upgraded as needed.
   const { lockingVault, lockingVaultProxy } = await deployLockingVault({
     signer,
-    votingTokenAddress: votingToken.address,
+    votingTokenAddress,
     // Set the Timelock as the owner of the proxy contract so that upgrades must
     // go through the normal proposal flow
     proxyOwnerAddress: timelock.address,
@@ -95,7 +105,7 @@ export async function deployCouncil(signer: Signer): Promise<
   // on withdrawing tokens as defined by a vesting schedule.
   const { vestingVault, vestingVaultProxy } = await deployVestingVault({
     signer,
-    votingTokenAddress: votingToken.address,
+    votingTokenAddress,
     // Set the Timelock as the owner of the proxy contract so that upgrades must
     // go through the normal proposal flow
     proxyOwnerAddress: timelock.address,
@@ -152,9 +162,8 @@ export async function deployCouncil(signer: Signer): Promise<
   console.log("Set owner of Timelock to CoreVoting");
 
   console.log("All contracts deployed!");
-  return [
+  ret.push(
     coreVoting,
-    votingToken,
     gscCoreVoting,
     gscVault,
     lockingVault,
@@ -163,5 +172,6 @@ export async function deployCouncil(signer: Signer): Promise<
     treasury,
     vestingVault,
     vestingVaultProxy,
-  ];
+  );
+  return ret;
 }

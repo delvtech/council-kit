@@ -39,7 +39,8 @@
         "GOERLI_DEPLOYER_PRIVATE_KEY",
         "MAINNET_URI",
         "GOERLI_URI",
-        "ETHERSCAN_API_KEY"
+        "ETHERSCAN_API_KEY",
+        "VOTING_TOKEN_ADDRESS"
       ]
     },
     "@council/cli#build": {
