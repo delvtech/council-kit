@@ -40,7 +40,19 @@
         "MAINNET_URI",
         "GOERLI_URI",
         "ETHERSCAN_API_KEY",
-        "VOTING_TOKEN_ADDRESS"
+        "VOTING_TOKEN_ADDRESS",
+        "GSC_BASE_QUORUM",
+        "GSC_LOCK_DURATION",
+        "GSC_EXTRA_VOTING",
+        "GSC_VOTING_POWER_BOUND",
+        "GSC_IDLE_DURATION",
+        "BASE_QUORUM",
+        "LOCK_DURATION",
+        "EXTRA_VOTING",
+        "MIN_PROPOSAL_POWER",
+        "WAIT_BLOCKS",
+        "TREASURY_ADDRESS",
+        "UNVESTED_VOTING_MULTIPLIER"
       ]
     },
     "@council/cli#build": {
