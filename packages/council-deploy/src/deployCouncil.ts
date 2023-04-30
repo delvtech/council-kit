@@ -19,6 +19,9 @@ export async function deployCouncil(signer: Signer): Promise<
   const signerAddress = await signer.getAddress();
   console.log("Signer:", signerAddress);
 
+  const chainId = await signer.getChainId();
+  const isLocalHost = chainId === 31337;
+
   // The voting token is used to determine voting power in the Locking Vault and
   // Vesting Vault. It has no dependencies on any of the council contracts.
   const votingToken = await deployVotingToken({
@@ -44,7 +47,7 @@ export async function deployCouncil(signer: Signer): Promise<
     ownerAddress: signerAddress,
     // base quorum is 1 so it only takes 1 gsc member to pass a proposal
     baseQuorum: "1",
-    lockDuration: 10,
+    lockDuration: isLocalHost ? 0 : 10,
     extraVotingTime: 15,
   });
 
@@ -56,7 +59,7 @@ export async function deployCouncil(signer: Signer): Promise<
   const timelock = await deployTimelock({
     signer,
     // can execute a call 10 blocks after it's registered
-    waitTimeInBlocks: 10,
+    waitTimeInBlocks: isLocalHost ? 0 : 10,
     // Temporarily set the owner as the current signer. We will reassign the
     // owner to CoreVoting at the end so that only community votes can govern
     // the system.
@@ -84,7 +87,7 @@ export async function deployCouncil(signer: Signer): Promise<
     // go through the normal proposal flow
     proxyOwnerAddress: timelock.address,
     // 300k blocks ~ 1 week on goerli
-    staleBlockLag: 300_000,
+    staleBlockLag: isLocalHost ? 10 : 300_000,
   });
 
   // The Vesting Vault is similar to the Locking Vault, however the voting power
@@ -98,7 +101,7 @@ export async function deployCouncil(signer: Signer): Promise<
     proxyOwnerAddress: timelock.address,
     timelockAddress: timelock.address,
     // 300k blocks ~ 1 week on goerli
-    staleBlockLag: 300_000,
+    staleBlockLag: isLocalHost ? 10 : 300_000,
   });
 
   const coreVoting = await deployCoreVoting({
@@ -115,9 +118,9 @@ export async function deployCouncil(signer: Signer): Promise<
     // the GSC does not have a voting power requirement to submit a proposal
     gscCoreVotingAddress: gscCoreVoting.address,
     // can execute a proposal 10 blocks after it gets created
-    lockDuration: 0,
+    lockDuration: 10,
     // can still vote on a proposal for this many blocks after it unlocks
-    extraVotingTime: 300000, // ~ 1 week on goerli
+    extraVotingTime: isLocalHost ? 10 : 300_000, // ~ 1 week on goerli
   });
 
   const gscVault = await deployGSCVault({
