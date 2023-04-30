@@ -1,35 +1,33 @@
 import { MockERC20__factory } from "@council/typechain";
-import { Wallet } from "ethers";
-import hre from "hardhat";
+import { ethers, network } from "hardhat";
 import prompt from "prompt";
 import { promptString } from "src/base/prompts/promptString";
 import { goerliDeployments } from "src/deployments";
-import { getDeploymentForContract } from "src/deployments/getDeployments";
+import {
+  getDeploymentForContract,
+  getDeploymentsFile,
+} from "src/deployments/getDeployments";
 import { DeploymentInfo } from "src/deployments/types";
 import { getVotingTokens } from "src/votingToken/getVotingTokens";
 import { promptMint } from "src/votingToken/promptMint";
 
-const goerliKey = process.env.GOERLI_DEPLOYER_PRIVATE_KEY;
-
-const allVotingTokens = getVotingTokens(goerliDeployments);
-const votingTokensTable = allVotingTokens.map((votingToken) => ({
-  "Deployment name": (
-    getDeploymentForContract(
-      votingToken.address,
-      goerliDeployments,
-    ) as DeploymentInfo
-  ).name,
-  "Voting token address": votingToken.address,
-}));
-
 async function mintFromListOfVotingTokens() {
-  const provider = hre.ethers.provider;
-  if (!goerliKey) {
-    console.error("No private key for goerli deployer address provided.");
-    return;
-  }
+  const signers = await ethers.getSigners();
+  const signer = signers[0];
+  const chainId = network.config.chainId;
 
-  const signer = new Wallet(goerliKey, provider);
+  const deploymentsFile = await getDeploymentsFile(network.name, chainId);
+  const deployments = deploymentsFile.deployments;
+  const allVotingTokens = getVotingTokens(deployments);
+  const votingTokensTable = allVotingTokens.map((votingToken) => ({
+    "Deployment name": (
+      getDeploymentForContract(
+        votingToken.address,
+        deployments,
+      ) as DeploymentInfo
+    ).name,
+    "Voting token address": votingToken.address,
+  }));
 
   console.table(votingTokensTable);
   prompt.start();
@@ -44,8 +42,7 @@ async function mintFromListOfVotingTokens() {
   );
 
   const recipientAddress = await promptString({
-    message:
-      "Enter the recipient's address (Defaults to Goerli Deployer from .env)",
+    message: "Enter the recipient's address",
     defaultValue: signer.address,
   });
 

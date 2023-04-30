@@ -115,7 +115,7 @@ export async function deployCouncil(signer: Signer): Promise<
     // the GSC does not have a voting power requirement to submit a proposal
     gscCoreVotingAddress: gscCoreVoting.address,
     // can execute a proposal 10 blocks after it gets created
-    lockDuration: 10,
+    lockDuration: 0,
     // can still vote on a proposal for this many blocks after it unlocks
     extraVotingTime: 300000, // ~ 1 week on goerli
   });

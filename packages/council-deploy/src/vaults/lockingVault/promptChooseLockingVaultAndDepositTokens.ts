@@ -1,10 +1,11 @@
 import { LockingVault__factory, MockERC20__factory } from "@council/typechain";
-import { Wallet } from "ethers";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
-import hre from "hardhat";
+import { ethers, network } from "hardhat";
 import prompt from "prompt";
-import { goerliDeployments } from "src/deployments";
-import { getDeploymentForContract } from "src/deployments/getDeployments";
+import {
+  getDeploymentForContract,
+  getDeploymentsFile,
+} from "src/deployments/getDeployments";
 import { promptString } from "src/base/prompts/promptString";
 import { promptMint } from "src/votingToken/promptMint";
 import { promptNumber } from "src/base/prompts/promptNumber";
@@ -13,27 +14,24 @@ import { makeGoerliTransactionUrl } from "src/etherscan/urls";
 import { promptYesNo } from "src/base/prompts/promptYesNo";
 import { DeploymentInfo } from "src/deployments/types";
 
-const goerliKey = process.env.GOERLI_DEPLOYER_PRIVATE_KEY;
-
-const allLockingVaults = getLockingVaults(goerliDeployments);
-const lockingVaultsTable = allLockingVaults.map((lockingVault) => ({
-  "Deployment name": (
-    getDeploymentForContract(
-      lockingVault.address,
-      goerliDeployments,
-    ) as DeploymentInfo
-  ).name,
-  "LockingVault address": lockingVault.address,
-}));
-
 async function promptChooseLockingVaultAndDepositTokens() {
-  const provider = hre.ethers.provider;
-  if (!goerliKey) {
-    console.error("No private key for goerli deployer address provided.");
-    return;
-  }
+  const signers = await ethers.getSigners();
+  const signer = signers[0];
+  const chainId = network.config.chainId;
 
-  const signer = new Wallet(goerliKey, provider);
+  const deploymentsFile = await getDeploymentsFile(network.name, chainId);
+  const deployments = deploymentsFile.deployments;
+  const allLockingVaults = getLockingVaults(deployments);
+  const lockingVaultsTable = allLockingVaults.map((lockingVault) => ({
+    "Deployment name": (
+      getDeploymentForContract(
+        lockingVault.address,
+        deployments,
+      ) as DeploymentInfo
+    ).name,
+    "LockingVault address": lockingVault.address,
+  }));
+
   prompt.start();
 
   // choose a locking vault
@@ -91,11 +89,7 @@ async function promptChooseLockingVaultAndDepositTokens() {
       amountToDepositBigNumber,
     );
     await approvalTx.wait(1);
-    console.log(
-      `Approval confirmed! View on etherscan: ${makeGoerliTransactionUrl(
-        approvalTx.hash,
-      )}`,
-    );
+    console.log(`Approval confirmed! ${approvalTx.hash}`);
   }
 
   const depositTx = await vaultContract.deposit(
@@ -108,11 +102,7 @@ async function promptChooseLockingVaultAndDepositTokens() {
   console.log("Deposit submitted, waiting 1 confirmation...");
   const minedTx = depositTx.wait(1);
 
-  console.log(
-    `Deposit confirmed! View on etherscan: ${makeGoerliTransactionUrl(
-      depositTx.hash,
-    )}`,
-  );
+  console.log(`Deposit confirmed! ${depositTx.hash}`);
   return minedTx;
 }
 
