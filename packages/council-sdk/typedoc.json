@@ -3,8 +3,8 @@
   "entryPoints": ["./src/index.ts"],
   "out": "docs",
   "navigationLinks": {
-    "github": "https://github.com/element-fi/council-monorepo/tree/main/packages/council-sdk",
-    "council-monorepo": "https://github.com/element-fi/council-monorepo"
+    "github": "https://github.com/element-fi/council-kit/tree/main/packages/council-sdk",
+    "council-kit": "https://github.com/element-fi/council-kit"
   },
   "categorizeByGroup": false,
   "categoryOrder": ["Context", "Models", "Data Sources", "Utils", "*"]
