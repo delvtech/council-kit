@@ -74,7 +74,7 @@ A vault which stores voting power by address
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:54](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L54)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:59](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L59)
 
 ## Properties
 
@@ -88,7 +88,7 @@ IVotingVault.address
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:51](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L51)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:56](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L56)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -116,7 +116,7 @@ IVotingVault.dataSource
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:52](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L52)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:57](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L57)
 
 ___
 
@@ -130,19 +130,19 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
 ### getTotalVotingPower
 
-▸ `Optional` **getTotalVotingPower**(`...args`): `Promise`<`string`\>
+▸ `Optional` **getTotalVotingPower**(`atBlock?`): `Promise`<`string`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `...args` | `any`[] |
+| `atBlock?` | `number` |
 
 #### Returns
 
@@ -154,19 +154,20 @@ IVotingVault.getTotalVotingPower
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:33](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L33)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:38](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L38)
 
 ___
 
 ### getVoters
 
-▸ `Optional` **getVoters**(`...args`): `Promise`<[`Voter`](Voter.md)[]\>
+▸ `Optional` **getVoters**(`fromBlock?`, `toBlock?`): `Promise`<[`Voter`](Voter.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `...args` | `any`[] |
+| `fromBlock?` | `number` |
+| `toBlock?` | `number` |
 
 #### Returns
 
@@ -178,7 +179,7 @@ IVotingVault.getVoters
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:31](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L31)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:32](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L32)
 
 ___
 
@@ -202,23 +203,25 @@ Get the usable voting power owned by a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:78](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L78)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:83](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L83)
 
 ___
 
 ### getVotingPowerBreakdown
 
-▸ `Optional` **getVotingPowerBreakdown**(`...args`): `Promise`<[`VoterPowerBreakdown`](../interfaces/VoterPowerBreakdown.md)[]\>
+▸ `Optional` **getVotingPowerBreakdown**(`address?`, `fromBlock?`, `toBlock?`): `Promise`<`VoterPowerBreakdown`[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `...args` | `any`[] |
+| `address?` | `string` |
+| `fromBlock?` | `number` |
+| `toBlock?` | `number` |
 
 #### Returns
 
-`Promise`<[`VoterPowerBreakdown`](../interfaces/VoterPowerBreakdown.md)[]\>
+`Promise`<`VoterPowerBreakdown`[]\>
 
 #### Inherited from
 
@@ -226,4 +229,4 @@ IVotingVault.getVotingPowerBreakdown
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:32](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/VotingVault.ts#L32)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:33](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L33)

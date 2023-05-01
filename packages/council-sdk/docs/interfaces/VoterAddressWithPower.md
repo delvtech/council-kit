@@ -6,7 +6,7 @@
 
 - **`VoterAddressWithPower`**
 
-  ↳ [`VoterAddressPowerBreakdown`](VoterAddressPowerBreakdown.md)
+  ↳ [`VoterPowerBreakdown`](VoterPowerBreakdown.md)
 
 ## Table of contents
 
@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:290](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L290)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:292](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L292)
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:291](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L291)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:293](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L293)

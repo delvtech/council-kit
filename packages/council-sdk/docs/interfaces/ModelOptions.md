@@ -6,6 +6,8 @@
 
 - **`ModelOptions`**
 
+  ↳ [`AirdropOptions`](AirdropOptions.md)
+
   ↳ [`TokenOptions`](TokenOptions.md)
 
   ↳ [`VotingContractOptions`](VotingContractOptions.md)
@@ -29,4 +31,4 @@ display name, debugging) and has no affect on the model's behavior.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/Model.ts#L11)
+[packages/council-sdk/src/models/Model.ts:11](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L11)

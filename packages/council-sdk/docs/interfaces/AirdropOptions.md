@@ -1,25 +1,25 @@
-[@council/sdk](../README.md) / [Exports](../modules.md) / VotingContractOptions
+[@council/sdk](../README.md) / [Exports](../modules.md) / AirdropOptions
 
-# Interface: VotingContractOptions
+# Interface: AirdropOptions
 
 ## Hierarchy
 
 - [`ModelOptions`](ModelOptions.md)
 
-  ↳ **`VotingContractOptions`**
+  ↳ **`AirdropOptions`**
 
 ## Table of contents
 
 ### Properties
 
-- [dataSource](VotingContractOptions.md#datasource)
-- [name](VotingContractOptions.md#name)
+- [dataSource](AirdropOptions.md#datasource)
+- [name](AirdropOptions.md#name)
 
 ## Properties
 
 ### dataSource
 
-• `Optional` **dataSource**: [`VotingContractDataSource`](VotingContractDataSource.md)
+• `Optional` **dataSource**: [`AirdropDataSource`](AirdropDataSource.md)
 
 A data source to use instead of registering one with the `context`. If you
 pass in a data source, you take over the responsibility of registering it
@@ -27,7 +27,7 @@ with the `context` to make it available to other models and data sources.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingContract/VotingContract.ts:31](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingContract/VotingContract.ts#L31)
+[packages/council-sdk/src/models/Airdrop.ts:19](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L19)
 
 ___
 
