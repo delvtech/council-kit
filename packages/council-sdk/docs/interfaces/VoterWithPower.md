@@ -2,12 +2,6 @@
 
 # Interface: VoterWithPower
 
-## Hierarchy
-
-- **`VoterWithPower`**
-
-  ↳ [`VoterPowerBreakdown`](VoterPowerBreakdown.md)
-
 ## Table of contents
 
 ### Properties
@@ -23,7 +17,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:4](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L4)
+[packages/council-sdk/src/models/votingVault/types.ts:4](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/types.ts#L4)
 
 ___
 
@@ -33,4 +27,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:5](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L5)
+[packages/council-sdk/src/models/votingVault/types.ts:5](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/types.ts#L5)

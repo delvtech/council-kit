@@ -4,7 +4,7 @@
 
 ## Hierarchy
 
-- [`VoterWithPower`](VoterWithPower.md)
+- [`VoterAddressWithPower`](VoterAddressWithPower.md)
 
   ↳ **`VoterPowerBreakdown`**
 
@@ -12,37 +12,37 @@
 
 ### Properties
 
+- [address](VoterPowerBreakdown.md#address)
 - [delegators](VoterPowerBreakdown.md#delegators)
-- [voter](VoterPowerBreakdown.md#voter)
 - [votingPower](VoterPowerBreakdown.md#votingpower)
 - [votingPowerFromDelegators](VoterPowerBreakdown.md#votingpowerfromdelegators)
 
 ## Properties
 
+### address
+
+• **address**: `string`
+
+#### Inherited from
+
+[VoterAddressWithPower](VoterAddressWithPower.md).[address](VoterAddressWithPower.md#address)
+
+#### Defined in
+
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:292](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L292)
+
+___
+
 ### delegators
 
-• **delegators**: [`VoterWithPower`](VoterWithPower.md)[]
+• **delegators**: [`VoterAddressWithPower`](VoterAddressWithPower.md)[]
 
 All wallets delegated to this voter with the power they're delegating. Does
 not include self-delegation.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:18](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L18)
-
-___
-
-### voter
-
-• **voter**: [`Voter`](../classes/Voter.md)
-
-#### Inherited from
-
-[VoterWithPower](VoterWithPower.md).[voter](VoterWithPower.md#voter)
-
-#### Defined in
-
-[packages/council-sdk/src/models/votingVault/types.ts:4](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L4)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:309](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L309)
 
 ___
 
@@ -52,11 +52,11 @@ ___
 
 #### Inherited from
 
-[VoterWithPower](VoterWithPower.md).[votingPower](VoterWithPower.md#votingpower)
+[VoterAddressWithPower](VoterAddressWithPower.md).[votingPower](VoterAddressWithPower.md#votingpower)
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:5](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L5)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:293](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L293)
 
 ___
 
@@ -69,4 +69,4 @@ include self-delegation.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/types.ts:13](https://github.com/element-fi/council-monorepo/blob/8fd0879/packages/council-sdk/src/models/votingVault/types.ts#L13)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:304](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L304)
