@@ -22,6 +22,9 @@
   "dependencies": {
     "@council/sdk": "*",
     "@council/typechain": "*",
+    "ajv": "^8.12.0",
+    "cli-table": "^0.3.11",
+    "json-schema-typed": "^8.0.1",
     "prompts": "^2.4.2",
     "signale": "^1.4.0",
     "yargs": "^17.7.1"
@@ -30,6 +33,7 @@
     "@council/eslint-config": "*",
     "@council/prettier-config": "*",
     "@council/tsconfig": "*",
+    "@types/cli-table": "^0.3.1",
     "@types/node": "^18.16.1",
     "@types/prompts": "^2.4.4",
     "@types/signale": "^1.4.4",
