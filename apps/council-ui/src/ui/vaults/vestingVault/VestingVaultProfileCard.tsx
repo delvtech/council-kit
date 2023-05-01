@@ -55,11 +55,6 @@ export function VestingVaultProfileCard({
     delegateIsGSCMember,
   } = data || {};
 
-  console.log({
-    profileAddress,
-    accountDelegate: accountDelegate?.address,
-  });
-
   return (
     <VaultProfileCard
       address={address}

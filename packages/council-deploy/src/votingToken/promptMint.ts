@@ -34,9 +34,7 @@ export async function promptMint(
   console.log("Mint submitted, waiting 1 confirmation...");
   const minedTx = await tx.wait(1);
 
-  console.log(
-    `Mint confirmed! View on etherscan: ${makeGoerliTransactionUrl(tx.hash)}`,
-  );
+  console.log(`Mint confirmed! ${tx.hash}`);
 
   return minedTx;
 }
