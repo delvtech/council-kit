@@ -2,7 +2,7 @@
  * Get a union of all required keys on `T`
  */
 export type RequiredKeys<T> = {
-  [K in keyof T]-?: undefined extends T[K] ? never : T[K];
+  [K in keyof T]-?: undefined extends T[K] ? never : K;
 }[keyof T];
 
 /**
