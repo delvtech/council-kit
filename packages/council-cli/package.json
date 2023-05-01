@@ -3,32 +3,43 @@
   "version": "0.0.1",
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/main.js",
-  "types": "dist/types.d.ts",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
+  "bin": {
+    "council": "dist/index.js"
+  },
   "alias": {
     "src": "./src"
   },
   "scripts": {
+    "council": "ts-node -r dotenv/config -r tsconfig-paths/register src/index.ts",
+    "build": "tsup",
     "docs": "typedoc",
-    "watch:docs": "typedoc --watch",
-    "foo": "yargs execute-proposal abc 1"
+    "watch:docs": "typedoc --watch"
   },
   "dependencies": {
     "@council/sdk": "*",
-    "@council/typechain": "*"
+    "@council/typechain": "*",
+    "prompts": "^2.4.2",
+    "signale": "^1.4.0",
+    "yargs": "^17.7.1"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
     "@council/prettier-config": "*",
     "@council/tsconfig": "*",
+    "@types/node": "^18.16.1",
+    "@types/prompts": "^2.4.4",
+    "@types/signale": "^1.4.4",
+    "@types/yargs": "^17.0.24",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "nodemon": "^2.0.20",
     "prettier-plugin-organize-imports": "^3.2.2",
     "tsconfig-paths": "^4.1.0",
+    "tsup": "^6.7.0",
     "typedoc": "^0.23.24",
     "typedoc-plugin-markdown": "^3.14.0",
     "typescript": "^4.7.4"

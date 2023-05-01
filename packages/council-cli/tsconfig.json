@@ -3,11 +3,17 @@
   "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "rootDir": ".",
     "baseUrl": ".",
+    "rootDir": "./src",
+    "outDir": "dist/",
+    "allowSyntheticDefaultImports": true, // To provide backwards compatibility, Node.js allows you to import most CommonJS packages with a default import. This flag tells TypeScript that it's okay to use import on CommonJS modules.
+
+    // we don't declaration files for a CLI
+    "declaration": false,
+    "declarationMap": false,
+
     "paths": {
       "src/*": ["src/*"]
-    },
-    "resolveJsonModule": true
+    }
   }
 }
