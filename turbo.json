@@ -42,6 +42,11 @@
         "ETHERSCAN_API_KEY"
       ]
     },
+    "@council/cli#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "env": ["RPC_URL", "WALLET_PRIVATE_KEY", "NODE_ENV"]
+    },
     "lint": {
       "dependsOn": ["^build"],
       "outputs": []
