@@ -12,8 +12,11 @@ const configuredChains = allChains.filter((chain) => {
   return chain.id !== 31337 && supportedChainIds.includes(`${chain.id}`);
 });
 
-// Add a general Localhost chain for 31337
-if (supportedChainIds.includes("31337")) {
+// Add a general Localhost chain for 31337 if in development
+if (
+  supportedChainIds.includes("31337") &&
+  process.env.NODE_ENV === "development"
+) {
   configuredChains.push({
     id: 31337,
     name: "Localhost",
