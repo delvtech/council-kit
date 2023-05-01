@@ -6,9 +6,9 @@
     "baseUrl": ".",
     "rootDir": "./src",
     "outDir": "dist/",
-    "allowSyntheticDefaultImports": true, // To provide backwards compatibility, Node.js allows you to import most CommonJS packages with a default import. This flag tells TypeScript that it's okay to use import on CommonJS modules.
+    "allowSyntheticDefaultImports": true,
 
-    // we don't declaration files for a CLI
+    // we don't need declaration files for a CLI
     "declaration": false,
     "declarationMap": false,
 
