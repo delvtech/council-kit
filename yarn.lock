@@ -18231,7 +18231,7 @@ yargs@^15.3.1:
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
 
-yargs@^17.3.1:
+yargs@^17.1.1-candidate.0, yargs@^17.3.1:
   version "17.7.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.7.1.tgz#34a77645201d1a8fc5213ace787c220eabbd0967"
   integrity sha512-cwiTb08Xuv5fqF4AovYacTFNxk62th7LKJ6BL9IGUpTJrWoU7/7WdQGTP2SjKf1dUNBGzDd28p/Yfs/GI6JrLw==
@@ -18263,6 +18263,12 @@ yargs@^4.7.1:
     window-size "^0.2.0"
     y18n "^3.2.1"
     yargs-parser "^2.4.1"
+
+"yargs@file:./packages/council-cli/yargs-v0.0.0.tgz":
+  version "0.0.0"
+  resolved "file:./packages/council-cli/yargs-v0.0.0.tgz#ba350f7292b1a9cc66d3bda17811d4976ff6216b"
+  dependencies:
+    yargs "^17.1.1-candidate.0"
 
 yn@3.1.1:
   version "3.1.1"

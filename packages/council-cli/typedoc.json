@@ -1,0 +1,10 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
+  "out": "docs",
+  "navigationLinks": {
+    "github": "https://github.com/element-fi/council-kit/tree/main/packages/council-sdk",
+    "council-kit": "https://github.com/element-fi/council-kit"
+  },
+  "categorizeByGroup": false
+}
