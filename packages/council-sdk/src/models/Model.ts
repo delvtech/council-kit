@@ -16,6 +16,8 @@ export interface ModelOptions {
  * @category Models
  */
 export class Model {
+  // TODO: Remove hard requirement on context or create default from a lighter
+  // argument like provider or rpcUrl.
   context: CouncilContext;
   name: string;
 
