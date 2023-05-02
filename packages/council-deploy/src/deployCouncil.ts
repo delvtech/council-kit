@@ -6,7 +6,7 @@ import { deployGSCVault } from "src/vaults/deployGSCVault";
 import { deployLockingVault } from "src/vaults/lockingVault/deployLockingVault";
 import { deployVestingVault } from "src/vaults/deployVestingVault";
 import { deployGSCCoreVoting } from "src/coreVoting/deployGSCCoreVoting";
-import { Contract, Signer } from "ethers";
+import { Contract, Signer, constants } from "ethers";
 import { config } from "dotenv";
 config();
 
@@ -84,10 +84,15 @@ export async function deployCouncil(signer: Signer): Promise<
 
   // The treasury holds the protocol funds. Proposals can be made to allocate
   // these funds as the community sees fit.
-  const treasury = await deployTreasury({
-    signer,
-    ownerAddress: timelock.address,
-  });
+  let treasuryAddress = process.env.TREASURY_ADDRESS;
+  if (!treasuryAddress || treasuryAddress === constants.AddressZero) {
+    const treasury = await deployTreasury({
+      signer,
+      ownerAddress: timelock.address,
+    });
+    treasuryAddress = treasury.address;
+    ret.push(treasury);
+  }
 
   // The Locking Vault allows you to deposit voting tokens in exchange for
   // voting power. This is actually a proxy contract so that the underlying
@@ -173,7 +178,6 @@ export async function deployCouncil(signer: Signer): Promise<
     lockingVault,
     lockingVaultProxy,
     timelock,
-    treasury,
     vestingVault,
     vestingVaultProxy,
   );
