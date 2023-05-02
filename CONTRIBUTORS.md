@@ -27,7 +27,7 @@ Confirm that your PR targets the 'main' branch. Your branch must be prefixed by 
 
 ## Create an Issue (Bug, Feature, Tutorial Request)
 
-- Create a [new issue](https://github.com/element-fi/council-kit/issues/new/choose).
+- Create a [new issue](https://github.com/delv-tech/council-kit/issues/new/choose).
 - Comment on the issue (if you'd like to be assigned to it) - [that way our team can assign the issue to you.](https://github.blog/2019-06-25-assign-issues-to-issue-commenters/)
 
 ## Code of Conduct

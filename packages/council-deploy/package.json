@@ -2,7 +2,7 @@
   "name": "@council/deploy",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://github.com/element-fi/council-monorepo",
+  "homepage": "https://github.com/delv-tech/council-monorepo",
   "source": "src/index.ts",
   "main": "dist/main.js",
   "types": "dist/types.d.ts",

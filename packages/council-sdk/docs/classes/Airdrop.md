@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:29](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L29)
+[packages/council-sdk/src/models/Airdrop.ts:29](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L29)
 
 ## Properties
 
@@ -61,7 +61,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:26](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L26)
+[packages/council-sdk/src/models/Airdrop.ts:26](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L26)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:27](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L27)
+[packages/council-sdk/src/models/Airdrop.ts:27](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L27)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -128,7 +128,7 @@ Claims tokens from the airdrop and sends them to the user.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:95](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L95)
+[packages/council-sdk/src/models/Airdrop.ts:95](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L95)
 
 ___
 
@@ -159,7 +159,7 @@ delegates in a single transaction.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:126](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L126)
+[packages/council-sdk/src/models/Airdrop.ts:126](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L126)
 
 ___
 
@@ -181,7 +181,7 @@ Get the token balance of a given address
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:71](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L71)
+[packages/council-sdk/src/models/Airdrop.ts:71](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L71)
 
 ___
 
@@ -198,7 +198,7 @@ owner).
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:48](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L48)
+[packages/council-sdk/src/models/Airdrop.ts:48](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L48)
 
 ___
 
@@ -215,7 +215,7 @@ when someone claims and delegates in a single tx.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:79](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L79)
+[packages/council-sdk/src/models/Airdrop.ts:79](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L79)
 
 ___
 
@@ -231,7 +231,7 @@ Get The merkle root with deposits encoded into it as hash [address, amount]
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:56](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L56)
+[packages/council-sdk/src/models/Airdrop.ts:56](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L56)
 
 ___
 
@@ -247,4 +247,4 @@ Get the token that will be paid out.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Airdrop.ts:63](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L63)
+[packages/council-sdk/src/models/Airdrop.ts:63](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Airdrop.ts#L63)
