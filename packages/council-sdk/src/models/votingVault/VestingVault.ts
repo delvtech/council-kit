@@ -65,7 +65,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
 
   /**
    * Gets the amount of tokens currently claimable from the grant.
-   * Mimics internal function https://github.com/delv-tech/council/blob/main/contracts/vaults/VestingVault.sol#L434
+   * Mimics internal function https://github.com/delvtech/council/blob/main/contracts/vaults/VestingVault.sol#L434
    * @param address - The grantee address.
    * @returns The amount of claimable tokens.
    */

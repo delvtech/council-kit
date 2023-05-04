@@ -48,7 +48,7 @@ A participant in Council
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:16](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L16)
+[packages/council-sdk/src/models/Voter.ts:16](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L16)
 
 ## Properties
 
@@ -58,7 +58,7 @@ A participant in Council
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:14](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L14)
+[packages/council-sdk/src/models/Voter.ts:14](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L14)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -111,7 +111,7 @@ this Voter has voted on every proposal they were able to.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:61](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L61)
+[packages/council-sdk/src/models/Voter.ts:61](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L61)
 
 ___
 
@@ -133,7 +133,7 @@ Get the casted votes for this Voter in a given Voting Contract
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:47](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L47)
+[packages/council-sdk/src/models/Voter.ts:47](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L47)
 
 ___
 
@@ -157,4 +157,4 @@ Get the total voting power for this Voter from a given list of vaults.
 
 #### Defined in
 
-[packages/council-sdk/src/models/Voter.ts:30](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L30)
+[packages/council-sdk/src/models/Voter.ts:30](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Voter.ts#L30)

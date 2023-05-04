@@ -26,7 +26,7 @@ date of a block that hasn't been mined yet. Defaults to 12.07
 
 #### Defined in
 
-[packages/council-sdk/src/utils/getBlockDate.ts:20](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/getBlockDate.ts#L20)
+[packages/council-sdk/src/utils/getBlockDate.ts:20](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/getBlockDate.ts#L20)
 
 ___
 
@@ -40,4 +40,4 @@ yet will return `null`.
 
 #### Defined in
 
-[packages/council-sdk/src/utils/getBlockDate.ts:15](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/getBlockDate.ts#L15)
+[packages/council-sdk/src/utils/getBlockDate.ts:15](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/getBlockDate.ts#L15)

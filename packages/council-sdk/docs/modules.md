@@ -87,7 +87,7 @@ A valid ballot option.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:176](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L176)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:176](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L176)
 
 ___
 
@@ -105,7 +105,7 @@ Get a union of all keys/properties on T that are functions.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:209](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L209)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:209](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L209)
 
 ___
 
@@ -124,7 +124,7 @@ Get a union of all keys/properties on T that are functions and return a
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:225](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L225)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:225](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L225)
 
 ___
 
@@ -136,7 +136,7 @@ The amount of voting power casted by ballot.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:193](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L193)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:193](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L193)
 
 ## Utils
 
@@ -174,7 +174,7 @@ The return value of the callback function.
 
 #### Defined in
 
-[packages/council-sdk/src/utils/cached.ts:21](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/cached.ts#L21)
+[packages/council-sdk/src/utils/cached.ts:21](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/cached.ts#L21)
 
 ___
 
@@ -198,7 +198,7 @@ This will not modify strings so
 
 #### Defined in
 
-[packages/council-sdk/src/utils/cached.ts:51](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/cached.ts#L51)
+[packages/council-sdk/src/utils/cached.ts:51](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/cached.ts#L51)
 
 ___
 
@@ -228,7 +228,7 @@ Get the date of a given block by it's block number
 
 #### Defined in
 
-[packages/council-sdk/src/utils/getBlockDate.ts:30](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/getBlockDate.ts#L30)
+[packages/council-sdk/src/utils/getBlockDate.ts:30](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/getBlockDate.ts#L30)
 
 ___
 
@@ -255,7 +255,7 @@ https://docs.ethers.org/v5/api/utils/bignumber
 
 #### Defined in
 
-[packages/council-sdk/src/utils/sumStrings.ts:9](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/sumStrings.ts#L9)
+[packages/council-sdk/src/utils/sumStrings.ts:9](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/sumStrings.ts#L9)
 
 ## Other
 
@@ -279,7 +279,7 @@ https://docs.ethers.org/v5/api/utils/bignumber
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:203](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L203)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:203](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L203)
 
 ___
 
@@ -289,7 +289,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/utils/cached.ts:4](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/cached.ts#L4)
+[packages/council-sdk/src/utils/cached.ts:4](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/cached.ts#L4)
 
 ___
 
@@ -313,7 +313,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:216](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L216)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:216](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L216)
 
 ___
 
@@ -334,4 +334,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/utils/getVaultsWithPower.ts:3](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/getVaultsWithPower.ts#L3)
+[packages/council-sdk/src/utils/getVaultsWithPower.ts:3](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/utils/getVaultsWithPower.ts#L3)
