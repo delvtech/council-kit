@@ -74,7 +74,7 @@ A vault which stores voting power by address
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:59](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L59)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:59](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L59)
 
 ## Properties
 
@@ -88,7 +88,7 @@ IVotingVault.address
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:56](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L56)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:56](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L56)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -116,7 +116,7 @@ IVotingVault.dataSource
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:57](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L57)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:57](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L57)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -154,7 +154,7 @@ IVotingVault.getTotalVotingPower
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:38](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L38)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:38](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L38)
 
 ___
 
@@ -179,7 +179,7 @@ IVotingVault.getVoters
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:32](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L32)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:32](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L32)
 
 ___
 
@@ -203,7 +203,7 @@ Get the usable voting power owned by a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:83](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L83)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:83](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L83)
 
 ___
 
@@ -229,4 +229,4 @@ IVotingVault.getVotingPowerBreakdown
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:33](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L33)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:33](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L33)

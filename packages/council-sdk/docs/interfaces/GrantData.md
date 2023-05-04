@@ -27,7 +27,7 @@ The total amount of tokens granted.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:280](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L280)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:280](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L280)
 
 ___
 
@@ -39,7 +39,7 @@ The address that can vote with this grant's voting power.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:311](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L311)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:311](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L311)
 
 ___
 
@@ -52,7 +52,7 @@ remaining balance can be withdrawn.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:296](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L296)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:296](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L296)
 
 ___
 
@@ -65,7 +65,7 @@ grant. This is set when a grant is accepted with the `acceptGrant` method.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:317](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L317)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:317](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L317)
 
 ___
 
@@ -77,7 +77,7 @@ The block number of when the grant starts.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:290](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L290)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:290](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L290)
 
 ___
 
@@ -89,7 +89,7 @@ The block number after which any withdrawable tokens can be withdrawn.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:301](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L301)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:301](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L301)
 
 ___
 
@@ -101,7 +101,7 @@ The voting power provided by the grant.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:306](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L306)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:306](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L306)
 
 ___
 
@@ -113,4 +113,4 @@ The amount of tokens that have been withdrawn.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:285](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L285)
+[packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts:285](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VestingVaultContractDataSource.ts#L285)
