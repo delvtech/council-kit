@@ -3,8 +3,8 @@
   "entryPoints": ["./src/index.ts"],
   "out": "docs",
   "navigationLinks": {
-    "github": "https://github.com/element-fi/council-kit/tree/main/packages/council-sdk",
-    "council-kit": "https://github.com/element-fi/council-kit"
+    "github": "https://github.com/delv-tech/council-kit/tree/main/packages/council-sdk",
+    "council-kit": "https://github.com/delv-tech/council-kit"
   },
   "categorizeByGroup": false,
   "categoryOrder": ["Context", "Models", "Data Sources", "Utils", "*"]

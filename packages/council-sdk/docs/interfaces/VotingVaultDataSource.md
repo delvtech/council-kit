@@ -30,7 +30,7 @@ An interface for fetching data from any voting vault.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VotingVaultDataSource.ts:9](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VotingVaultDataSource.ts#L9)
+[packages/council-sdk/src/datasources/votingVault/VotingVaultDataSource.ts:9](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VotingVaultDataSource.ts#L9)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/DataSource.ts:8](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/DataSource.ts#L8)
+[packages/council-sdk/src/datasources/base/DataSource.ts:8](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/DataSource.ts#L8)
 
 ___
 
@@ -72,4 +72,4 @@ Get the voting power owned by a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/VotingVaultDataSource.ts:16](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VotingVaultDataSource.ts#L16)
+[packages/council-sdk/src/datasources/votingVault/VotingVaultDataSource.ts:16](https://github.com/delv-tech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/VotingVaultDataSource.ts#L16)

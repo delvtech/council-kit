@@ -21,7 +21,7 @@ export default function Index(): ReactElement {
             <button className="daisy-btn daisy-btn-accent">Open App</button>
           </Link>
           <a
-            href="https://github.com/element-fi/council-kit"
+            href="https://github.com/delv-tech/council-kit"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -42,7 +42,7 @@ export default function Index(): ReactElement {
 
             <div className="daisy-mockup-code">
               <pre data-prefix="$">
-                <code>git clone https://github.com/element-fi/council-kit</code>
+                <code>git clone https://github.com/delv-tech/council-kit</code>
               </pre>
             </div>
           </div>
