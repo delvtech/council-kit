@@ -25,7 +25,7 @@ export async function deployCouncil(signer: Signer): Promise<
   const isLocalHost = chainId === 31337;
 
   // Return all of the contracts that get deployed
-  const ret = [];
+  const deployedContracts = [];
 
   // The voting token is used to determine voting power in the Locking Vault and
   // Vesting Vault. It has no dependencies on any of the council contracts.
@@ -37,7 +37,7 @@ export async function deployCouncil(signer: Signer): Promise<
       signer,
     });
     votingTokenAddress = votingToken.address;
-    ret.push(votingToken);
+    deployedContracts.push(votingToken);
   }
 
   // The GSC Core Voting is a privileged voting contract which enables a small
@@ -91,7 +91,7 @@ export async function deployCouncil(signer: Signer): Promise<
       ownerAddress: timelock.address,
     });
     treasuryAddress = treasury.address;
-    ret.push(treasury);
+    deployedContracts.push(treasury);
   }
 
   // The Locking Vault allows you to deposit voting tokens in exchange for
@@ -171,7 +171,7 @@ export async function deployCouncil(signer: Signer): Promise<
   console.log("Set owner of Timelock to CoreVoting");
 
   console.log("All contracts deployed!");
-  ret.push(
+  deployedContracts.push(
     coreVoting,
     gscCoreVoting,
     gscVault,
@@ -181,5 +181,5 @@ export async function deployCouncil(signer: Signer): Promise<
     vestingVault,
     vestingVaultProxy,
   );
-  return ret;
+  return deployedContracts;
 }
