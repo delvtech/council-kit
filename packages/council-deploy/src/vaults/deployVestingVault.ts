@@ -42,11 +42,13 @@ export async function deployVestingVault({
   console.log(`Deployed VestingVault @ ${vestingVault.address}`);
 
   console.log("Initializing VestingVault...");
-  await vestingVault.initialize(signerAddress, signerAddress);
+  const init = await vestingVault.initialize(signerAddress, signerAddress);
+  await init.wait(1);
 
   // Only the Timelock can update things like the unvestedMultiplier.
   console.log("Setting timelock permissions on VestingVault...");
-  await vestingVault.setTimelock(timelockAddress);
+  const timelock = await vestingVault.setTimelock(timelockAddress);
+  await timelock.wait(1);
 
   // deploy vesting vault behind a proxy so it's upgradeable
   console.log("Deploying VestingVault proxy...");
