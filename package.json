@@ -20,6 +20,7 @@
     "@parcel/transformer-typescript-types": "2.8.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
+    "os-browserify": "^0.3.0",
     "prettier": "latest",
     "turbo": "latest",
     "typescript": ">=3.0.0"

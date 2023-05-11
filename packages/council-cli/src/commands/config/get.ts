@@ -1,32 +1,24 @@
-import prompts from "prompts";
 import signale from "signale";
 import { config, CouncilClIConfig } from "src/config";
+import { requiredString } from "src/options/utils/requiredString";
+import { createCommandModule } from "src/utils/createCommandModule";
 import { ArgumentsCamelCase } from "yargs";
 
-export const command = "get [setting]";
+export const { command, describe, handler } = createCommandModule({
+  command: "get [setting]",
+  describe: "Get a setting",
 
-export const describe = "Get a setting";
-
-export async function handler(
-  argv: ArgumentsCamelCase<{
-    setting?: string;
-  }>,
-): Promise<void> {
-  let setting = argv.setting;
-
-  if (!setting) {
-    const promptResult = await prompts({
-      type: "text",
+  handler: async (
+    args: ArgumentsCamelCase<{
+      setting?: string;
+    }>,
+  ) => {
+    const setting = await requiredString(args.setting, {
       name: "setting",
       message: "Enter setting name",
     });
-    setting = promptResult.setting;
-  }
 
-  try {
     const value = config.get(setting as keyof CouncilClIConfig);
     signale.info(value);
-  } catch (err) {
-    signale.error((err as Error).message);
-  }
-}
+  },
+});

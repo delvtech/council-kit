@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 import path from "node:path";
+import signale from "signale";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { selectCommandHandler } from "./utils/selectCommandHandler";
+import {
+  COMMAND_FILE_EXTENSIONS,
+  selectCommandHandler,
+} from "./utils/selectCommandHandler";
 
 const commandDir = "./commands";
-const extensions = ["ts", "js"];
 
-yargs(hideBin(process.argv))
+const parser = yargs(hideBin(process.argv))
   .commandDir(commandDir, {
-    extensions,
+    extensions: COMMAND_FILE_EXTENSIONS,
   })
   .command(
     "$0",
@@ -17,8 +20,20 @@ yargs(hideBin(process.argv))
     () => {},
     selectCommandHandler({
       commandsPath: path.resolve(__dirname, commandDir),
-      extensions,
-      message: "What would you like to do?",
+      message: `What would you like to do?`,
+      isRoot: true,
     }),
   )
-  .help().argv;
+  // turn off yargs error handling
+  .fail(false);
+
+async function main() {
+  try {
+    await parser.parse();
+  } catch (err) {
+    const help = await parser.getHelp();
+    signale.error(`${err}\n\n${help}`);
+  }
+}
+
+main();

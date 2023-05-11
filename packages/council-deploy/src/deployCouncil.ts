@@ -135,7 +135,7 @@ export async function deployCouncil(signer: Signer): Promise<
     // the GSC does not have a voting power requirement to submit a proposal
     gscCoreVotingAddress: gscCoreVoting.address,
     // can execute a proposal 10 blocks after it gets created
-    lockDuration: +(process.env.LOCK_DURATION ?? "10"),
+    lockDuration: +(process.env.LOCK_DURATION ?? isLocalHost ? 0 : 10),
     // can still vote on a proposal for this many blocks after it unlocks
     extraVotingTime: +(
       process.env.EXTRA_VOTING ?? (isLocalHost ? "10" : "300000")

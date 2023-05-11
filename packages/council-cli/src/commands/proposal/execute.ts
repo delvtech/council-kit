@@ -1,82 +1,53 @@
 import { CouncilContext, Proposal } from "@council/sdk";
 import { getDefaultProvider, Wallet } from "ethers";
-import prompts from "prompts";
 import signale from "signale";
-import { config } from "src/config";
-import { ArgumentsCamelCase, CommandBuilder } from "yargs";
+import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
+import { requiredNumber } from "src/options/utils/requiredNumber";
+import { requiredString } from "src/options/utils/requiredString";
+import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
+import { createCommandModule } from "src/utils/createCommandModule";
 
-export const command = "execute";
-export const describe = "Execute a proposal";
+export const { command, describe, builder, handler } = createCommandModule({
+  command: "execute [OPTIONS]",
+  describe: "Execute a proposal",
 
-export const builder: CommandBuilder = (argv) => {
-  return argv.options({
-    a: {
-      alias: ["address"],
-      describe: "The voting contract address",
-      type: "string",
-    },
-    p: {
-      alias: ["proposal-id"],
-      describe: "The id of the proposal to execute",
-      type: "number",
-    },
-    w: {
-      alias: ["wallet-key"],
-      describe: "The key of the wallet to use for the transaction",
-      type: "string",
-      hidden: true,
-    },
-  });
-};
+  builder: (yargs) => {
+    return yargs.options({
+      a: {
+        alias: ["address"],
+        describe: "The voting contract address",
+        type: "string",
+      },
+      p: {
+        alias: ["id"],
+        describe: "The id of the proposal to execute",
+        type: "number",
+      },
+      r: rpcUrlOption,
+      w: walletKeyOption,
+    });
+  },
 
-export async function handler(
-  argv: ArgumentsCamelCase<{
-    address?: string;
-    proposalId?: number;
-    walletKey?: string;
-  }>,
-): Promise<void> {
-  let address = argv.address;
-  let proposalId = argv.proposalId;
-  let walletKey = argv.walletKey || process.env.WALLET_PRIVATE_KEY;
-
-  if (!address) {
-    const promptResult = await prompts({
-      type: "text",
+  handler: async (args) => {
+    const address = await requiredString(args.address, {
       name: "address",
       message: "Enter voting contract address",
     });
-    address = promptResult.address;
-  }
 
-  if (proposalId === undefined) {
-    const promptResult = await prompts({
-      type: "number",
-      name: "proposalId",
+    const id = await requiredNumber(args.id, {
+      name: "id",
       message: "Enter proposal id",
     });
-    proposalId = promptResult.proposalId;
-  }
 
-  if (!walletKey) {
-    const promptResult = await prompts({
-      type: "text",
-      name: "walletKey",
-      message: "Enter wallet key",
-    });
-    walletKey = promptResult.walletKey;
-  }
+    const rpcUrl = await requiredRpcUrl(args.rpcUrl);
+    const walletKey = await requiredWalletKey(args.walletKey);
 
-  const rpcURL = config.get("rpc-url");
-  const provider = getDefaultProvider(rpcURL);
-  const signer = new Wallet(walletKey!, provider);
+    const provider = getDefaultProvider(rpcUrl);
+    const context = new CouncilContext(provider);
+    const proposal = new Proposal(id, address, context);
 
-  const context = new CouncilContext(provider);
-  const proposal = new Proposal(proposalId!, address!, context);
+    const signer = new Wallet(walletKey, provider);
 
-  try {
     signale.success(await proposal.execute(signer));
-  } catch (err) {
-    signale.error(err);
-  }
-}
+  },
+});

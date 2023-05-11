@@ -14,16 +14,20 @@
     "src": "./src"
   },
   "scripts": {
-    "council": "ts-node -r dotenv/config -r tsconfig-paths/register src/index.ts",
+    "council": "ts-node -r dotenv/config -r tsconfig-paths/register --files src/index",
     "build": "tsup",
     "docs": "typedoc",
     "watch:docs": "typedoc --watch"
   },
   "dependencies": {
+    "@council/deploy": "*",
     "@council/sdk": "*",
     "@council/typechain": "*",
     "ajv": "^8.12.0",
+    "cfonts": "^3.1.1",
     "cli-table": "^0.3.11",
+    "colors": "^1.4.0",
+    "ganache": "^7.8.0",
     "json-schema-typed": "^8.0.1",
     "prompts": "^2.4.2",
     "signale": "^1.4.0",
@@ -42,6 +46,7 @@
     "ethers": "^5.7.2",
     "nodemon": "^2.0.20",
     "prettier-plugin-organize-imports": "^3.2.2",
+    "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
     "tsup": "^6.7.0",
     "typedoc": "^0.23.24",

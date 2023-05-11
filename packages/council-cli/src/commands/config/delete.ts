@@ -1,33 +1,25 @@
-import prompts from "prompts";
 import signale from "signale";
 import { config, CouncilClIConfig } from "src/config";
+import { requiredArray } from "src/options/utils/requiredArray";
+import { createCommandModule } from "src/utils/createCommandModule";
 import { ArgumentsCamelCase } from "yargs";
 
-export const command = "delete [settings...]";
+export const { command, describe, handler } = createCommandModule({
+  command: "delete [settings...]",
+  describe: "Delete a setting",
 
-export const describe = "Delete a setting";
-
-export async function handler(
-  argv: ArgumentsCamelCase<{
-    settings?: string[];
-  }>,
-): Promise<void> {
-  let settings = argv.settings;
-
-  if (!settings) {
-    const promptResult = await prompts({
-      type: "list",
-      separator: " ",
+  handler: async (
+    // TODO: parse command for arg types
+    args: ArgumentsCamelCase<{
+      settings?: string[];
+    }>,
+  ) => {
+    const settings = await requiredArray(args.settings, {
       name: "settings",
       message: "Enter setting names",
     });
-    settings = promptResult.settings;
-  }
 
-  try {
     config.delete(...(settings as (keyof CouncilClIConfig)[]));
-    signale.success();
-  } catch (err) {
-    signale.error((err as Error).message);
-  }
-}
+    signale.success(`Deleted settings: ${settings.join(", ")}`);
+  },
+});

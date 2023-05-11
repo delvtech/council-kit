@@ -98,9 +98,9 @@ export class VotingContract<
    * @param vaults - The addresses of the approved vaults to draw voting power
    *   from.
    * @param targets - The targets (contract addresses) to call.
-   * @param calldatas - The calldatas to call each target with.
-   * @param lastCall: A block number that limits when the proposal can be executed.
-   * @param ballot: The vote for the proposal from the signer's account.
+   * @param calldatas - The execution calldata for each target.
+   * @param lastCall - The block number after which the proposal can't be executed.
+   * @param ballot: The initial vote from the signer's account.
    * @returns The transaction hash.
    */
   createProposal(

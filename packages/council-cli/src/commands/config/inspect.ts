@@ -1,18 +1,15 @@
 import Table from "cli-table";
-import signale from "signale";
 import { config } from "src/config";
+import { createCommandModule } from "src/utils/createCommandModule";
 
-export const command = "inspect";
+export const { command, describe, handler } = createCommandModule({
+  command: "inspect",
+  describe: "Print all settings out as a table",
 
-export const describe = "Print all settings out as a table";
-
-export async function handler(): Promise<void> {
-  try {
+  handler: async () => {
     const table = new Table({
       rows: Object.entries(config.data),
     });
     console.log(`${table.toString()}`);
-  } catch (err) {
-    signale.error((err as Error).message);
-  }
-}
+  },
+});

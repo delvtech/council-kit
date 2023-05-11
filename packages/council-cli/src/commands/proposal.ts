@@ -1,21 +1,23 @@
 import path from "node:path";
-import { selectCommandHandler } from "src/utils/selectCommandHandler";
-import { Argv } from "yargs";
+import { createCommandModule } from "src/utils/createCommandModule";
+import {
+  COMMAND_FILE_EXTENSIONS,
+  selectCommandHandler,
+} from "src/utils/selectCommandHandler";
 
 const commandDir = "./proposal";
-const extensions = ["js", "ts"];
 
-export const command = "proposal [command]";
+export const { command, describe, builder, handler } = createCommandModule({
+  command: "proposal [command]",
+  describe: "Interact with a proposal",
 
-export const describe = "Interact with a proposal";
+  builder: (yargs) => {
+    return yargs.commandDir(commandDir, {
+      extensions: COMMAND_FILE_EXTENSIONS,
+    });
+  },
 
-export function builder(yargs: Argv): Argv {
-  return yargs.commandDir(commandDir, {
-    extensions,
-  });
-}
-
-export const handler = selectCommandHandler({
-  commandsPath: path.resolve(__dirname, commandDir),
-  extensions,
+  handler: selectCommandHandler({
+    commandsPath: path.resolve(__dirname, commandDir),
+  }),
 });

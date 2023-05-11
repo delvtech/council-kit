@@ -67,6 +67,9 @@ export class JSONStore<T extends object = Record<string, unknown>> {
    */
   private readonly _validator?: ValidateFunction;
 
+  /**
+   * Use a JSON file to persist key-value data
+   */
   constructor(options: JSONStoreOptions<T>) {
     const filename = `${removeJSONExtension(options.name)}.json`;
     this.path = path.resolve(process.cwd(), options.path, filename);
@@ -178,8 +181,6 @@ export class JSONStore<T extends object = Record<string, unknown>> {
 
   /**
    * Reset config to defaults
-   * @param key - The key of the entry to delete
-   * @returns True if an item was deleted, false otherwise
    */
   reset(): void {
     this._save(this.defaults as T);
