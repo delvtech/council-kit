@@ -1,14 +1,11 @@
-import signale from "signale";
 import { config } from "src/config";
+import { createCommandModule } from "src/utils/createCommandModule";
 
-export const command = "reset";
+export const { command, describe, handler } = createCommandModule({
+  command: "reset",
+  describe: "Reset settings to default",
 
-export const describe = "Reset settings to default";
-
-export async function handler(): Promise<void> {
-  try {
+  handler: async () => {
     config.reset();
-  } catch (err) {
-    signale.error((err as Error).message);
-  }
-}
+  },
+});
