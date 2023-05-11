@@ -67,6 +67,9 @@ export class JSONStore<T extends object = Record<string, unknown>> {
    */
   private readonly _validator?: ValidateFunction;
 
+  /**
+   * Use a JSON file to persist key-value data
+   */
   constructor(options: JSONStoreOptions<T>) {
     const filename = `${removeJSONExtension(options.name)}.json`;
     this.path = path.resolve(process.cwd(), options.path, filename);
