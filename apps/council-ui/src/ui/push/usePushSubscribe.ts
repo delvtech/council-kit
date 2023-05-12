@@ -13,32 +13,36 @@ export function usePushSubscribe(): UsePushSubscribeType {
   const [loading, setLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const fetchChainId = () => {
+  function fetchChainId() {
     const isProd = chainId === 1;
-    const env: any = isProd ? "prod" : "staging";
+    const env = isProd ? "prod" : "staging";
     const channel = isProd
       ? PushSettings.PROD_CHANNEL_ADDRESS
       : PushSettings.STAGING_CHANNEL_ADDRESS;
     return { chainId, env, channel };
-  };
+  }
 
-  const isUserSubscribed = useCallback(async () => {
-    const { env, channel } = fetchChainId();
-    const userSubscriptions =
-      address &&
-      (await PushAPI.user.getSubscriptions({
-        user: String(address),
-        env,
-      }));
-    const addresses =
-      userSubscriptions &&
-      userSubscriptions.map(({ channel }: { channel: string }) => channel);
-    if (addresses) {
-      return addresses.includes(channel);
-    }
+  const isUserSubscribed = useCallback(
+    async function () {
+      const { env, channel } = fetchChainId();
+      const userSubscriptions =
+        address &&
+        (await PushAPI.user.getSubscriptions({
+          user: String(address),
+          env,
+        }));
+      const addresses =
+        userSubscriptions &&
+        userSubscriptions.map(({ channel }: { channel: string }) => channel);
 
-    return false; // or handle the case where addresses is empty
-  }, [address]);
+      if (addresses) {
+        return addresses.includes(channel);
+      }
+
+      return false; // or handle the case where addresses is empty
+    },
+    [address],
+  );
 
   // define a wrapper around the signTypedData function to match the types
   const { signTypedDataAsync: signer } = useSignTypedData();
@@ -47,8 +51,7 @@ export function usePushSubscribe(): UsePushSubscribeType {
     types: unknown,
     value: unknown,
   ) {
-    let params: any;
-    // if they are all objects
+    let params;
     if (
       typeof domain === "object" &&
       typeof types === "object" &&
@@ -65,8 +68,7 @@ export function usePushSubscribe(): UsePushSubscribeType {
       throw new Error("FAILURE");
     }
   }
-  // define a wrapper around the signTypedData function to match the types
-  const generatePayload = (): SubscribeOptionsType => {
+  function generatePayload(): SubscribeOptionsType {
     const { chainId, env, channel } = fetchChainId();
     const payload = {
       signer: { _signTypedData },
@@ -75,9 +77,9 @@ export function usePushSubscribe(): UsePushSubscribeType {
       env,
     };
     return payload;
-  };
+  }
 
-  const toggleUserStatus = async () => {
+  async function toggleUserStatus() {
     setLoading(true);
     try {
       const payload = generatePayload();
@@ -92,7 +94,7 @@ export function usePushSubscribe(): UsePushSubscribeType {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     // fetch if the user is subscribed
