@@ -2,8 +2,7 @@ import { ReactElement } from "react";
 
 export default function PushIcon(): ReactElement {
   return (
-    <div className="mr-2">
-      {" "}
+    <div className="mr-2 fill-current">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1.0"
@@ -14,7 +13,6 @@ export default function PushIcon(): ReactElement {
       >
         <g
           transform="translate(0.000000,256.000000) scale(0.100000,-0.100000)"
-          fill="#fff"
           stroke="none"
         >
           <path d="M671 2400 c-124 -43 -211 -99 -304 -195 -87 -89 -164 -245 -182 -365 -4 -24 -8 -48 -11 -51 -2 -4 7 -14 20 -22 30 -20 54 -5 62 38 24 135 78 252 154 338 85 94 215 174 336 206 53 14 68 31 50 56 -19 27 -36 26 -125 -5z" />

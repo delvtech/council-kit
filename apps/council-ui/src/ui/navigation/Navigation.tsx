@@ -7,7 +7,7 @@ import { makeVoterURL, Routes } from "src/routes";
 import PushIcon from "src/ui/base/svg/PushLogo";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
-import { usePushSubscribe } from "src/ui/push/subscribePush";
+import { usePushSubscribe } from "src/ui/push/usePushSubscribe";
 import { useAccount } from "wagmi";
 
 export function Navigation(): ReactElement {
