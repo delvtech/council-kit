@@ -1,10 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
 
 export default function Index(): ReactElement {
   return (
     <div className="m-auto">
-      <div className="flex flex-col max-w-5xl p-24 m-auto gap-y-8">
+      <div className="flex flex-col max-w-5xl md:-24 p-10 m-auto gap-y-8">
         <h1 className="text-5xl font-bold text-accent-content">
           <span className="text-accent">Council</span> is a decentralized
           governance protocol that allows a community to manage a DAO.
@@ -30,7 +31,7 @@ export default function Index(): ReactElement {
         </div>
       </div>
 
-      <div className="w-full p-24 bg-base-200">
+      <div className="w-full md:p-24 p-10bg-base-200">
         <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
             <div className="text-4xl font-bold">Get Started</div>
@@ -42,7 +43,9 @@ export default function Index(): ReactElement {
 
             <div className="daisy-mockup-code">
               <pre data-prefix="$">
-                <code>git clone https://github.com/delvtech/council-kit</code>
+                <code className="w-full">
+                  git clone https://github.com/delvtech/council-kit
+                </code>
               </pre>
             </div>
           </div>
@@ -104,7 +107,7 @@ export default function Index(): ReactElement {
         </div>
       </div>
 
-      <div className="w-full p-24 bg-base-200">
+      <div className="w-full md:p-24 p-10bg-base-200">
         <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
             <div className="text-4xl font-medium">Council 🤝 DAOs </div>
@@ -113,23 +116,22 @@ export default function Index(): ReactElement {
               <div className="w-48 daisy-card bg-neutral text-neutral-content">
                 <div className="items-center text-center daisy-card-body">
                   <h2 className="daisy-card-title">Yearn</h2>
-                  {/* <Image src={} /> */}
-                  <img
+                  <Image
                     alt="yearn logo"
                     height={80}
                     width={80}
-                    src="https://cryptologos.cc/logos/yearn-finance-yfi-logo.png"
+                    src="/images/yearn-finance-yfi-logo.png"
                   />
                 </div>
               </div>
               <div className="w-48 daisy-card bg-neutral text-neutral-content">
                 <div className="items-center daisy-card-body">
                   <h2 className="daisy-card-title">Balancer</h2>
-                  <img
+                  <Image
                     alt="balancer logo"
                     height={80}
                     width={80}
-                    src="https://cryptologos.cc/logos/balancer-bal-logo.svg?v=024"
+                    src="/images/balancer-bal-logo.svg"
                   />
                 </div>
               </div>
@@ -137,11 +139,11 @@ export default function Index(): ReactElement {
               <div className="w-48 daisy-card bg-neutral text-neutral-content">
                 <div className="items-center daisy-card-body">
                   <h2 className="daisy-card-title">Synthetix</h2>
-                  <img
+                  <Image
                     alt="snx logo"
                     height={80}
                     width={80}
-                    src="https://cryptologos.cc/logos/synthetix-network-token-snx-logo.svg?v=024"
+                    src="/images/synthetix-network-token-snx-logo.svg"
                   />
                 </div>
               </div>
