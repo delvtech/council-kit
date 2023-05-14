@@ -37,11 +37,14 @@ export const { command, aliases, builder, handler } = createCommandModule({
       initial: 18,
     });
 
-    signale.success(encodeSetVotePowerBounc(power, decimals));
+    signale.success(encodeSetVotePowerBound(power, decimals));
   },
 });
 
-export function encodeSetVotePowerBounc(power: string, decimals = 0): string {
+export function encodeSetVotePowerBound(
+  power: string,
+  decimals: number,
+): string {
   const gscVaultInterface = new Interface(GSCVault__factory.abi);
   return gscVaultInterface.encodeFunctionData("setVotePowerBound", [
     parseUnits(power, decimals),
