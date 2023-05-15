@@ -14,7 +14,7 @@ export const { command, aliases, describe, builder, handler } =
       return yargs.options({
         a: {
           alias: ["address", "new-delegate", "newDelegate"],
-          describe: "The amount of tokens to deposit",
+          describe: "The address to delegate to",
           type: "string",
         },
       });
