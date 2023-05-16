@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ReactElement } from "react";
 
@@ -116,22 +115,22 @@ export default function Index(): ReactElement {
               <div className="w-48 daisy-card bg-neutral text-neutral-content">
                 <div className="items-center text-center daisy-card-body">
                   <h2 className="daisy-card-title">Yearn</h2>
-                  <Image
+                  <img
                     alt="yearn logo"
                     height={80}
                     width={80}
-                    src="/images/yearn-finance-yfi-logo.png"
+                    src="https://cryptologos.cc/logos/yearn-finance-yfi-logo.png"
                   />
                 </div>
               </div>
               <div className="w-48 daisy-card bg-neutral text-neutral-content">
                 <div className="items-center daisy-card-body">
                   <h2 className="daisy-card-title">Balancer</h2>
-                  <Image
+                  <img
                     alt="balancer logo"
                     height={80}
                     width={80}
-                    src="/images/balancer-bal-logo.svg"
+                    src="https://cryptologos.cc/logos/balancer-bal-logo.svg?v=024"
                   />
                 </div>
               </div>
@@ -139,11 +138,11 @@ export default function Index(): ReactElement {
               <div className="w-48 daisy-card bg-neutral text-neutral-content">
                 <div className="items-center daisy-card-body">
                   <h2 className="daisy-card-title">Synthetix</h2>
-                  <Image
+                  <img
                     alt="snx logo"
                     height={80}
                     width={80}
-                    src="/images/synthetix-network-token-snx-logo.svg"
+                    src="https://cryptologos.cc/logos/synthetix-network-token-snx-logo.svg?v=024"
                   />
                 </div>
               </div>
