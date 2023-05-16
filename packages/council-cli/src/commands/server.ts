@@ -23,6 +23,12 @@ export const { command, describe, builder, handler } = createCommandModule({
         type: "string",
         default: "127.0.0.1",
       },
+      b: {
+        alias: ["balance"],
+        describe: "The ETH balance to assign to each account",
+        type: "number",
+        default: 100,
+      },
       t: {
         alias: ["block-time"],
         describe: "The blockTime in seconds for automatic mining",
@@ -52,7 +58,7 @@ export const { command, describe, builder, handler } = createCommandModule({
 
       wallet: {
         totalAccounts: 10,
-        defaultBalance: 100,
+        defaultBalance: args.balance,
       },
     });
 
