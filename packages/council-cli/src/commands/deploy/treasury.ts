@@ -19,7 +19,7 @@ export const { command, aliases, describe, builder, handler } =
       return yargs.options({
         o: {
           alias: ["owner"],
-          describe: "The owner of the contract (e.g., a Timelock contract)",
+          describe: "The contract owner's address (e.g., a Timelock contract)",
           type: "string",
         },
         r: rpcUrlOption,

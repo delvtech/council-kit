@@ -18,7 +18,7 @@ export const optimisticRewardsCommandModule = createCommandModule({
     return yargs.options({
       o: {
         alias: ["owner", "governance"],
-        describe: "The owner of the contract (e.g., a Timelock contract)",
+        describe: "The contract owner's address (e.g., a Timelock contract)",
         type: "string",
       },
       r: {

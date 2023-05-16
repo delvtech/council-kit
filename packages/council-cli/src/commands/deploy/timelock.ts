@@ -26,7 +26,8 @@ export const { command, aliases, describe, builder, handler } =
         },
         o: {
           alias: ["owner"],
-          describe: "The owner of the contract (e.g., a CoreVoting contract)",
+          describe:
+            "The contract owner's address (e.g., a CoreVoting contract)",
           type: "string",
         },
         g: {
