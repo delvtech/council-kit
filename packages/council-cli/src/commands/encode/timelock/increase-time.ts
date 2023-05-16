@@ -9,6 +9,7 @@ export const { command, aliases, describe, builder, handler } =
   createCommandModule({
     command: "increase-time [OPTIONS]",
     aliases: ["increaseTime"],
+    describe: "Encode call data for Timelock.increaseTime",
 
     builder: (yargs) => {
       return yargs.options({
