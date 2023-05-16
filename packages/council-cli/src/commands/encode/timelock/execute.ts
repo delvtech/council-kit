@@ -18,7 +18,7 @@ export const { command, describe, builder, handler } = createCommandModule({
       },
       d: {
         alias: ["calldatas"],
-        describe: "Execution call data for each target",
+        describe: "Encoded call data for each target",
         type: "array",
         string: true,
       },
