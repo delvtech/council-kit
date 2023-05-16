@@ -1,9 +1,10 @@
 import { VestingVault__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "deposit [OPTIONS]",
@@ -42,8 +43,9 @@ export const { command, describe, builder, handler } = createCommandModule({
 });
 
 export function encodeDeposit(amount: string, decimals: number): string {
-  const vestingVaultInterface = new Interface(VestingVault__factory.abi);
-  return vestingVaultInterface.encodeFunctionData("deposit", [
-    parseUnits(amount, decimals),
-  ]);
+  return encodeFunctionData({
+    abi: VestingVault__factory.abi,
+    functionName: "deposit",
+    args: [parseBigInt(amount, decimals)],
+  });
 }

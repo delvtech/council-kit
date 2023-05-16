@@ -1,8 +1,8 @@
 import { Airdrop__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredString } from "src/options/utils/requiredString";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "reclaim [OPTIONS]",
@@ -29,6 +29,9 @@ export const { command, describe, builder, handler } = createCommandModule({
 });
 
 function encodeReclaim(recipient: string) {
-  const airdropInterface = new Interface(Airdrop__factory.abi);
-  return airdropInterface.encodeFunctionData("reclaim", [recipient]);
+  return encodeFunctionData({
+    abi: Airdrop__factory.abi,
+    functionName: "reclaim",
+    args: [recipient],
+  });
 }

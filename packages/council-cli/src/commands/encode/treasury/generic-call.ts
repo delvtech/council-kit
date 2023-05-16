@@ -1,8 +1,8 @@
 import { Treasury__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredString } from "src/options/utils/requiredString";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const genericCall = createCommandModule({
   command: "generic-call [OPTIONS]",
@@ -40,6 +40,9 @@ export const genericCall = createCommandModule({
 });
 
 export function encodeGenericCall(target: string, data: string): string {
-  const treasuryInterface = new Interface(Treasury__factory.abi);
-  return treasuryInterface.encodeFunctionData("genericCall", [target, data]);
+  return encodeFunctionData({
+    abi: Treasury__factory.abi,
+    functionName: "genericCall",
+    args: [target, data],
+  });
 }

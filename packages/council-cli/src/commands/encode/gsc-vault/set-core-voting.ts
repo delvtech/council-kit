@@ -1,8 +1,8 @@
 import { GSCVault__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredString } from "src/options/utils/requiredString";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -31,6 +31,9 @@ export const { command, aliases, describe, builder, handler } =
   });
 
 export function encodeSetCoreVoting(address: string): string {
-  const gscVaultInterface = new Interface(GSCVault__factory.abi);
-  return gscVaultInterface.encodeFunctionData("setCoreVoting", [address]);
+  return encodeFunctionData({
+    abi: GSCVault__factory.abi,
+    functionName: "setCoreVoting",
+    args: [address],
+  });
 }

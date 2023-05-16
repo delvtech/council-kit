@@ -1,9 +1,10 @@
 import { Treasury__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -68,10 +69,9 @@ export function encodeApprove(
   decimals: number,
   spender: string,
 ): string {
-  const treasuryInterface = new Interface(Treasury__factory.abi);
-  return treasuryInterface.encodeFunctionData("approve", [
-    token,
-    parseUnits(amount, decimals),
-    spender,
-  ]);
+  return encodeFunctionData({
+    abi: Treasury__factory.abi,
+    functionName: "approve",
+    args: [token, parseBigInt(amount, decimals), spender],
+  });
 }

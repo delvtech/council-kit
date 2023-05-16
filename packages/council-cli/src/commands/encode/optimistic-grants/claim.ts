@@ -1,12 +1,8 @@
-/**
- * A command module for encoding call data for OptimisticGrants.claim
- */
-
 import { OptimisticGrants__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredString } from "src/options/utils/requiredString";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "claim",
@@ -33,8 +29,9 @@ export const { command, describe, builder, handler } = createCommandModule({
 });
 
 export function encodeClaim(recipient: string): string {
-  const optimisticGrantsInterface = new Interface(
-    OptimisticGrants__factory.abi,
-  );
-  return optimisticGrantsInterface.encodeFunctionData("claim", [recipient]);
+  return encodeFunctionData({
+    abi: OptimisticGrants__factory.abi,
+    functionName: "claim",
+    args: [recipient],
+  });
 }

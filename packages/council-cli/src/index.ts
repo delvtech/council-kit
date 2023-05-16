@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import path from "node:path";
 import signale from "signale";
+import "src/utils/fetchPolyfill";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import {

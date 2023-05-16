@@ -1,8 +1,8 @@
 import { CoreVoting__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -32,6 +32,9 @@ export const { command, aliases, describe, builder, handler } =
   });
 
 export function encodeSetLockDuration(duration: number): string {
-  const coreVotingInterface = new Interface(CoreVoting__factory.abi);
-  return coreVotingInterface.encodeFunctionData("setLockDuration", [duration]);
+  return encodeFunctionData({
+    abi: CoreVoting__factory.abi,
+    functionName: "setLockDuration",
+    args: [duration],
+  });
 }

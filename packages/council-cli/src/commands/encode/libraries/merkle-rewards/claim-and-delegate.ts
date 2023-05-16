@@ -1,10 +1,11 @@
 import { MerkleRewards__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredArray } from "src/options/utils/requiredArray";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -103,12 +104,15 @@ export function encodeClaimAndDelegate(
   proof: string[],
   recipient: string,
 ): string {
-  const optimisticRewardsInterface = new Interface(MerkleRewards__factory.abi);
-  return optimisticRewardsInterface.encodeFunctionData("claimAndDelegate", [
-    parseUnits(amount, decimals),
-    delegate,
-    parseUnits(totalGrant, decimals),
-    proof,
-    recipient,
-  ]);
+  return encodeFunctionData({
+    abi: MerkleRewards__factory.abi,
+    functionName: "claimAndDelegate",
+    args: [
+      parseBigInt(amount, decimals),
+      delegate,
+      parseBigInt(totalGrant, decimals),
+      proof,
+      recipient,
+    ],
+  });
 }

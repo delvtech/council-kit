@@ -1,8 +1,8 @@
 import { VestingVault__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -31,8 +31,9 @@ export const { command, aliases, describe, builder, handler } =
   });
 
 export function encodeChangeUnvestedMultiplier(multiplier: number): string {
-  const lockingVaultInterface = new Interface(VestingVault__factory.abi);
-  return lockingVaultInterface.encodeFunctionData("changeUnvestedMultiplier", [
-    multiplier,
-  ]);
+  return encodeFunctionData({
+    abi: VestingVault__factory.abi,
+    functionName: "changeUnvestedMultiplier",
+    args: [multiplier],
+  });
 }

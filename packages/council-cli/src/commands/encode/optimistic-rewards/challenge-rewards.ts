@@ -1,22 +1,21 @@
 import { OptimisticRewards__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "challenge-rewards [OPTIONS]",
-    aliases: ["challengeRewards"],
-    describe: "Encode call data for OptimisticRewards.challengeRewards",
+export const { command, aliases, describe, handler } = createCommandModule({
+  command: "challenge-rewards [OPTIONS]",
+  aliases: ["challengeRewards"],
+  describe: "Encode call data for OptimisticRewards.challengeRewards",
 
-    handler: async () => {
-      signale.success(encodeChallengeRewards());
-    },
-  });
+  handler: async () => {
+    signale.success(encodeChallengeRewards());
+  },
+});
 
 export function encodeChallengeRewards(): string {
-  const optimisticRewardsInterface = new Interface(
-    OptimisticRewards__factory.abi,
-  );
-  return optimisticRewardsInterface.encodeFunctionData("challengeRewards", []);
+  return encodeFunctionData({
+    abi: OptimisticRewards__factory.abi,
+    functionName: "challengeRewards",
+  });
 }

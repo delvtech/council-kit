@@ -1,9 +1,10 @@
 import { LockingVault__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "withdraw [OPTIONS]",
@@ -41,9 +42,10 @@ export const { command, describe, builder, handler } = createCommandModule({
   },
 });
 
-export function encodeWithdraw(amount: string, decimals = 0): string {
-  const lockingVaultInterface = new Interface(LockingVault__factory.abi);
-  return lockingVaultInterface.encodeFunctionData("withdraw", [
-    parseUnits(amount, decimals),
-  ]);
+export function encodeWithdraw(amount: string, decimals: number): string {
+  return encodeFunctionData({
+    abi: LockingVault__factory.abi,
+    functionName: "withdraw",
+    args: [parseBigInt(amount, decimals)],
+  });
 }

@@ -1,10 +1,11 @@
 import { CoreVoting__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredNumberString } from "src/options/utils/requiredNumberString";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -68,12 +69,11 @@ export function encodeSetCustomQuorum(
   target: string,
   selector: string,
   quorum: string,
-  decimals = 0,
+  decimals: number,
 ): string {
-  const coreVotingInterface = new Interface(CoreVoting__factory.abi);
-  return coreVotingInterface.encodeFunctionData("setCustomQuorum", [
-    target,
-    selector,
-    parseUnits(quorum, decimals),
-  ]);
+  return encodeFunctionData({
+    abi: CoreVoting__factory.abi,
+    functionName: "setCustomQuorum",
+    args: [target, selector, parseBigInt(quorum, decimals)],
+  });
 }
