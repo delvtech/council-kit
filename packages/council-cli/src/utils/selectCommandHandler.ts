@@ -64,13 +64,16 @@ export function selectCommandHandler(
 
       const commandDirItems = fs.readdirSync(commandsPath);
       const extensionStrings = COMMAND_FILE_EXTENSIONS.map(
-        (extension) => `.${extension}`,
+        (extension) => `\\.${extension}`,
       );
       const extensionRegex = new RegExp(`(${extensionStrings.join("|")})$`);
 
       const choices = await Promise.all(
         commandDirItems
-          .filter((item) => extensionRegex.test(item))
+          .filter((item) => {
+            const isCommand = extensionRegex.test(item);
+            return isCommand;
+          })
           .map(async (filename): Promise<Choice> => {
             const title = removeFileExtension(filename);
             let description;
