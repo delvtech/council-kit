@@ -2,8 +2,8 @@ import colors from "colors";
 import ganache from "ganache";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
+import { formatBigInt } from "src/utils/bigint/formatBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { formatBigInt } from "src/utils/formatBigInt";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "server [OPTIONS]",
