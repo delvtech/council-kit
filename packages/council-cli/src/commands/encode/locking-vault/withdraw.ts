@@ -13,7 +13,7 @@ export const { command, describe, builder, handler } = createCommandModule({
     return yargs.options({
       a: {
         alias: ["amount"],
-        describe: "The amount of tokens to deposit",
+        describe: "The amount of tokens to withdraw",
         type: "string",
       },
       d: {
