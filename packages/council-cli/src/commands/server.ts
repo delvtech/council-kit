@@ -84,13 +84,6 @@ export const { command, describe, builder, handler } = createCommandModule({
         console.log(`Private Key: ${account.secretKey}`);
         console.log(colors.dim(`${"-".repeat(80)}`));
       });
-
-      // const accountsTable = new Table({
-      //   head: ["Address", "Private Key", "Balance (ETH)"],
-      //   rows: Object.entries(initialAccounts).map(([address, account]) => {
-      //     return [address, account.secretKey, formatBigInt(account.balance)];
-      //   }),
-      // });
     });
   },
 });
