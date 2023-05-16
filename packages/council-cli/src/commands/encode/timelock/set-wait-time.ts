@@ -1,8 +1,8 @@
 import { Timelock__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -31,6 +31,9 @@ export const { command, aliases, describe, builder, handler } =
   });
 
 export function encodeSetWaitTime(waitTime: string): string {
-  const timelockInterface = new Interface(Timelock__factory.abi);
-  return timelockInterface.encodeFunctionData("setWaitTime", [waitTime]);
+  return encodeFunctionData({
+    abi: Timelock__factory.abi,
+    functionName: "setWaitTime",
+    args: [waitTime],
+  });
 }

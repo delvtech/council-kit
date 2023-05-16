@@ -1,13 +1,10 @@
-/**
- * A command module for encoding call data for OptimisticGrants.configureGrant
- */
-
 import { OptimisticGrants__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -75,12 +72,9 @@ export function encodeConfigureGrant(
   decimals: number,
   expiration: number,
 ): string {
-  const optimisticGrantsInterface = new Interface(
-    OptimisticGrants__factory.abi,
-  );
-  return optimisticGrantsInterface.encodeFunctionData("configureGrant", [
-    owner,
-    parseUnits(amount, decimals),
-    expiration,
-  ]);
+  return encodeFunctionData({
+    abi: OptimisticGrants__factory.abi,
+    functionName: "configureGrant",
+    args: [owner, parseBigInt(amount, decimals), expiration],
+  });
 }

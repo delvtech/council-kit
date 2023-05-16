@@ -1,9 +1,10 @@
 import { Spender__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -59,9 +60,9 @@ export function encodeRemoveToken(
   decimals: number,
   destination: string,
 ): string {
-  const spenderInterface = new Interface(Spender__factory.abi);
-  return spenderInterface.encodeFunctionData("removeToken", [
-    parseUnits(amount, decimals),
-    destination,
-  ]);
+  return encodeFunctionData({
+    abi: Spender__factory.abi,
+    functionName: "removeToken",
+    args: [parseBigInt(amount, decimals), destination],
+  });
 }

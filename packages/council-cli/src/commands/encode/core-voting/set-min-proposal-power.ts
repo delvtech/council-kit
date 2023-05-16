@@ -1,9 +1,10 @@
 import { CoreVoting__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredNumberString } from "src/options/utils/requiredNumberString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -43,9 +44,13 @@ export const { command, aliases, describe, builder, handler } =
     },
   });
 
-export function encodeSetMinProposalPower(power: string, decimals = 0): string {
-  const coreVotingInterface = new Interface(CoreVoting__factory.abi);
-  return coreVotingInterface.encodeFunctionData("setMinProposalPower", [
-    parseUnits(power, decimals),
-  ]);
+export function encodeSetMinProposalPower(
+  power: string,
+  decimals: number,
+): string {
+  return encodeFunctionData({
+    abi: CoreVoting__factory.abi,
+    functionName: "setMinProposalPower",
+    args: [parseBigInt(power, decimals)],
+  });
 }

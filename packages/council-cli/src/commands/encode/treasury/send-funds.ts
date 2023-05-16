@@ -1,9 +1,10 @@
 import { Treasury__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 const ETH_CONSTANT = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
@@ -72,10 +73,9 @@ export function encodeSendFunds(
   decimals: number,
   recipient: string,
 ): string {
-  const treasuryInterface = new Interface(Treasury__factory.abi);
-  return treasuryInterface.encodeFunctionData("sendFunds", [
-    token,
-    parseUnits(amount, decimals),
-    recipient,
-  ]);
+  return encodeFunctionData({
+    abi: Treasury__factory.abi,
+    functionName: "sendFunds",
+    args: [token, parseBigInt(amount, decimals), recipient],
+  });
 }

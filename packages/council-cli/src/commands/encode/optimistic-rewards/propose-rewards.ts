@@ -1,8 +1,8 @@
 import { OptimisticRewards__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredString } from "src/options/utils/requiredString";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -31,10 +31,9 @@ export const { command, aliases, describe, builder, handler } =
   });
 
 export function encodeProposeRewards(root: string): string {
-  const optimisticRewardsInterface = new Interface(
-    OptimisticRewards__factory.abi,
-  );
-  return optimisticRewardsInterface.encodeFunctionData("proposeRewards", [
-    root,
-  ]);
+  return encodeFunctionData({
+    abi: OptimisticRewards__factory.abi,
+    functionName: "proposeRewards",
+    args: [root],
+  });
 }

@@ -1,9 +1,10 @@
 import { VestingVault__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -122,13 +123,16 @@ export function encodeAddGrantAndDelegate({
   cliff,
   delegate,
 }: EncodeAddGrantAndDelegateOptions): string {
-  const lockingVaultInterface = new Interface(VestingVault__factory.abi);
-  return lockingVaultInterface.encodeFunctionData("addGrantAndDelegate", [
-    who,
-    parseUnits(amount, decimals),
-    startTime,
-    expiration,
-    cliff,
-    delegate,
-  ]);
+  return encodeFunctionData({
+    abi: VestingVault__factory.abi,
+    functionName: "addGrantAndDelegate",
+    args: [
+      who,
+      parseBigInt(amount, decimals),
+      startTime,
+      expiration,
+      cliff,
+      delegate,
+    ],
+  });
 }

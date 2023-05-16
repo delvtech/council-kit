@@ -1,8 +1,8 @@
 import { Authorizable__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredString } from "src/options/utils/requiredString";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -31,6 +31,9 @@ export const { command, aliases, describe, builder, handler } =
   });
 
 export function encodeSetOwner(address: string): string {
-  const authorizableInterface = new Interface(Authorizable__factory.abi);
-  return authorizableInterface.encodeFunctionData("setOwner", [address]);
+  return encodeFunctionData({
+    abi: Authorizable__factory.abi,
+    functionName: "setOwner",
+    args: [address],
+  });
 }

@@ -1,8 +1,8 @@
 import { Authorizable__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredString } from "src/options/utils/requiredString";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "deauthorize [OPTIONS]",
@@ -29,6 +29,9 @@ export const { command, describe, builder, handler } = createCommandModule({
 });
 
 export function encodeDeauthorize(address: string): string {
-  const authorizableInterface = new Interface(Authorizable__factory.abi);
-  return authorizableInterface.encodeFunctionData("deauthorize", [address]);
+  return encodeFunctionData({
+    abi: Authorizable__factory.abi,
+    functionName: "deauthorize",
+    args: [address],
+  });
 }

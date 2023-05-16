@@ -1,8 +1,8 @@
 import { Timelock__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredArray } from "src/options/utils/requiredArray";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "execute [OPTIONS]",
@@ -41,6 +41,9 @@ export const { command, describe, builder, handler } = createCommandModule({
 });
 
 export function encodeExecute(targets: string[], calldatas: string[]): string {
-  const timelockInterface = new Interface(Timelock__factory.abi);
-  return timelockInterface.encodeFunctionData("execute", [targets, calldatas]);
+  return encodeFunctionData({
+    abi: Timelock__factory.abi,
+    functionName: "execute",
+    args: [targets, calldatas],
+  });
 }

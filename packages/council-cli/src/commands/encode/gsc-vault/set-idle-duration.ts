@@ -1,8 +1,8 @@
 import { GSCVault__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -32,6 +32,9 @@ export const { command, aliases, describe, builder, handler } =
   });
 
 export function encodeSetIdleDuration(time: number): string {
-  const gscVaultInterface = new Interface(GSCVault__factory.abi);
-  return gscVaultInterface.encodeFunctionData("setIdleDuration", [time]);
+  return encodeFunctionData({
+    abi: GSCVault__factory.abi,
+    functionName: "setIdleDuration",
+    args: [time],
+  });
 }

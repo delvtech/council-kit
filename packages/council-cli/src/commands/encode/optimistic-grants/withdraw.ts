@@ -1,9 +1,10 @@
 import { OptimisticGrants__factory } from "@council/typechain";
-import { Interface, parseUnits } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
+import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "withdraw [OPTIONS]",
@@ -56,11 +57,9 @@ export function encodeDeposit(
   decimals: number,
   recipient: string,
 ): string {
-  const optimisticGrantsInterface = new Interface(
-    OptimisticGrants__factory.abi,
-  );
-  return optimisticGrantsInterface.encodeFunctionData("withdraw", [
-    parseUnits(amount, decimals),
-    recipient,
-  ]);
+  return encodeFunctionData({
+    abi: OptimisticGrants__factory.abi,
+    functionName: "withdraw",
+    args: [parseBigInt(amount, decimals), recipient],
+  });
 }

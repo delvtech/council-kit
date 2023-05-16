@@ -1,9 +1,9 @@
 import { CoreVoting__factory } from "@council/typechain";
-import { Interface } from "ethers/lib/utils";
 import signale from "signale";
 import { requiredBoolean } from "src/options/utils/requiredBoolean";
 import { requiredString } from "src/options/utils/requiredString";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { encodeFunctionData } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -47,9 +47,9 @@ export function encodeChangeVaultStatus(
   vault: string,
   approved: boolean,
 ): string {
-  const coreVotingInterface = new Interface(CoreVoting__factory.abi);
-  return coreVotingInterface.encodeFunctionData("changeVaultStatus", [
-    vault,
-    approved,
-  ]);
+  return encodeFunctionData({
+    abi: CoreVoting__factory.abi,
+    functionName: "changeVaultStatus",
+    args: [vault, approved],
+  });
 }
