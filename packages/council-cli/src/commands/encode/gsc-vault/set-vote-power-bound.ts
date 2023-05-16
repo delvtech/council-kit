@@ -8,6 +8,7 @@ import { createCommandModule } from "src/utils/createCommandModule";
 export const { command, aliases, builder, handler } = createCommandModule({
   command: "set-vote-power-bound [OPTIONS]",
   aliases: ["setVotePowerBound"],
+  describe: "Encode call data for GSCVault.setVotePowerBound",
 
   builder: (yargs) => {
     return yargs.options({
