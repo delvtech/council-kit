@@ -1,6 +1,7 @@
-import { OptimisticRewards__factory } from "@council/typechain";
+import { Airdrop__factory } from "@council/typechain";
 import signale from "signale";
 import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
+import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
 import { createCommandModule } from "src/utils/createCommandModule";
@@ -9,10 +10,10 @@ import { Hex, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { Chain, localhost } from "viem/chains";
 
-export const optimisticRewardsCommandModule = createCommandModule({
-  command: "optimistic-rewards [OPTIONS]",
-  aliases: ["OptimisticRewards"],
-  describe: "Deploy a OptimisticRewards contract",
+export const airDropCommandModule = createCommandModule({
+  command: "airdrop [OPTIONS]",
+  aliases: ["Airdrop"],
+  describe: "Deploy an Airdrop contract",
 
   builder: (yargs) => {
     return yargs.options({
@@ -22,24 +23,20 @@ export const optimisticRewardsCommandModule = createCommandModule({
         type: "string",
       },
       r: {
-        alias: ["root", "starting-root", "startingRoot"],
-        describe: "The starting merkle root",
-        type: "string",
-      },
-      p: {
-        alias: ["proposer"],
-        describe: "The address that can propose new roots",
-        type: "string",
-      },
-      c: {
-        alias: ["revoker", "challenger"],
-        describe: "The address that can remove proposed reward roots",
+        alias: ["root", "merkle-root", "merkleRoot"],
+        describe: "The merkle root of the airdrop",
         type: "string",
       },
       t: {
         alias: ["token"],
-        describe: "The address of the ERC20 token to distribute",
+        describe: "The address of the ERC20 token contract",
         type: "string",
+      },
+      e: {
+        alias: ["expiration"],
+        describe:
+          "The expiration timestamp (in seconds) after which the funds can be reclaimed by the owner",
+        type: "number",
       },
       u: rpcUrlOption,
       w: walletKeyOption,
@@ -54,17 +51,7 @@ export const optimisticRewardsCommandModule = createCommandModule({
 
     const root = await requiredString(args.root, {
       name: "root",
-      message: "Enter starting root",
-    });
-
-    const proposer = await requiredString(args.proposer, {
-      name: "proposer",
-      message: "Enter proposer address",
-    });
-
-    const revoker = await requiredString(args.revoker, {
-      name: "revoker",
-      message: "Enter revoker address",
+      message: "Enter merkle root",
     });
 
     const token = await requiredString(args.token, {
@@ -72,57 +59,59 @@ export const optimisticRewardsCommandModule = createCommandModule({
       message: "Enter token address",
     });
 
+    const expiration = await requiredNumber(args.expiration, {
+      name: "expiration",
+      message: "Enter expiration timestamp (in seconds)",
+    });
+
     const rpcUrl = await requiredRpcUrl(args.rpcUrl);
     const walletKey = await requiredWalletKey(args.walletKey);
     const account = privateKeyToAccount(walletKey as Hex);
 
-    signale.pending("Deploying OptimisticRewards...");
+    signale.pending("Deploying Airdrop...");
 
-    const { address } = await deployOptimisticRewards({
+    const { address } = await deployAirDrop({
       owner,
-      startingRoot: root,
-      proposer,
-      revoker,
+      merkleRoot: root,
       token,
+      expiration,
       account,
       rpcUrl,
       chain: localhost,
       onSubmitted: (txHash) => {
-        signale.pending(`OptimisticRewards deployment tx submitted: ${txHash}`);
+        signale.pending(`Airdrop deployment tx submitted: ${txHash}`);
       },
     });
 
-    signale.success(`OptimisticRewards deployed @ ${address}`);
+    signale.success(`Airdrop deployed @ ${address}`);
   },
 });
 
-export interface DeployOptimisticRewardsOptions {
+export interface DeployAirDropOptions {
   owner: string;
-  startingRoot: string;
-  proposer: string;
-  revoker: string;
+  merkleRoot: string;
   token: string;
+  expiration: number;
   account: PrivateKeyAccount;
   rpcUrl: string;
   chain: Chain;
   onSubmitted?: (txHash: string) => void;
 }
 
-export async function deployOptimisticRewards({
+export async function deployAirDrop({
   owner,
-  startingRoot,
-  proposer,
-  revoker,
+  merkleRoot,
   token,
+  expiration,
   account,
   rpcUrl,
   chain,
   onSubmitted,
-}: DeployOptimisticRewardsOptions): Promise<DeployedContract> {
+}: DeployAirDropOptions): Promise<DeployedContract> {
   return deployContract({
-    abi: OptimisticRewards__factory.abi,
-    args: [owner, startingRoot, proposer, revoker, token],
-    bytecode: OptimisticRewards__factory.bytecode,
+    abi: Airdrop__factory.abi,
+    args: [owner, merkleRoot, token, expiration],
+    bytecode: Airdrop__factory.bytecode,
     account,
     rpcUrl,
     chain,
