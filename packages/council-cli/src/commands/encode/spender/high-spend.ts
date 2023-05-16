@@ -49,11 +49,11 @@ export const { command, aliases, describe, builder, handler } =
         message: "Enter destination address",
       });
 
-      signale.success(encodeSmallSpend(amount, decimals, destination));
+      signale.success(encodeHighSpend(amount, decimals, destination));
     },
   });
 
-export function encodeSmallSpend(
+export function encodeHighSpend(
   amount: string,
   decimals: number,
   destination: string,
