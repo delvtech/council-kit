@@ -10,6 +10,6 @@ export const { command, describe, handler } = createCommandModule({
     const table = new Table({
       rows: Object.entries(config.data),
     });
-    console.log(`${table.toString()}`);
+    console.log(table.toString());
   },
 });
