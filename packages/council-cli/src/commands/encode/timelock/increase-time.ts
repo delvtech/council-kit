@@ -9,6 +9,7 @@ export const { command, aliases, describe, builder, handler } =
   createCommandModule({
     command: "increase-time [OPTIONS]",
     aliases: ["increaseTime"],
+    describe: "Encode call data for Timelock.increaseTime",
 
     builder: (yargs) => {
       return yargs.options({
@@ -32,7 +33,7 @@ export const { command, aliases, describe, builder, handler } =
         d: {
           alias: ["calldatas"],
           describe:
-            "Execution call data for each target. This will be used with the `-t | --targets` option to create a call hash if one isn't provided via the `-h | --call-hash` option.",
+            "Encoded call data for each target. This will be used with the `-t | --targets` option to create a call hash if one isn't provided via the `-h | --call-hash` option.",
           type: "array",
           string: true,
         },
