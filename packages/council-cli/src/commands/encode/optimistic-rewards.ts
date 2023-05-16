@@ -5,13 +5,13 @@ import {
   selectCommandHandler,
 } from "src/utils/selectCommandHandler";
 
-const commandDir = "./locking-vault";
+const commandDir = "./optimistic-rewards";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
-    command: "locking-vault [function]",
-    aliases: ["LockingVault"],
-    describe: "Encode call data for a LockingVault function",
+    command: "optimistic-rewards [function]",
+    aliases: ["OptimisticRewards"],
+    describe: "Encode call data for a OptimisticRewards function",
 
     builder: (yargs) => {
       return yargs.commandDir(commandDir, {
