@@ -131,6 +131,17 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "Discussing a fair short term incentive program before enabling transferability of ELFI. As Element’s vaults begin to expire, the necessity of incentivizing rollover is getting more and more important to help retain liquidity in the protocol. The fixed income markets require liquidity to create the opportunity for fixed rate purchasers to earn a fixed rate with minimal slippage.",
       },
+      9: {
+        descriptionURL:
+          "https://snapshot.org/#/elfi.eth/proposal/0x38b141145f27e23753978ebe8987059c49986579d1b7dcbe1a6d6f8743bff8f7",
+        targets: [],
+        calldatas: [],
+        title: "Technical Correction of Core Voting Proposal 8 (EGP-5)",
+        sentenceSummary:
+          "This proposal fixes the technical error of the prior proposal, EGP-5.",
+        paragraphSummary:
+          "This proposal fixes the technical error of the prior proposal, EGP-5. The ELFI token has 18 decimals, which was not accounted for in Proposal 8. Thus, despite the success of the onchain vote, the retroactive incentives of EGP-5 could not be sent to the reward contract.",
+      },
     },
   },
 
