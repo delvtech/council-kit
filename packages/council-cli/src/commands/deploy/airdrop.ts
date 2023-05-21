@@ -10,82 +10,83 @@ import { Hex, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { Chain, localhost } from "viem/chains";
 
-export const airDropCommandModule = createCommandModule({
-  command: "airdrop [OPTIONS]",
-  aliases: ["Airdrop"],
-  describe: "Deploy an Airdrop contract",
+export const { command, aliases, describe, builder, handler } =
+  createCommandModule({
+    command: "airdrop [OPTIONS]",
+    aliases: ["Airdrop"],
+    describe: "Deploy an Airdrop contract",
 
-  builder: (yargs) => {
-    return yargs.options({
-      o: {
-        alias: ["owner", "governance"],
-        describe: "The contract owner's address (e.g., a Timelock contract)",
-        type: "string",
-      },
-      r: {
-        alias: ["root", "merkle-root", "merkleRoot"],
-        describe: "The merkle root of the airdrop",
-        type: "string",
-      },
-      t: {
-        alias: ["token"],
-        describe: "The address of the ERC20 token contract",
-        type: "string",
-      },
-      e: {
-        alias: ["expiration"],
-        describe:
-          "The expiration timestamp (in seconds) after which the funds can be reclaimed by the owner",
-        type: "number",
-      },
-      u: rpcUrlOption,
-      w: walletKeyOption,
-    });
-  },
+    builder: (yargs) => {
+      return yargs.options({
+        o: {
+          alias: ["owner", "governance"],
+          describe: "The contract owner's address (e.g., a Timelock contract)",
+          type: "string",
+        },
+        r: {
+          alias: ["root", "merkle-root", "merkleRoot"],
+          describe: "The merkle root of the airdrop",
+          type: "string",
+        },
+        t: {
+          alias: ["token"],
+          describe: "The address of the ERC20 token contract",
+          type: "string",
+        },
+        e: {
+          alias: ["expiration"],
+          describe:
+            "The expiration timestamp (in seconds) after which the funds can be reclaimed by the owner",
+          type: "number",
+        },
+        u: rpcUrlOption,
+        w: walletKeyOption,
+      });
+    },
 
-  handler: async (args) => {
-    const owner = await requiredString(args.owner, {
-      name: "owner",
-      message: "Enter owner address (e.g., a Timelock contract)",
-    });
+    handler: async (args) => {
+      const owner = await requiredString(args.owner, {
+        name: "owner",
+        message: "Enter owner address (e.g., a Timelock contract)",
+      });
 
-    const root = await requiredString(args.root, {
-      name: "root",
-      message: "Enter merkle root",
-    });
+      const root = await requiredString(args.root, {
+        name: "root",
+        message: "Enter merkle root",
+      });
 
-    const token = await requiredString(args.token, {
-      name: "token",
-      message: "Enter token address",
-    });
+      const token = await requiredString(args.token, {
+        name: "token",
+        message: "Enter token address",
+      });
 
-    const expiration = await requiredNumber(args.expiration, {
-      name: "expiration",
-      message: "Enter expiration timestamp (in seconds)",
-    });
+      const expiration = await requiredNumber(args.expiration, {
+        name: "expiration",
+        message: "Enter expiration timestamp (in seconds)",
+      });
 
-    const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-    const walletKey = await requiredWalletKey(args.walletKey);
-    const account = privateKeyToAccount(walletKey as Hex);
+      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
+      const walletKey = await requiredWalletKey(args.walletKey);
+      const account = privateKeyToAccount(walletKey as Hex);
 
-    signale.pending("Deploying Airdrop...");
+      signale.pending("Deploying Airdrop...");
 
-    const { address } = await deployAirDrop({
-      owner,
-      merkleRoot: root,
-      token,
-      expiration,
-      account,
-      rpcUrl,
-      chain: localhost,
-      onSubmitted: (txHash) => {
-        signale.pending(`Airdrop deployment tx submitted: ${txHash}`);
-      },
-    });
+      const { address } = await deployAirDrop({
+        owner,
+        merkleRoot: root,
+        token,
+        expiration,
+        account,
+        rpcUrl,
+        chain: localhost,
+        onSubmitted: (txHash) => {
+          signale.pending(`Airdrop deployment tx submitted: ${txHash}`);
+        },
+      });
 
-    signale.success(`Airdrop deployed @ ${address}`);
-  },
-});
+      signale.success(`Airdrop deployed @ ${address}`);
+    },
+  });
 
 export interface DeployAirDropOptions {
   owner: string;
