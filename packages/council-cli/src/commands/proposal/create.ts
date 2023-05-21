@@ -7,6 +7,7 @@ import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredOption } from "src/options/utils/requiredOption";
 import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
+import { DAY_IN_BLOCKS } from "src/utils/constants";
 import { createCommandModule } from "src/utils/createCommandModule";
 
 export const { command, describe, builder, handler } = createCommandModule({
@@ -80,7 +81,7 @@ export const { command, describe, builder, handler } = createCommandModule({
 
     const ballot = await requiredOption(args.ballot, {
       name: "ballot",
-      message: "Enter initial ballot",
+      message: "Select initial ballot",
       type: "select",
       choices: [
         {
@@ -98,11 +99,6 @@ export const { command, describe, builder, handler } = createCommandModule({
       ],
     });
 
-    const lastCall = await requiredNumber(args.lastCall, {
-      name: "last-call",
-      message: "Enter the last call block",
-    });
-
     const walletKey = await requiredWalletKey(args.walletKey);
     const rpcURL = await requiredRpcUrl(args.rpcUrl);
 
@@ -111,6 +107,13 @@ export const { command, describe, builder, handler } = createCommandModule({
     const votingContract = new VotingContract(address, [], context);
 
     const signer = new Wallet(walletKey, provider);
+    const currentBlock = await provider.getBlockNumber();
+
+    const lastCall = await requiredNumber(args.lastCall, {
+      name: "last-call",
+      message: "Enter the last call block",
+      initial: currentBlock + DAY_IN_BLOCKS * 90,
+    });
 
     signale.success(
       await votingContract.createProposal(

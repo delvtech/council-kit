@@ -9,60 +9,63 @@ import { Hex, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { Chain, localhost } from "viem/chains";
 
-export const optimisticGrantsCommandModule = createCommandModule({
-  command: "optimistic-grants [OPTIONS]",
-  aliases: ["OptimisticGrants"],
-  describe: "Deploy an OptimisticGrants contract",
+export const { command, aliases, describe, builder, handler } =
+  createCommandModule({
+    command: "optimistic-grants [OPTIONS]",
+    aliases: ["OptimisticGrants"],
+    describe: "Deploy an OptimisticGrants contract",
 
-  builder: (yargs) => {
-    return yargs.options({
-      t: {
-        alias: ["token"],
-        describe: "The address of the ERC20 token to distribute",
-        type: "string",
-      },
-      g: {
-        alias: ["governance"],
-        describe:
-          "The governance contract's address for ACL (e.g., a Timelock contract)",
-        type: "string",
-      },
-      u: rpcUrlOption,
-      w: walletKeyOption,
-    });
-  },
+    builder: (yargs) => {
+      return yargs.options({
+        t: {
+          alias: ["token"],
+          describe: "The address of the ERC20 token to distribute",
+          type: "string",
+        },
+        g: {
+          alias: ["governance"],
+          describe:
+            "The governance contract's address for ACL (e.g., a Timelock contract)",
+          type: "string",
+        },
+        u: rpcUrlOption,
+        w: walletKeyOption,
+      });
+    },
 
-  handler: async (args) => {
-    const token = await requiredString(args.token, {
-      name: "token",
-      message: "Enter token address",
-    });
+    handler: async (args) => {
+      const token = await requiredString(args.token, {
+        name: "token",
+        message: "Enter token address",
+      });
 
-    const governance = await requiredString(args.governance, {
-      name: "governance",
-      message: "Enter governance address (e.g., a Timelock contract)",
-    });
+      const governance = await requiredString(args.governance, {
+        name: "governance",
+        message: "Enter governance address (e.g., a Timelock contract)",
+      });
 
-    const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-    const walletKey = await requiredWalletKey(args.walletKey);
-    const account = privateKeyToAccount(walletKey as Hex);
+      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
+      const walletKey = await requiredWalletKey(args.walletKey);
+      const account = privateKeyToAccount(walletKey as Hex);
 
-    signale.pending("Deploying OptimisticGrants...");
+      signale.pending("Deploying OptimisticGrants...");
 
-    const { address } = await deployOptimisticGrants({
-      token,
-      governance,
-      account,
-      rpcUrl,
-      chain: localhost,
-      onSubmitted: (txHash) => {
-        signale.pending(`OptimisticGrants deployment tx submitted: ${txHash}`);
-      },
-    });
+      const { address } = await deployOptimisticGrants({
+        token,
+        governance,
+        account,
+        rpcUrl,
+        chain: localhost,
+        onSubmitted: (txHash) => {
+          signale.pending(
+            `OptimisticGrants deployment tx submitted: ${txHash}`,
+          );
+        },
+      });
 
-    signale.success(`OptimisticGrants deployed @ ${address}`);
-  },
-});
+      signale.success(`OptimisticGrants deployed @ ${address}`);
+    },
+  });
 
 export interface DeployOptimisticGrantsOptions {
   token: string;

@@ -31,8 +31,8 @@ export const { command, aliases, describe, builder, handler } =
           describe: "The default quorum for proposals",
           type: "string",
         },
-        p: {
-          alias: ["power", "min-proposal-power", "minProposalPower"],
+        m: {
+          alias: ["min-power", "min-proposal-power", "minProposalPower"],
           describe: "The minimum voting power required to create a proposal",
           type: "string",
         },
@@ -69,8 +69,8 @@ export const { command, aliases, describe, builder, handler } =
         message: "Enter default quorum",
       });
 
-      const power = await requiredNumberString(args.power, {
-        name: "power",
+      const minPower = await requiredNumberString(args.minPower, {
+        name: "min-power",
         message: "Enter minimum proposal power",
       });
 
@@ -98,9 +98,9 @@ export const { command, aliases, describe, builder, handler } =
       signale.pending("Deploying CoreVoting...");
 
       const { address } = await deployCoreVoting({
-        timelock: owner,
+        owner,
         quorum,
-        power,
+        minPower,
         decimals,
         gsc,
         vaults,
@@ -118,35 +118,35 @@ export const { command, aliases, describe, builder, handler } =
 
 export interface DeployCoreVotingOptions {
   quorum: string;
-  power: string;
+  minPower: string;
   decimals: number;
   gsc: string;
   vaults: string[];
   account: PrivateKeyAccount;
   rpcUrl: string;
   chain: Chain;
-  timelock?: string;
+  owner?: string;
   onSubmitted?: (txHash: string) => void;
 }
 
 export async function deployCoreVoting({
   quorum,
-  power,
+  minPower,
   decimals,
   gsc,
   vaults,
   account,
   rpcUrl,
   chain,
-  timelock = account.address,
+  owner = account.address,
   onSubmitted,
 }: DeployCoreVotingOptions): Promise<DeployedContract> {
   return await deployContract({
     abi: CoreVoting__factory.abi,
     args: [
-      timelock,
+      owner,
       parseBigInt(quorum, decimals),
-      parseBigInt(power, decimals),
+      parseBigInt(minPower, decimals),
       gsc,
       vaults,
     ],

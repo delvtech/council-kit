@@ -40,7 +40,7 @@ export const { command, aliases, describe, builder, handler } =
       signale.pending("Deploying Treasury...");
 
       const { address } = await deployTreasury({
-        governance: owner,
+        owner,
         account,
         rpcUrl,
         chain: localhost,
@@ -54,24 +54,23 @@ export const { command, aliases, describe, builder, handler } =
   });
 
 export interface DeployTreasuryOptions {
-  governance: string;
   account: PrivateKeyAccount;
   rpcUrl: string;
   chain: Chain;
-  timelock?: string;
+  owner?: string;
   onSubmitted?: (txHash: string) => void;
 }
 
 export async function deployTreasury({
-  governance,
   account,
   rpcUrl,
   chain,
+  owner = account.address,
   onSubmitted,
 }: DeployTreasuryOptions): Promise<DeployedContract> {
   return await deployContract({
     abi: Treasury__factory.abi,
-    args: [governance],
+    args: [owner],
     bytecode: Treasury__factory.bytecode,
     account,
     rpcUrl,
