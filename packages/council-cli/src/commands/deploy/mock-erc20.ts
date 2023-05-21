@@ -49,7 +49,7 @@ export const { command, aliases, describe, builder, handler } =
 
       signale.pending("Deploying MockERC20...");
 
-      const { address } = await deployVotingToken({
+      const { address } = await deployMockERC20({
         tokenName: name,
         tokenSymbol: symbol,
         account,
@@ -64,7 +64,7 @@ export const { command, aliases, describe, builder, handler } =
     },
   });
 
-export interface DeployVotingTokenOptions {
+export interface DeployMockERC20Options {
   tokenName: string;
   tokenSymbol: string;
   account: PrivateKeyAccount;
@@ -73,14 +73,14 @@ export interface DeployVotingTokenOptions {
   onSubmitted?: (txHash: string) => void;
 }
 
-export async function deployVotingToken({
+export async function deployMockERC20({
   tokenName,
   tokenSymbol,
   account,
   rpcUrl,
   chain,
   onSubmitted,
-}: DeployVotingTokenOptions): Promise<DeployedContract> {
+}: DeployMockERC20Options): Promise<DeployedContract> {
   return await deployContract({
     abi: MockERC20__factory.abi,
     args: [tokenName, tokenSymbol, account.address],
