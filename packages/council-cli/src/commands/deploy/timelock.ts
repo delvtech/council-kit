@@ -64,7 +64,7 @@ export const { command, aliases, describe, builder, handler } =
 
       const { address } = await deployTimelock({
         waitTime: time,
-        governance: owner,
+        owner,
         gsc,
         account,
         rpcUrl,
@@ -80,27 +80,26 @@ export const { command, aliases, describe, builder, handler } =
 
 export interface DeployTimelockOptions {
   waitTime: number;
-  governance: string;
   gsc: string;
   account: PrivateKeyAccount;
   rpcUrl: string;
-  timelock?: string;
+  owner?: string;
   chain: Chain;
   onSubmitted?: (txHash: string) => void;
 }
 
 export async function deployTimelock({
   waitTime,
-  governance,
   gsc,
   account,
   rpcUrl,
   chain,
+  owner = account.address,
   onSubmitted,
 }: DeployTimelockOptions): Promise<DeployedContract> {
   return await deployContract({
     abi: Timelock__factory.abi,
-    args: [waitTime, governance, gsc],
+    args: [waitTime, owner, gsc],
     bytecode: Timelock__factory.bytecode,
     account,
     rpcUrl,
