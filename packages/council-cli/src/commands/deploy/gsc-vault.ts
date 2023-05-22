@@ -1,5 +1,6 @@
 import { GSCVault__factory } from "@council/typechain";
 import signale from "signale";
+import { chainOption, requiredChain } from "src/options/chain";
 import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredNumberString } from "src/options/utils/requiredNumberString";
@@ -10,7 +11,7 @@ import { createCommandModule } from "src/utils/createCommandModule";
 import { deployContract, DeployedContract } from "src/utils/deployContract";
 import { Hex, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { Chain, localhost } from "viem/chains";
+import { Chain } from "viem/chains";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -41,6 +42,7 @@ export const { command, aliases, describe, builder, handler } =
           describe: "The owner of the contract (e.g., a Timelock contract)",
           type: "string",
         },
+        n: chainOption,
         r: rpcUrlOption,
         w: walletKeyOption,
       });
@@ -68,6 +70,7 @@ export const { command, aliases, describe, builder, handler } =
         message: "Enter owner address (e.g., a Timelock contract)",
       });
 
+      const chain = await requiredChain(args.chain);
       const rpcUrl = await requiredRpcUrl(args.rpcUrl);
       const walletKey = await requiredWalletKey(args.walletKey);
       const account = privateKeyToAccount(walletKey as Hex);
@@ -81,7 +84,7 @@ export const { command, aliases, describe, builder, handler } =
         owner,
         account,
         rpcUrl,
-        chain: localhost,
+        chain,
         onSubmitted: (txHash) => {
           signale.pending(`GSCVault deployment tx submitted: ${txHash}`);
         },

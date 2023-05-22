@@ -1,5 +1,6 @@
 import { OptimisticRewards__factory } from "@council/typechain";
 import signale from "signale";
+import { chainOption, requiredChain } from "src/options/chain";
 import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
 import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
@@ -7,7 +8,7 @@ import { createCommandModule } from "src/utils/createCommandModule";
 import { deployContract, DeployedContract } from "src/utils/deployContract";
 import { Hex, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { Chain, localhost } from "viem/chains";
+import { Chain } from "viem/chains";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -42,6 +43,7 @@ export const { command, aliases, describe, builder, handler } =
           describe: "The address of the ERC20 token to distribute",
           type: "string",
         },
+        n: chainOption,
         u: rpcUrlOption,
         w: walletKeyOption,
       });
@@ -73,6 +75,7 @@ export const { command, aliases, describe, builder, handler } =
         message: "Enter token address",
       });
 
+      const chain = await requiredChain(args.chain);
       const rpcUrl = await requiredRpcUrl(args.rpcUrl);
       const walletKey = await requiredWalletKey(args.walletKey);
       const account = privateKeyToAccount(walletKey as Hex);
@@ -87,7 +90,7 @@ export const { command, aliases, describe, builder, handler } =
         token,
         account,
         rpcUrl,
-        chain: localhost,
+        chain,
         onSubmitted: (txHash) => {
           signale.pending(
             `OptimisticRewards deployment tx submitted: ${txHash}`,

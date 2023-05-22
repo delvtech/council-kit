@@ -1,5 +1,6 @@
 import { CoreVoting__factory } from "@council/typechain";
 import signale from "signale";
+import { chainOption, requiredChain } from "src/options/chain";
 import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
 import { requiredArray } from "src/options/utils/requiredArray";
 import { requiredNumber } from "src/options/utils/requiredNumber";
@@ -11,7 +12,7 @@ import { createCommandModule } from "src/utils/createCommandModule";
 import { deployContract, DeployedContract } from "src/utils/deployContract";
 import { Hex, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { Chain, localhost } from "viem/chains";
+import { Chain } from "viem/chains";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -53,6 +54,7 @@ export const { command, aliases, describe, builder, handler } =
           type: "array",
           string: true,
         },
+        c: chainOption,
         r: rpcUrlOption,
         w: walletKeyOption,
       });
@@ -91,6 +93,7 @@ export const { command, aliases, describe, builder, handler } =
         validate: () => true,
       });
 
+      const chain = await requiredChain(args.chain);
       const rpcUrl = await requiredRpcUrl(args.rpcUrl);
       const walletKey = await requiredWalletKey(args.walletKey);
       const account = privateKeyToAccount(walletKey as Hex);
@@ -106,7 +109,7 @@ export const { command, aliases, describe, builder, handler } =
         vaults,
         account,
         rpcUrl,
-        chain: localhost,
+        chain,
         onSubmitted: (txHash) => {
           signale.pending(`CoreVoting deployment tx submitted: ${txHash}`);
         },
