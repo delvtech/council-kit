@@ -58,10 +58,12 @@ export async function deployContract({
   return {
     address: contractAddress,
     hash,
+    deploymentArgs: args,
   };
 }
 
 export type DeployedContract = {
   address: string;
   hash: string;
+  deploymentArgs: any[];
 };

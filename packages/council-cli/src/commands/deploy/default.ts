@@ -11,6 +11,7 @@ import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
+import { convertBigInts } from "src/utils/bigint/removeBigInts";
 import {
   DAY_IN_BLOCKS,
   DAY_IN_SECONDS,
@@ -32,6 +33,11 @@ import { deployMockERC20 } from "./mock-erc20";
 import { deploySimpleProxy } from "./simple-proxy";
 import { deployTimelock } from "./timelock";
 import { deployTreasury } from "./treasury";
+import {
+  ContractInfo,
+  DEFAULT_DEPLOYMENTS_DIR,
+  getDeploymentStore,
+} from "./utils/deploymentStore";
 
 const defaults = {
   tokenAddress: process.env.VOTING_TOKEN_ADDRESS,
@@ -59,6 +65,8 @@ const defaults = {
   gscIdleDuration: process.env.GSC_IDLE_DURATION
     ? +process.env.GSC_IDLE_DURATION
     : undefined,
+  outDir: DEFAULT_DEPLOYMENTS_DIR,
+  name: "default",
 };
 
 export const { command, describe, builder, handler } = createCommandModule({
@@ -155,6 +163,19 @@ export const { command, describe, builder, handler } = createCommandModule({
           "The amount of time (in seconds) a new GSC member must wait after joining before they can vote.",
         type: "number",
         default: defaults.gscIdleDuration,
+      },
+      o: {
+        alias: ["out-dir"],
+        describe:
+          "The directory to write the contract addresses to; relative to the current working directory.",
+        type: "string",
+        default: defaults.outDir,
+      },
+      n: {
+        alias: ["name"],
+        describe: "The name of the deployment.",
+        type: "string",
+        default: defaults.name,
       },
       c: chainOption,
       r: rpcUrlOption,
@@ -667,7 +688,33 @@ export const { command, describe, builder, handler } = createCommandModule({
     signale.success("Successfully set Timelock owner to CoreVoting");
 
     // =========================================================================
-    // 8. DONE!
+    // 8. Save the addresses
+    // =========================================================================
+
+    const deploymentName = await requiredString(args.name, {
+      name: "name",
+      message: "Enter deployment name",
+      initial: defaults.name,
+    });
+
+    const outDir = await requiredString(args.outDir, {
+      name: "out-dir",
+      message: "Enter output directory",
+      initial: defaults.outDir,
+    });
+
+    const store = getDeploymentStore(deploymentName, chain.id, outDir);
+
+    await store.set({
+      name: deploymentName,
+      chainId: chain.id,
+      timestamp: Date.now(),
+      deployer: account.address,
+      contracts: convertBigInts(contractInfos),
+    });
+
+    // =========================================================================
+    // 9. DONE!
     // =========================================================================
 
     console.log("\n");
@@ -684,8 +731,3 @@ export const { command, describe, builder, handler } = createCommandModule({
     console.log(colors.dim(`${"=".repeat(80)}`));
   },
 });
-
-interface ContractInfo {
-  name: string;
-  address: string;
-}
