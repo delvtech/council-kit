@@ -13,7 +13,6 @@ import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
 import { DAY_IN_BLOCKS, DAY_IN_SECONDS } from "src/utils/constants";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { getChain, SupportedChain } from "src/utils/getChain";
 import {
   Address,
   createPublicClient,
@@ -161,9 +160,7 @@ export const { command, describe, builder, handler } = createCommandModule({
   },
 
   handler: async (args) => {
-    const chainName = await requiredChain(args.chain as SupportedChain);
-    const chain = getChain(chainName);
-
+    const chain = await requiredChain(args.chain);
     const rpcUrl = await requiredRpcUrl(args.rpcUrl);
     const walletKey = await requiredWalletKey(args.walletKey);
 
