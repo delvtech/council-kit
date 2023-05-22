@@ -1,5 +1,6 @@
 import { LockingVault__factory } from "@council/typechain";
 import signale from "signale";
+import { chainOption, requiredChain } from "src/options/chain";
 import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
@@ -8,7 +9,7 @@ import { createCommandModule } from "src/utils/createCommandModule";
 import { deployContract, DeployedContract } from "src/utils/deployContract";
 import { Hex, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { Chain, localhost } from "viem/chains";
+import { Chain } from "viem/chains";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -29,6 +30,7 @@ export const { command, aliases, describe, builder, handler } =
             "The number of blocks before the delegation history is forgotten",
           type: "number",
         },
+        c: chainOption,
         r: rpcUrlOption,
         w: walletKeyOption,
       });
@@ -45,6 +47,7 @@ export const { command, aliases, describe, builder, handler } =
         message: "Enter stale block lag",
       });
 
+      const chain = await requiredChain(args.chain);
       const rpcUrl = await requiredRpcUrl(args.rpcUrl);
       const walletKey = await requiredWalletKey(args.walletKey);
       const account = privateKeyToAccount(walletKey as Hex);
@@ -56,7 +59,7 @@ export const { command, aliases, describe, builder, handler } =
         staleBlockLag: lag,
         account,
         rpcUrl,
-        chain: localhost,
+        chain,
         onSubmitted: (txHash) => {
           signale.pending(`LockingVault deployment tx submitted: ${txHash}`);
         },

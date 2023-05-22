@@ -1,5 +1,6 @@
 import { Airdrop__factory } from "@council/typechain";
 import signale from "signale";
+import { chainOption, requiredChain } from "src/options/chain";
 import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
@@ -8,7 +9,7 @@ import { createCommandModule } from "src/utils/createCommandModule";
 import { deployContract, DeployedContract } from "src/utils/deployContract";
 import { Hex, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { Chain, localhost } from "viem/chains";
+import { Chain } from "viem/chains";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -39,6 +40,7 @@ export const { command, aliases, describe, builder, handler } =
             "The expiration timestamp (in seconds) after which the funds can be reclaimed by the owner",
           type: "number",
         },
+        c: chainOption,
         u: rpcUrlOption,
         w: walletKeyOption,
       });
@@ -65,6 +67,7 @@ export const { command, aliases, describe, builder, handler } =
         message: "Enter expiration timestamp (in seconds)",
       });
 
+      const chain = await requiredChain(args.chain);
       const rpcUrl = await requiredRpcUrl(args.rpcUrl);
       const walletKey = await requiredWalletKey(args.walletKey);
       const account = privateKeyToAccount(walletKey as Hex);
@@ -78,7 +81,7 @@ export const { command, aliases, describe, builder, handler } =
         expiration,
         account,
         rpcUrl,
-        chain: localhost,
+        chain,
         onSubmitted: (txHash) => {
           signale.pending(`Airdrop deployment tx submitted: ${txHash}`);
         },
