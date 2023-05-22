@@ -11,7 +11,7 @@ import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { convertBigInts } from "src/utils/bigint/removeBigInts";
+import { stringifyBigInts } from "src/utils/bigint/stringifyBigInts";
 import {
   DAY_IN_BLOCKS,
   DAY_IN_SECONDS,
@@ -710,7 +710,7 @@ export const { command, describe, builder, handler } = createCommandModule({
       chainId: chain.id,
       timestamp: Date.now(),
       deployer: account.address,
-      contracts: convertBigInts(contractInfos),
+      contracts: stringifyBigInts(contractInfos),
     });
 
     // =========================================================================

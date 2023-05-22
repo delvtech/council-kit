@@ -17,7 +17,7 @@ export type ConvertedBigInts<T> = T extends bigint
  * @param obj - The object to convert
  * @returns The object with bigints converted to strings
  */
-export function convertBigInts<T>(obj: T): ConvertedBigInts<T> {
+export function stringifyBigInts<T>(obj: T): ConvertedBigInts<T> {
   if (!obj) {
     return obj as ConvertedBigInts<T>;
   }
@@ -27,14 +27,14 @@ export function convertBigInts<T>(obj: T): ConvertedBigInts<T> {
   }
 
   if (Array.isArray(obj)) {
-    return obj.map((item) => convertBigInts(item)) as ConvertedBigInts<T>;
+    return obj.map((item) => stringifyBigInts(item)) as ConvertedBigInts<T>;
   }
 
   if (typeof obj === "object") {
     return Object.fromEntries(
       Object.entries(obj).map(([key, value]) => [
         key,
-        convertBigInts(value as any),
+        stringifyBigInts(value as any),
       ]),
     ) as ConvertedBigInts<T>;
   }
