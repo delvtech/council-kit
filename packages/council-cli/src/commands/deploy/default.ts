@@ -11,7 +11,11 @@ import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { DAY_IN_BLOCKS, DAY_IN_SECONDS } from "src/utils/constants";
+import {
+  DAY_IN_BLOCKS,
+  DAY_IN_SECONDS,
+  ZERO_ADDRESS,
+} from "src/utils/constants";
 import { createCommandModule } from "src/utils/createCommandModule";
 import {
   Address,
@@ -276,7 +280,7 @@ export const { command, describe, builder, handler } = createCommandModule({
       // All members get 1 vote
       decimals: 0,
       // There is no GSC for the GSC
-      gsc: "0x0000000000000000000000000000000000000000",
+      gsc: ZERO_ADDRESS,
       // The GSC vault depends on the regular CoreVoting contract being deployed
       // first so we'll approve it later
       vaults: [],
