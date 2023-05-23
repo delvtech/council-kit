@@ -26,7 +26,7 @@ export const { command, describe, builder, handler } = createCommandModule({
       },
       h: {
         alias: ["host"],
-        describe: "The port to listen on",
+        describe: "The hostname to listen on",
         type: "string",
         default: "127.0.0.1",
       },
