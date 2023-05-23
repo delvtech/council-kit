@@ -2,13 +2,20 @@ import colors from "colors";
 import { requiredArray } from "src/options/utils/requiredArray";
 import { requiredOption } from "src/options/utils/requiredOption";
 import { createCallHash } from "src/utils/createCallHash";
+import { isNotEmptyList } from "src/utils/validation/isNotEmptyList";
 
 export async function requiredCallHash(
   callHash?: string,
   targets?: string[],
   calldatas?: string[],
 ): Promise<string> {
-  const ensuredCallHash = await requiredOption(callHash, {
+  let fallbackCallHash: string | undefined;
+
+  if (isNotEmptyList(targets) && isNotEmptyList(calldatas)) {
+    fallbackCallHash = createCallHash(targets, calldatas);
+  }
+
+  const ensuredCallHash = await requiredOption(callHash || fallbackCallHash, {
     name: "call-hash",
     type: "text",
     message: `Enter call hash ${colors.dim(
