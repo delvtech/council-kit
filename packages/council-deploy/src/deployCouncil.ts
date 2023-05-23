@@ -79,7 +79,8 @@ export async function deployCouncil(signer: Signer): Promise<
     // The GSC has one special privilege in the Timelock. They can invoke a
     // "speedbump" method to increase the waitTimeInBlocks for a given
     // registered call. This is a security feature.
-    gscCoreVotingAddress: gscCoreVoting.address,
+    // gscCoreVotingAddress: gscCoreVoting.address,
+    gscCoreVotingAddress: "0x0000000000000000000000000000000000000000",
   });
 
   // The treasury holds the protocol funds. Proposals can be made to allocate
@@ -133,7 +134,8 @@ export async function deployCouncil(signer: Signer): Promise<
     // set minProposalPower to 50 ELFI so any test account can make a proposal
     minProposalPower: process.env.MIN_PROPOSAL_POWER ?? "50",
     // the GSC does not have a voting power requirement to submit a proposal
-    gscCoreVotingAddress: gscCoreVoting.address,
+    // gscCoreVotingAddress: gscCoreVoting.address,
+    gscCoreVotingAddress: "0x0000000000000000000000000000000000000000",
     // can execute a proposal 10 blocks after it gets created
     lockDuration: +(process.env.LOCK_DURATION ?? isLocalHost ? 0 : 10),
     // can still vote on a proposal for this many blocks after it unlocks
@@ -154,16 +156,16 @@ export async function deployCouncil(signer: Signer): Promise<
     idleDuration: +(process.env.GSC_IDLE_DURATION ?? "60"),
   });
 
-  // The GSC Vault must be created *after* the GSCCoreVoting contract is
-  // deployed, so we approve the gsc vault after the fact. We can do this
-  // because the signer is still the owner.
-  await gscCoreVoting.contract.changeVaultStatus(gscVault.address, true);
-  console.log("Approved GSCVault on GSCCoreVoting");
+  // // The GSC Vault must be created *after* the GSCCoreVoting contract is
+  // // deployed, so we approve the gsc vault after the fact. We can do this
+  // // because the signer is still the owner.
+  // await gscCoreVoting.contract.changeVaultStatus(gscVault.address, true);
+  // console.log("Approved GSCVault on GSCCoreVoting");
 
-  // Now we transfer ownership to the Timelock, any future upgrades to
-  // GSCCoreVoting must go through the normal proposal flow.
-  await gscCoreVoting.contract.setOwner(timelock.address);
-  console.log("Set owner of GSCCoreVoting to Timelock");
+  // // Now we transfer ownership to the Timelock, any future upgrades to
+  // // GSCCoreVoting must go through the normal proposal flow.
+  // await gscCoreVoting.contract.setOwner(timelock.address);
+  // console.log("Set owner of GSCCoreVoting to Timelock");
 
   // Setting the CoreVoting contract as the owner of the Timelock allows
   // executed proposals to register calls on the Timelock.

@@ -54,6 +54,7 @@ jobs:
         env:
           NEXT_PUBLIC_MAINNET_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
           NEXT_PUBLIC_GOERLI_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
+          NEXT_PUBLIC_MUMBAI_ALCHEMY_KEY: ${{ secrets.MUMBAI_ALCHEMY_KEY }}
           NEXT_PUBLIC_COUNCIL_UI_BASE_PATH: ${{ secrets.COUNCIL_UI_BASE_PATH }}
         run: npx turbo run build --filter=council-ui
       - name: Static HTML export of Next.js

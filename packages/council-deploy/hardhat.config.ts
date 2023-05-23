@@ -42,13 +42,22 @@ const config: HardhatUserConfig = {
       url: process.env.GOERLI_URI,
       accounts: [process.env.GOERLI_DEPLOYER_PRIVATE_KEY || ""],
     },
+    mumbai: {
+      chainId: 80001,
+      url: process.env.MUMBAI_URI,
+      accounts: [process.env.GOERLI_DEPLOYER_PRIVATE_KEY || ""],
+    },
     localhost: {
       chainId: 31337,
     },
   },
   // See: https://hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-etherscan
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: {
+      mainnet: process.env.ETHERSCAN_API_KEY as string,
+      goerli: process.env.ETHERSCAN_API_KEY as string,
+      polygonMumbai: process.env.POLYSCAN_API_KEY as string,
+    },
   },
 };
 
