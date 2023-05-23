@@ -2,7 +2,7 @@
   "name": "@council/cli",
   "version": "0.0.1",
   "license": "MIT",
-  "source": "src/index.ts",
+  "source": "src/council.ts",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -14,7 +14,7 @@
     "src": "./src"
   },
   "scripts": {
-    "council": "ts-node -r dotenv/config -r tsconfig-paths/register --files src/index",
+    "council": "ts-node -r dotenv/config -r tsconfig-paths/register --files src/council",
     "build": "tsup",
     "docs": "typedoc",
     "watch:docs": "typedoc --watch"
