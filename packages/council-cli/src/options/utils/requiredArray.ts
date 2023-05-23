@@ -14,7 +14,13 @@ export async function requiredArray(
   return requiredOption(
     value,
     {
-      validate: isNotEmptyList,
+      validate: (value) => {
+        // The value is a string if it was captured from the prompt.
+        if (typeof value === "string") {
+          value = value.split(" ");
+        }
+        return isNotEmptyList(value);
+      },
       ...question,
       type: "list",
       separator: " ",
