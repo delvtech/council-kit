@@ -28,7 +28,7 @@ Initially, the Delv team will act as the maintainer for this project. Avid contr
 
 ## Terminology
 
-|  |  |
+| Name | Description |
 | -------- | -------- |
 | **Draft**     | An item added directly to the ‘Council’ GitHub project (‘Screen’ or ‘Backlog’ column) that has not yet been converted to an issue |
 | **Issue**     | An issue (aka Task) that has been assigned to a Release (i.e., a Milestone) |
@@ -57,7 +57,7 @@ Issue Modifier Labels:
 
 🧐 Screen → 📋 Backlog → 🔖 Ready → 🏗 In Progress → 👀 In review → ✅ Done  |  🚫 Won’t Do
 
-|   |                    |          |
+| #  |          Status          |    Description      |
 | - | ------------------ | -------- |
 | 1 | 🧐 **Screen**      | New Drafts or Issues awaiting triage by a Maintainer     |
 | 2 | 📋 **Backlog**     | Drafts or Issues that have been screened by a Maintainer and accepted as Tasks for future development     |
@@ -117,7 +117,7 @@ Release planning is a soft lock on the next set of features/improvements to be s
  
 ## Release Types:
 
-|                  |                    |
+|    Type Name              |    Description                |
 | ---------------- | ------------------ |
 | **Patch:** v0.0.**x** | no breaking changes, no new features |
 | **Minor:** v0.**x**.0 | backwards compatible, no breaking changes, new features |
