@@ -2,19 +2,17 @@
 
 Building Council couldn’t have been possible without the feedback and support from our community! We strive to make Council better and would love to see community submissions to improve the quality of the codebase and extend its core capabilities.
 
-##
-# Quick Start
+## Quick Start
 * Clone this repository on your local environment
 * Follow the installation & build steps in the [README](https://github.com/delvtech/council-kit#readme)
 * Browse the ['Backlog' view](https://github.com/orgs/delvtech/projects/7/views/1) of the Council GitHub Project
 
-##
-# Contributor Roles
+## Contributor Roles
 
-## Contributor
+### Contributor
 Anybody can become a Contributor by requesting to be assigned to an issue and subsequently opening a PR. Contributors can request to be assigned to an issue by leaving a comment on it. You can view issues by release using the ['Milestones' view](https://github.com/orgs/delvtech/projects/7/views/5) in the Council GitHub project.
 
-## Maintainer
+### Maintainer
 Initially, the Delv team will act as the maintainer for this project. Avid contributors can apply to be a Maintainer and would be expected to show active engagement with the project, including:
 * Reviewing and approving PRs
 * Answering questions that contributors send through the appropriate channels
@@ -23,23 +21,22 @@ Initially, the Delv team will act as the maintainer for this project. Avid contr
 * Maintainers may join product strategy calls where discussions are long-term focused and could include changes to process, templates, PR review criteria, etc.
  
  
-##
-# Contribution Process
+## Contribution Process
 
-## Terminology
+### Terminology
 
 | Name | Description |
 | -------- | -------- |
 | **Draft**     | An item added directly to the ‘Council’ GitHub project (‘Screen’ or ‘Backlog’ column) that has not yet been converted to an issue |
 | **Issue**     | An issue (aka Task) that has been assigned to a Release (i.e., a Milestone) |
 
-## New Issues
+### New Issues
 
 Anyone can request features, improvements, bug fixes, and any other changes to the code through [Delv’s Discord server](https://discord.gg/tQC6jzHn) or by [submitting an issue](https://github.com/delvtech/council-kit/issues) to the council-kit GitHub repository.
 
 Maintainers will monitor these channels and add them to the repository’s GitHub Project, thus initiating the issue lifecycle. New ideas and requests are triaged by maintainers on an ongoing basis.
 
-Issue Labels:
+**Issue Labels:**
 * UI
 * Docs
 * SDK
@@ -47,15 +44,14 @@ Issue Labels:
 * Deploy
 * Protocol (only added from the ‘Council’ contracts repo)
 
-Issue Modifier Labels:
+**Issue Modifier Labels:**
 * Bug
 * Good First Issue
 * Enhancement
 
-##
 ## Issue Lifecycle
 
-🧐 Screen → 📋 Backlog → 🔖 Ready → 🏗 In Progress → 👀 In review → ✅ Done  |  🚫 Won’t Do
+**🧐 Screen → 📋 Backlog → 🔖 Ready → 🏗 In Progress → 👀 In review → ✅ Done  |  🚫 Won’t Do**
 
 | #  |          Status          |    Description      |
 | - | ------------------ | -------- |
@@ -66,8 +62,6 @@ Issue Modifier Labels:
 | 5 | 👀 **In review**   | Issues that are ready for review by a Maintainer     |
 | 6 | ✅ **Done**        | Issues that have been completed, reviewed, and merged into the codebase     |
 | 6 | 🚫 **Won’t Do**    | Feature requests, improvements, or issues that have been rejected     |
-
-
 
 ##
 **Screening phase**: 🧐 **Screen** → 📋 **Backlog**
@@ -99,15 +93,13 @@ After your code is ready for review, please remove the [WIP] tag and submit the 
 * passes lint check (yarn lint)
 * builds (yarn build)
 
-##
-# Shipping
+## Shipping
 
 Once your PR passes all the checks, a Maintainer will review it and either request more changes (moving the issue back to ‘In Progress’ if necessary), or approve it and move the issue to the ‘Done’ column.
 
 All PRs will need to be reviewed by a Maintainer before being squashed and merged. Please note, Maintainers will likely be busy and thus for some PRs it may take several weeks for review; we ask you to remain patient and respectful throughout that process. Once all issues from the current release are completed, the versions will be updated, a new version tag created, and a GitHub release created for the new version.
 
-##
-# Planning and Coordination for Releases
+## Planning and Coordination for Releases
 
 Changes to the code will be pushed to production through releases, which group sets of issues that have been prioritized by the Council project Maintainers based on factors such as impact, size, collaboration cost, confidence score, and available resources.
 
