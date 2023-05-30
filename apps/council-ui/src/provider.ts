@@ -52,6 +52,18 @@ const configuredProviders = configuredChains.map((chain) => {
     });
   }
 
+  if (chain.id === 80001) {
+    const mumbaiAlchemyKey = process.env.NEXT_PUBLIC_MUMBAI_ALCHEMY_KEY;
+    if (!mumbaiAlchemyKey) {
+      console.error(
+        "Chain ID 80001 (mumbai) exists in council.config.ts, but no provider was given, see .env",
+      );
+    }
+    return alchemyProvider({
+      apiKey: process.env.NEXT_PUBLIC_MUMBAI_ALCHEMY_KEY,
+    });
+  }
+
   if (chain.id === 31337) {
     const provider = jsonRpcProvider({
       rpc: () => ({ http: chain.rpcUrls.default }),
