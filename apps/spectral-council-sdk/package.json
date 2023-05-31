@@ -1,0 +1,36 @@
+{
+  "name": "spectral-council-sdk",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/types.d.ts",
+  "source": "src/index.ts",
+  "alias": {
+    "src": "./src"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build",
+    "createProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/createProposal.ts",
+    "depositIntoLockingVault": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/depositIntoLockingVault.ts"
+  },
+  "dependencies": {
+    "@council/deploy": "*",
+    "@council/sdk": "*",
+    "@council/typechain": "*",
+    "ethers": "^5.7.2"
+  },
+  "devDependencies": {
+    "@council/prettier-config": "*",
+    "@council/tsconfig": "*",
+    "dotenv": "^16.0.3",
+    "parcel": "^2.8.0",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.7.4"
+  }
+}

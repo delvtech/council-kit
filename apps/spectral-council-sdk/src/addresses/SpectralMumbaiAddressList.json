@@ -1,0 +1,15 @@
+{
+  "addresses": {
+    "airdrop": "",
+    "coreVoting": "0xa4B16B1676EcA1E888f5dbF5Bac627f5ef6B71Dd",
+    "specToken": "0xF0CEC3F6a38D8FBE072d5E8efF9B546C70E42cDd",
+    "gscCoreVoting": "0x780c0b5C6c8bD12f17B862cB2ECCeFD982B625Df",
+    "gscVault": "0x5CC5134434C09bA1F4dbE6E2f101591586E8C97f",
+    "lockingVault": "0xd10C17DA353D7B906BF04A84875117603d681288",
+    "spender": "",
+    "timeLock": "0x8725507FDDe0e1be8f772F055f1E5800579F0D53",
+    "treasury": "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3",
+    "vestingVault": "0x91884f0c2EdBD69A04372b740a916295281D61d3"
+  },
+  "chainId": 80001
+}

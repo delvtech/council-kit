@@ -10,8 +10,8 @@ const proxyAdminInterface = new utils.Interface(ProxyAdminJson.abi);
 
 const calldatas = [
   proxyAdminInterface.encodeFunctionData("upgrade", [
-    "0x39421BE6bfdcDeaF01854F33Cf9C3B33d04BA221", // SpecTokenProxy
-    "0xAbd78b1C016286F45d8152889cF788EEDf1B0409", // SpecTokenV2Impl
+    "0xF0CEC3F6a38D8FBE072d5E8efF9B546C70E42cDd", // SpecTokenProxy
+    "0xDD275C92A0bBacb6FBeca27ffa2D646fe1d07816", // SpecTokenV2Impl
   ]),
 ];
 
@@ -23,18 +23,18 @@ export const mumbaiCouncilConfig: CouncilConfig = {
   },
   coreVoting: {
     name: "Core Voting",
-    address: "0xF0e4d38516a4Acc207E64d73d60D635AF35d1c21",
+    address: "0xa4B16B1676EcA1E888f5dbF5Bac627f5ef6B71Dd",
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
         name: "Locking Vault",
-        address: "0x4032bbb913Bc278730Bdf52F2Bf442381580f54F",
+        address: "0xd10C17DA353D7B906BF04A84875117603d681288",
         type: "LockingVault",
         descriptionURL: "https://moreinfo.com",
       },
       {
         name: "Vesting Vault",
-        address: "0xf20a0d8e2a8c9D52f1b74d6a4987c227c2b98d0E",
+        address: "0x91884f0c2EdBD69A04372b740a916295281D61d3",
         type: "VestingVault",
         descriptionURL: "https://moreinfo.com",
       },
@@ -54,12 +54,12 @@ export const mumbaiCouncilConfig: CouncilConfig = {
 
   gscVoting: {
     name: "GSC",
-    address: "0x2e260C9f357AAa7cEE436C243F125b8dF7fC5764",
+    address: "0x780c0b5C6c8bD12f17B862cB2ECCeFD982B625Df",
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
         name: "GSC Vault",
-        address: "0x644f1aAc68bfe53099A401Cf09C1f354a991cD2F",
+        address: "0x5CC5134434C09bA1F4dbE6E2f101591586E8C97f",
         type: "GSCVault",
         descriptionURL: "https://moreinfo.com",
       },

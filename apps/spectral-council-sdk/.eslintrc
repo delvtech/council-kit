@@ -1,0 +1,4 @@
+{
+    "extends": ["@council/eslint-config"]
+  }
+  
