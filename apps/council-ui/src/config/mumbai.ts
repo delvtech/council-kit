@@ -4,16 +4,24 @@ import { CouncilConfig } from "src/config/CouncilConfig";
 
 import ProxyAdminJson from "src/artifacts/ProxyAdmin.json";
 
-const proxyAdminAddress = "0x2f687f3fFd7e045365473F8655b560d2C856516c";
-const specTokenProxy = "0x5e1b640893a4BDA27EE4F1bA8a1b439F190254db";
-const specTokenV2Impl = "0x59474fD0A24157712d03EdCaa61ABAe5a09bd895";
+const proxyAdminAddress = "0x46a8049944C7d0E65B81145Dec33d4A9a0Fb72CD";
+const specTokenProxy = "0x99E542507D938a2297d075C66a64E66c16BD27E4";
+const specTokenV2Impl = "0xEe84d28e1B26638a56026764512dEeB8A8a6d1A5";
+const specTokenV3Impl = "0xfdd894316B833E2C4837dc157BF74503ec7a7F25";
 
 const proxyAdminInterface = new utils.Interface(ProxyAdminJson.abi);
 
-const calldatas = [
+const calldatas0 = [
   proxyAdminInterface.encodeFunctionData("upgrade", [
     specTokenProxy, // SpecTokenProxy
     specTokenV2Impl, // SpecTokenV2Impl
+  ]),
+];
+
+const calldatas1 = [
+  proxyAdminInterface.encodeFunctionData("upgrade", [
+    specTokenProxy, // SpecTokenProxy
+    specTokenV3Impl, // SpecTokenV3Impl
   ]),
 ];
 
@@ -76,7 +84,17 @@ export const mumbaiCouncilConfig: CouncilConfig = {
           "SPECGRU-1: SpecTokenV1 to SpecTokenV2 upgrade. Enables token transferability.",
         descriptionURL: "https://moreinfo.com",
         targets: [proxyAdminAddress],
-        calldatas: calldatas,
+        calldatas: calldatas0,
+      },
+      1: {
+        sentenceSummary:
+          "The SpecTokenV2 contract should be upgraded to SpecTokenV3 in order to see versioning change",
+        paragraphSummary:
+          "This will change the SPEC_TOKEN_REVISION version in the contract from 0x2 to 0x3",
+        title: "SPECGRU-2: SpecTokenV2 to SpecTokenV3 upgrade.",
+        descriptionURL: "https://moreinfo.com",
+        targets: [proxyAdminAddress],
+        calldatas: calldatas1,
       },
     },
   },

@@ -15,8 +15,7 @@
     "watch": "parcel watch",
     "build": "parcel build",
     "createProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/createProposal.ts",
-    "executeProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/executeProposal.ts",
-    "depositIntoLockingVault": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/depositIntoLockingVault.ts"
+    "executeProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/executeProposal.ts"
   },
   "dependencies": {
     "@council/deploy": "*",

@@ -2,17 +2,17 @@
   "chainId": 80001,
   "deployments": [
     {
-      "name": "Mumbai",
-      "timestamp": 1685641510354,
+      "name": "MumbaiS",
+      "timestamp": 1685646259895,
       "signer": "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3",
       "contracts": [
         {
-          "address": "0xAA72d517abC8f1f5DC3624FabD76A4261A2809D0",
+          "address": "0xccf727Cc0cbA6677929ce4fFc774DAc331Ae2680",
           "name": "Treasury",
-          "deploymentArgs": ["0x5058f7F776304F90D3e6F87ed9ee2075D134128e"]
+          "deploymentArgs": ["0x411b935751fC5d1148BeA61825879c9729ADC4dC"]
         },
         {
-          "address": "0x39F65DDe23eEdC60fC301E8EA1fF4C58c4908976",
+          "address": "0x9694cA28e3E937B2b4833394fC5F6A9151E27411",
           "name": "CoreVoting",
           "deploymentArgs": [
             "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3",
@@ -20,13 +20,13 @@
             "0x00",
             "0x0000000000000000000000000000000000000000",
             [
-              "0x39eCE8e44E4B3ad39B725adE2609a562A1CDA75b",
-              "0xfbE79b09fB91443BC1B32e07a3aA0A8B4d91F93F"
+              "0x5EF6751A9661ceEB51a1A53C7575544B0D184ACB",
+              "0x8F1962a36Abf9E6385b85812Dff3f86F0A419901"
             ]
           ]
         },
         {
-          "address": "0xF9865b188251959Cd1550B8bE82eb122eDDf2B69",
+          "address": "0xB7078d256a6Ced2700060Da02e884b92bb5a90cb",
           "name": "GSCCoreVoting",
           "deploymentArgs": [
             "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3",
@@ -37,53 +37,53 @@
           ]
         },
         {
-          "address": "0x1a89185ab17E3979F0AF2030BFd82575f5f736Bc",
+          "address": "0xeE5685F3736d188d6965002b483b7CD7a1cd92C9",
           "name": "GSCVault",
           "deploymentArgs": [
-            "0x39F65DDe23eEdC60fC301E8EA1fF4C58c4908976",
+            "0x9694cA28e3E937B2b4833394fC5F6A9151E27411",
             "0x056bc75e2d63100000",
             "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3"
           ]
         },
         {
-          "address": "0x2349561cc1E94a9fB3fF1968356cF5Fc4cF43ACD",
+          "address": "0x4AC01257B47a0362422766e94e334B5Cf8423789",
           "name": "LockingVault",
           "deploymentArgs": [
-            "0x5e1b640893a4BDA27EE4F1bA8a1b439F190254db",
+            "0x99E542507D938a2297d075C66a64E66c16BD27E4",
             300000
           ]
         },
         {
-          "address": "0x39eCE8e44E4B3ad39B725adE2609a562A1CDA75b",
+          "address": "0x5EF6751A9661ceEB51a1A53C7575544B0D184ACB",
           "name": "LockingVaultProxy",
           "deploymentArgs": [
-            "0x5058f7F776304F90D3e6F87ed9ee2075D134128e",
-            "0x2349561cc1E94a9fB3fF1968356cF5Fc4cF43ACD"
+            "0x411b935751fC5d1148BeA61825879c9729ADC4dC",
+            "0x4AC01257B47a0362422766e94e334B5Cf8423789"
           ]
         },
         {
-          "address": "0x5058f7F776304F90D3e6F87ed9ee2075D134128e",
+          "address": "0x411b935751fC5d1148BeA61825879c9729ADC4dC",
           "name": "Timelock",
           "deploymentArgs": [
-            4,
+            10,
             "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3",
             "0x0000000000000000000000000000000000000000"
           ]
         },
         {
-          "address": "0x7A69e4A696a9B466C06a669c32511C930AB6f6be",
+          "address": "0x5Ddc3e041BcEa4eC5E71640f4B024974082F182C",
           "name": "VestingVault",
           "deploymentArgs": [
-            "0x5e1b640893a4BDA27EE4F1bA8a1b439F190254db",
+            "0x99E542507D938a2297d075C66a64E66c16BD27E4",
             300000
           ]
         },
         {
-          "address": "0xfbE79b09fB91443BC1B32e07a3aA0A8B4d91F93F",
+          "address": "0x8F1962a36Abf9E6385b85812Dff3f86F0A419901",
           "name": "VestingVaultProxy",
           "deploymentArgs": [
-            "0x5058f7F776304F90D3e6F87ed9ee2075D134128e",
-            "0x7A69e4A696a9B466C06a669c32511C930AB6f6be"
+            "0x411b935751fC5d1148BeA61825879c9729ADC4dC",
+            "0x5Ddc3e041BcEa4eC5E71640f4B024974082F182C"
           ]
         }
       ]
