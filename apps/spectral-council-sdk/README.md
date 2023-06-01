@@ -29,16 +29,10 @@ Create your own `.env`. An example template is included in the project in `.env.
 
 Multiple example scripts are included in [`src/scripts`](src/scripts). Each one has a corresponding npm script to run it.
 
-#### Get Proposal Results
+#### Execute Proposal Results
 
 ```
-yarn workspace council-sdk-start getProposalResults
-```
-
-#### Deposit Into Locking Vault
-
-```
-yarn workspace council-sdk-start depositIntoLockingVault
+yarn workspace spectral-council-sdk executeProposal
 ```
 
 #### Create a Proposal
@@ -46,11 +40,11 @@ yarn workspace council-sdk-start depositIntoLockingVault
 _Caution! this will require paying gas._
 
 ```
-yarn workspace council-sdk-start createProposal
+yarn workspace spectral-council-sdk createProposal
 ```
 
 ### Building
 
 ```bash
-yarn workspace council-sdk-starter build
+yarn workspace spectral-council-sdk build
 ```

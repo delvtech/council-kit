@@ -38,6 +38,10 @@ The entire process takes around 10 minutes. This is because some contracts need
 to interact with other contracts. It also takes a little extra time for
 Etherscan to index new contracts before they can be verified.
 
+### Mumbai:
+
+Run: `yarn workspace @council/deploy run mumbai:deploy-contracts`
+
 ### Goerli:
 
 Run: `yarn workspace @council/deploy run goerli:deploy-contracts`

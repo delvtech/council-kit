@@ -4,13 +4,18 @@ import {
   VestingVault,
   VotingContract,
 } from "@council/sdk";
-import { CoreVoting__factory } from "@council/typechain";
-import { BigNumber, utils, Wallet } from "ethers";
+import { utils, Wallet } from "ethers";
 import { getSpectralAddress } from "src/addresses/spectralAddresses";
 import { provider } from "src/provider";
 
+import ProxyAdminJson from "src/artifacts/ProxyAdmin.json";
+
 // approx 90 days in blocks assuming 12 seconds a block
 const NINETY_DAYS_IN_BLOCKS = (90 * 24 * 60 * 60) / 12;
+
+const proxyAdminAddress = "0x2f687f3fFd7e045365473F8655b560d2C856516c";
+const specTokenProxy = "0x5e1b640893a4BDA27EE4F1bA8a1b439F190254db";
+const specTokenV2Impl = "0x59474fD0A24157712d03EdCaa61ABAe5a09bd895";
 
 // wrap the script in an async function so we can await promises
 export async function createProposal(): Promise<void> {
@@ -44,23 +49,18 @@ export async function createProposal(): Promise<void> {
   if (+lockingVaultVotingPower > 0) {
     vaults.push(lockingVault);
   }
-  const vestingVaultVotingPower = await vestingVault.getVotingPower(
-    signer.address,
-  );
-  if (+vestingVaultVotingPower > 0) {
-    vaults.push(vestingVault);
-  }
 
   // the target contract addresses for the proposal
-  const targets = [coreVoting.address];
+  const targets = [proxyAdminAddress];
 
-  // get the core voting contract abi to encode call data
-  const coreVotingInterface = new utils.Interface(CoreVoting__factory.abi);
+  // get the ProxyAdmin contract abi to encode call data
+  const proxyAdminInterface = new utils.Interface(ProxyAdminJson.abi);
 
   // the proposed calls datas to send to the targets
   const calldatas = [
-    coreVotingInterface.encodeFunctionData("setDefaultQuorum", [
-      BigNumber.from(10),
+    proxyAdminInterface.encodeFunctionData("upgrade", [
+      specTokenProxy, // SpecTokenProxy
+      specTokenV2Impl, // SpecTokenV2Impl
     ]),
   ];
 

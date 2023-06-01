@@ -1,40 +1,67 @@
-//import { mumbaiDeployments } from "@council/deploy";
+import { mumbaiDeployments } from "@council/deploy";
 import { utils } from "ethers";
 import { CouncilConfig } from "src/config/CouncilConfig";
 
 import ProxyAdminJson from "src/artifacts/ProxyAdmin.json";
 
-const proxyAdminAddress = "0x91e1156d5Fba6b1B251f396e96aFAaCE91394283";
+const proxyAdminAddress = "0x2f687f3fFd7e045365473F8655b560d2C856516c";
+const specTokenProxy = "0x5e1b640893a4BDA27EE4F1bA8a1b439F190254db";
+const specTokenV2Impl = "0x59474fD0A24157712d03EdCaa61ABAe5a09bd895";
 
 const proxyAdminInterface = new utils.Interface(ProxyAdminJson.abi);
 
 const calldatas = [
   proxyAdminInterface.encodeFunctionData("upgrade", [
-    "0xF0CEC3F6a38D8FBE072d5E8efF9B546C70E42cDd", // SpecTokenProxy
-    "0xDD275C92A0bBacb6FBeca27ffa2D646fe1d07816", // SpecTokenV2Impl
+    specTokenProxy, // SpecTokenProxy
+    specTokenV2Impl, // SpecTokenV2Impl
   ]),
 ];
+
+const { contracts: mumbaiContracts } =
+  mumbaiDeployments[mumbaiDeployments.length - 1];
+
+// Find the deployed contract addresses. These are safe to cast as strings
+// because we know the deployment contains these contracts in the
+// @council/deploy project.
+const mumbaiTimelockAddress = mumbaiContracts.find(
+  ({ name }) => name === "Timelock",
+)?.address as string;
+const mumbaiCoreVotingAddress = mumbaiContracts.find(
+  ({ name }) => name === "CoreVoting",
+)?.address as string;
+const lockingVaultProxyAddress = mumbaiContracts.find(
+  ({ name }) => name === "LockingVaultProxy",
+)?.address as string;
+const vestingVaultProxyAddress = mumbaiContracts.find(
+  ({ name }) => name === "VestingVaultProxy",
+)?.address as string;
+const gscVotingAddress = mumbaiContracts.find(
+  ({ name }) => name === "GSCCoreVoting",
+)?.address as string;
+const mumbaiGSCVaultAddress = mumbaiContracts.find(
+  ({ name }) => name === "GSCVault",
+)?.address as string;
 
 export const mumbaiCouncilConfig: CouncilConfig = {
   version: "",
   chainId: 80001,
   timelock: {
-    address: "0xBdd3A047Fd69e9021d5535Ae522Dfc929045de2e",
+    address: mumbaiTimelockAddress,
   },
   coreVoting: {
     name: "Core Voting",
-    address: "0xa4B16B1676EcA1E888f5dbF5Bac627f5ef6B71Dd",
+    address: mumbaiCoreVotingAddress,
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
         name: "Locking Vault",
-        address: "0xd10C17DA353D7B906BF04A84875117603d681288",
+        address: lockingVaultProxyAddress,
         type: "LockingVault",
         descriptionURL: "https://moreinfo.com",
       },
       {
         name: "Vesting Vault",
-        address: "0x91884f0c2EdBD69A04372b740a916295281D61d3",
+        address: vestingVaultProxyAddress,
         type: "VestingVault",
         descriptionURL: "https://moreinfo.com",
       },
@@ -42,24 +69,25 @@ export const mumbaiCouncilConfig: CouncilConfig = {
     proposals: {
       0: {
         sentenceSummary:
-          "The SpecToken contract should be upgraded to support unrestricted transfers.",
+          "The SpecTokenV1 contract should be upgraded to SpecTokenV2 in order to support unrestricted transfers.",
         paragraphSummary:
           "This will remove the whitelisted functionality from the Spec Token contract, and will allow unrestricted transfers to and from anyone.",
+        title:
+          "SPECGRU-1: SpecTokenV1 to SpecTokenV2 upgrade. Enables token transferability.",
         descriptionURL: "https://moreinfo.com",
         targets: [proxyAdminAddress],
         calldatas: calldatas,
       },
     },
   },
-
   gscVoting: {
     name: "GSC",
-    address: "0x780c0b5C6c8bD12f17B862cB2ECCeFD982B625Df",
+    address: gscVotingAddress,
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
         name: "GSC Vault",
-        address: "0x5CC5134434C09bA1F4dbE6E2f101591586E8C97f",
+        address: mumbaiGSCVaultAddress,
         type: "GSCVault",
         descriptionURL: "https://moreinfo.com",
       },
