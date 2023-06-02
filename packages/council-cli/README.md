@@ -30,8 +30,7 @@ used directly from the root of the `council-kit` monorepo or installed within th
 
 ## Basic Usage
 
-The easiest way to use the CLI until it's published is to call it from
-within the monorepo:
+The easiest way to use the CLI is to call it from within the monorepo:
 
 ```
 yarn workspace @council/cli council
