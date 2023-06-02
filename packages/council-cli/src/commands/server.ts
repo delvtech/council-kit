@@ -1,9 +1,16 @@
+// HACK: Suppress ganache warning about bigint
+// https://github.com/trufflesuite/ganache/issues/1080#issuecomment-906550239
+const originalConsoleWarn = console.warn;
+console.warn = () => {};
+
 import colors from "colors";
 import ganache from "ganache";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { formatBigInt } from "src/utils/bigint/formatBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+
+console.warn = originalConsoleWarn;
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "server [OPTIONS]",
@@ -19,7 +26,7 @@ export const { command, describe, builder, handler } = createCommandModule({
       },
       h: {
         alias: ["host"],
-        describe: "The port to listen on",
+        describe: "The hostname to listen on",
         type: "string",
         default: "127.0.0.1",
       },
