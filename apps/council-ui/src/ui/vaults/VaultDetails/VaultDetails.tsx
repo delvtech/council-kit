@@ -7,7 +7,7 @@ interface VaultDetailsProps {
   header: ReactNode;
   statsRow: ReactNode;
   paragraphSummary?: string;
-  actions: ReactNode;
+  actions?: ReactNode;
 }
 
 export function VaultDetails({
@@ -26,9 +26,14 @@ export function VaultDetails({
         />
         {header}
       </div>
+
       {statsRow}
+
       {paragraphSummary && <p className="mb-1 text-lg">{paragraphSummary}</p>}
-      <div className="flex flex-col w-full gap-8 sm:flex-row">{actions}</div>
+
+      {actions && (
+        <div className="flex flex-col w-full gap-8 sm:flex-row">{actions}</div>
+      )}
     </>
   );
 }

@@ -5,8 +5,8 @@ import {
   LockingVault,
   VestingVault,
   VotingContract,
+  VotingVault,
 } from "@council/sdk";
-import assertNever from "assert-never";
 import { councilConfigs, SupportedChainId } from "src/config/council.config";
 import { provider as getProvider } from "src/provider";
 
@@ -37,7 +37,7 @@ export function getCouncilClient(chainId: SupportedChainId): CouncilClient {
       case "GSCVault":
         return new GSCVault(address, context);
       default:
-        assertNever(type);
+        return new VotingVault(address, context);
     }
   });
 
