@@ -13,9 +13,10 @@ import ProxyAdminJson from "src/artifacts/ProxyAdmin.json";
 // approx 90 days in blocks assuming 12 seconds a block
 const NINETY_DAYS_IN_BLOCKS = (90 * 24 * 60 * 60) / 12;
 
-const proxyAdminAddress = "0x46a8049944C7d0E65B81145Dec33d4A9a0Fb72CD";
-const specTokenProxy = "0x99E542507D938a2297d075C66a64E66c16BD27E4";
-const specTokenV2Impl = "0xEe84d28e1B26638a56026764512dEeB8A8a6d1A5";
+const proxyAdminAddress = "0x198A191CB42573F46be162b53F1bA16230ca2eB4";
+const specTokenProxy = "0x8BEAe9284e6FC83076B8931F1c27eDc657b34c3A";
+const specTokenV2Impl = "0xA95489C36630EE65000B1A4dC82f1F04eA1dF33C";
+const specTokenV3Impl = "0xEd4E5654C0e9e708980d276801EEd703640055a6";
 
 // wrap the script in an async function so we can await promises
 export async function createProposal(): Promise<void> {

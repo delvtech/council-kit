@@ -2,17 +2,17 @@
   "chainId": 80001,
   "deployments": [
     {
-      "name": "MumbaiS",
-      "timestamp": 1685646259895,
+      "name": "Mumbai",
+      "timestamp": 1685715364236,
       "signer": "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3",
       "contracts": [
         {
-          "address": "0xccf727Cc0cbA6677929ce4fFc774DAc331Ae2680",
+          "address": "0x4b7A361dD122fa0e2e5236C20F32c2b1F14b8F85",
           "name": "Treasury",
-          "deploymentArgs": ["0x411b935751fC5d1148BeA61825879c9729ADC4dC"]
+          "deploymentArgs": ["0x0266751f35FE0646cAb6Da2b0Fe5fEA2C3F447Fc"]
         },
         {
-          "address": "0x9694cA28e3E937B2b4833394fC5F6A9151E27411",
+          "address": "0x06417F73ca2F2c37ACA2B5b40B19604bc5c0B6b4",
           "name": "CoreVoting",
           "deploymentArgs": [
             "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3",
@@ -20,13 +20,13 @@
             "0x00",
             "0x0000000000000000000000000000000000000000",
             [
-              "0x5EF6751A9661ceEB51a1A53C7575544B0D184ACB",
-              "0x8F1962a36Abf9E6385b85812Dff3f86F0A419901"
+              "0xCde5DaA080F957b0bA7Fe64e42e0D28B46A13C69",
+              "0x29901f0fEd677264289f1A8c06469bbCD36dADcF"
             ]
           ]
         },
         {
-          "address": "0xB7078d256a6Ced2700060Da02e884b92bb5a90cb",
+          "address": "0xF4441a171969658Ec588125CA24836F82D4A79E6",
           "name": "GSCCoreVoting",
           "deploymentArgs": [
             "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3",
@@ -37,32 +37,32 @@
           ]
         },
         {
-          "address": "0xeE5685F3736d188d6965002b483b7CD7a1cd92C9",
+          "address": "0x07a64c78340585135407d69bA97291Af66ed8809",
           "name": "GSCVault",
           "deploymentArgs": [
-            "0x9694cA28e3E937B2b4833394fC5F6A9151E27411",
+            "0x06417F73ca2F2c37ACA2B5b40B19604bc5c0B6b4",
             "0x056bc75e2d63100000",
             "0x59F95C766F8Cb05DAf9CCDcC624fd63e5C3B06B3"
           ]
         },
         {
-          "address": "0x4AC01257B47a0362422766e94e334B5Cf8423789",
+          "address": "0x10de2cf933bfFfb28767743948cA0F23dc5Dcd2D",
           "name": "LockingVault",
           "deploymentArgs": [
-            "0x99E542507D938a2297d075C66a64E66c16BD27E4",
+            "0x8BEAe9284e6FC83076B8931F1c27eDc657b34c3A",
             300000
           ]
         },
         {
-          "address": "0x5EF6751A9661ceEB51a1A53C7575544B0D184ACB",
+          "address": "0xCde5DaA080F957b0bA7Fe64e42e0D28B46A13C69",
           "name": "LockingVaultProxy",
           "deploymentArgs": [
-            "0x411b935751fC5d1148BeA61825879c9729ADC4dC",
-            "0x4AC01257B47a0362422766e94e334B5Cf8423789"
+            "0x0266751f35FE0646cAb6Da2b0Fe5fEA2C3F447Fc",
+            "0x10de2cf933bfFfb28767743948cA0F23dc5Dcd2D"
           ]
         },
         {
-          "address": "0x411b935751fC5d1148BeA61825879c9729ADC4dC",
+          "address": "0x0266751f35FE0646cAb6Da2b0Fe5fEA2C3F447Fc",
           "name": "Timelock",
           "deploymentArgs": [
             10,
@@ -71,19 +71,19 @@
           ]
         },
         {
-          "address": "0x5Ddc3e041BcEa4eC5E71640f4B024974082F182C",
+          "address": "0x87Da63ab63108E97A33d52622109Eb8d27744602",
           "name": "VestingVault",
           "deploymentArgs": [
-            "0x99E542507D938a2297d075C66a64E66c16BD27E4",
+            "0x8BEAe9284e6FC83076B8931F1c27eDc657b34c3A",
             300000
           ]
         },
         {
-          "address": "0x8F1962a36Abf9E6385b85812Dff3f86F0A419901",
+          "address": "0x29901f0fEd677264289f1A8c06469bbCD36dADcF",
           "name": "VestingVaultProxy",
           "deploymentArgs": [
-            "0x411b935751fC5d1148BeA61825879c9729ADC4dC",
-            "0x5Ddc3e041BcEa4eC5E71640f4B024974082F182C"
+            "0x0266751f35FE0646cAb6Da2b0Fe5fEA2C3F447Fc",
+            "0x87Da63ab63108E97A33d52622109Eb8d27744602"
           ]
         }
       ]
