@@ -5,6 +5,9 @@
 
 # Council CLI
 
+A CLI for interfacing with the [Council
+protocol](https://github.com/delvtech/council).
+
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
 - [Help](#help)
@@ -15,10 +18,6 @@
   - [1. Encode the function data for the proposed actions](#1-encode-the-function-data-for-the-proposed-actions)
   - [2. Encode the function data to register the call in the Timelock](#2-encode-the-function-data-to-register-the-call-in-the-timelock)
   - [3. Create the proposal](#3-create-the-proposal)
-
-
-A CLI for interfacing with the [Council
-protocol](https://github.com/delvtech/council).
 
 ## Installation
 
