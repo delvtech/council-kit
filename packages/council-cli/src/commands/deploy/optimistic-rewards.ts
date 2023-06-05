@@ -43,6 +43,12 @@ export const { command, aliases, describe, builder, handler } =
           describe: "The address of the ERC20 token to distribute",
           type: "string",
         },
+        v: {
+          alias: ["locking-vault", "lockingVault"],
+          describe:
+            "The address of the locking vault contract that will be used when calling Airdrop.claimAndDelegate()",
+          type: "string",
+        },
         n: chainOption,
         u: rpcUrlOption,
         w: walletKeyOption,
@@ -75,6 +81,11 @@ export const { command, aliases, describe, builder, handler } =
         message: "Enter token address",
       });
 
+      const lockingVault = await requiredString(args.lockingVault, {
+        name: "lockingVault",
+        message: "Enter locking vault address",
+      });
+
       const chain = await requiredChain(args.chain);
       const rpcUrl = await requiredRpcUrl(args.rpcUrl);
       const walletKey = await requiredWalletKey(args.walletKey);
@@ -88,6 +99,7 @@ export const { command, aliases, describe, builder, handler } =
         proposer,
         revoker,
         token,
+        lockingVault,
         account,
         rpcUrl,
         chain,
@@ -108,6 +120,7 @@ export interface DeployOptimisticRewardsOptions {
   proposer: string;
   revoker: string;
   token: string;
+  lockingVault: string;
   account: PrivateKeyAccount;
   rpcUrl: string;
   chain: Chain;
@@ -120,6 +133,7 @@ export async function deployOptimisticRewards({
   proposer,
   revoker,
   token,
+  lockingVault,
   account,
   rpcUrl,
   chain,
@@ -127,7 +141,7 @@ export async function deployOptimisticRewards({
 }: DeployOptimisticRewardsOptions): Promise<DeployedContract> {
   return deployContract({
     abi: OptimisticRewards__factory.abi,
-    args: [owner, startingRoot, proposer, revoker, token],
+    args: [owner, startingRoot, proposer, revoker, token, lockingVault],
     bytecode: OptimisticRewards__factory.bytecode,
     account,
     rpcUrl,

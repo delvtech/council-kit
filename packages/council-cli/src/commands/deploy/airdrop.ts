@@ -34,6 +34,12 @@ export const { command, aliases, describe, builder, handler } =
           describe: "The address of the ERC20 token contract",
           type: "string",
         },
+        v: {
+          alias: ["locking-vault", "lockingVault"],
+          describe:
+            "The address of the locking vault contract that will be used when calling OptimisticRewards.claimAndDelegate()",
+          type: "string",
+        },
         e: {
           alias: ["expiration"],
           describe:
@@ -62,6 +68,11 @@ export const { command, aliases, describe, builder, handler } =
         message: "Enter token address",
       });
 
+      const lockingVault = await requiredString(args.lockingVault, {
+        name: "lockingVault",
+        message: "Enter locking vault address",
+      });
+
       const expiration = await requiredNumber(args.expiration, {
         name: "expiration",
         message: "Enter expiration timestamp (in seconds)",
@@ -79,6 +90,7 @@ export const { command, aliases, describe, builder, handler } =
         merkleRoot: root,
         token,
         expiration,
+        lockingVault,
         account,
         rpcUrl,
         chain,
@@ -96,6 +108,7 @@ export interface DeployAirDropOptions {
   merkleRoot: string;
   token: string;
   expiration: number;
+  lockingVault: string;
   account: PrivateKeyAccount;
   rpcUrl: string;
   chain: Chain;
@@ -107,6 +120,7 @@ export async function deployAirDrop({
   merkleRoot,
   token,
   expiration,
+  lockingVault,
   account,
   rpcUrl,
   chain,
@@ -114,7 +128,7 @@ export async function deployAirDrop({
 }: DeployAirDropOptions): Promise<DeployedContract> {
   return deployContract({
     abi: Airdrop__factory.abi,
-    args: [owner, merkleRoot, token, expiration],
+    args: [owner, merkleRoot, token, expiration, lockingVault],
     bytecode: Airdrop__factory.bytecode,
     account,
     rpcUrl,
