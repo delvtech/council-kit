@@ -4,7 +4,7 @@ import { TransactionOptions } from "src/datasources/base/contract/ContractDataSo
 import { MockERC20ContractDataSource } from "src/datasources/token/MockERC20ContractDataSource";
 import { Token, TokenOptions } from "./Token";
 
-export interface MintableTokenOptions extends TokenOptions {
+export interface MockTokenOptions extends TokenOptions {
   dataSource?: MockERC20ContractDataSource;
 }
 
