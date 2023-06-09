@@ -45,7 +45,7 @@ export const { command, describe, builder, handler } = createCommandModule({
         alias: ["chain-id"],
         describe: "The id to use for the local blockchain",
         type: "number",
-        default: 1337,
+        default: 31337,
       },
     });
   },
