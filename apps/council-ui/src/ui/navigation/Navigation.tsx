@@ -10,11 +10,18 @@ import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
 import { usePushSubscribe } from "src/ui/push/usePushSubscribe";
 import { useAccount } from "wagmi";
 
+import markelTree from "src/data/leavesWithProofs.json";
+import AirdropIcon from "src/ui/airdrop/AirdropIcon";
+
 export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
   const { toggleUserStatus, loading, isSubscribed } = usePushSubscribe();
+  console.log({ markelTree });
+
   useWrongNetworkEffect();
+
+  const hasAirdrop = true;
 
   return (
     <div className="daisy-navbar bg-base-200 ">
@@ -142,7 +149,17 @@ export function Navigation(): ReactElement {
           )}
         </ul>
       </div>
-      <div className="daisy-navbar-end">
+      <div className="daisy-navbar-end flex gap-3">
+        <Link
+          href={"/airdrop"}
+          className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 sm:bg-white bg-black"
+        >
+          <AirdropIcon
+            className="text-white sm:fill-black fill-white"
+            fillClass="sm:fill-black fill-white"
+          />
+          <span className="hidden sm:block">Claim airdrop</span>
+        </Link>
         {address && toggleUserStatus && (
           <Tooltip
             content={`Subscribe to start recieving updates as notifications from PUSH`}
