@@ -39,7 +39,7 @@ export class MockToken extends Token<MockERC20ContractDataSource> {
     amount: string,
     options?: TransactionOptions,
   ): Promise<string> {
-    return this.dataSource.mint(signer, amount, account, options);
+    return this.dataSource.mint(signer, account, amount, options);
   }
 
   /**
