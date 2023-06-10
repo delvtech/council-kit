@@ -1,0 +1,66 @@
+[
+  {
+    "leaf": {
+      "address": "0x00D5E029aFCE62738fa01EdCA21c9A4bAeabd434",
+      "amount": "100.000000000000000000"
+    },
+    "proof": [
+      "0x271e61abd8219c77862fda17c0c094302fa9884962394db34da950745db9fbbb",
+      "0x3889db47cb95d6d73f4bad64adf84a7724c8c83ffa58c5cad440f142c040a365",
+      "0x78c8945665d755d9b62bd8be8c3fbb941c1fd9e129c5f8b12bbbc74a5bf61f52"
+    ]
+  },
+  {
+    "leaf": {
+      "address": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "amount": "100.000000000000000000"
+    },
+    "proof": [
+      "0xf5111c4fa6bd06c74ffe8ff51b4b1ae39159381b4e0c2bd39613c0814d047f41",
+      "0x3889db47cb95d6d73f4bad64adf84a7724c8c83ffa58c5cad440f142c040a365",
+      "0x78c8945665d755d9b62bd8be8c3fbb941c1fd9e129c5f8b12bbbc74a5bf61f52"
+    ]
+  },
+  {
+    "leaf": {
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "amount": "100.000000000000000000"
+    },
+    "proof": [
+      "0x0b4c05bfeaff696a6005ca9096af2535d85c4ea6adf929f186c5765844f99f2f",
+      "0x801fa479e4f0012edb252aa984a5d55a6f7edb6a4b5b77b2d339bb0e03c1780b",
+      "0x78c8945665d755d9b62bd8be8c3fbb941c1fd9e129c5f8b12bbbc74a5bf61f52"
+    ]
+  },
+  {
+    "leaf": {
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      "amount": "100.000000000000000000"
+    },
+    "proof": [
+      "0xb744c83281c8c4e19fd76aa9822f709c68558891ccff788560f3873aab6b19b3",
+      "0x801fa479e4f0012edb252aa984a5d55a6f7edb6a4b5b77b2d339bb0e03c1780b",
+      "0x78c8945665d755d9b62bd8be8c3fbb941c1fd9e129c5f8b12bbbc74a5bf61f52"
+    ]
+  },
+  {
+    "leaf": {
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+      "amount": "100.000000000000000000"
+    },
+    "proof": [
+      "0x237d3a47770a3265ae98e7c870ce112e5e53b0cec3c538cae793f0a6d7d7748d",
+      "0x66e72161b05ac5f80f87b16e7969b123c006943a8b3dc2ab9a42e66897b2aedc"
+    ]
+  },
+  {
+    "leaf": {
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
+      "amount": "100.000000000000000000"
+    },
+    "proof": [
+      "0x259b98d749bca4a7d88fb6d07e639aad4a3f8b7d12f690ce0e60d427bb3ebcae",
+      "0x66e72161b05ac5f80f87b16e7969b123c006943a8b3dc2ab9a42e66897b2aedc"
+    ]
+  }
+]

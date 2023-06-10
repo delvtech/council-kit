@@ -3,15 +3,21 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
-import { makeVoterURL, Routes } from "src/routes";
-import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
 import { useAccount } from "wagmi";
+
+import markelTree from "src/data/leavesWithProofs.json";
+import { makeVoterURL, Routes } from "src/routes";
+import AirdropIcon from "src/ui/airdrop/AirdropIcon";
+import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
 
 export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
+  console.log({ markelTree });
 
   useWrongNetworkEffect();
+
+  const hasAirdrop = true;
 
   return (
     <div className="daisy-navbar bg-base-200 ">
@@ -139,7 +145,17 @@ export function Navigation(): ReactElement {
           )}
         </ul>
       </div>
-      <div className="daisy-navbar-end">
+      <div className="daisy-navbar-end flex gap-3">
+        <Link
+          href={"/airdrop"}
+          className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 sm:bg-white bg-black"
+        >
+          <AirdropIcon
+            className="text-white sm:fill-black fill-white"
+            fillClass="sm:fill-black fill-white"
+          />
+          <span className="hidden sm:block">Claim airdrop</span>
+        </Link>
         <ConnectButton />
       </div>
     </div>
