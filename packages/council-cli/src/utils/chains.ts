@@ -1,7 +1,7 @@
 import {
   arbitrum,
   goerli,
-  localhost,
+  hardhat,
   mainnet,
   optimism,
   polygon,
@@ -9,7 +9,7 @@ import {
 } from "viem/chains";
 
 export const supportedChains = {
-  localhost,
+  localhost: hardhat,
   mainnet,
   goerli,
   sepolia,

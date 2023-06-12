@@ -60,7 +60,7 @@ export const { command, describe, builder, handler } = createCommandModule({
     const server = ganache.server({
       blockTime: args.blockTime,
       chain: {
-        chainId: args.chainId,
+        chainId: args.chainId || 31337,
       },
 
       wallet: {

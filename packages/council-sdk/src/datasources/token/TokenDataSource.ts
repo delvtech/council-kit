@@ -1,4 +1,4 @@
-import { BigNumber, Signer } from "ethers";
+import { Signer } from "ethers";
 import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { DataSource } from "src/datasources/base/DataSource";
 
@@ -41,13 +41,13 @@ export interface TokenDataSource extends DataSource {
    * Sets approval of token access up to a certain amount
    * @param signer - Signer.
    * @param spender - Address to approve access to.
-   * @param amount - Amount approved for, defaults to maximum.
+   * @param amount - Amount approved for (as a decimal string), defaults to maximum.
    * @return - The transaction hash.
    */
   approve: (
     signer: Signer,
     spender: string,
-    amount: BigNumber,
+    amount: string,
     options?: TransactionOptions,
   ) => Promise<string>;
 }

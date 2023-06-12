@@ -5,7 +5,7 @@ import {
   GrantData,
   VestingVaultContractDataSource,
 } from "src/datasources/votingVault/VestingVaultContractDataSource";
-import { Token } from "src/models/Token";
+import { Token } from "src/models/token/Token";
 import { Voter } from "src/models/Voter";
 import { VoterPowerBreakdown } from "src/models/votingVault/types";
 import { sumStrings } from "src/utils/sumStrings";

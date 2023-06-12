@@ -4,7 +4,7 @@ import { AirdropContractDataSource } from "src/datasources/airdrop/AirdropContra
 import { AirdropDataSource } from "src/datasources/airdrop/AirdropDataSource";
 import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { Model, ModelOptions } from "./Model";
-import { Token } from "./Token";
+import { Token } from "./token/Token";
 import { LockingVault } from "./votingVault/LockingVault";
 
 /**

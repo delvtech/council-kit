@@ -1,29 +1,32 @@
 import { Signer } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
 import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import { ERC20ContractDataSource } from "src/datasources/token/ERC20ContractDataSource";
 import { TokenDataSource } from "src/datasources/token/TokenDataSource";
-import { Model, ModelOptions } from "./Model";
+import { Model, ModelOptions } from "src/models/Model";
 
 /**
  * @category Models
  */
-export interface TokenOptions extends ModelOptions {
+export interface TokenOptions<
+  TDataSource extends TokenDataSource = TokenDataSource,
+> extends ModelOptions {
   /**
    * A data source to use instead of registering one with the `context`. If you
    * pass in a data source, you take over the responsibility of registering it
    * with the `context` to make it available to other models and data sources.
    */
-  dataSource?: TokenDataSource;
+  dataSource?: TDataSource;
 }
 
 /**
  * @category Models
  */
-export class Token extends Model {
+export class Token<
+  TDataSource extends TokenDataSource = TokenDataSource,
+> extends Model {
   address: string;
-  dataSource: TokenDataSource;
+  dataSource: TDataSource;
 
   constructor(
     address: string,
@@ -32,12 +35,11 @@ export class Token extends Model {
   ) {
     super(context, options);
     this.address = address;
-    this.dataSource =
-      options?.dataSource ||
+    this.dataSource = (options?.dataSource ||
       context.registerDataSource(
         { address },
         new ERC20ContractDataSource(address, context),
-      );
+      )) as TDataSource;
   }
 
   /**
@@ -89,11 +91,6 @@ export class Token extends Model {
     amount: string,
     options?: TransactionOptions,
   ): Promise<string> {
-    return this.dataSource.approve(
-      signer,
-      spender,
-      parseUnits(amount, await this.getDecimals()),
-      options,
-    );
+    return this.dataSource.approve(signer, spender, amount, options);
   }
 }
