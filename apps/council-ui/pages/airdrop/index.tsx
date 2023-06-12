@@ -1,21 +1,29 @@
 import { ReactElement } from "react";
 
-import { BuildingLibraryIcon, WalletIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
-import AirdropIcon from "src/ui/airdrop/AirdropIcon";
+import Cliam from "src/ui/airdrop/Cliam";
+import ConfirmCliam from "src/ui/airdrop/ConfirmCliam";
+import ConfirmDeposit from "src/ui/airdrop/ConfirmDeposit";
+import ConfirmFirstTimeDeposit from "src/ui/airdrop/ConfirmFirstTimeDepost";
+import DepositOrCliam from "src/ui/airdrop/DeopistOrCliam";
+import Deposit from "src/ui/airdrop/Deposit";
+import FirstTimeDeposit from "src/ui/airdrop/FirstTimeDeposit";
 import useTrackCurrentAirdropStep from "src/ui/airdrop/hooks/useTrackAirdropSteps";
 
 export enum AIRDROP_STEPS {
   DEPOSIT_OR_CLAIM = 1,
-  CHOOSE_ACCOUNT = 2,
-  CONFIRM = 3,
+  CLAIM = 2,
+  CONFIRM_CLIAM = 3,
+  DEPOSIT = 4,
+  CONFIRM_DEPOSIT = 5,
+  FIRST_TIME_DEPOSIT = 6,
+  FIRST_TIME_DEPOSIT_CONFIRM = 7,
 }
 
 export const CURRENT_STEP_KEY = "current_airdrop_step";
 
 export default function AirdropPage(): ReactElement {
-  const { currentStep, completedSteps, updateCurrentStepStatus } =
-    useTrackCurrentAirdropStep();
+  const stepsUtils = useTrackCurrentAirdropStep();
 
   return (
     <section className="mx-auto max-w-4xl flex flex-col justify-center gap-5 mt-10 text-center">
@@ -24,9 +32,7 @@ export default function AirdropPage(): ReactElement {
         <li
           data-content="1"
           className={classNames("daisy-step", {
-            "daisy-step-neutral": completedSteps.includes(
-              AIRDROP_STEPS.DEPOSIT_OR_CLAIM,
-            ),
+            "daisy-step-neutral": stepsUtils.completedSteps.includes(1),
           })}
         >
           Deposit or Claim
@@ -34,9 +40,7 @@ export default function AirdropPage(): ReactElement {
         <li
           data-content="2"
           className={classNames("daisy-step", {
-            "daisy-step-neutral": completedSteps.includes(
-              AIRDROP_STEPS.CHOOSE_ACCOUNT,
-            ),
+            "daisy-step-neutral": stepsUtils.completedSteps.includes(2),
           })}
         >
           Choose account
@@ -44,39 +48,33 @@ export default function AirdropPage(): ReactElement {
         <li
           data-content="3"
           className={classNames("daisy-step", {
-            "daisy-step-neutral": completedSteps.includes(
-              AIRDROP_STEPS.CONFIRM,
-            ),
+            "daisy-step-neutral": stepsUtils.completedSteps.includes(3),
           })}
         >
           Confirm
         </li>
       </ul>
-      <div className="p-10 mx-auto">
-        <h5 className="text-md m-3">You&apos;ve been airdropped</h5>
-        <span className="flex justify-center p-5 rounded-lg bg-zinc-200 w-52 items-center gap-3">
-          <AirdropIcon className="h-5 w-5" fillClass="fill-black" />
-          <span className="text-2xl font-bold">
-            2,000.0<span className="text-sm mx-1">MVT</span>
-          </span>
-        </span>
-      </div>
-      <p className="mx-auto max-w-lg text-sm">
-        These tokens can be <b>deposited</b> into the locking vault for
-        immediate voting power or <b>claimed</b> directly to a wallet.
-      </p>
-      <div className="flex justify-center gap-2">
-        <button
-          onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.CHOOSE_ACCOUNT)}
-          className="flex text-sm uppercase whitespace-nowrap gap-2 items-center rounded-md px-10 py-2 bg-black text-white"
-        >
-          <BuildingLibraryIcon className="w-5 h-5 fill-white" />
-          Deposit
-        </button>
-        <button className="flex text-sm uppercase whitespace-nowrap gap-2 items-center rounded-md px-10 py-2 bg-zinc-200">
-          <WalletIcon className="w-5 h-5 fill-black" />
-          Claim
-        </button>
+      <div className="mx-auto flex justify-center flex-col space-y-4">
+        {(() => {
+          switch (stepsUtils.currentStep) {
+            case AIRDROP_STEPS.DEPOSIT_OR_CLAIM:
+              return <DepositOrCliam {...stepsUtils} />;
+            case AIRDROP_STEPS.CLAIM:
+              return <Cliam {...stepsUtils} />;
+            case AIRDROP_STEPS.CONFIRM_CLIAM:
+              return <ConfirmCliam {...stepsUtils} />;
+            case AIRDROP_STEPS.DEPOSIT:
+              return <Deposit {...stepsUtils} />;
+            case AIRDROP_STEPS.CONFIRM_DEPOSIT:
+              return <ConfirmDeposit {...stepsUtils} />;
+            case AIRDROP_STEPS.FIRST_TIME_DEPOSIT:
+              return <FirstTimeDeposit {...stepsUtils} />;
+            case AIRDROP_STEPS.FIRST_TIME_DEPOSIT_CONFIRM:
+              return <ConfirmFirstTimeDeposit {...stepsUtils} />;
+            default:
+              return null;
+          }
+        })()}
       </div>
     </section>
   );
