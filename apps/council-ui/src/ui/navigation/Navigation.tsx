@@ -154,7 +154,7 @@ export function Navigation(): ReactElement {
             className="text-white sm:fill-black fill-white"
             fillClass="sm:fill-black fill-white"
           />
-          <span className="hidden sm:block text-base-100">Claim airdrop</span>
+          <span className="hidden sm:block text-base-500">Claim airdrop</span>
         </Link>
         <ConnectButton />
       </div>

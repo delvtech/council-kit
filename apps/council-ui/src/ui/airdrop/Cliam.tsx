@@ -1,10 +1,9 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { AIRDROP_STEPS } from "pages/airdrop";
 import { ReactElement } from "react";
-import Button from "./common/Button";
 import Input from "./common/Input";
 import Label from "./common/Label";
-import { TrackCurrentAirDropStepI } from "./hooks/useTrackAirdropSteps";
+import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
 interface ClaimProps extends Partial<TrackCurrentAirDropStepI> {
   updateCurrentStepStatus: TrackCurrentAirDropStepI["updateCurrentStepStatus"];
@@ -19,22 +18,22 @@ export default function Cliam({
       <Input type="text" name="address" id="address" />
       <p className="text-xs">The tokens will be sent to this address.</p>
       <div className="flex justify-center gap-2 pt-10">
-        <Button
-          color="secondary"
+        <button
+          className="daisy-btn gap-2 px-8"
           onClick={() =>
             updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)
           }
         >
-          <ArrowLeftIcon className="w-4 h-4 fill-black" />
+          <ArrowLeftIcon className="w-4 h-4 fill-white" />
           Back
-        </Button>
-        <Button
-          color="primary"
+        </button>
+        <button
+          className="daisy-btn-primary daisy-btn gap-2"
           onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.CONFIRM_CLIAM)}
         >
           Continue
           <ArrowRightIcon className="w-4 h-4 fill-white" />
-        </Button>
+        </button>
       </div>
     </div>
   );

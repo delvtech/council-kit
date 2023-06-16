@@ -8,7 +8,7 @@ export interface TrackCurrentAirDropStepI {
   updateCurrentStepStatus: (currentStep: AIRDROP_STEPS) => void;
 }
 
-export default function useTrackCurrentAirdropStep(): TrackCurrentAirDropStepI {
+export default function useAirdropSteps(): TrackCurrentAirDropStepI {
   //TBD:
   // const persistedCurrentStep = parseInt(
   //   localStorage.getItem(CURRENT_STEP_KEY) as string,
