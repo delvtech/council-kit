@@ -15,9 +15,11 @@ export default function Cliam({
 }: ClaimProps): ReactElement {
   return (
     <div className="min-w-[400px] text-start space-y-1">
-      <Label htmlFor="address">Address</Label>
-      <Input type="text" name="address" id="address" />
-      <p className="text-xs">The tokens will be sent to this address.</p>
+      <div className="daisy-form-control">
+        <Label htmlFor="address">Address</Label>
+        <Input className="daisy-input" type="text" name="address" id="address" />
+        <label className="daisy-label daisy-label-text-alt">The tokens will be sent to this address.</label>
+      </div>
       <div className="flex justify-center gap-2 pt-10">
         <Button
           color="secondary"
