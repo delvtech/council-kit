@@ -21,7 +21,7 @@ export default function ConfirmCliam({
           className="daisy-btn gap-2 px-8"
           onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.CLAIM)}
         >
-          <ArrowLeftIcon className="w-4 h-4 fill-white" />
+          <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back
         </button>
         <button
@@ -29,7 +29,7 @@ export default function ConfirmCliam({
           onClick={handleConfirm}
         >
           Confirm
-          <CheckIcon className="w-4 h-4 fill-white" />
+          <CheckIcon className="w-4 h-4 fill-current" />
         </button>
       </div>
     </div>

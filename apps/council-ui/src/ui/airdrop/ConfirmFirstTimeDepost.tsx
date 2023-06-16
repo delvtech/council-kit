@@ -23,7 +23,7 @@ export default function ConfirmFirstTimeDeposit({
             updateCurrentStepStatus(AIRDROP_STEPS.FIRST_TIME_DEPOSIT)
           }
         >
-          <ArrowLeftIcon className="w-4 h-4 fill-white" />
+          <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back
         </button>
         <button
@@ -31,7 +31,7 @@ export default function ConfirmFirstTimeDeposit({
           onClick={handleConfirm}
         >
           Confirm
-          <CheckIcon className="w-4 h-4 fill-white" />
+          <CheckIcon className="w-4 h-4 fill-current" />
         </button>
       </div>
     </div>

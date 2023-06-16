@@ -35,14 +35,14 @@ export default function DepositOrClaim({
           className="daisy-btn-primary daisy-btn gap-2"
           onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT)}
         >
-          <BuildingLibraryIcon className="w-5 h-5 fill-white" />
+          <BuildingLibraryIcon className="w-5 h-5 fill-current" />
           Deposit
         </button>
         <button
           className="daisy-btn gap-2"
           onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.CLAIM)}
         >
-          <WalletIcon className="w-5 h-5 fill-white" />
+          <WalletIcon className="w-5 h-5 fill-current" />
           Claim
         </button>
       </div>
