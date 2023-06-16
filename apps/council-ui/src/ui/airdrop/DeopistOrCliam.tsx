@@ -15,13 +15,17 @@ export default function DepositOrClaim({
   return (
     <>
       <div className="p-10 mx-auto">
-        <h5 className="text-md m-3">You&apos;ve been airdropped</h5>
-        <span className="flex justify-center p-5 rounded-lg bg-zinc-200 w-52 items-center gap-3">
-          <AirdropIcon className="h-5 w-5" fillClass="fill-black" />
-          <span className="text-2xl font-bold">
-            2,000.0<span className="text-sm mx-1">MVT</span>
-          </span>
-        </span>
+        <p className="mb-2">You&apos;ve been airdropped</p>
+        <div className="daisy-stats bg-base-200">
+          <div className="daisy-stat">
+            <span className="daisy-stat-value flex items-center gap-3">
+              <AirdropIcon className="h-5 w-5" fillClass="fill-black" />
+              <span>
+                2,000.0<span className="text-sm mx-1">MVT</span>
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
       <p className="mx-auto max-w-lg text-sm">
         These tokens can be <b>deposited</b> into the locking vault for
