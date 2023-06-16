@@ -2,8 +2,7 @@ import { BuildingLibraryIcon, WalletIcon } from "@heroicons/react/20/solid";
 import { AIRDROP_STEPS } from "pages/airdrop";
 import { ReactElement } from "react";
 import AirdropIcon from "./AirdropIcon";
-import Button from "./common/Button";
-import { TrackCurrentAirDropStepI } from "./hooks/useTrackAirdropSteps";
+import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
 interface DepositOrClaimProps extends Partial<TrackCurrentAirDropStepI> {
   updateCurrentStepStatus: TrackCurrentAirDropStepI["updateCurrentStepStatus"];
@@ -32,20 +31,20 @@ export default function DepositOrClaim({
         immediate voting power or <b>claimed</b> directly to a wallet.
       </p>
       <div className="flex justify-center gap-2">
-        <Button
-          color="primary"
+        <button
+          className="daisy-btn-primary daisy-btn gap-2"
           onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT)}
         >
           <BuildingLibraryIcon className="w-5 h-5 fill-white" />
           Deposit
-        </Button>
-        <Button
-          color="secondary"
+        </button>
+        <button
+          className="daisy-btn gap-2"
           onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.CLAIM)}
         >
-          <WalletIcon className="w-5 h-5 fill-black" />
+          <WalletIcon className="w-5 h-5 fill-white" />
           Claim
-        </Button>
+        </button>
       </div>
     </>
   );

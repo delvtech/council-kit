@@ -8,7 +8,7 @@ import ConfirmFirstTimeDeposit from "src/ui/airdrop/ConfirmFirstTimeDepost";
 import DepositOrCliam from "src/ui/airdrop/DeopistOrCliam";
 import Deposit from "src/ui/airdrop/Deposit";
 import FirstTimeDeposit from "src/ui/airdrop/FirstTimeDeposit";
-import useTrackCurrentAirdropStep from "src/ui/airdrop/hooks/useTrackAirdropSteps";
+import useAirdropSteps from "src/ui/airdrop/hooks/useAirdropSteps";
 
 export enum AIRDROP_STEPS {
   DEPOSIT_OR_CLAIM = 1,
@@ -23,10 +23,10 @@ export enum AIRDROP_STEPS {
 export const CURRENT_STEP_KEY = "current_airdrop_step";
 
 export default function AirdropPage(): ReactElement {
-  const stepsUtils = useTrackCurrentAirdropStep();
+  const stepsUtils = useAirdropSteps();
 
   return (
-    <section className="mx-auto max-w-lg flex flex-col justify-center gap-5 mt-10 text-center">
+    <section className="mx-auto max-w-3xl flex flex-col justify-center gap-5 mt-10 text-center">
       <h1 className="text-4xl font-bold">Airdrop Claim</h1>
       <ul className="daisy-steps md:w-1/2 m-auto text-sm">
         <li

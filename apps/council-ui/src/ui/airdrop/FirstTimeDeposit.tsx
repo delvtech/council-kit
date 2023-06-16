@@ -3,10 +3,9 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { AIRDROP_STEPS } from "pages/airdrop";
 import { ReactElement } from "react";
-import Button from "./common/Button";
 import Input from "./common/Input";
 import Label from "./common/Label";
-import { TrackCurrentAirDropStepI } from "./hooks/useTrackAirdropSteps";
+import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
 interface FirstTimeProps extends Partial<TrackCurrentAirDropStepI> {
   updateCurrentStepStatus: TrackCurrentAirDropStepI["updateCurrentStepStatus"];
@@ -44,24 +43,24 @@ export default function FirstTimeDeposit({
         <ArrowTopRightOnSquareIcon className="h-5 w-4" />
       </Link>
       <div className="flex justify-center gap-2 pt-10">
-        <Button
-          color="secondary"
+        <button
+          className="daisy-btn gap-2 px-8"
           onClick={() =>
             updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)
           }
         >
-          <ArrowLeftIcon className="w-4 h-4 fill-black" />
+          <ArrowLeftIcon className="w-4 h-4 fill-white" />
           Back
-        </Button>
-        <Button
-          color="primary"
+        </button>
+        <button
+          className="daisy-btn daisy-btn-primary gap-2"
           onClick={() =>
             updateCurrentStepStatus(AIRDROP_STEPS.FIRST_TIME_DEPOSIT_CONFIRM)
           }
         >
           Continue
           <ArrowRightIcon className="w-4 h-4 fill-white" />
-        </Button>
+        </button>
       </div>
     </div>
   );
