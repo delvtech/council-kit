@@ -37,7 +37,7 @@ export default function Deposit({ ...props }: DepositProps): ReactElement {
             props.updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)
           }
         >
-          <ArrowLeftIcon className="w-4 h-4 fill-white" />
+          <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back
         </button>
         <button
@@ -47,7 +47,7 @@ export default function Deposit({ ...props }: DepositProps): ReactElement {
           }
         >
           Continue
-          <ArrowRightIcon className="w-4 h-4 fill-white" />
+          <ArrowRightIcon className="w-4 h-4 fill-current" />
         </button>
       </div>
     </div>

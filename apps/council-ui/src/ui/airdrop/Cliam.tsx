@@ -26,7 +26,7 @@ export default function Cliam({
             updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)
           }
         >
-          <ArrowLeftIcon className="w-4 h-4 fill-white" />
+          <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back
         </button>
         <button
@@ -34,7 +34,7 @@ export default function Cliam({
           onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.CONFIRM_CLIAM)}
         >
           Continue
-          <ArrowRightIcon className="w-4 h-4 fill-white" />
+          <ArrowRightIcon className="w-4 h-4 fill-current" />
         </button>
       </div>
     </div>
