@@ -32,7 +32,7 @@ export default function AirdropPage(): ReactElement {
         <li
           data-content="1"
           className={classNames("daisy-step", {
-            "daisy-step-neutral": stepsUtils.completedSteps.includes(1),
+            "daisy-step-primary": stepsUtils.completedSteps.includes(1),
           })}
         >
           Deposit or Claim
@@ -40,7 +40,7 @@ export default function AirdropPage(): ReactElement {
         <li
           data-content="2"
           className={classNames("daisy-step", {
-            "daisy-step-neutral": stepsUtils.completedSteps.includes(2),
+            "daisy-step-primary": stepsUtils.completedSteps.includes(2),
           })}
         >
           Choose account
@@ -48,7 +48,7 @@ export default function AirdropPage(): ReactElement {
         <li
           data-content="3"
           className={classNames("daisy-step", {
-            "daisy-step-neutral": stepsUtils.completedSteps.includes(3),
+            "daisy-step-primary": stepsUtils.completedSteps.includes(3),
           })}
         >
           Confirm
