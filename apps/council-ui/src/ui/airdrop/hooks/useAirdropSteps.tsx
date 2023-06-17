@@ -5,27 +5,20 @@ import { AIRDROP_STEPS } from "pages/airdrop";
 export interface TrackCurrentAirDropStepI {
   currentStep: AIRDROP_STEPS;
   completedSteps: Array<AIRDROP_STEPS>;
-  updateCurrentStepStatus: (currentStep: AIRDROP_STEPS) => void;
+  setCurrentStepStatus: (currentStep: AIRDROP_STEPS) => void;
 }
 
 export default function useAirdropSteps(): TrackCurrentAirDropStepI {
-  //TBD:
-  // const persistedCurrentStep = parseInt(
-  //   localStorage.getItem(CURRENT_STEP_KEY) as string,
-  // ) as AIRDROP_STEPS;
-
-  const persistedCurrentStep = null;
-  //current active step that the user is present on
   const [currentStep, setCurrentStep] = useState<AIRDROP_STEPS>(
-    persistedCurrentStep ?? AIRDROP_STEPS.DEPOSIT_OR_CLAIM,
+    AIRDROP_STEPS.DEPOSIT_OR_CLAIM,
   );
+
   //list of steps that the user have completed following.
   const [completedSteps, setCompletedSteps] = useState<Array<AIRDROP_STEPS>>(
     [],
   );
 
-  function updateCurrentStepStatus(_currentStep: AIRDROP_STEPS) {
-    // localStorage.setItem(CURRENT_STEP_KEY, _currentStep.toString());
+  function setCurrentStepStatus(_currentStep: AIRDROP_STEPS) {
     setCurrentStep(_currentStep);
   }
 
@@ -51,5 +44,5 @@ export default function useAirdropSteps(): TrackCurrentAirDropStepI {
     //whenever the currentStep state changes/updates reset the completedSteps accordingly
     updateCompletedSteps();
   }, [currentStep]);
-  return { currentStep, completedSteps, updateCurrentStepStatus };
+  return { currentStep, completedSteps, setCurrentStepStatus };
 }

@@ -2,13 +2,11 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { ReactElement, useEffect, useState } from "react";
 
 import { AIRDROP_STEPS } from "pages/airdrop";
-import Input from "./common/Input";
-import Label from "./common/Label";
 import FirstTimeDeposit from "./FirstTimeDeposit";
 import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
 interface DepositProps extends Partial<TrackCurrentAirDropStepI> {
-  updateCurrentStepStatus: TrackCurrentAirDropStepI["updateCurrentStepStatus"];
+  setCurrentStepStatus: TrackCurrentAirDropStepI["setCurrentStepStatus"];
 }
 
 export default function Deposit({ ...props }: DepositProps): ReactElement {
@@ -25,8 +23,15 @@ export default function Deposit({ ...props }: DepositProps): ReactElement {
 
   return (
     <div className="min-w-[400px] text-start space-y-1">
-      <Label htmlFor="address">Address</Label>
-      <Input type="text" name="address" id="address" />
+      <label className="daisy-label text-lg font-bold" htmlFor="address">
+        Address
+      </label>
+      <input
+        className="w-full daisy-input-bordered daisy-input"
+        type="text"
+        name="address"
+        id="address"
+      />
       <p className="text-xs">
         The tokens will be owned by this address in the locking vault.
       </p>
@@ -34,7 +39,7 @@ export default function Deposit({ ...props }: DepositProps): ReactElement {
         <button
           className="daisy-btn gap-2 px-8"
           onClick={() =>
-            props.updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)
+            props.setCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)
           }
         >
           <ArrowLeftIcon className="w-4 h-4 fill-current" />
@@ -43,7 +48,7 @@ export default function Deposit({ ...props }: DepositProps): ReactElement {
         <button
           className="daisy-btn daisy-btn-primary gap-2"
           onClick={() =>
-            props.updateCurrentStepStatus(AIRDROP_STEPS.CONFIRM_DEPOSIT)
+            props.setCurrentStepStatus(AIRDROP_STEPS.CONFIRM_DEPOSIT)
           }
         >
           Continue
