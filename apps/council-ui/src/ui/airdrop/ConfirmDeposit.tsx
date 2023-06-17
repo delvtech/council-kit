@@ -4,11 +4,11 @@ import { ReactElement } from "react";
 import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
 interface ConfirmDepositProps extends Partial<TrackCurrentAirDropStepI> {
-  updateCurrentStepStatus: TrackCurrentAirDropStepI["updateCurrentStepStatus"];
+  setCurrentStepStatus: TrackCurrentAirDropStepI["setCurrentStepStatus"];
 }
 
 export default function ConfirmDeposit({
-  updateCurrentStepStatus,
+  setCurrentStepStatus,
 }: ConfirmDepositProps): ReactElement {
   function handleConfirm() {
     alert("handle confirm");
@@ -19,7 +19,7 @@ export default function ConfirmDeposit({
       <div className="flex justify-center gap-2 pt-10">
         <button
           className="daisy-btn gap-2 px-8"
-          onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT)}
+          onClick={() => setCurrentStepStatus(AIRDROP_STEPS.DEPOSIT)}
         >
           <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back

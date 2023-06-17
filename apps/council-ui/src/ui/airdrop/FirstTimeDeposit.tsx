@@ -3,27 +3,40 @@ import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { AIRDROP_STEPS } from "pages/airdrop";
 import { ReactElement } from "react";
-import Input from "./common/Input";
-import Label from "./common/Label";
+import { Routes } from "src/routes";
 import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
 interface FirstTimeProps extends Partial<TrackCurrentAirDropStepI> {
-  updateCurrentStepStatus: TrackCurrentAirDropStepI["updateCurrentStepStatus"];
+  setCurrentStepStatus: TrackCurrentAirDropStepI["setCurrentStepStatus"];
 }
 
 export default function FirstTimeDeposit({
-  updateCurrentStepStatus,
+  setCurrentStepStatus,
 }: FirstTimeProps): ReactElement {
   return (
     <div className="min-w-[400px] text-start space-y-1">
       <form className="py-3">
-        <Label htmlFor="address">Address</Label>
-        <Input type="text" name="address" id="address" />
+        <label className="daisy-label text-lg font-bold" htmlFor="address">
+          Address
+        </label>
+        <input
+          className="w-full daisy-input-bordered daisy-input"
+          type="text"
+          name="address"
+          id="address"
+        />
         <p className="text-xs mt-2">
           The tokens will be owned by this address in the locking vault.
         </p>
-        <Label htmlFor="address">Delegate</Label>
-        <Input type="text" name="address" id="address" />
+        <label className="daisy-label text-lg font-bold" htmlFor="address">
+          Delegate
+        </label>
+        <input
+          className="w-full daisy-input-bordered daisy-input"
+          type="text"
+          name="address"
+          id="address"
+        />
         <p className="text-xs mt-2">
           The resulting voting power will be usable by this address. This can be
           changed at any time.
@@ -37,7 +50,7 @@ export default function FirstTimeDeposit({
       </Link>
       <Link
         className="flex items-center gap-1 underline underline-offset-2 text-xs"
-        href="#"
+        href={Routes.VOTERS}
       >
         Explore delegate profiles
         <ArrowTopRightOnSquareIcon className="h-5 w-4" />
@@ -45,9 +58,7 @@ export default function FirstTimeDeposit({
       <div className="flex justify-center gap-2 pt-10">
         <button
           className="daisy-btn gap-2 px-8"
-          onClick={() =>
-            updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)
-          }
+          onClick={() => setCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)}
         >
           <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back
@@ -55,7 +66,7 @@ export default function FirstTimeDeposit({
         <button
           className="daisy-btn daisy-btn-primary gap-2"
           onClick={() =>
-            updateCurrentStepStatus(AIRDROP_STEPS.FIRST_TIME_DEPOSIT_CONFIRM)
+            setCurrentStepStatus(AIRDROP_STEPS.FIRST_TIME_DEPOSIT_CONFIRM)
           }
         >
           Continue

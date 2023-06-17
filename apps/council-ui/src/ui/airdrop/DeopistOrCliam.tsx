@@ -5,11 +5,11 @@ import AirdropIcon from "./AirdropIcon";
 import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
 interface DepositOrClaimProps extends Partial<TrackCurrentAirDropStepI> {
-  updateCurrentStepStatus: TrackCurrentAirDropStepI["updateCurrentStepStatus"];
+  setCurrentStepStatus: TrackCurrentAirDropStepI["setCurrentStepStatus"];
 }
 
 export default function DepositOrClaim({
-  updateCurrentStepStatus,
+  setCurrentStepStatus,
 }: DepositOrClaimProps): ReactElement {
   return (
     <>
@@ -27,20 +27,21 @@ export default function DepositOrClaim({
         </div>
       </div>
       <p className="mx-auto max-w-lg text-sm">
-        These tokens can be <b>deposited</b> into the locking vault for
-        immediate voting power or <b>claimed</b> directly to a wallet.
+        These tokens can be <strong>deposited</strong> into the locking vault
+        for immediate voting power or <strong>claimed</strong> directly to a
+        wallet.
       </p>
       <div className="flex justify-center gap-2">
         <button
           className="daisy-btn-primary daisy-btn gap-2"
-          onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.DEPOSIT)}
+          onClick={() => setCurrentStepStatus(AIRDROP_STEPS.DEPOSIT)}
         >
           <BuildingLibraryIcon className="w-5 h-5 fill-current" />
           Deposit
         </button>
         <button
           className="daisy-btn gap-2"
-          onClick={() => updateCurrentStepStatus(AIRDROP_STEPS.CLAIM)}
+          onClick={() => setCurrentStepStatus(AIRDROP_STEPS.CLAIM)}
         >
           <WalletIcon className="w-5 h-5 fill-current" />
           Claim
