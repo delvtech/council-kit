@@ -10,7 +10,7 @@ interface DepositProps extends Partial<TrackCurrentAirDropStepI> {
 }
 
 export default function Deposit({ ...props }: DepositProps): ReactElement {
-  const [isFirstTimeDeposit, setIsFirstTimeDeposit] = useState(false);
+  const [isFirstTimeDeposit, setIsFirstTimeDeposit] = useState(true);
 
   useEffect(() => {
     //perform some logic and update @isFirstTimeDeposit value.

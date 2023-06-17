@@ -26,7 +26,7 @@ export default function AirdropPage(): ReactElement {
   const stepsUtils = useAirdropSteps();
 
   return (
-    <section className="mx-auto max-w-3xl flex flex-col justify-center gap-5 mt-10 text-center">
+    <section className="mx-auto max-w-5xl flex flex-col justify-center gap-5 mt-10 text-center">
       <h1 className="text-4xl font-bold">Airdrop Claim</h1>
       <ul className="daisy-steps md:w-1/2 m-auto text-sm">
         <li
