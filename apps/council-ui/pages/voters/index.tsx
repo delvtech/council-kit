@@ -70,7 +70,7 @@ export default function Voters(): ReactElement {
   );
 }
 
-function useVoterPageData(): UseQueryResult<VoterRowData[]> {
+export function useVoterPageData(): UseQueryResult<VoterRowData[]> {
   const {
     coreVoting,
     gscVoting,
