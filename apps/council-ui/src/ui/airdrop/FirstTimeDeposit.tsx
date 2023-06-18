@@ -2,8 +2,12 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { AIRDROP_STEPS } from "pages/airdrop";
+import { useVoterPageData } from "pages/voters";
 import { ReactElement } from "react";
 import { Routes } from "src/routes";
+import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
+import AutoComplete from "./AutoComplete";
 import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
 interface FirstTimeProps extends Partial<TrackCurrentAirDropStepI> {
@@ -13,6 +17,13 @@ interface FirstTimeProps extends Partial<TrackCurrentAirDropStepI> {
 export default function FirstTimeDeposit({
   setCurrentStepStatus,
 }: FirstTimeProps): ReactElement {
+  const { data: voters, status, error } = useVoterPageData();
+  const { results, search } = useVotersSearch(voters);
+
+  if (status === "error") {
+    return <ErrorMessage error={error} />;
+  }
+
   return (
     <div className="min-w-[400px] text-start space-y-1">
       <form className="py-3">
@@ -31,12 +42,7 @@ export default function FirstTimeDeposit({
         <label className="daisy-label text-lg font-bold" htmlFor="address">
           Delegate
         </label>
-        <input
-          className="w-full daisy-input-bordered daisy-input"
-          type="text"
-          name="address"
-          id="address"
-        />
+        <AutoComplete voters={results} onChange={search} />
         <p className="text-xs mt-2">
           The resulting voting power will be usable by this address. This can be
           changed at any time.
