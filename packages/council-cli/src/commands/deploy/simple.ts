@@ -331,7 +331,7 @@ export const { command, describe, builder, handler } = createCommandModule({
     });
 
     if (chain.id === 31337) {
-      // Querying voting power on a voting vault that has a stale block lag larger
+      // Calling queryVotePower on a voting vault that has a stale block lag larger
       // than the current block height will result in an error. To avoid this, we
       // we fast forward the block height by the stale block lag.
       signale.pending(
