@@ -225,11 +225,16 @@ export const { command, describe, builder, handler } = createCommandModule({
           return;
         }
 
+        if (i !== 0) {
+          console.log(colors.dim(`${"-".repeat(80)}`));
+        }
+
         const balance = formatBigInt(account.balance);
         console.log(`Account ${i + 1}: ${address} (${balance} ETH)`);
         console.log(`Private Key: ${account.secretKey}`);
-        console.log(colors.dim(`${"-".repeat(80)}`));
       });
+
+      console.log(colors.dim(`${"=".repeat(80)}`));
     });
   },
 });
