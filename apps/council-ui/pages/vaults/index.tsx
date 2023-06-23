@@ -110,9 +110,7 @@ function useVaultsPageData(
             address: vault.address,
             name: vaultConfig?.name || vault.name,
             tvp: await vault.getTotalVotingPower?.(),
-            votingPower:
-              account &&
-              (await vault.getVotingPowerBreakdown?.(account))?.[0].votingPower,
+            votingPower: account && (await vault.getVotingPower(account)),
             sentenceSummary: vaultConfig?.sentenceSummary,
           };
         }),
