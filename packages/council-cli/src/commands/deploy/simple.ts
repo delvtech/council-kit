@@ -9,6 +9,7 @@ import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
 import { stringifyBigInts } from "src/utils/bigint/stringifyBigInts";
 import { DAY_IN_BLOCKS, DAY_IN_SECONDS } from "src/utils/constants";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { mine } from "src/utils/mine";
 import {
   Address,
   createPublicClient,
@@ -328,6 +329,21 @@ export const { command, describe, builder, handler } = createCommandModule({
       message: "Enter stale block lag",
       initial: defaults.staleBlockLag,
     });
+
+    if (chain.id === 31337) {
+      // Calling queryVotePower on a voting vault that has a stale block lag larger
+      // than the current block height will result in an error. To avoid this, we
+      // we fast forward the block height by the stale block lag.
+      signale.pending(
+        `Fast forwarding block height by ${staleBlockLag} blocks...`,
+      );
+
+      const blockNumber = await mine({ blocks: staleBlockLag, rpcUrl });
+
+      signale.success(
+        `Successfully fast forwarded block height to ${blockNumber}`,
+      );
+    }
 
     signale.pending("Deploying LockingVault...");
 

@@ -142,17 +142,15 @@ function useLockingVaultDetailsData(
     queryFn: async () => {
       const lockingVault = new LockingVault(address, context);
       const token = await lockingVault.getToken();
-
       const delegate = account
         ? await lockingVault.getDelegate(account)
         : undefined;
-
-      const votingPowerBreakdowns = account
-        ? await lockingVault.getVotingPowerBreakdown(account)
-        : undefined;
+      const accountVotingPower = account
+        ? await lockingVault.getVotingPower(account)
+        : "0";
 
       return {
-        accountVotingPower: votingPowerBreakdowns?.[0].votingPower,
+        accountVotingPower,
 
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
