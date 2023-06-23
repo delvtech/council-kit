@@ -330,14 +330,20 @@ export const { command, describe, builder, handler } = createCommandModule({
       initial: defaults.staleBlockLag,
     });
 
-    // Querying voting power on a voting vault that has a stale block lag larger
-    // than the current block height will result in an error. To avoid this, we
-    // we fast forward the block height by the stale block lag.
-    signale.pending(
-      `Fast forwarding block height by ${staleBlockLag} blocks...`,
-    );
+    if (chain.id === 31337) {
+      // Querying voting power on a voting vault that has a stale block lag larger
+      // than the current block height will result in an error. To avoid this, we
+      // we fast forward the block height by the stale block lag.
+      signale.pending(
+        `Fast forwarding block height by ${staleBlockLag} blocks...`,
+      );
 
-    await mine({ blocks: staleBlockLag, rpcUrl });
+      const blockNumber = await mine({ blocks: staleBlockLag, rpcUrl });
+
+      signale.success(
+        `Successfully fast forwarded block height to ${blockNumber}`,
+      );
+    }
 
     signale.pending("Deploying LockingVault...");
 
