@@ -220,6 +220,11 @@ export const { command, describe, builder, handler } = createCommandModule({
       console.log(colors.dim(`${"=".repeat(80)}`));
 
       Object.entries(initialAccounts).forEach(([address, account], i) => {
+        // don't log the user's private key
+        if (account.secretKey === process.env.WALLET_PRIVATE_KEY) {
+          return;
+        }
+
         const balance = formatBigInt(account.balance);
         console.log(`Account ${i + 1}: ${address} (${balance} ETH)`);
         console.log(`Private Key: ${account.secretKey}`);
