@@ -19,6 +19,7 @@ import { useAccount } from "wagmi";
 export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
   const { data, error, status } = useProposalsPageData(address);
+  console.log({ status, error });
 
   return (
     <Page>
