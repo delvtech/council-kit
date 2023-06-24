@@ -46,6 +46,7 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
 
   return (
     <>
+      {/* Desktop */}
       <div className="hidden md:block">
         <SortableGridTable
           headingRowClassName="grid-cols-[4fr_1fr_1fr_1fr_56px]"
@@ -109,56 +110,64 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
           )}
         />
       </div>
-      <div className="md:hidden flex flex-col gap-6">
-        {sortedData.map(
-          (
-            {
-              status,
-              ballot,
-              id,
-              votingContractAddress,
-              votingContractName,
-              votingEnds,
-              sentenceSummary,
-              title,
-            },
-            i,
-          ) => (
-            <Link
-              key={i}
-              href={makeProposalURL(votingContractAddress, id)}
-              className="daisy-card bg-base-200 hover:shadow-xl transition-shadow"
-            >
-              <div className="daisy-card-body justify-between">
-                <h3 className="text-2xl daisy-card-title">
-                  {title ?? `${votingContractName} Proposal ${id}`}
-                </h3>
-                {sentenceSummary && (
-                  <p className="opacity-60">
-                    {sentenceSummary.length > 80
-                      ? `${sentenceSummary.slice(0, 80)}\u2026` // unicode for horizontal ellipses
-                      : sentenceSummary}
-                  </p>
-                )}
-                <div className="mt-4 grid grid-flow-col auto-cols-fr border-t border-base-300">
-                  <div className=" px-4 py-2 flex flex-col justify-center border-r border-base-300">
-                    <span className="text-sm opacity-60">Status</span>
-                    <StatusBadge status={status} />
-                  </div>
-                  <div className=" px-4 py-2 flex flex-col justify-center">
-                    <span className="text-sm opacity-60">Your Ballot</span>
-                    {ballot ? (
-                      <FormattedBallot ballot={ballot} />
-                    ) : account ? (
-                      <em>Not voted</em>
-                    ) : (
-                      <em>Not connected</em>
-                    )}
+
+      {/* Mobile */}
+      <div className="md:hidden flex flex-col gap-6 h-full">
+        {!sortedData.length ? (
+          <div className="bg-base-200 p-10 text-center rounded-b-lg">
+            <p className="text-lg">Nothing to show.</p>
+          </div>
+        ) : (
+          sortedData.map(
+            (
+              {
+                status,
+                ballot,
+                id,
+                votingContractAddress,
+                votingContractName,
+                votingEnds,
+                sentenceSummary,
+                title,
+              },
+              i,
+            ) => (
+              <Link
+                key={i}
+                href={makeProposalURL(votingContractAddress, id)}
+                className="daisy-card bg-base-200 hover:shadow-xl transition-shadow"
+              >
+                <div className="daisy-card-body justify-between">
+                  <h3 className="text-2xl daisy-card-title">
+                    {title ?? `${votingContractName} Proposal ${id}`}
+                  </h3>
+                  {sentenceSummary && (
+                    <p className="opacity-60">
+                      {sentenceSummary.length > 80
+                        ? `${sentenceSummary.slice(0, 80)}\u2026` // unicode for horizontal ellipses
+                        : sentenceSummary}
+                    </p>
+                  )}
+                  <div className="mt-4 grid grid-flow-col auto-cols-fr border-t border-base-300">
+                    <div className=" px-4 py-2 flex flex-col justify-center border-r border-base-300">
+                      <span className="text-sm opacity-60">Status</span>
+                      <StatusBadge status={status} />
+                    </div>
+                    <div className=" px-4 py-2 flex flex-col justify-center">
+                      <span className="text-sm opacity-60">Your Ballot</span>
+                      {ballot ? (
+                        <FormattedBallot ballot={ballot} />
+                      ) : account ? (
+                        <em>Not voted</em>
+                      ) : (
+                        <em>Not connected</em>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ),
+              </Link>
+            ),
+          )
         )}
       </div>
     </>
