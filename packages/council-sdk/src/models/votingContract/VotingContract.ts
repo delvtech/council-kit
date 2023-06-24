@@ -320,4 +320,18 @@ export class VotingContract<
     const missedVotesCount = proposalsNotVoted.filter(Boolean).length;
     return [proposals.length - missedVotesCount, proposals.length];
   }
+
+  /**
+   * Change the number of blocks that must be waited before a proposal can be executed.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param blocks - The number of blocks that must be waited.
+   * @returns The transaction hash.
+   */
+  async setLockDuration(
+    signer: Signer,
+    blocks: number,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.setLockDuration(signer, blocks, options);
+  }
 }

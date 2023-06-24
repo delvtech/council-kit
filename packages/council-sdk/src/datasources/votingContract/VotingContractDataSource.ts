@@ -138,6 +138,18 @@ export interface VotingContractDataSource extends DataSource {
       extraVaultData?: BytesLike[];
     },
   ) => Promise<string>;
+
+  /**
+   * Change the number of blocks that must be waited before a proposal can be executed.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param blocks - The number of blocks that must be waited.
+   * @returns The transaction hash.
+   */
+  setLockDuration: (
+    signer: Signer,
+    blocks: number,
+    options?: TransactionOptions,
+  ) => Promise<string>;
 }
 
 /**

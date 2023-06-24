@@ -320,4 +320,19 @@ export class CoreVotingContractDataSource
     this.clearCached();
     return transaction.hash;
   }
+
+  async setLockDuration(
+    signer: Signer,
+    blocks: number,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "setLockDuration",
+      [blocks],
+      signer,
+      options,
+    );
+    this.clearCached();
+    return transaction.hash;
+  }
 }
