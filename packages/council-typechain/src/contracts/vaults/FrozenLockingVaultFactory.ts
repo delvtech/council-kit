@@ -30,7 +30,7 @@ import type {
 export interface FrozenLockingVaultFactoryInterface extends utils.Interface {
   functions: {
     "changeDelegation(address)": FunctionFragment;
-    "createCappedFrozenLockingVault(address,uint256,uint256)": FunctionFragment;
+    "createCappedFrozenLockingVault(address,uint256,uint256,address)": FunctionFragment;
     "deposit(address,uint256,address)": FunctionFragment;
     "deposits(address)": FunctionFragment;
     "queryVotePower(address,uint256,bytes)": FunctionFragment;
@@ -45,7 +45,7 @@ export interface FrozenLockingVaultFactoryInterface extends utils.Interface {
       | "changeDelegation"
       | "changeDelegation(address)"
       | "createCappedFrozenLockingVault"
-      | "createCappedFrozenLockingVault(address,uint256,uint256)"
+      | "createCappedFrozenLockingVault(address,uint256,uint256,address)"
       | "deposit"
       | "deposit(address,uint256,address)"
       | "deposits"
@@ -76,14 +76,16 @@ export interface FrozenLockingVaultFactoryInterface extends utils.Interface {
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
     ],
   ): string;
   encodeFunctionData(
-    functionFragment: "createCappedFrozenLockingVault(address,uint256,uint256)",
+    functionFragment: "createCappedFrozenLockingVault(address,uint256,uint256,address)",
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
     ],
   ): string;
   encodeFunctionData(
@@ -166,7 +168,7 @@ export interface FrozenLockingVaultFactoryInterface extends utils.Interface {
     data: BytesLike,
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createCappedFrozenLockingVault(address,uint256,uint256)",
+    functionFragment: "createCappedFrozenLockingVault(address,uint256,uint256,address)",
     data: BytesLike,
   ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
@@ -212,7 +214,7 @@ export interface FrozenLockingVaultFactoryInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "CappedFrozenLockingVaultCreated(address,address,uint256,uint256)": EventFragment;
+    "CappedFrozenLockingVaultCreated(address,address,uint256,uint256,address)": EventFragment;
     "VoteChange(address,address,int256)": EventFragment;
   };
 
@@ -220,7 +222,7 @@ export interface FrozenLockingVaultFactoryInterface extends utils.Interface {
     nameOrSignatureOrTopic: "CappedFrozenLockingVaultCreated",
   ): EventFragment;
   getEvent(
-    nameOrSignatureOrTopic: "CappedFrozenLockingVaultCreated(address,address,uint256,uint256)",
+    nameOrSignatureOrTopic: "CappedFrozenLockingVaultCreated(address,address,uint256,uint256,address)",
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "VoteChange"): EventFragment;
   getEvent(
@@ -233,9 +235,10 @@ export interface CappedFrozenLockingVaultCreatedEventObject {
   token: string;
   staleBlockLag: BigNumber;
   lockBalance: BigNumber;
+  grantReciever: string;
 }
 export type CappedFrozenLockingVaultCreatedEvent = TypedEvent<
-  [string, string, BigNumber, BigNumber],
+  [string, string, BigNumber, BigNumber, string],
   CappedFrozenLockingVaultCreatedEventObject
 >;
 
@@ -295,13 +298,15 @@ export interface FrozenLockingVaultFactory extends BaseContract {
       _token: PromiseOrValue<string>,
       _staleBlockLag: PromiseOrValue<BigNumberish>,
       _lockBalance: PromiseOrValue<BigNumberish>,
+      _grantReciever: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<ContractTransaction>;
 
-    "createCappedFrozenLockingVault(address,uint256,uint256)"(
+    "createCappedFrozenLockingVault(address,uint256,uint256,address)"(
       _token: PromiseOrValue<string>,
       _staleBlockLag: PromiseOrValue<BigNumberish>,
       _lockBalance: PromiseOrValue<BigNumberish>,
+      _grantReciever: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<ContractTransaction>;
 
@@ -388,13 +393,15 @@ export interface FrozenLockingVaultFactory extends BaseContract {
     _token: PromiseOrValue<string>,
     _staleBlockLag: PromiseOrValue<BigNumberish>,
     _lockBalance: PromiseOrValue<BigNumberish>,
+    _grantReciever: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> },
   ): Promise<ContractTransaction>;
 
-  "createCappedFrozenLockingVault(address,uint256,uint256)"(
+  "createCappedFrozenLockingVault(address,uint256,uint256,address)"(
     _token: PromiseOrValue<string>,
     _staleBlockLag: PromiseOrValue<BigNumberish>,
     _lockBalance: PromiseOrValue<BigNumberish>,
+    _grantReciever: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> },
   ): Promise<ContractTransaction>;
 
@@ -481,13 +488,15 @@ export interface FrozenLockingVaultFactory extends BaseContract {
       _token: PromiseOrValue<string>,
       _staleBlockLag: PromiseOrValue<BigNumberish>,
       _lockBalance: PromiseOrValue<BigNumberish>,
+      _grantReciever: PromiseOrValue<string>,
       overrides?: CallOverrides,
     ): Promise<string>;
 
-    "createCappedFrozenLockingVault(address,uint256,uint256)"(
+    "createCappedFrozenLockingVault(address,uint256,uint256,address)"(
       _token: PromiseOrValue<string>,
       _staleBlockLag: PromiseOrValue<BigNumberish>,
       _lockBalance: PromiseOrValue<BigNumberish>,
+      _grantReciever: PromiseOrValue<string>,
       overrides?: CallOverrides,
     ): Promise<string>;
 
@@ -561,17 +570,19 @@ export interface FrozenLockingVaultFactory extends BaseContract {
   };
 
   filters: {
-    "CappedFrozenLockingVaultCreated(address,address,uint256,uint256)"(
+    "CappedFrozenLockingVaultCreated(address,address,uint256,uint256,address)"(
       vaultAddress?: null,
       token?: null,
       staleBlockLag?: null,
       lockBalance?: null,
+      grantReciever?: null,
     ): CappedFrozenLockingVaultCreatedEventFilter;
     CappedFrozenLockingVaultCreated(
       vaultAddress?: null,
       token?: null,
       staleBlockLag?: null,
       lockBalance?: null,
+      grantReciever?: null,
     ): CappedFrozenLockingVaultCreatedEventFilter;
 
     "VoteChange(address,address,int256)"(
@@ -601,13 +612,15 @@ export interface FrozenLockingVaultFactory extends BaseContract {
       _token: PromiseOrValue<string>,
       _staleBlockLag: PromiseOrValue<BigNumberish>,
       _lockBalance: PromiseOrValue<BigNumberish>,
+      _grantReciever: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<BigNumber>;
 
-    "createCappedFrozenLockingVault(address,uint256,uint256)"(
+    "createCappedFrozenLockingVault(address,uint256,uint256,address)"(
       _token: PromiseOrValue<string>,
       _staleBlockLag: PromiseOrValue<BigNumberish>,
       _lockBalance: PromiseOrValue<BigNumberish>,
+      _grantReciever: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<BigNumber>;
 
@@ -695,13 +708,15 @@ export interface FrozenLockingVaultFactory extends BaseContract {
       _token: PromiseOrValue<string>,
       _staleBlockLag: PromiseOrValue<BigNumberish>,
       _lockBalance: PromiseOrValue<BigNumberish>,
+      _grantReciever: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<PopulatedTransaction>;
 
-    "createCappedFrozenLockingVault(address,uint256,uint256)"(
+    "createCappedFrozenLockingVault(address,uint256,uint256,address)"(
       _token: PromiseOrValue<string>,
       _staleBlockLag: PromiseOrValue<BigNumberish>,
       _lockBalance: PromiseOrValue<BigNumberish>,
+      _grantReciever: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> },
     ): Promise<PopulatedTransaction>;
 

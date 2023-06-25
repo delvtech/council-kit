@@ -22,9 +22,11 @@ contract CappedFrozenLockingVault is AbstractLockingVault {
   constructor(
     IERC20 _token,
     uint256 _staleBlockLag,
-    uint256 _lockBalance
+    uint256 _lockBalance,
+    address _grantReciever
   ) AbstractLockingVault(_token, _staleBlockLag) {
     lockBalance = _lockBalance;
+    grantReciever = _grantReciever;
   }
 
   function deposit(

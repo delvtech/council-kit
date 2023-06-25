@@ -3,6 +3,7 @@ import { ReactElement } from "react";
 import { Page } from "src/ui/base/Page";
 import { useChainId } from "src/ui/network/useChainId";
 import { FrozenLockingVaultDetails } from "src/ui/vaults/frozenLockingVault/FrozenLockingVaultDetails";
+import { FundVaultDetails } from "src/ui/vaults/fundVault/FundVaultDetails";
 import { GenericVaultDetails } from "src/ui/vaults/genericVault/GenericVaultDetails";
 import { GSCVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
 import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
@@ -31,6 +32,9 @@ export default function Vault(): ReactElement {
         switch (vaultConfig.type) {
           case "FrozenLockingVault":
             return <FrozenLockingVaultDetails address={address as string} />;
+
+          case "FundVault":
+            return <FundVaultDetails address={address as string} />;
 
           case "LockingVault":
             return <LockingVaultDetails address={address as string} />;

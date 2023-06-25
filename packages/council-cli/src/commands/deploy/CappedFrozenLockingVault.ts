@@ -43,6 +43,12 @@ export const { command, aliases, describe, builder, handler } =
             "The decimal precision used by the contract. The power option will be multiplied by (10 ** decimals). For example, if power is 100 and decimals is 18, then the result will be 100000000000000000000",
           type: "number",
         },
+        b: {
+          alias: ["benificiary"],
+          describe:
+            "benificiary / reciever address that will get the funds after the vault is full",
+          type: "string",
+        },
         c: chainOption,
         r: rpcUrlOption,
         w: walletKeyOption,
@@ -58,6 +64,7 @@ export const { command, aliases, describe, builder, handler } =
       const lag = await requiredNumber(args.lag, {
         name: "lag",
         message: "Enter stale block lag",
+        initial: 100,
       });
 
       const size = await requiredString(args.s, {
@@ -69,6 +76,12 @@ export const { command, aliases, describe, builder, handler } =
         name: "decimals",
         message: "Enter decimal precision",
         initial: 18,
+      });
+
+      const benificiary = await requiredString(args.benificiary, {
+        name: "benificiary",
+        message: "Enter benificiary:",
+        initial: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
       });
 
       const chain = await requiredChain(args.chain);
@@ -83,6 +96,7 @@ export const { command, aliases, describe, builder, handler } =
         staleBlockLag: lag,
         size,
         decimals,
+        benificiary,
         account,
         rpcUrl,
         chain,
@@ -102,6 +116,7 @@ export interface DeployCappedFrozenLockingVaultOptions {
   staleBlockLag: number;
   size: string;
   decimals: number;
+  benificiary: string;
   account: PrivateKeyAccount;
   rpcUrl: string;
   chain: Chain;
@@ -113,6 +128,7 @@ export async function deployCappedFrozenLockingVault({
   staleBlockLag,
   size,
   decimals,
+  benificiary,
   account,
   rpcUrl,
   chain,
@@ -120,7 +136,7 @@ export async function deployCappedFrozenLockingVault({
 }: DeployCappedFrozenLockingVaultOptions): Promise<DeployedContract> {
   return await deployContract({
     abi: CappedFrozenLockingVault__factory.abi,
-    args: [token, staleBlockLag, parseBigInt(size, decimals)],
+    args: [token, staleBlockLag, parseBigInt(size, decimals), benificiary],
     bytecode: CappedFrozenLockingVault__factory.bytecode,
     account,
     rpcUrl,

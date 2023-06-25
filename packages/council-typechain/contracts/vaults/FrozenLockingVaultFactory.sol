@@ -9,7 +9,8 @@ contract FrozenLockingVaultFactory is AbstractLockingVault {
     address vaultAddress,
     address token,
     uint256 staleBlockLag,
-    uint256 lockBalance
+    uint256 lockBalance,
+    address grantReciever
   );
 
   /// @notice Constructs the contract by setting immutables
@@ -22,18 +23,21 @@ contract FrozenLockingVaultFactory is AbstractLockingVault {
   function createCappedFrozenLockingVault(
     IERC20 _token,
     uint256 _staleBlockLag,
-    uint256 _lockBalance
+    uint256 _lockBalance,
+    address _grantReciever
   ) public returns (address) {
     CappedFrozenLockingVault vault = new CappedFrozenLockingVault(
       _token,
       _staleBlockLag,
-      _lockBalance
+      _lockBalance,
+      _grantReciever
     );
     emit CappedFrozenLockingVaultCreated(
       address(vault),
       address(_token),
       _staleBlockLag,
-      _lockBalance
+      _lockBalance,
+      _grantReciever
     );
     return address(vault);
   }
