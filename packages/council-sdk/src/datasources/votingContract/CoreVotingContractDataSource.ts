@@ -335,4 +335,20 @@ export class CoreVotingContractDataSource
     this.clearCached();
     return transaction.hash;
   }
+
+  async changeVaultStatus(
+    signer: Signer,
+    address: string,
+    isValid: boolean,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    const transaction = await this.callWithSigner(
+      "changeVaultStatus",
+      [address, isValid],
+      signer,
+      options,
+    );
+    this.clearCached();
+    return transaction.hash;
+  }
 }
