@@ -20,6 +20,14 @@ export const localhostCouncilConfig: CouncilConfig = {
         descriptionURL: "https://moreinfo.com",
       },
     ],
-    proposals: {},
+    proposals: {
+      0: {
+        descriptionURL: "https://moreinfo.com",
+        title: "EGP-2: Increase GSC quorum threshold",
+        sentenceSummary: "Increase the current GSC quroum threshold to 3.",
+        paragraphSummary:
+          "As of today (April 28, 2022) there has only been one delegate (myself) who has proven their membership to the GSC on-chain. In roughly five days I will be able to pass votes by myself with no further approval because the current quroum threshold on the GSC is one. I believe that no one person should be able to govern the GSC by themselves, and thus I am proposing to effectively lock the GSC until two other delegates join the GSC. Three was chosen as a starting point for one reason, to break a tie. As more delegates join, I'm sure this value will gradually increase but for the time being, a threshold of three will be adequate to ensure some level of participation.",
+      },
+    },
   },
 };

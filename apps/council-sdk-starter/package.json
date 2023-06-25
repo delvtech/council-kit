@@ -21,7 +21,8 @@
     "setLockDuration": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/setLockDuration.ts",
     "changeVaultStatus": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/changeVaultStatus.ts",
     "getGSCMembers": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/getGSCMembers.ts",
-    "getProposalResults": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/getProposalResults.ts"
+    "getProposalResults": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/getProposalResults.ts",
+    "createFund": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/createFund.ts"
   },
   "dependencies": {
     "@council/deploy": "*",

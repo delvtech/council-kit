@@ -4,7 +4,10 @@
 export * as lockingVaultSol from "./LockingVault.sol";
 export * as nonvotingVaultSol from "./NonvotingVault.sol";
 export * as vestingVaultSol from "./VestingVault.sol";
+export { CappedFrozenLockingVault__factory } from "./CappedFrozenLockingVault__factory";
+export { CappedFrozenLockingVaultFactory__factory } from "./CappedFrozenLockingVaultFactory__factory";
 export { FrozenLockingVault__factory } from "./FrozenLockingVault__factory";
+export { FrozenLockingVaultFactory__factory } from "./FrozenLockingVaultFactory__factory";
 export { FrozenVestingVault__factory } from "./FrozenVestingVault__factory";
 export { GSCVault__factory } from "./GSCVault__factory";
 export { OptimisticRewards__factory } from "./OptimisticRewards__factory";

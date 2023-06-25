@@ -1,0 +1,71 @@
+Arguments: 
+  /usr/bin/node /home/kirill/.yarn/bin/yarn.js workspace council-sdk-starter createFund
+
+PATH: 
+  /home/kirill/.local/bin:/home/kirill/.deno/bin:/home/kirill/.yarn/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Intel/WiFi/bin/:/mnt/c/Program Files/Common Files/Intel/WirelessCommon/:/mnt/c/Program Files (x86)/Calibre2/:/mnt/c/Program Files/WezTerm:/mnt/c/Users/kiril/AppData/Local/Microsoft/WindowsApps:/snap/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.16.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  SyntaxError: /home/kirill/hackathons/waterlooeth2023/council-kit/apps/council-sdk-starter/package.json: Unexpected token } in JSON at position 932
+      at JSON.parse (<anonymous>)
+      at /home/kirill/.yarn/lib/cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (/home/kirill/.yarn/lib/cli.js:310:30)
+      at /home/kirill/.yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "council-sdk-starter",
+    "version": "0.0.1",
+    "description": "Boilerplate to get started using the council-sdk fast!",
+    "license": "MIT",
+    "private": true,
+    "main": "dist/index.js",
+    "types": "dist/types.d.ts",
+    "source": "src/index.ts",
+    "alias": {
+      "src": "./src"
+    },
+    "files": [
+      "dist"
+    ],
+    "scripts": {
+      "watch": "parcel watch",
+      "build": "parcel build",
+      "createProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/createProposal.ts",
+      "executeProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/executeProposal.ts",
+      "getGSCMembers": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/getGSCMembers.ts",
+      "getProposalResults": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/getProposalResults.ts",
+      "createFund": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/createFund.ts",
+    },
+    "dependencies": {
+      "@council/deploy": "*",
+      "@council/sdk": "*",
+      "@council/typechain": "*",
+      "ethers": "^5.7.2"
+    },
+    "devDependencies": {
+      "@council/prettier-config": "*",
+      "@council/tsconfig": "*",
+      "dotenv": "^16.0.3",
+      "parcel": "^2.8.0",
+      "prettier-plugin-organize-imports": "^3.2.2",
+      "ts-node": "^10.9.1",
+      "tsconfig-paths": "^4.1.0",
+      "typescript": "^4.7.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

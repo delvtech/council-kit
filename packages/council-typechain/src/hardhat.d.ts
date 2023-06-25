@@ -141,9 +141,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.SimpleProxy__factory>;
     getContractFactory(
+      name: "CappedFrozenLockingVault",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.CappedFrozenLockingVault__factory>;
+    getContractFactory(
+      name: "CappedFrozenLockingVaultFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.CappedFrozenLockingVaultFactory__factory>;
+    getContractFactory(
       name: "FrozenLockingVault",
       signerOrOptions?: ethers.Signer | FactoryOptions,
     ): Promise<Contracts.FrozenLockingVault__factory>;
+    getContractFactory(
+      name: "FrozenLockingVaultFactory",
+      signerOrOptions?: ethers.Signer | FactoryOptions,
+    ): Promise<Contracts.FrozenLockingVaultFactory__factory>;
     getContractFactory(
       name: "FrozenVestingVault",
       signerOrOptions?: ethers.Signer | FactoryOptions,
@@ -338,10 +350,25 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer,
     ): Promise<Contracts.SimpleProxy>;
     getContractAt(
+      name: "CappedFrozenLockingVault",
+      address: string,
+      signer?: ethers.Signer,
+    ): Promise<Contracts.CappedFrozenLockingVault>;
+    getContractAt(
+      name: "CappedFrozenLockingVaultFactory",
+      address: string,
+      signer?: ethers.Signer,
+    ): Promise<Contracts.CappedFrozenLockingVaultFactory>;
+    getContractAt(
       name: "FrozenLockingVault",
       address: string,
       signer?: ethers.Signer,
     ): Promise<Contracts.FrozenLockingVault>;
+    getContractAt(
+      name: "FrozenLockingVaultFactory",
+      address: string,
+      signer?: ethers.Signer,
+    ): Promise<Contracts.FrozenLockingVaultFactory>;
     getContractAt(
       name: "FrozenVestingVault",
       address: string,
