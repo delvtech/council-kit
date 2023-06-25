@@ -1,0 +1,18 @@
+graph TD
+subgraph Governance_Vault
+proposal_voting
+end
+subgraph Fund_Vaults
+gather_data
+clean_data
+tokenize_data
+pre-train
+fine-tune
+RLHF
+end
+proposal_voting --> gather_data
+proposal_voting --> clean_data
+proposal_voting --> tokenize_data
+proposal_voting --> pre-train
+proposal_voting --> fine-tune
+proposal_voting --> RLHF
