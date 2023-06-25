@@ -334,4 +334,20 @@ export class VotingContract<
   ): Promise<string> {
     return this.dataSource.setLockDuration(signer, blocks, options);
   }
+
+  /**
+   * Change whether a vault is approved or not.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param address -The address of the vault.
+   * @param isValid - Whether or not the approved.
+   * @returns The transaction hash.
+   */
+  changeVaultStatus(
+    signer: Signer,
+    address: string,
+    isValid: boolean,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.changeVaultStatus(signer, address, isValid, options);
+  }
 }
