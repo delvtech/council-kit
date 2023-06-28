@@ -89,4 +89,12 @@ export const goerliCouncilConfig: CouncilConfig = {
       1: { descriptionURL: "", targets: [], calldatas: [] },
     },
   },
+
+  /**
+   * Optional Push integration
+   */
+  push: {
+    channel: "0xbAE1338219a9BDDB38d38B77094e833995B703E2",
+    env: "staging",
+  },
 };

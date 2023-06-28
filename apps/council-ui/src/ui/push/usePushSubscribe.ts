@@ -2,9 +2,10 @@ import * as PushAPI from "@pushprotocol/restapi";
 import { SubscribeOptionsType } from "@pushprotocol/restapi/src/lib/channels";
 import { useCallback, useEffect, useState } from "react";
 
+import { ENV } from "@pushprotocol/restapi/src/lib/constants";
+import { councilConfigs } from "src/config/council.config";
 import { useChainId } from "src/ui/network/useChainId";
 import { useAccount, useSignTypedData } from "wagmi";
-import PushSettings from "./settings.json";
 import { UsePushSubscribeType } from "./types";
 
 export function usePushSubscribe(): UsePushSubscribeType {
@@ -13,23 +14,17 @@ export function usePushSubscribe(): UsePushSubscribeType {
   const [loading, setLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  function fetchChainId() {
-    const isProd = chainId === 1;
-    const env = isProd ? "prod" : "staging";
-    const channel = isProd
-      ? PushSettings.PROD_CHANNEL_ADDRESS
-      : PushSettings.STAGING_CHANNEL_ADDRESS;
-    return { chainId, env, channel };
-  }
+  const config = councilConfigs[chainId].push || {};
+  const isConfigured = !!councilConfigs[chainId].push;
 
   const isUserSubscribed = useCallback(
     async function () {
-      const { env, channel } = fetchChainId();
+      const { env, channel } = config;
       const userSubscriptions =
         address &&
         (await PushAPI.user.getSubscriptions({
-          user: String(address),
-          env,
+          user: address.toString(),
+          env: env as ENV,
         }));
       const addresses =
         userSubscriptions &&
@@ -62,19 +57,19 @@ export function usePushSubscribe(): UsePushSubscribeType {
         types: { ...types },
         value: { ...value },
       };
-      const response = await signer(params);
+      const response = await signer(params as any);
       return response;
     } else {
       throw new Error("FAILURE");
     }
   }
   function generatePayload(): SubscribeOptionsType {
-    const { chainId, env, channel } = fetchChainId();
+    const { env, channel } = config;
     const payload = {
       signer: { _signTypedData },
       channelAddress: `eip155:${chainId}:${channel}`, // channel address in CAIP
       userAddress: `eip155:${chainId}:${address}`, // user address in CAIP
-      env,
+      env: env as ENV,
     };
     return payload;
   }
@@ -110,7 +105,7 @@ export function usePushSubscribe(): UsePushSubscribeType {
   }, [isUserSubscribed]);
 
   return {
-    toggleUserStatus,
+    toggleUserStatus: isConfigured ? toggleUserStatus : undefined,
     isSubscribed,
     loading,
   };

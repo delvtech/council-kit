@@ -29,7 +29,7 @@ export type Value = Record<string, string>;
 export type UsePushSubscribeType = {
   loading: boolean;
   isSubscribed: boolean;
-  toggleUserStatus: () => void;
+  toggleUserStatus?: () => void;
 };
 /** Type for usePushSubscribe */
 

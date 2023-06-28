@@ -92,4 +92,12 @@ export const mainnetCouncilConfig: CouncilConfig = {
       1: { descriptionURL: "", targets: [], calldatas: [] },
     },
   },
+
+  /**
+   * Optional Push integration
+   */
+  push: {
+    channel: "0x349da2A6825284E9E181D46D664b95aecE86da56",
+    env: "prod",
+  },
 };

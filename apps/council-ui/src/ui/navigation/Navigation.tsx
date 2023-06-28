@@ -143,7 +143,7 @@ export function Navigation(): ReactElement {
         </ul>
       </div>
       <div className="daisy-navbar-end">
-        {address && (
+        {address && toggleUserStatus && (
           <Tooltip
             content={`Subscribe to start recieving updates as notifications from PUSH`}
           >
