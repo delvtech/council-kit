@@ -40,7 +40,7 @@ An interface for fetching data from any airdrop.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:10](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L10)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:10](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L10)
 
 ___
 
@@ -73,7 +73,7 @@ Claims tokens from the airdrop and sends them to the user.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:50](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L50)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:50](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L50)
 
 ___
 
@@ -108,7 +108,7 @@ delegates in a single transaction.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:72](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L72)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:72](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L72)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/DataSource.ts:8](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/DataSource.ts#L8)
+[packages/council-sdk/src/datasources/base/DataSource.ts:8](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/DataSource.ts#L8)
 
 ___
 
@@ -148,7 +148,7 @@ Get the amount that an address has already claimed.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:31](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L31)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:31](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L31)
 
 ___
 
@@ -169,7 +169,7 @@ owner).
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:16](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L16)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:16](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L16)
 
 ___
 
@@ -190,7 +190,7 @@ when someone claims and delegates in a single tx.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:37](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L37)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:37](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L37)
 
 ___
 
@@ -210,7 +210,7 @@ Get The merkle root with deposits encoded into it as hash [address, amount]
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:21](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L21)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:21](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L21)
 
 ___
 
@@ -240,7 +240,7 @@ Remove funds from the airdrop after expiration
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:88](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L88)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:88](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L88)
 
 ## Methods
 
@@ -256,4 +256,4 @@ Get the address of the token that will be paid out.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:26](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L26)
+[packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts:26](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/airdrop/AirdropDataSource.ts#L26)

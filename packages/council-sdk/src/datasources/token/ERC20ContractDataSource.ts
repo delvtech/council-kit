@@ -1,6 +1,6 @@
 import { MockERC20, MockERC20__factory } from "@council/typechain";
-import { BigNumber, Signer } from "ethers";
-import { formatUnits } from "ethers/lib/utils";
+import { Signer } from "ethers";
+import { formatUnits, parseUnits } from "ethers/lib/utils";
 import { CouncilContext } from "src/context/context";
 import {
   ContractDataSource,
@@ -61,22 +61,16 @@ export class ERC20ContractDataSource
     return formatUnits(balanceBigNumber, decimals);
   }
 
-  /**
-   * Sets approval of token access up to a certain amount
-   * @param signer - Signer.
-   * @param spender - Address to approve access to.
-   * @param amount - Amount approved for, defaults to maximum.
-   * @return - The transaction hash.
-   */
   async approve(
     signer: Signer,
     spender: string,
-    amount: BigNumber,
+    amount: string,
     options?: TransactionOptions,
   ): Promise<string> {
+    const decimals = await this.getDecimals();
     const transaction = await this.callWithSigner(
       "approve",
-      [spender, amount],
+      [spender, parseUnits(amount, decimals)],
       signer,
       options,
     );

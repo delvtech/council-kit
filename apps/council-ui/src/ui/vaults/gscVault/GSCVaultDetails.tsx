@@ -21,11 +21,11 @@ import { GSCStatus } from "src/vaults/gscVault/types";
 import { useAccount } from "wagmi";
 
 interface GSCVaultDetailsProps {
-  vaultAddress: string;
+  address: string;
 }
 
 export function GSCVaultDetails({
-  vaultAddress,
+  address: vaultAddress,
 }: GSCVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
   const { data, status, error } = useGSCVaultDetails({

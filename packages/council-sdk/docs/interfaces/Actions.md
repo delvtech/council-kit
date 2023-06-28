@@ -19,7 +19,7 @@ The actions a proposal will perform.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:169](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L169)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:169](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L169)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:168](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L168)
+[packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts:168](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingContract/VotingContractDataSource.ts#L168)

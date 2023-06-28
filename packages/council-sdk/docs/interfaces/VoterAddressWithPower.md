@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:292](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L292)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:292](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L292)
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:293](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L293)
+[packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts:293](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/votingVault/LockingVaultContractDataSource.ts#L293)

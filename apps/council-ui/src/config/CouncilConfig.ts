@@ -33,7 +33,12 @@ export interface VotingContractConfig extends ContractConfig {
 }
 
 export interface VaultConfig extends ContractConfig {
-  type: "LockingVault" | "FrozenLockingVault" | "VestingVault" | "GSCVault";
+  type:
+    | "LockingVault"
+    | "FrozenLockingVault"
+    | "VestingVault"
+    | "GSCVault"
+    | string;
   name: string;
   /**
    * A short one-liner to show below the vault name.

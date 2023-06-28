@@ -34,7 +34,7 @@ A function called when the transaction is canceled.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:194](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L194)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:194](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L194)
 
 ___
 
@@ -60,7 +60,7 @@ A function called when the transaction is repriced.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:200](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L200)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:200](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L200)
 
 ___
 
@@ -86,4 +86,4 @@ A function called when the transaction is submitted to the blockchain.
 
 #### Defined in
 
-[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:188](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L188)
+[packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts:188](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/datasources/base/contract/ContractDataSource.ts#L188)

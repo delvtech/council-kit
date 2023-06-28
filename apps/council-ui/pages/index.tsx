@@ -4,7 +4,7 @@ import { ReactElement } from "react";
 export default function Index(): ReactElement {
   return (
     <div className="m-auto">
-      <div className="flex flex-col max-w-5xl p-24 m-auto gap-y-8">
+      <div className="flex flex-col max-w-5xl md:-24 p-8 m-auto gap-y-8">
         <h1 className="text-5xl font-bold text-accent-content">
           <span className="text-accent">Council</span> is a decentralized
           governance protocol that allows a community to manage a DAO.
@@ -21,7 +21,7 @@ export default function Index(): ReactElement {
             <button className="daisy-btn daisy-btn-accent">Open App</button>
           </Link>
           <a
-            href="https://github.com/element-fi/council-kit"
+            href="https://github.com/delvtech/council-kit"
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -30,7 +30,7 @@ export default function Index(): ReactElement {
         </div>
       </div>
 
-      <div className="w-full p-24 bg-base-200">
+      <div className="w-full md:p-24 p-8 bg-base-200">
         <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
             <div className="text-4xl font-bold">Get Started</div>
@@ -40,24 +40,26 @@ export default function Index(): ReactElement {
               Javascript SDK, and fully open source code.{" "}
             </div>
 
-            <div className="daisy-mockup-code">
+            <div className="daisy-mockup-code w-full">
               <pre data-prefix="$">
-                <code>git clone https://github.com/element-fi/council-kit</code>
+                <code className="w-full">
+                  git clone https://github.com/delvtech/council-kit
+                </code>
               </pre>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full p-24">
+      <div className="w-full md:p-24 p-8">
         <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
-            <div className="text-4xl font-bold">Why use Council?</div>
-            <div className="text-xl text-center">
+            <h1 className="text-4xl font-bold">Why use Council?</h1>
+            <p className="text-xl text-center">
               Council Protocol was created because there are no governance
               frameworks that exist today that meet the realistic needs of
               day-to-day and long-term governance.
-            </div>
+            </p>
             <div className="flex flex-col max-w-md gap-4">
               <div className="daisy-card bg-neutral text-neutral-content">
                 <div className="daisy-card-body">
@@ -104,16 +106,15 @@ export default function Index(): ReactElement {
         </div>
       </div>
 
-      <div className="w-full p-24 bg-base-200">
+      <div className="w-full md:p-24 p-8 bg-base-200">
         <div className="max-w-5xl m-auto">
           <div className="flex flex-col items-center gap-8">
-            <div className="text-4xl font-medium">Council 🤝 DAOs </div>
+            <h2 className="text-4xl font-medium">Council 🤝 DAOs </h2>
 
             <div className="flex flex-wrap justify-center gap-6">
               <div className="w-48 daisy-card bg-neutral text-neutral-content">
                 <div className="items-center text-center daisy-card-body">
                   <h2 className="daisy-card-title">Yearn</h2>
-                  {/* <Image src={} /> */}
                   <img
                     alt="yearn logo"
                     height={80}
@@ -150,19 +151,19 @@ export default function Index(): ReactElement {
         </div>
       </div>
 
-      <div className="w-full p-24">
+      <div className="w-full md:p-24 p-8">
         <div className="flex flex-col max-w-5xl m-auto text-center gap-y-8">
-          <div className="text-5xl font-medium">
+          <h3 className="md:text-5xl text-3xl font-medium">
             Built with ❤️ and 🧠 by{" "}
-            <span className="text-secondary">Delve</span>
-          </div>
-          <div className="text-lg">
+            <span className="text-secondary font-bold">Delve</span>
+          </h3>
+          <p className="text-lg">
             Building Council has been an absolute pleasure and we couldn&apos;t
             have done it without the feedback and support from you all.
             We&apos;re always looking to make Council better, so please let us
             know how we can continue to improve or ask how you can start
             contributing.
-          </div>
+          </p>
         </div>
       </div>
     </div>

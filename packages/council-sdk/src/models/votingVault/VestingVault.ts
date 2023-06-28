@@ -5,7 +5,7 @@ import {
   GrantData,
   VestingVaultContractDataSource,
 } from "src/datasources/votingVault/VestingVaultContractDataSource";
-import { Token } from "src/models/Token";
+import { Token } from "src/models/token/Token";
 import { Voter } from "src/models/Voter";
 import { VoterPowerBreakdown } from "src/models/votingVault/types";
 import { sumStrings } from "src/utils/sumStrings";
@@ -65,7 +65,7 @@ export class VestingVault extends VotingVault<VestingVaultContractDataSource> {
 
   /**
    * Gets the amount of tokens currently claimable from the grant.
-   * Mimics internal function https://github.com/element-fi/council/blob/main/contracts/vaults/VestingVault.sol#L434
+   * Mimics internal function https://github.com/delvtech/council/blob/main/contracts/vaults/VestingVault.sol#L434
    * @param address - The grantee address.
    * @returns The amount of claimable tokens.
    */

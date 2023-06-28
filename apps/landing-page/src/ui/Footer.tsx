@@ -24,7 +24,7 @@ export function Footer(): ReactElement {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="https://github.com/element-fi/council"
+                  href="https://github.com/delvtech/council"
                   className="transition-all text-primary-text hover:text-white"
                 >
                   Council Contracts
@@ -32,7 +32,7 @@ export function Footer(): ReactElement {
               </li>
               <li>
                 <a
-                  href="https://github.com/element-fi/council-kit"
+                  href="https://github.com/delvtech/council-kit"
                   className="transition-all text-primary-text hover:text-white"
                 >
                   Council Kit
@@ -45,7 +45,7 @@ export function Footer(): ReactElement {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="https://github.com/element-fi/council-kit/wiki"
+                  href="https://github.com/delvtech/council-kit/wiki"
                   className="transition-all text-primary-text hover:text-white"
                 >
                   Docs

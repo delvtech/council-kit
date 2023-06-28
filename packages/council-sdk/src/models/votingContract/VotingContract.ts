@@ -98,9 +98,9 @@ export class VotingContract<
    * @param vaults - The addresses of the approved vaults to draw voting power
    *   from.
    * @param targets - The targets (contract addresses) to call.
-   * @param calldatas - The calldatas to call each target with.
-   * @param lastCall: A block number that limits when the proposal can be executed.
-   * @param ballot: The vote for the proposal from the signer's account.
+   * @param calldatas - The execution calldata for each target.
+   * @param lastCall - The block number after which the proposal can't be executed.
+   * @param ballot: The initial vote from the signer's account.
    * @returns The transaction hash.
    */
   createProposal(
@@ -319,5 +319,35 @@ export class VotingContract<
     );
     const missedVotesCount = proposalsNotVoted.filter(Boolean).length;
     return [proposals.length - missedVotesCount, proposals.length];
+  }
+
+  /**
+   * Change the number of blocks that must be waited before a proposal can be executed.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param blocks - The number of blocks that must be waited.
+   * @returns The transaction hash.
+   */
+  async setLockDuration(
+    signer: Signer,
+    blocks: number,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.setLockDuration(signer, blocks, options);
+  }
+
+  /**
+   * Change whether a vault is approved or not.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param address -The address of the vault.
+   * @param isValid - Whether or not the approved.
+   * @returns The transaction hash.
+   */
+  changeVaultStatus(
+    signer: Signer,
+    address: string,
+    isValid: boolean,
+    options?: TransactionOptions,
+  ): Promise<string> {
+    return this.dataSource.changeVaultStatus(signer, address, isValid, options);
   }
 }

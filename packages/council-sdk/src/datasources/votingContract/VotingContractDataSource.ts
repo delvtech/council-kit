@@ -138,6 +138,32 @@ export interface VotingContractDataSource extends DataSource {
       extraVaultData?: BytesLike[];
     },
   ) => Promise<string>;
+
+  /**
+   * Change the number of blocks that must be waited before a proposal can be executed.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param blocks - The number of blocks that must be waited.
+   * @returns The transaction hash.
+   */
+  setLockDuration: (
+    signer: Signer,
+    blocks: number,
+    options?: TransactionOptions,
+  ) => Promise<string>;
+
+  /**
+   * Change whether a vault is approved or not.
+   * @param signer - An ethers Signer instance for the voter.
+   * @param address -The address of the vault.
+   * @param isValid - Whether or not the approved.
+   * @returns The transaction hash.
+   */
+  changeVaultStatus: (
+    signer: Signer,
+    address: string,
+    isValid: boolean,
+    options?: TransactionOptions,
+  ) => Promise<string>;
 }
 
 /**

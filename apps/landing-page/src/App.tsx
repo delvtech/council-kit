@@ -33,14 +33,14 @@ function App(): ReactElement {
               </p>
               <div className="flex gap-4">
                 <LinkButton
-                  href="https://github.com/element-fi/council-kit/wiki/Getting-Started"
+                  href="https://github.com/delvtech/council-kit/wiki/Getting-Started"
                   variant="primary"
                 >
                   <RocketLaunchIcon className="w-5" />
                   Get started
                 </LinkButton>
                 <LinkButton
-                  href="https://github.com/element-fi/council-kit"
+                  href="https://github.com/delvtech/council-kit"
                   target="_blank"
                 >
                   <GitHubIcon className="w-5 fill-black" />
@@ -216,14 +216,14 @@ function App(): ReactElement {
             </ol>
             <div className="flex flex-col items-stretch w-full gap-4 mt-3">
               <LinkButton
-                href="https://github.com/element-fi/council-kit/wiki/Getting-Started"
+                href="https://github.com/delvtech/council-kit/wiki/Getting-Started"
                 variant="primary"
               >
                 <RocketLaunchIcon className="w-5" />
                 View the guide
               </LinkButton>
               <LinkButton
-                href="https://github.com/element-fi/council"
+                href="https://github.com/delvtech/council"
                 target="_blank"
                 variant="stroke"
               >
@@ -231,7 +231,7 @@ function App(): ReactElement {
                 View contract code
               </LinkButton>
               <LinkButton
-                href="https://github.com/element-fi/council-kit"
+                href="https://github.com/delvtech/council-kit"
                 target="_blank"
                 variant="stroke"
               >

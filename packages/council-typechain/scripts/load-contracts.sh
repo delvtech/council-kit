@@ -1,9 +1,9 @@
 echo "Downloading contracts..."
 
 if [[ -z "${GITHUB_TOKEN}" ]]; then
-  git clone git@github.com:element-fi/council.git council
+  git clone git@github.com:delvtech/council.git council
 else
- git clone https://$GITHUB_TOKEN@github.com/element-fi/council.git council
+ git clone https://$GITHUB_TOKEN@github.com/delvtech/council.git council
 fi
 
 # blow away old-contracts

@@ -61,7 +61,7 @@ multiplier on unvested tokens to reduce their voting power.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:24](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L24)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:24](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L24)
 
 ## Properties
 
@@ -75,7 +75,7 @@ multiplier on unvested tokens to reduce their voting power.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:56](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L56)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:56](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L56)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:19](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
+[packages/council-sdk/src/models/Model.ts:19](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L19)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:57](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L57)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:57](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L57)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/council-sdk/src/models/Model.ts:20](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
+[packages/council-sdk/src/models/Model.ts:20](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/Model.ts#L20)
 
 ## Methods
 
@@ -143,7 +143,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:209](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L209)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:209](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L209)
 
 ___
 
@@ -168,7 +168,7 @@ The transaction hash.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:222](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L222)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:222](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L222)
 
 ___
 
@@ -190,7 +190,7 @@ Get the current delegate of a given address.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:190](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L190)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:190](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L190)
 
 ___
 
@@ -213,7 +213,7 @@ Get all voters delegated to a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:198](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L198)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:198](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L198)
 
 ___
 
@@ -235,7 +235,7 @@ Get the grant data for a given address.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:62](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L62)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:62](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L62)
 
 ___
 
@@ -244,7 +244,7 @@ ___
 ▸ **getGrantWithdrawableAmount**(`address`): `Promise`<`string`\>
 
 Gets the amount of tokens currently claimable from the grant.
-Mimics internal function https://github.com/element-fi/council/blob/main/contracts/vaults/VestingVault.sol#L434
+Mimics internal function https://github.com/delvtech/council/blob/main/contracts/vaults/VestingVault.sol#L434
 
 #### Parameters
 
@@ -260,7 +260,7 @@ The amount of claimable tokens.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:72](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L72)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:72](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L72)
 
 ___
 
@@ -286,7 +286,7 @@ The historical voting power of the given address.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:167](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L167)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:167](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L167)
 
 ___
 
@@ -304,7 +304,7 @@ stale block lag.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:156](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L156)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:156](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L156)
 
 ___
 
@@ -320,7 +320,7 @@ Get this vault's token.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:44](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L44)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:44](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L44)
 
 ___
 
@@ -346,7 +346,7 @@ Get the sum of voting power held by all voters in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:178](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L178)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:178](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L178)
 
 ___
 
@@ -365,7 +365,7 @@ value would be 50.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:55](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L55)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:55](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L55)
 
 ___
 
@@ -392,7 +392,7 @@ Get all participants that have voting power in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:105](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L105)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:105](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L105)
 
 ___
 
@@ -420,7 +420,7 @@ Get the usable voting power owned by a given address in this vault.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VotingVault.ts:83](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L83)
+[packages/council-sdk/src/models/votingVault/VotingVault.ts:83](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VotingVault.ts#L83)
 
 ___
 
@@ -452,4 +452,4 @@ voters in a single call.
 
 #### Defined in
 
-[packages/council-sdk/src/models/votingVault/VestingVault.ts:128](https://github.com/element-fi/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L128)
+[packages/council-sdk/src/models/votingVault/VestingVault.ts:128](https://github.com/delvtech/council-monorepo/blob/c29492c/packages/council-sdk/src/models/votingVault/VestingVault.ts#L128)

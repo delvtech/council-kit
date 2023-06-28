@@ -52,7 +52,7 @@ yarn workspace council-ui format # write to files
 
 ## Production
 
-This project is configured to be deployed using GitHub pages using a [custom action](https://github.com/element-fi/council-kit/blob/main/.github/workflows/gh-pages-council.yml). Furthermore, we've included some additional actions for CI code [linting](https://github.com/element-fi/council-kit/blob/main/.github/workflows/lint.yml) and [formatting](https://github.com/element-fi/council-kit/blob/main/.github/workflows/format.yml).
+This project is configured to be deployed using GitHub pages using a [custom action](https://github.com/delvtech/council-kit/blob/main/.github/workflows/gh-pages-council.yml). Furthermore, we've included some additional actions for CI code [linting](https://github.com/delvtech/council-kit/blob/main/.github/workflows/lint.yml) and [formatting](https://github.com/delvtech/council-kit/blob/main/.github/workflows/format.yml).
 
 If you need a custom deployment you can build the bundle using the following commands.
 

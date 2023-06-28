@@ -2,10 +2,21 @@
   "name": "@council/deploy",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://github.com/element-fi/council-monorepo",
-  "source": "src/index.ts",
+  "homepage": "https://github.com/delvtech/council-monorepo",
   "main": "dist/main.js",
+  "source": "src/index.ts",
   "types": "dist/types.d.ts",
+  "targets": {
+    "main": {
+      "source": "src/index.ts"
+    },
+    "exampleDeploy": {
+      "source": "src/deployCouncil.ts"
+    },
+    "types": {
+      "source": "src/index.ts"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -14,35 +25,38 @@
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.1.7",
+    "@council/typechain": "*",
+    "@ethersproject/providers": "^5.6.5",
+    "dotenv": "^16.0.0",
+    "merkletreejs": "^0.3.9"
+  },
+  "devDependencies": {
     "@council/eslint-config": "*",
     "@council/prettier-config": "*",
     "@council/tsconfig": "*",
-    "@council/typechain": "*",
-    "@ethersproject/providers": "^5.6.5",
     "@nomiclabs/hardhat-etherscan": "^3.1.3",
-    "@types/prompt": "^1.1.4",
-    "dotenv": "^16.0.0",
-    "lint-staged": "^12.3.7",
-    "merkletreejs": "^0.3.9",
-    "prompt": "^1.3.0",
-    "tsc": "^2.0.3"
-  },
-  "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "^4.2.0",
     "@types/ethereumjs-abi": "^0.6.3",
     "@types/node": "^14.17.20",
+    "@types/prompt": "^1.1.4",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "ethers": "^5.6.6",
     "hardhat": "^2.6.6",
+    "lint-staged": "^12.3.7",
     "parcel": "^2.8.0",
     "prettier": "2.6.2",
+    "prompt": "^1.3.0",
     "ts-generator": "^0.1.1",
     "ts-node": "^10.8.1",
+    "tsc": "^2.0.3",
     "tsconfig-paths": "^4.0.0",
     "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "ethers": "^5.6.6"
   },
   "scripts": {
     "start-node": "rm -f src/deployments/localhost.deployments.json && hardhat node",

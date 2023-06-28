@@ -33,7 +33,7 @@ export function Navigation(): ReactElement {
         >
           <li>
             <a
-              href="https://github.com/element-fi/council-kit/wiki"
+              href="https://github.com/delvtech/council-kit/wiki"
               target="_blank"
               rel="noreferrer"
               className="whitespace-nowrap flex gap-2 items-center px-8 h-11 text-black transition-all hover:bg-primary hover:text-white [&>*]:hover:fill-white"
@@ -66,7 +66,7 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <a
-              href="https://github.com/element-fi/council-kit"
+              href="https://github.com/delvtech/council-kit"
               target="_blank"
               rel="noreferrer"
               className="whitespace-nowrap flex gap-2 items-center px-8 h-11 text-black transition-all hover:bg-primary hover:text-white [&>*]:hover:fill-white"
@@ -82,7 +82,7 @@ export function Navigation(): ReactElement {
       <ul tabIndex={0} className="ml-auto gap-4 hidden md:flex">
         <li>
           <LinkButton
-            href="https://github.com/element-fi/council-kit/wiki"
+            href="https://github.com/delvtech/council-kit/wiki"
             target="_blank"
             variant="stroke"
           >
@@ -112,7 +112,7 @@ export function Navigation(): ReactElement {
         </li>
         <li>
           <LinkButton
-            href="https://github.com/element-fi/council-kit"
+            href="https://github.com/delvtech/council-kit"
             target="_blank"
             variant="stroke"
           >

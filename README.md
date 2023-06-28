@@ -6,7 +6,7 @@ Council kit is the complete toolkit for scaffolding your own DAO using the
 council protocol. This repository is designed to be forkable for your own
 council protocol variant.
 
-Get started with the [Docs](https://github.com/element-fi/council-kit/wiki).
+Get started with the [Docs](https://github.com/delvtech/council-kit/wiki).
 
 Requires `Node 14+`.
 
@@ -17,24 +17,24 @@ This monorepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It
 ### Apps
 | Name                                                                                                | Description                                                     |
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| [council-ui](https://github.com/element-fi/council-kit/tree/main/apps/council-ui)                   | A reference user interface built with NextJS and using the SDK. |
-| [council-sdk-starter](https://github.com/element-fi/council-kit/tree/main/apps/council-sdk-starter) | A boilerplate TypeScript project that uses the SDK.             |
+| [council-ui](https://github.com/delvtech/council-kit/tree/main/apps/council-ui)                   | A reference user interface built with NextJS and using the SDK. |
+| [council-sdk-starter](https://github.com/delvtech/council-kit/tree/main/apps/council-sdk-starter) | A boilerplate TypeScript project that uses the SDK.             |
 
 ### Packages
 
 | Name                                                                                                | Description                                                                 |
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| [council-sdk](https://github.com/element-fi/council-kit/tree/main/packages/council-sdk)             | A TypeScript SDK for interfacing with the Council protocol.                 |
-| [council-deploy](https://github.com/element-fi/council-kit/tree/main/packages/council-deploy)       | A template for deploying council contracts on Goerli.                |
-| [council-typechain](https://github.com/element-fi/council-kit/tree/main/packages/council-typechain) | Type classes generated from the council protocol contracts using Typechain. |
+| [council-sdk](https://github.com/delvtech/council-kit/tree/main/packages/council-sdk)             | A TypeScript SDK for interfacing with the Council protocol.                 |
+| [council-deploy](https://github.com/delvtech/council-kit/tree/main/packages/council-deploy)       | A template for deploying council contracts on Goerli.                |
+| [council-typechain](https://github.com/delvtech/council-kit/tree/main/packages/council-typechain) | Type classes generated from the council protocol contracts using Typechain. |
 
 ### Utility Packages
 
 | Name                                                                                            | Description                          |
 | ----------------------------------------------------------------------------------------------- | ------------------------------------ |
-| [eslint-config](https://github.com/element-fi/council-kit/tree/main/packages/eslint-config)     | Package for static type checking.    |
-| [prettier-config](https://github.com/element-fi/council-kit/tree/main/packages/prettier-config) | Package for code formatting.         |
-| [tsconfig](https://github.com/element-fi/council-kit/tree/main/packages/tsconfig)               | Package for TypeScript configuation. |
+| [eslint-config](https://github.com/delvtech/council-kit/tree/main/packages/eslint-config)     | Package for static type checking.    |
+| [prettier-config](https://github.com/delvtech/council-kit/tree/main/packages/prettier-config) | Package for code formatting.         |
+| [tsconfig](https://github.com/delvtech/council-kit/tree/main/packages/tsconfig)               | Package for TypeScript configuation. |
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -82,7 +82,7 @@ yarn format
 
 ## Development
 
-1. Clone the repo: `git clone git@github.com:element-fi/council-kit.git`
+1. Clone the repo: `git clone git@github.com:delvtech/council-kit.git`
 2. Run `yarn` at the top-level to install all packages across every workspace
 
 ### Installing new packages

@@ -67,6 +67,9 @@ export class JSONStore<T extends object = Record<string, unknown>> {
    */
   private readonly _validator?: ValidateFunction;
 
+  /**
+   * Use a JSON file to persist key-value data
+   */
   constructor(options: JSONStoreOptions<T>) {
     const filename = `${removeJSONExtension(options.name)}.json`;
     this.path = path.resolve(process.cwd(), options.path, filename);
@@ -107,15 +110,24 @@ export class JSONStore<T extends object = Record<string, unknown>> {
   }
 
   /**
-   * Set a key in the store to a given value
-   * @param key - The key to set
-   * @param value - The value to set it to
+   * Set the value for a key or multiple keys in the store
+   * @param key - The key to set or an object of key-value pairs to set
+   * @param value - The value to set the key to if `key` is not an object
    */
-  set<K extends keyof T>(key: K, value: T[K]): void {
-    validateSerializable(key as string, value);
-
+  set(values: Partial<T>): void;
+  set<K extends keyof T>(key: K, value: T[K]): void;
+  set<K extends keyof T>(keyOrValues: K | Partial<T>, value?: T[K]): void {
     const data = this.data;
-    data[key] = value;
+
+    if (typeof keyOrValues !== "object" && value) {
+      validateSerializable(keyOrValues.toString(), value);
+      data[keyOrValues] = value;
+    } else {
+      for (const [key, value] of Object.entries(keyOrValues)) {
+        validateSerializable(key as string, value);
+      }
+      Object.assign(data, keyOrValues);
+    }
 
     this._save(data);
   }
@@ -178,8 +190,6 @@ export class JSONStore<T extends object = Record<string, unknown>> {
 
   /**
    * Reset config to defaults
-   * @param key - The key of the entry to delete
-   * @returns True if an item was deleted, false otherwise
    */
   reset(): void {
     this._save(this.defaults as T);
@@ -247,7 +257,7 @@ function removeJSONExtension(filename: string): string {
  */
 function validateSerializable(key: string, value: unknown) {
   const type = typeof value;
-  if (["undefined", "function", "symbol"].includes(typeof value)) {
+  if (["undefined", "function", "symbol", "bigint"].includes(typeof value)) {
     throw new TypeError(
       `Failed to set value of type \`${type}\` for key \`${key}\`. Values must be JSON serializable.`,
     );
