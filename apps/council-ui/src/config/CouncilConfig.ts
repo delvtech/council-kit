@@ -1,3 +1,5 @@
+import { ENV } from "@pushprotocol/restapi/src/lib/constants";
+
 export interface CouncilConfig {
   /**
    * The version of the council config object
@@ -11,6 +13,12 @@ export interface CouncilConfig {
   timelock: ContractConfig;
   coreVoting: VotingContractConfig;
   gscVoting?: VotingContractConfig;
+
+  /**
+   * Optional Push Integration
+   * @see https://docs.push.org/developers/developer-tooling/push-sdk/sdk-packages-details/epnsproject-sdk-restapi/for-notification/opt-in-and-opt-out
+   */
+  push?: PushSettings;
 }
 
 export interface ContractConfig {
@@ -54,4 +62,12 @@ export interface ProposalConfig {
   descriptionURL: string;
   targets: string[];
   calldatas: string[];
+}
+
+interface PushSettings {
+  /**
+   * The address of the channel to subscribe to
+   */
+  channel?: string;
+  env?: `${ENV}`;
 }
