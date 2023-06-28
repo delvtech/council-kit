@@ -4,13 +4,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { makeVoterURL, Routes } from "src/routes";
+import PushIcon from "src/ui/base/svg/PushLogo";
+import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
+import { usePushSubscribe } from "src/ui/push/usePushSubscribe";
 import { useAccount } from "wagmi";
 
 export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
-
+  const { toggleUserStatus, loading, isSubscribed } = usePushSubscribe();
   useWrongNetworkEffect();
 
   return (
@@ -140,6 +143,22 @@ export function Navigation(): ReactElement {
         </ul>
       </div>
       <div className="daisy-navbar-end">
+        {address && toggleUserStatus && (
+          <Tooltip
+            content={`Subscribe to start recieving updates as notifications from PUSH`}
+          >
+            <span className="hidden lg:inline">
+              <button
+                className="daisy-btn daisy-btn-ghost mr-4"
+                onClick={toggleUserStatus}
+                disabled={loading}
+              >
+                <PushIcon />
+                {isSubscribed ? "Opt-out" : "Opt-in"}
+              </button>
+            </span>
+          </Tooltip>
+        )}
         <ConnectButton />
       </div>
     </div>
