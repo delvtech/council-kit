@@ -1,25 +1,21 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { ReactElement, useEffect, useState } from "react";
 
-import { AIRDROP_STEPS } from "pages/airdrop";
-import FirstTimeDeposit from "./FirstTimeDeposit";
-import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
-
-interface DepositProps extends Partial<TrackCurrentAirDropStepI> {
-  setCurrentStepStatus: TrackCurrentAirDropStepI["setCurrentStepStatus"];
+interface DepositProps {
+  onBack: () => void;
+  onNext: () => void;
 }
 
-export default function Deposit({ ...props }: DepositProps): ReactElement {
+export default function Deposit({
+  onBack,
+  onNext,
+}: DepositProps): ReactElement {
   const [isFirstTimeDeposit, setIsFirstTimeDeposit] = useState(true);
 
   useEffect(() => {
     //perform some logic and update @isFirstTimeDeposit value.
     // setIsFirstTimeDeposit(true);
   }, []);
-
-  if (isFirstTimeDeposit) {
-    return <FirstTimeDeposit {...props} />;
-  }
 
   return (
     <div className="min-w-[400px] text-start space-y-1">
@@ -36,21 +32,11 @@ export default function Deposit({ ...props }: DepositProps): ReactElement {
         The tokens will be owned by this address in the locking vault.
       </p>
       <div className="flex justify-center gap-2 pt-10">
-        <button
-          className="daisy-btn gap-2 px-8"
-          onClick={() =>
-            props.setCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)
-          }
-        >
+        <button className="daisy-btn gap-2 px-8" onClick={onBack}>
           <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back
         </button>
-        <button
-          className="daisy-btn daisy-btn-primary gap-2"
-          onClick={() =>
-            props.setCurrentStepStatus(AIRDROP_STEPS.CONFIRM_DEPOSIT)
-          }
-        >
+        <button className="daisy-btn daisy-btn-primary gap-2" onClick={onNext}>
           Continue
           <ArrowRightIcon className="w-4 h-4 fill-current" />
         </button>

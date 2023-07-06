@@ -8,12 +8,12 @@ export const localhostCouncilConfig: CouncilConfig = {
   },
   coreVoting: {
     name: "Core Voting",
-    address: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
+    address: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
         name: "Locking Vault",
-        address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+        address: "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
         type: "LockingVault",
         descriptionURL: "https://moreinfo.com",
       },

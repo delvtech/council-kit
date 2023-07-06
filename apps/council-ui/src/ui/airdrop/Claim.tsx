@@ -1,15 +1,12 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
-import { AIRDROP_STEPS } from "pages/airdrop";
 import { ReactElement } from "react";
-import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
-interface ClaimProps extends Partial<TrackCurrentAirDropStepI> {
-  setCurrentStepStatus: TrackCurrentAirDropStepI["setCurrentStepStatus"];
+interface ClaimProps {
+  onBack: () => void;
+  onNext: () => void;
 }
 
-export default function Cliam({
-  setCurrentStepStatus,
-}: ClaimProps): ReactElement {
+export default function Claim({ onBack, onNext }: ClaimProps): ReactElement {
   return (
     <div className="min-w-[400px] text-start space-y-1">
       <label className="daisy-label text-lg font-bold" htmlFor="address">
@@ -23,17 +20,11 @@ export default function Cliam({
       />
       <p className="text-xs my-2">The tokens will be sent to this address.</p>
       <div className="flex justify-center gap-2 pt-10">
-        <button
-          className="daisy-btn gap-2 px-8"
-          onClick={() => setCurrentStepStatus(AIRDROP_STEPS.DEPOSIT_OR_CLAIM)}
-        >
+        <button className="daisy-btn gap-2 px-8" onClick={onBack}>
           <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back
         </button>
-        <button
-          className="daisy-btn-primary daisy-btn gap-2"
-          onClick={() => setCurrentStepStatus(AIRDROP_STEPS.CONFIRM_CLIAM)}
-        >
+        <button className="daisy-btn-primary daisy-btn gap-2" onClick={onNext}>
           Continue
           <ArrowRightIcon className="w-4 h-4 fill-current" />
         </button>

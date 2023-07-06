@@ -1,14 +1,12 @@
 import { ArrowLeftIcon, CheckIcon } from "@heroicons/react/20/solid";
-import { AIRDROP_STEPS } from "pages/airdrop";
 import { ReactElement } from "react";
-import { TrackCurrentAirDropStepI } from "./hooks/useAirdropSteps";
 
-interface ConfirmDepositProps extends Partial<TrackCurrentAirDropStepI> {
-  setCurrentStepStatus: TrackCurrentAirDropStepI["setCurrentStepStatus"];
+interface ConfirmDepositProps {
+  onBack: () => void;
 }
 
 export default function ConfirmDeposit({
-  setCurrentStepStatus,
+  onBack,
 }: ConfirmDepositProps): ReactElement {
   function handleConfirm() {
     alert("handle confirm");
@@ -30,10 +28,7 @@ export default function ConfirmDeposit({
         disabled
       />
       <div className="flex justify-center gap-2 pt-10">
-        <button
-          className="daisy-btn gap-2 px-8"
-          onClick={() => setCurrentStepStatus(AIRDROP_STEPS.DEPOSIT)}
-        >
+        <button className="daisy-btn gap-2 px-8" onClick={onBack}>
           <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back
         </button>
