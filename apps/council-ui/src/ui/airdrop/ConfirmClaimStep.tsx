@@ -1,13 +1,13 @@
 import { ArrowLeftIcon, CheckIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
 
-interface ConfirmClaimProps {
+interface ConfirmClaimStepProps {
   onBack: () => void;
 }
 
-export default function ConfirmClaim({
+export default function ConfirmClaimStep({
   onBack,
-}: ConfirmClaimProps): ReactElement {
+}: ConfirmClaimStepProps): ReactElement {
   function handleConfirm() {
     alert("handle confirm");
   }

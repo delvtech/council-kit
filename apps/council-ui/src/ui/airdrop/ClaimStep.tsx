@@ -1,37 +1,30 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement } from "react";
 
-interface DepositProps {
+interface ClaimStepProps {
   onBack: () => void;
   onNext: () => void;
 }
 
-export default function Deposit({
+export default function ClaimStep({
   onBack,
   onNext,
-}: DepositProps): ReactElement {
-  const [isFirstTimeDeposit, setIsFirstTimeDeposit] = useState(true);
-
-  useEffect(() => {
-    //perform some logic and update @isFirstTimeDeposit value.
-    // setIsFirstTimeDeposit(true);
-  }, []);
-
+}: ClaimStepProps): ReactElement {
   return (
     <>
       <div className="daisy-form-control w-full">
-        <label className="daisy-label text-2xl font-bold" htmlFor="account">
-          Account
+        <label className="daisy-label text-2xl font-bold" htmlFor="address">
+          Address
         </label>
         <input
           className="w-full daisy-input-bordered daisy-input"
           type="text"
-          name="account"
-          id="account"
+          name="address"
+          id="address"
         />
         <label className="daisy-label">
           <span className="label-text-alt">
-            The tokens will be owned by this address in the locking vault.
+            The tokens will be sent to this address.
           </span>
         </label>
       </div>
@@ -41,7 +34,7 @@ export default function Deposit({
           Back
         </button>
         <button
-          className="daisy-btn daisy-btn-primary gap-2 grow"
+          className="daisy-btn-primary daisy-btn gap-2 grow"
           onClick={onNext}
         >
           Continue

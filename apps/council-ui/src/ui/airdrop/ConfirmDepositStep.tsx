@@ -1,13 +1,13 @@
 import { ArrowLeftIcon, CheckIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
 
-interface ConfirmDepositProps {
+interface ConfirmDepositStepProps {
   onBack: () => void;
 }
 
-export default function ConfirmDeposit({
+export default function ConfirmDepositStep({
   onBack,
-}: ConfirmDepositProps): ReactElement {
+}: ConfirmDepositStepProps): ReactElement {
   function handleConfirm() {
     alert("handle confirm");
   }

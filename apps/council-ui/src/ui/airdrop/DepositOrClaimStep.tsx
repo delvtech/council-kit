@@ -2,15 +2,15 @@ import { BuildingLibraryIcon, WalletIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
 import { AirdropIcon } from "src/ui/base/svg/24/AirdropIcon";
 
-interface DepositOrClaimProps {
+interface DepositOrClaimStepProps {
   onDeposit: () => void;
   onClaim: () => void;
 }
 
-export default function DepositOrClaim({
+export default function DepositOrClaimStep({
   onDeposit,
   onClaim,
-}: DepositOrClaimProps): ReactElement {
+}: DepositOrClaimStepProps): ReactElement {
   return (
     <>
       <div>

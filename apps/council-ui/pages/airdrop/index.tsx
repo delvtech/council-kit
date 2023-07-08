@@ -1,11 +1,11 @@
 import { ReactElement } from "react";
 
 import classNames from "classnames";
-import Claim from "src/ui/airdrop/Claim";
-import ConfirmClaim from "src/ui/airdrop/ConfirmClaim";
-import ConfirmDeposit from "src/ui/airdrop/ConfirmDeposit";
-import Deposit from "src/ui/airdrop/Deposit";
-import DepositOrClaim from "src/ui/airdrop/DepositOrClaim";
+import ClaimStep from "src/ui/airdrop/ClaimStep";
+import ConfirmClaimStep from "src/ui/airdrop/ConfirmClaimStep";
+import ConfirmDepositStep from "src/ui/airdrop/ConfirmDepositStep";
+import DepositOrClaimStep from "src/ui/airdrop/DepositOrClaimStep";
+import DepositStep from "src/ui/airdrop/DepositStep";
 import useRouterSteps from "src/ui/router/useRouterSteps";
 
 export default function AirdropPage(): ReactElement {
@@ -53,28 +53,28 @@ export default function AirdropPage(): ReactElement {
         switch (currentStep) {
           case "deposit":
             return (
-              <Deposit
+              <DepositStep
                 onBack={() => goToStep("deposit-or-claim")}
                 onNext={() => goToStep("confirm-deposit")}
               />
             );
           case "confirm-deposit":
-            return <ConfirmDeposit onBack={() => goToStep("deposit")} />;
+            return <ConfirmDepositStep onBack={() => goToStep("deposit")} />;
 
           case "claim":
             return (
-              <Claim
+              <ClaimStep
                 onBack={() => goToStep("deposit-or-claim")}
                 onNext={() => goToStep("confirm-claim")}
               />
             );
           case "confirm-claim":
-            return <ConfirmClaim onBack={() => goToStep("claim")} />;
+            return <ConfirmClaimStep onBack={() => goToStep("claim")} />;
 
           case "deposit-or-claim":
           default:
             return (
-              <DepositOrClaim
+              <DepositOrClaimStep
                 onDeposit={() => goToStep("deposit")}
                 onClaim={() => goToStep("claim")}
               />
