@@ -1,14 +1,21 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import classNames from "classnames";
+import { constants } from "ethers";
 import ClaimStep from "src/ui/airdrop/ClaimStep";
 import ConfirmClaimStep from "src/ui/airdrop/ConfirmClaimStep";
 import ConfirmDepositStep from "src/ui/airdrop/ConfirmDepositStep";
 import DepositOrClaimStep from "src/ui/airdrop/DepositOrClaimStep";
 import DepositStep from "src/ui/airdrop/DepositStep";
+import { useAirdropLockingVault } from "src/ui/airdrop/hooks/useAirdropLockingVault";
+import { useCouncil } from "src/ui/council/useCouncil";
 import useRouterSteps from "src/ui/router/useRouterSteps";
+import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
+import { useAccount } from "wagmi";
 
 export default function AirdropPage(): ReactElement {
+  // Utilities to help with routing between steps
   const { currentStep, currentStepNumber, goToStep } = useRouterSteps({
     steps: [
       "deposit-or-claim",
@@ -16,6 +23,31 @@ export default function AirdropPage(): ReactElement {
       ["confirm-claim", "confirm-deposit"],
     ],
   });
+
+  const { address } = useAccount();
+  const { airdrop } = useCouncil();
+
+  // The address that will receive the airdrop
+  const [recipientAddress, setRecipientAddress] = useState("");
+
+  // The address to delegate to if the user chooses to deposit
+  const [delegateAddress, setDelegateAddress] = useState("");
+
+  // Determine if the user needs to choose a delegate
+  const { data: lockingVault } = useAirdropLockingVault(airdrop?.address);
+  const { data: currentDelegate } = useDelegate(
+    lockingVault?.address,
+    recipientAddress,
+  );
+  const needsDelegate =
+    currentDelegate && currentDelegate.address === constants.AddressZero;
+
+  // Set the recipient and delegate addresses to the connected address if they
+  // haven't been set yet
+  useEffect(() => {
+    setRecipientAddress((previousValue) => previousValue || address || "");
+    setDelegateAddress((previousValue) => previousValue || address || "");
+  }, [address]);
 
   return (
     <section className="mx-auto max-w-lg flex flex-col justify-center gap-16 mt-14 text-center">
@@ -49,10 +81,22 @@ export default function AirdropPage(): ReactElement {
         </ul>
       </div>
       {(() => {
+        if (!address) {
+          return (
+            <div className="flex justify-center">
+              <ConnectButton />
+            </div>
+          );
+        }
+
         switch (currentStep) {
           case "deposit":
             return (
               <DepositStep
+                account={recipientAddress}
+                setAccount={setRecipientAddress}
+                delegate={delegateAddress}
+                setDelegate={needsDelegate ? setDelegateAddress : undefined}
                 onBack={() => goToStep("deposit-or-claim")}
                 onNext={() => goToStep("confirm-deposit")}
               />

@@ -10,7 +10,7 @@ export interface AirdropData {
 /**
  * Fetch the data needed to claim an airdrop for the given address.
  * If the address doesn't have an airdrop, `airdropData` will be `undefined`.
- * @param address - The address to fetch the airdrop data for
+ * @param address - The recipient address to fetch the airdrop data for
  * @returns The airdrop data and the status of the request
  */
 export function useAirdropData(address: string | undefined): {
