@@ -66,7 +66,7 @@ export class Airdrop extends Model {
   }
 
   /**
-   * Get the token balance of a given address
+   * Get the amount that an address has already claimed.
    */
   getClaimedAmount(address: string): Promise<string> {
     return this.dataSource.getClaimedAmount(address);
