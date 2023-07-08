@@ -179,12 +179,14 @@ export function Navigation(): ReactElement {
         {hasAirdrop && (
           <Link
             href={"/airdrop"}
-            className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 md:bg-white bg-primary group"
+            className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 md:bg-white bg-accent group"
           >
-            <span className="text-primary-content md:text-primary">
+            <span className="text-accent-content md:text-accent">
               <AirdropIcon />
             </span>
-            <span className="hidden md:block text-base-500">Claim airdrop</span>
+            <span className="hidden md:block md:text-gray-800 text-accent-content">
+              Claim airdrop
+            </span>
           </Link>
         )}
         <ConnectButton />
