@@ -44,6 +44,7 @@ export default function useRouterSteps<T extends string = string>(
   completedSteps: number;
   completeStep: (step: number | T) => void;
   currentStep: T;
+  currentStepNumber: number;
   getStepNumber: (step: number | T) => number;
   getStepPath: (step: number | T) => string;
   getStepStatus: (step: number | T) => StepStatus;
@@ -106,6 +107,16 @@ export default function useRouterSteps<T extends string = string>(
       return 0;
     },
     [steps],
+  );
+
+  /**
+   * Returns the current step number. If the step is a number, it is returned as
+   * is. If the step is not a number, the index is looked up in the steps array.
+   * If the step is not in the steps array, 0 is returned.
+   */
+  const currentStepNumber = useMemo(
+    () => getStepNumber(currentStep),
+    [currentStep, getStepNumber],
   );
 
   const getStepPath = useCallback(
@@ -207,6 +218,7 @@ export default function useRouterSteps<T extends string = string>(
     completedSteps,
     completeStep,
     currentStep,
+    currentStepNumber,
     getStepNumber,
     getStepPath,
     getStepStatus,

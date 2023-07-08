@@ -9,7 +9,7 @@ import DepositStep from "src/ui/airdrop/DepositStep";
 import useRouterSteps from "src/ui/router/useRouterSteps";
 
 export default function AirdropPage(): ReactElement {
-  const { currentStep, goToStep, getStepNumber } = useRouterSteps({
+  const { currentStep, currentStepNumber, goToStep } = useRouterSteps({
     steps: [
       "deposit-or-claim",
       ["claim", "deposit"],
@@ -25,8 +25,7 @@ export default function AirdropPage(): ReactElement {
           <li
             data-content="1"
             className={classNames("daisy-step", {
-              "daisy-step-primary": getStepNumber(currentStep) >= 1,
-              // "daisy-step-primary": stepsUtils.completedSteps.includes(1),
+              "daisy-step-primary": currentStepNumber >= 1,
             })}
           >
             Deposit or Claim
@@ -34,7 +33,7 @@ export default function AirdropPage(): ReactElement {
           <li
             data-content="2"
             className={classNames("daisy-step", {
-              "daisy-step-primary": getStepNumber(currentStep) >= 2,
+              "daisy-step-primary": currentStepNumber >= 2,
             })}
           >
             Choose account
@@ -42,7 +41,7 @@ export default function AirdropPage(): ReactElement {
           <li
             data-content="3"
             className={classNames("daisy-step", {
-              "daisy-step-primary": getStepNumber(currentStep) >= 3,
+              "daisy-step-primary": currentStepNumber >= 3,
             })}
           >
             Confirm
