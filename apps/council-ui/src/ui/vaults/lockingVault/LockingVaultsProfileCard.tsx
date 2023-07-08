@@ -17,7 +17,7 @@ import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { getVaultConfig } from "src/vaults/vaults";
-import { useSigner } from "wagmi";
+import { useAccount, useSigner } from "wagmi";
 
 interface LockingVaultProfileCardProps {
   address: string;
@@ -32,7 +32,8 @@ export function LockingVaultProfileCard({
   const { data } = useLockingVaultProfileCardData(address, profileAddress);
   const profileName = useDisplayName(profileAddress);
   const delegateName = useDisplayName(data?.delegate.address);
-  const { data: accountDelegate } = useDelegate(address);
+  const { address: account } = useAccount();
+  const { data: accountDelegate } = useDelegate(address, account);
 
   // config
   const chainId = useChainId();
