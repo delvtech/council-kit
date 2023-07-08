@@ -18,8 +18,15 @@ interface UseRouterStepsOptions<T extends string> {
    */
   paramName?: string;
   /**
-   * The steps in the process. Each step can be a single value or an array of
+   * The steps in the flow. Each step can be a single value or an array of
    * values for steps that have alternative paths. Steps are 1-indexed.
+   *
+   * @example
+   * // A flow with 3 steps
+   * steps: ["step1", "step2", "step3"]
+   *
+   * // A flow with 3 steps where step 2 has 2 alternative paths
+   * steps: ["step1", ["step2a", "step2b"], "step3"]
    */
   steps?: (T | T[])[];
   /**
