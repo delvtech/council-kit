@@ -6,22 +6,29 @@ import { UntypedQuestion } from "./types";
 
 export type ArrayQuestion = Omit<UntypedQuestion, "separator">;
 
-export async function requiredArray(
-  value: string[] | undefined,
+export async function requiredArray<T extends string>(
+  value: T[] | undefined,
   question: ArrayQuestion,
   options?: prompts.Options,
-): Promise<string[]> {
+): Promise<T[]> {
   return requiredOption(
     value,
     {
-      validate: (value) => {
+      ...question,
+      validate: (_value, ...passthroughArgs) => {
+        let value = _value;
+
         // The value is a string if it was captured from the prompt.
         if (typeof value === "string") {
           value = value.split(" ");
         }
+
+        if (question.validate) {
+          return question.validate(value, ...passthroughArgs);
+        }
+
         return isNotEmptyList(value);
       },
-      ...question,
       type: "list",
       separator: " ",
       message: `${question.message} ${colors.dim("(space separated)")}`,
