@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { makeVoterURL, Routes } from "src/routes";
+import { useAirdropData } from "src/ui/airdrop/hooks/useAirdropData";
 import { AirdropIcon } from "src/ui/base/svg/20/AirdropIcon";
 import PushIcon from "src/ui/base/svg/PushLogo";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
@@ -11,17 +12,13 @@ import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
 import { usePushSubscribe } from "src/ui/push/usePushSubscribe";
 import { useAccount } from "wagmi";
 
-import markelTree from "src/data/leavesWithProofs.json";
-
 export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
   const { toggleUserStatus, loading, isSubscribed } = usePushSubscribe();
-  console.log({ markelTree });
+  const { hasAirdrop } = useAirdropData(address);
 
   useWrongNetworkEffect();
-
-  const hasAirdrop = true;
 
   return (
     <div className="daisy-navbar bg-base-200 ">
@@ -179,15 +176,17 @@ export function Navigation(): ReactElement {
             </span>
           </Tooltip>
         )}
-        <Link
-          href={"/airdrop"}
-          className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 md:bg-white bg-primary group"
-        >
-          <span className="text-primary-content md:text-primary">
-            <AirdropIcon />
-          </span>
-          <span className="hidden md:block text-base-500">Claim airdrop</span>
-        </Link>
+        {hasAirdrop && (
+          <Link
+            href={"/airdrop"}
+            className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 md:bg-white bg-primary group"
+          >
+            <span className="text-primary-content md:text-primary">
+              <AirdropIcon />
+            </span>
+            <span className="hidden md:block text-base-500">Claim airdrop</span>
+          </Link>
+        )}
         <ConnectButton />
       </div>
     </div>

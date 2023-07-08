@@ -13,6 +13,7 @@ export interface CouncilConfig {
   timelock: ContractConfig;
   coreVoting: VotingContractConfig;
   gscVoting?: VotingContractConfig;
+  airdrop?: AirdropConfig;
 
   /**
    * Optional Push Integration
@@ -67,6 +68,27 @@ export interface ProposalConfig {
   descriptionURL: string;
   targets: string[];
   calldatas: string[];
+}
+
+interface AirdropConfig extends ContractConfig {
+  /**
+   * The base url for the airdrop data api.
+   *
+   * if the base url is https://cdn.io/airdrop/ then the airdrop data for
+   * the address `0x123` will be fetched from https://cdn.io/airdrop/0x123
+   *
+   * The data returned from the api should be a json object matching the
+   * following example:
+   *
+   * ```json
+   * {
+   *   "amount": "100.5",
+   *   "proof": ["0x123", "0x456", "0x789"]
+   * }
+   * ```
+   *
+   */
+  baseDataURL: string;
 }
 
 interface PushSettings {

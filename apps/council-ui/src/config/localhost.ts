@@ -20,4 +20,9 @@ export const localhostCouncilConfig: CouncilConfig = {
     ],
     proposals: {},
   },
+
+  airdrop: {
+    address: "0x0165878a594ca255338adfa4d48449f69242eb8f",
+    baseDataURL: "/api/airdrop",
+  },
 };
