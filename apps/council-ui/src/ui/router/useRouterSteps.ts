@@ -10,13 +10,14 @@ import {
 } from "react";
 import { useParams } from "src/ui/router/useParams";
 
-export type StepStatus = "complete" | "current" | "pending";
+export type StepPosition = "behind" | "current" | "adjacent" | "ahead";
 
 interface UseRouterStepsOptions<T extends string> {
   /**
    * The URL parameter name to use for the steps. Defaults to "step".
    */
   paramName?: string;
+
   /**
    * The steps in the flow. Each step can be a single value or an array of
    * values for steps that have alternative paths. Steps are 1-indexed.
@@ -29,6 +30,7 @@ interface UseRouterStepsOptions<T extends string> {
    * steps: ["step1", ["step2a", "step2b"], "step3"]
    */
   steps?: (T | T[])[];
+
   /**
    * The number of initially completed steps. Defaults to 0.
    */
@@ -47,17 +49,88 @@ interface UseRouterStepsOptions<T extends string> {
 export default function useRouterSteps<T extends string = string>(
   options?: UseRouterStepsOptions<T>,
 ): {
+  /**
+   * Returns true for all steps up to and including the step after the last
+   * completed step. The step must be a valid step number or a step in the steps
+   * array.
+   */
   canViewStep: (step: number | T) => boolean;
+
+  /**
+   * The number of steps considered complete.
+   */
   completedSteps: number;
+
+  /**
+   * Complete a single step. This will not navigate to a new step.
+   */
   completeStep: (step: number | T) => void;
+
+  /**
+   * The current step. This will be the same as `currentStepNumber` if no
+   * `steps` option was provided.
+   */
   currentStep: T;
+
+  /**
+   * The number of the current step in the flow.
+   *
+   * @example
+   * const steps = ["step1", ["step2a", "step2b"], "step3"];
+   *
+   * switch (currentStep) {
+   *   case "step1":
+   *     return 1;
+   *   case "step2a":
+   *   case "step2b":
+   *     return 2;
+   *   case "step3":
+   *     return 3;
+   * }
+   */
   currentStepNumber: number;
+
+  /**
+   * Get the number of a step in the flow. Returns 0 if the step is not in the
+   * flow.
+   */
   getStepNumber: (step: number | T) => number;
+
+  /**
+   * Get the router path for a step.
+   */
   getStepPath: (step: number | T) => string;
-  getStepStatus: (step: number | T) => StepStatus;
+
+  /**
+   * Get the position of a step in the flow. If the step's number is less than
+   * the current step's number, It's `behind`. If It's greater than the current
+   * step's number, It's `ahead`. If the numbers are the same, but the steps are
+   * different, It's `adjacent`. Otherwise, it's `current`.
+   */
+  getStepPosition: (step: number | T) => StepPosition | undefined;
+
+  /**
+   * Complete the current step and navigate to the next step in the flow. If the
+   * next step has multiple paths, it will go to the first path.
+   */
   goToNextStep: () => void;
+
+  /**
+   * Navigate to the previous step in the flow. If the previous step has
+   * multiple paths, it will go to the first path.
+   */
   goToPreviousStep: () => void;
+
+  /**
+   * Complete all steps up to a given step and navigate to that step.
+   */
   goToStep: (step: number | T) => void;
+
+  /**
+   * Set the number of completed steps. This will not navigate to a new step.
+   * This is useful for when you want to persist the completed steps across
+   * sessions, skip steps, or reset steps for a new path.
+   */
   setCompletedSteps: Dispatch<SetStateAction<number>>;
 } {
   // using useRef to ensure these values never trigger rerenders when changed
@@ -76,11 +149,6 @@ export default function useRouterSteps<T extends string = string>(
 
   const [completedSteps, setCompletedSteps] = useState(initialCompleted);
 
-  /**
-   * Returns the current step. If the step is a number, it is returned as is.
-   * If the step is not a number, it is looked up in the steps array. If the
-   * step is not in the steps array, the first step is returned.
-   */
   const currentStep = useMemo(() => {
     if (steps) {
       if (paramStep) {
@@ -94,11 +162,6 @@ export default function useRouterSteps<T extends string = string>(
     return (paramStep ? parseInt(paramStep) : 1) as unknown as T;
   }, [paramStep, steps]);
 
-  /**
-   * Returns the step number of the given step. If the step is a number, it is
-   * returned as is. If the step is not a number, the index is looked up in the
-   * steps array. If the step is not in the steps array, 0 is returned.
-   */
   const getStepNumber = useCallback(
     (step: number | T) => {
       if (typeof step === "number") {
@@ -116,11 +179,6 @@ export default function useRouterSteps<T extends string = string>(
     [steps],
   );
 
-  /**
-   * Returns the current step number. If the step is a number, it is returned as
-   * is. If the step is not a number, the index is looked up in the steps array.
-   * If the step is not in the steps array, 0 is returned.
-   */
   const currentStepNumber = useMemo(
     () => getStepNumber(currentStep),
     [currentStep, getStepNumber],
@@ -144,30 +202,29 @@ export default function useRouterSteps<T extends string = string>(
     [pathname, paramName, steps],
   );
 
-  /**
-   * Returns the status of the step. If the step is less than the current step,
-   * it is complete. If it is greater than the current step, it is pending.
-   * Otherwise, it is the current step.
-   */
-  const getStepStatus = useCallback(
-    (step: number | T): StepStatus => {
-      if (getStepNumber(step) < getStepNumber(currentStep)) {
-        return "complete";
+  const getStepPosition = useCallback(
+    (step: number | T): StepPosition | undefined => {
+      // if the step is the current step, it is `current`
+      if (step === currentStep) {
+        return "current";
       }
-      if (getStepNumber(step) > getStepNumber(currentStep)) {
-        return "pending";
+
+      const stepNumber = getStepNumber(step);
+      const currentStepNumber = getStepNumber(currentStep);
+
+      if (stepNumber === currentStepNumber) {
+        return "adjacent";
       }
-      return "current";
+      if (stepNumber > currentStepNumber) {
+        return "ahead";
+      }
+      if (stepNumber > 0 && stepNumber < currentStepNumber) {
+        return "behind";
+      }
     },
     [getStepNumber, currentStep],
   );
 
-  /**
-   * Returns true if the step is one of the following:
-   *  - greater than 0
-   * - less than or equal to the step after the last completed one
-   * - is a number or in steps
-   */
   const canViewStep = useCallback(
     (step: number | T) => {
       const stepNumber = getStepNumber(step);
@@ -185,9 +242,6 @@ export default function useRouterSteps<T extends string = string>(
     [getStepNumber],
   );
 
-  /**
-   * Completes all steps up to a given step and navigates to that step.
-   */
   const goToStep = useCallback(
     (step: number | T) => {
       completeStep(getStepNumber(step) - 1);
@@ -228,7 +282,7 @@ export default function useRouterSteps<T extends string = string>(
     currentStepNumber,
     getStepNumber,
     getStepPath,
-    getStepStatus,
+    getStepPosition,
     goToNextStep,
     goToPreviousStep,
     goToStep,
