@@ -44,19 +44,11 @@ export default function DepositOrClaimStep({
       </div>
       <div>
         <p className="mb-4">
-          These tokens can be <strong>deposited</strong> into the locking vault
-          for immediate voting power or <strong>claimed</strong> directly to a
-          wallet.
+          These tokens can be <strong>claimed</strong> to a wallet or{" "}
+          <strong>deposited</strong> directly into the locking vault for
+          immediate voting power.
         </p>
-        <div className="flex justify-center gap-2">
-          <button
-            className="daisy-btn-primary daisy-btn gap-2 grow"
-            disabled={!onDeposit}
-            onClick={onDeposit}
-          >
-            <BuildingLibraryIcon className="w-5 h-5 fill-current" />
-            Deposit
-          </button>
+        <div className="flex justify-center gap-2 sm:gap-4">
           <button
             className="daisy-btn gap-2 grow"
             disabled={!onClaim}
@@ -64,6 +56,14 @@ export default function DepositOrClaimStep({
           >
             <WalletIcon className="w-5 h-5 fill-current" />
             Claim
+          </button>
+          <button
+            className="daisy-btn-primary daisy-btn gap-2 grow"
+            disabled={!onDeposit}
+            onClick={onDeposit}
+          >
+            <BuildingLibraryIcon className="w-5 h-5 fill-current" />
+            Deposit
           </button>
         </div>
       </div>

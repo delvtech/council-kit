@@ -41,7 +41,7 @@ export default function ConfirmClaimStep({
           <div className=" daisy-stat-value">{displayName}</div>
         </div>
       </div>
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-2 sm:gap-4">
         <button className="daisy-btn gap-2 grow" onClick={onBack}>
           <ArrowLeftIcon className="w-4 h-4 fill-current" />
           Back

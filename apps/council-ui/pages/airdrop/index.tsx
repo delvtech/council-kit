@@ -59,7 +59,7 @@ export default function AirdropPage(): ReactElement {
   const hasClaimableAmount = claimableAmount && +claimableAmount;
 
   return (
-    <section className="mx-auto max-w-lg flex flex-col justify-center gap-16 mt-14 text-center">
+    <section className="mx-auto max-w-lg flex flex-col justify-center gap-16 mt-14 text-center px-[6vw] box-content">
       <div className="flex flex-col justify-center gap-8">
         <h1 className="text-5xl font-bold">Airdrop Claim</h1>
         <ul className="daisy-steps m-auto text-sm w-full">
