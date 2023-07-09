@@ -10,6 +10,7 @@ import DepositOrClaimStep from "src/ui/airdrop/DepositOrClaimStep";
 import DepositStep from "src/ui/airdrop/DepositStep";
 import { useAirdropLockingVault } from "src/ui/airdrop/hooks/useAirdropLockingVault";
 import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
+import { useClaimAirdrop } from "src/ui/airdrop/hooks/useClaimAirdrop";
 import { useClaimAndDelegateAirdrop } from "src/ui/airdrop/hooks/useClaimAndDelegateAirdrop";
 import useRouterSteps from "src/ui/router/useRouterSteps";
 import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
@@ -53,6 +54,7 @@ export default function AirdropPage(): ReactElement {
 
   const { data: signer } = useSigner();
   const { mutate: claimAndDelegate } = useClaimAndDelegateAirdrop();
+  const { mutate: claim } = useClaimAirdrop();
 
   const hasClaimableAmount = claimableAmount && +claimableAmount;
 
@@ -136,7 +138,21 @@ export default function AirdropPage(): ReactElement {
               />
             );
           case "confirm-claim":
-            return <ConfirmClaimStep onBack={() => goToStep("claim")} />;
+            return (
+              <ConfirmClaimStep
+                recipient={recipientAddress}
+                onBack={() => goToStep("claim")}
+                onConfirm={
+                  signer && claimableAmount && +claimableAmount
+                    ? () =>
+                        claim({
+                          signer,
+                          recipient: recipientAddress,
+                        })
+                    : undefined
+                }
+              />
+            );
 
           case "deposit-or-claim":
           default:
