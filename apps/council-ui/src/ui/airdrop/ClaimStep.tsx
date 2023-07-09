@@ -2,11 +2,15 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
 
 interface ClaimStepProps {
+  recipient: string;
+  setRecipient: (address: string) => void;
   onBack: () => void;
   onNext: () => void;
 }
 
 export default function ClaimStep({
+  recipient,
+  setRecipient,
   onBack,
   onNext,
 }: ClaimStepProps): ReactElement {
@@ -21,6 +25,8 @@ export default function ClaimStep({
           type="text"
           name="address"
           id="address"
+          value={recipient}
+          onChange={(e) => setRecipient(e.target.value)}
         />
         <label className="daisy-label">
           <span className="label-text-alt">
@@ -35,6 +41,7 @@ export default function ClaimStep({
         </button>
         <button
           className="daisy-btn-primary daisy-btn gap-2 grow"
+          disabled={!recipient}
           onClick={onNext}
         >
           Continue

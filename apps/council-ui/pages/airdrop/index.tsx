@@ -129,6 +129,8 @@ export default function AirdropPage(): ReactElement {
           case "claim":
             return (
               <ClaimStep
+                recipient={recipientAddress}
+                setRecipient={setRecipientAddress}
                 onBack={() => goToStep("deposit-or-claim")}
                 onNext={() => goToStep("confirm-claim")}
               />
