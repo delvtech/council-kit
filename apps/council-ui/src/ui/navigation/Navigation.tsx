@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { makeVoterURL, Routes } from "src/routes";
-import { useAirdropData } from "src/ui/airdrop/hooks/useAirdropData";
+import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
 import { AirdropIcon } from "src/ui/base/svg/20/AirdropIcon";
 import PushIcon from "src/ui/base/svg/PushLogo";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
@@ -16,7 +16,7 @@ export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
   const { toggleUserStatus, loading, isSubscribed } = usePushSubscribe();
-  const { hasAirdrop } = useAirdropData(address);
+  const { data: claimableAmount } = useClaimableAirdropAmount();
 
   useWrongNetworkEffect();
 
@@ -157,8 +157,6 @@ export function Navigation(): ReactElement {
           )}
         </ul>
       </div>
-      {/* <div className="daisy-navbar-center hidden lg:flex">
-      </div> */}
       <div className="daisy-navbar-end flex gap-3">
         {address && toggleUserStatus && (
           <Tooltip
@@ -176,7 +174,7 @@ export function Navigation(): ReactElement {
             </span>
           </Tooltip>
         )}
-        {hasAirdrop && (
+        {claimableAmount && +claimableAmount && (
           <Link
             href={"/airdrop"}
             className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 md:bg-white bg-accent group"

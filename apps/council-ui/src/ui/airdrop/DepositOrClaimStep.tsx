@@ -1,10 +1,9 @@
 import { BuildingLibraryIcon, WalletIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
-import { useAirdropData } from "src/ui/airdrop/hooks/useAirdropData";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { AirdropIcon } from "src/ui/base/svg/24/AirdropIcon";
-import { useAccount } from "wagmi";
+import { useClaimableAirdropAmount } from "./hooks/useClaimableAirdropAmount";
 
 interface DepositOrClaimStepProps {
   onDeposit: () => void;
@@ -15,8 +14,7 @@ export default function DepositOrClaimStep({
   onDeposit,
   onClaim,
 }: DepositOrClaimStepProps): ReactElement {
-  const { address } = useAccount();
-  const { airdropData } = useAirdropData(address);
+  const { data: claimableAmount } = useClaimableAirdropAmount();
 
   return (
     <>
@@ -29,8 +27,8 @@ export default function DepositOrClaimStep({
                 <AirdropIcon />
               </span>
               <span className="flex items-end">
-                {airdropData ? (
-                  formatBalance(airdropData.amount, 4)
+                {claimableAmount ? (
+                  formatBalance(claimableAmount, 4)
                 ) : (
                   <Skeleton width={120} className="inline" />
                 )}
