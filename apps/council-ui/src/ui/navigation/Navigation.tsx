@@ -174,7 +174,7 @@ export function Navigation(): ReactElement {
             </span>
           </Tooltip>
         )}
-        {claimableAmount && +claimableAmount && (
+        {!!claimableAmount && !!+claimableAmount && (
           <Link
             href={"/airdrop"}
             className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 md:bg-white bg-accent group"

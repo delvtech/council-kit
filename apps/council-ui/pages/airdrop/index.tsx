@@ -9,9 +9,11 @@ import ConfirmDepositStep from "src/ui/airdrop/ConfirmDepositStep";
 import DepositOrClaimStep from "src/ui/airdrop/DepositOrClaimStep";
 import DepositStep from "src/ui/airdrop/DepositStep";
 import { useAirdropLockingVault } from "src/ui/airdrop/hooks/useAirdropLockingVault";
+import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
+import { useClaimAndDelegateAirdrop } from "src/ui/airdrop/hooks/useClaimAndDelegateAirdrop";
 import useRouterSteps from "src/ui/router/useRouterSteps";
 import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
-import { useAccount } from "wagmi";
+import { useAccount, useSigner } from "wagmi";
 
 export default function AirdropPage(): ReactElement {
   // Utilities to help with routing between steps
@@ -22,6 +24,9 @@ export default function AirdropPage(): ReactElement {
       ["confirm-claim", "confirm-deposit"],
     ],
   });
+
+  // Determine if the user has any claimable airdrop tokens
+  const { data: claimableAmount } = useClaimableAirdropAmount();
 
   // The address that will receive the airdrop
   const [recipientAddress, setRecipientAddress] = useState("");
@@ -45,6 +50,11 @@ export default function AirdropPage(): ReactElement {
     setRecipientAddress((previousValue) => previousValue || address || "");
     setDelegateAddress((previousValue) => previousValue || address || "");
   }, [address]);
+
+  const { data: signer } = useSigner();
+  const { mutate: claimAndDelegate } = useClaimAndDelegateAirdrop();
+
+  const hasClaimableAmount = claimableAmount && +claimableAmount;
 
   return (
     <section className="mx-auto max-w-lg flex flex-col justify-center gap-16 mt-14 text-center">
@@ -99,8 +109,23 @@ export default function AirdropPage(): ReactElement {
               />
             );
           case "confirm-deposit":
-            return <ConfirmDepositStep onBack={() => goToStep("deposit")} />;
-
+            return (
+              <ConfirmDepositStep
+                account={recipientAddress}
+                delegate={delegateAddress}
+                onBack={() => goToStep("deposit")}
+                onConfirm={
+                  signer && claimableAmount && +claimableAmount
+                    ? () =>
+                        claimAndDelegate({
+                          signer,
+                          recipient: recipientAddress,
+                          delegate: delegateAddress,
+                        })
+                    : undefined
+                }
+              />
+            );
           case "claim":
             return (
               <ClaimStep
@@ -115,8 +140,12 @@ export default function AirdropPage(): ReactElement {
           default:
             return (
               <DepositOrClaimStep
-                onDeposit={() => goToStep("deposit")}
-                onClaim={() => goToStep("claim")}
+                onDeposit={
+                  hasClaimableAmount ? () => goToStep("deposit") : undefined
+                }
+                onClaim={
+                  hasClaimableAmount ? () => goToStep("claim") : undefined
+                }
               />
             );
         }
