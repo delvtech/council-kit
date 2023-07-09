@@ -9,7 +9,6 @@ import ConfirmDepositStep from "src/ui/airdrop/ConfirmDepositStep";
 import DepositOrClaimStep from "src/ui/airdrop/DepositOrClaimStep";
 import DepositStep from "src/ui/airdrop/DepositStep";
 import { useAirdropLockingVault } from "src/ui/airdrop/hooks/useAirdropLockingVault";
-import { useCouncil } from "src/ui/council/useCouncil";
 import useRouterSteps from "src/ui/router/useRouterSteps";
 import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
 import { useAccount } from "wagmi";
@@ -24,9 +23,6 @@ export default function AirdropPage(): ReactElement {
     ],
   });
 
-  const { address } = useAccount();
-  const { airdrop } = useCouncil();
-
   // The address that will receive the airdrop
   const [recipientAddress, setRecipientAddress] = useState("");
 
@@ -34,7 +30,7 @@ export default function AirdropPage(): ReactElement {
   const [delegateAddress, setDelegateAddress] = useState("");
 
   // Determine if the user needs to choose a delegate
-  const { data: lockingVault } = useAirdropLockingVault(airdrop?.address);
+  const { data: lockingVault } = useAirdropLockingVault();
   const { data: currentDelegate } = useDelegate(
     lockingVault?.address,
     recipientAddress,
@@ -42,8 +38,9 @@ export default function AirdropPage(): ReactElement {
   const needsDelegate =
     currentDelegate && currentDelegate.address === constants.AddressZero;
 
-  // Set the recipient and delegate addresses to the connected address if they
+  // Set the recipient and delegate addresses to the connected wallet if they
   // haven't been set yet
+  const { address } = useAccount();
   useEffect(() => {
     setRecipientAddress((previousValue) => previousValue || address || "");
     setDelegateAddress((previousValue) => previousValue || address || "");

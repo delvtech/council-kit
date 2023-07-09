@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { councilConfigs } from "src/config/council.config";
 import { useChainId } from "src/ui/network/useChainId";
+import { useAccount } from "wagmi";
 
 export interface AirdropData {
   amount: string;
@@ -8,16 +9,11 @@ export interface AirdropData {
 }
 
 /**
- * Fetch the data needed to claim an airdrop for the given address.
+ * Fetch the data needed to claim an airdrop for the connected wallet address.
  * If the address doesn't have an airdrop, `airdropData` will be `undefined`.
- * @param address - The recipient address to fetch the airdrop data for
- * @returns The airdrop data and the status of the request
  */
-export function useAirdropData(address: string | undefined): {
-  airdropData: AirdropData | undefined;
-  airdropDataStatus: "loading" | "error" | "success";
-  hasAirdrop: boolean | undefined;
-} {
+export function useAirdropData(): UseQueryResult<AirdropData | undefined> {
+  const { address } = useAccount();
   const chainId = useChainId();
   let baseDataURL = councilConfigs[chainId]?.airdrop?.baseDataURL;
 
@@ -41,7 +37,7 @@ export function useAirdropData(address: string | undefined): {
     dataURL = new URL(`${baseDataURL}${address}`, window.location.origin);
   }
 
-  const { data, status } = useQuery<AirdropData | undefined>({
+  return useQuery<AirdropData | undefined>({
     queryKey: [dataURL],
     enabled: !!dataURL,
     select: (data) => data ?? undefined,
@@ -91,16 +87,6 @@ export function useAirdropData(address: string | undefined): {
         }
       : undefined,
   });
-
-  return {
-    airdropData: data,
-    airdropDataStatus: status,
-    // If the request hasn't succeeded, we don't know if the address has an
-    // airdrop or not. Otherwise If data has an amount property that is a number
-    // greater than 0, then the address does have an airdrop.
-    hasAirdrop:
-      status === "success" ? !!data && /[1-9]/.test(data.amount) : undefined,
-  };
 }
 
 /**
