@@ -77,7 +77,7 @@ export class AirdropContractDataSource
     amount: string,
     totalGrant: string,
     merkleProof: string[],
-    destination?: string,
+    recipient?: string,
     options?: TransactionOptions,
   ): Promise<string> {
     const address = await signer.getAddress();
@@ -89,7 +89,7 @@ export class AirdropContractDataSource
         parseUnits(amount, decimals),
         parseUnits(totalGrant, decimals),
         merkleProof,
-        destination || address,
+        recipient || address,
       ],
       signer,
       options,
@@ -105,7 +105,7 @@ export class AirdropContractDataSource
     delegate: string,
     totalGrant: string,
     merklProof: string[],
-    destination?: string,
+    recipient?: string,
     options?: TransactionOptions,
   ): Promise<string> {
     const address = await signer.getAddress();
@@ -118,7 +118,7 @@ export class AirdropContractDataSource
         delegate,
         parseUnits(totalGrant, decimals),
         merklProof,
-        destination || address,
+        recipient || address,
       ],
       signer,
       options,
@@ -130,12 +130,12 @@ export class AirdropContractDataSource
 
   async reclaim(
     signer: Signer,
-    destination?: string,
+    recipient?: string,
     options?: TransactionOptions,
   ): Promise<string> {
     const transaction = await this.callWithSigner(
       "reclaim",
-      [destination || (await signer.getAddress())],
+      [recipient || (await signer.getAddress())],
       signer,
       options,
     );

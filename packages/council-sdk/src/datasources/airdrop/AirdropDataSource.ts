@@ -44,7 +44,7 @@ export interface AirdropDataSource extends DataSource {
    * @param merkleProof - A set of hashes that can be used to reconstruct the
    * path from a user (leaf) node to the merkle root, verifying that the user is
    * part of the tree.
-   * @param destination - The address which will be credited with funds.
+   * @param recipient - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   claim: (
@@ -52,7 +52,7 @@ export interface AirdropDataSource extends DataSource {
     amount: string,
     totalGrant: string,
     merkleProof: string[],
-    destination?: string,
+    recipient?: string,
     options?: TransactionOptions,
   ) => Promise<string>;
 
@@ -66,7 +66,7 @@ export interface AirdropDataSource extends DataSource {
    * @param merkleProof - A set of hashes that can be used to reconstruct the
    * path from a user (leaf) node to the merkle root, verifying that the user is
    * part of the tree.
-   * @param destination - The address which will be credited with funds.
+   * @param recipient - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   claimAndDelegate: (
@@ -75,19 +75,19 @@ export interface AirdropDataSource extends DataSource {
     delegate: string,
     totalGrant: string,
     merkleProof: string[],
-    destination?: string,
+    recipient?: string,
     options?: TransactionOptions,
   ) => Promise<string>;
 
   /**
    * Remove funds from the airdrop after expiration
    * @param signer - Signer.
-   * @param destination - The address which will be credited with funds.
+   * @param recipient - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   reclaim: (
     signer: Signer,
-    destination?: string,
+    recipient?: string,
     options?: TransactionOptions,
   ) => Promise<string>;
 }
