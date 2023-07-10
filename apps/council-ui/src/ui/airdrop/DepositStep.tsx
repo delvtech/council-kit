@@ -48,7 +48,6 @@ export default function DepositStep({
               name="account"
               id="account"
               value={delegate}
-              // readOnly={!setDelegate}
               onChange={(e) => setDelegate(e.target.value)}
             />
             <label className="daisy-label text-sm">
