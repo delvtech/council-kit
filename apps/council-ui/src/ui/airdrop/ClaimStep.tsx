@@ -29,7 +29,7 @@ export default function ClaimStep({
           onChange={(e) => setRecipient(e.target.value)}
         />
         <label className="daisy-label">
-          <span className="label-text-alt">
+          <span className="daisy-label text-sm">
             The tokens will be sent to this address.
           </span>
         </label>
