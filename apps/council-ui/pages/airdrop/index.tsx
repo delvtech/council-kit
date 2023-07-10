@@ -56,7 +56,7 @@ export default function AirdropPage(): ReactElement {
   const { mutate: claimAndDelegate } = useClaimAndDelegateAirdrop();
   const { mutate: claim } = useClaimAirdrop();
 
-  const hasClaimableAmount = claimableAmount && +claimableAmount;
+  const hasClaimableAmount = !!claimableAmount && !!+claimableAmount;
 
   return (
     <section className="mx-auto max-w-lg flex flex-col justify-center gap-16 mt-14 text-center px-[6vw] box-content">
