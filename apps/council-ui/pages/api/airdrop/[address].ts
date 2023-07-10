@@ -34,27 +34,9 @@ export default function handler(
   }
 
   if (Array.isArray(address)) {
-    const infos: MerkleRewards["accounts"][string][] = [];
-    const missingAddresses: string[] = [];
-
-    for (const addr of address) {
-      const info = merkleRewards.accounts[addr.toLowerCase()];
-
-      if (info) {
-        infos.push(info);
-      } else {
-        missingAddresses.push(addr);
-      }
-    }
-
-    if (missingAddresses.length) {
-      res.status(404).json({
-        error: `Address(es) not found: ${missingAddresses.join(", ")}`,
-      });
-    } else {
-      res.status(200).json(infos);
-    }
-
+    res
+      .status(400)
+      .json({ error: `Address must be single value. Received: ${address}` });
     return;
   }
 
