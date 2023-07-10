@@ -66,7 +66,7 @@ export class Airdrop extends Model {
   }
 
   /**
-   * Get the token balance of a given address
+   * Get the amount that an address has already claimed.
    */
   getClaimedAmount(address: string): Promise<string> {
     return this.dataSource.getClaimedAmount(address);
@@ -89,7 +89,7 @@ export class Airdrop extends Model {
    * @param merkleProof - A set of hashes that can be used to reconstruct the
    * path from a user (leaf) node to the merkle root, verifying that the user is
    * part of the tree.
-   * @param destination - The address which will be credited with funds.
+   * @param recipient - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   async claim(
@@ -97,7 +97,7 @@ export class Airdrop extends Model {
     amount: string,
     totalGrant: string,
     merkleProof: string[],
-    destination?: string,
+    recipient?: string,
     options?: TransactionOptions,
   ): Promise<string> {
     return this.dataSource.claim(
@@ -105,7 +105,7 @@ export class Airdrop extends Model {
       amount,
       totalGrant,
       merkleProof,
-      destination,
+      recipient,
       options,
     );
   }
@@ -120,7 +120,7 @@ export class Airdrop extends Model {
    * @param merkleProof - A set of hashes that can be used to reconstruct the
    * path from a user (leaf) node to the merkle root, verifying that the user is
    * part of the tree.
-   * @param destination - The address which will be credited with funds.
+   * @param recipient - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   async claimAndDelegate(
@@ -129,7 +129,7 @@ export class Airdrop extends Model {
     delegate: string,
     totalGrant: string,
     merkleProof: string[],
-    destination?: string,
+    recipient?: string,
     options?: TransactionOptions,
   ): Promise<string> {
     return this.dataSource.claimAndDelegate(
@@ -138,7 +138,7 @@ export class Airdrop extends Model {
       delegate,
       totalGrant,
       merkleProof,
-      destination,
+      recipient,
       options,
     );
   }

@@ -1,4 +1,5 @@
 import {
+  Airdrop,
   CouncilContext,
   GSCVault,
   GSCVotingContract,
@@ -14,6 +15,7 @@ export interface CouncilClient {
   context: CouncilContext;
   coreVoting: VotingContract;
   gscVoting?: GSCVotingContract;
+  airdrop?: Airdrop;
 }
 
 export function getCouncilClient(chainId: SupportedChainId): CouncilClient {
@@ -56,6 +58,10 @@ export function getCouncilClient(chainId: SupportedChainId): CouncilClient {
       new GSCVault(config.gscVoting.vaults[0].address, context),
       context,
     );
+  }
+
+  if (config.airdrop) {
+    client.airdrop = new Airdrop(config.airdrop.address, context);
   }
 
   return client;

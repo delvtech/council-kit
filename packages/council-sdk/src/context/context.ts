@@ -1,4 +1,5 @@
 import { providers } from "ethers";
+import { CachedDataSource } from "src/datasources/base/cached/CachedDataSource";
 import { DataSource } from "src/datasources/base/DataSource";
 
 /**
@@ -10,8 +11,8 @@ export interface CouncilContextOptions {
 
 /**
  * The Context stores common information used in model and data source methods
- * including shared data sources and their cache. It also includes a couple
- * utility methods for getting and registering new shared data sources.
+ * including shared data sources and their cache. It also includes a few
+ * utility methods for working with data sources.
  * @category Context
  */
 export class CouncilContext {
@@ -76,5 +77,16 @@ export class CouncilContext {
     }
     this.dataSources.push(dataSource);
     return dataSource;
+  }
+
+  /**
+   * Clear the cache of all data sources that extend `CachedDataSource`.
+   */
+  clearCached(): void {
+    for (const dataSource of this.dataSources) {
+      if (dataSource instanceof CachedDataSource) {
+        dataSource.clearCached();
+      }
+    }
   }
 }

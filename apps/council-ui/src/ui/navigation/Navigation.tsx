@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { makeVoterURL, Routes } from "src/routes";
+import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
+import { AirdropIcon } from "src/ui/base/svg/20/AirdropIcon";
 import PushIcon from "src/ui/base/svg/PushLogo";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
@@ -14,6 +16,8 @@ export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
   const { toggleUserStatus, loading, isSubscribed } = usePushSubscribe();
+  const { data: claimableAmount } = useClaimableAirdropAmount();
+
   useWrongNetworkEffect();
 
   return (
@@ -91,14 +95,16 @@ export function Navigation(): ReactElement {
         <div className="ml-2 whitespace-nowrap text-xl text-base-content">
           council-reference-ui
         </div>
-      </div>
-      <div className="daisy-navbar-center hidden lg:flex">
-        <ul className="daisy-menu daisy-menu-horizontal p-0">
+
+        <ul className="ml-4 items-center p-0 hidden lg:flex">
           <li>
             <Link
-              className={classNames({
-                "daisy-active": pathname.startsWith(Routes.PROPOSALS),
-              })}
+              className={classNames(
+                "hover:text-primary focus:text-primary px-4 py-3 transition-all font-medium",
+                {
+                  "text-primary": pathname.startsWith(Routes.PROPOSALS),
+                },
+              )}
               href={Routes.PROPOSALS}
             >
               proposals
@@ -106,9 +112,12 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <Link
-              className={classNames({
-                "daisy-active": pathname.startsWith(Routes.VAULTS),
-              })}
+              className={classNames(
+                "hover:text-primary focus:text-primary px-4 py-3 transition-all font-medium",
+                {
+                  "text-primary": pathname.startsWith(Routes.VAULTS),
+                },
+              )}
               href={Routes.VAULTS}
             >
               vaults
@@ -116,11 +125,14 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <Link
-              className={classNames({
-                "daisy-active":
-                  pathname.startsWith(Routes.VOTERS) &&
-                  address !== query.address,
-              })}
+              className={classNames(
+                "hover:text-primary focus:text-primary px-4 py-3 transition-all font-medium",
+                {
+                  "text-primary":
+                    pathname.startsWith(Routes.VOTERS) &&
+                    address !== query.address,
+                },
+              )}
               href={Routes.VOTERS}
             >
               voters
@@ -129,11 +141,14 @@ export function Navigation(): ReactElement {
           {address && (
             <li>
               <Link
-                className={classNames({
-                  "daisy-active":
-                    pathname.startsWith(Routes.VOTERS) &&
-                    address === query.address,
-                })}
+                className={classNames(
+                  "hover:text-primary focus:text-primary px-4 py-3 transition-all font-medium",
+                  {
+                    "text-primary":
+                      pathname.startsWith(Routes.VOTERS) &&
+                      address === query.address,
+                  },
+                )}
                 href={makeVoterURL(address)}
               >
                 profile
@@ -142,7 +157,7 @@ export function Navigation(): ReactElement {
           )}
         </ul>
       </div>
-      <div className="daisy-navbar-end">
+      <div className="daisy-navbar-end flex gap-3">
         {address && toggleUserStatus && (
           <Tooltip
             content={`Subscribe to start recieving updates as notifications from PUSH`}
@@ -158,6 +173,19 @@ export function Navigation(): ReactElement {
               </button>
             </span>
           </Tooltip>
+        )}
+        {!!claimableAmount && !!+claimableAmount && (
+          <Link
+            href={"/airdrop"}
+            className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 md:bg-white bg-accent group"
+          >
+            <span className="text-accent-content md:text-accent">
+              <AirdropIcon />
+            </span>
+            <span className="hidden md:block md:text-gray-800 text-accent-content">
+              Claim airdrop
+            </span>
+          </Link>
         )}
         <ConnectButton />
       </div>

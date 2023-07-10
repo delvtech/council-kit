@@ -5,11 +5,11 @@ import {
   selectCommandHandler,
 } from "src/utils/selectCommandHandler";
 
-const commandDir = "./mock-token";
+const commandDir = "./locking-vault";
 
 export const { command, describe, builder, handler } = createCommandModule({
-  command: "mock-token [command]",
-  describe: "Interact with a MockERC20 contract",
+  command: "locking-vault [command]",
+  describe: "Interact with a LockingVault contract",
 
   builder: (yargs) => {
     return yargs.commandDir(commandDir, {

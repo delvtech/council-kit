@@ -17,7 +17,7 @@ import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
 import { useDelegate } from "src/ui/vaults/vestingVault/hooks/useDelegate";
 import { getVaultConfig } from "src/vaults/vaults";
-import { useSigner } from "wagmi";
+import { useAccount, useSigner } from "wagmi";
 
 interface VestingVaultProfileCardProps {
   address: string;
@@ -32,7 +32,8 @@ export function VestingVaultProfileCard({
   const { data } = useVestingVaultProfileCardData(address, profileAddress);
   const profileName = useDisplayName(profileAddress);
   const delegateName = useDisplayName(data?.delegate.address);
-  const { data: accountDelegate } = useDelegate(address);
+  const { address: account } = useAccount();
+  const { data: accountDelegate } = useDelegate(address, account);
 
   // config
   const chainId = useChainId();

@@ -15,7 +15,7 @@ export async function requiredCallHash(
     fallbackCallHash = createCallHash(targets, calldatas);
   }
 
-  const ensuredCallHash = await requiredOption(callHash || fallbackCallHash, {
+  const possibleCallHash = await requiredOption(callHash || fallbackCallHash, {
     name: "call-hash",
     type: "text",
     message: `Enter call hash ${colors.dim(
@@ -23,8 +23,8 @@ export async function requiredCallHash(
     )}`,
   });
 
-  if (ensuredCallHash) {
-    return ensuredCallHash;
+  if (possibleCallHash) {
+    return possibleCallHash;
   }
 
   const ensuredTargets = await requiredArray(targets, {

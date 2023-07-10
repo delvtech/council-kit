@@ -1,18 +1,20 @@
 import { LockingVault, Voter } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useCouncil } from "src/ui/council/useCouncil";
-import { useAccount } from "wagmi";
 
-export function useDelegate(vaultAddress: string): UseQueryResult<Voter> {
+export function useDelegate(
+  vaultAddress: string | undefined,
+  accountAddress: string | undefined,
+): UseQueryResult<Voter> {
   const { context } = useCouncil();
-  const { address } = useAccount();
+  const enabled = !!vaultAddress && !!accountAddress;
   return useQuery({
-    queryKey: ["delegate", vaultAddress, address],
-    enabled: !!address,
-    queryFn: !!address
+    queryKey: ["delegate", vaultAddress, accountAddress],
+    enabled,
+    queryFn: enabled
       ? async () => {
           const lockingVault = new LockingVault(vaultAddress, context);
-          return lockingVault.getDelegate(address);
+          return lockingVault.getDelegate(accountAddress);
         }
       : undefined,
   });
