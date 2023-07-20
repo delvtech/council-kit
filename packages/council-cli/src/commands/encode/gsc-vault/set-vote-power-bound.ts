@@ -2,9 +2,8 @@ import { GSCVault__factory } from "@council/typechain";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredNumberString } from "src/options/utils/requiredNumberString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
 export const { command, aliases, builder, handler } = createCommandModule({
   command: "set-vote-power-bound [OPTIONS]",
@@ -50,6 +49,6 @@ export function encodeSetVotePowerBound(
   return encodeFunctionData({
     abi: GSCVault__factory.abi,
     functionName: "setVotePowerBound",
-    args: [parseBigInt(power, decimals)],
+    args: [parseUnits(power as `${number}`, decimals)],
   });
 }

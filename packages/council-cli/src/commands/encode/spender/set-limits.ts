@@ -2,9 +2,8 @@ import { Spender__factory } from "@council/typechain";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -75,9 +74,9 @@ export function encodeSetLimits(
     functionName: "setLimits",
     args: [
       [
-        parseBigInt(small, decimals),
-        parseBigInt(medium, decimals),
-        parseBigInt(high, decimals),
+        parseUnits(small as `${number}`, decimals),
+        parseUnits(medium as `${number}`, decimals),
+        parseUnits(high as `${number}`, decimals),
       ],
     ],
   });

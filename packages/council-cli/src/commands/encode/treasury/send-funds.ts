@@ -2,9 +2,8 @@ import { Treasury__factory } from "@council/typechain";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
 const ETH_CONSTANT = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
@@ -76,6 +75,6 @@ export function encodeSendFunds(
   return encodeFunctionData({
     abi: Treasury__factory.abi,
     functionName: "sendFunds",
-    args: [token, parseBigInt(amount, decimals), recipient],
+    args: [token, parseUnits(amount as `${number}`, decimals), recipient],
   });
 }
