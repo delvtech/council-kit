@@ -2,9 +2,8 @@ import { VestingVault__factory } from "@council/typechain";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "deposit [OPTIONS]",
@@ -46,6 +45,6 @@ export function encodeDeposit(amount: string, decimals: number): string {
   return encodeFunctionData({
     abi: VestingVault__factory.abi,
     functionName: "deposit",
-    args: [parseBigInt(amount, decimals)],
+    args: [parseUnits(amount as `${number}`, decimals)],
   });
 }

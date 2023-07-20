@@ -3,9 +3,8 @@ import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredNumberString } from "src/options/utils/requiredNumberString";
 import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -74,6 +73,6 @@ export function encodeSetCustomQuorum(
   return encodeFunctionData({
     abi: CoreVoting__factory.abi,
     functionName: "setCustomQuorum",
-    args: [target, selector, parseBigInt(quorum, decimals)],
+    args: [target, selector, parseUnits(quorum as `${number}`, decimals)],
   });
 }

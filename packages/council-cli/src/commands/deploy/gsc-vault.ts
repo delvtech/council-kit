@@ -6,10 +6,9 @@ import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredNumberString } from "src/options/utils/requiredNumberString";
 import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
 import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
+import { Hex, parseUnits, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { Chain } from "viem/chains";
 
@@ -117,7 +116,11 @@ export async function deployGSCVault({
 }: DeployGSCVaultOptions): Promise<DeployedContract> {
   return await deployContract({
     abi: GSCVault__factory.abi,
-    args: [coreVoting, parseBigInt(votingPowerBound, decimals), owner],
+    args: [
+      coreVoting,
+      parseUnits(votingPowerBound as `${number}`, decimals),
+      owner,
+    ],
     bytecode: GSCVault__factory.bytecode,
     account,
     rpcUrl,

@@ -2,9 +2,8 @@ import { VestingVault__factory } from "@council/typechain";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
 export const { command, aliases, describe, builder, handler } =
   createCommandModule({
@@ -128,7 +127,7 @@ export function encodeAddGrantAndDelegate({
     functionName: "addGrantAndDelegate",
     args: [
       who,
-      parseBigInt(amount, decimals),
+      parseUnits(amount as `${number}`, decimals),
       startTime,
       expiration,
       cliff,

@@ -7,10 +7,9 @@ import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredNumberString } from "src/options/utils/requiredNumberString";
 import { requiredString } from "src/options/utils/requiredString";
 import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
 import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
+import { Hex, parseUnits, PrivateKeyAccount } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { Chain } from "viem/chains";
 
@@ -148,8 +147,8 @@ export async function deployCoreVoting({
     abi: CoreVoting__factory.abi,
     args: [
       owner,
-      parseBigInt(quorum, decimals),
-      parseBigInt(minPower, decimals),
+      parseUnits(quorum as `${number}`, decimals),
+      parseUnits(minPower as `${number}`, decimals),
       gsc,
       vaults,
     ],

@@ -3,9 +3,8 @@ import signale from "signale";
 import { requiredArray } from "src/options/utils/requiredArray";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
 export const { command, describe, builder, handler } = createCommandModule({
   command: "claim [OPTIONS]",
@@ -87,8 +86,8 @@ export function encodeClaim(
     abi: MerkleRewards__factory.abi,
     functionName: "claim",
     args: [
-      parseBigInt(amount, decimals),
-      parseBigInt(totalGrant, decimals),
+      parseUnits(amount as `${number}`, decimals),
+      parseUnits(totalGrant as `${number}`, decimals),
       proof,
       recipient,
     ],

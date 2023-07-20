@@ -7,9 +7,8 @@ import colors from "colors";
 import ganache from "ganache";
 import signale from "signale";
 import { requiredNumber } from "src/options/utils/requiredNumber";
-import { formatBigInt } from "src/utils/bigint/formatBigInt";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
+import { formatUnits, parseUnits } from "viem";
 
 console.warn = originalConsoleWarn;
 
@@ -58,7 +57,10 @@ export const { command, describe, builder, handler } = createCommandModule({
       initial: 8545,
     });
 
-    const initialAccountBalance = parseBigInt((args.balance || 100).toString());
+    const initialAccountBalance = parseUnits(
+      (args.balance || 100).toString() as `${number}`,
+      18,
+    );
 
     const serverConfig = {
       blockTime: args.blockTime,
@@ -229,7 +231,7 @@ export const { command, describe, builder, handler } = createCommandModule({
           console.log(colors.dim(`${"-".repeat(80)}`));
         }
 
-        const balance = formatBigInt(account.balance);
+        const balance = formatUnits(account.balance, 18);
         console.log(`Account ${i + 1}: ${address} (${balance} ETH)`);
         console.log(`Private Key: ${account.secretKey}`);
       });

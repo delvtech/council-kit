@@ -6,8 +6,6 @@ import signale from "signale";
 import { ArrayQuestion, requiredArray } from "src/options/utils/requiredArray";
 import { requiredNumber } from "src/options/utils/requiredNumber";
 import { requiredOption } from "src/options/utils/requiredOption";
-import { formatBigInt } from "src/utils/bigint/formatBigInt";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
 import { createCommandModule } from "src/utils/createCommandModule";
 import { JSONStore } from "src/utils/JSONStore";
 import { Schema, validateData } from "src/utils/validateData";
@@ -16,6 +14,7 @@ import { isNumberString } from "src/utils/validation/isNumberString";
 import {
   Address,
   encodePacked,
+  formatUnits,
   Hex,
   isAddress,
   keccak256,
@@ -81,7 +80,7 @@ export const { command, describe, builder, handler } = createCommandModule({
 
     // Sum all the amounts
     const amountTotal = accounts.reduce(
-      (sum, { amount }) => sum + parseBigInt(amount, decimals),
+      (sum, { amount }) => sum + parseUnits(amount, decimals),
       BigInt(0),
     );
 
@@ -101,7 +100,7 @@ export const { command, describe, builder, handler } = createCommandModule({
 
     const merkleTreeInfo = {
       root: merkleTree.getHexRoot(),
-      rewardsTotal: formatBigInt(amountTotal),
+      rewardsTotal: formatUnits(amountTotal, decimals),
       uniqueAccountsTotal: uniqueAddresses.size,
       accounts: Object.fromEntries(accountsEntries),
     };
