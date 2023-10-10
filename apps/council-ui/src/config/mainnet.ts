@@ -142,9 +142,19 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "This proposal fixes the technical error of the prior proposal, EGP-5. The ELFI token has 18 decimals, which was not accounted for in Proposal 8. Thus, despite the success of the onchain vote, the retroactive incentives of EGP-5 could not be sent to the reward contract.",
       },
+      10: {
+        descriptionURL:
+          "https://snapshot.org/#/elfi.eth/proposal/0xbfd1f2b0977aed2aa1cfaf38f5a79fc3b7b21a49ff8b556ed3d11e83f14ad382",
+        targets: [],
+        calldatas: [],
+        title: "EGP16-2: Begin unwinding of the main treasury",
+        sentenceSummary:
+          "This PR is the follow-up from the approved Snapshot proposal, targeting the unwinding of the main treasury.",
+        paragraphSummary:
+          "The main treasury, accessible here, holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
+      },
     },
   },
-
   gscVoting: {
     name: "GSC",
     address: "0x40309f197e7f94B555904DF0f788a3F48cF326aB",
@@ -164,7 +174,17 @@ export const mainnetCouncilConfig: CouncilConfig = {
       },
     ],
     proposals: {
-      0: { descriptionURL: "", targets: [], calldatas: [] },
+      0: {
+        descriptionURL:
+          "https://snapshot.org/#/elfi.eth/proposal/0xbfd1f2b0977aed2aa1cfaf38f5a79fc3b7b21a49ff8b556ed3d11e83f14ad382",
+        targets: [],
+        calldatas: [],
+        title: "EGP16-1: Unwind GSC Treasury",
+        sentenceSummary:
+          "This PR follows on from the approved snapshot proposal to unwind the GSC and main treasury, currently living in a gnosis safe, transferring the unwound assets to the main treasury.",
+        paragraphSummary:
+          "The GSC treasury, https://app.safe.global/home?safe=eth:0x654be0b5556f8eadbc2d140505445fa32715ef2b or https://zapper.fi/account/0x654be0b5556f8eadbc2d140505445fa32715ef2b, is a gnosis safe currently containing 24 different assets in balancer pools. These assets came from protocol fees traded on the Element protocol. In order to unwind the assets, the LP positions are withdrawn from the Balancer pools. After withdrawal, principal tokens are redeemed through the Element protocol. Once redeemed, the base assets are transferred and consolidated to the main treasury, https://zapper.fi/account/0x82ef450fb7f06e3294f2f19ed1713b255af0f541.",
+      },
     },
   },
 

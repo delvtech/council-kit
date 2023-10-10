@@ -4,6 +4,7 @@ import assertNever from "assert-never";
 import { parseEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
+import { ProposalConfig } from "src/config/CouncilConfig";
 import { getProposalStatus } from "src/proposals/getProposalStatus";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
@@ -75,6 +76,7 @@ function useProposalsPageData(
   const { context, coreVoting, gscVoting } = useCouncil();
   const chainId = useChainId();
   const proposalsConfig = councilConfigs[chainId].coreVoting.proposals;
+  const gscProposalsConfig = councilConfigs[chainId].gscVoting?.proposals;
   return useQuery({
     queryKey: ["proposalsPage", account],
     queryFn: async () => {
@@ -87,7 +89,13 @@ function useProposalsPageData(
 
       return await Promise.all(
         allProposals.map(async (proposal) => {
-          const proposalConfig = proposalsConfig[proposal.id];
+          let proposalConfig: ProposalConfig | undefined;
+          if (proposal.votingContract.address === gscVoting?.address) {
+            proposalConfig = gscProposalsConfig?.[proposal.id];
+          } else {
+            proposalConfig = proposalsConfig[proposal.id];
+          }
+
           const createdBlock = await proposal.getCreatedBlock();
           const expirationBlock = await proposal.getExpirationBlock();
           const votingEnds = expirationBlock
