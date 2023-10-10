@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { ReactElement, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { councilConfigs } from "src/config/council.config";
+import { ProposalConfig } from "src/config/CouncilConfig";
 import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
 import {
   getProposalStatus,
@@ -241,10 +242,21 @@ function useProposalDetailsPageData(
   const { context, coreVoting, gscVoting } = useCouncil();
   const provider = context.provider;
   const chainId = useChainId();
-  const proposalConfigs = councilConfigs[chainId].coreVoting.proposals;
-  const votingContractName = councilConfigs[chainId].coreVoting.name;
+
+  // Default to the coreVoting, but if it's gsc grab the gsc name and proposal
+  // configs instead
+  let proposalConfigs = councilConfigs[chainId].coreVoting.proposals;
+  let votingContractName = councilConfigs[chainId].coreVoting.name;
+  if (gscVoting && votingContractAddress === gscVoting.address) {
+    proposalConfigs = councilConfigs[chainId].gscVoting?.proposals as Record<
+      string,
+      ProposalConfig
+    >;
+    votingContractName = councilConfigs[chainId].gscVoting?.name as string;
+  }
 
   const queryEnabled = votingContractAddress !== undefined && id !== undefined;
+
   return useQuery<ProposalDetailsPageData>({
     queryKey: ["proposalDetailsPage", id],
     enabled: queryEnabled,
