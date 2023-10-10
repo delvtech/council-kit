@@ -1,5 +1,6 @@
 import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
 import { useQuery } from "@tanstack/react-query";
+import { parseUnits } from "ethers/lib/utils";
 import { useRouter } from "next/router";
 import { ReactElement, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -304,17 +305,30 @@ function useProposalDetailsPageData(
               })
             : null;
 
-          const votes = await proposal.getVotes();
+          let votes = await proposal.getVotes();
           const voterEnsRecords = await getBulkEnsRecords(
             Array.from(new Set(votes.map((vote) => vote.voter.address))),
             provider,
           );
 
-          const currentQuorum = await proposal.getCurrentQuorum();
-          const requiredQuorum = await proposal.getRequiredQuorum();
+          let currentQuorum = await proposal.getCurrentQuorum();
+          let requiredQuorum = await proposal.getRequiredQuorum();
           const results = await proposal.getResults();
 
           const proposalConfig = proposalConfigs[id];
+
+          // Hotfix for correct vote display of gsc
+          // TODO @cashd: add parameter to voting vault configs for voting power decimals
+          if (type === "gsc") {
+            currentQuorum = parseUnits(currentQuorum).toString();
+            requiredQuorum = requiredQuorum
+              ? parseUnits(requiredQuorum).toString()
+              : null;
+            votes = votes.map((vote) => ({
+              ...vote,
+              power: parseUnits(vote.power).toString(),
+            }));
+          }
 
           return {
             type,
@@ -335,7 +349,7 @@ function useProposalDetailsPageData(
             endsAtDate,
             unlockedAtDate,
             lastCallAtDate: lastCallAtDate,
-            votes: await proposal.getVotes(),
+            votes,
             voterEnsRecords,
             createdTransactionHash,
             accountBallot: account
