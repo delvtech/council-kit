@@ -55,7 +55,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "https://snapshot.org/#/elfi.eth/proposal/0x132d4d3e0580349d938d22c844ce088ba2e5f394fc28b41f2927856746b125d7",
         targets: [],
         calldatas: [],
-        title: "EGP-15: Element Fixed Borrow Protocol Grant Proposal (Old)",
+        title: "(Invalid) EGP-15: Element Fixed Borrow Protocol Grant Proposal",
         sentenceSummary:
           "Component is proposing a 274,414.06 ELFI voting token grant to build a fixed borrow protocol on top of Element Finance and for building the YTC tool.",
         paragraphSummary:
@@ -175,6 +175,17 @@ export const mainnetCouncilConfig: CouncilConfig = {
     ],
     proposals: {
       0: {
+        descriptionURL:
+          "https://docs.google.com/document/d/17tR4ZjibQyfAma3QfklA0FTA4n6S3lGEXXWMzT75K-k/edit",
+        targets: [],
+        calldatas: [],
+        title: "(Invalid) EGP16-1: Unwind GSC Treasury",
+        sentenceSummary:
+          "This PR follows on from the approved snapshot proposal to unwind the GSC and main treasury, currently living in a gnosis safe, transferring the unwound assets to the main treasury.",
+        paragraphSummary:
+          "The GSC treasury  is a gnosis safe currently containing 24 different assets in balancer pools. These assets came from protocol fees traded on the Element protocol. In order to unwind the assets, the LP positions are withdrawn from the Balancer pools. After withdrawal, principal tokens are redeemed through the Element protocol. Once redeemed, the base assets are transferred and consolidated to the main treasury.",
+      },
+      1: {
         descriptionURL:
           "https://docs.google.com/document/d/17tR4ZjibQyfAma3QfklA0FTA4n6S3lGEXXWMzT75K-k/edit",
         targets: [],
