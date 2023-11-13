@@ -153,6 +153,16 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
       },
+      11: {
+      targets: [],
+      calldatas: [],
+      title:
+        "EGP28: Security Fix for Discovered Vulnerability in the Locking Vault",
+      sentenceSummary:
+        "EGP-28 is being proposed in response to a bug disclosure from the Immunefi bug bounty program related to the LockingVault.",
+      paragraphSummary:
+        "This proposal includes a solution to fix the ability for exploit to the LockingVault. For security purposes, this proposal won’t include the specific details of the proposal solution until the fix has been implemented. Once the proposal has been executed, a full report will be published revealing the bug report, the fix (including the technical solution), and a call to action for governance process improvement in the case that another situation like this occurs in the future.",
+    },
     },
   },
   gscVoting: {
