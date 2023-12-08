@@ -162,7 +162,17 @@ export const mainnetCouncilConfig: CouncilConfig = {
         "EGP-28 is being proposed in response to a bug disclosure from the Immunefi bug bounty program related to the LockingVault.",
       paragraphSummary:
         "This proposal includes a solution to fix the ability for exploit to the LockingVault. For security purposes, this proposal won’t include the specific details of the proposal solution until the fix has been implemented. Once the proposal has been executed, a full report will be published revealing the bug report, the fix (including the technical solution), and a call to action for governance process improvement in the case that another situation like this occurs in the future.",
-    },
+      },
+      12: {
+        targets: [],
+        calldatas: [],
+        title:
+          "EGP27: The Removal of Non-Contributor Grants from the Vesting Vault",
+        sentenceSummary:
+          "EGP-27 is being proposed to remove the DELV (formerly Element Finance) team-allocated token grants for those who left DELV before their vesting cliffs, reduce existing grants for Team Members who partially vested, or for Team Members who left before the vesting dates were reached.",
+        paragraphSummary:
+          "This proposal formalizes a solution for the removal/reclaiming of DELV Team Members-allocated token grants who departed prior to reaching the vesting vault smart contract-defined vesting cliffs, partially vested, and/or before the vesting dates were reached.\n\n These DELV team-allocated token grants were distributed during the governance launch of Element DAO on March 31 of 2022. The vesting cliff was defined as one year from the launch date and the token vesting schedule defined was as three years after the launch date.",
+        },
     },
   },
   gscVoting: {
