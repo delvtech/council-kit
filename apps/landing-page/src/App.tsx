@@ -280,9 +280,6 @@ function App(): ReactElement {
                 >
                   <img src="/gyroscope-logo.png" width={180} alt="Gyroscope" />
                 </a>
-                <p className="mt-3 text-center text-primary-text-light">
-                  COMING SOON!
-                </p>
               </div>
             </div>
 
