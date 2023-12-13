@@ -273,10 +273,10 @@ function App(): ReactElement {
               </div>
               <div>
                 <a
-                  href="https://twitter.com/GyroStable/status/1629157857097654275?s=20"
+                  href="https://gov.gyro.finance/"
                   target="_blank"
                   rel="noreferrer"
-                  className="transition-all hover:scale-105 hover:opacity-100 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833]/40 rounded-2xl relative overflow-hidden before:content-[''] before:absolute before:border-[6px] before:border-dashed before:border-primary-text-light/50 before:rounded-[22px] before:inset-[-5px] opacity-50"
+                  className="transition-all hover:scale-105 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833] rounded-2xl"
                 >
                   <img src="/gyroscope-logo.png" width={180} alt="Gyroscope" />
                 </a>
