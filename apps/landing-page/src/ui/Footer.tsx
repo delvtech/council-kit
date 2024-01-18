@@ -14,6 +14,24 @@ export function Footer(): ReactElement {
             Built with 💜 by{" "}
             <span className="font-semibold text-primary-text">DELV</span>
           </p>
+          <p className="flex gap-4">
+            <a
+              href="https://elementfi.s3.us-east-2.amazonaws.com/element-finance-terms-of-service.pdf"
+              className="transition-all text-primary-text hover:text-white"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Terms
+            </a>
+            <a
+              href="https://elementfi.s3.us-east-2.amazonaws.com/element-finance-privacy-policy.pdf"
+              className="transition-all text-primary-text hover:text-white"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Privacy
+            </a>
+          </p>
           <p className="text-sm">
             &copy; 2023 Element Finance Inc., dba DELV. All rights reserved
           </p>
