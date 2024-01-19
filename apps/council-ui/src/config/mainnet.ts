@@ -154,14 +154,14 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
       },
       11: {
-      targets: [],
-      calldatas: [],
-      title:
-        "EGP28: Security Fix for Discovered Vulnerability in the Locking Vault",
-      sentenceSummary:
-        "EGP-28 is being proposed in response to a bug disclosure from the Immunefi bug bounty program related to the LockingVault.",
-      paragraphSummary:
-        "This proposal includes a solution to fix the ability for exploit to the LockingVault. For security purposes, this proposal won’t include the specific details of the proposal solution until the fix has been implemented. Once the proposal has been executed, a full report will be published revealing the bug report, the fix (including the technical solution), and a call to action for governance process improvement in the case that another situation like this occurs in the future.",
+        targets: [],
+        calldatas: [],
+        title:
+          "EGP28: Security Fix for Discovered Vulnerability in the Locking Vault",
+        sentenceSummary:
+          "EGP-28 is being proposed in response to a bug disclosure from the Immunefi bug bounty program related to the LockingVault.",
+        paragraphSummary:
+          "This proposal includes a solution to fix the ability for exploit to the LockingVault. For security purposes, this proposal won’t include the specific details of the proposal solution until the fix has been implemented. Once the proposal has been executed, a full report will be published revealing the bug report, the fix (including the technical solution), and a call to action for governance process improvement in the case that another situation like this occurs in the future.",
       },
       12: {
         targets: [],
@@ -172,7 +172,15 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "EGP-27 is being proposed to remove the DELV (formerly Element Finance) team-allocated token grants for those who left DELV before their vesting cliffs, reduce existing grants for Team Members who partially vested, or for Team Members who left before the vesting dates were reached.",
         paragraphSummary:
           "This proposal formalizes a solution for the removal/reclaiming of DELV Team Members-allocated token grants who departed prior to reaching the vesting vault smart contract-defined vesting cliffs, partially vested, and/or before the vesting dates were reached.\n\n These DELV team-allocated token grants were distributed during the governance launch of Element DAO on March 31 of 2022. The vesting cliff was defined as one year from the launch date and the token vesting schedule defined was as three years after the launch date.",
-        },
+      },
+      13: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-16: Main Treasury - 1",
+        sentenceSummary: "Revised proposal to unwind the main treasury.",
+        paragraphSummary:
+          "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
+      },
     },
   },
   gscVoting: {
@@ -215,6 +223,17 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "This PR follows on from the approved snapshot proposal to unwind the GSC and main treasury, currently living in a gnosis safe, transferring the unwound assets to the main treasury.",
         paragraphSummary:
           "The GSC treasury  is a gnosis safe currently containing 24 different assets in balancer pools. These assets came from protocol fees traded on the Element protocol. In order to unwind the assets, the LP positions are withdrawn from the Balancer pools. After withdrawal, principal tokens are redeemed through the Element protocol. Once redeemed, the base assets are transferred and consolidated to the main treasury.",
+      },
+      2: {
+        descriptionURL:
+          "https://docs.google.com/document/d/17tR4ZjibQyfAma3QfklA0FTA4n6S3lGEXXWMzT75K-k/edit",
+        targets: [],
+        calldatas: [],
+        title: "EGP-16: GSC-1",
+        sentenceSummary:
+          "Revised proposal to unwind the GSC treasury, transferring the unwound assets to the main treasury.",
+        paragraphSummary:
+          "The GSC treasury is a gnosis safe currently containing 24 different assets in balancer pools. These assets came from protocol fees traded on the Element protocol. In order to unwind the assets, the LP positions are withdrawn from the Balancer pools. After withdrawal, principal tokens are redeemed through the Element protocol. Once redeemed, the base assets are transferred and consolidated to the main treasury.",
       },
     },
   },
