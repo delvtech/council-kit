@@ -1,9 +1,6 @@
 {
-  "name": "@council/typechain",
+  "name": "@council/artifacts",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -11,20 +8,12 @@
     "load-contracts": "sh scripts/load-contracts.sh",
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
-    "build:src": "npm run load-contracts && npm run clean && npm run compile",
-    "build": "tsc --project tsconfig.build.json"
+    "build": "npm run load-contracts && npm run clean && npm run compile"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
     "@council/tsconfig": "*",
-    "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@openzeppelin/contracts": "^4.2.0",
-    "@typechain/ethers-v5": "^10.1.1",
-    "@typechain/hardhat": "^6.1.4",
-    "ethers": "^5.7.2",
-    "hardhat": "^2.12.2",
-    "tsc": "^2.0.4",
-    "typechain": "^8.1.1",
-    "typescript": "^4.9.3"
+    "hardhat": "^2.19.4"
   }
 }

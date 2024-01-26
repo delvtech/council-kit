@@ -1,5 +1,2 @@
-node_modules
-artifacts
 cache
-coverage*
-dist
+contracts

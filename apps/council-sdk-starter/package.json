@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@council/sdk": "*",
-    "@council/typechain": "*",
+    "@council/artifacts": "*",
     "ethers": "^5.7.2"
   },
   "devDependencies": {

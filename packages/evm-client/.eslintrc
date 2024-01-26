@@ -5,5 +5,5 @@
   ],
   "ignorePatterns": [
     "generated.ts"
-  ],
+  ]
 }

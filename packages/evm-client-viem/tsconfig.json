@@ -1,11 +1,13 @@
 {
   "extends": "@council/tsconfig/base.json",
-  "include": ["./*.ts", "src"],
+  "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
     "target": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "paths": {
       "src/*": ["src/*"]
     },

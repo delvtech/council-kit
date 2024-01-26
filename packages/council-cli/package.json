@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@council/sdk": "*",
-    "@council/typechain": "*",
+    "@council/artifacts": "*",
     "ajv": "^8.12.0",
     "cfonts": "^3.1.1",
     "cli-table": "^0.3.11",
