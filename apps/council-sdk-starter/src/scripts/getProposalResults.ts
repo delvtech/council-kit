@@ -1,11 +1,9 @@
 import { CouncilContext, VoteResults, VotingContract } from "@council/sdk";
-import { getElementAddress } from "src/addresses/elementAddresses";
+import { addresses } from "src/addresses/addressList.json";
 import { provider } from "src/provider";
 
 // wrap the script in an async function so we can await promises
 export async function getProposalResults(): Promise<void> {
-  const addresses = await getElementAddress();
-
   // create a CouncilContext instance
   const context = new CouncilContext(provider);
 

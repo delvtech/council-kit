@@ -12,13 +12,10 @@
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
     "build:src": "npm run load-contracts && npm run clean && npm run compile",
-    "build": "tsc --project tsconfig.build.json",
-    "format": "prettier --write '**/*.{gql,graphql,js,jsx,ts,tsx,json,md,yaml,yml}'",
-    "format:check": "prettier --check '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'"
+    "build": "tsc --project tsconfig.build.json"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
-    "@council/prettier-config": "*",
     "@council/tsconfig": "*",
     "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@openzeppelin/contracts": "^4.2.0",

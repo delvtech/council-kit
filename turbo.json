@@ -24,37 +24,10 @@
       "outputs": ["dist/**"],
       "env": ["PROVIDER_URI", "WALLET_PRIVATE_KEY", "NODE_ENV"]
     },
-    "@council/contract-stub": {
-      "env": ["MOCK_WALLET_PRIVATE_KEY"]
-    },
     "@council/sdk#build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],
       "env": ["PROVIDER_URI", "EXAMPLE_WALLET_PRIVATE_KEY", "NODE_ENV"]
-    },
-    "@council/deploy#build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "env": [
-        "MAINNET_DEPLOYER_PRIVATE_KEY",
-        "GOERLI_DEPLOYER_PRIVATE_KEY",
-        "MAINNET_URI",
-        "GOERLI_URI",
-        "ETHERSCAN_API_KEY",
-        "VOTING_TOKEN_ADDRESS",
-        "GSC_BASE_QUORUM",
-        "GSC_LOCK_DURATION",
-        "GSC_EXTRA_VOTING",
-        "GSC_VOTING_POWER_BOUND",
-        "GSC_IDLE_DURATION",
-        "BASE_QUORUM",
-        "LOCK_DURATION",
-        "EXTRA_VOTING",
-        "MIN_PROPOSAL_POWER",
-        "WAIT_BLOCKS",
-        "TREASURY_ADDRESS",
-        "UNVESTED_VOTING_MULTIPLIER"
-      ]
     },
     "@council/cli": {
       "env": [

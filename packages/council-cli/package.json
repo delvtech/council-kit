@@ -20,7 +20,6 @@
     "watch:docs": "typedoc --watch"
   },
   "dependencies": {
-    "@council/deploy": "*",
     "@council/sdk": "*",
     "@council/typechain": "*",
     "ajv": "^8.12.0",
@@ -38,7 +37,6 @@
   },
   "devDependencies": {
     "@council/eslint-config": "*",
-    "@council/prettier-config": "*",
     "@council/tsconfig": "*",
     "@types/cli-table": "^0.3.1",
     "@types/node": "^18.16.1",
@@ -48,7 +46,6 @@
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "nodemon": "^2.0.20",
-    "prettier-plugin-organize-imports": "^3.2.2",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
     "tsup": "^6.7.0",
