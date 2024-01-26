@@ -18,15 +18,12 @@
   "devDependencies": {
     "@parcel/packager-ts": "2.8.0",
     "@parcel/transformer-typescript-types": "2.8.0",
+    "eslint": "^8.56.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "os-browserify": "^0.3.0",
-    "prettier": "latest",
-    "turbo": "latest",
-    "typescript": ">=3.0.0"
-  },
-  "resolutions": {
-    "typescript": "4.7.4"
+    "prettier": "^3.2.4",
+    "turbo": "latest"
   },
   "lint-staged": {
     "{apps,packages}/**/*.{gql,graphql,js,jsx,ts,tsx,json}": [
@@ -35,8 +32,7 @@
     ]
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
-  "dependencies": {},
-  "packageManager": "yarn@1.22.18"
+  "packageManager": "yarn@1.22.21"
 }
