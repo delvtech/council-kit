@@ -2,8 +2,6 @@
 
 src_dir=$1
 
-cd $(dirname $0)
-
 if [ ! -d $src_dir ]; then
   # From Harhat config:
   contracts_dir="contracts"

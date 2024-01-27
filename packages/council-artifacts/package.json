@@ -2,14 +2,11 @@
   "name": "@council/artifacts",
   "version": "1.0.0",
   "type": "module",
-  "exports": {
-    ".": "./artifacts"
-  },
   "files": [
     "artifacts"
   ],
   "scripts": {
-    "build:src": "sh build.sh src",
+    "build:src": "sh scripts/build-src.sh src",
     "build": "npm run build:src && tsc --build --force"
   },
   "devDependencies": {
