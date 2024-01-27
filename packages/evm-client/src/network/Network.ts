@@ -25,7 +25,7 @@ export type GetBlockParameters =
 /**
  * An interface representing data the SDK needs to get from the network.
  */
-export interface INetwork {
+export interface Network {
   /**
    * Get a block from a block tag, number, or hash. If no argument is provided,
    * the latest block is returned.

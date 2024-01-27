@@ -16,8 +16,10 @@
   "peerDependencies": {
     "viem": ">=2"
   },
+  "dependencies": {
+    "@council/evm-client": "*"
+  },
   "devDependencies": {
-    "@council/evm-client": "*",
     "@council/eslint-config": "*",
     "@council/tsconfig": "*",
     "tsup": "^8.0.1",

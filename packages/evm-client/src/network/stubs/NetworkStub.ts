@@ -1,11 +1,11 @@
-import { GetBlockParameters, INetwork } from "src/network/Network";
+import { GetBlockParameters, Network } from "src/network/Network";
 import { SinonStub, stub } from "sinon";
 
 /**
  * A mock implementation of a `Network` designed to facilitate unit
  * testing.
  */
-export class NetworkStub implements INetwork {
+export class NetworkStub implements Network {
   protected getBlockStub:
     | SinonStub<
         [GetBlockParameters | undefined],

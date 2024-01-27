@@ -4,15 +4,14 @@ export { LruSimpleCache } from "src/cache/LruSimpleCache";
 
 // Contract
 export type {
-  IReadContract,
+  ReadContract,
   ContractReadOptions,
-} from "src/contract/IReadContract";
+} from "src/contract/ReadContract";
 export type {
-  IReadWriteContract,
+  ReadWriteContract,
   ContractWriteOptions,
   ContractWriteOptionsWithCallback,
-} from "src/contract/IReadWriteContract";
-export type { Contract } from "src/contract/Contract";
+} from "src/contract/ReadWriteContract";
 export type {
   ContractEvent,
   ContractGetEventsOptions,
@@ -20,21 +19,18 @@ export type {
 export {
   CachedReadContract,
   type CachedReadContractOptions,
-  type ICachedReadContract,
 } from "src/contract/cached/CachedReadContract/CachedReadContract";
 export {
   CachedReadWriteContract,
   type CachedReadWriteContractOptions,
-  type ICachedReadWriteContract,
 } from "src/contract/cached/CachedReadWriteContract";
-export type { ICachedContract } from "src/contract/cached/CachedContract";
 
 // Contract testing stubs
 export { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
 export { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub/ReadWriteContractStub";
 
 // Network
-export type { INetwork, GetBlockParameters } from "src/network/Network";
+export type { Network, GetBlockParameters } from "src/network/Network";
 // Network testing stub
 export { NetworkStub } from "src/network/stubs/NetworkStub";
 

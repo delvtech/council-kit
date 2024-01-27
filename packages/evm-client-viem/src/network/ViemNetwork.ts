@@ -1,7 +1,7 @@
-import { GetBlockParameters, INetwork } from "@council/evm-client";
+import { GetBlockParameters, Network } from "@council/evm-client";
 import { PublicClient } from "viem";
 
-export class ViemNetwork implements INetwork {
+export class ViemNetwork implements Network {
   private readonly _publicClient: PublicClient;
 
   constructor(publicClient: PublicClient) {

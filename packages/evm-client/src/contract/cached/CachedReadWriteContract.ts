@@ -6,25 +6,16 @@ import {
 } from "src/base/abitype";
 import {
   ContractWriteOptions,
-  IReadWriteContract,
-} from "src/contract/IReadWriteContract";
+  ReadWriteContract,
+} from "src/contract/ReadWriteContract";
 import {
-  CachedReadContract,
   CachedReadContractOptions,
-  ICachedReadContract,
+  CachedReadContract,
 } from "src/contract/cached/CachedReadContract/CachedReadContract";
-
-/**
- * Interface for a writable contract that also provides caching capabilities.
- * This extends both readable cached contracts and writable contracts.
- */
-export interface ICachedReadWriteContract<TAbi extends Abi = Abi>
-  extends ICachedReadContract<TAbi>,
-    IReadWriteContract<TAbi> {}
 
 export interface CachedReadWriteContractOptions<TAbi extends Abi = Abi>
   extends CachedReadContractOptions<TAbi> {
-  contract: IReadWriteContract<TAbi>;
+  contract: ReadWriteContract<TAbi>;
 }
 
 /**
@@ -35,10 +26,10 @@ export interface CachedReadWriteContractOptions<TAbi extends Abi = Abi>
  */
 export class CachedReadWriteContract<TAbi extends Abi = Abi>
   extends CachedReadContract<TAbi>
-  implements ICachedReadWriteContract<TAbi>
+  implements ReadWriteContract<TAbi>
 {
   /** The wrapped writable contract instance. */
-  protected readonly _contract: IReadWriteContract<TAbi>;
+  protected readonly _contract: ReadWriteContract<TAbi>;
 
   constructor({ contract, cache, id }: CachedReadWriteContractOptions<TAbi>) {
     super({ contract, cache, id });

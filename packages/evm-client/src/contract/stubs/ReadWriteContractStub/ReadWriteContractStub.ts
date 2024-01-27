@@ -1,7 +1,7 @@
 import {
   ContractWriteOptions,
-  IReadWriteContract,
-} from "src/contract/IReadWriteContract";
+  ReadWriteContract,
+} from "src/contract/ReadWriteContract";
 import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
 import { Abi } from "abitype";
 import { FunctionArgs, FunctionName } from "src/base/abitype";
@@ -21,11 +21,11 @@ import { stub } from "sinon";
  *
  * const result = await contract.write("addLiquidity", []); // 100n
  * @extends {ReadContractStub<TAbi>}
- * @implements {IReadWriteContract<TAbi>}
+ * @implements {ReadWriteContract<TAbi>}
  */
 export class ReadWriteContractStub<TAbi extends Abi = Abi>
   extends ReadContractStub<TAbi>
-  implements IReadWriteContract<TAbi>
+  implements ReadWriteContract<TAbi>
 {
   /**
    * Simulates a contract write operation for a given function. If the function

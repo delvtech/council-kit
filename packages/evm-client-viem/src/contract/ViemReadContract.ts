@@ -1,5 +1,5 @@
 import {
-  IReadContract,
+  ReadContract,
   FunctionName,
   FunctionArgs,
   ContractReadOptions,
@@ -24,7 +24,7 @@ export interface ViemReadContractOptions<TAbi extends Abi = Abi> {
  * @see https://viem.sh/
  */
 export class ViemReadContract<TAbi extends Abi = Abi>
-  implements IReadContract<TAbi>
+  implements ReadContract<TAbi>
 {
   readonly abi: TAbi;
   readonly address: Address;

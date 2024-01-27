@@ -3,8 +3,8 @@ import {
   ContractEvent,
   ContractGetEventsOptions,
 } from "src/contract/ContractEvents";
-import { ContractWriteOptions } from "src/contract/IReadWriteContract";
-import { ContractReadOptions, IReadContract } from "src/contract/IReadContract";
+import { ContractWriteOptions } from "src/contract/ReadWriteContract";
+import { ContractReadOptions, ReadContract } from "src/contract/ReadContract";
 import { SimpleCache, SimpleCacheKey } from "src/cache/SimpleCache";
 import { LruSimpleCache } from "src/cache/LruSimpleCache";
 import {
@@ -15,21 +15,12 @@ import {
 } from "src/base/abitype";
 import { createSimpleCacheKey } from "src/cache/utils/createSimpleCacheKey";
 
-/**
- * Extended readable contract interface that provides capabilities
- * for cache management on contract reads.
- */
-export interface ICachedReadContract<TAbi extends Abi = Abi>
-  extends IReadContract<TAbi> {
-  deleteRead: (...args: Parameters<IReadContract<TAbi>["read"]>) => void;
-  clearCache: () => void;
-}
 
 // TODO: Figure out a good default cache size
 const DEFAULT_CACHE_SIZE = 100;
 
 export interface CachedReadContractOptions<TAbi extends Abi = Abi> {
-  contract: IReadContract<TAbi>;
+  contract: ReadContract<TAbi>;
   cache?: SimpleCache;
   /**
    * An ID to distinguish this instance from others. Used to prefix to all cache
@@ -49,12 +40,12 @@ export interface CachedReadContractOptions<TAbi extends Abi = Abi> {
  * const result2 = await cachedContract.read("functionName", args); // Fetched from cache
  */
 export class CachedReadContract<TAbi extends Abi = Abi>
-  implements ICachedReadContract<TAbi>
+  implements ReadContract<TAbi>
 {
   readonly address: `0x${string}`;
   readonly abi: TAbi;
 
-  protected readonly _contract: IReadContract<TAbi>;
+  protected readonly _contract: ReadContract<TAbi>;
   protected readonly _id: string;
 
   /** Internal cache for contract reads. */

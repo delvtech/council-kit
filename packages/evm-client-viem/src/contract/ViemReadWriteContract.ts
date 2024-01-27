@@ -1,5 +1,5 @@
 import {
-  IReadWriteContract,
+  ReadWriteContract,
   FunctionName,
   FunctionArgs,
   ContractWriteOptions,
@@ -24,7 +24,7 @@ export interface ViemReadWriteContractOptions<TAbi extends Abi = Abi>
  */
 export class ViemReadWriteContract<TAbi extends Abi = Abi>
   extends ViemReadContract<TAbi>
-  implements IReadWriteContract<TAbi>
+  implements ReadWriteContract<TAbi>
 {
   protected readonly _walletClient: WalletClient;
 

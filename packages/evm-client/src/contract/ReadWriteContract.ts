@@ -4,15 +4,15 @@ import {
   FunctionArgs,
   FunctionReturnType,
 } from "src/base/abitype";
-import { IReadContract } from "./IReadContract";
+import { ReadContract } from "./ReadContract";
 
 /**
  * Interface representing a writable contract with specified ABI.
  * Extends IReadContract to also include write operations.
  */
 
-export interface IReadWriteContract<TAbi extends Abi = Abi>
-  extends IReadContract<TAbi> {
+export interface ReadWriteContract<TAbi extends Abi = Abi>
+  extends ReadContract<TAbi> {
   /**
    * Writes to a specified function on the contract.
    */

@@ -15,6 +15,9 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "lru-cache": "^10.0.1"
+  },
   "devDependencies": {
     "@council/eslint-config": "*",
     "@council/tsconfig": "*",
@@ -31,8 +34,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "lru-cache": "^10.0.1"
   }
 }

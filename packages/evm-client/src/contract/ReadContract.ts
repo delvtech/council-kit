@@ -9,7 +9,7 @@ import {
   ContractEvent,
   ContractGetEventsOptions,
 } from "src/contract/ContractEvents";
-import { ContractWriteOptions } from "src/contract/IReadWriteContract";
+import { ContractWriteOptions } from "src/contract/ReadWriteContract";
 import { BlockTag } from "src/network/BlockTag";
 
 /**
@@ -17,7 +17,7 @@ import { BlockTag } from "src/network/BlockTag";
  * Provides methods to read and simulate write operations on the contract.
  */
 
-export interface IReadContract<TAbi extends Abi = Abi> {
+export interface ReadContract<TAbi extends Abi = Abi> {
   abi: TAbi;
   address: Address;
 

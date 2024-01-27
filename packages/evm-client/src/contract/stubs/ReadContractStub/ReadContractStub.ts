@@ -10,8 +10,8 @@ import {
   ContractEvent,
   ContractGetEventsOptions,
 } from "src/contract/ContractEvents";
-import { ContractWriteOptions } from "src/contract/IReadWriteContract";
-import { ContractReadOptions, IReadContract } from "src/contract/IReadContract";
+import { ContractWriteOptions } from "src/contract/ReadWriteContract";
+import { ContractReadOptions, ReadContract } from "src/contract/ReadContract";
 
 /**
  * A mock implementation of a `ReadContract` designed to facilitate unit
@@ -27,7 +27,7 @@ import { ContractReadOptions, IReadContract } from "src/contract/IReadContract";
  *
  */
 export class ReadContractStub<TAbi extends Abi = Abi>
-  implements IReadContract<TAbi>
+  implements ReadContract<TAbi>
 {
   abi;
   address = "0x0000000000000000000000000000000000000000" as `0x${string}`;
