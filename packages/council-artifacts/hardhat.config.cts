@@ -4,7 +4,6 @@ const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
   paths: {
     sources: "contracts",
-    artifacts: "dist",
   },
   solidity: {
     compilers: [

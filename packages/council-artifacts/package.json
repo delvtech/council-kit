@@ -1,19 +1,22 @@
 {
   "name": "@council/artifacts",
   "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./artifacts"
+  },
   "files": [
-    "dist"
+    "artifacts"
   ],
   "scripts": {
-    "load-contracts": "sh scripts/load-contracts.sh",
-    "clean": "npx hardhat clean",
-    "compile": "npx hardhat compile",
-    "build": "npm run load-contracts && npm run clean && npm run compile"
+    "build:src": "sh build.sh src",
+    "build": "npm run build:src && tsc --build --force"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
     "@council/tsconfig": "*",
     "@openzeppelin/contracts": "^4.2.0",
-    "hardhat": "^2.19.4"
+    "hardhat": "^2.19.4",
+    "typescript": "^5.3.3"
   }
 }
