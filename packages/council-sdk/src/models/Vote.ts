@@ -1,30 +1,44 @@
-import { CouncilContext } from "src/context/context";
 import { Ballot } from "src/datasources/votingContract/VotingContractDataSource";
-import { Model, ModelOptions } from "./Model";
-import { Proposal } from "./Proposal";
-import { Voter } from "./Voter";
+import { Model, ReadModelOptions } from "src/models/Model";
+import { ReadProposal } from "src/models/Proposal";
+import { ReadVoter } from "src/models/Voter";
+
+export interface ReadVoteOptions extends ReadModelOptions {
+  ballot: Ballot;
+  power: bigint;
+  proposal: ReadProposal;
+  voter: ReadVoter | `0x${string}`;
+}
 
 /**
  * @category Models
  */
-export class Vote extends Model {
-  power: string;
+export class ReadVote extends Model {
   ballot: Ballot;
-  proposal: Proposal;
-  voter: Voter;
+  power: bigint;
+  proposal: ReadProposal;
+  voter: ReadVoter;
 
-  constructor(
-    power: string,
-    ballot: Ballot,
-    voter: Voter,
-    proposal: Proposal,
-    context: CouncilContext,
-    options?: ModelOptions,
-  ) {
-    super(context, options);
-    this.power = power;
+  constructor({
+    ballot,
+    contractFactory,
+    network,
+    power,
+    proposal,
+    voter,
+    name,
+  }: ReadVoteOptions) {
+    super({ contractFactory, network, name });
     this.ballot = ballot;
+    this.power = power;
     this.proposal = proposal;
-    this.voter = voter;
+    this.voter =
+      typeof voter === "string"
+        ? new ReadVoter({
+            address: voter,
+            contractFactory,
+            network,
+          })
+        : voter;
   }
 }

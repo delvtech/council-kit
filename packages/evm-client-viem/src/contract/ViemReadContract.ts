@@ -6,9 +6,10 @@ import {
   EventArgs,
   EventName,
   FunctionArgs,
-  functionArgsToArray,
+  functionArgsToInput,
   FunctionName,
-  FunctionReturnType,
+  functionOutputToReturn,
+  FunctionReturn,
   ReadContract,
 } from "@council/evm-client";
 import { createSimulateContractParameters } from "src/contract/utils/createSimulateContractParameters";
@@ -27,10 +28,10 @@ export interface ViemReadContractOptions<TAbi extends Abi = Abi> {
 export class ViemReadContract<TAbi extends Abi = Abi>
   implements ReadContract<TAbi>
 {
-  readonly abi: TAbi;
-  readonly address: Address;
+  abi: TAbi;
+  address: Address;
 
-  protected readonly _publicClient: PublicClient;
+  protected _publicClient: PublicClient;
 
   constructor({ abi, address, publicClient }: ViemReadContractOptions<TAbi>) {
     this.abi = abi;
@@ -42,12 +43,12 @@ export class ViemReadContract<TAbi extends Abi = Abi>
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractReadOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
-    const result = await this._publicClient.readContract({
+  ): Promise<FunctionReturn<TAbi, TFunctionName>> {
+    const output = await this._publicClient.readContract({
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: functionArgsToArray({
+      args: functionArgsToInput({
         args,
         abi: this.abi,
         functionName,
@@ -55,11 +56,13 @@ export class ViemReadContract<TAbi extends Abi = Abi>
       ...options,
     });
 
-    if (Array.isArray(result) && result.length === 1) {
-      return result[0];
-    } else {
-      return result as FunctionReturnType<TAbi, TFunctionName>;
-    }
+    const arrayOutput = Array.isArray(output) ? output : [output];
+
+    return functionOutputToReturn({
+      abi: this.abi,
+      functionName,
+      output: arrayOutput as any,
+    });
   }
 
   async simulateWrite<
@@ -68,12 +71,12 @@ export class ViemReadContract<TAbi extends Abi = Abi>
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
+  ): Promise<FunctionReturn<TAbi, TFunctionName>> {
     const { result } = await this._publicClient.simulateContract({
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: functionArgsToArray({
+      args: functionArgsToInput({
         args,
         abi: this.abi,
         functionName,
@@ -81,11 +84,13 @@ export class ViemReadContract<TAbi extends Abi = Abi>
       ...createSimulateContractParameters(options),
     });
 
-    if (Array.isArray(result) && result.length === 1) {
-      return result[0];
-    } else {
-      return result as FunctionReturnType<TAbi, TFunctionName>;
-    }
+    const arrayOutput = Array.isArray(result) ? result : [result];
+
+    return functionOutputToReturn({
+      abi: this.abi,
+      functionName,
+      output: arrayOutput as any,
+    });
   }
 
   async getEvents<TEventName extends EventName<TAbi>>(

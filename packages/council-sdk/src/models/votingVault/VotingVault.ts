@@ -23,7 +23,7 @@ export class ReadVotingVault extends Model {
     contractFactory,
     network,
     cache,
-    id,
+    namespace,
     name,
   }: ReadVotingVaultOptions) {
     super({ name, network, contractFactory });
@@ -31,15 +31,15 @@ export class ReadVotingVault extends Model {
       abi: votingVaultAbi,
       address,
       cache,
-      id,
+      namespace,
     });
   }
 
   get address(): `0x${string}` {
     return this._contract.address;
   }
-  get id(): string {
-    return this._contract.id;
+  get namespace(): string {
+    return this._contract.namespace;
   }
 
   /**
@@ -48,11 +48,11 @@ export class ReadVotingVault extends Model {
    *   such as merkle proofs.
    */
   async getVotingPower({
-    address,
+    voter,
     atBlock = "latest",
     extraData = "0x00",
   }: {
-    address: `0x${string}`;
+    voter: `0x${string}`;
     atBlock?: BlockLike;
     extraData?: `0x${string}`;
   }): Promise<bigint> {
@@ -66,7 +66,7 @@ export class ReadVotingVault extends Model {
     return this._contract.simulateWrite("queryVotePower", {
       blockNumber,
       extraData,
-      user: address,
+      user: voter,
     });
   }
 }

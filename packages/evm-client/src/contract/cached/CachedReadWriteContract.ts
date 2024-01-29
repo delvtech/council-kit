@@ -25,15 +25,10 @@ export class CachedReadWriteContract<TAbi extends Abi = Abi>
   implements ReadWriteContract<TAbi>
 {
   /** The wrapped writable contract instance. */
-  protected readonly _contract: ReadWriteContract<TAbi>;
+  declare contract: ReadWriteContract<TAbi>;
 
-  constructor({
-    contract,
-    cache,
-    namespace,
-  }: CachedReadWriteContractOptions<TAbi>) {
-    super({ contract, cache, namespace });
-    this._contract = contract;
+  constructor(options: CachedReadWriteContractOptions<TAbi>) {
+    super(options);
   }
 
   /**
@@ -46,6 +41,6 @@ export class CachedReadWriteContract<TAbi extends Abi = Abi>
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
   ): Promise<`0x${string}`> {
-    return this._contract.write(fn, args, options);
+    return this.contract.write(fn, args, options);
   }
 }

@@ -1,27 +1,45 @@
 import { BytesLike, Signer } from "ethers";
 import { parseEther } from "ethers/lib/utils";
-import { CouncilContext } from "src/context/context";
-import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
 import {
   Actions,
   Ballot,
-  ProposalData,
   VoteResults,
 } from "src/datasources/votingContract/VotingContractDataSource";
+import { ReadVoter } from "src/models/Voter";
 import { getVaultsWithPower } from "src/utils/getVaultsWithPower";
 import { sumStrings } from "src/utils/sumStrings";
-import { Model, ModelOptions } from "./Model";
-import { Vote } from "./Vote";
-import { Voter } from "./Voter";
-import { VotingContract } from "./votingContract/VotingContract";
+import { ReadCoreVoting } from "./CoreVoting/CoreVoting";
+import { Model, ReadModelOptions } from "./Model";
+
+export interface ReadProposalOptions extends ReadModelOptions {
+  id: bigint;
+  coreVoting: ReadCoreVoting | `0x${string}`;
+  /**
+   * The block number of when this proposal was created.
+   */
+  created: bigint;
+  expiration: bigint;
+  lastCall?: bigint;
+  proposalHash?: `0x${string}`;
+  requiredQuorum?: bigint;
+  unlock?: bigint;
+}
 
 /**
  * A model of a Proposal in Council
  * @category Models
  */
-export class Proposal extends Model {
-  id: number;
-  votingContract: VotingContract;
+export class ReadProposal extends Model {
+  id: bigint;
+  coreVoting: ReadCoreVoting;
+  created: bigint;
+  expiration: bigint;
+
+  private _lastCall?: bigint;
+  private _proposalHash?: `0x${string}`;
+  private _requiredQuorum?: bigint;
+  private _unlock?: bigint;
+  private _allDataFetched = false;
 
   /**
    * Create a new Proposal model instance.
@@ -29,45 +47,35 @@ export class Proposal extends Model {
    * @param votingContract - the voting contract in which this proposal was
    *   created.
    */
-  constructor(
-    id: number,
-    votingContract: VotingContract | string,
-    context: CouncilContext,
-    options?: ModelOptions,
-  ) {
-    super(context, {
-      ...options,
-      name: options?.name ?? `Proposal ${id}`,
-    });
+  constructor({
+    id,
+    coreVoting,
+    contractFactory,
+    network,
+    created,
+    expiration,
+    lastCall,
+    name,
+    proposalHash,
+    requiredQuorum,
+    unlock,
+  }: ReadProposalOptions) {
+    super({ contractFactory, network, name });
     this.id = id;
-    this.votingContract =
-      votingContract instanceof VotingContract
-        ? votingContract
-        : new VotingContract(votingContract, [], context);
-  }
-
-  /**
-   * Get the base set of data returned from fetching a proposal. The data
-   * returned will depend whether this proposal has been executed. Once
-   * executed, the proposal is deleted from the voting contract and only a
-   * preview of the data from the logs can be fetched.
-   *
-   * Additionally, if this proposal instance was initiated with an invalid id,
-   * then only the id provided will be available.
-   */
-  async getData(): Promise<Partial<ProposalData>> {
-    const data = await this.votingContract.dataSource.getProposal(this.id);
-    if (data) {
-      return data;
-    }
-    const allDataPreviews = await this.votingContract.dataSource.getProposals();
-    const dataPreview = allDataPreviews.find(({ id }) => id === this.id);
-    return {
-      id: this.id,
-      createdBlock: dataPreview?.createdBlock,
-      unlockBlock: dataPreview?.unlockBlock,
-      expirationBlock: dataPreview?.expirationBlock,
-    };
+    this.coreVoting =
+      typeof coreVoting === "string"
+        ? new ReadCoreVoting({
+            address: coreVoting,
+            contractFactory,
+            network,
+          })
+        : coreVoting;
+    this.created = created;
+    this.expiration = expiration;
+    this._lastCall = lastCall;
+    this._proposalHash = proposalHash;
+    this._requiredQuorum = requiredQuorum;
+    this._unlock = unlock;
   }
 
   /**
@@ -75,16 +83,46 @@ export class Proposal extends Model {
    * they'll be called with (calldatas) by a proposal.
    */
   getTargetsAndCalldatas(): Promise<Actions | null> {
-    return this.votingContract.dataSource.getTargetsAndCalldatas(this.id);
+    const createdEvent = await this.coreVoting.get;
+  }
+
+  /**
+   * Idempotent function to ensure all possible data is fetched for the
+   * proposal. (From both events and the CoreVoting contract)
+   **/
+  private async _getProposalData(): Promise<
+    | {
+        _lastCall?: bigint;
+        _proposalHash?: `0x${string}`;
+        _requiredQuorum?: bigint;
+        _unlock?: bigint;
+      }
+    | undefined
+  > {
+    if (this._allDataFetched) {
+      return {
+        _lastCall: this._lastCall,
+        _proposalHash: this._proposalHash,
+        _requiredQuorum: this._requiredQuorum,
+        _unlock: this._unlock,
+      };
+    }
+
+    const { _lastCall, _proposalHash, _requiredQuorum, _unlock } =
+      (await this.coreVoting.getProposal({ id: this.id }))!;
+
+    const data = { _lastCall, _proposalHash, _requiredQuorum, _unlock };
+    Object.assign(this, data, { _allDataFetched: true });
+    return data;
   }
 
   /**
    * Get the hash of this proposal, used by its voting contract to verify the
    * proposal data on execution. Not available on executed proposals.
    */
-  async getHash(): Promise<string | null> {
-    const data = await this.getData();
-    return data?.hash || null;
+  async getHash(): Promise<`0x${string}` | undefined> {
+    const { _proposalHash } = (await this._getProposalData()) || {};
+    return _proposalHash;
   }
 
   /**
@@ -94,17 +132,8 @@ export class Proposal extends Model {
    * proposals.
    */
   async getRequiredQuorum(): Promise<string | null> {
-    const data = await this.getData();
+    const { _proposalHash } = (await this._getProposalData()) || {};
     return data?.requiredQuorum || null;
-  }
-
-  /**
-   * Get the block number of when this proposal was created. Will only be null
-   * if this proposal instance was initiated with an invalid id.
-   */
-  async getCreatedBlock(): Promise<number | null> {
-    const data = await this.getData();
-    return data?.createdBlock || null;
   }
 
   /**
@@ -224,15 +253,18 @@ export class Proposal extends Model {
    * @param extraData - ABI encoded optional extra data used by some vaults, such
    *   as merkle proofs.
    */
-  async getVotingPower(
-    address: string,
-    extraData?: BytesLike[],
-  ): Promise<string | null> {
-    const createdBlock = await this.getCreatedBlock();
-    if (!createdBlock) {
-      return null;
-    }
-    return this.votingContract.getVotingPower(address, createdBlock, extraData);
+  async getVotingPower({
+    voter,
+    extraData,
+  }: {
+    voter: ReadVoter | `0x${string}`;
+    extraData?: `0x${string}`[];
+  }): Promise<bigint> {
+    return this.coreVoting.getVotingPower({
+      voter,
+      atBlock: this.created,
+      extraData,
+    });
   }
 
   /**

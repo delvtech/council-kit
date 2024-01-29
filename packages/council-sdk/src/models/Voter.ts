@@ -1,8 +1,8 @@
 import { BlockLike } from "src/contract/args";
-import { Model, ReadModelOptions } from "./Model";
-import { Vote } from "./Vote";
-import { VotingContract } from "./votingContract/VotingContract";
-import { ReadVotingVault, VotingVault } from "./votingVault/VotingVault";
+import { Model, ReadModelOptions } from "src/models/Model";
+import { ReadVote } from "src/models/Vote";
+import { ReadVotingVault } from "src/models/VotingVault/VotingVault";
+import { ReadCoreVoting } from "..";
 
 export interface ReadVoterOptions extends ReadModelOptions {
   address: `0x${string}`;
@@ -30,7 +30,7 @@ export class ReadVoter extends Model {
     atBlock,
     extraData,
   }: {
-    vaults: (`0x${string}` | ReadVotingVault)[];
+    vaults: (ReadVotingVault | `0x${string}`)[];
     atBlock?: BlockLike;
     extraData?: `0x${string}`[];
   }): Promise<bigint> {
@@ -43,7 +43,7 @@ export class ReadVoter extends Model {
         });
       }
       return vault.getVotingPower({
-        address: this.address,
+        voter: this.address,
         atBlock,
         extraData: extraData?.[i],
       });
@@ -54,13 +54,31 @@ export class ReadVoter extends Model {
   /**
    * Get the casted votes for this Voter in a given Voting Contract
    */
-  async getVotes(votingContractAddress: `0x${string}`): Promise<Vote[]> {
-    const votingContract = new ReadVotingContract({
-      address: votingContractAddress,
-      contractFactory: this._contractFactory,
-      network: this._network
+  async getVotes({
+    coreVoting,
+    proposalId,
+    fromBlock,
+    toBlock,
+  }: {
+    coreVoting: `0x${string}`;
+    proposalId?: bigint;
+    fromBlock?: BlockLike;
+    toBlock?: BlockLike;
+  }): Promise<ReadVote[]> {
+    const _coreVoting =
+      typeof coreVoting === "string"
+        ? new ReadCoreVoting({
+            address: coreVoting,
+            contractFactory: this._contractFactory,
+            network: this._network,
+          })
+        : coreVoting;
+    return _coreVoting.getVotes({
+      proposalId,
+      voter: this,
+      fromBlock,
+      toBlock,
     });
-    return votingContract.getVotes({ voter: this.address });
   }
 
   /**

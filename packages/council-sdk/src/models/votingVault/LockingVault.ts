@@ -12,9 +12,9 @@ import {
 } from "src/models/Model";
 import { ReadToken } from "src/models/token/Token";
 import { ReadVoter } from "src/models/Voter";
-import { VoterPowerBreakdown } from "src/models/votingVault/types";
+import { VoterPowerBreakdown } from "src/models/VotingVault/types";
+import { ReadVotingVault } from "src/models/VotingVault/VotingVault";
 import { getOrSet } from "src/utils/getOrSet";
-import { ReadVotingVault } from "./VotingVault";
 
 const lockingVaultAbi = LockingVault.abi;
 type LockingVaultAbi = typeof lockingVaultAbi;
@@ -30,22 +30,24 @@ export class ReadLockingVault extends ReadVotingVault {
   constructor({
     address,
     contractFactory,
+    network,
     cache,
-    id,
-    ...rest
+    namespace,
+    name,
   }: ReadLockingVaultOptions) {
     super({
       address,
       contractFactory,
+      network,
       cache,
-      id,
-      ...rest,
+      namespace,
+      name,
     });
     this._lockingVaultContract = contractFactory({
       abi: lockingVaultAbi,
       address,
       cache,
-      id,
+      namespace,
     });
   }
 
@@ -72,7 +74,7 @@ export class ReadLockingVault extends ReadVotingVault {
     address: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<bigint> {
-    const [, balance] = await this._lockingVaultContract.read(
+    const { 1: balance } = await this._lockingVaultContract.read(
       "deposits",
       address,
       blockToReadOptions(atBlock),
@@ -276,7 +278,7 @@ export class ReadLockingVault extends ReadVotingVault {
     voter: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<ReadVoter> {
-    const [address] = await this._lockingVaultContract.read(
+    const { 0: address } = await this._lockingVaultContract.read(
       "deposits",
       voter,
       blockToReadOptions(atBlock),

@@ -11,7 +11,7 @@ import {
   ReadWriteContractModelOptions,
 } from "src/models/Model";
 import { ReadVoter } from "src/models/Voter";
-import { ReadVotingVault } from "./VotingVault";
+import { ReadVotingVault } from "src/models/VotingVault/VotingVault";
 
 const gscVaultAbi = GSCVault.abi;
 type GSCVaultAbi = typeof gscVaultAbi;
@@ -30,22 +30,24 @@ export class ReadGSCVault extends ReadVotingVault {
   constructor({
     address,
     contractFactory,
+    network,
     cache,
-    id,
-    ...rest
+    namespace,
+    name,
   }: ReadGSCVaultOptions) {
     super({
       address,
       contractFactory,
+      network,
       cache,
-      id,
-      ...rest,
+      namespace,
+      name,
     });
     this._gscVaultContract = contractFactory({
       abi: gscVaultAbi,
       address,
       cache,
-      id,
+      namespace,
     });
   }
 
@@ -150,7 +152,7 @@ export class ReadGSCVault extends ReadVotingVault {
     member,
     atBlock,
   }: {
-    member: `0x${string}` | ReadVoter;
+    member: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<Date | null> {
     const secondsTimestamp = await this._gscVaultContract.read(
@@ -168,7 +170,7 @@ export class ReadGSCVault extends ReadVotingVault {
     voter,
     atBlock,
   }: {
-    voter: `0x${string}` | ReadVoter;
+    voter: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<boolean> {
     return !!(await this.getJoinDate({
@@ -197,7 +199,7 @@ export class ReadGSCVault extends ReadVotingVault {
     member,
     atBlock,
   }: {
-    member: `0x${string}` | ReadVoter;
+    member: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<boolean> {
     const joinDate = await this.getJoinDate({
@@ -225,7 +227,7 @@ export class ReadGSCVault extends ReadVotingVault {
     member,
     atBlock,
   }: {
-    member: `0x${string}` | ReadVoter;
+    member: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<ReadVotingVault[]> {
     const vaultAddresses = await this._gscVaultContract.read(
@@ -269,7 +271,7 @@ export class ReadWriteGSCVault extends ReadGSCVault {
     extraVaultData = [],
     options,
   }: {
-    vaults: (`0x${string}` | ReadVotingVault)[];
+    vaults: (ReadVotingVault | `0x${string}`)[];
     /**
      * Extra data given to the vaults to help calculation
      */
@@ -303,7 +305,7 @@ export class ReadWriteGSCVault extends ReadGSCVault {
     extraVaultData = [],
     options,
   }: {
-    member: `0x${string}` | ReadVoter;
+    member: ReadVoter | `0x${string}`;
     /**
      * The extra data the vaults need to load the member's voting power
      */

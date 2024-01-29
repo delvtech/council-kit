@@ -4,7 +4,7 @@ import {
   EventName,
   FunctionArgs,
   FunctionName,
-  FunctionReturnType,
+  FunctionReturn,
 } from "src/base/abitype";
 import { EmptyObject, MaybePromise } from "src/base/types";
 import {
@@ -59,7 +59,7 @@ export class ReadContractStub<TAbi extends Abi = Abi>
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractReadOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
+  ): Promise<FunctionReturn<TAbi, TFunctionName>> {
     const stub = this.readStubMap.get(functionName);
     if (!stub) {
       throw new Error(
@@ -79,7 +79,7 @@ export class ReadContractStub<TAbi extends Abi = Abi>
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
+  ): Promise<FunctionReturn<TAbi, TFunctionName>> {
     const stub = this.simulateWriteStubMap.get(functionName);
     if (!stub) {
       throw new Error(
@@ -119,7 +119,7 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   }: {
     functionName: TFunctionName;
     args?: FunctionArgs<TAbi, TFunctionName>;
-    value: MaybePromise<FunctionReturnType<TAbi, TFunctionName>>;
+    value: MaybePromise<FunctionReturn<TAbi, TFunctionName>>;
   }): void {
     let readStubFromMap = this.readStubMap.get(functionName);
     if (!readStubFromMap) {
@@ -154,7 +154,7 @@ export class ReadContractStub<TAbi extends Abi = Abi>
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(
     functionName: TFunctionName,
-    value: MaybePromise<FunctionReturnType<TAbi, TFunctionName>>,
+    value: MaybePromise<FunctionReturn<TAbi, TFunctionName>>,
   ): void {
     this.simulateWriteStubMap.set(
       functionName,
@@ -221,7 +221,7 @@ type ReadStub<
   TFunctionName extends FunctionName<TAbi>,
 > = SinonStub<
   [FunctionArgs<TAbi, TFunctionName>, ContractReadOptions?],
-  MaybePromise<FunctionReturnType<TAbi, TFunctionName>>
+  MaybePromise<FunctionReturn<TAbi, TFunctionName>>
 >;
 
 /**
@@ -244,5 +244,5 @@ type SimulateWriteStub<
   TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
 > = SinonStub<
   [FunctionArgs<TAbi, TFunctionName>, ContractWriteOptions?],
-  MaybePromise<FunctionReturnType<TAbi, TFunctionName>>
+  MaybePromise<FunctionReturn<TAbi, TFunctionName>>
 >;

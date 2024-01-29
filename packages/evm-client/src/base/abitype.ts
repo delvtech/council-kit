@@ -1,6 +1,7 @@
 import {
   Abi,
   AbiParameter,
+  AbiParameterKind,
   AbiParametersToPrimitiveTypes,
   AbiParameterToPrimitiveType,
   AbiStateMutability,
@@ -20,31 +21,35 @@ type NamedAbiParameter = AbiParameter & { name: string };
 // says it does.
 type NamedParametersToInterface<
   TParameters extends readonly NamedAbiParameter[],
+  TParameterKind extends AbiParameterKind = AbiParameterKind,
 > = {
   [K in TParameters[number]["name"]]: AbiParameterToPrimitiveType<
-    Extract<TParameters[number], { name: K }>
+    Extract<TParameters[number], { name: K }>,
+    TParameterKind
   >;
 };
 
-type ParametersToInterface<TParameters extends readonly AbiParameter[]> =
-  TParameters extends readonly []
-    ? EmptyObject
-    : TParameters extends NamedAbiParameter[]
-      ? NamedParametersToInterface<TParameters>
-      : {
-          [K in Exclude<
-            keyof TParameters,
-            number
-          > as TParameters[K] extends NamedAbiParameter
-            ? TParameters[K]["name"] extends ""
-              ? K
-              : TParameters[K]["name"]
-            : TParameters[K] extends AbiParameter
-              ? K
-              : never]: TParameters[K] extends AbiParameter
-            ? AbiParameterToPrimitiveType<TParameters[K]>
-            : never;
-        };
+type ParametersToInterface<
+  TParameters extends readonly AbiParameter[],
+  TParameterKind extends AbiParameterKind = AbiParameterKind,
+> = TParameters extends readonly []
+  ? EmptyObject
+  : TParameters extends NamedAbiParameter[]
+    ? NamedParametersToInterface<TParameters, TParameterKind>
+    : {
+        [K in Exclude<
+          keyof TParameters,
+          number
+        > as TParameters[K] extends NamedAbiParameter
+          ? TParameters[K]["name"] extends ""
+            ? K
+            : TParameters[K]["name"]
+          : TParameters[K] extends AbiParameter
+            ? K
+            : never]: TParameters[K] extends AbiParameter
+          ? AbiParameterToPrimitiveType<TParameters[K], TParameterKind>
+          : never;
+      };
 
 /**
  * Get a union of event names from an abi
@@ -68,7 +73,7 @@ type NamedEventInput<
 export type EventArgs<
   TAbi extends Abi,
   TEventName extends EventName<TAbi>,
-> = NamedParametersToInterface<NamedEventInput<TAbi, TEventName>[]>;
+> = NamedParametersToInterface<NamedEventInput<TAbi, TEventName>[], "inputs">;
 
 /**
  * Get a union of indexed input objects for an event from an abi
@@ -83,8 +88,10 @@ type IndexedEventInput<
  */
 export type EventFilter<
   TAbi extends Abi,
-  TEventName extends EventName<TAbi> = EventName<TAbi>,
-> = Partial<NamedParametersToInterface<IndexedEventInput<TAbi, TEventName>[]>>;
+  TEventName extends EventName<TAbi>,
+> = Partial<
+  NamedParametersToInterface<IndexedEventInput<TAbi, TEventName>[], "inputs">
+>;
 
 /**
  * Get a union of function names from an abi
@@ -102,31 +109,61 @@ export type FunctionName<
  */
 export type FunctionArgs<
   TAbi extends Abi,
-  TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+  TFunctionName extends FunctionName<TAbi>,
 > = ExtractAbiFunction<
   TAbi,
   TFunctionName
 >["inputs"] extends infer TInputs extends readonly AbiParameter[]
   ? TInputs extends readonly [AbiParameter]
-    ? AbiParameterToPrimitiveType<TInputs[0]>
-    : ParametersToInterface<TInputs>
+    ? AbiParameterToPrimitiveType<TInputs[0], "inputs">
+    : ParametersToInterface<TInputs, "outputs">
   : never;
+
+/**
+ * Get an array of function arguments from an abi function.
+ */
+export type FunctionInput<
+  TAbi extends Abi,
+  TFunctionName extends FunctionName<TAbi>,
+> =
+  AbiParametersToPrimitiveTypes<
+    ExtractAbiFunction<TAbi, TFunctionName>["inputs"],
+    "inputs"
+  > extends infer TTuple extends readonly any[]
+    ? TTuple
+    : readonly unknown[];
 
 /**
  * Get the return type of an abi function, which is determined by it's outputs:
  * - __Single output:__ the type of the single output.
- * - __Multiple outputs:__ a tuple of the output types.
+ * - __Multiple outputs:__ an object with the output names as keys and the output types as values.
  * - __No outputs:__ `void`.
  */
-export type FunctionReturnType<
+export type FunctionReturn<
   TAbi extends Abi,
-  TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+  TFunctionName extends FunctionName<TAbi>,
+> = ExtractAbiFunction<
+  TAbi,
+  TFunctionName
+>["outputs"] extends infer TOuputs extends readonly [
+  AbiParameter,
+  ...AbiParameter[],
+]
+  ? TOuputs extends readonly [AbiParameter]
+    ? AbiParameterToPrimitiveType<TOuputs[0], "outputs">
+    : ParametersToInterface<TOuputs, "outputs">
+  : void;
+
+/**
+ *
+ */
+export type FunctionOutput<
+  TAbi extends Abi,
+  TFunctionName extends FunctionName<TAbi>,
 > =
   AbiParametersToPrimitiveTypes<
-    ExtractAbiFunction<TAbi, TFunctionName>["outputs"],
-    "outputs"
-  > extends readonly [infer TFirst, ...infer TRest]
-    ? TRest extends []
-      ? TFirst
-      : [TFirst, ...TRest]
-    : void;
+    ExtractAbiFunction<TAbi, TFunctionName>["inputs"],
+    "inputs"
+  > extends infer TTuple extends readonly any[]
+    ? TTuple
+    : readonly unknown[];

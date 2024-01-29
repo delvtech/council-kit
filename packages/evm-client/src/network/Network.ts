@@ -1,14 +1,13 @@
 import { BlockTag } from "src/network/BlockTag";
-export type GetBlockParameters =
+import { Transaction } from "src/network/Transaction";
+export type GetBlockOptions =
   | {
-      /** Hash of the block. */
       blockHash?: `0x${string}`;
       blockNumber?: never;
       blockTag?: never;
     }
   | {
       blockHash?: never;
-      /** The block number. */
       blockNumber?: bigint;
       blockTag?: never;
     }
@@ -16,7 +15,6 @@ export type GetBlockParameters =
       blockHash?: never;
       blockNumber?: never;
       /**
-       * The block tag.
        * @default 'latest'
        */
       blockTag?: BlockTag;
@@ -31,6 +29,12 @@ export interface Network {
    * the latest block is returned.
    */
   getBlock(
-    args?: GetBlockParameters,
+    args?: GetBlockOptions,
   ): Promise<{ blockNumber: bigint; timestamp: bigint }>;
+
+  getTransaction({
+    hash,
+  }: {
+    hash: `0x${string}`;
+  }): Promise<Transaction>;
 }

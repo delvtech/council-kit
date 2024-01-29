@@ -29,8 +29,9 @@ export { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContra
 export { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub/ReadWriteContractStub";
 
 // Network
-export type { Network, GetBlockParameters } from "src/network/Network";
+export type { Network, GetBlockOptions } from "src/network/Network";
 export type { BlockTag } from "src/network/BlockTag";
+export type { Transaction, TransactionInfo, MinedTransaction } from "src/network/Transaction";
 // Network testing stub
 export { NetworkStub } from "src/network/stubs/NetworkStub";
 
@@ -41,6 +42,9 @@ export type {
   EventFilter,
   FunctionName,
   FunctionArgs,
-  FunctionReturnType,
+  FunctionInput,
+  FunctionReturn,
+  FunctionOutput,
 } from "src/base/abitype";
-export { functionArgsToArray, type FunctionArgsToArray } from "src/base/functionArgsToArray";
+export { functionArgsToInput } from "src/base/functionArgsToInput";
+export { functionOutputToReturn } from "src/base/functionOutputToReturn";

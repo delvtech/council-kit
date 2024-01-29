@@ -4,15 +4,15 @@ import {
   CachedReadWriteContract,
   ContractWriteOptions,
 } from "@council/evm-client";
-import { blockToReadOptions, BlockLike } from "src/contract/args";
+import { BlockLike, blockToReadOptions } from "src/contract/args";
 import { CachedReadWriteContractFactory } from "src/contract/factory";
 import {
   Model,
-  ReadModelOptions,
-  ReadWriteModelOptions,
+  ReadContractModelOptions,
+  ReadWriteContractModelOptions,
 } from "src/models/Model";
 import { ReadToken, ReadWriteToken } from "src/models/token/Token";
-import { LockingVault } from "src/models/votingVault/LockingVault";
+import { ReadLockingVault } from "src/models/VotingVault/LockingVault";
 import { formatUnits } from "src/utils/formatUnits";
 
 const airdropAbi = AirdropArtifact.abi;
@@ -21,9 +21,7 @@ type AirdropAbi = typeof airdropAbi;
 /**
  * @category Models
  */
-export interface ReadAirdropOptions extends ReadModelOptions {
-  contract: CachedReadContract<AirdropAbi>;
-}
+export interface ReadAirdropOptions extends ReadContractModelOptions {}
 
 /**
  * @category Models
@@ -32,17 +30,27 @@ export class ReadAirdrop extends Model {
   protected _contract: CachedReadContract<AirdropAbi>;
 
   constructor({
-    contract,
+    address,
     contractFactory,
     network,
+    cache,
+    namespace,
     name,
   }: ReadAirdropOptions) {
-    super({ name, network, contractFactory });
-    this._contract = contract;
+    super({ contractFactory, name, network });
+    this._contract = contractFactory({
+      abi: airdropAbi,
+      address,
+      cache,
+      namespace,
+    });
   }
 
   get address(): `0x${string}` {
     return this._contract.address;
+  }
+  get namespace(): string {
+    return this._contract.namespace;
   }
 
   /**
@@ -97,7 +105,7 @@ export class ReadAirdrop extends Model {
    * Get the address of the locking vault into which tokens will be deposited
    * when someone claims and delegates in a single tx.
    */
-  async getLockingVault(): Promise<LockingVault> {
+  async getLockingVault(): Promise<ReadLockingVault> {
     const address = await this._contract.read("lockingVault", {});
     return new ReadLockingVault({
       address,
@@ -110,21 +118,17 @@ export class ReadAirdrop extends Model {
 /**
  * @category Models
  */
-interface ReadWriteAirdropOptions extends ReadWriteModelOptions {
-  contract: CachedReadWriteContract<AirdropAbi>;
-}
+interface ReadWriteAirdropOptions extends ReadWriteContractModelOptions {}
 
 /**
  * @category Models
  */
 export class ReadWriteAirdrop extends ReadAirdrop {
-  protected _contract: CachedReadWriteContract<AirdropAbi>;
-  protected _contractFactory: CachedReadWriteContractFactory;
+  protected declare _contract: CachedReadWriteContract<AirdropAbi>;
+  protected declare _contractFactory: CachedReadWriteContractFactory;
 
   constructor(options: ReadWriteAirdropOptions) {
     super(options);
-    this._contract = options.contract;
-    this._contractFactory = options.contractFactory;
   }
 
   override async getToken(): Promise<ReadWriteToken> {

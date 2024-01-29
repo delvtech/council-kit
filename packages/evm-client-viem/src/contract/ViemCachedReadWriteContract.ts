@@ -8,7 +8,7 @@ import { Abi } from "viem";
 export interface ViemCachedReadWriteContractOptions<TAbi extends Abi = Abi>
   extends ViemReadWriteContractOptions<TAbi> {
   cache?: SimpleCache;
-  id?: string;
+  namespace?: string;
 }
 
 export class ViemCachedReadWriteContract<
@@ -20,7 +20,7 @@ export class ViemCachedReadWriteContract<
     publicClient,
     walletClient,
     cache,
-    id,
+    namespace,
   }: ViemCachedReadWriteContractOptions<TAbi>) {
     super({
       contract: new ViemReadWriteContract({
@@ -30,7 +30,7 @@ export class ViemCachedReadWriteContract<
         walletClient,
       }),
       cache,
-      id,
+      namespace,
     });
   }
 }

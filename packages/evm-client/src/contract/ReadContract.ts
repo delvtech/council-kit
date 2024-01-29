@@ -3,7 +3,7 @@ import {
   EventName,
   FunctionArgs,
   FunctionName,
-  FunctionReturnType,
+  FunctionReturn,
 } from "src/base/abitype";
 import {
   ContractEvent,
@@ -27,7 +27,7 @@ export interface ReadContract<TAbi extends Abi = Abi> {
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractReadOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>>;
+  ): Promise<FunctionReturn<TAbi, TFunctionName>>;
 
   /**
    * Simulates a write operation on a specified function of the contract.
@@ -38,7 +38,7 @@ export interface ReadContract<TAbi extends Abi = Abi> {
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>>;
+  ): Promise<FunctionReturn<TAbi, TFunctionName>>;
 
   /**
    * Retrieves specified events from the contract.

@@ -13,8 +13,10 @@
 	],
 	"markdown.extension.toc.levels": "2..6",
 	"cSpell.words": [
+		"abitype",
 		"Delegators",
 		"merkle",
-		"unvested"
+		"unvested",
+		"Viem"
 	]
 }

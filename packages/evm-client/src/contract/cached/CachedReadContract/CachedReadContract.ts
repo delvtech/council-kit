@@ -3,7 +3,7 @@ import {
   EventName,
   FunctionArgs,
   FunctionName,
-  FunctionReturnType,
+  FunctionReturn,
 } from "src/base/abitype";
 import { LruSimpleCache } from "src/cache/LruSimpleCache";
 import { SimpleCache, SimpleCacheKey } from "src/cache/SimpleCache";
@@ -41,19 +41,19 @@ export interface CachedReadContractOptions<TAbi extends Abi = Abi> {
 export class CachedReadContract<TAbi extends Abi = Abi>
   implements ReadContract<TAbi>
 {
-  namespace: string;
   abi: TAbi;
   address: `0x${string}`;
+  contract: ReadContract<TAbi>;
+  cache: SimpleCache;
+  namespace: string;
 
-  protected _contract: ReadContract<TAbi>;
-  protected _cache: SimpleCache;
 
   constructor({ contract, cache, namespace }: CachedReadContractOptions<TAbi>) {
-    this.namespace = namespace || "";
     this.abi = contract.abi;
     this.address = contract.address;
-    this._contract = contract;
-    this._cache = cache || new LruSimpleCache({ max: DEFAULT_CACHE_SIZE });
+    this.contract = contract;
+    this.cache = cache || new LruSimpleCache({ max: DEFAULT_CACHE_SIZE });
+    this.namespace = namespace || "";
   }
 
   /**
@@ -64,7 +64,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractReadOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
+  ): Promise<FunctionReturn<TAbi, TFunctionName>> {
     return this._getOrSet({
       key: createSimpleCacheKey([
         this.namespace,
@@ -77,7 +77,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
         },
       ]),
 
-      callback: () => this._contract.read(functionName, args, options),
+      callback: () => this.contract.read(functionName, args, options),
     });
   }
 
@@ -108,7 +108,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
       },
     ]);
 
-    this._cache.delete(key);
+    this.cache.delete(key);
   }
 
   /**
@@ -129,7 +129,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
           options,
         },
       ]),
-      callback: () => this._contract.getEvents(eventName, options),
+      callback: () => this.contract.getEvents(eventName, options),
     });
   }
 
@@ -137,7 +137,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
    * Clears the entire cache.
    */
   clearCache(): void {
-    this._cache.clear();
+    this.cache.clear();
   }
 
   /**
@@ -150,8 +150,8 @@ export class CachedReadContract<TAbi extends Abi = Abi>
     fn: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
-    return this._contract.simulateWrite(fn, args, options);
+  ): Promise<FunctionReturn<TAbi, TFunctionName>> {
+    return this.contract.simulateWrite(fn, args, options);
   }
 
   /**
@@ -164,13 +164,13 @@ export class CachedReadContract<TAbi extends Abi = Abi>
     key: SimpleCacheKey;
     callback: () => Promise<TValue> | TValue;
   }): Promise<TValue> {
-    let value = this._cache.get(key);
+    let value = this.cache.get(key);
     if (value) {
       return value;
     }
 
     value = await callback();
-    this._cache.set(key, value);
+    this.cache.set(key, value);
 
     return value;
   }

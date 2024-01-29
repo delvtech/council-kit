@@ -3,7 +3,7 @@ import {
   CachedReadContract,
   CachedReadWriteContract,
   ContractWriteOptions,
-  FunctionReturnType,
+  FunctionReturn,
 } from "@council/evm-client";
 import Big from "big.js";
 import { BlockLike, blockToReadOptions } from "src/contract/args";
@@ -14,8 +14,8 @@ import {
 } from "src/models/Model";
 import { ReadToken } from "src/models/token/Token";
 import { ReadVoter } from "src/models/Voter";
-import { VoterPowerBreakdown } from "src/models/votingVault/types";
-import { ReadVotingVault } from "src/models/votingVault/VotingVault";
+import { VoterPowerBreakdown } from "src/models/VotingVault/types";
+import { ReadVotingVault } from "src/models/VotingVault/VotingVault";
 import { getOrSet } from "src/utils/getOrSet";
 
 const vestingVaultAbi = VestingVault.abi;
@@ -34,22 +34,24 @@ export class ReadVestingVault extends ReadVotingVault {
   constructor({
     address,
     contractFactory,
+    network,
     cache,
-    id,
-    ...rest
+    namespace,
+    name,
   }: ReadVestingVaultOptions) {
     super({
       address,
       contractFactory,
+      network,
       cache,
-      id,
-      ...rest,
+      namespace,
+      name,
     });
     this._vestingVaultContract = contractFactory({
       abi: vestingVaultAbi,
       address,
       cache,
-      id,
+      namespace,
     });
   }
 
@@ -88,7 +90,7 @@ export class ReadVestingVault extends ReadVotingVault {
   }: {
     address: `0x${string}`;
     atBlock?: BlockLike;
-  }): Promise<FunctionReturnType<VestingVaultAbi, "getGrant">> {
+  }): Promise<FunctionReturn<VestingVaultAbi, "getGrant">> {
     return this._vestingVaultContract.read(
       "getGrant",
       address,
@@ -354,22 +356,13 @@ export class ReadVestingVault extends ReadVotingVault {
     address: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<ReadVoter[]> {
-    let toBlock = atBlock;
-
-    if (typeof toBlock !== "bigint") {
-      const { blockNumber } = await this._network.getBlock(
-        blockToReadOptions(atBlock),
-      );
-      toBlock = blockNumber;
-    }
-
     const voteChangeEvents = await this._vestingVaultContract.getEvents(
       "VoteChange",
       {
         filter: {
           to: address,
         },
-        toBlock,
+        toBlock: atBlock,
       },
     );
 

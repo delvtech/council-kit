@@ -33,7 +33,7 @@ export class ReadToken extends Model {
     contractFactory,
     network,
     cache,
-    id,
+    namespace,
     name,
   }: ReadTokenOptions) {
     super({ name, network, contractFactory });
@@ -41,12 +41,15 @@ export class ReadToken extends Model {
       abi: erc20Abi,
       address,
       cache,
-      id,
+      namespace,
     });
   }
 
   get address(): `0x${string}` {
     return this._contract.address;
+  }
+  get namespace(): string {
+    return this._contract.namespace;
   }
 
   /**

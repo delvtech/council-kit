@@ -1,9 +1,9 @@
 import {
   ContractWriteOptions,
   FunctionArgs,
-  functionArgsToArray,
+  functionArgsToInput,
   FunctionName,
-  FunctionReturnType,
+  FunctionReturn,
   ReadWriteContract,
 } from "@council/evm-client";
 import { createSimulateContractParameters } from "src/contract/utils/createSimulateContractParameters";
@@ -26,7 +26,7 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
   extends ViemReadContract<TAbi>
   implements ReadWriteContract<TAbi>
 {
-  protected readonly _walletClient: WalletClient;
+  protected _walletClient: WalletClient;
 
   constructor({
     abi,
@@ -47,9 +47,9 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(
     functionName: TFunctionName,
-    args: FunctionArgs<TAbi>,
+    args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
-  ): Promise<FunctionReturnType<TAbi>> {
+  ): Promise<FunctionReturn<TAbi, TFunctionName>> {
     const [account] = await this._walletClient.getAddresses();
 
     return super.simulateWrite(functionName, args, {
@@ -71,10 +71,10 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: functionArgsToArray({
-        args,
+      args: functionArgsToInput({
         abi: this.abi,
         functionName,
+        args,
       }),
       ...createSimulateContractParameters({
         ...options,
