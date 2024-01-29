@@ -1,17 +1,13 @@
 import { Abi } from "abitype";
+import { FunctionArgs, FunctionName } from "src/base/abitype";
 import {
-  FunctionArgs,
-  FunctionName,
-  FunctionReturnType,
-} from "src/base/abitype";
+  CachedReadContract,
+  CachedReadContractOptions,
+} from "src/contract/cached/CachedReadContract/CachedReadContract";
 import {
   ContractWriteOptions,
   ReadWriteContract,
 } from "src/contract/ReadWriteContract";
-import {
-  CachedReadContractOptions,
-  CachedReadContract,
-} from "src/contract/cached/CachedReadContract/CachedReadContract";
 
 export interface CachedReadWriteContractOptions<TAbi extends Abi = Abi>
   extends CachedReadContractOptions<TAbi> {
@@ -45,7 +41,7 @@ export class CachedReadWriteContract<TAbi extends Abi = Abi>
     fn: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
+  ): Promise<`0x${string}`> {
     return this._contract.write(fn, args, options);
   }
 }

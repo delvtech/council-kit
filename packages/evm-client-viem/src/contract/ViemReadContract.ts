@@ -1,14 +1,15 @@
 import {
-  ReadContract,
-  FunctionName,
-  FunctionArgs,
-  ContractReadOptions,
-  FunctionReturnType,
-  ContractWriteOptions,
-  EventName,
-  ContractGetEventsOptions,
   ContractEvent,
+  ContractGetEventsOptions,
+  ContractReadOptions,
+  ContractWriteOptions,
   EventArgs,
+  EventName,
+  FunctionArgs,
+  functionArgsToArray,
+  FunctionName,
+  FunctionReturnType,
+  ReadContract,
 } from "@council/evm-client";
 import { createSimulateContractParameters } from "src/contract/utils/createSimulateContractParameters";
 import { Abi, Address, PublicClient } from "viem";
@@ -46,22 +47,19 @@ export class ViemReadContract<TAbi extends Abi = Abi>
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: args as any,
+      args: functionArgsToArray({
+        args,
+        abi: this.abi,
+        functionName,
+      }),
       ...options,
     });
 
-    // Viem is smart enough to unpack an array of length 1 (might have something
-    // to do with the `components` field in the abi), but not all contract
-    // methods return a single-value array. To handle this discrepancy we make
-    // sure to always return an array.
-    if (Array.isArray(result)) {
-      return result as unknown as Promise<
-        FunctionReturnType<TAbi, TFunctionName>
-      >;
+    if (Array.isArray(result) && result.length === 1) {
+      return result[0];
+    } else {
+      return result as FunctionReturnType<TAbi, TFunctionName>;
     }
-    return [result] as unknown as Promise<
-      FunctionReturnType<TAbi, TFunctionName>
-    >;
   }
 
   async simulateWrite<
@@ -75,22 +73,19 @@ export class ViemReadContract<TAbi extends Abi = Abi>
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: args as any,
+      args: functionArgsToArray({
+        args,
+        abi: this.abi,
+        functionName,
+      }),
       ...createSimulateContractParameters(options),
     });
 
-    // Viem is smart enough to unpack an array of length 1 (might have something
-    // to do with the `components` field in the abi), but not all contract
-    // methods return a single-value array. To handle this discrepancy we make
-    // sure to always return an array.
-    if (Array.isArray(result)) {
-      return result as unknown as Promise<
-        FunctionReturnType<TAbi, TFunctionName>
-      >;
+    if (Array.isArray(result) && result.length === 1) {
+      return result[0];
+    } else {
+      return result as FunctionReturnType<TAbi, TFunctionName>;
     }
-    return [result] as unknown as Promise<
-      FunctionReturnType<TAbi, TFunctionName>
-    >;
   }
 
   async getEvents<TEventName extends EventName<TAbi>>(

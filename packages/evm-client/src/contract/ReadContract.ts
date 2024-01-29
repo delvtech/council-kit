@@ -1,9 +1,9 @@
 import { Abi, Address } from "abitype";
 import {
-  FunctionName,
-  FunctionArgs,
-  FunctionReturnType,
   EventName,
+  FunctionArgs,
+  FunctionName,
+  FunctionReturnType,
 } from "src/base/abitype";
 import {
   ContractEvent,
@@ -13,10 +13,9 @@ import { ContractWriteOptions } from "src/contract/ReadWriteContract";
 import { BlockTag } from "src/network/BlockTag";
 
 /**
- * Interface representing a readable contract with specified ABI.
- * Provides methods to read and simulate write operations on the contract.
+ * Interface representing a readable contract with specified ABI. Provides type
+ * safe methods to read and simulate write operations on the contract.
  */
-
 export interface ReadContract<TAbi extends Abi = Abi> {
   abi: TAbi;
   address: Address;

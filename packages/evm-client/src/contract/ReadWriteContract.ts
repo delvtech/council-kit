@@ -1,9 +1,5 @@
 import { Abi, Address } from "abitype";
-import {
-  FunctionName,
-  FunctionArgs,
-  FunctionReturnType,
-} from "src/base/abitype";
+import { FunctionArgs, FunctionName } from "src/base/abitype";
 import { ReadContract } from "./ReadContract";
 
 /**
@@ -15,14 +11,16 @@ export interface ReadWriteContract<TAbi extends Abi = Abi>
   extends ReadContract<TAbi> {
   /**
    * Writes to a specified function on the contract.
+   * @returns The transaction hash of the submitted transaction.
    */
   write<TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractWriteOptionsWithCallback,
-  ): Promise<FunctionReturnType<TAbi, TFunctionName>>;
-} // https://github.com/ethereum/execution-apis/blob/main/src/schemas/transaction.yaml#L274
+    options?: ContractWriteOptions,
+  ): Promise<`0x${string}`>;
+}
 
+// https://github.com/ethereum/execution-apis/blob/main/src/schemas/transaction.yaml#L274
 export interface ContractWriteOptions {
   type?: `0x${string}`;
   nonce?: bigint;
@@ -58,10 +56,4 @@ export interface ContractWriteOptions {
    * Chain ID that this transaction is valid on.
    */
   chainId?: bigint;
-}
-export interface ContractWriteOptionsWithCallback extends ContractWriteOptions {
-  /**
-   * Called when a transaction is submitted on chain.
-   */
-  onSubmitted?: (hash: `0x${string}`) => void;
 }

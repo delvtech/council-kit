@@ -10,7 +10,6 @@ export type {
 export type {
   ReadWriteContract,
   ContractWriteOptions,
-  ContractWriteOptionsWithCallback,
 } from "src/contract/ReadWriteContract";
 export type {
   ContractEvent,
@@ -43,3 +42,4 @@ export type {
   FunctionArgs,
   FunctionReturnType,
 } from "src/base/abitype";
+export { functionArgsToArray, type FunctionArgsToArray } from 'src/base/functionArgsToArray'

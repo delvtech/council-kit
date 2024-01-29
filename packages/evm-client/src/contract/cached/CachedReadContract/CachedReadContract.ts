@@ -1,20 +1,20 @@
 import { Abi } from "abitype";
 import {
-  ContractEvent,
-  ContractGetEventsOptions,
-} from "src/contract/ContractEvents";
-import { ContractWriteOptions } from "src/contract/ReadWriteContract";
-import { ContractReadOptions, ReadContract } from "src/contract/ReadContract";
-import { SimpleCache, SimpleCacheKey } from "src/cache/SimpleCache";
-import { LruSimpleCache } from "src/cache/LruSimpleCache";
-import {
   EventName,
   FunctionArgs,
   FunctionName,
   FunctionReturnType,
 } from "src/base/abitype";
+import { EmptyObject } from "src/base/types";
+import { LruSimpleCache } from "src/cache/LruSimpleCache";
+import { SimpleCache, SimpleCacheKey } from "src/cache/SimpleCache";
 import { createSimpleCacheKey } from "src/cache/utils/createSimpleCacheKey";
-
+import {
+  ContractEvent,
+  ContractGetEventsOptions,
+} from "src/contract/ContractEvents";
+import { ContractReadOptions, ReadContract } from "src/contract/ReadContract";
+import { ContractWriteOptions } from "src/contract/ReadWriteContract";
 
 // TODO: Figure out a good default cache size
 const DEFAULT_CACHE_SIZE = 100;
@@ -23,8 +23,8 @@ export interface CachedReadContractOptions<TAbi extends Abi = Abi> {
   contract: ReadContract<TAbi>;
   cache?: SimpleCache;
   /**
-   * An ID to distinguish this instance from others. Used to prefix to all cache
-   * keys.
+   * An ID to distinguish this instance from others in the cache by prefixing
+   * all cache keys.
    */
   id?: string;
 }
@@ -63,7 +63,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
    * Reads data from the contract. First checks the cache, and if not present,
    * fetches from the contract and then caches the result.
    */
-  async read<TFunctionName extends FunctionName<TAbi>>(
+  async read<TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>>(
     functionName: TFunctionName,
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractReadOptions,

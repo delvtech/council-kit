@@ -5,10 +5,13 @@ const ERC20ABI = IERC20.abi;
 test("It stubs the write function", async () => {
   const contract = new ReadWriteContractStub(ERC20ABI);
 
-  const stubbedValue = [true] as const;
+  const stubbedValue = "0x01234";
   contract.stubWrite("transfer", stubbedValue);
 
-  const value = await contract.write("transfer", [true]);
+  const value = await contract.write("transfer", {
+    _to: "0x123abc",
+    _value: 100n,
+  });
   expect(value).toBe(stubbedValue);
 
   const stub = contract.getWriteStub("transfer");

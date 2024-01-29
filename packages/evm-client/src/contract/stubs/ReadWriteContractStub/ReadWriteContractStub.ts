@@ -1,11 +1,12 @@
+import { Abi } from "abitype";
+import { SinonStub, stub } from "sinon";
+import { FunctionArgs, FunctionName } from "src/base/abitype";
+import { MaybePromise } from "src/base/types";
 import {
   ContractWriteOptions,
   ReadWriteContract,
 } from "src/contract/ReadWriteContract";
 import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
-import { Abi } from "abitype";
-import { FunctionArgs, FunctionName } from "src/base/abitype";
-import { stub } from "sinon";
 
 /**
  * A mock implementation of a writable Ethereum contract designed for unit
@@ -27,24 +28,67 @@ export class ReadWriteContractStub<TAbi extends Abi = Abi>
   extends ReadContractStub<TAbi>
   implements ReadWriteContract<TAbi>
 {
+  protected writeStubMap = new Map<
+    FunctionName<TAbi, "nonpayable" | "payable">,
+    WriteStub<TAbi, FunctionName<TAbi, "nonpayable" | "payable">>
+  >();
+
   /**
    * Simulates a contract write operation for a given function. If the function
    * is not previously stubbed using `stubWrite` from the parent class, an error
    * will be thrown.
    */
-  write = stub().callsFake(
-    <TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
-      functionName: TFunctionName,
-      args: FunctionArgs<TAbi, TFunctionName>,
-      options?: ContractWriteOptions,
-    ) => {
-      const stub = this.writeStubMap.get(functionName);
-      if (!stub) {
-        throw new Error(
-          `Called write for ${functionName} on a stubbed contract without a return value. The function must be stubbed first:\n\tcontract.stubWrite("${functionName}", value)`,
-        );
-      }
-      return stub(args, options);
-    },
-  );
+  async write<TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
+    functionName: TFunctionName,
+    args: FunctionArgs<TAbi, TFunctionName>,
+    options?: ContractWriteOptions,
+  ): Promise<`0x${string}`> {
+    const stub = this.writeStubMap.get(functionName);
+    if (!stub) {
+      throw new Error(
+        `Called write for ${functionName} on a stubbed contract without a return value. The function must be stubbed first:\n\tcontract.stubWrite("${functionName}", value)`,
+      );
+    }
+    return stub(args as any, options);
+  }
+
+  /**
+   * Stubs the return value for a given function when `simulateWrite` is called
+   * with that function name. This method overrides any previously stubbed
+   * values for the same function.
+   *
+   * *Note: The stub doesn't account for dynamic values based on provided
+   * arguments/options.*
+   */
+  stubWrite<TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
+    functionName: TFunctionName,
+    value: MaybePromise<`0x${string}`>,
+  ): void {
+    this.writeStubMap.set(
+      functionName,
+      stub().resolves(value) as WriteStub<TAbi, FunctionName<TAbi>>,
+    );
+  }
+
+  /**
+   * Retrieves the stub associated with a write function name.
+   * Useful for assertions in testing, such as checking call counts.
+   */
+  getWriteStub<
+    TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
+  >(functionName: TFunctionName): WriteStub<TAbi, TFunctionName> | undefined {
+    return this.writeStubMap.get(functionName);
+  }
 }
+
+/**
+ * Type representing a stub for the "write" and "simulateWrite" functions of a
+ * contract.
+ */
+type WriteStub<
+  TAbi extends Abi,
+  TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
+> = SinonStub<
+  [FunctionArgs<TAbi, TFunctionName>, ContractWriteOptions?],
+  MaybePromise<`0x${string}`>
+>;
