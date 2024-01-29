@@ -22,10 +22,10 @@ export interface CachedReadContractOptions<TAbi extends Abi = Abi> {
   contract: ReadContract<TAbi>;
   cache?: SimpleCache;
   /**
-   * An ID to distinguish this instance from others in the cache by prefixing
-   * all cache keys.
+   * A namespace to distinguish this instance from others in the cache by
+   * prefixing all cache keys.
    */
-  id?: string;
+  namespace?: string;
 }
 
 /**
@@ -41,15 +41,15 @@ export interface CachedReadContractOptions<TAbi extends Abi = Abi> {
 export class CachedReadContract<TAbi extends Abi = Abi>
   implements ReadContract<TAbi>
 {
-  id: string;
+  namespace: string;
   abi: TAbi;
   address: `0x${string}`;
 
   protected _contract: ReadContract<TAbi>;
   protected _cache: SimpleCache;
 
-  constructor({ contract, cache, id }: CachedReadContractOptions<TAbi>) {
-    this.id = id || "";
+  constructor({ contract, cache, namespace }: CachedReadContractOptions<TAbi>) {
+    this.namespace = namespace || "";
     this.abi = contract.abi;
     this.address = contract.address;
     this._contract = contract;
@@ -67,7 +67,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
   ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
     return this._getOrSet({
       key: createSimpleCacheKey([
-        this.id,
+        this.namespace,
         "read",
         {
           address: this.address,
@@ -98,7 +98,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
     options?: ContractReadOptions,
   ): void {
     const key = createSimpleCacheKey([
-      this.id,
+      this.namespace,
       "read",
       {
         address: this.address,
@@ -121,7 +121,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
   ): Promise<ContractEvent<TAbi, TEventName>[]> {
     return this._getOrSet({
       key: createSimpleCacheKey([
-        this.id,
+        this.namespace,
         "getEvents",
         {
           address: this.address,

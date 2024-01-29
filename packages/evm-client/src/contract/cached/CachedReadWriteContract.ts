@@ -27,8 +27,12 @@ export class CachedReadWriteContract<TAbi extends Abi = Abi>
   /** The wrapped writable contract instance. */
   protected readonly _contract: ReadWriteContract<TAbi>;
 
-  constructor({ contract, cache, id }: CachedReadWriteContractOptions<TAbi>) {
-    super({ contract, cache, id });
+  constructor({
+    contract,
+    cache,
+    namespace,
+  }: CachedReadWriteContractOptions<TAbi>) {
+    super({ contract, cache, namespace });
     this._contract = contract;
   }
 
