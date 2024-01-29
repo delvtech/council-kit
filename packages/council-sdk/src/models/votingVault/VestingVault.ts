@@ -142,86 +142,25 @@ export class ReadVestingVault extends ReadVotingVault {
    * @param fromBlock - Include all voters that had power on or after this block number.
    * @param toBlock - Include all voters that had power on or before this block number.
    */
-  async getVoters(
-    fromBlock?: BlockLike,
-    toBlock?: BlockLike,
-  ): Promise<ReadVoter[]> {
-    const breakDownsByVoter = await this._getPowerBreakdownByVoter({
-      fromBlock,
-      toBlock,
-    });
-    return Object.entries(breakDownsByVoter)
-      .filter(([, { power }]) => power > 0n)
-      .map(
-        ([address]) =>
-          new ReadVoter({
-            address: address as `0x${string}`,
-            contractFactory: this._contractFactory,
-            network: this._network,
-          }),
-      );
-  }
-
-  private async _getPowerBreakdownByVoter({
-    address,
+  async getVoters({
     fromBlock,
     toBlock,
   }: {
-    address?: `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
-  }): Promise<
-    Record<
-      `0x${string}`,
-      {
-        power: bigint;
-        powerFromAllDelegators: bigint;
-        powerByDelegator: Record<`0x${string}`, bigint>;
-      }
-    >
-  > {
-    const voteChangeEvents = await this._vestingVaultContract.getEvents(
-      "VoteChange",
-      {
-        filter: {
-          to: address,
-        },
-        fromBlock,
-        toBlock,
-      },
+  }): Promise<ReadVoter[]> {
+    const powerByVoter = await this._getPowerByVoter({
+      fromBlock,
+      toBlock,
+    });
+    return Object.keys(powerByVoter).map(
+      (address) =>
+        new ReadVoter({
+          address: address as `0x${string}`,
+          contractFactory: this._contractFactory,
+          network: this._network,
+        }),
     );
-
-    const breakdownsByVoter: Record<
-      `0x${string}`,
-      {
-        power: bigint;
-        powerFromAllDelegators: bigint;
-        powerByDelegator: Record<`0x${string}`, bigint>;
-      }
-    > = {};
-
-    for (const {
-      args: { from, to, amount },
-    } of voteChangeEvents) {
-      if (!breakdownsByVoter[to]) {
-        breakdownsByVoter[to] = {
-          power: 0n,
-          powerFromAllDelegators: 0n,
-          powerByDelegator: {},
-        };
-      }
-
-      breakdownsByVoter[to].power += amount;
-
-      // ignore self-delegation
-      if (from !== to) {
-        breakdownsByVoter[to].powerFromAllDelegators += amount;
-        breakdownsByVoter[to].powerByDelegator[from] =
-          breakdownsByVoter[to].powerByDelegator[from] ?? 0n + amount;
-      }
-    }
-
-    return breakdownsByVoter;
   }
 
   /**
@@ -236,12 +175,57 @@ export class ReadVestingVault extends ReadVotingVault {
    * @param toBlock - Include all voters that had power on or before this block
    * number.
    */
-  async getVotingPowerBreakdown(options: {
+  async getVotingPowerBreakdown({
+    address,
+    fromBlock,
+    toBlock,
+  }: {
     address?: `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
   }): Promise<VoterPowerBreakdown[]> {
-    const breakdownByVoter = await this._getPowerBreakdownByVoter(options);
+    // const breakdownByVoter = await this._getPowerBreakdownByVoter(options);
+    const voteChangeEvents = await this._vestingVaultContract.getEvents(
+      "VoteChange",
+      {
+        filter: {
+          to: address,
+        },
+        fromBlock,
+        toBlock,
+      },
+    );
+
+    const breakdownByVoter: Record<
+      `0x${string}`,
+      {
+        power: bigint;
+        powerFromAllDelegators: bigint;
+        powerByDelegator: Record<`0x${string}`, bigint>;
+      }
+    > = {};
+
+    for (const {
+      args: { from, to, amount },
+    } of voteChangeEvents) {
+      if (!breakdownByVoter[to]) {
+        breakdownByVoter[to] = {
+          power: 0n,
+          powerFromAllDelegators: 0n,
+          powerByDelegator: {},
+        };
+      }
+
+      breakdownByVoter[to].power += amount;
+
+      // ignore self-delegation
+      if (from !== to) {
+        breakdownByVoter[to].powerFromAllDelegators += amount;
+        breakdownByVoter[to].powerByDelegator[from] =
+          breakdownByVoter[to].powerByDelegator[from] ?? 0n + amount;
+      }
+    }
+
     const voterMap = new Map<`0x${string}`, ReadVoter>();
 
     return Object.entries(breakdownByVoter)
@@ -307,10 +291,13 @@ export class ReadVestingVault extends ReadVotingVault {
    * @param atBlock
    * @returns The historical voting power of the given address.
    */
-  async getHistoricalVotingPower(
-    address: `0x${string}`,
-    atBlock?: BlockLike,
-  ): Promise<bigint> {
+  async getHistoricalVotingPower({
+    address,
+    atBlock,
+  }: {
+    address: `0x${string}`;
+    atBlock?: BlockLike;
+  }): Promise<bigint> {
     let blockNumber = atBlock;
 
     if (typeof blockNumber !== "bigint") {
@@ -328,27 +315,28 @@ export class ReadVestingVault extends ReadVotingVault {
    * Get the sum of voting power held by all voters in this vault.
    * @param atBlock - Get the total held at this block number.
    */
-  async getTotalVotingPower(atBlock?: BlockLike): Promise<bigint> {
-    const breakdownByVoter = await this._getPowerBreakdownByVoter({
+  async getTotalVotingPower({
+    atBlock,
+  }: {
+    atBlock?: BlockLike;
+  }): Promise<bigint> {
+    const powerByVoter = await this._getPowerByVoter({
       toBlock: atBlock,
     });
-    return Object.values(breakdownByVoter).reduce(
-      (sum, { power }) => sum + power,
-      0n,
-    );
+    return Object.values(powerByVoter).reduce((sum, power) => sum + power);
   }
 
   /**
    * Get the current delegate of a given address.
    */
   async getDelegate({
-    address,
+    voter,
     atBlock,
   }: {
-    address: `0x${string}`;
+    voter: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<ReadVoter> {
-    const { delegatee } = await this.getGrant({ address, atBlock });
+    const { delegatee } = await this.getGrant({ address: voter, atBlock });
     return new ReadVoter({
       address: delegatee,
       contractFactory: this._contractFactory,
@@ -405,6 +393,38 @@ export class ReadVestingVault extends ReadVotingVault {
             network: this._network,
           }),
       );
+  }
+
+  private async _getPowerByVoter({
+    address,
+    fromBlock,
+    toBlock,
+  }: {
+    address?: `0x${string}`;
+    fromBlock?: BlockLike;
+    toBlock?: BlockLike;
+  }): Promise<Record<`0x${string}`, bigint>> {
+    const voteChangeEvents = await this._vestingVaultContract.getEvents(
+      "VoteChange",
+      {
+        filter: {
+          to: address,
+        },
+        fromBlock,
+        toBlock,
+      },
+    );
+
+    const powerByVoter: Record<`0x${string}`, bigint> = {};
+    for (const {
+      args: { to, amount },
+    } of voteChangeEvents) {
+      powerByVoter[to] = powerByVoter[to] ?? 0n + amount;
+    }
+
+    return Object.fromEntries(
+      Object.entries(powerByVoter).filter(([, power]) => power > 0n),
+    );
   }
 }
 
