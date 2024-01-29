@@ -45,7 +45,7 @@ export class ReadToken extends Model {
     });
   }
 
-  get address(): string {
+  get address(): `0x${string}` {
     return this._contract.address;
   }
 
