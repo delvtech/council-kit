@@ -3695,6 +3695,11 @@
   resolved "https://registry.yarnpkg.com/@types/async-eventemitter/-/async-eventemitter-0.2.1.tgz#f8e6280e87e8c60b2b938624b0a3530fb3e24712"
   integrity sha512-M2P4Ng26QbAeITiH7w1d7OxtldgfAe0wobpyJzVK/XOb0cUGKU2R4pfAhqcJBXAe2ife5ZOhSv4wk7p+ffURtg==
 
+"@types/big.js@^6.2.2":
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@types/big.js/-/big.js-6.2.2.tgz#69422ec9ef59df1330ccfde2106d9e1159a083c3"
+  integrity sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==
+
 "@types/bn.js@*", "@types/bn.js@^5.1.0":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-5.1.1.tgz#b51e1b55920a4ca26e9285ff79936bbdec910682"
@@ -5799,7 +5804,7 @@ big-integer@1.6.36:
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.36.tgz#78631076265d4ae3555c04f85e7d9d2f3a071a36"
   integrity sha512-t70bfa7HYEA1D9idDbmuv7YbsbVkQ+Hp+8KFSul4aE5e/i1bjCNIRYJZlA8Q8p0r9T8cF/RVvwUgRA//FydEyg==
 
-big.js@^6.0.3:
+big.js@^6.0.3, big.js@^6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-6.2.1.tgz#7205ce763efb17c2e41f26f121c420c6a7c2744f"
   integrity sha512-bCtHMwL9LeDIozFn+oNhhFoq+yQ3BNdnsLSASUxLciOb1vgvpHsIO1dsENiGMgbb4SkP5TrzWzRiLddn8ahVOQ==

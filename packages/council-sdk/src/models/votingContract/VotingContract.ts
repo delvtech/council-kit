@@ -1,3 +1,4 @@
+import { CachedReadContract } from "@council/evm-client";
 import { Signer } from "ethers";
 import { BytesLike, parseEther } from "ethers/lib/utils";
 import uniqBy from "lodash.uniqby";
@@ -8,7 +9,7 @@ import {
   Ballot,
   VotingContractDataSource,
 } from "src/datasources/votingContract/VotingContractDataSource";
-import { Model, ModelOptions } from "src/models/Model";
+import { Model, ReadModelOptions } from "src/models/Model";
 import { Proposal } from "src/models/Proposal";
 import { Vote } from "src/models/Vote";
 import { Voter } from "src/models/Voter";
@@ -18,29 +19,24 @@ import {
 } from "src/models/votingVault/types";
 import { VotingVault } from "src/models/votingVault/VotingVault";
 import { sumStrings } from "src/utils/sumStrings";
+import { CoreVoting } from '@council/artifacts/dist/CoreVoting'
+
+const coreVotingAbi = CoreVoting.abi
+type CoreVotingAbi = typeof coreVotingAbi
 
 /**
  * @category Models
  */
-export interface VotingContractOptions extends ModelOptions {
-  /**
-   * A data source to use instead of registering one with the `context`. If you
-   * pass in a data source, you take over the responsibility of registering it
-   * with the `context` to make it available to other models and data sources.
-   */
-  dataSource?: VotingContractDataSource;
+export interface ReadVotingContractOptions extends ReadModelOptions {
+  contract: CachedReadContract<CoreVotingAbi>;
 }
 
 /**
- * A model of a CoreVoting contract.
  * @category Models
  */
-export class VotingContract<
-  TVaults extends VotingVault[] = VotingVault[],
-> extends Model {
-  address: string;
-  dataSource: VotingContractDataSource;
-  vaults: TVaults;
+export class ReadVotingContract extends Model {
+  protected _contract: CachedReadContract<CoreVotingAbi>;
+  // protected vaults: TVaults;
 
   /**
    * Create a new VotingContract model instance.
@@ -48,17 +44,14 @@ export class VotingContract<
    * @param vaults - The VotingVault instances or addresses of the vaults that are
    *   approved for this voting contract.
    */
-  constructor(
-    address: string,
-    vaults: (VotingVault | string)[],
-    context: CouncilContext,
-    options?: VotingContractOptions,
-  ) {
-    super(context, {
-      ...options,
-      name: options?.name ?? "Core Voting",
-    });
-    this.address = address;
+  constructor({
+    contract,
+    contractFactory,
+    network,
+    name,
+  }: ReadVotingContractOptions) {
+    super({ name, network, contractFactory });
+    this._contract = contract;
     this.vaults = vaults.map((vault) =>
       vault instanceof VotingVault
         ? vault

@@ -1,8 +1,6 @@
 export * from "./context/context";
 export * from "./datasources/airdrop/AirdropContractDataSource";
 export * from "./datasources/airdrop/AirdropDataSource";
-export * from "./datasources/base/cached/CachedDataSource";
-export * from "./datasources/base/contract/ContractDataSource";
 export * from "./datasources/base/DataSource";
 export * from "./datasources/base/http/HTTPDataSource";
 export * from "./datasources/token/ERC20ContractDataSource";
@@ -32,7 +30,5 @@ export * from "./models/votingVault/LockingVault";
 export * from "./models/votingVault/types";
 export * from "./models/votingVault/VestingVault";
 export * from "./models/votingVault/VotingVault";
-export * from "./utils/cached";
 export * from "./utils/getBlockDate";
 export * from "./utils/getVaultsWithPower";
-export * from "./utils/sumStrings";

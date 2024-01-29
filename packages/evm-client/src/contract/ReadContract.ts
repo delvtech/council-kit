@@ -47,8 +47,9 @@ export interface ReadContract<TAbi extends Abi = Abi> {
     eventName: TEventName,
     options?: ContractGetEventsOptions<TAbi, TEventName>,
   ): Promise<ContractEvent<TAbi, TEventName>[]>;
-} // https://github.com/ethereum/execution-apis/blob/main/src/eth/execute.yaml#L1
+}
 
+// https://github.com/ethereum/execution-apis/blob/main/src/eth/execute.yaml#L1
 export type ContractReadOptions =
   | {
       blockNumber?: bigint;

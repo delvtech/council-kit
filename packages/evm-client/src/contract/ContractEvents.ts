@@ -1,5 +1,5 @@
 import { Abi } from "abitype";
-import { EventName, EventFilter, EventArgs } from "src/base/abitype";
+import { EventArgs, EventFilter, EventName } from "src/base/abitype";
 import { BlockTag } from "src/network/BlockTag";
 
 export interface ContractGetEventsOptions<
@@ -10,10 +10,10 @@ export interface ContractGetEventsOptions<
   fromBlock?: bigint | BlockTag;
   toBlock?: bigint | BlockTag;
 }
+
 /**
  * A strongly typed event object based on an abi
  */
-
 export interface ContractEvent<
   TAbi extends Abi,
   TEventName extends EventName<TAbi> = EventName<TAbi>,

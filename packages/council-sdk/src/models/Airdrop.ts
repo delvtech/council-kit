@@ -1,44 +1,48 @@
-import { Signer } from "ethers";
-import { CouncilContext } from "src/context/context";
-import { AirdropContractDataSource } from "src/datasources/airdrop/AirdropContractDataSource";
-import { AirdropDataSource } from "src/datasources/airdrop/AirdropDataSource";
-import { TransactionOptions } from "src/datasources/base/contract/ContractDataSource";
-import { Model, ModelOptions } from "./Model";
-import { Token } from "./token/Token";
-import { LockingVault } from "./votingVault/LockingVault";
+import { Airdrop as AirdropArtifact } from "@council/artifacts/dist/Airdrop";
+import {
+  CachedReadContract,
+  CachedReadWriteContract,
+  ContractWriteOptions,
+} from "@council/evm-client";
+import { blockToReadOptions, BlockLike } from "src/contract/args";
+import { CachedReadWriteContractFactory } from "src/contract/factory";
+import {
+  Model,
+  ReadModelOptions,
+  ReadWriteModelOptions,
+} from "src/models/Model";
+import { ReadToken, ReadWriteToken } from "src/models/token/Token";
+import { LockingVault } from "src/models/votingVault/LockingVault";
+import { formatUnits } from "src/utils/formatUnits";
+
+const airdropAbi = AirdropArtifact.abi;
+type AirdropAbi = typeof airdropAbi;
 
 /**
  * @category Models
  */
-export interface AirdropOptions extends ModelOptions {
-  /**
-   * A data source to use instead of registering one with the `context`. If you
-   * pass in a data source, you take over the responsibility of registering it
-   * with the `context` to make it available to other models and data sources.
-   */
-  dataSource?: AirdropDataSource;
+export interface ReadAirdropOptions extends ReadModelOptions {
+  contract: CachedReadContract<AirdropAbi>;
 }
 
 /**
  * @category Models
  */
-export class Airdrop extends Model {
-  address: string;
-  dataSource: AirdropDataSource;
+export class ReadAirdrop extends Model {
+  protected _contract: CachedReadContract<AirdropAbi>;
 
-  constructor(
-    address: string,
-    context: CouncilContext,
-    options?: AirdropOptions,
-  ) {
-    super(context, options);
-    this.address = address;
-    this.dataSource =
-      options?.dataSource ||
-      context.registerDataSource(
-        { address },
-        new AirdropContractDataSource(address, context),
-      );
+  constructor({
+    contract,
+    contractFactory,
+    network,
+    name,
+  }: ReadAirdropOptions) {
+    super({ name, network, contractFactory });
+    this._contract = contract;
+  }
+
+  get address(): string {
+    return this._contract.address;
   }
 
   /**
@@ -46,30 +50,47 @@ export class Airdrop extends Model {
    * owner).
    */
   async getExpiration(): Promise<Date> {
-    const timestamp = await this.dataSource.getExpiration();
-    return new Date(timestamp * 1000);
+    const secondsTimestamp = await this._contract.read("expiration", {});
+    return new Date(Number(secondsTimestamp * 1000n));
   }
 
   /**
    * Get The merkle root with deposits encoded into it as hash [address, amount]
    */
   getMerkleRoot(): Promise<string> {
-    return this.dataSource.getMerkleRoot();
+    return this._contract.read("rewardsRoot", {});
   }
 
   /**
    * Get the token that will be paid out.
    */
-  async getToken(): Promise<Token> {
-    const address = await this.dataSource.getToken();
-    return new Token(address, this.context);
+  async getToken(): Promise<ReadToken> {
+    const address = await this._contract.read("token", {});
+    return new ReadToken({
+      address,
+      contractFactory: this._contractFactory,
+      network: this._network,
+    });
   }
 
   /**
    * Get the amount that an address has already claimed.
    */
-  getClaimedAmount(address: string): Promise<string> {
-    return this.dataSource.getClaimedAmount(address);
+  async getClaimedAmount({
+    address,
+    atBlock,
+  }: {
+    address: `0x${string}`;
+    atBlock?: BlockLike;
+  }): Promise<string> {
+    const claimed = await this._contract.read(
+      "claimed",
+      address,
+      blockToReadOptions(atBlock),
+    );
+    const token = await this.getToken();
+    const decimals = await token.getDecimals();
+    return formatUnits(claimed, decimals);
   }
 
   /**
@@ -77,13 +98,46 @@ export class Airdrop extends Model {
    * when someone claims and delegates in a single tx.
    */
   async getLockingVault(): Promise<LockingVault> {
-    const address = await this.dataSource.getLockingVault();
-    return new LockingVault(address, this.context);
+    const address = await this._contract.read("lockingVault", {});
+    return new ReadLockingVault({
+      address,
+      contractFactory: this._contractFactory,
+      network: this._network,
+    });
+  }
+}
+
+/**
+ * @category Models
+ */
+interface ReadWriteAirdropOptions extends ReadWriteModelOptions {
+  contract: CachedReadWriteContract<AirdropAbi>;
+}
+
+/**
+ * @category Models
+ */
+export class ReadWriteAirdrop extends ReadAirdrop {
+  protected _contract: CachedReadWriteContract<AirdropAbi>;
+  protected _contractFactory: CachedReadWriteContractFactory;
+
+  constructor(options: ReadWriteAirdropOptions) {
+    super(options);
+    this._contract = options.contract;
+    this._contractFactory = options.contractFactory;
+  }
+
+  override async getToken(): Promise<ReadWriteToken> {
+    const address = await this._contract.read("token", {});
+    return new ReadWriteToken({
+      address,
+      contractFactory: this._contractFactory,
+      network: this._network,
+    });
   }
 
   /**
    * Claims tokens from the airdrop and sends them to the user.
-   * @param signer - Signer.
    * @param amount - Amount of tokens to claim.
    * @param totalGrant - The total amount of tokens the user was granted.
    * @param merkleProof - A set of hashes that can be used to reconstruct the
@@ -92,28 +146,36 @@ export class Airdrop extends Model {
    * @param recipient - The address which will be credited with funds.
    * @return - The transaction hash.
    */
-  async claim(
-    signer: Signer,
-    amount: string,
-    totalGrant: string,
-    merkleProof: string[],
-    recipient?: string,
-    options?: TransactionOptions,
-  ): Promise<string> {
-    return this.dataSource.claim(
-      signer,
-      amount,
-      totalGrant,
-      merkleProof,
-      recipient,
+  async claim({
+    amount,
+    totalGrant,
+    merkleProof,
+    recipient,
+    options,
+  }: {
+    amount: bigint;
+    totalGrant: bigint;
+    merkleProof: `0x${string}`[];
+    recipient: `0x${string}`;
+    options?: ContractWriteOptions;
+  }): Promise<string> {
+    const hash = await this._contract.write(
+      "claim",
+      {
+        amount,
+        destination: recipient,
+        merkleProof,
+        totalGrant,
+      },
       options,
     );
+    this._contract.deleteRead("claimed", recipient);
+    return hash;
   }
 
   /**
    * Claims tokens from the airdrop, deposits it into the locking vault, and
    * delegates in a single transaction.
-   * @param signer - Signer.
    * @param amount - Amount of tokens to claim.
    * @param delegate - The address the user will delegate to, WARNING - should not be zero.
    * @param totalGrant - The total amount of tokens the user was granted.
@@ -123,23 +185,50 @@ export class Airdrop extends Model {
    * @param recipient - The address which will be credited with funds.
    * @return - The transaction hash.
    */
-  async claimAndDelegate(
-    signer: Signer,
-    amount: string,
-    delegate: string,
-    totalGrant: string,
-    merkleProof: string[],
-    recipient?: string,
-    options?: TransactionOptions,
-  ): Promise<string> {
-    return this.dataSource.claimAndDelegate(
-      signer,
-      amount,
-      delegate,
-      totalGrant,
-      merkleProof,
-      recipient,
+  async claimAndDelegate({
+    amount,
+    delegate,
+    totalGrant,
+    merkleProof,
+    recipient,
+    options,
+  }: {
+    amount: bigint;
+    delegate: `0x${string}`;
+    totalGrant: bigint;
+    merkleProof: `0x${string}`[];
+    recipient: `0x${string}`;
+    options?: ContractWriteOptions;
+  }): Promise<string> {
+    const hash = await this._contract.write(
+      "claimAndDelegate",
+      {
+        amount,
+        delegate,
+        totalGrant,
+        merkleProof,
+        destination: recipient,
+      },
       options,
     );
+    this._contract.deleteRead("claimed", recipient);
+    return hash;
+  }
+
+  /**
+   * Remove funds from the airdrop after expiration
+   * @param recipient - The address which will be credited with funds.
+   * @return - The transaction hash.
+   */
+  async reclaim({
+    recipient,
+    options,
+  }: {
+    recipient: `0x${string}`;
+    options?: ContractWriteOptions;
+  }): Promise<`0x${string}`> {
+    const hash = await this._contract.write("reclaim", recipient, options);
+    this._contract.clearCache();
+    return hash;
   }
 }

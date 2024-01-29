@@ -30,6 +30,7 @@ export { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub/
 
 // Network
 export type { Network, GetBlockParameters } from "src/network/Network";
+export type { BlockTag } from "src/network/BlockTag";
 // Network testing stub
 export { NetworkStub } from "src/network/stubs/NetworkStub";
 
@@ -42,4 +43,4 @@ export type {
   FunctionArgs,
   FunctionReturnType,
 } from "src/base/abitype";
-export { functionArgsToArray, type FunctionArgsToArray } from 'src/base/functionArgsToArray'
+export { functionArgsToArray, type FunctionArgsToArray } from "src/base/functionArgsToArray";

@@ -5,7 +5,6 @@ import {
   FunctionName,
   FunctionReturnType,
 } from "src/base/abitype";
-import { EmptyObject } from "src/base/types";
 import { LruSimpleCache } from "src/cache/LruSimpleCache";
 import { SimpleCache, SimpleCacheKey } from "src/cache/SimpleCache";
 import { createSimpleCacheKey } from "src/cache/utils/createSimpleCacheKey";
@@ -42,21 +41,19 @@ export interface CachedReadContractOptions<TAbi extends Abi = Abi> {
 export class CachedReadContract<TAbi extends Abi = Abi>
   implements ReadContract<TAbi>
 {
-  readonly address: `0x${string}`;
-  readonly abi: TAbi;
+  id: string;
+  abi: TAbi;
+  address: `0x${string}`;
 
-  protected readonly _contract: ReadContract<TAbi>;
-  protected readonly _id: string;
-
-  /** Internal cache for contract reads. */
-  protected readonly _cache: SimpleCache;
+  protected _contract: ReadContract<TAbi>;
+  protected _cache: SimpleCache;
 
   constructor({ contract, cache, id }: CachedReadContractOptions<TAbi>) {
-    this.address = contract.address;
+    this.id = id || "";
     this.abi = contract.abi;
+    this.address = contract.address;
     this._contract = contract;
     this._cache = cache || new LruSimpleCache({ max: DEFAULT_CACHE_SIZE });
-    this._id = id || "";
   }
 
   /**
@@ -70,7 +67,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
   ): Promise<FunctionReturnType<TAbi, TFunctionName>> {
     return this._getOrSet({
       key: createSimpleCacheKey([
-        this._id,
+        this.id,
         "read",
         {
           address: this.address,
@@ -101,7 +98,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
     options?: ContractReadOptions,
   ): void {
     const key = createSimpleCacheKey([
-      this._id,
+      this.id,
       "read",
       {
         address: this.address,
@@ -124,7 +121,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
   ): Promise<ContractEvent<TAbi, TEventName>[]> {
     return this._getOrSet({
       key: createSimpleCacheKey([
-        this._id,
+        this.id,
         "getEvents",
         {
           address: this.address,

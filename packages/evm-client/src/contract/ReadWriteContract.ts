@@ -6,7 +6,6 @@ import { ReadContract } from "./ReadContract";
  * Interface representing a writable contract with specified ABI.
  * Extends IReadContract to also include write operations.
  */
-
 export interface ReadWriteContract<TAbi extends Abi = Abi>
   extends ReadContract<TAbi> {
   /**

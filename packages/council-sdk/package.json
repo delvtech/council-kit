@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@council/artifacts": "*",
+    "big.js": "^6.2.1",
     "fast-json-stable-stringify": "^2.1.0",
     "lodash.uniqby": "^4.7.0",
     "lru-cache": "^10.2.0"
@@ -25,7 +26,9 @@
     "@council/evm-client": "*",
     "@council/tsconfig": "*",
     "@jest/globals": "^29.7.0",
+    "@types/big.js": "^6.2.2",
     "@types/lodash.uniqby": "^4.7.9",
+    "abitype": "^1.0.0",
     "dotenv": "^16.4.1",
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",

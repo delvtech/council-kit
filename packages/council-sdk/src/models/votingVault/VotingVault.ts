@@ -1,90 +1,91 @@
-import { BytesLike } from "ethers";
-import { CouncilContext } from "src/context/context";
-import { VotingVaultContractDataSource } from "src/datasources/votingVault/VotingVaultContractDataSource";
-import { VotingVaultDataSource } from "src/datasources/votingVault/VotingVaultDataSource";
-import { Model, ModelOptions } from "src/models/Model";
-import { Voter } from "src/models/Voter";
-import { VoterPowerBreakdown } from "src/models/votingVault/types";
+import { IVotingVault } from "@council/artifacts/dist/IVotingVault";
+import { CachedReadContract } from "@council/evm-client";
+import { BlockLike, blockToReadOptions } from "src/contract/args";
+import { Model, ReadContractModelOptions } from "src/models/Model";
+
+const votingVaultAbi = IVotingVault.abi;
+type VotingVaultAbi = typeof votingVaultAbi;
 
 /**
  * @category Models
  */
-export interface VotingVaultOptions<
-  TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
-> extends ModelOptions {
-  /**
-   * A data source to use instead of registering one with the `context`. If you
-   * pass in a data source, you take over the responsibility of registering it
-   * with the `context` to make it available to other models and data sources.
-   */
-  dataSource?: TDataSource;
-}
-
-// Adds common methods as optional. This makes it possible to loop through a
-// list of VotingVaults and conditionally call these methods without TypeScript
-// complaining that the methods don't exist on type VotingVault.
-// TODO: Find a better solution for this.
-interface IVotingVault<
-  TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
-> {
-  address: string;
-  dataSource: TDataSource;
-  getVoters?(fromBlock?: number, toBlock?: number): Promise<Voter[]>;
-  getVotingPowerBreakdown?(
-    address?: string,
-    fromBlock?: number,
-    toBlock?: number,
-  ): Promise<VoterPowerBreakdown[]>;
-  getTotalVotingPower?(atBlock?: number): Promise<string>;
-}
-
-// Include the common optional methods in the `VotingVault` export. The original
-// interface name has to be different than the model name so that the model can
-// implement it.
-export interface VotingVault extends IVotingVault {}
+export interface ReadVotingVaultOptions extends ReadContractModelOptions {}
 
 /**
  * A vault which stores voting power by address
  * @category Models
  */
-export class VotingVault<
-    TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
-  >
-  extends Model
-  implements IVotingVault
-{
-  address: string;
-  dataSource: TDataSource;
+export class ReadVotingVault extends Model {
+  protected _contract: CachedReadContract<VotingVaultAbi>;
 
-  constructor(
-    address: string,
-    context: CouncilContext,
-    options?: VotingVaultOptions,
-  ) {
-    super(context, {
-      ...options,
-      name: options?.name ?? "Voting Vault",
+  constructor({
+    address,
+    contractFactory,
+    network,
+    cache,
+    id,
+    name,
+  }: ReadVotingVaultOptions) {
+    super({ name, network, contractFactory });
+    this._contract = contractFactory({
+      abi: votingVaultAbi,
+      address,
+      cache,
+      id,
     });
-    this.address = address;
-    this.dataSource = (options?.dataSource ||
-      this.context.registerDataSource(
-        {
-          address,
-        },
-        new VotingVaultContractDataSource(address, context),
-      )) as TDataSource;
+  }
+
+  get address(): string {
+    return this._contract.address;
+  }
+  get id(): string {
+    return this._contract.id;
   }
 
   /**
    * Get the usable voting power owned by a given address in this vault.
-   * @param extraData - ABI encoded optional extra data used by some vaults, such
-   *   as merkle proofs.
+   * @param extraData - ABI encoded optional extra data used by some vaults,
+   *   such as merkle proofs.
    */
-  async getVotingPower(
-    address: string,
-    atBlock?: number,
-    extraData: BytesLike = "0x00",
-  ): Promise<string> {
-    return this.dataSource.getVotingPower(address, atBlock, extraData);
+  async getVotingPower({
+    address,
+    atBlock = "latest",
+    extraData = "0x00",
+  }: {
+    address: `0x${string}`;
+    atBlock?: BlockLike;
+    extraData?: `0x${string}`;
+  }): Promise<bigint> {
+    let blockNumber = atBlock;
+
+    if (typeof blockNumber !== "bigint") {
+      const block = await this._network.getBlock(blockToReadOptions(atBlock));
+      blockNumber = block.blockNumber;
+    }
+
+    return this._contract.simulateWrite("queryVotePower", {
+      blockNumber,
+      extraData,
+      user: address,
+    });
   }
 }
+
+// interface IVotingVault<
+//   TDataSource extends VotingVaultDataSource = VotingVaultDataSource,
+// > {
+//   address: string;
+//   dataSource: TDataSource;
+//   getVoters?(fromBlock?: number, toBlock?: number): Promise<Voter[]>;
+//   getVotingPowerBreakdown?(
+//     address?: string,
+//     fromBlock?: number,
+//     toBlock?: number,
+//   ): Promise<VoterPowerBreakdown[]>;
+//   getTotalVotingPower?(atBlock?: number): Promise<string>;
+// }
+
+// Include the common optional methods in the `VotingVault` export. The original
+// interface name has to be different than the model name so that the model can
+// implement it.
+// export interface VotingVault extends IVotingVault {}

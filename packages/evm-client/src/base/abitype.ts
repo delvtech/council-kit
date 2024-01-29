@@ -46,25 +46,6 @@ type ParametersToInterface<TParameters extends readonly AbiParameter[]> =
             : never;
         };
 
-const foo = "d";
-
-type Foo2 = typeof foo extends "" ? "never" : "not never";
-
-type Foo = ParametersToInterface<
-  [
-    {
-      internalType: "address";
-      name: "isActive";
-      type: "bool";
-    },
-    {
-      internalType: "address";
-      name: "";
-      type: "address";
-    },
-  ]
->;
-
 /**
  * Get a union of event names from an abi
  */
@@ -117,7 +98,7 @@ export type FunctionName<
  * Get the argument types for a function from an abi function, which is determined by it's inputs:
  * - __Single input:__ the type of the single input.
  * - __Multiple inputs:__ an object with the input names as keys and the input types as values.
- * - __No outputs:__ `undefined` | `null`.
+ * - __No inputs:__ an empty object.
  */
 export type FunctionArgs<
   TAbi extends Abi,

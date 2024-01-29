@@ -1,9 +1,31 @@
-import { CouncilContext } from "src/context/context";
+import {
+  CachedReadContractOptions,
+  CachedReadWriteContractOptions,
+  Network,
+} from "@council/evm-client";
+import {
+  CachedReadContractFactory,
+  CachedReadWriteContractFactory,
+} from "src/contract/factory";
 
 /**
+ * A base class for read-only models.
  * @category Models
  */
-export interface ModelOptions {
+export class Model {
+  name: string;
+  protected _network: Network;
+  protected _contractFactory: CachedReadContractFactory;
+
+  constructor({ name, network, contractFactory }: ReadModelOptions) {
+    this.name = name ?? this.constructor.name;
+    this._network = network;
+    this._contractFactory = contractFactory;
+  }
+}
+
+interface ModelOptions {
+  network: Network;
   /**
    * An arbitrary name for the instance. This is for convenience only (e.g.,
    * display name, debugging) and has no affect on the model's behavior.
@@ -12,17 +34,33 @@ export interface ModelOptions {
 }
 
 /**
- * Base model class extended by all others
  * @category Models
  */
-export class Model {
-  // TODO: Remove hard requirement on context or create default from a lighter
-  // argument like provider or rpcUrl.
-  context: CouncilContext;
-  name: string;
+export interface ReadModelOptions extends ModelOptions {
+  contractFactory: CachedReadContractFactory;
+}
 
-  constructor(context: CouncilContext, options?: ModelOptions) {
-    this.context = context;
-    this.name = options?.name ?? this.constructor.name;
-  }
+/**
+ * @category Models
+ */
+export interface ReadContractModelOptions
+  extends ReadModelOptions,
+    Omit<CachedReadContractOptions, "contract"> {
+  address: `0x${string}`;
+}
+
+/**
+ * @category Models
+ */
+export interface ReadWriteModelOptions extends ModelOptions {
+  contractFactory: CachedReadWriteContractFactory;
+}
+
+/**
+ * @category Models
+ */
+export interface ReadWriteContractModelOptions
+  extends ReadWriteModelOptions,
+    Omit<CachedReadWriteContractOptions, "contract"> {
+  address: `0x${string}`;
 }

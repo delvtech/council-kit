@@ -1,24 +1,22 @@
-import { BytesLike } from "ethers";
-import { CouncilContext } from "src/context/context";
-import { sumStrings } from "src/utils/sumStrings";
-import { Model, ModelOptions } from "./Model";
+import { BlockLike } from "src/contract/args";
+import { Model, ReadModelOptions } from "./Model";
 import { Vote } from "./Vote";
 import { VotingContract } from "./votingContract/VotingContract";
-import { VotingVault } from "./votingVault/VotingVault";
+import { ReadVotingVault, VotingVault } from "./votingVault/VotingVault";
+
+export interface ReadVoterOptions extends ReadModelOptions {
+  address: `0x${string}`;
+}
 
 /**
  * A participant in Council
  * @category Models
  */
-export class Voter extends Model {
-  address: string;
+export class ReadVoter extends Model {
+  address: `0x${string}`;
 
-  constructor(
-    address: string,
-    context: CouncilContext,
-    options?: ModelOptions,
-  ) {
-    super(context, options);
+  constructor({ address, ...rest }: ReadVoterOptions) {
+    super(rest);
     this.address = address;
   }
 
@@ -27,30 +25,42 @@ export class Voter extends Model {
    * @param extraData - ABI encoded optional extra data used by some vaults, such
    *   as merkle proofs.
    */
-  async getVotingPower(
-    vaults: (string | VotingVault)[],
-    atBlock?: number,
-    extraData?: BytesLike[],
-  ): Promise<string> {
+  async getVotingPower({
+    vaults,
+    atBlock,
+    extraData,
+  }: {
+    vaults: (`0x${string}` | ReadVotingVault)[];
+    atBlock?: BlockLike;
+    extraData?: `0x${string}`[];
+  }): Promise<bigint> {
     const vaultPowers = vaults.map((vault, i) => {
       if (typeof vault === "string") {
-        vault = new VotingVault(vault, this.context);
+        vault = new ReadVotingVault({
+          address: vault,
+          contractFactory: this._contractFactory,
+          network: this._network,
+        });
       }
-      return vault.getVotingPower(this.address, atBlock, extraData?.[i]);
+      return vault.getVotingPower({
+        address: this.address,
+        atBlock,
+        extraData: extraData?.[i],
+      });
     });
-    return sumStrings(await Promise.all(vaultPowers));
+    return (await Promise.all(vaultPowers)).reduce((sum, val) => sum + val);
   }
 
   /**
    * Get the casted votes for this Voter in a given Voting Contract
    */
-  async getVotes(votingContractAddress: string): Promise<Vote[]> {
-    const votingContract = new VotingContract(
-      votingContractAddress,
-      [],
-      this.context,
-    );
-    return votingContract.getVotes(this.address);
+  async getVotes(votingContractAddress: `0x${string}`): Promise<Vote[]> {
+    const votingContract = new ReadVotingContract({
+      address: votingContractAddress,
+      contractFactory: this._contractFactory,
+      network: this._network
+    });
+    return votingContract.getVotes({ voter: this.address });
   }
 
   /**
