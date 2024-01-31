@@ -1,5 +1,6 @@
 import { Abi } from "abitype";
 import {
+  DecodedFunctionData,
   EventName,
   FunctionArgs,
   FunctionName,
@@ -46,7 +47,6 @@ export class CachedReadContract<TAbi extends Abi = Abi>
   contract: ReadContract<TAbi>;
   cache: SimpleCache;
   namespace: string;
-
 
   constructor({ contract, cache, namespace }: CachedReadContractOptions<TAbi>) {
     this.abi = contract.abi;
@@ -152,6 +152,19 @@ export class CachedReadContract<TAbi extends Abi = Abi>
     options?: ContractWriteOptions,
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
     return this.contract.simulateWrite(fn, args, options);
+  }
+
+  encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
+    functionName: TFunctionName,
+    args: FunctionArgs<TAbi, TFunctionName>,
+  ): `0x${string}` {
+    return this.contract.encodeFunctionData(functionName, args);
+  }
+
+  decodeFunctionData<
+    TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+  >(data: `0x${string}`): DecodedFunctionData<TAbi, TFunctionName> {
+    return this.contract.decodeFunctionData(data);
   }
 
   /**

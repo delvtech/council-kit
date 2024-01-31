@@ -1,5 +1,6 @@
 import {
   Abi,
+  AbiItemType,
   AbiParameter,
   AbiParameterKind,
   AbiParametersToPrimitiveTypes,
@@ -14,12 +15,12 @@ import { EmptyObject } from "./types";
 
 type NamedAbiParameter = AbiParameter & { name: string };
 
-// HACK: When all parameters are named, the normal way of creating an interface
-// results in an interface whose value types are unions of all parameter types.
+// HACK: When all parameters are named, the normal way of creating an object
+// results in an object whose value types are unions of all parameter types.
 // This way of mapping over a union of the parameter names and extracting the
 // parameter type by name works around that. Idk how... but trial and error
 // says it does.
-type NamedParametersToInterface<
+type NamedParametersToObject<
   TParameters extends readonly NamedAbiParameter[],
   TParameterKind extends AbiParameterKind = AbiParameterKind,
 > = {
@@ -29,13 +30,16 @@ type NamedParametersToInterface<
   >;
 };
 
-type ParametersToInterface<
+/**
+ * Convert an array of abi parameters to an object type.
+ */
+export type AbiParametersToObject<
   TParameters extends readonly AbiParameter[],
   TParameterKind extends AbiParameterKind = AbiParameterKind,
 > = TParameters extends readonly []
   ? EmptyObject
   : TParameters extends NamedAbiParameter[]
-    ? NamedParametersToInterface<TParameters, TParameterKind>
+    ? NamedParametersToObject<TParameters, TParameterKind>
     : {
         [K in Exclude<
           keyof TParameters,
@@ -56,9 +60,6 @@ type ParametersToInterface<
  */
 export type EventName<TAbi extends Abi> = ExtractAbiEventNames<TAbi>;
 
-/**
- * Get a union of named inputs for an event from an abi
- */
 type NamedEventInput<
   TAbi extends Abi,
   TEventName extends EventName<TAbi>,
@@ -73,7 +74,20 @@ type NamedEventInput<
 export type EventArgs<
   TAbi extends Abi,
   TEventName extends EventName<TAbi>,
-> = NamedParametersToInterface<NamedEventInput<TAbi, TEventName>[], "inputs">;
+> = AbiParametersToObject<ExtractAbiEvent<TAbi, TEventName>["inputs"]>;
+
+// TODO: Ensure utils can deep convert between arrays and objects in cases like
+// the CoreVoting.Voted event:
+// type FooArgs = EventArgs<typeof CoreVoting.abi, "Voted">
+// // -> {
+//   voter: `0x${string}`;
+//   proposalId: bigint;
+//   vote: {
+//       votingPower: bigint;
+//       castBallot: number;
+//   };
+// }
+// type FooArgs = EventArgs<typeof CoreVoting.abi, "Voted">;
 
 /**
  * Get a union of indexed input objects for an event from an abi
@@ -90,7 +104,7 @@ export type EventFilter<
   TAbi extends Abi,
   TEventName extends EventName<TAbi>,
 > = Partial<
-  NamedParametersToInterface<IndexedEventInput<TAbi, TEventName>[], "inputs">
+  NamedParametersToObject<IndexedEventInput<TAbi, TEventName>[], "inputs">
 >;
 
 /**
@@ -100,6 +114,66 @@ export type FunctionName<
   TAbi extends Abi,
   TAbiStateMutability extends AbiStateMutability = AbiStateMutability,
 > = ExtractAbiFunctionNames<TAbi, TAbiStateMutability>;
+
+/**
+ * Get a union of possible names for an abi item type.
+ */
+export type AbiItemName<
+  TAbi extends Abi,
+  TItemType extends AbiItemType = AbiItemType,
+> = TAbi extends readonly (
+  | {
+      name: infer TName;
+      type: TItemType;
+    }
+  | AbiParameter
+)[]
+  ? TName
+  : string;
+
+/**
+ * Get an entry from an abi for a specified type and name.
+ */
+export type SubAbi<
+  TAbi extends Abi,
+  TItemType extends AbiItemType,
+  TName extends string,
+> = Extract<
+  TAbi[number],
+  TItemType extends "constructor"
+    ? { type: TItemType }
+    : { type: TItemType; name: TName }
+>;
+
+/**
+ * Get an array of primitive types for any ABI parameters.
+ *
+ * @example
+ * ```ts
+ * type ApproveInput = ArrayType<Erc20Abi, "function", "approve", "inputs">;
+ * // -> [`${string}`, bigint]
+ *
+ * type BalanceOutput = ArrayType<Erc20Abi, "function", "balanceOf", "outputs">;
+ * // -> [bigint]
+ *
+ * ```
+ */
+export type AbiArrayType<
+  TAbi extends Abi,
+  TItemType extends AbiItemType,
+  TName extends AbiItemName<TAbi, TItemType>,
+  TParameterKind extends AbiParameterKind,
+> =
+  SubAbi<TAbi, TItemType, TName> extends infer TSubAbi
+    ? TParameterKind extends keyof TSubAbi
+      ? TSubAbi[TParameterKind] extends infer TParameters
+        ? TParameters extends readonly AbiParameter[]
+          ? AbiParametersToPrimitiveTypes<TParameters>
+          : TParameters
+        : never
+      : // ABI doesn't include the specified kind, e.g. "inputs" or "outputs"
+        []
+    : never;
 
 /**
  * Get the argument types for a function from an abi function, which is determined by it's inputs:
@@ -116,7 +190,7 @@ export type FunctionArgs<
 >["inputs"] extends infer TInputs extends readonly AbiParameter[]
   ? TInputs extends readonly [AbiParameter]
     ? AbiParameterToPrimitiveType<TInputs[0], "inputs">
-    : ParametersToInterface<TInputs, "outputs">
+    : AbiParametersToObject<TInputs, "outputs">
   : never;
 
 /**
@@ -145,25 +219,40 @@ export type FunctionReturn<
 > = ExtractAbiFunction<
   TAbi,
   TFunctionName
->["outputs"] extends infer TOuputs extends readonly [
+>["outputs"] extends infer TOutputs extends readonly [
   AbiParameter,
   ...AbiParameter[],
 ]
-  ? TOuputs extends readonly [AbiParameter]
-    ? AbiParameterToPrimitiveType<TOuputs[0], "outputs">
-    : ParametersToInterface<TOuputs, "outputs">
+  ? TOutputs extends readonly [AbiParameter]
+    ? AbiParameterToPrimitiveType<TOutputs[0], "outputs">
+    : AbiParametersToObject<TOutputs, "outputs">
   : void;
 
 /**
- *
+ * Get an array of ABI function input or output types from an abi function.
  */
-export type FunctionOutput<
+export type FunctionValues<
   TAbi extends Abi,
   TFunctionName extends FunctionName<TAbi>,
+  TKind extends AbiParameterKind = AbiParameterKind,
 > =
   AbiParametersToPrimitiveTypes<
-    ExtractAbiFunction<TAbi, TFunctionName>["inputs"],
-    "inputs"
+    ExtractAbiFunction<TAbi, TFunctionName>[TKind],
+    TKind
   > extends infer TTuple extends readonly any[]
     ? TTuple
     : readonly unknown[];
+
+/**
+ * Get an object representing decoded function data for a specified function
+ * name.
+ */
+export type DecodedFunctionData<
+  TAbi extends Abi,
+  TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+> = {
+  [K in TFunctionName]: {
+    args: FunctionArgs<TAbi, K>;
+    functionName: K;
+  };
+}[TFunctionName];

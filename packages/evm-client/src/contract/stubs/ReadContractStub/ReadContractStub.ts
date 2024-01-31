@@ -1,12 +1,13 @@
 import { Abi } from "abitype";
 import { SinonStub, stub } from "sinon";
 import {
+  DecodedFunctionData,
   EventName,
   FunctionArgs,
   FunctionName,
   FunctionReturn,
 } from "src/base/abitype";
-import { EmptyObject, MaybePromise } from "src/base/types";
+import { MaybePromise } from "src/base/types";
 import {
   ContractEvent,
   ContractGetEventsOptions,
@@ -210,6 +211,21 @@ export class ReadContractStub<TAbi extends Abi = Abi>
     eventName: TEventName,
   ): EventsStub<TAbi, TEventName> | undefined {
     return this.eventsStubMap.get(eventName) as EventsStub<TAbi, TEventName>;
+  }
+
+  // TODO:
+  decodeFunctionData<
+    TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+  >(data: `0x${string}`): DecodedFunctionData<TAbi, TFunctionName> {
+    throw new Error("Method not implemented.");
+  }
+
+  // TODO:
+  encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
+    functionName: TFunctionName,
+    args: FunctionArgs<TAbi, TFunctionName>,
+  ): `0x${string}` {
+    throw new Error("Method not implemented.");
   }
 }
 

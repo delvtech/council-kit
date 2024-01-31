@@ -1,5 +1,6 @@
 import { Abi, Address } from "abitype";
 import {
+  DecodedFunctionData,
   EventName,
   FunctionArgs,
   FunctionName,
@@ -47,6 +48,17 @@ export interface ReadContract<TAbi extends Abi = Abi> {
     eventName: TEventName,
     options?: ContractGetEventsOptions<TAbi, TEventName>,
   ): Promise<ContractEvent<TAbi, TEventName>[]>;
+
+  encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
+    functionName: TFunctionName,
+    args: FunctionArgs<TAbi, TFunctionName>,
+  ): `0x${string}`;
+
+  decodeFunctionData<
+    TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+  >(
+    data: `0x${string}`,
+  ): DecodedFunctionData<TAbi, TFunctionName>;
 }
 
 // https://github.com/ethereum/execution-apis/blob/main/src/eth/execute.yaml#L1

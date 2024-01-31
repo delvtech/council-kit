@@ -37,6 +37,10 @@ export { NetworkStub } from "src/network/stubs/NetworkStub";
 
 // ABI utils
 export type {
+  AbiArrayType,
+  AbiParametersToObject,
+  SubAbi,
+  DecodedFunctionData,
   EventName,
   EventArgs,
   EventFilter,
@@ -44,7 +48,10 @@ export type {
   FunctionArgs,
   FunctionInput,
   FunctionReturn,
-  FunctionOutput,
+  FunctionValues,
 } from "src/base/abitype";
-export { functionArgsToInput } from "src/base/functionArgsToInput";
-export { functionOutputToReturn } from "src/base/functionOutputToReturn";
+export {
+  arrayToFriendly,
+  friendlyToArray,
+  type FriendlyType
+} from "src/contract/FriendlyType";
