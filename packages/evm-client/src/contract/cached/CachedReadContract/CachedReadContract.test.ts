@@ -1,9 +1,10 @@
 import { IERC20 } from "src/base/IERC20";
 import { ALICE, BOB } from "src/base/testing/accounts";
 import { CachedReadContract } from "src/contract/cached/CachedReadContract/CachedReadContract";
-import { ContractEvent } from "src/contract/ContractEvents";
+import { Event } from "src/contract/Event";
 import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
 import { expect, test } from "vitest";
+
 const ERC20ABI = IERC20.abi;
 
 test("It caches the read function", async () => {
@@ -16,10 +17,10 @@ test("It caches the read function", async () => {
     value: stubbedValue,
   });
 
-  const value = await cachedContract.read("name", {});
+  const value = await cachedContract.read("name");
   expect(value).toBe(stubbedValue);
 
-  const value2 = await cachedContract.read("name", {});
+  const value2 = await cachedContract.read("name");
   expect(value2).toBe(stubbedValue);
 
   const stub = contract.getReadStub("name");
@@ -30,7 +31,7 @@ test("It caches the getEvents function", async () => {
   const contract = new ReadContractStub(ERC20ABI);
   const cachedContract = new CachedReadContract({ contract });
 
-  const stubbedEvents: ContractEvent<typeof ERC20ABI, "Transfer">[] = [
+  const stubbedEvents: Event<typeof ERC20ABI, "Transfer">[] = [
     {
       eventName: "Transfer",
       args: {
@@ -86,12 +87,12 @@ test("It clears the cache", async () => {
   });
   2;
   await cachedContract.read("balanceOf", "0x123abc");
-  await cachedContract.read("name", {});
+  await cachedContract.read("name");
 
   cachedContract.clearCache();
 
   await cachedContract.read("balanceOf", "0x123abc");
-  await cachedContract.read("name", {});
+  await cachedContract.read("name");
 
   const stubA = contract.getReadStub("balanceOf");
   const stubB = contract.getReadStub("name");

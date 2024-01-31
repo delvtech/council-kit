@@ -1,7 +1,9 @@
 import { IERC20 } from "src/base/IERC20";
 import { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub/ReadWriteContractStub";
 import { expect, test } from "vitest";
+
 const ERC20ABI = IERC20.abi;
+
 test("It stubs the write function", async () => {
   const contract = new ReadWriteContractStub(ERC20ABI);
 

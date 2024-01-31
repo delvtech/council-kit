@@ -1,5 +1,10 @@
 import { SinonStub, stub } from "sinon";
-import { GetBlockOptions, Network } from "src/network/Network";
+import { Block } from "src/network/Block";
+import {
+  Network,
+  NetworkGetBlockArgs,
+  NetworkGetTransactionArgs,
+} from "src/network/Network";
 import { Transaction } from "src/network/Transaction";
 
 /**
@@ -8,26 +13,18 @@ import { Transaction } from "src/network/Transaction";
  */
 export class NetworkStub implements Network {
   protected getBlockStub:
-    | SinonStub<
-        [GetBlockOptions | undefined],
-        Promise<{ blockNumber: bigint; timestamp: bigint }>
-      >
+    | SinonStub<[NetworkGetBlockArgs?], Promise<Block | undefined>>
     | undefined;
   protected getTransactionStub:
-    | SinonStub<
-        [{ hash: `0x${string}` } | undefined],
-        Promise<Transaction>
-      >
+    | SinonStub<[NetworkGetTransactionArgs?], Promise<Transaction | undefined>>
     | undefined;
-
-  constructor() {}
 
   stubGetBlock({
     args,
     value,
   }: {
-    args?: GetBlockOptions | undefined;
-    value: Promise<{ blockNumber: bigint; timestamp: bigint }>;
+    args?: NetworkGetBlockArgs | undefined;
+    value: Block | undefined;
   }): void {
     if (!this.getBlockStub) {
       this.getBlockStub = stub();
@@ -35,19 +32,19 @@ export class NetworkStub implements Network {
 
     // Account for dynamic args if provided
     if (args) {
-      this.getBlockStub.withArgs(args).resolves(value as any);
+      this.getBlockStub.withArgs(args).resolves(value);
       return;
     }
 
-    this.getBlockStub.resolves(value as any);
+    this.getBlockStub.resolves(value);
   }
 
   stubGetTransaction({
     args,
     value,
   }: {
-    args?: { hash: `0x${string}` };
-    value: Promise<Transaction>;
+    args?: NetworkGetTransactionArgs;
+    value: Transaction | undefined;
   }): void {
     if (!this.getTransactionStub) {
       this.getTransactionStub = stub();
@@ -55,34 +52,30 @@ export class NetworkStub implements Network {
 
     // Account for dynamic args if provided
     if (args) {
-      this.getTransactionStub.withArgs(args).resolves(value as any);
+      this.getTransactionStub.withArgs(args).resolves(value);
       return;
     }
 
-    this.getTransactionStub.resolves(value as any);
+    this.getTransactionStub.resolves(value);
   }
 
-  getBlock = stub().callsFake(
-    (
-      args?: GetBlockOptions | undefined,
-    ): Promise<{ blockNumber: bigint; timestamp: bigint }> => {
-      if (!this.getBlockStub) {
-        throw new Error(
-          `The getBlock function must be stubbed first:\n\tcontract.stubGetBlock()`,
-        );
-      }
-      return this.getBlockStub(args);
-    },
-  );
+  getBlock(...args: NetworkGetBlockArgs): Promise<Block | undefined> {
+    if (!this.getBlockStub) {
+      throw new Error(
+        `The getBlock function must be stubbed first:\n\tcontract.stubGetBlock()`,
+      );
+    }
+    return this.getBlockStub(args);
+  }
 
-  getTransaction = stub().callsFake(
-    (args?: { hash: `0x${string}` }): Promise<Transaction> => {
-      if (!this.getTransactionStub) {
-        throw new Error(
-          `The getTransaction function must be stubbed first:\n\tcontract.stubGetTransaction()`,
-        );
-      }
-      return this.getTransactionStub(args);
-    },
-  );
+  getTransaction(
+    ...args: NetworkGetTransactionArgs
+  ): Promise<Transaction | undefined> {
+    if (!this.getTransactionStub) {
+      throw new Error(
+        `The getTransaction function must be stubbed first:\n\tcontract.stubGetTransaction()`,
+      );
+    }
+    return this.getTransactionStub(args);
+  }
 }

@@ -1,3 +1,8 @@
+export interface Block {
+  blockNumber: bigint;
+  timestamp: bigint;
+}
+
 // ETH JSON-RPC Types
 // TODO: Find or build an OS types package (e.g., @types/evm-json-rpc)
 // https://github.com/ethereum/execution-apis/tree/main

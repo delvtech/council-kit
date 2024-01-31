@@ -1,11 +1,12 @@
 import { Abi } from "abitype";
 import { SinonStub, stub } from "sinon";
-import { FunctionArgs, FunctionName } from "src/base/abitype";
-import { MaybePromise } from "src/base/types";
+import { EmptyObject } from "src/base/types";
 import {
+  ContractWriteArgs,
   ContractWriteOptions,
   ReadWriteContract,
-} from "src/contract/ReadWriteContract";
+} from "src/contract/Contract";
+import { FunctionArgs, FunctionName } from "src/contract/Function";
 import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
 
 /**
@@ -38,18 +39,18 @@ export class ReadWriteContractStub<TAbi extends Abi = Abi>
    * is not previously stubbed using `stubWrite` from the parent class, an error
    * will be thrown.
    */
-  async write<TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractWriteOptions,
+  async write<
+    TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
+  >(
+    ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<`0x${string}`> {
-    const stub = this.writeStubMap.get(functionName);
+    const stub = this.getWriteStub(functionName);
     if (!stub) {
       throw new Error(
         `Called write for ${functionName} on a stubbed contract without a return value. The function must be stubbed first:\n\tcontract.stubWrite("${functionName}", value)`,
       );
     }
-    return stub(args as any, options);
+    return stub(args, options);
   }
 
   /**
@@ -62,12 +63,14 @@ export class ReadWriteContractStub<TAbi extends Abi = Abi>
    */
   stubWrite<TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
     functionName: TFunctionName,
-    value: MaybePromise<`0x${string}`>,
+    value: `0x${string}`,
   ): void {
-    this.writeStubMap.set(
-      functionName,
-      stub().resolves(value) as WriteStub<TAbi, FunctionName<TAbi>>,
-    );
+    let writeStub = this.writeStubMap.get(functionName);
+    if (!writeStub) {
+      writeStub = stub();
+      this.writeStubMap.set(functionName, writeStub);
+    }
+    writeStub.resolves(value);
   }
 
   /**
@@ -77,7 +80,10 @@ export class ReadWriteContractStub<TAbi extends Abi = Abi>
   getWriteStub<
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(functionName: TFunctionName): WriteStub<TAbi, TFunctionName> | undefined {
-    return this.writeStubMap.get(functionName);
+    return this.writeStubMap.get(functionName) as WriteStub<
+      TAbi,
+      TFunctionName
+    >;
   }
 }
 
@@ -89,6 +95,6 @@ type WriteStub<
   TAbi extends Abi,
   TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
 > = SinonStub<
-  [FunctionArgs<TAbi, TFunctionName>, ContractWriteOptions?],
-  MaybePromise<`0x${string}`>
+  [(FunctionArgs<TAbi, TFunctionName> | EmptyObject)?, ContractWriteOptions?],
+  `0x${string}`
 >;

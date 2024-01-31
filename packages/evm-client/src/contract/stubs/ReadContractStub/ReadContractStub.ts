@@ -1,19 +1,21 @@
 import { Abi } from "abitype";
 import { SinonStub, stub } from "sinon";
+import { EmptyObject } from "src/base/types";
+import {
+  ContractGetEventsOptions,
+  ContractReadArgs,
+  ContractReadOptions,
+  ContractWriteArgs,
+  ContractWriteOptions,
+  ReadContract,
+} from "src/contract/Contract";
+import { Event, EventName } from "src/contract/Event";
 import {
   DecodedFunctionData,
-  EventName,
   FunctionArgs,
   FunctionName,
   FunctionReturn,
-} from "src/base/abitype";
-import { MaybePromise } from "src/base/types";
-import {
-  ContractEvent,
-  ContractGetEventsOptions,
-} from "src/contract/ContractEvents";
-import { ContractReadOptions, ReadContract } from "src/contract/ReadContract";
-import { ContractWriteOptions } from "src/contract/ReadWriteContract";
+} from "src/contract/Function";
 
 /**
  * A mock implementation of a `ReadContract` designed to facilitate unit
@@ -32,7 +34,7 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   implements ReadContract<TAbi>
 {
   abi;
-  address = "0x0000000000000000000000000000000000000000" as `0x${string}`;
+  address = "0x0000000000000000000000000000000000000000" as const;
 
   // Maps to store stubs for different contract methods based on their name.
   protected readStubMap = new Map<
@@ -57,17 +59,15 @@ export class ReadContractStub<TAbi extends Abi = Abi>
    * is not previously stubbed using `stubRead`, an error will be thrown.
    */
   async read<TFunctionName extends FunctionName<TAbi>>(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractReadOptions,
+    ...[functionName, args, options]: ContractReadArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
-    const stub = this.readStubMap.get(functionName);
+    const stub = this.getReadStub(functionName);
     if (!stub) {
       throw new Error(
         `Called read for ${functionName} on a stubbed contract without a return value. The function must be stubbed first:\n\tcontract.stubRead("${functionName}", value)`,
       );
     }
-    return stub(args as any, options);
+    return stub(args, options);
   }
 
   /**
@@ -77,17 +77,15 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   async simulateWrite<
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractWriteOptions,
+    ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
-    const stub = this.simulateWriteStubMap.get(functionName);
+    const stub = this.getSimulateWriteStub(functionName);
     if (!stub) {
       throw new Error(
         `Called simulateWrite for ${functionName} on a stubbed contract without a return value. The function must be stubbed first:\n\tcontract.stubWrite("${functionName}", value)`,
       );
     }
-    return stub(args as any, options);
+    return stub(args, options);
   }
 
   /**
@@ -98,14 +96,14 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   async getEvents<TEventName extends EventName<TAbi>>(
     eventName: TEventName,
     options?: ContractGetEventsOptions<TAbi, TEventName>,
-  ): Promise<ContractEvent<TAbi, TEventName>[]> {
-    const stub = this.eventsStubMap.get(eventName);
+  ): Promise<Event<TAbi, TEventName>[]> {
+    const stub = this.getEventsStub(eventName);
     if (!stub) {
       throw new Error(
         `Called getEvents for ${eventName} on a stubbed contract without a return value. The function must be stubbed first:\n\tcontract.stubEvents("${eventName}", value)`,
       );
     }
-    return stub(options) as Promise<ContractEvent<TAbi, TEventName>[]>;
+    return stub(options);
   }
 
   /**
@@ -120,27 +118,21 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   }: {
     functionName: TFunctionName;
     args?: FunctionArgs<TAbi, TFunctionName>;
-    value: MaybePromise<FunctionReturn<TAbi, TFunctionName>>;
+    value: FunctionReturn<TAbi, TFunctionName>;
   }): void {
-    let readStubFromMap = this.readStubMap.get(functionName);
-    if (!readStubFromMap) {
-      readStubFromMap = stub() as ReadStub<TAbi, FunctionName<TAbi>>;
-      this.readStubMap.set(functionName, readStubFromMap);
+    let readStub = this.readStubMap.get(functionName);
+    if (!readStub) {
+      readStub = stub();
+      this.readStubMap.set(functionName, readStub);
     }
 
-    // Account for dynamic args if provied
+    // Account for dynamic args if provided
     if (args) {
-      readStubFromMap.withArgs(args as any).resolves(value as any) as ReadStub<
-        TAbi,
-        FunctionName<TAbi>
-      >;
+      readStub.withArgs(args).resolves(value);
       return;
     }
 
-    readStubFromMap.resolves(value as any) as ReadStub<
-      TAbi,
-      FunctionName<TAbi>
-    >;
+    readStub.resolves(value);
   }
 
   /**
@@ -155,12 +147,14 @@ export class ReadContractStub<TAbi extends Abi = Abi>
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(
     functionName: TFunctionName,
-    value: MaybePromise<FunctionReturn<TAbi, TFunctionName>>,
+    value: FunctionReturn<TAbi, TFunctionName>,
   ): void {
-    this.simulateWriteStubMap.set(
-      functionName,
-      stub().resolves(value) as SimulateWriteStub<TAbi, FunctionName<TAbi>>,
-    );
+    let simulateWriteStub = this.simulateWriteStubMap.get(functionName);
+    if (!simulateWriteStub) {
+      simulateWriteStub = stub();
+      this.simulateWriteStubMap.set(functionName, simulateWriteStub);
+    }
+    simulateWriteStub.resolves(value);
   }
 
   /**
@@ -173,12 +167,14 @@ export class ReadContractStub<TAbi extends Abi = Abi>
    */
   stubEvents<TEventName extends EventName<TAbi>>(
     eventName: TEventName,
-    value: MaybePromise<ContractEvent<TAbi, TEventName>[]>,
+    value: Event<TAbi, TEventName>[],
   ): void {
-    this.eventsStubMap.set(
-      eventName,
-      stub().resolves(value) as EventsStub<TAbi, EventName<TAbi>>,
-    );
+    let eventsStub = this.eventsStubMap.get(eventName);
+    if (!eventsStub) {
+      eventsStub = stub();
+      this.eventsStubMap.set(eventName, eventsStub);
+    }
+    eventsStub.resolves(value);
   }
 
   /**
@@ -188,7 +184,7 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   getReadStub<TFunctionName extends FunctionName<TAbi>>(
     functionName: TFunctionName,
   ): ReadStub<TAbi, TFunctionName> | undefined {
-    return this.readStubMap.get(functionName);
+    return this.readStubMap.get(functionName) as ReadStub<TAbi, TFunctionName>;
   }
 
   /**
@@ -200,7 +196,10 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   >(
     functionName: TFunctionName,
   ): SimulateWriteStub<TAbi, TFunctionName> | undefined {
-    return this.simulateWriteStubMap.get(functionName);
+    return this.simulateWriteStubMap.get(functionName) as SimulateWriteStub<
+      TAbi,
+      TFunctionName
+    >;
   }
 
   /**
@@ -216,15 +215,12 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   // TODO:
   decodeFunctionData<
     TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
-  >(data: `0x${string}`): DecodedFunctionData<TAbi, TFunctionName> {
+  >(): DecodedFunctionData<TAbi, TFunctionName> {
     throw new Error("Method not implemented.");
   }
 
   // TODO:
-  encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-  ): `0x${string}` {
+  encodeFunctionData(): `0x${string}` {
     throw new Error("Method not implemented.");
   }
 }
@@ -236,8 +232,8 @@ type ReadStub<
   TAbi extends Abi,
   TFunctionName extends FunctionName<TAbi>,
 > = SinonStub<
-  [FunctionArgs<TAbi, TFunctionName>, ContractReadOptions?],
-  MaybePromise<FunctionReturn<TAbi, TFunctionName>>
+  [(FunctionArgs<TAbi, TFunctionName> | EmptyObject)?, ContractReadOptions?],
+  Promise<FunctionReturn<TAbi, TFunctionName>>
 >;
 
 /**
@@ -248,7 +244,7 @@ type EventsStub<
   TEventName extends EventName<TAbi>,
 > = SinonStub<
   [ContractGetEventsOptions<TAbi, TEventName>?],
-  MaybePromise<ContractEvent<TAbi, TEventName>[]>
+  Promise<Event<TAbi, TEventName>[]>
 >;
 
 /**
@@ -259,6 +255,6 @@ type SimulateWriteStub<
   TAbi extends Abi,
   TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
 > = SinonStub<
-  [FunctionArgs<TAbi, TFunctionName>, ContractWriteOptions?],
-  MaybePromise<FunctionReturn<TAbi, TFunctionName>>
+  [(FunctionArgs<TAbi, TFunctionName> | EmptyObject)?, ContractWriteOptions?],
+  Promise<FunctionReturn<TAbi, TFunctionName>>
 >;

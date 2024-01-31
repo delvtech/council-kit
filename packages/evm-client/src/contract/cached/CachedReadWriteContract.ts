@@ -1,13 +1,10 @@
 import { Abi } from "abitype";
-import { FunctionArgs, FunctionName } from "src/base/abitype";
 import {
   CachedReadContract,
   CachedReadContractOptions,
 } from "src/contract/cached/CachedReadContract/CachedReadContract";
-import {
-  ContractWriteOptions,
-  ReadWriteContract,
-} from "src/contract/ReadWriteContract";
+import { ContractWriteArgs, ReadWriteContract } from "src/contract/Contract";
+import { FunctionName } from "src/contract/Function";
 
 export interface CachedReadWriteContractOptions<TAbi extends Abi = Abi>
   extends CachedReadContractOptions<TAbi> {
@@ -37,10 +34,8 @@ export class CachedReadWriteContract<TAbi extends Abi = Abi>
    * inherently modify state and cannot be cached.
    */
   write<TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
-    fn: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractWriteOptions,
+    ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<`0x${string}`> {
-    return this.contract.write(fn, args, options);
+    return this.contract.write(functionName, args, options);
   }
 }

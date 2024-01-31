@@ -1,9 +1,11 @@
 import { IERC20 } from "src/base/IERC20";
 import { ALICE, BOB, NANCY } from "src/base/testing/accounts";
-import { ContractEvent } from "src/contract/ContractEvents";
+import { Event } from "src/contract/Event";
 import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
 import { expect, test } from "vitest";
+
 const ERC20ABI = IERC20.abi;
+
 test("It stubs the read function", async () => {
   const contract = new ReadContractStub(IERC20.abi);
 
@@ -74,7 +76,7 @@ test("It stubs the getEvents function", async () => {
 
   expect(contract.getEvents("Transfer")).rejects.toThrowError();
 
-  const stubbedEvents: ContractEvent<typeof ERC20ABI, "Transfer">[] = [
+  const stubbedEvents: Event<typeof ERC20ABI, "Transfer">[] = [
     {
       eventName: "Transfer",
       args: {

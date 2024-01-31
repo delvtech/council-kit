@@ -1,20 +1,21 @@
 import { Abi } from "abitype";
-import {
-  DecodedFunctionData,
-  EventName,
-  FunctionArgs,
-  FunctionName,
-  FunctionReturn,
-} from "src/base/abitype";
 import { LruSimpleCache } from "src/cache/LruSimpleCache";
 import { SimpleCache, SimpleCacheKey } from "src/cache/SimpleCache";
 import { createSimpleCacheKey } from "src/cache/utils/createSimpleCacheKey";
 import {
-  ContractEvent,
-  ContractGetEventsOptions,
-} from "src/contract/ContractEvents";
-import { ContractReadOptions, ReadContract } from "src/contract/ReadContract";
-import { ContractWriteOptions } from "src/contract/ReadWriteContract";
+  ContractDecodeFunctionDataArgs,
+  ContractGetEventsArgs,
+  ContractReadArgs,
+  ContractWriteArgs,
+  ReadContract,
+} from "src/contract/Contract";
+import { Event, EventName } from "src/contract/Event";
+import {
+  DecodedFunctionData,
+  FunctionArgs,
+  FunctionName,
+  FunctionReturn,
+} from "src/contract/Function";
 
 // TODO: Figure out a good default cache size
 const DEFAULT_CACHE_SIZE = 100;
@@ -61,9 +62,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
    * fetches from the contract and then caches the result.
    */
   async read<TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>>(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractReadOptions,
+    ...[functionName, args, options]: ContractReadArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
     return this._getOrSet({
       key: createSimpleCacheKey([
@@ -93,9 +92,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
    * const result3 = await cachedContract.read("functionName", args); // Fetched from contract
    */
   deleteRead<TFunctionName extends FunctionName<TAbi>>(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractReadOptions,
+    ...[functionName, args, options]: ContractReadArgs<TAbi, TFunctionName>
   ): void {
     const key = createSimpleCacheKey([
       this.namespace,
@@ -116,9 +113,8 @@ export class CachedReadContract<TAbi extends Abi = Abi>
    * fetches from the contract and then caches the result.
    */
   async getEvents<TEventName extends EventName<TAbi>>(
-    eventName: TEventName,
-    options?: ContractGetEventsOptions<TAbi, TEventName>,
-  ): Promise<ContractEvent<TAbi, TEventName>[]> {
+    ...[eventName, options]: ContractGetEventsArgs<TAbi, TEventName>
+  ): Promise<Event<TAbi, TEventName>[]> {
     return this._getOrSet({
       key: createSimpleCacheKey([
         this.namespace,
@@ -147,11 +143,9 @@ export class CachedReadContract<TAbi extends Abi = Abi>
   simulateWrite<
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(
-    fn: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractWriteOptions,
+    ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
-    return this.contract.simulateWrite(fn, args, options);
+    return this.contract.simulateWrite(functionName, args, options);
   }
 
   encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
@@ -163,8 +157,10 @@ export class CachedReadContract<TAbi extends Abi = Abi>
 
   decodeFunctionData<
     TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
-  >(data: `0x${string}`): DecodedFunctionData<TAbi, TFunctionName> {
-    return this.contract.decodeFunctionData(data);
+  >(
+    ...[functionName, data]: ContractDecodeFunctionDataArgs<TAbi, TFunctionName>
+  ): DecodedFunctionData<TAbi, TFunctionName> {
+    return this.contract.decodeFunctionData(functionName, data);
   }
 
   /**
