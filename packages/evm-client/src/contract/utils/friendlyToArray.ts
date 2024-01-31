@@ -1,4 +1,5 @@
 import { Abi, AbiItemType, AbiParameter, AbiParameterKind } from "abitype";
+import { EmptyObject } from "src/base/types";
 import {
   AbiArrayType,
   AbiEntryName,
@@ -55,7 +56,10 @@ export function friendlyToArray<
 }: {
   abi: TAbi;
   name: TName;
-  value: AbiFriendlyType<TAbi, TItemType, TName, TParameterKind>;
+  value:
+    | AbiFriendlyType<TAbi, TItemType, TName, TParameterKind>
+    | EmptyObject
+    | undefined;
   kind: TParameterKind;
   type: TItemType;
 }): AbiArrayType<TAbi, TItemType, TName, TParameterKind> {
