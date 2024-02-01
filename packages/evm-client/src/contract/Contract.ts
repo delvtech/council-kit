@@ -62,7 +62,7 @@ export interface ReadWriteContract<TAbi extends Abi = Abi>
    * @returns The transaction hash of the submitted transaction.
    */
   write<TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
-    ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
+    ...args: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<`0x${string}`>;
 }
 
@@ -87,7 +87,7 @@ export type ContractReadArgs<
   FunctionArgs<TAbi, TFunctionName> extends undefined
     ? [
         functionName: TFunctionName,
-        args?: undefined | EmptyObject,
+        args?: EmptyObject,
         options?: ContractReadOptions,
       ]
     : [
@@ -158,7 +158,7 @@ export type ContractWriteArgs<
   FunctionArgs<TAbi, TFunctionName> extends undefined
     ? [
         functionName: TFunctionName,
-        args?: undefined | EmptyObject,
+        args?: EmptyObject,
         options?: ContractWriteOptions,
       ]
     : [
@@ -170,9 +170,12 @@ export type ContractWriteArgs<
 export type ContractEncodeFunctionDataArgs<
   TAbi extends Abi,
   TFunctionName extends FunctionName<TAbi>,
-> = [functionName: TFunctionName, args: FunctionArgs<TAbi, TFunctionName>];
+> =
+  FunctionArgs<TAbi, TFunctionName> extends undefined
+    ? [functionName: TFunctionName, args?: EmptyObject]
+    : [functionName: TFunctionName, args: FunctionArgs<TAbi, TFunctionName>];
 
 export type ContractDecodeFunctionDataArgs<
   TAbi extends Abi,
-  TFunctionName extends FunctionName<TAbi>,
-> = [functionName: TFunctionName, data: `0x${string}`];
+  TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+> = [data: `0x${string}`, functionName?: TFunctionName];

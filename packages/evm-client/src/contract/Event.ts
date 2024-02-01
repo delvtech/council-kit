@@ -5,7 +5,6 @@ import {
   NamedAbiParameter,
   NamedParametersToObject,
 } from "src/contract/AbiEntry";
-import { FunctionName } from "src/contract/Function";
 
 /**
  * Get a union of event names from an abi
@@ -14,8 +13,11 @@ export type EventName<TAbi extends Abi> = AbiEntry<TAbi, "event">["name"];
 
 type NamedEventInput<
   TAbi extends Abi,
-  TEventName extends FunctionName<TAbi>,
-> = Extract<AbiEntry<TAbi, "event", TEventName>["inputs"], NamedAbiParameter>;
+  TEventName extends EventName<TAbi>,
+> = Extract<
+  AbiEntry<TAbi, "event", TEventName>["inputs"][number],
+  NamedAbiParameter
+>;
 
 /**
  * Get an object type for an event's fields from an abi
