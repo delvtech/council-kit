@@ -51,7 +51,7 @@ export function arrayToFriendly<
   type,
   name,
   kind,
-  values: _values,
+  values,
 }: {
   abi: TAbi;
   name: TName;
@@ -59,7 +59,6 @@ export function arrayToFriendly<
   kind: TParameterKind;
   type: TItemType;
 }): AbiFriendlyType<TAbi, TItemType, TName, TParameterKind> {
-  const values = _values as any[];
   const abiEntry = getAbiEntry({ abi, type, name });
 
   let parameters: AbiParameter[] = [];
@@ -69,7 +68,7 @@ export function arrayToFriendly<
 
   // Single or no parameters
   if (parameters.length <= 1) {
-    return values[0];
+    return (values as any[])[0];
   }
 
   const friendlyValue: Record<string, any> = {};

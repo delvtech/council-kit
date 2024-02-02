@@ -1,5 +1,4 @@
 import { Abi, AbiItemType, AbiParameter, AbiParameterKind } from "abitype";
-import { EmptyObject } from "src/base/types";
 import {
   AbiArrayType,
   AbiEntryName,
@@ -52,18 +51,14 @@ export function friendlyToArray<
   type,
   name,
   kind,
-  value: _value,
+  value,
 }: {
   abi: TAbi;
   name: TName;
-  value:
-    | AbiFriendlyType<TAbi, TItemType, TName, TParameterKind>
-    | EmptyObject
-    | undefined;
+  value: AbiFriendlyType<TAbi, TItemType, TName, TParameterKind>;
   kind: TParameterKind;
   type: TItemType;
 }): AbiArrayType<TAbi, TItemType, TName, TParameterKind> {
-  const value = _value as any;
   const abiEntry = getAbiEntry({ abi, type, name });
 
   let parameters: AbiParameter[] = [];
@@ -78,7 +73,7 @@ export function friendlyToArray<
 
   const array: any[] = [];
   parameters.forEach(({ name }, i) => {
-    array.push(value[name ?? i]);
+    array.push((value as any)[name ?? i]);
   });
 
   return array as AbiArrayType<TAbi, TItemType, TName, TParameterKind>;

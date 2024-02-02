@@ -1,7 +1,9 @@
 import { Abi } from "abitype";
 import { SinonStub, stub } from "sinon";
-import { EmptyObject } from "src/base/types";
 import {
+  ContractDecodeFunctionDataArgs,
+  ContractEncodeFunctionDataArgs,
+  ContractGetEventsArgs,
   ContractGetEventsOptions,
   ContractReadArgs,
   ContractReadOptions,
@@ -94,8 +96,7 @@ export class ReadContractStub<TAbi extends Abi = Abi>
    * thrown.
    */
   async getEvents<TEventName extends EventName<TAbi>>(
-    eventName: TEventName,
-    options?: ContractGetEventsOptions<TAbi, TEventName>,
+    ...[eventName, options]: ContractGetEventsArgs<TAbi, TEventName>
   ): Promise<Event<TAbi, TEventName>[]> {
     const stub = this.getEventsStub(eventName);
     if (!stub) {
@@ -169,12 +170,11 @@ export class ReadContractStub<TAbi extends Abi = Abi>
     eventName: TEventName,
     value: Event<TAbi, TEventName>[],
   ): void {
-    let eventsStub = this.eventsStubMap.get(eventName);
-    if (!eventsStub) {
-      eventsStub = stub();
-      this.eventsStubMap.set(eventName, eventsStub);
+    if (this.eventsStubMap.has(eventName)) {
+      this.getEventsStub(eventName)!.resolves(value);
+    } else {
+      this.eventsStubMap.set(eventName, stub().resolves(value) as any);
     }
-    eventsStub.resolves(value);
   }
 
   /**
@@ -184,7 +184,9 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   getReadStub<TFunctionName extends FunctionName<TAbi>>(
     functionName: TFunctionName,
   ): ReadStub<TAbi, TFunctionName> | undefined {
-    return this.readStubMap.get(functionName) as ReadStub<TAbi, TFunctionName>;
+    return this.readStubMap.get(functionName) as
+      | ReadStub<TAbi, TFunctionName>
+      | undefined;
   }
 
   /**
@@ -196,10 +198,9 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   >(
     functionName: TFunctionName,
   ): SimulateWriteStub<TAbi, TFunctionName> | undefined {
-    return this.simulateWriteStubMap.get(functionName) as SimulateWriteStub<
-      TAbi,
-      TFunctionName
-    >;
+    return this.simulateWriteStubMap.get(functionName) as
+      | SimulateWriteStub<TAbi, TFunctionName>
+      | undefined;
   }
 
   /**
@@ -209,18 +210,26 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   getEventsStub<TEventName extends EventName<TAbi>>(
     eventName: TEventName,
   ): EventsStub<TAbi, TEventName> | undefined {
-    return this.eventsStubMap.get(eventName) as EventsStub<TAbi, TEventName>;
+    return this.eventsStubMap.get(eventName) as
+      | EventsStub<TAbi, TEventName>
+      | undefined;
   }
 
   // TODO:
   decodeFunctionData<
     TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
-  >(): DecodedFunctionData<TAbi, TFunctionName> {
+  >(
+    ...args: ContractDecodeFunctionDataArgs<TAbi, TFunctionName>
+  ): DecodedFunctionData<TAbi, TFunctionName> {
     throw new Error("Method not implemented.");
   }
 
   // TODO:
-  encodeFunctionData(): `0x${string}` {
+  encodeFunctionData<
+    TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+  >(
+    ...args: ContractEncodeFunctionDataArgs<TAbi, TFunctionName>
+  ): `0x${string}` {
     throw new Error("Method not implemented.");
   }
 }
@@ -232,7 +241,7 @@ type ReadStub<
   TAbi extends Abi,
   TFunctionName extends FunctionName<TAbi>,
 > = SinonStub<
-  [(FunctionArgs<TAbi, TFunctionName> | EmptyObject)?, ContractReadOptions?],
+  [args?: FunctionArgs<TAbi, TFunctionName>, options?: ContractReadOptions],
   Promise<FunctionReturn<TAbi, TFunctionName>>
 >;
 
@@ -243,7 +252,7 @@ type EventsStub<
   TAbi extends Abi,
   TEventName extends EventName<TAbi>,
 > = SinonStub<
-  [ContractGetEventsOptions<TAbi, TEventName>?],
+  [options?: ContractGetEventsOptions<TAbi, TEventName>],
   Promise<Event<TAbi, TEventName>[]>
 >;
 
@@ -255,6 +264,9 @@ type SimulateWriteStub<
   TAbi extends Abi,
   TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
 > = SinonStub<
-  [(FunctionArgs<TAbi, TFunctionName> | EmptyObject)?, ContractWriteOptions?],
+  [
+    args?: FunctionArgs<TAbi, TFunctionName> | undefined,
+    options?: ContractWriteOptions,
+  ],
   Promise<FunctionReturn<TAbi, TFunctionName>>
 >;

@@ -1,6 +1,5 @@
 import { Abi } from "abitype";
 import { SinonStub, stub } from "sinon";
-import { EmptyObject } from "src/base/types";
 import {
   ContractWriteArgs,
   ContractWriteOptions,
@@ -95,6 +94,6 @@ type WriteStub<
   TAbi extends Abi,
   TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
 > = SinonStub<
-  [(FunctionArgs<TAbi, TFunctionName> | EmptyObject)?, ContractWriteOptions?],
+  [args?: FunctionArgs<TAbi, TFunctionName>, options?: ContractWriteOptions],
   `0x${string}`
 >;

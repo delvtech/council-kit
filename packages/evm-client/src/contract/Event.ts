@@ -1,9 +1,10 @@
 import { Abi } from "abitype";
+import { EmptyObject } from "src/base/types";
 import {
   AbiEntry,
+  AbiFriendlyType,
   AbiParametersToObject,
   NamedAbiParameter,
-  NamedParametersToObject,
 } from "src/contract/AbiEntry";
 
 /**
@@ -11,6 +12,9 @@ import {
  */
 export type EventName<TAbi extends Abi> = AbiEntry<TAbi, "event">["name"];
 
+/**
+ * Get a union of named input parameters for an event from an abi
+ */
 type NamedEventInput<
   TAbi extends Abi,
   TEventName extends EventName<TAbi>,
@@ -20,12 +24,17 @@ type NamedEventInput<
 >;
 
 /**
- * Get an object type for an event's fields from an abi
+ * Get a user-friendly argument type for an abi event, which is determined by
+ * it's inputs:
+ * - __Single input:__ the type of the single input.
+ * - __Multiple inputs:__ an object with the input names as keys and the input
+ *   types as values.
+ * - __No inputs:__ `undefined`.
  */
 export type EventArgs<
   TAbi extends Abi,
   TEventName extends EventName<TAbi>,
-> = AbiParametersToObject<AbiEntry<TAbi, "event", TEventName>["inputs"]>;
+> = AbiFriendlyType<TAbi, "event", TEventName, "inputs">;
 
 /**
  * Get a union of indexed input objects for an event from an abi
@@ -36,14 +45,20 @@ type IndexedEventInput<
 > = Extract<NamedEventInput<TAbi, TEventName>, { indexed: true }>;
 
 /**
- * Get an object type for an event's indexed fields from an abi
+ * Get an object type for an event's indexed fields from an abi or `undefined`
+ * if there are no indexed fields.
  */
-export type EventFilter<
-  TAbi extends Abi,
-  TEventName extends EventName<TAbi>,
-> = Partial<
-  NamedParametersToObject<IndexedEventInput<TAbi, TEventName>[], "inputs">
->;
+export type EventFilter<TAbi extends Abi, TEventName extends EventName<TAbi>> =
+  AbiParametersToObject<
+    IndexedEventInput<TAbi, TEventName>[],
+    "inputs"
+  > extends infer TParamObject
+    ? TParamObject extends EmptyObject
+      ? undefined
+      : Partial<
+          AbiParametersToObject<IndexedEventInput<TAbi, TEventName>[], "inputs">
+        >
+    : never;
 
 /**
  * A strongly typed event object based on an abi

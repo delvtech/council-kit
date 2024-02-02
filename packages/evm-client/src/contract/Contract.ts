@@ -1,5 +1,4 @@
 import { Abi, Address } from "abitype";
-import { EmptyObject } from "src/base/types";
 import { Event, EventFilter, EventName } from "src/contract/Event";
 import {
   DecodedFunctionData,
@@ -87,7 +86,7 @@ export type ContractReadArgs<
   FunctionArgs<TAbi, TFunctionName> extends undefined
     ? [
         functionName: TFunctionName,
-        args?: EmptyObject,
+        args?: undefined,
         options?: ContractReadOptions,
       ]
     : [
@@ -158,7 +157,7 @@ export type ContractWriteArgs<
   FunctionArgs<TAbi, TFunctionName> extends undefined
     ? [
         functionName: TFunctionName,
-        args?: EmptyObject,
+        args?: undefined,
         options?: ContractWriteOptions,
       ]
     : [
@@ -172,7 +171,7 @@ export type ContractEncodeFunctionDataArgs<
   TFunctionName extends FunctionName<TAbi>,
 > =
   FunctionArgs<TAbi, TFunctionName> extends undefined
-    ? [functionName: TFunctionName, args?: EmptyObject]
+    ? [functionName: TFunctionName, args?: undefined]
     : [functionName: TFunctionName, args: FunctionArgs<TAbi, TFunctionName>];
 
 export type ContractDecodeFunctionDataArgs<

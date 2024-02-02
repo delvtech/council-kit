@@ -65,12 +65,10 @@ export type AbiArrayType<
       : []
     : [];
 
-// HACK: When all parameters are named, the normal way of creating an object
-// results in an object whose value types are unions of all parameter types.
-// This way of mapping over a union of the parameter names and extracting the
-// parameter type by name works around that. Idk how... but trial and error
-// says it does.
-export type NamedParametersToObject<
+/**
+ * Convert an array or tuple of named abi parameters to an object type.
+ */
+type NamedParametersToObject<
   TParameters extends readonly NamedAbiParameter[],
   TParameterKind extends AbiParameterKind = AbiParameterKind,
 > = {
@@ -81,7 +79,20 @@ export type NamedParametersToObject<
 };
 
 /**
- * Convert an array of abi parameters to an object type.
+ * Add default names to any ABI parameters that are missing a name. The default
+ * name is the index of the parameter.
+ */
+type WithDefaultNames<TParameters extends readonly AbiParameter[]> = {
+  [K in keyof TParameters]: TParameters[K] extends infer TParameter extends
+    AbiParameter
+    ? TParameter extends NamedAbiParameter
+      ? TParameter
+      : TParameter & { name: `${K}` }
+    : never;
+};
+
+/**
+ * Convert an array or tuple of abi parameters to an object type.
  */
 export type AbiParametersToObject<
   TParameters extends readonly AbiParameter[],
@@ -90,20 +101,7 @@ export type AbiParametersToObject<
   ? EmptyObject
   : TParameters extends NamedAbiParameter[]
     ? NamedParametersToObject<TParameters, TParameterKind>
-    : {
-        [K in Exclude<
-          keyof TParameters,
-          number
-        > as TParameters[K] extends NamedAbiParameter
-          ? TParameters[K]["name"] extends ""
-            ? K
-            : TParameters[K]["name"]
-          : TParameters[K] extends AbiParameter
-            ? K
-            : never]: TParameters[K] extends AbiParameter
-          ? AbiParameterToPrimitiveType<TParameters[K], TParameterKind>
-          : never;
-      };
+    : NamedParametersToObject<WithDefaultNames<TParameters>, TParameterKind>;
 
 /**
  * Get a user-friendly primitive type for any ABI parameters, which is
