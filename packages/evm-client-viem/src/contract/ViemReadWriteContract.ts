@@ -1,7 +1,6 @@
 import {
-  ContractWriteOptions,
+  ContractWriteArgs,
   friendlyToArray,
-  FunctionArgs,
   FunctionName,
   FunctionReturn,
   ReadWriteContract,
@@ -46,9 +45,7 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
   override async simulateWrite<
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractWriteOptions,
+    ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
     const [account] = await this.walletClient.getAddresses();
 
@@ -61,9 +58,7 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
   async write<
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractWriteOptions,
+    ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<`0x${string}`> {
     const [account] = await this.walletClient.getAddresses();
 

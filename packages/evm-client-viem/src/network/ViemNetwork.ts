@@ -1,4 +1,9 @@
-import { GetBlockOptions, Network, Transaction } from "@council/evm-client";
+import {
+  Network,
+  NetworkGetBlockArgs,
+  NetworkGetTransactionArgs,
+  Transaction,
+} from "@council/evm-client";
 import { PublicClient, rpcTransactionType, TransactionLegacy } from "viem";
 
 export class ViemNetwork implements Network {
@@ -8,7 +13,7 @@ export class ViemNetwork implements Network {
     this.publicClient = publicClient;
   }
 
-  async getBlock(args: GetBlockOptions): Promise<{
+  async getBlock(...[args]: NetworkGetBlockArgs): Promise<{
     blockNumber: bigint;
     timestamp: bigint;
   }> {
@@ -21,11 +26,9 @@ export class ViemNetwork implements Network {
     return { blockNumber: block.number, timestamp: block.timestamp };
   }
 
-  async getTransaction({
-    hash,
-  }: {
-    hash: `0x${string}`;
-  }): Promise<Transaction> {
+  async getTransaction(
+    ...[hash]: NetworkGetTransactionArgs
+  ): Promise<Transaction> {
     const {
       blockHash,
       blockNumber,
