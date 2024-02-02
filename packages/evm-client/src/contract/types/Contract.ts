@@ -1,14 +1,16 @@
 import { Abi, Address } from "abitype";
-import { Event, EventFilter, EventName } from "src/contract/Event";
+import { Event, EventFilter, EventName } from "src/contract/types/Event";
 import {
   DecodedFunctionData,
   FunctionArgs,
   FunctionName,
   FunctionReturn,
-} from "src/contract/Function";
-import { BlockTag } from "src/network/Block";
+} from "src/contract/types/Function";
+import { BlockTag } from "src/network/types/Block";
 
-/**src/contract/Function
+// https://ethereum.github.io/execution-apis/api-documentation/
+
+/**
  * Interface representing a readable contract with specified ABI. Provides type
  * safe methods to read and simulate write operations on the contract.
  */

@@ -1,5 +1,7 @@
-import { Block, BlockTag } from "src/network/Block";
-import { Transaction } from "src/network/Transaction";
+import { Block, BlockTag } from "src/network/types/Block";
+import { Transaction } from "src/network/types/Transaction";
+
+// https://ethereum.github.io/execution-apis/api-documentation/
 
 /**
  * An interface representing data the SDK needs to get from the network.

@@ -1,4 +1,8 @@
-import { SimpleCacheKey } from "src/cache/SimpleCache";
+import { SimpleCacheKey } from "src/cache/types/SimpleCache";
+
+type DefinedValue = NonNullable<
+  Record<string, any> | string | number | boolean | symbol
+>;
 
 /**
  * Converts a given raw key into a `SimpleCacheKey``.
@@ -14,7 +18,7 @@ import { SimpleCacheKey } from "src/cache/SimpleCache";
  * @param rawKey - The raw input to be converted into a cache key.
  * @returns A standardized cache key suitable for consistent referencing within the cache.
  */
-export function createSimpleCacheKey(rawKey: NonNullable<any>): SimpleCacheKey {
+export function createSimpleCacheKey(rawKey: DefinedValue): SimpleCacheKey {
   switch (typeof rawKey) {
     case "string":
     case "number":
@@ -49,7 +53,7 @@ export function createSimpleCacheKey(rawKey: NonNullable<any>): SimpleCacheKey {
       try {
         return rawKey.toString();
       } catch (err) {
-        throw new Error(`Unable to process cache key value: ${rawKey}`);
+        throw new Error(`Unable to process cache key value: ${String(rawKey)}`);
       }
   }
 }

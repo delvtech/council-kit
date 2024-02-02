@@ -2,9 +2,12 @@ import { Abi } from "abitype";
 import {
   CachedReadContract,
   CachedReadContractOptions,
-} from "src/contract/cached/CachedReadContract/CachedReadContract";
-import { ContractWriteArgs, ReadWriteContract } from "src/contract/Contract";
-import { FunctionName } from "src/contract/Function";
+} from "src/contract/implementations/CachedReadContract/CachedReadContract";
+import {
+  ContractWriteArgs,
+  ReadWriteContract,
+} from "src/contract/types/Contract";
+import { FunctionName } from "src/contract/types/Function";
 
 export interface CachedReadWriteContractOptions<TAbi extends Abi = Abi>
   extends CachedReadContractOptions<TAbi> {

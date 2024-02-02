@@ -1,21 +1,21 @@
 import { Abi } from "abitype";
-import { LruSimpleCache } from "src/cache/LruSimpleCache";
-import { SimpleCache, SimpleCacheKey } from "src/cache/SimpleCache";
+import { LruSimpleCache } from "src/cache/implementations/LruSimpleCache";
+import { SimpleCache, SimpleCacheKey } from "src/cache/types/SimpleCache";
 import { createSimpleCacheKey } from "src/cache/utils/createSimpleCacheKey";
 import {
   ContractDecodeFunctionDataArgs,
+  ContractEncodeFunctionDataArgs,
   ContractGetEventsArgs,
   ContractReadArgs,
   ContractWriteArgs,
   ReadContract,
-} from "src/contract/Contract";
-import { Event, EventName } from "src/contract/Event";
+} from "src/contract/types/Contract";
+import { Event, EventName } from "src/contract/types/Event";
 import {
   DecodedFunctionData,
-  FunctionArgs,
   FunctionName,
   FunctionReturn,
-} from "src/contract/Function";
+} from "src/contract/types/Function";
 
 // TODO: Figure out a good default cache size
 const DEFAULT_CACHE_SIZE = 100;
@@ -149,8 +149,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
   }
 
   encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
+    ...[functionName, args]: ContractEncodeFunctionDataArgs<TAbi, TFunctionName>
   ): `0x${string}` {
     return this.contract.encodeFunctionData(functionName, args);
   }
@@ -166,7 +165,7 @@ export class CachedReadContract<TAbi extends Abi = Abi>
   /**
    * Retrieves a value from the cache or sets it if not present.
    */
-  private async _getOrSet<TValue = any>({
+  private async _getOrSet<TValue>({
     key,
     callback,
   }: {

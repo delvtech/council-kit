@@ -1,6 +1,6 @@
-import { LRUCache } from "lru-cache";
 import stringify from "fast-json-stable-stringify";
-import { SimpleCache, SimpleCacheKey } from "src/cache/SimpleCache";
+import { LRUCache } from "lru-cache";
+import { SimpleCache, SimpleCacheKey } from "src/cache/types/SimpleCache";
 
 /**
  * An LRU (Least Recently Used) implementation of the `SimpleCache` interface.

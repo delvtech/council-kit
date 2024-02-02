@@ -1,12 +1,12 @@
 import { Abi } from "abitype";
 import { SinonStub, stub } from "sinon";
+import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
 import {
   ContractWriteArgs,
   ContractWriteOptions,
   ReadWriteContract,
-} from "src/contract/Contract";
-import { FunctionArgs, FunctionName } from "src/contract/Function";
-import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
+} from "src/contract/types/Contract";
+import { FunctionArgs, FunctionName } from "src/contract/types/Function";
 
 /**
  * A mock implementation of a writable Ethereum contract designed for unit

@@ -3,9 +3,9 @@ import {
   AbiArrayType,
   AbiEntryName,
   AbiFriendlyType,
-} from "src/contract/AbiEntry";
-import { FunctionName } from "src/contract/Function";
-import { getAbiEntry } from "src/contract/utils/getAbiItem";
+} from "src/contract/types/AbiEntry";
+import { FunctionName } from "src/contract/types/Function";
+import { getAbiEntry } from "src/contract/utils/getAbiEntry";
 
 /**
  * Converts an {@linkcode AbiFriendlyType} into an array of input or output

@@ -9,7 +9,7 @@ import {
 } from "abitype";
 import { EmptyObject } from "src/base/types";
 
-//https://docs.soliditylang.org/en/latest/abi-spec.html#json
+// https://docs.soliditylang.org/en/latest/abi-spec.html#json
 
 export type NamedAbiParameter = AbiParameter & { name: string };
 
@@ -27,11 +27,12 @@ export type AbiEntryName<
 export type AbiEntry<
   TAbi extends Abi,
   TItemType extends AbiItemType = AbiItemType,
-  TName extends
-    | (AbiEntryName<TAbi, TItemType> extends string
-        ? AbiEntryName<TAbi, TItemType>
-        : string)
-    | undefined = string,
+  // TName extends
+  //   | (AbiEntryName<TAbi, TItemType> extends string
+  //       ? AbiEntryName<TAbi, TItemType>
+  //       : string)
+  //   | undefined = string,
+  TName extends AbiEntryName<TAbi, TItemType> = AbiEntryName<TAbi, TItemType>,
   TStateMutability extends AbiStateMutability = AbiStateMutability,
 > = Extract<
   TAbi[number],
@@ -72,8 +73,8 @@ type NamedParametersToObject<
   TParameters extends readonly NamedAbiParameter[],
   TParameterKind extends AbiParameterKind = AbiParameterKind,
 > = {
-  [K in TParameters[number]["name"]]: AbiParameterToPrimitiveType<
-    Extract<TParameters[number], { name: K }>,
+  [TName in TParameters[number]["name"]]: AbiParameterToPrimitiveType<
+    Extract<TParameters[number], { name: TName }>,
     TParameterKind
   >;
 };
@@ -131,17 +132,17 @@ export type AbiFriendlyType<
   TStateMutability extends AbiStateMutability = AbiStateMutability,
 > =
   AbiEntry<TAbi, TItemType, TName, TStateMutability> extends infer TAbiEntry
-    ? TParameterKind extends keyof TAbiEntry & AbiParameterKind
-      ? TAbiEntry[TParameterKind] extends readonly [AbiParameter]
+    ? TParameterKind extends keyof TAbiEntry & AbiParameterKind // Check if the ABI entry includes the parameter kind (inputs/outputs)
+      ? TAbiEntry[TParameterKind] extends readonly [AbiParameter] // Check if it's a single parameter
         ? AbiParameterToPrimitiveType<
             TAbiEntry[TParameterKind][0],
             TParameterKind
-          >
+          > // Single parameter type
         : TAbiEntry[TParameterKind] extends readonly [
               AbiParameter,
               ...AbiParameter[],
-            ]
-          ? AbiParametersToObject<TAbiEntry[TParameterKind], TParameterKind>
-          : undefined
-      : undefined
-    : undefined;
+            ] // Check if it's multiple parameters
+          ? AbiParametersToObject<TAbiEntry[TParameterKind], TParameterKind> // Multiple parameters type
+          : undefined // Empty parameters
+      : undefined // ABI entry doesn't include the parameter kind (inputs/outputs)
+    : undefined; // ABI entry not found

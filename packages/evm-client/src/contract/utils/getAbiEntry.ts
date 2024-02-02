@@ -1,5 +1,5 @@
 import { Abi, AbiItemType } from "abitype";
-import { AbiEntry, AbiEntryName } from "src/contract/AbiEntry";
+import { AbiEntry, AbiEntryName } from "src/contract/types/AbiEntry";
 
 /**
  * Get an entry from an ABI by type and name.
