@@ -50,17 +50,19 @@ export class ViemReadContract<TAbi extends Abi = Abi>
   async read<TFunctionName extends FunctionName<TAbi>>(
     ...[functionName, args, options]: ContractReadArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
+    const argsArray = friendlyToArray({
+      abi: this.abi as Abi,
+      type: "function",
+      name: functionName,
+      kind: "inputs",
+      value: args,
+    });
+
     const output = await this.publicClient.readContract({
       abi: this.abi as Abi,
       address: this.address,
       functionName,
-      args: friendlyToArray({
-        abi: this.abi as Abi,
-        type: "function",
-        name: functionName,
-        kind: "inputs",
-        value: args,
-      }),
+      args: argsArray,
       ...options,
     });
 
@@ -82,17 +84,19 @@ export class ViemReadContract<TAbi extends Abi = Abi>
   >(
     ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
+    const argsArray = friendlyToArray({
+      abi: this.abi as Abi,
+      type: "function",
+      name: functionName,
+      kind: "inputs",
+      value: args,
+    });
+
     const { result } = await this.publicClient.simulateContract({
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: friendlyToArray({
-        abi: this.abi as Abi,
-        type: "function",
-        name: "foo",
-        kind: "inputs",
-        value: args,
-      }),
+      args: argsArray,
       ...createSimulateContractParameters(options),
     });
 
@@ -149,16 +153,18 @@ export class ViemReadContract<TAbi extends Abi = Abi>
   encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
     ...[functionName, args]: ContractEncodeFunctionDataArgs<TAbi, TFunctionName>
   ): `0x${string}` {
+    const arrayArgs = friendlyToArray({
+      abi: this.abi as Abi,
+      type: "function",
+      name: functionName,
+      kind: "inputs",
+      value: args,
+    });
+
     return encodeFunctionData({
-      abi: this.abi as any,
-      functionName: functionName,
-      args: friendlyToArray({
-        abi: this.abi as Abi,
-        type: "function",
-        name: functionName,
-        kind: "inputs",
-        value: args,
-      }),
+      abi: this.abi as Abi,
+      functionName: functionName as string,
+      args: arrayArgs,
     });
   }
 
@@ -167,19 +173,20 @@ export class ViemReadContract<TAbi extends Abi = Abi>
   >(
     ...[data]: ContractDecodeFunctionDataArgs<TAbi, TFunctionName>
   ): DecodedFunctionData<TAbi, TFunctionName> {
-    const decoded = decodeFunctionData({
-      abi: this.abi as any,
+    const { args, functionName } = decodeFunctionData({
+      abi: this.abi,
       data,
     });
+
     return {
       args: arrayToFriendly({
-        abi: this.abi as any,
+        abi: this.abi as Abi,
         type: "function",
-        name: decoded.functionName,
+        name: functionName,
         kind: "inputs",
-        values: decoded.args,
+        values: (args || []) as any[],
       }),
-      functionName: decoded.functionName,
+      functionName,
     } as DecodedFunctionData<TAbi, TFunctionName>;
   }
 }

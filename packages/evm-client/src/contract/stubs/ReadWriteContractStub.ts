@@ -1,6 +1,6 @@
 import { Abi } from "abitype";
 import { SinonStub, stub } from "sinon";
-import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
+import { ReadContractStub } from "src/contract/stubs/ReadContractStub";
 import {
   ContractWriteArgs,
   ContractWriteOptions,

@@ -1,8 +1,8 @@
 import { Abi, AbiItemType, AbiParameter, AbiParameterKind } from "abitype";
 import {
-  AbiArrayType,
   AbiEntryName,
   AbiFriendlyType,
+  AbiTuple,
 } from "src/contract/types/AbiEntry";
 import { FunctionName } from "src/contract/types/Function";
 import { getAbiEntry } from "src/contract/utils/getAbiEntry";
@@ -55,7 +55,7 @@ export function arrayToFriendly<
 }: {
   abi: TAbi;
   name: TName;
-  values: AbiArrayType<TAbi, TItemType, TName, TParameterKind>;
+  values: AbiTuple<TAbi, TItemType, TName, TParameterKind>;
   kind: TParameterKind;
   type: TItemType;
 }): AbiFriendlyType<TAbi, TItemType, TName, TParameterKind> {

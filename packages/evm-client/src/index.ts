@@ -3,18 +3,18 @@ export type { SimpleCache, SimpleCacheKey } from "src/cache/types/SimpleCache";
 export {
   CachedReadContract,
   type CachedReadContractOptions,
-} from "src/contract/implementations/CachedReadContract/CachedReadContract";
+} from "src/contract/implementations/CachedReadContract";
 export {
   CachedReadWriteContract,
   type CachedReadWriteContractOptions,
 } from "src/contract/implementations/CachedReadWriteContract";
-export { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
-export { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub/ReadWriteContractStub";
+export { ReadContractStub } from "src/contract/stubs/ReadContractStub";
+export { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub";
 export type {
-  AbiArrayType,
   AbiEntry,
   AbiEntryName,
   AbiFriendlyType,
+  AbiTuple as AbiArrayType,
 } from "src/contract/types/AbiEntry";
 export type {
   ContractDecodeFunctionDataArgs,

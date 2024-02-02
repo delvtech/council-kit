@@ -2,7 +2,7 @@ import { Abi } from "abitype";
 import {
   CachedReadContract,
   CachedReadContractOptions,
-} from "src/contract/implementations/CachedReadContract/CachedReadContract";
+} from "src/contract/implementations/CachedReadContract";
 import {
   ContractWriteArgs,
   ReadWriteContract,

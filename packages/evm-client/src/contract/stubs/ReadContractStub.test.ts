@@ -1,6 +1,6 @@
 import { IERC20 } from "src/base/IERC20";
 import { ALICE, BOB, NANCY } from "src/base/testing/accounts";
-import { ReadContractStub } from "src/contract/stubs/ReadContractStub/ReadContractStub";
+import { ReadContractStub } from "src/contract/stubs/ReadContractStub";
 import { Event } from "src/contract/types/Event";
 import { expect, test } from "vitest";
 

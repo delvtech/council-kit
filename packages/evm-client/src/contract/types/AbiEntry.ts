@@ -39,6 +39,26 @@ export type AbiEntry<
   { type: TItemType; name?: TName; stateMutability?: TStateMutability }
 >;
 
+const exampleAbi = [
+  {
+    type: "function",
+    name: "transfer",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "value", type: "uint256" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "balanceOf",
+    inputs: [{ name: "", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+  },
+] as const;
+
 /**
  * Get an array of primitive types for any ABI parameters.
  *
@@ -50,7 +70,7 @@ export type AbiEntry<
  * type BalanceOutput = AbiArrayType<Erc20Abi, "function", "balanceOf", "outputs">;
  * // -> [bigint]
  */
-export type AbiArrayType<
+export type AbiTuple<
   TAbi extends Abi,
   TItemType extends AbiItemType = AbiItemType,
   TName extends AbiEntryName<TAbi, TItemType> = AbiEntryName<TAbi, TItemType>,

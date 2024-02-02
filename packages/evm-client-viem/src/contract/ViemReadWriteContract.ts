@@ -62,17 +62,19 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
   ): Promise<`0x${string}`> {
     const [account] = await this.walletClient.getAddresses();
 
+    const arrayArgs = friendlyToArray({
+      abi: this.abi as Abi,
+      type: "function",
+      name: functionName,
+      kind: "inputs",
+      value: args,
+    });
+
     const { request } = await this.publicClient.simulateContract({
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: friendlyToArray({
-        abi: this.abi as Abi,
-        type: "function",
-        name: functionName,
-        kind: "inputs",
-        value: args,
-      }),
+      args: arrayArgs,
       ...createSimulateContractParameters({
         ...options,
         from: options?.from ?? account,
