@@ -1,7 +1,7 @@
 import {
   ContractWriteOptions,
+  friendlyToArray,
   FunctionArgs,
-  functionArgsToInput,
   FunctionName,
   FunctionReturn,
   ReadWriteContract,
@@ -26,7 +26,7 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
   extends ViemReadContract<TAbi>
   implements ReadWriteContract<TAbi>
 {
-  protected _walletClient: WalletClient;
+  walletClient: WalletClient;
 
   constructor({
     abi,
@@ -39,7 +39,7 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
       address,
       publicClient,
     });
-    this._walletClient = walletClient;
+    this.walletClient = walletClient;
   }
 
   // override to get the account from the wallet client
@@ -50,7 +50,7 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
-    const [account] = await this._walletClient.getAddresses();
+    const [account] = await this.walletClient.getAddresses();
 
     return super.simulateWrite(functionName, args, {
       from: account,
@@ -65,16 +65,18 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
     args: FunctionArgs<TAbi, TFunctionName>,
     options?: ContractWriteOptions,
   ): Promise<`0x${string}`> {
-    const [account] = await this._walletClient.getAddresses();
+    const [account] = await this.walletClient.getAddresses();
 
-    const { request } = await this._publicClient.simulateContract({
+    const { request } = await this.publicClient.simulateContract({
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: functionArgsToInput({
-        abi: this.abi,
-        functionName,
-        args,
+      args: friendlyToArray({
+        abi: this.abi as Abi,
+        type: "function",
+        name: functionName,
+        kind: "inputs",
+        value: args,
       }),
       ...createSimulateContractParameters({
         ...options,
@@ -82,6 +84,6 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
       }),
     });
 
-    return this._walletClient.writeContract(request);
+    return this.walletClient.writeContract(request);
   }
 }

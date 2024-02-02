@@ -1,19 +1,28 @@
 import {
-  ContractEvent,
-  ContractGetEventsOptions,
-  ContractReadOptions,
-  ContractWriteOptions,
+  AbiArrayType,
+  arrayToFriendly,
+  ContractDecodeFunctionDataArgs,
+  ContractEncodeFunctionDataArgs,
+  ContractGetEventsArgs,
+  ContractReadArgs,
+  ContractWriteArgs,
+  DecodedFunctionData,
+  Event,
   EventArgs,
   EventName,
-  FunctionArgs,
-  functionArgsToInput,
+  friendlyToArray,
   FunctionName,
-  functionOutputToReturn,
   FunctionReturn,
   ReadContract,
 } from "@council/evm-client";
 import { createSimulateContractParameters } from "src/contract/utils/createSimulateContractParameters";
-import { Abi, Address, PublicClient } from "viem";
+import {
+  Abi,
+  Address,
+  decodeFunctionData,
+  encodeFunctionData,
+  PublicClient,
+} from "viem";
 
 export interface ViemReadContractOptions<TAbi extends Abi = Abi> {
   abi: TAbi;
@@ -30,92 +39,147 @@ export class ViemReadContract<TAbi extends Abi = Abi>
 {
   abi: TAbi;
   address: Address;
-
-  protected _publicClient: PublicClient;
+  publicClient: PublicClient;
 
   constructor({ abi, address, publicClient }: ViemReadContractOptions<TAbi>) {
     this.abi = abi;
     this.address = address;
-    this._publicClient = publicClient;
+    this.publicClient = publicClient;
   }
 
   async read<TFunctionName extends FunctionName<TAbi>>(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractReadOptions,
+    ...[functionName, args, options]: ContractReadArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
-    const output = await this._publicClient.readContract({
-      abi: this.abi as any,
+    const output = await this.publicClient.readContract({
+      abi: this.abi as Abi,
       address: this.address,
       functionName,
-      args: functionArgsToInput({
-        args,
-        abi: this.abi,
-        functionName,
+      args: friendlyToArray({
+        abi: this.abi as Abi,
+        type: "function",
+        name: functionName,
+        kind: "inputs",
+        value: args,
       }),
       ...options,
     });
 
-    const arrayOutput = Array.isArray(output) ? output : [output];
+    const arrayOutput = (
+      Array.isArray(output) ? output : [output]
+    ) as AbiArrayType<TAbi, "function", TFunctionName, "outputs">;
 
-    return functionOutputToReturn({
+    return arrayToFriendly({
       abi: this.abi,
-      functionName,
-      output: arrayOutput as any,
+      type: "function",
+      name: functionName,
+      kind: "outputs",
+      values: arrayOutput,
     });
   }
 
   async simulateWrite<
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(
-    functionName: TFunctionName,
-    args: FunctionArgs<TAbi, TFunctionName>,
-    options?: ContractWriteOptions,
+    ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>> {
-    const { result } = await this._publicClient.simulateContract({
+    const { result } = await this.publicClient.simulateContract({
       abi: this.abi as any,
       address: this.address,
       functionName,
-      args: functionArgsToInput({
-        args,
-        abi: this.abi,
-        functionName,
+      args: friendlyToArray({
+        abi: this.abi as Abi,
+        type: "function",
+        name: "foo",
+        kind: "inputs",
+        value: args,
       }),
       ...createSimulateContractParameters(options),
     });
 
-    const arrayOutput = Array.isArray(result) ? result : [result];
+    const arrayOutput = (
+      Array.isArray(result) ? result : [result]
+    ) as AbiArrayType<TAbi, "function", TFunctionName, "outputs">;
 
-    return functionOutputToReturn({
+    return arrayToFriendly({
       abi: this.abi,
-      functionName,
-      output: arrayOutput as any,
+      type: "function",
+      name: functionName,
+      kind: "outputs",
+      values: arrayOutput,
     });
   }
 
   async getEvents<TEventName extends EventName<TAbi>>(
-    eventName: TEventName,
-    options?: ContractGetEventsOptions<TAbi, TEventName>,
-  ): Promise<ContractEvent<TAbi, TEventName>[]> {
-    const filter = await this._publicClient.createContractEventFilter({
+    ...[eventName, options]: ContractGetEventsArgs<TAbi, TEventName>
+  ): Promise<Event<TAbi, TEventName>[]> {
+    const filter = await this.publicClient.createContractEventFilter({
       address: this.address,
-      abi: this.abi,
-      eventName: eventName as any,
-      args: options?.filter as any,
+      abi: this.abi as Abi,
+      eventName: eventName as string,
+      args: options?.filter,
       fromBlock: options?.fromBlock ?? "earliest",
       toBlock: options?.toBlock ?? "latest",
     });
 
-    const events = await this._publicClient.getFilterLogs({ filter });
+    const events = await this.publicClient.getFilterLogs({ filter });
 
     return events.map(({ args, blockNumber, data, transactionHash }) => {
+      const friendlyArgs = (
+        Array.isArray(args)
+          ? arrayToFriendly({
+              abi: this.abi,
+              type: "event",
+              name: eventName,
+              kind: "inputs",
+              values: args as AbiArrayType<TAbi, "event", TEventName, "inputs">,
+            })
+          : args
+      ) as EventArgs<TAbi, TEventName>;
+
       return {
-        args: args as EventArgs<TAbi, typeof eventName>,
+        args: friendlyArgs,
         blockNumber: blockNumber ?? undefined,
         data,
         eventName,
         transactionHash: transactionHash ?? undefined,
       };
     });
+  }
+
+  encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
+    ...[functionName, args]: ContractEncodeFunctionDataArgs<TAbi, TFunctionName>
+  ): `0x${string}` {
+    return encodeFunctionData({
+      abi: this.abi as any,
+      functionName: functionName,
+      args: friendlyToArray({
+        abi: this.abi as Abi,
+        type: "function",
+        name: functionName,
+        kind: "inputs",
+        value: args,
+      }),
+    });
+  }
+
+  decodeFunctionData<
+    TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
+  >(
+    ...[data]: ContractDecodeFunctionDataArgs<TAbi, TFunctionName>
+  ): DecodedFunctionData<TAbi, TFunctionName> {
+    const decoded = decodeFunctionData({
+      abi: this.abi as any,
+      data,
+    });
+    return {
+      args: arrayToFriendly({
+        abi: this.abi as any,
+        type: "function",
+        name: decoded.functionName,
+        kind: "inputs",
+        values: decoded.args,
+      }),
+      functionName: decoded.functionName,
+    } as DecodedFunctionData<TAbi, TFunctionName>;
   }
 }

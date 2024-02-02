@@ -2,17 +2,17 @@ import { GetBlockOptions, Network, Transaction } from "@council/evm-client";
 import { PublicClient, rpcTransactionType, TransactionLegacy } from "viem";
 
 export class ViemNetwork implements Network {
-  private readonly _publicClient: PublicClient;
+  publicClient: PublicClient;
 
   constructor(publicClient: PublicClient) {
-    this._publicClient = publicClient;
+    this.publicClient = publicClient;
   }
 
   async getBlock(args: GetBlockOptions): Promise<{
     blockNumber: bigint;
     timestamp: bigint;
   }> {
-    const block = await this._publicClient.getBlock(args);
+    const block = await this.publicClient.getBlock(args);
 
     if (!block.number || !block.timestamp) {
       throw new Error(`Block not found for args: ${args}`);
@@ -39,7 +39,7 @@ export class ViemNetwork implements Network {
       type,
       value,
       chainId,
-    } = (await this._publicClient.getTransaction({
+    } = (await this.publicClient.getTransaction({
       hash,
     })) as TransactionLegacy;
 
