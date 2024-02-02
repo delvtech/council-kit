@@ -8,8 +8,8 @@ import { FunctionName } from "src/contract/Function";
 import { getAbiEntry } from "src/contract/utils/getAbiItem";
 
 /**
- * Converts an array of input or output values into a {@linkcode AbiFriendlyType},
- * ensuring the values are properly identified based on their index.
+ * Converts an {@linkcode AbiFriendlyType} into an array of input or output
+ * values, ensuring the the correct number and order of values are present.
  *
  * @example
  * const abi = [
@@ -32,14 +32,6 @@ import { getAbiEntry } from "src/contract/utils/getAbiItem";
  *   kind: "inputs",
  *   value: { value: 123n, to: "0x123" },
  * }); // -> ["0x123", 123n]
- *
- * const parsedReturn = friendlyToArray({
- *   abi,
- *   type: "function",
- *   name: "transfer",
- *   kind: "outputs",
- *   value: true,
- * }); // -> [true]
  */
 export function friendlyToArray<
   TAbi extends Abi,
@@ -55,7 +47,10 @@ export function friendlyToArray<
 }: {
   abi: TAbi;
   name: TName;
-  value: AbiFriendlyType<TAbi, TItemType, TName, TParameterKind>;
+  value: Abi extends TAbi
+    ? // Accept undefined for unknown ABIs
+      AbiFriendlyType<TAbi, TItemType, TName, TParameterKind> | undefined
+    : AbiFriendlyType<TAbi, TItemType, TName, TParameterKind>;
   kind: TParameterKind;
   type: TItemType;
 }): AbiArrayType<TAbi, TItemType, TName, TParameterKind> {
