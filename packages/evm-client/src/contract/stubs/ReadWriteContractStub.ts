@@ -1,5 +1,6 @@
 import { Abi } from "abitype";
 import { SinonStub, stub } from "sinon";
+import { BOB } from "src/base/testing/accounts";
 import { ReadContractStub } from "src/contract/stubs/ReadContractStub";
 import {
   ContractWriteArgs,
@@ -32,6 +33,8 @@ export class ReadWriteContractStub<TAbi extends Abi = Abi>
     FunctionName<TAbi, "nonpayable" | "payable">,
     WriteStub<TAbi, FunctionName<TAbi, "nonpayable" | "payable">>
   >();
+
+  getSignerAddress = stub().resolves(BOB);
 
   /**
    * Simulates a contract write operation for a given function. If the function

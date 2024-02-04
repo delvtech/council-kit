@@ -19,6 +19,7 @@ module.exports = {
      */
     "prettier",
   ],
+  parser: '@typescript-eslint/parser',
   rules: {
     "@typescript-eslint/explicit-module-boundary-types": "error", // exported functions must have return types
     "@typescript-eslint/no-empty-function": "off", // empty arrow functions are fine for noops when passed to components
@@ -55,7 +56,7 @@ module.exports = {
   settings: {
     "import/resolver": {
       typescript: {
-        // Tell eslint-config where to find the tsconfig when it runs, see:
+        // Tell @council/eslint-config where to find the tsconfig when it runs, see:
         // https://www.npmjs.com/package/eslint-import-resolver-typescript
         project: "{apps,packages}/**/*/tsconfig.json",
       },

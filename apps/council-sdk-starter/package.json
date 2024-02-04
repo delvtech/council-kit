@@ -24,7 +24,7 @@
     "getProposalResults": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/getProposalResults.ts"
   },
   "dependencies": {
-    "@council/sdk": "*",
+    "@delvtech/council-core": "*",
     "@council/artifacts": "*",
     "ethers": "^5.7.2"
   },

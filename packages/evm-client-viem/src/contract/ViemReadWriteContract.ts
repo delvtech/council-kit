@@ -41,6 +41,10 @@ export class ViemReadWriteContract<TAbi extends Abi = Abi>
     this.walletClient = walletClient;
   }
 
+  getSignerAddress(): Promise<`0x${string}`> {
+    return this.walletClient.getAddresses().then(([address]) => address);
+  }
+
   // override to get the account from the wallet client
   override async simulateWrite<
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,

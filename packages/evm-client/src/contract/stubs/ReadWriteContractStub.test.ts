@@ -1,4 +1,4 @@
-import { IERC20 } from "src/base/IERC20";
+import { IERC20 } from "src/base/testing/IERC20";
 import { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub";
 import { expect, test } from "vitest";
 

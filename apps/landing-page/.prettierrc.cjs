@@ -6,5 +6,5 @@ module.exports = {
     ...base.plugins,
     require("prettier-plugin-tailwindcss"),
   ],
-  tailwindConfig: "./tailwind.config.js",
+  tailwindConfig: "./tailwind.config.cjs",
 };

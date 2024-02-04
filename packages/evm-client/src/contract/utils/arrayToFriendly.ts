@@ -1,15 +1,16 @@
 import { Abi, AbiItemType, AbiParameter, AbiParameterKind } from "abitype";
 import {
+  AbiArrayType,
   AbiEntryName,
   AbiFriendlyType,
-  AbiTuple,
 } from "src/contract/types/AbiEntry";
 import { FunctionName } from "src/contract/types/Function";
 import { getAbiEntry } from "src/contract/utils/getAbiEntry";
 
 /**
- * Converts an array of input or output values into a {@linkcode AbiFriendlyType},
- * ensuring the values are properly identified based on their index.
+ * Converts an array of input or output values into an
+ * {@linkcode AbiFriendlyType}, ensuring the values are properly identified
+ * based on their index.
  *
  * @example
  * const abi = [
@@ -55,7 +56,7 @@ export function arrayToFriendly<
 }: {
   abi: TAbi;
   name: TName;
-  values: AbiTuple<TAbi, TItemType, TName, TParameterKind>;
+  values: AbiArrayType<TAbi, TItemType, TName, TParameterKind>;
   kind: TParameterKind;
   type: TItemType;
 }): AbiFriendlyType<TAbi, TItemType, TName, TParameterKind> {

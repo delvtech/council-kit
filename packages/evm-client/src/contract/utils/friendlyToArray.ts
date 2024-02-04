@@ -1,8 +1,8 @@
 import { Abi, AbiItemType, AbiParameter, AbiParameterKind } from "abitype";
 import {
+  AbiArrayType,
   AbiEntryName,
   AbiFriendlyType,
-  AbiTuple,
 } from "src/contract/types/AbiEntry";
 import { FunctionName } from "src/contract/types/Function";
 import { getAbiEntry } from "src/contract/utils/getAbiEntry";
@@ -53,7 +53,7 @@ export function friendlyToArray<
     : AbiFriendlyType<TAbi, TItemType, TName, TParameterKind>;
   kind: TParameterKind;
   type: TItemType;
-}): AbiTuple<TAbi, TItemType, TName, TParameterKind> {
+}): AbiArrayType<TAbi, TItemType, TName, TParameterKind> {
   const abiEntry = getAbiEntry({ abi, type, name });
 
   let parameters: AbiParameter[] = [];
@@ -63,7 +63,7 @@ export function friendlyToArray<
 
   // Single or no parameters
   if (parameters.length <= 1) {
-    return [] as AbiTuple<TAbi, TItemType, TName, TParameterKind>;
+    return [] as AbiArrayType<TAbi, TItemType, TName, TParameterKind>;
   }
 
   const array: any[] = [];
@@ -71,5 +71,5 @@ export function friendlyToArray<
     array.push((value as any)[name ?? i]);
   });
 
-  return array as AbiTuple<TAbi, TItemType, TName, TParameterKind>;
+  return array as AbiArrayType<TAbi, TItemType, TName, TParameterKind>;
 }

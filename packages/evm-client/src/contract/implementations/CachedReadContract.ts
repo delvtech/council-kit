@@ -136,10 +136,6 @@ export class CachedReadContract<TAbi extends Abi = Abi>
     this.cache.clear();
   }
 
-  /**
-   * Simulates a contract write operation. This method directly delegates
-   * to the underlying contract without interacting with the cache.
-   */
   simulateWrite<
     TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">,
   >(

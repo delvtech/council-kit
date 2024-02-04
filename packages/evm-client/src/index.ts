@@ -11,10 +11,10 @@ export {
 export { ReadContractStub } from "src/contract/stubs/ReadContractStub";
 export { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub";
 export type {
+  AbiArrayType,
   AbiEntry,
   AbiEntryName,
   AbiFriendlyType,
-  AbiTuple as AbiArrayType,
 } from "src/contract/types/AbiEntry";
 export type {
   ContractDecodeFunctionDataArgs,

@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@council/sdk": "*",
+    "@delvtech/council-core": "*",
     "@ensdomains/ensjs": "^3.0.0-alpha.37",
     "@heroicons/react": "^2.0.13",
     "@metamask/jazzicon": "^2.0.0",

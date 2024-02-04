@@ -32,9 +32,9 @@ This monorepo uses [Yarn](https://classic.yarnpkg.com/) as a package manager. It
 
 | Name                                                                                            | Description                          |
 | ----------------------------------------------------------------------------------------------- | ------------------------------------ |
-| [eslint-config](https://github.com/delvtech/council-kit/tree/main/packages/eslint-config)     | Package for static type checking.    |
+| [@council/eslint-config](https://github.com/delvtech/council-kit/tree/main/packages/@council/eslint-config)     | Package for static type checking.    |
 | [prettier-config](https://github.com/delvtech/council-kit/tree/main/packages/prettier-config) | Package for code formatting.         |
-| [tsconfig](https://github.com/delvtech/council-kit/tree/main/packages/tsconfig)               | Package for TypeScript configuation. |
+| [@council/tsconfig](https://github.com/delvtech/council-kit/tree/main/packages/tsconfig)               | Package for TypeScript configuation. |
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 

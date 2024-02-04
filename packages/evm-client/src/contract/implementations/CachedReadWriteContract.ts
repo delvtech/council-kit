@@ -24,18 +24,16 @@ export class CachedReadWriteContract<TAbi extends Abi = Abi>
   extends CachedReadContract<TAbi>
   implements ReadWriteContract<TAbi>
 {
-  /** The wrapped writable contract instance. */
   declare contract: ReadWriteContract<TAbi>;
 
   constructor(options: CachedReadWriteContractOptions<TAbi>) {
     super(options);
   }
 
-  /**
-   * Writes data to the contract. This method directly delegates to the
-   * underlying contract without interacting with the cache since writes
-   * inherently modify state and cannot be cached.
-   */
+  getSignerAddress(): Promise<`0x${string}`> {
+    return this.contract.getSignerAddress();
+  }
+
   write<TFunctionName extends FunctionName<TAbi, "nonpayable" | "payable">>(
     ...[functionName, args, options]: ContractWriteArgs<TAbi, TFunctionName>
   ): Promise<`0x${string}`> {

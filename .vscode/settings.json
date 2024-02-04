@@ -16,7 +16,10 @@
 		"abitype",
 		"calldatas",
 		"Delegators",
+		"delvtech",
 		"merkle",
+		"tsup",
+		"typecheck",
 		"unvested",
 		"Viem"
 	]

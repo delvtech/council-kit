@@ -1,4 +1,4 @@
-import { Abi, Address } from "abitype";
+import { Abi } from "abitype";
 import { Event, EventFilter, EventName } from "src/contract/types/Event";
 import {
   DecodedFunctionData,
@@ -16,7 +16,7 @@ import { BlockTag } from "src/network/types/Block";
  */
 export interface ReadContract<TAbi extends Abi = Abi> {
   abi: TAbi;
-  address: Address;
+  address: `0x${string}`;
 
   /**
    * Reads a specified function from the contract.
@@ -41,10 +41,17 @@ export interface ReadContract<TAbi extends Abi = Abi> {
     ...args: ContractGetEventsArgs<TAbi, TEventName>
   ): Promise<Event<TAbi, TEventName>[]>;
 
+  /**
+   * Encodes a function call into calldata.
+   */
   encodeFunctionData<TFunctionName extends FunctionName<TAbi>>(
     ...args: ContractEncodeFunctionDataArgs<TAbi, TFunctionName>
   ): `0x${string}`;
 
+  /**
+   * Decodes a string of function calldata into it's arguments and function
+   * name.
+   */
   decodeFunctionData<
     TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
   >(
@@ -58,6 +65,11 @@ export interface ReadContract<TAbi extends Abi = Abi> {
  */
 export interface ReadWriteContract<TAbi extends Abi = Abi>
   extends ReadContract<TAbi> {
+  /**
+   * Get the address of the signer for this contract.
+   */
+  getSignerAddress(): Promise<`0x${string}`>;
+
   /**
    * Writes to a specified function on the contract.
    * @returns The transaction hash of the submitted transaction.
@@ -118,8 +130,8 @@ export type ContractGetEventsArgs<
 export interface ContractWriteOptions {
   type?: `0x${string}`;
   nonce?: bigint;
-  to?: Address;
-  from?: Address;
+  to?: `0x${string}`;
+  from?: `0x${string}`;
   /**
    * Gas limit
    */

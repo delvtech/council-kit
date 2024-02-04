@@ -1,0 +1,32 @@
+{
+  "name": "@delvtech/council-viem",
+  "version": "0.0.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "viem": ">=2"
+  },
+  "dependencies": {
+    "@council/evm-client": "*"
+  },
+  "devDependencies": {
+    "@council/eslint-config": "*",
+    "@council/tsconfig": "*",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "viem": "^2.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
