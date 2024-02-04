@@ -8,19 +8,13 @@ import { Abi } from "abitype";
 export interface CachedContractFactoryOptions<TAbi extends Abi = Abi>
   extends Omit<CachedReadContractOptions, "contract"> {
   abi: TAbi;
-  address: string;
+  address: `0x${string}`;
 }
 
-export type CachedReadContractFactory<
-  TOptions extends Record<string, any> = object,
-> = <TAbi extends Abi = Abi>(
-  options: Prettify<CachedContractFactoryOptions<TAbi> & TOptions>,
+export type CachedReadContractFactory = <TAbi extends Abi = Abi>(
+  options: CachedContractFactoryOptions<TAbi>,
 ) => CachedReadContract<TAbi>;
 
-export type CachedReadWriteContractFactory<
-  TOptions extends Record<string, any> = object,
-> = <TAbi extends Abi = Abi>(
-  options: Prettify<CachedContractFactoryOptions<TAbi> & TOptions>,
+export type CachedReadWriteContractFactory = <TAbi extends Abi = Abi>(
+  options: CachedContractFactoryOptions<TAbi>,
 ) => CachedReadWriteContract<TAbi>;
-
-type Prettify<T> = { [K in keyof T]: T[K] };
