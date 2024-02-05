@@ -1,5 +1,6 @@
 import { Abi, AbiItemType } from "abitype";
 import { AbiEntry, AbiEntryName } from "src/contract/types/AbiEntry";
+import { AbiEntryNotFoundError } from "src/errors/AbiEntryNotFound";
 
 /**
  * Get an entry from an ABI by type and name.
@@ -16,7 +17,7 @@ export function getAbiEntry<
 }: {
   abi: TAbi;
   type: TItemType;
-  name: TName;
+  name?: TName;
 }): AbiEntry<TAbi, TItemType, TName> {
   const abiItem = abi.find(
     (item) =>
@@ -25,7 +26,7 @@ export function getAbiEntry<
   ) as AbiEntry<TAbi, TItemType, TName> | undefined;
 
   if (!abiItem) {
-    throw new Error(`${type}${name ? ` ${name}` : ""} not found in abi`);
+    throw new AbiEntryNotFoundError({ type, name });
   }
 
   return abiItem;

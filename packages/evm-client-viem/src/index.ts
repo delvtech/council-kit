@@ -1,20 +1,21 @@
 // contract
 export {
-  ViemCachedReadContract,
-  type ViemCachedReadContractOptions,
-} from "src/contract/ViemCachedReadContract";
+  createViemCachedReadContract,
+  type CreateViemCachedReadContractOptions,
+} from "src/contract/createViemCachedReadContract";
 export {
-  ViemCachedReadWriteContract,
-  type ViemCachedReadWriteContractOptions,
-} from "src/contract/ViemCachedReadWriteContract";
+  createViemCachedReadWriteContract,
+  type CreateViemCachedReadWriteContractOptions,
+} from "src/contract/createViemCachedReadWriteContract";
 export {
-  ViemReadContract,
-  type ViemReadContractOptions,
-} from "src/contract/ViemReadContract";
+  createViemReadContract,
+  type CreateViemReadContractOptions,
+  type ViemReadContract,
+} from "src/contract/createViemReadContract";
 export {
-  ViemReadWriteContract,
+  createViemReadWriteContract,
   type ViemReadWriteContractOptions,
-} from "src/contract/ViemReadWriteContract";
+} from "src/contract/createViemReadWriteContract";
 
 // network
-export { ViemNetwork } from "src/network/ViemNetwork";
+export { createViemNetwork } from "src/network/createViemNetwork";

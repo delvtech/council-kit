@@ -4,7 +4,6 @@ import {
   AbiEntryName,
   AbiFriendlyType,
 } from "src/contract/types/AbiEntry";
-import { FunctionName } from "src/contract/types/Function";
 import { getAbiEntry } from "src/contract/utils/getAbiEntry";
 
 /**
@@ -24,6 +23,15 @@ import { getAbiEntry } from "src/contract/utils/getAbiEntry";
  *     outputs: [{ name: "", type: "bool" }],
  *     stateMutability: "nonpayable",
  *   },
+ *   {
+ *     type: "event",
+ *     name: "Approval",
+ *     inputs: [
+ *       { indexed: true, name: "owner", type: "address" },
+ *       { indexed: true, name: "spender", type: "address" },
+ *       { indexed: false, name: "value", type: "uint256" },
+ *     ],
+ *   },
  * ] as const;
  *
  * const parsedArgs = arrayToFriendly({
@@ -41,11 +49,19 @@ import { getAbiEntry } from "src/contract/utils/getAbiEntry";
  *   kind: "outputs",
  *   values: [true],
  * }); // -> true
+ *
+ * const parsedFilter = arrayToFriendly({
+ *   abi,
+ *   type: "event",
+ *   name: "Approval",
+ *   kind: "inputs",
+ *   values: [undefined, "0x123", undefined],
+ * }); // -> { owner: undefined, spender: "0x123", value: undefined }
  */
 export function arrayToFriendly<
   TAbi extends Abi,
   TItemType extends AbiItemType,
-  TName extends AbiEntryName<TAbi, TItemType> & FunctionName<TAbi>,
+  TName extends AbiEntryName<TAbi, TItemType>,
   TParameterKind extends AbiParameterKind,
 >({
   abi,
@@ -56,7 +72,9 @@ export function arrayToFriendly<
 }: {
   abi: TAbi;
   name: TName;
-  values: AbiArrayType<TAbi, TItemType, TName, TParameterKind>;
+  values?: Abi extends TAbi
+    ? readonly unknown[] // <- fallback for unknown ABI type
+    : Partial<AbiArrayType<TAbi, TItemType, TName, TParameterKind>>;
   kind: TParameterKind;
   type: TItemType;
 }): AbiFriendlyType<TAbi, TItemType, TName, TParameterKind> {
@@ -72,12 +90,14 @@ export function arrayToFriendly<
     return (values as any[])[0];
   }
 
+  const valuesArray = values || [];
+
   const friendlyValue: Record<string, any> = {};
   parameters.forEach(({ name }, i) => {
     if (name) {
-      friendlyValue[name] = values[i];
+      friendlyValue[name] = valuesArray[i];
     } else {
-      friendlyValue[i] = values[i];
+      friendlyValue[i] = valuesArray[i];
     }
   });
 

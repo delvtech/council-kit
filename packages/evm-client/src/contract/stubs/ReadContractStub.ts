@@ -219,7 +219,7 @@ export class ReadContractStub<TAbi extends Abi = Abi>
   decodeFunctionData<
     TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
   >(
-    ...args: ContractDecodeFunctionDataArgs<TAbi, TFunctionName>
+    ...args: ContractDecodeFunctionDataArgs
   ): DecodedFunctionData<TAbi, TFunctionName> {
     throw new Error("Method not implemented.");
   }

@@ -1,5 +1,5 @@
 import { SimpleCache } from "@council/evm-client";
-import { ViemNetwork } from "@council/evm-client-viem";
+import { createViemNetwork } from "@council/evm-client-viem";
 import { ReadCouncil } from "@delvtech/council-core";
 import { createViemReadContractFactory } from "src/contract/createViemReadContractFactory";
 import { PublicClient } from "viem";
@@ -18,7 +18,7 @@ export class ViemReadCouncil extends ReadCouncil {
   constructor({ publicClient, cache, namespace }: ViemReadCouncilOptions) {
     super({
       name: namespace,
-      network: new ViemNetwork(publicClient),
+      network: createViemNetwork(publicClient),
       contractFactory: createViemReadContractFactory({
         publicClient,
         cache,

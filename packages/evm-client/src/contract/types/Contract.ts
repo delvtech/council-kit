@@ -55,7 +55,7 @@ export interface ReadContract<TAbi extends Abi = Abi> {
   decodeFunctionData<
     TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
   >(
-    ...args: ContractDecodeFunctionDataArgs<TAbi, TFunctionName>
+    ...args: ContractDecodeFunctionDataArgs
   ): DecodedFunctionData<TAbi, TFunctionName>;
 }
 
@@ -188,7 +188,4 @@ export type ContractEncodeFunctionDataArgs<
     ? [functionName: TFunctionName, args?: undefined]
     : [functionName: TFunctionName, args: FunctionArgs<TAbi, TFunctionName>];
 
-export type ContractDecodeFunctionDataArgs<
-  TAbi extends Abi,
-  TFunctionName extends FunctionName<TAbi> = FunctionName<TAbi>,
-> = [data: `0x${string}`, functionName?: TFunctionName];
+export type ContractDecodeFunctionDataArgs = [data: `0x${string}`];

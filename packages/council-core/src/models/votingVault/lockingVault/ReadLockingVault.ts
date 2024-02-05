@@ -73,6 +73,13 @@ export class ReadLockingVault extends ReadVotingVault {
     return deposits[1];
   }
 
+  get address(): `0x${string}` {
+    return this.contract.address;
+  }
+  get namespace(): string | undefined {
+    return this.contract.namespace;
+  }
+
   /**
    * Get all participants with voting power in this vault.
    * @param fromBlock - Include all voters that had power on or after this block number.

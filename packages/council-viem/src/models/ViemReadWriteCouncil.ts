@@ -1,4 +1,4 @@
-import { ViemNetwork } from "@council/evm-client-viem";
+import { createViemNetwork } from "@council/evm-client-viem";
 import { ReadWriteCouncil } from "@delvtech/council-core";
 import { createViemReadWriteContractFactory } from "src/contract/createViemReadWriteContractFactory";
 import { WalletClient } from "viem";
@@ -17,7 +17,7 @@ export class ViemReadWriteCouncil extends ReadWriteCouncil {
   }: ViemReadWriteCouncilOptions) {
     super({
       name: namespace,
-      network: new ViemNetwork(publicClient),
+      network: createViemNetwork(publicClient),
       contractFactory: createViemReadWriteContractFactory({
         publicClient,
         walletClient,

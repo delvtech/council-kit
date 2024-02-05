@@ -37,7 +37,7 @@ export class ReadAirdrop extends Model {
   get address(): `0x${string}` {
     return this.contract.address;
   }
-  get namespace(): string {
+  get namespace(): string | undefined {
     return this.contract.namespace;
   }
 

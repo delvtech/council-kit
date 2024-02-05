@@ -1,6 +1,6 @@
 import {
-  CachedReadContractOptions,
-  CachedReadWriteContractOptions,
+  CreateCachedReadContractOptions,
+  CreateCachedReadWriteContractOptions,
   Network,
 } from "@council/evm-client";
 import {
@@ -54,7 +54,7 @@ export interface ReadWriteModelOptions extends ModelOptions {
  */
 export interface ReadContractModelOptions
   extends ReadModelOptions,
-    Omit<CachedReadContractOptions, "contract"> {
+    Omit<CreateCachedReadContractOptions, "contract"> {
   address: `0x${string}`;
 }
 
@@ -63,6 +63,6 @@ export interface ReadContractModelOptions
  */
 export interface ReadWriteContractModelOptions
   extends ReadWriteModelOptions,
-    Omit<CachedReadWriteContractOptions, "contract"> {
+    Omit<CreateCachedReadWriteContractOptions, "contract"> {
   address: `0x${string}`;
 }

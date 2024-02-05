@@ -1,4 +1,4 @@
-import { ViemCachedReadWriteContract } from "@council/evm-client-viem";
+import { createViemCachedReadWriteContract } from "@council/evm-client-viem";
 import { CachedReadWriteContractFactory } from "@delvtech/council-core";
 import { CreateViemReadContractFactoryOptions } from "src/contract/createViemReadContractFactory";
 import { WalletClient } from "viem";
@@ -12,9 +12,9 @@ export function createViemReadWriteContractFactory(
   options: CreateViemReadWriteContractFactoryOptions,
 ): CachedReadWriteContractFactory {
   return (factoryOptions) => {
-    return new ViemCachedReadWriteContract({
-      ...factoryOptions,
+    return createViemCachedReadWriteContract({
       ...options,
+      ...factoryOptions,
     });
   };
 }

@@ -1,15 +1,15 @@
 import { IERC20 } from "src/base/testing/IERC20";
 import { ALICE, BOB } from "src/base/testing/accounts";
-import { CachedReadContract } from "src/contract/implementations/CachedReadContract";
 import { ReadContractStub } from "src/contract/stubs/ReadContractStub";
 import { Event } from "src/contract/types/Event";
 import { expect, test } from "vitest";
+import { createCachedReadContract } from "./createCachedReadContract";
 
 const ERC20ABI = IERC20.abi;
 
 test("It caches the read function", async () => {
   const contract = new ReadContractStub(ERC20ABI);
-  const cachedContract = new CachedReadContract({ contract });
+  const cachedContract = createCachedReadContract({ contract });
 
   const stubbedValue = "0x123abc";
   contract.stubRead({
@@ -29,7 +29,7 @@ test("It caches the read function", async () => {
 
 test("It caches the getEvents function", async () => {
   const contract = new ReadContractStub(ERC20ABI);
-  const cachedContract = new CachedReadContract({ contract });
+  const cachedContract = createCachedReadContract({ contract });
 
   const stubbedEvents: Event<typeof ERC20ABI, "Transfer">[] = [
     {
@@ -58,7 +58,7 @@ test("It caches the getEvents function", async () => {
 
 test("The deleteRead function deletes the cached read value", async () => {
   const contract = new ReadContractStub(ERC20ABI);
-  const cachedContract = new CachedReadContract({ contract });
+  const cachedContract = createCachedReadContract({ contract });
 
   const stubbedValue = 100n;
   contract.stubRead({ functionName: "balanceOf", value: stubbedValue });
@@ -77,7 +77,7 @@ test("The deleteRead function deletes the cached read value", async () => {
 
 test("It clears the cache", async () => {
   const contract = new ReadContractStub(ERC20ABI);
-  const cachedContract = new CachedReadContract({ contract });
+  const cachedContract = createCachedReadContract({ contract });
 
   contract.stubRead({ functionName: "balanceOf", value: 100n });
   const stubbedValue = "0x123abc";

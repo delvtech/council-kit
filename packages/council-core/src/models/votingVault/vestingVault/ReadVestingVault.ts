@@ -47,6 +47,13 @@ export class ReadVestingVault extends ReadVotingVault {
     });
   }
 
+  get address(): `0x${string}` {
+    return this.contract.address;
+  }
+  get namespace(): string | undefined {
+    return this.contract.namespace;
+  }
+
   /**
    * Get this vault's token.
    */
