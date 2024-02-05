@@ -5,9 +5,5 @@
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
-    "paths": {
-      "src/*": ["src/*"]
-    },
-    "resolveJsonModule": true
   }
 }

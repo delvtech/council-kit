@@ -12,8 +12,7 @@
     "format:check": "prettier --check '**/*.{gql,graphql,js,jsx,ts,tsx,json,md}'"
   },
   "dependencies": {
-    "@council/deploy": "*",
-    "@council/sdk": "*",
+    "@delvtech/council-viem": "*",
     "@ensdomains/ensjs": "^3.0.0-alpha.37",
     "@heroicons/react": "^2.0.13",
     "@metamask/jazzicon": "^2.0.0",
