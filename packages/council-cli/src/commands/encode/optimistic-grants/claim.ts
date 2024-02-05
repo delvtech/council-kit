@@ -1,37 +1,34 @@
-import { OptimisticGrants__factory } from "@council/typechain";
+import { OptimisticGrants } from "@council/artifacts/OptimisticGrants";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "claim",
-  describe: "Encode call data for OptimisticGrants.claim",
+export default command({
+  description: "Encode call data for OptimisticGrants.claim",
 
-  builder: (yargs) => {
-    return yargs.options({
-      r: {
-        alias: ["recipient", "destination"],
-        description: "The address to send the tokens to",
-        type: "string",
-      },
-    });
+  options: {
+    r: {
+      alias: ["recipient", "destination"],
+      description: "The address to send the tokens to",
+      type: "string",
+      required: true,
+    },
   },
 
-  handler: async (args) => {
-    const recipient = await requiredString(args.recipient, {
-      name: "recipient",
-      message: "Enter recipient address",
+  handler: async ({ options, next }) => {
+    const recipient = await options.recipient({
+      prompt: "Enter recipient address",
     });
-
-    signale.success(encodeClaim(recipient));
+    const encoded = encodeClaim(recipient);
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
 export function encodeClaim(recipient: string): string {
   return encodeFunctionData({
-    abi: OptimisticGrants__factory.abi,
+    abi: OptimisticGrants.abi,
     functionName: "claim",
-    args: [recipient],
+    args: [recipient as `0x${string}`],
   });
 }

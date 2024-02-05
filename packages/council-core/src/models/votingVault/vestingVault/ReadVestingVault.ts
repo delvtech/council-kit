@@ -1,4 +1,4 @@
-import { VestingVault } from "@council/artifacts/dist/VestingVault";
+import { VestingVault } from "@council/artifacts/VestingVault";
 import { CachedReadContract, FunctionReturn } from "@council/evm-client";
 import Big from "big.js";
 import { ReadContractModelOptions } from "src/models/Model";

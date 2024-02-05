@@ -1,39 +1,36 @@
-import { VestingVault__factory } from "@council/typechain";
+import { VestingVault } from "@council/artifacts/VestingVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-timelock [OPTIONS]",
-    aliases: ["setTimelock"],
-    describe: "Encode call data for VestingVault.setTimelock",
+export default command({
+  description: "Encode call data for VestingVault.setTimelock",
 
-    builder: (yargs) => {
-      return yargs.options({
-        a: {
-          alias: ["address", "timelock"],
-          describe: "The new timelock address",
-          type: "string",
-        },
-      });
+  options: {
+    a: {
+      alias: ["address", "timelock"],
+      description: "The new timelock address",
+      type: "string",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const address = await requiredString(args.address, {
-        name: "address",
-        message: "Enter new timelock address",
-      });
+  handler: async ({ options, next }) => {
+    const address = await options.address({
+      prompt: "Enter new timelock address",
+    });
 
-      signale.success(encodeSetTimelock(address));
-    },
-  });
+    const encoded = encodeSetTimelock(address);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetTimelock(address: string): string {
   return encodeFunctionData({
-    abi: VestingVault__factory.abi,
+    abi: VestingVault.abi,
     functionName: "setTimelock",
-    args: [address],
+    args: [address as `0x${string}`],
   });
 }

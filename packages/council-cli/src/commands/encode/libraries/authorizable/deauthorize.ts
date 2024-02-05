@@ -1,37 +1,36 @@
-import { Authorizable__factory } from "@council/typechain";
+import { Authorizable } from "@council/artifacts/Authorizable";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "deauthorize [OPTIONS]",
-  describe: "Encode call data for Authorizable.deauthorize",
+export default command({
+  description: "Encode call data for Authorizable.deauthorize",
 
-  builder: (yargs) => {
-    return yargs.options({
-      a: {
-        alias: ["address", "who"],
-        describe: "The address to remove authorization from",
-        type: "string",
-      },
-    });
+  options: {
+    a: {
+      alias: ["address", "who"],
+      description: "The address to remove authorization from",
+      type: "string",
+      required: true,
+    },
   },
 
-  handler: async (args) => {
-    const address = await requiredString(args.address, {
-      name: "address",
-      message: "Enter address",
+  handler: async ({ options, next }) => {
+    const address = await options.address({
+      prompt: "Enter address",
     });
 
-    signale.success(encodeDeauthorize(address));
+    const encoded = encodeDeauthorize(address);
+
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
 export function encodeDeauthorize(address: string): string {
   return encodeFunctionData({
-    abi: Authorizable__factory.abi,
+    abi: Authorizable.abi,
     functionName: "deauthorize",
-    args: [address],
+    args: [address as `0x${string}`],
   });
 }

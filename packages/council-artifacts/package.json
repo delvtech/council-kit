@@ -5,6 +5,17 @@
   "files": [
     "artifacts"
   ],
+  "exports": {
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    },
+    "./*.js": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build:src": "sh scripts/build-src.sh src",
     "build": "npm run build:src && tsc --build --force"

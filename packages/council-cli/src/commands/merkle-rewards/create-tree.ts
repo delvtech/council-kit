@@ -1,80 +1,68 @@
+import { OptionGetter, command } from "clide-js";
 import colors from "colors";
 import MerkleTree from "merkletreejs";
 import path from "path";
-import prompts from "prompts";
 import signale from "signale";
-import { ArrayQuestion, requiredArray } from "src/options/utils/requiredArray";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredOption } from "src/options/utils/requiredOption";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { JSONStore } from "src/utils/JSONStore";
-import { Schema, validateData } from "src/utils/validateData";
-import { isNotEmptyList } from "src/utils/validation/isNotEmptyList";
-import { isNumberString } from "src/utils/validation/isNumberString";
 import {
   Address,
+  Hex,
   encodePacked,
   formatUnits,
-  Hex,
   isAddress,
   keccak256,
   parseUnits,
 } from "viem";
+import { JsonStore } from "../../utils/config/JsonStore.js";
+import { Schema, validateData } from "../../utils/config/validateData.js";
+import { isNotEmptyList } from "../../utils/validation/isNotEmptyList.js";
+import { isNumberString } from "../../utils/validation/isNumberString.js";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "create-tree [OPTIONS]",
-  describe:
+export default command({
+  description:
     "Create a merkle tree for rewards (e.g., airdrop) from a list of addresses and reward amounts. The output is a JSON file with the merkle root and each leaf by address with it's proof.",
 
-  builder: (yargs) => {
-    return yargs.options({
-      p: {
-        alias: ["accounts-path"],
-        describe:
-          'The path to the json file with the addresses and amounts listed as an array of objects with address and amount properties. The amount property is a decimal string that will be scaled based on the decimals option. For example, [{"address": "0x1234...", "amount": "100.5"}, ...].',
-        type: "string",
-      },
-      a: {
-        alias: ["addresses"],
-        describe:
-          "A list of recipient addresses to include in the merkle tree.",
-        type: "array",
-        string: true,
-      },
-      m: {
-        alias: ["amounts"],
-        describe:
-          "A list of amounts to reward each address. Must be same length as addresses.",
-        type: "array",
-        string: true,
-      },
-      d: {
-        alias: ["decimals", "token-decimals"],
-        describe:
-          "The decimal precision used by the token contract. The amounts will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000.",
-        type: "number",
-      },
-      o: {
-        alias: ["out-path"],
-        describe:
-          "The directory to write the merkle tree info to; relative to the current working directory.",
-        type: "string",
-      },
-    });
+  options: {
+    p: {
+      alias: ["accounts-path"],
+      description:
+        'The path to the json file with the addresses and amounts listed as an array of objects with address and amount properties. The amount property is a decimal string that will be scaled based on the decimals option. For example, [{"address": "0x1234...", "amount": "100.5"}, ...].',
+      type: "string",
+    },
+    a: {
+      alias: ["addresses"],
+      description:
+        "A list of recipient addresses to include in the merkle tree.",
+      type: "array",
+    },
+    m: {
+      alias: ["amounts"],
+      description:
+        "A list of amounts to reward each address. Must be same length as addresses.",
+      type: "array",
+    },
+    d: {
+      alias: ["decimals", "token-decimals"],
+      description:
+        "The decimal precision used by the token contract. The amounts will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000.",
+      type: "number",
+      default: 18,
+    },
+    o: {
+      alias: ["out-path"],
+      description:
+        "The directory to write the merkle tree info to; relative to the current working directory.",
+      type: "string",
+    },
   },
 
-  handler: async (args) => {
-    const accounts = await requiredAccounts(
-      args.accountsPath,
-      args.addresses as Address[],
-      args.amounts as `${number}`[],
-    );
-
-    const decimals = await requiredNumber(args.decimals, {
-      name: "decimals",
-      message: "Enter decimal precision",
-      initial: 18,
+  handler: async ({ options, next }) => {
+    const accounts = await getAccounts({
+      accountsPathGetter: options.accountsPath,
+      addressesGetter: options.addresses,
+      amountsGetter: options.amounts,
     });
+
+    const decimals = await options.decimals();
 
     const merkleTree = getMerkleTree(accounts, decimals);
 
@@ -105,16 +93,14 @@ export const { command, describe, builder, handler } = createCommandModule({
       accounts: Object.fromEntries(accountsEntries),
     };
 
-    const outPath = await requiredOption(args.outPath, {
-      name: "out-path",
-      type: "text",
-      message: `Enter the path to write the merkle tree info to ${colors.dim(
+    const outPath = await options.outPath({
+      prompt: `Enter the path to write the merkle tree info to ${colors.dim(
         "(optional)",
       )}`,
     });
 
     if (outPath) {
-      const store = new JSONStore({
+      const store = new JsonStore({
         path: path.dirname(outPath),
         name: path.basename(outPath),
       });
@@ -133,6 +119,8 @@ export const { command, describe, builder, handler } = createCommandModule({
     console.log(colors.dim(`${"-".repeat(80)}`));
     console.log(`Unique accounts total: ${merkleTreeInfo.uniqueAccountsTotal}`);
     console.log(colors.dim(`${"=".repeat(80)}`));
+
+    next(merkleTreeInfo);
   },
 });
 
@@ -140,20 +128,25 @@ export const { command, describe, builder, handler } = createCommandModule({
  * A requiredOption wrapper for prompting the user for the accounts to create
  * the merkle tree from.
  */
-async function requiredAccounts(
-  accountsPath?: string,
-  addresses?: Address[],
-  amounts?: `${number}`[],
-): Promise<Account[]> {
+async function getAccounts({
+  accountsPathGetter,
+  addressesGetter,
+  amountsGetter,
+}: {
+  accountsPathGetter: OptionGetter<string | undefined>;
+  addressesGetter: OptionGetter<string[] | undefined>;
+  amountsGetter: OptionGetter<string[] | undefined>;
+}): Promise<Account[]> {
   let accounts: Account[] = [];
+
+  let addresses = await addressesGetter();
+  let amounts = await amountsGetter();
 
   // Try to import the accounts from the accounts path if it was passed or
   // prompt the user for the accounts path if no options were passed.
-  if (accountsPath || (!addresses && !amounts)) {
-    const possibleAccountsPath = await requiredOption(accountsPath, {
-      name: "accounts-path",
-      type: "text",
-      message: `Enter the path to the accounts JSON file ${colors.dim(
+  if (!addresses && !amounts) {
+    const possibleAccountsPath = await accountsPathGetter({
+      prompt: `Enter the path to the accounts JSON file ${colors.dim(
         "(Leave blank to enter addresses and amounts manually)",
       )}`,
     });
@@ -189,32 +182,70 @@ async function requiredAccounts(
     isNotEmptyList(amounts) ||
     !accounts.length
   ) {
-    const ensuredAddresses = await requiredAddressArray(addresses, {
-      name: "addresses",
-      message: "Enter recipient addresses",
+    addresses = await addressesGetter({
+      prompt: {
+        message: "Enter recipient addresses",
+        validate: (addresses) => {
+          if (!addresses?.length) {
+            return "Enter valid addresses";
+          }
+
+          // Validate the addresses
+          for (const address of addresses) {
+            if (!isAddress(address)) {
+              return `Invalid address: ${address}`;
+            }
+          }
+
+          return true;
+        },
+      },
     });
 
-    const ensuredAmounts = await requiredAmountArray(amounts, {
-      name: "amounts",
-      message: "Enter reward amounts",
+    if (!addresses) {
+      throw new Error("Addresses are required");
+    }
+
+    amounts = await amountsGetter({
+      prompt: {
+        message: "Enter reward amounts",
+        validate: (amounts) => {
+          if (!amounts) {
+            return "Enter valid amounts";
+          }
+
+          // Validate the addresses
+          for (const amount of amounts) {
+            if (!isNumberString(amount)) {
+              return `Invalid amount: ${amount}`;
+            }
+          }
+
+          return true;
+        },
+      },
     });
+
+    if (!amounts) {
+      throw new Error("Amounts are required");
+    }
 
     // Ensure options are the same length
-    if (ensuredAddresses.length !== ensuredAmounts.length) {
+    if (addresses.length !== amounts.length) {
       throw new Error(
         "The `addresses` and `amounts` options must be the same length.",
       );
     }
 
-    const ensuredAccounts = ensuredAddresses.map((address, i) => {
+    const ensuredAccounts = addresses.map((address, i) => {
       return {
-        address,
-        amount: ensuredAmounts[i],
+        address: address as `0x${string}`,
+        amount: (amounts as `${number}`[])[i],
       };
     });
 
     // Add the ensured accounts to the accounts array
-    accounts = [...accounts, ...ensuredAccounts];
+    return [...accounts, ...ensuredAccounts];
   }
 
   return accounts;
@@ -243,66 +274,10 @@ const accountsScema: Schema<Account[]> = {
   },
 };
 
-function requiredAddressArray(
-  value: Address[] | undefined,
-  question: ArrayQuestion,
-  options?: prompts.Options,
-): Promise<Address[]> {
-  return requiredArray(
-    value,
-    {
-      validate: (value?: string | string[]) => {
-        if (!value) {
-          return "Enter valid addresses";
-        }
-
-        // Validate the addresses
-        for (const address of value) {
-          if (!isAddress(address)) {
-            return `Invalid address: ${address}`;
-          }
-        }
-
-        return true;
-      },
-      ...question,
-    },
-    options,
-  );
-}
-
-function requiredAmountArray(
-  value: `${number}`[] | undefined,
-  question: ArrayQuestion,
-  options?: prompts.Options,
-): Promise<`${number}`[]> {
-  return requiredArray(
-    value,
-    {
-      validate: (value?: `${number}`[]) => {
-        if (!value) {
-          return "Enter valid amounts";
-        }
-
-        // Validate the addresses
-        for (const amount of value) {
-          if (!isNumberString(amount)) {
-            return `Invalid amount: ${amount}`;
-          }
-        }
-
-        return true;
-      },
-      ...question,
-    },
-    options,
-  );
-}
-
 function getMerkleTree(accounts: Account[], tokenDecimals: number) {
   const leaves = accounts.map((account) => hashAccount(account, tokenDecimals));
 
-  return new MerkleTree(
+  return new MerkleTree.default(
     leaves,
     (bytes: Hex) => {
       const packedData = encodePacked(["bytes"], [bytes]);

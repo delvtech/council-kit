@@ -93,7 +93,7 @@ export function createViemReadContract<TAbi extends Abi = Abi>({
       });
 
       const { result } = await publicClient.simulateContract({
-        abi: abi as any,
+        abi: abi as Abi,
         address: address,
         functionName,
         args: argsArray,

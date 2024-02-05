@@ -1,38 +1,36 @@
-import { VestingVault__factory } from "@council/typechain";
+import { VestingVault } from "@council/artifacts/VestingVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "delegate [OPTIONS]",
-    describe: "Encode call data for VestingVault.delegate",
+export default command({
+  description: "Encode call data for VestingVault.delegate",
 
-    builder: (yargs) => {
-      return yargs.options({
-        a: {
-          alias: ["address", "to"],
-          describe: "The address to delegate to",
-          type: "string",
-        },
-      });
+  options: {
+    a: {
+      alias: ["address", "to"],
+      description: "The address to delegate to",
+      type: "string",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const address = await requiredString(args.address, {
-        name: "to",
-        message: "Enter new delegate address",
-      });
+  handler: async ({ options, next }) => {
+    const address = await options.address({
+      prompt: "Enter new delegate address",
+    });
 
-      signale.success(encodeDelegate(address));
-    },
-  });
+    const encoded = encodeDelegate(address);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeDelegate(address: string): string {
   return encodeFunctionData({
-    abi: VestingVault__factory.abi,
+    abi: VestingVault.abi,
     functionName: "delegate",
-    args: [address],
+    args: [address as `0x${string}`],
   });
 }

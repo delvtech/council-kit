@@ -1,3 +1,3 @@
-import { LockingVault } from "@council/artifacts/dist/LockingVault";
+import { LockingVault } from "@council/artifacts/LockingVault";
 
 export type LockingVaultAbi = typeof LockingVault.abi;

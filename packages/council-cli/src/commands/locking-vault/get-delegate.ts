@@ -1,48 +1,56 @@
-import { CouncilContext, LockingVault } from "@council/sdk";
-import { getDefaultProvider } from "ethers";
+import { ViemReadCouncil } from "@delvtech/council-viem";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
+import { createPublicClient, http } from "viem";
+import { chainOption, getChain } from "../../reusable-options/chain.js";
+import { rpcUrlOption } from "../../reusable-options/rpc-url.js";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "get-delegate [OPTIONS]",
-  describe: "Get the delegate of a given account.",
+export default command({
+  description: "Get the delegate of a given account.",
 
-  builder: (yargs) => {
-    return yargs.options({
-      v: {
-        alias: ["address"],
-        describe: "The LockingVault contract address",
-        type: "string",
-      },
-      a: {
-        alias: ["account"],
-        describe: "The account to get the delegate of",
-        type: "string",
-      },
-      r: rpcUrlOption,
-    });
+  options: {
+    v: {
+      alias: ["address"],
+      description: "The LockingVault contract address",
+      type: "string",
+      required: true,
+    },
+    a: {
+      alias: ["account"],
+      description: "The account to get the delegate of",
+      type: "string",
+      required: true,
+    },
+    c: chainOption,
+    r: rpcUrlOption,
   },
 
-  handler: async (args) => {
-    const address = await requiredString(args.address, {
-      name: "address",
-      message: "Enter LockingVault contract address",
+  handler: async ({ options, next }) => {
+    const chain = await getChain(options.chain);
+
+    const rpcUrl = await options.rpc({
+      prompt: "Enter RPC URL",
     });
 
-    const account = await requiredString(args.account, {
-      name: "account",
-      message: "Enter account to get delegate of",
+    const address = await options.address({
+      prompt: "Enter LockingVault contract address",
     });
 
-    const rpcURL = await requiredRpcUrl(args.rpcUrl);
+    const account = await options.account({
+      prompt: "Enter account to get delegate of",
+    });
 
-    const provider = getDefaultProvider(rpcURL);
-    const context = new CouncilContext(provider);
-    const lockingVault = new LockingVault(address, context);
+    const transport = http(rpcUrl);
+    const publicClient = createPublicClient({ transport, chain });
 
-    const delegate = await lockingVault.getDelegate(account);
-    signale.success(await delegate.address);
+    const council = new ViemReadCouncil({ publicClient });
+    const lockingVault = council.lockingVault(address as `0x${string}`);
+
+    const delegate = await lockingVault.getDelegate({
+      voter: account as `0x${string}`,
+    });
+
+    signale.success(delegate.address);
+    next(delegate);
   },
 });

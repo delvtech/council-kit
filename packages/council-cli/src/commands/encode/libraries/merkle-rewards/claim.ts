@@ -1,77 +1,68 @@
-import { MerkleRewards__factory } from "@council/typechain";
+import { MerkleRewards } from "@council/artifacts/MerkleRewards";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredArray } from "src/options/utils/requiredArray";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "claim [OPTIONS]",
-  describe: "Encode call data for MerkleRewards.claim",
+export default command({
+  description: "Encode call data for MerkleRewards.claim",
 
-  builder: (yargs) => {
-    return yargs.options({
-      a: {
-        alias: ["amount"],
-        describe: "The amount of rewards to claim",
-        type: "string",
-      },
-      d: {
-        alias: ["decimals"],
-        describe:
-          "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-        type: "number",
-      },
-      t: {
-        alias: ["total-grant", "totalGrant"],
-        describe: "The total grant amount",
-        type: "string",
-      },
-      m: {
-        alias: ["proof", "merkle-proof", "merkleProof"],
-        describe: "The merkle proof for the claim",
-        type: "array",
-        string: true,
-      },
-      r: {
-        alias: ["recipient", "destination"],
-        describe: "The address which will be credited with funds",
-        type: "string",
-      },
-    });
+  options: {
+    a: {
+      alias: ["amount"],
+      description: "The amount of rewards to claim",
+      type: "string",
+      required: true,
+    },
+    d: {
+      alias: ["decimals"],
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    t: {
+      alias: ["total-grant", "totalGrant"],
+      description: "The total grant amount",
+      type: "string",
+      required: true,
+    },
+    m: {
+      alias: ["proof", "merkle-proof", "merkleProof"],
+      description: "The merkle proof for the claim",
+      type: "array",
+      required: true,
+    },
+    r: {
+      alias: ["recipient", "destination"],
+      description: "The address which will be credited with funds",
+      type: "string",
+      required: true,
+    },
   },
 
-  handler: async (args) => {
-    const amount = await requiredString(args.amount, {
-      name: "amount",
-      message: "Enter amount to claim",
+  handler: async ({ options, next }) => {
+    const amount = await options.amount({
+      prompt: "Enter amount to claim",
     });
 
-    const totalGrant = await requiredString(args.totalGrant, {
-      name: "totalGrant",
-      message: "Enter total grant amount",
+    const totalGrant = await options.totalGrant({
+      prompt: "Enter total grant amount",
     });
 
-    const decimals = await requiredNumber(args.decimals, {
-      name: "decimals",
-      message: "Enter decimal precision",
-      initial: 18,
+    const decimals = await options.decimals();
+
+    const proof = await options.proof({
+      prompt: "Enter merkle proof",
     });
 
-    const proof = await requiredArray(args.proof, {
-      name: "proof",
-      message: "Enter merkle proof",
+    const recipient = await options.recipient({
+      prompt: "Enter recipient address",
     });
 
-    const recipient = await requiredString(args.recipient, {
-      name: "recipient",
-      message: "Enter recipient address",
-    });
+    const encoded = encodeClaim(amount, decimals, totalGrant, proof, recipient);
 
-    signale.success(
-      encodeClaim(amount, decimals, totalGrant, proof, recipient),
-    );
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
@@ -83,13 +74,13 @@ export function encodeClaim(
   recipient: string,
 ): string {
   return encodeFunctionData({
-    abi: MerkleRewards__factory.abi,
+    abi: MerkleRewards.abi,
     functionName: "claim",
     args: [
-      parseUnits(amount as `${number}`, decimals),
-      parseUnits(totalGrant as `${number}`, decimals),
-      proof,
-      recipient,
+      parseUnits(amount, decimals),
+      parseUnits(totalGrant, decimals),
+      proof as `0x${string}`[],
+      recipient as `0x${string}`,
     ],
   });
 }

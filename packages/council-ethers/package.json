@@ -17,12 +17,12 @@
     "ethers": ">=6"
   },
   "dependencies": {
-    "@council/evm-client": "*",
     "@council/evm-client-ethers": "*",
     "@delvtech/council-core": "*"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
+    "@council/evm-client": "*",
     "@council/tsconfig": "*",
     "ethers": "^6.10.0",
     "tsup": "^8.0.1",

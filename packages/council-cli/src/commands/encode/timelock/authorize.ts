@@ -1,1 +1,2 @@
-export * from "src/commands/encode/libraries/authorizable/authorize";
+import authorize from "../libraries/authorizable/authorize.js";
+export default authorize;

@@ -1,70 +1,65 @@
-import { Treasury__factory } from "@council/typechain";
+import { Treasury } from "@council/artifacts/Treasury";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
 const ETH_CONSTANT = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "send-funds [OPTIONS]",
-    aliases: ["sendFunds"],
-    describe: "Encode call data for Treasury.sendFunds",
+export default command({
+  description: "Encode call data for Treasury.sendFunds",
 
-    builder: (yargs) => {
-      return yargs.options({
-        t: {
-          alias: ["token"],
-          describe: `The address of token to send (${ETH_CONSTANT} to send ETH)`,
-          type: "string",
-        },
-        a: {
-          alias: ["amount"],
-          describe: "The amount to send",
-          type: "string",
-        },
-        d: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-        r: {
-          alias: ["recipient"],
-          describe: "The address to send the funds to",
-          type: "string",
-        },
-      });
+  options: {
+    t: {
+      alias: ["token"],
+      description: `The address of token to send (${ETH_CONSTANT} to send ETH)`,
+      type: "string",
+      required: true,
     },
+    a: {
+      alias: ["amount"],
+      description: "The amount to send",
+      type: "string",
+      required: true,
+    },
+    d: {
+      alias: ["decimals"],
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    r: {
+      alias: ["recipient"],
+      description: "The address to send the funds to",
+      type: "string",
+      required: true,
+    },
+  },
 
-    handler: async (args) => {
-      const token = await requiredString(args.token, {
-        name: "token",
+  handler: async ({ options, next }) => {
+    const token = await options.token({
+      prompt: {
         message: "Enter token address",
         initial: ETH_CONSTANT,
-      });
+      },
+    });
 
-      const amount = await requiredString(args.amount, {
-        name: "amount",
-        message: "Enter amount to send",
-      });
+    const amount = await options.amount({
+      prompt: "Enter amount to send",
+    });
 
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
+    const decimals = await options.decimals();
 
-      const recipient = await requiredString(args.recipient, {
-        name: "recipient",
-        message: "Enter recipient address",
-      });
+    const recipient = await options.recipient({
+      prompt: "Enter recipient address",
+    });
 
-      signale.success(encodeSendFunds(token, amount, decimals, recipient));
-    },
-  });
+    const encoded = encodeSendFunds(token, amount, decimals, recipient);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSendFunds(
   token: string,
@@ -73,8 +68,12 @@ export function encodeSendFunds(
   recipient: string,
 ): string {
   return encodeFunctionData({
-    abi: Treasury__factory.abi,
+    abi: Treasury.abi,
     functionName: "sendFunds",
-    args: [token, parseUnits(amount as `${number}`, decimals), recipient],
+    args: [
+      token as `0x${string}`,
+      parseUnits(amount as `${number}`, decimals),
+      recipient as `0x${string}`,
+    ],
   });
 }

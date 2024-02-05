@@ -1,64 +1,80 @@
-import { CouncilContext, MockToken } from "@council/sdk";
-import { getDefaultProvider, Wallet } from "ethers";
+import { ViemReadWriteMockToken } from "@delvtech/council-viem";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredNumberString } from "src/options/utils/requiredNumberString";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { createCommandModule } from "src/utils/createCommandModule";
+import { createPublicClient, createWalletClient, http, parseUnits } from "viem";
+import {
+  getWriteOptions,
+  writeOptions,
+} from "../../reusable-options/write-options.js";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "set-balance [OPTIONS]",
-  aliases: ["setBalance"],
-  describe: "Set an account's token balance",
+export default command({
+  description: "Set an account's token balance",
 
-  builder: (yargs) => {
-    return yargs.options({
-      a: {
-        alias: ["address"],
-        describe: "The token contract address",
-        type: "string",
-      },
-      f: {
-        alias: ["account"],
-        describe: "The account to set balance for",
-        type: "string",
-      },
-      b: {
-        alias: ["balance"],
-        describe: "The new balance (as a decimal string) for the account",
-        type: "string",
-      },
-      w: walletKeyOption,
-      r: rpcUrlOption,
-    });
+  options: {
+    a: {
+      alias: ["address"],
+      description: "The token contract address",
+      type: "string",
+      required: true,
+    },
+    f: {
+      alias: ["account"],
+      description: "The account to set balance for",
+      type: "string",
+      required: true,
+    },
+    b: {
+      alias: ["balance"],
+      description: "The new balance (as a decimal string) for the account",
+      type: "string",
+      required: true,
+    },
+    ...writeOptions,
   },
 
-  handler: async (args) => {
-    const address = await requiredString(args.address, {
-      name: "address",
-      message: "Enter token contract address",
+  handler: async ({ options, next }) => {
+    const {
+      account: singerAccount,
+      chain,
+      rpcUrl,
+    } = await getWriteOptions(options);
+
+    const address = await options.address({
+      prompt: "Enter token contract address",
     });
 
-    const account = await requiredString(args.account, {
-      name: "account",
-      message: "Enter account to set balance for",
+    const account = await options.account({
+      prompt: "Enter account to set balance for",
     });
 
-    const balance = await requiredNumberString(args.balance, {
-      name: "balance",
-      message: "Enter new balance for account",
+    const balance = await options.balance({
+      prompt: {
+        message: "Enter new balance for account",
+        initial: "0.0",
+      },
     });
 
-    const walletKey = await requiredWalletKey(args.walletKey);
-    const rpcURL = await requiredRpcUrl(args.rpcUrl);
+    const transport = http(rpcUrl);
+    const publicClient = createPublicClient({ transport, chain });
+    const walletClient = createWalletClient({
+      transport,
+      chain,
+      account: singerAccount,
+    });
 
-    const provider = getDefaultProvider(rpcURL);
-    const context = new CouncilContext(provider);
-    const token = new MockToken(address, context);
+    const token = new ViemReadWriteMockToken({
+      address: address as `0x${string}`,
+      publicClient,
+      walletClient,
+    });
 
-    const signer = new Wallet(walletKey, provider);
+    const decimals = await token.getDecimals();
+    const hash = await token.setBalance({
+      account: account as `0x${string}`,
+      balance: parseUnits(balance, decimals),
+    });
 
-    signale.success(await token.setBalance(signer, account, balance));
+    signale.success(hash);
+    next(hash);
   },
 });

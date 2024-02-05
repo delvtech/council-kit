@@ -1,14 +1,15 @@
 import Table from "cli-table";
-import { config } from "src/config";
-import { createCommandModule } from "src/utils/createCommandModule";
+import { command } from "clide-js";
+import { config } from "../../config.js";
 
-export const { command, describe, handler } = createCommandModule({
-  command: "inspect",
-  describe: "Print all settings out as a table",
-
-  handler: async () => {
+export default command({
+  description: "Print all settings out as a table",
+  handler: () => {
+    const data = config.data;
     const table = new Table({
-      rows: Object.entries(config.data),
+      rows: Object.entries(data).filter(
+        ([_, value]: unknown[]) => value !== undefined,
+      ),
     });
     console.log(table.toString());
   },

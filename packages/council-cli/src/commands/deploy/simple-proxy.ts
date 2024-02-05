@@ -1,75 +1,56 @@
-import { SimpleProxy__factory } from "@council/typechain";
+import { SimpleProxy } from "@council/artifacts/SimpleProxy";
+import { command } from "clide-js";
 import signale from "signale";
-import { chainOption, requiredChain } from "src/options/chain";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { PrivateKeyAccount } from "viem";
 import { Chain } from "viem/chains";
+import { WriteOptions } from "../../reusable-options/write-options.js";
+import {
+  DeployedContract,
+  deployContract,
+} from "../../utils/deployContract.js";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "simple-proxy [OPTIONS]",
-    aliases: ["SimpleProxy"],
-    describe: "Deploy a SimpleProxy contract",
+export default command({
+  description: "Deploy a SimpleProxy contract",
 
-    builder: (yargs) => {
-      return yargs.options({
-        o: {
-          alias: ["owner"],
-          describe: "The contract owner's address (e.g., a Timelock contract)",
-          type: "string",
-        },
-        i: {
-          alias: [
-            "implementation",
-            "first-implementation",
-            "firstImplementation",
-          ],
-          describe: "The address that calls to the proxy will be forwarded to",
-          type: "string",
-        },
-        c: chainOption,
-        r: rpcUrlOption,
-        w: walletKeyOption,
-      });
+  options: {
+    o: {
+      alias: ["owner"],
+      describe: "The contract owner's address (e.g., a Timelock contract)",
+      type: "string",
     },
-
-    handler: async (args) => {
-      const owner = await requiredString(args.owner, {
-        name: "owner",
-        message: "Enter owner address (e.g., a Timelock contract)",
-      });
-
-      const implementation = await requiredString(args.implementation, {
-        name: "implementation",
-        message: "Enter implementation address",
-      });
-
-      const chain = await requiredChain(args.chain);
-      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-      const walletKey = await requiredWalletKey(args.walletKey);
-      const account = privateKeyToAccount(walletKey as Hex);
-
-      signale.pending("Deploying SimpleProxy...");
-
-      const { address } = await deploySimpleProxy({
-        owner,
-        implementation,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (txHash) => {
-          signale.pending(`SimpleProxy deployment tx submitted: ${txHash}`);
-        },
-      });
-
-      signale.success(`SimpleProxy deployed @ ${address}`);
+    i: {
+      alias: ["implementation", "first-implementation"],
+      describe: "The address that calls to the proxy will be forwarded to",
+      type: "string",
+      required: true,
     },
-  });
+  },
+
+  handler: async ({ data, options, next }) => {
+    const { account, chain, rpcUrl } = data as WriteOptions;
+    const owner = (await options.owner()) || account.address;
+
+    const implementation = await options.implementation({
+      prompt: "Enter implementation address",
+    });
+
+    signale.pending("Deploying SimpleProxy...");
+
+    const deployData = await deploySimpleProxy({
+      owner,
+      implementation,
+      account,
+      rpcUrl,
+      chain,
+      onSubmitted: (txHash) => {
+        signale.pending(`SimpleProxy deployment tx submitted: ${txHash}`);
+      },
+    });
+
+    signale.success(`SimpleProxy deployed @ ${deployData.address}`);
+    next(deployData);
+  },
+});
 
 export interface DeploySimpleProxyOptions {
   owner: string;
@@ -89,9 +70,9 @@ export async function deploySimpleProxy({
   onSubmitted,
 }: DeploySimpleProxyOptions): Promise<DeployedContract> {
   return await deployContract({
-    abi: SimpleProxy__factory.abi,
-    args: [owner, implementation],
-    bytecode: SimpleProxy__factory.bytecode,
+    abi: SimpleProxy.abi,
+    args: [owner as `0x${string}`, implementation as `0x${string}`],
+    bytecode: SimpleProxy.bytecode,
     account,
     rpcUrl,
     chain,

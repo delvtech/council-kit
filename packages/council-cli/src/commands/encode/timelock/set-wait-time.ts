@@ -1,39 +1,36 @@
-import { Timelock__factory } from "@council/typechain";
+import { Timelock } from "@council/artifacts/Timelock";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-wait-time [OPTIONS]",
-    aliases: ["setWaitTime"],
-    describe: "Encode call data for Timelock.setWaitTime",
+export default command({
+  description: "Encode call data for Timelock.setWaitTime",
 
-    builder: (yargs) => {
-      return yargs.options({
-        t: {
-          alias: ["time", "wait-time", "waitTime"],
-          describe: "The new wait time (in seconds)",
-          type: "number",
-        },
-      });
+  options: {
+    t: {
+      alias: ["time", "wait-time"],
+      description: "The new wait time (in seconds)",
+      type: "number",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const time = await requiredNumber(args.time, {
-        name: "time",
-        message: "Enter new wait time (in seconds)",
-      });
+  handler: async ({ options, next }) => {
+    const time = await options.time({
+      prompt: "Enter new wait time (in seconds)",
+    });
 
-      signale.success(encodeSetWaitTime(time.toString()));
-    },
-  });
+    const encoded = encodeSetWaitTime(time.toString());
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetWaitTime(waitTime: string): string {
   return encodeFunctionData({
-    abi: Timelock__factory.abi,
+    abi: Timelock.abi,
     functionName: "setWaitTime",
-    args: [waitTime],
+    args: [BigInt(waitTime)],
   });
 }

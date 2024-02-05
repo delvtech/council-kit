@@ -1,39 +1,36 @@
-import { Authorizable__factory } from "@council/typechain";
+import { Authorizable } from "@council/artifacts/Authorizable";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-owner [OPTIONS]",
-    aliases: ["setOwner"],
-    describe: "Encode call data for Authorizable.setOwner",
+export default command({
+  description: "Encode call data for Authorizable.setOwner",
 
-    builder: (yargs) => {
-      return yargs.options({
-        a: {
-          alias: ["address", "who"],
-          describe: "The address to set as the owner",
-          type: "string",
-        },
-      });
+  options: {
+    a: {
+      alias: ["address", "who"],
+      description: "The address to set as the owner",
+      type: "string",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const address = await requiredString(args.address, {
-        name: "address",
-        message: "Enter owner address",
-      });
+  handler: async ({ options, next }) => {
+    const address = await options.address({
+      prompt: "Enter owner address",
+    });
 
-      signale.success(encodeSetOwner(address));
-    },
-  });
+    const encoded = encodeSetOwner(address);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetOwner(address: string): string {
   return encodeFunctionData({
-    abi: Authorizable__factory.abi,
+    abi: Authorizable.abi,
     functionName: "setOwner",
-    args: [address],
+    args: [address as `0x${string}`],
   });
 }

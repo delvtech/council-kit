@@ -9,8 +9,12 @@ export {
 export {
   EthersReadCouncil,
   type EthersReadCouncilOptions,
-} from "src/models/EthersReadCouncil";
+} from "src/models/council/EthersReadCouncil";
 export {
   EthersReadWriteCouncil,
   type EthersReadWriteCouncilOptions,
-} from "src/models/EthersReadWriteCouncil";
+} from "src/models/council/EthersReadWriteCouncil";
+export {
+  EthersReadWriteMockToken,
+  type EthersReadWriteMockTokenOptions,
+} from "src/models/token/EthersReadWriteMockToken";

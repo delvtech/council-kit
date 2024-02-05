@@ -1,4 +1,4 @@
-import { LockingVault } from "@council/artifacts/dist/LockingVault";
+import { LockingVault } from "@council/artifacts/LockingVault";
 import { CachedReadContract } from "@council/evm-client";
 import { ReadContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";

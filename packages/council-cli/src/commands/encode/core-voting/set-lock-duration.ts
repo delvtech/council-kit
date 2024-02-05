@@ -1,40 +1,35 @@
-import { CoreVoting__factory } from "@council/typechain";
+import { CoreVoting } from "@council/artifacts/CoreVoting";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-lock-duration [OPTIONS]",
-    aliases: ["setLockDuration"],
-    describe: "Encode call data for CoreVoting.setLockDuration",
+export default command({
+  description: "Encode call data for CoreVoting.setLockDuration",
 
-    builder: (yargs) => {
-      return yargs.options({
-        b: {
-          alias: ["blocks", "lock-duration", "lockDuration"],
-          describe:
-            "The number of blocks that must pass before a new proposal can be executed",
-          type: "number",
-        },
-      });
+  options: {
+    b: {
+      alias: ["blocks", "lock-duration"],
+      description:
+        "The number of blocks that must pass before a new proposal can be executed",
+      type: "number",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const blocks = await requiredNumber(args.blocks, {
-        name: "blocks",
-        message: "Enter new lock duration (in blocks)",
-      });
-
-      signale.success(encodeSetLockDuration(blocks));
-    },
-  });
+  handler: async ({ options, next }) => {
+    const blocks = await options.blocks({
+      prompt: "Enter new lock duration (in blocks)",
+    });
+    const encoded = encodeSetLockDuration(blocks);
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetLockDuration(duration: number): string {
   return encodeFunctionData({
-    abi: CoreVoting__factory.abi,
+    abi: CoreVoting.abi,
     functionName: "setLockDuration",
-    args: [duration],
+    args: [BigInt(duration)],
   });
 }

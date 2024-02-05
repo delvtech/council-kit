@@ -1,4 +1,4 @@
-import { CoreVoting } from "@council/artifacts/dist/CoreVoting";
+import { CoreVoting } from "@council/artifacts/CoreVoting";
 import { CachedReadContract } from "@council/evm-client";
 import {
   BALLOTS,

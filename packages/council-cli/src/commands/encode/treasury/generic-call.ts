@@ -1,48 +1,46 @@
-import { Treasury__factory } from "@council/typechain";
+import { Treasury } from "@council/artifacts/Treasury";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const genericCall = createCommandModule({
-  command: "generic-call [OPTIONS]",
-  aliases: ["genericCall"],
-  describe: "Encode call data for Treasury.genericCall",
+export default command({
+  description: "Encode call data for Treasury.genericCall",
 
-  builder: (yargs) => {
-    return yargs.options({
-      t: {
-        alias: ["target"],
-        describe: `The address of the target contract`,
-        type: "string",
-      },
-      d: {
-        alias: ["data", "calldata", "call-data", "callData"],
-        describe: "The encoded call data",
-        type: "string",
-      },
-    });
+  options: {
+    t: {
+      alias: ["target"],
+      description: `The address of the target contract`,
+      type: "string",
+      required: true,
+    },
+    d: {
+      alias: ["data", "calldata", "call-data", "callData"],
+      description: "The encoded call data",
+      type: "string",
+      required: true,
+    },
   },
 
-  handler: async (args) => {
-    const target = await requiredString(args.target, {
-      name: "target",
-      message: "Enter target address",
+  handler: async ({ options, next }) => {
+    const target = await options.target({
+      prompt: "Enter target address",
     });
 
-    const data = await requiredString(args.data, {
-      name: "data",
-      message: "Enter call data",
+    const data = await options.data({
+      prompt: "Enter call data",
     });
 
-    signale.success(encodeGenericCall(target, data));
+    const encoded = encodeGenericCall(target, data);
+
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
 export function encodeGenericCall(target: string, data: string): string {
   return encodeFunctionData({
-    abi: Treasury__factory.abi,
+    abi: Treasury.abi,
     functionName: "genericCall",
-    args: [target, data],
+    args: [target as `0x${string}`, data as `0x${string}`],
   });
 }

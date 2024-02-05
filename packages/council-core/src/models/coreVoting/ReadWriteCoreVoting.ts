@@ -175,4 +175,27 @@ export class ReadWriteCoreVoting extends ReadCoreVoting {
     this.contract.deleteRead("approvedVaults", vault.address);
     return hash;
   }
+
+  /**
+   * Change the amount of time (in blocks) that a proposal can still be voted on
+   * after it's been unlocked.
+   * @param extraVoteBlocks - The number of blocks after the proposal is
+   *  unlocked during which voting can continue.
+   * @returns The transaction hash.
+   */
+  async changeExtraVotingTime({
+    extraVoteBlocks,
+    options,
+  }: {
+    extraVoteBlocks: bigint;
+    options?: ContractWriteOptions;
+  }): Promise<`0x${string}`> {
+    const hash = await this.contract.write(
+      "changeExtraVotingTime",
+      extraVoteBlocks,
+      options,
+    );
+    this.contract.deleteRead("extraVoteTime");
+    return hash;
+  }
 }

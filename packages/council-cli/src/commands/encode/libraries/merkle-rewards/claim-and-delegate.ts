@@ -1,99 +1,91 @@
-import { MerkleRewards__factory } from "@council/typechain";
+import { MerkleRewards } from "@council/artifacts/MerkleRewards";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredArray } from "src/options/utils/requiredArray";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "claim-and-delegate [OPTIONS]",
-    aliases: ["claimAndDelegate"],
-    describe: "Encode call data for MerkleRewards.claimAndDelegate",
+export default command({
+  description: "Encode call data for MerkleRewards.claimAndDelegate",
 
-    builder: (yargs) => {
-      return yargs.options({
-        a: {
-          alias: ["amount"],
-          describe: "The amount of rewards to claim and delegate",
-          type: "string",
-        },
-        p: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-        d: {
-          alias: ["delegate"],
-          describe:
-            "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate",
-          type: "string",
-        },
-        t: {
-          alias: ["total-grant", "totalGrant"],
-          describe: "The total grant amount",
-          type: "string",
-        },
-        m: {
-          alias: ["proof", "merkle-proof", "merkleProof"],
-          describe: "The merkle proof for the claim",
-          type: "array",
-          string: true,
-        },
-        r: {
-          alias: ["recipient", "destination"],
-          describe: "The address which will be credited with funds",
-          type: "string",
-        },
-      });
+  options: {
+    a: {
+      alias: ["amount"],
+      description: "The amount of rewards to claim and delegate",
+      type: "string",
+      required: true,
     },
+    p: {
+      alias: ["decimals"],
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    d: {
+      alias: ["delegate"],
+      description:
+        "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate",
+      type: "string",
+      required: true,
+    },
+    t: {
+      alias: ["total-grant", "totalGrant"],
+      description: "The total grant amount",
+      type: "string",
+      required: true,
+    },
+    m: {
+      alias: ["proof", "merkle-proof", "merkleProof"],
+      description: "The merkle proof for the claim",
+      type: "array",
+      required: true,
+    },
+    r: {
+      alias: ["recipient", "destination"],
+      description: "The address which will be credited with funds",
+      type: "string",
+      required: true,
+    },
+  },
 
-    handler: async (args) => {
-      const amount = await requiredString(args.amount, {
-        name: "amount",
-        message: "Enter amount to claim",
-      });
+  handler: async ({ options, next }) => {
+    const amount = await options.amount({
+      prompt: "Enter amount to claim",
+    });
 
-      const totalGrant = await requiredString(args.totalGrant, {
-        name: "totalGrant",
-        message: "Enter total grant amount",
-      });
+    const totalGrant = await options.totalGrant({
+      prompt: "Enter total grant amount",
+    });
 
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
+    const decimals = await options.decimals();
 
-      const proof = await requiredArray(args.proof, {
-        name: "proof",
-        message: "Enter merkle proof",
-      });
+    const proof = await options.proof({
+      prompt: "Enter merkle proof",
+    });
 
-      const recipient = await requiredString(args.recipient, {
-        name: "recipient",
-        message: "Enter recipient address",
-      });
+    const recipient = await options.recipient({
+      prompt: "Enter recipient address",
+    });
 
-      const delegate = await requiredString(args.delegate, {
-        name: "delegate",
+    const delegate = await options.delegate({
+      prompt: {
         message: "Enter delegate address",
-      });
+        initial: recipient,
+      },
+    });
 
-      signale.success(
-        encodeClaimAndDelegate(
-          amount,
-          decimals,
-          delegate,
-          totalGrant,
-          proof,
-          recipient,
-        ),
-      );
-    },
-  });
+    const encoded = encodeClaimAndDelegate(
+      amount,
+      decimals,
+      delegate,
+      totalGrant,
+      proof,
+      recipient,
+    );
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeClaimAndDelegate(
   amount: string,
@@ -104,14 +96,14 @@ export function encodeClaimAndDelegate(
   recipient: string,
 ): string {
   return encodeFunctionData({
-    abi: MerkleRewards__factory.abi,
+    abi: MerkleRewards.abi,
     functionName: "claimAndDelegate",
     args: [
-      parseUnits(amount as `${number}`, decimals),
-      delegate,
-      parseUnits(totalGrant as `${number}`, decimals),
-      proof,
-      recipient,
+      parseUnits(amount, decimals),
+      delegate as `0x${string}`,
+      parseUnits(totalGrant, decimals),
+      proof as `0x${string}`[],
+      recipient as `0x${string}`,
     ],
   });
 }

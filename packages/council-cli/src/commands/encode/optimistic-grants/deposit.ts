@@ -1,50 +1,44 @@
-import { OptimisticGrants__factory } from "@council/typechain";
+import { OptimisticGrants } from "@council/artifacts/OptimisticGrants";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "deposit [OPTIONS]",
-  describe: "Encode call data for OptimisticGrants.deposit",
+export default command({
+  description: "Encode call data for OptimisticGrants.deposit",
 
-  builder: (yargs) => {
-    return yargs.options({
-      a: {
-        alias: ["amount"],
-        describe: "The amount of tokens to deposit",
-        type: "string",
-      },
-      d: {
-        alias: ["decimals"],
-        describe:
-          "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-        type: "number",
-      },
-    });
+  options: {
+    a: {
+      alias: ["amount"],
+      description: "The amount of tokens to deposit",
+      type: "string",
+      required: true,
+    },
+    d: {
+      alias: ["decimals"],
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
   },
 
-  handler: async (args) => {
-    const amount = await requiredString(args.amount, {
-      name: "amount",
-      message: "Enter amount to deposit",
+  handler: async ({ options, next }) => {
+    const amount = await options.amount({
+      prompt: "Enter amount to deposit",
     });
 
-    const decimals = await requiredNumber(args.decimals, {
-      name: "decimals",
-      message: "Enter decimal precision",
-      initial: 18,
-    });
+    const decimals = await options.decimals();
 
-    signale.success(encodeDeposit(amount, decimals));
+    const encoded = encodeDeposit(amount, decimals);
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
 export function encodeDeposit(amount: string, decimals: number): string {
   return encodeFunctionData({
-    abi: OptimisticGrants__factory.abi,
+    abi: OptimisticGrants.abi,
     functionName: "deposit",
-    args: [parseUnits(amount as `${number}`, decimals)],
+    args: [parseUnits(amount, decimals)],
   });
 }

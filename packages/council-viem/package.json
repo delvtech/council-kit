@@ -17,16 +17,16 @@
     "viem": ">=2"
   },
   "dependencies": {
-    "@council/evm-client": "*",
     "@council/evm-client-viem": "*",
     "@delvtech/council-core": "*"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
+    "@council/evm-client": "*",
     "@council/tsconfig": "*",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "viem": "^2.7.2"
+    "viem": "^2.7.3"
   },
   "publishConfig": {
     "access": "public"

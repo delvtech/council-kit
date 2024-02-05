@@ -1,40 +1,37 @@
 #!/usr/bin/env node
-import path from "node:path";
-import signale from "signale";
-import "src/utils/fetchPolyfill";
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
-import {
-  COMMAND_FILE_EXTENSIONS,
-  selectCommandHandler,
-} from "./utils/selectCommandHandler";
+import { help, run } from "clide-js";
+import { commandMenu } from "clide-plugin-command-menu";
 
-const commandDir = "./commands";
-
-const parser = yargs(hideBin(process.argv))
-  .commandDir(commandDir, {
-    extensions: COMMAND_FILE_EXTENSIONS,
-  })
-  .command(
-    "$0",
-    "Start a guided walkthrough",
-    () => {},
-    selectCommandHandler({
-      commandsPath: path.resolve(__dirname, commandDir),
-      message: `What would you like to do?`,
-      isRoot: true,
+run({
+  plugins: [
+    // Help generator with --help and -h options
+    help({
+      maxWidth: 100,
     }),
-  )
-  // turn off yargs error handling
-  .fail(false);
 
-async function main() {
-  try {
-    await parser.parse();
-  } catch (err) {
-    const help = await parser.getHelp();
-    signale.error(`${err}\n\n${help}`);
-  }
-}
+    // Interactive prompts for incomplete commands
+    commandMenu({
+      title: "Council CLI",
+      skip: (options) => !!options.help,
+    }),
+  ],
 
-main();
+  // Top level options applied to all commands
+  options: {
+    y: {
+      alias: ["yes"],
+      description: "Accept all default option values",
+      type: "boolean",
+      default: false,
+    },
+  },
+
+  // Apply default values to options after parsing if --yes or -y are passed
+  afterParse: async ({ parsedOptions, context }) => {
+    if (parsedOptions.yes) {
+      for (const [key, config] of Object.entries(context.options)) {
+        (parsedOptions[key] as any) = parsedOptions[key] ?? config.default;
+      }
+    }
+  },
+});

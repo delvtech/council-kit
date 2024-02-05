@@ -1,24 +1,12 @@
-import path from "node:path";
-import { createCommandModule } from "src/utils/createCommandModule";
+import { command } from "clide-js";
 import {
-  COMMAND_FILE_EXTENSIONS,
-  selectCommandHandler,
-} from "src/utils/selectCommandHandler";
+  getWriteOptions,
+  writeOptions,
+} from "../reusable-options/write-options.js";
 
-const commandDir = "./deploy";
-
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "deploy [contract]",
-  describe: "Deploy a contract or combination of contracts",
-
-  builder: (yargs) => {
-    return yargs.commandDir(commandDir, {
-      extensions: COMMAND_FILE_EXTENSIONS,
-    });
-  },
-
-  handler: selectCommandHandler({
-    commandsPath: path.resolve(__dirname, commandDir),
-    message: "What do you want to deploy?",
-  }),
+export default command({
+  description: "Deploy a contract or combination of contracts",
+  requiresSubcommand: true,
+  options: writeOptions,
+  handler: async ({ options, next }) => next(await getWriteOptions(options)),
 });

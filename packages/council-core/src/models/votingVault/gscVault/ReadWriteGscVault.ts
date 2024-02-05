@@ -21,6 +21,27 @@ export class ReadWriteGSCVault extends ReadGscVault {
   }
 
   /**
+   * Set the idle duration for a member in this GSC vault. The idle duration is
+   * the amount of time a member must be a member before they can vote.
+   * @param duration - The new idle duration in seconds.
+   */
+  async setIdleDuration({
+    duration,
+    options,
+  }: {
+    duration: bigint;
+    options?: ContractWriteOptions;
+  }): Promise<`0x${string}`> {
+    const hash = await this.gscVaultContract.write(
+      "setIdleDuration",
+      duration,
+      options,
+    );
+    this.contract.clearCache();
+    return hash;
+  }
+
+  /**
    * Become a member of this GSC vault.
    * @param vaults - The addresses of the approved vaults the joining member has
    *   voting power in. This is used to prove the joining member meets the

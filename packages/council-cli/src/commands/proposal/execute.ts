@@ -1,53 +1,60 @@
-import { CouncilContext, Proposal } from "@council/sdk";
-import { getDefaultProvider, Wallet } from "ethers";
+import { ViemReadWriteCouncil } from "@delvtech/council-viem";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { createCommandModule } from "src/utils/createCommandModule";
+import { createPublicClient, createWalletClient, http } from "viem";
+import {
+  getWriteOptions,
+  writeOptions,
+} from "../../reusable-options/write-options.js";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "execute [OPTIONS]",
-  describe: "Execute a proposal",
+export default command({
+  description: "Execute a proposal",
 
-  builder: (yargs) => {
-    return yargs.options({
-      a: {
-        alias: ["address"],
-        describe: "The voting contract address",
-        type: "string",
-      },
-      p: {
-        alias: ["id"],
-        describe: "The id of the proposal to execute",
-        type: "number",
-      },
-      r: rpcUrlOption,
-      w: walletKeyOption,
-    });
+  options: {
+    a: {
+      alias: ["address"],
+      description: "The voting contract address",
+      type: "string",
+      required: true,
+    },
+    p: {
+      alias: ["id"],
+      description: "The id of the proposal to execute",
+      type: "number",
+      required: true,
+    },
+    ...writeOptions,
   },
 
-  handler: async (args) => {
-    const address = await requiredString(args.address, {
-      name: "address",
-      message: "Enter voting contract address",
+  handler: async ({ options, end, next }) => {
+    const { account, chain, rpcUrl } = await getWriteOptions(options);
+
+    const address = await options.address({
+      prompt: "Enter voting contract address",
     });
 
-    const id = await requiredNumber(args.id, {
-      name: "id",
-      message: "Enter proposal id",
+    const id = await options.id({
+      prompt: "Enter proposal id",
     });
 
-    const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-    const walletKey = await requiredWalletKey(args.walletKey);
+    const transport = http(rpcUrl);
+    const publicClient = createPublicClient({ transport, chain });
+    const walletClient = createWalletClient({ transport, chain, account });
 
-    const provider = getDefaultProvider(rpcUrl);
-    const context = new CouncilContext(provider);
-    const proposal = new Proposal(id, address, context);
+    const council = new ViemReadWriteCouncil({ publicClient, walletClient });
+    const coreVoting = council.coreVoting({
+      address: address as `0x${string}`,
+    });
+    const proposal = await coreVoting.getProposal({ id: BigInt(id) });
 
-    const signer = new Wallet(walletKey, provider);
+    if (!proposal) {
+      signale.error(`Proposal ${id} not found`);
+      return end();
+    }
 
-    signale.success(await proposal.execute(signer));
+    const hash = await proposal.execute();
+
+    signale.success(hash);
+    next(hash);
   },
 });

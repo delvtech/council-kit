@@ -1,11 +1,7 @@
-import { config } from "src/config";
-import { createCommandModule } from "src/utils/createCommandModule";
+import { command } from "clide-js";
+import { config } from "../../config.js";
 
-export const { command, describe, handler } = createCommandModule({
-  command: "reset",
-  describe: "Reset settings to default",
-
-  handler: async () => {
-    config.reset();
-  },
+export default command({
+  description: "Reset settings to default",
+  handler: () => config.reset(),
 });

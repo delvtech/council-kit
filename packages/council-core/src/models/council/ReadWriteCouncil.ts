@@ -23,7 +23,7 @@ export class ReadWriteCouncil extends ReadCouncil {
     vaults,
   }: {
     address: `0x${string}`;
-    vaults: (ReadVotingVault | `0x${string}`)[];
+    vaults?: (ReadVotingVault | `0x${string}`)[];
   }): ReadWriteCoreVoting {
     return new ReadWriteCoreVoting({
       address,

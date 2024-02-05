@@ -1,39 +1,34 @@
-import { GSCVault__factory } from "@council/typechain";
+import { GSCVault } from "@council/artifacts/GSCVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-core-voting [OPTIONS]",
-    aliases: ["setCoreVoting"],
-    describe: "Encode call data for GSCVault.setCoreVoting",
+export default command({
+  description: "Encode call data for GSCVault.setCoreVoting",
 
-    builder: (yargs) => {
-      return yargs.options({
-        a: {
-          alias: ["address", "new-voting", "newVoting"],
-          describe: "The new core voting contract address",
-          type: "string",
-        },
-      });
+  options: {
+    a: {
+      alias: ["address", "new-voting"],
+      description: "The new core voting contract address",
+      type: "string",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const address = await requiredString(args.address, {
-        name: "address",
-        message: "Enter core voting address",
-      });
-
-      signale.success(encodeSetCoreVoting(address));
-    },
-  });
+  handler: async ({ options, next }) => {
+    const address = await options.address({
+      prompt: "Enter core voting address",
+    });
+    const encoded = encodeSetCoreVoting(address);
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetCoreVoting(address: string): string {
   return encodeFunctionData({
-    abi: GSCVault__factory.abi,
+    abi: GSCVault.abi,
     functionName: "setCoreVoting",
-    args: [address],
+    args: [address as `0x${string}`],
   });
 }

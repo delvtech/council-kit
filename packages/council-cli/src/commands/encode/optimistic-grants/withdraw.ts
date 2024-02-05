@@ -1,53 +1,47 @@
-import { OptimisticGrants__factory } from "@council/typechain";
+import { OptimisticGrants } from "@council/artifacts/OptimisticGrants";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "withdraw [OPTIONS]",
-  describe: "Encode call data for OptimisticGrants.withdraw",
+export default command({
+  description: "Encode call data for OptimisticGrants.withdraw",
 
-  builder: (yargs) => {
-    return yargs.options({
-      a: {
-        alias: ["amount"],
-        describe: "The amount of tokens to withdraw",
-        type: "string",
-      },
-      d: {
-        alias: ["decimals"],
-        describe:
-          "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-        type: "number",
-      },
-      r: {
-        alias: ["recipient"],
-        describe: "The address to withdraw to",
-        type: "string",
-      },
-    });
+  options: {
+    a: {
+      alias: ["amount"],
+      description: "The amount of tokens to withdraw",
+      type: "string",
+      required: true,
+    },
+    d: {
+      alias: ["decimals"],
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    r: {
+      alias: ["recipient"],
+      description: "The address to withdraw to",
+      type: "string",
+      required: true,
+    },
   },
 
-  handler: async (args) => {
-    const amount = await requiredString(args.amount, {
-      name: "amount",
-      message: "Enter amount to withdraw",
+  handler: async ({ options, next }) => {
+    const amount = await options.amount({
+      prompt: "Enter amount to withdraw",
     });
 
-    const decimals = await requiredNumber(args.decimals, {
-      name: "decimals",
-      message: "Enter decimal precision",
-      initial: 18,
+    const decimals = await options.decimals();
+
+    const recipient = await options.recipient({
+      prompt: "Enter recipient address",
     });
 
-    const recipient = await requiredString(args.recipient, {
-      name: "recipient",
-      message: "Enter recipient address",
-    });
-
-    signale.success(encodeDeposit(amount, decimals, recipient));
+    const encoded = encodeDeposit(amount, decimals, recipient);
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
@@ -57,8 +51,8 @@ export function encodeDeposit(
   recipient: string,
 ): string {
   return encodeFunctionData({
-    abi: OptimisticGrants__factory.abi,
+    abi: OptimisticGrants.abi,
     functionName: "withdraw",
-    args: [parseUnits(amount as `${number}`, decimals), recipient],
+    args: [parseUnits(amount, decimals), recipient as `0x${string}`],
   });
 }

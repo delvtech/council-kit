@@ -1,4 +1,4 @@
-import { IVotingVault } from "@council/artifacts/dist/IVotingVault";
+import { IVotingVault } from "@council/artifacts/IVotingVault";
 import { CachedReadContract } from "@council/evm-client";
 import { Model, ReadContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";

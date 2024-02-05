@@ -1,4 +1,4 @@
-import { JSONStore } from "src/utils/JSONStore";
+import { JsonStore } from "../../../utils/config/JsonStore.js";
 
 export const DEFAULT_DEPLOYMENTS_DIR = "./deployments";
 
@@ -21,8 +21,8 @@ export function getDeploymentStore(
   name: string,
   chainId: number,
   deploymentsDir = DEFAULT_DEPLOYMENTS_DIR,
-): JSONStore<DeploymentInfo> {
-  return new JSONStore<DeploymentInfo>({
+): JsonStore<DeploymentInfo> {
+  return new JsonStore<DeploymentInfo>({
     path: deploymentsDir,
     name: `${name}-${chainId}`,
     defaults: {

@@ -1,40 +1,35 @@
-import { CoreVoting__factory } from "@council/typechain";
+import { CoreVoting } from "@council/artifacts/CoreVoting";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "change-extra-voting-time [OPTIONS]",
-    aliases: ["changeExtraVotingTime"],
-    describe: "Encode call data for CoreVoting.changeExtraVotingTime",
+export default command({
+  description: "Encode call data for CoreVoting.changeExtraVotingTime",
 
-    builder: (yargs) => {
-      return yargs.options({
-        b: {
-          alias: ["blocks", "extra-vote-time", "extraVoteTime"],
-          describe:
-            "The number of blocks for which a proposal can still be voted on after it's unlocked",
-          type: "number",
-        },
-      });
+  options: {
+    b: {
+      alias: ["blocks", "extra-vote-time", "extraVoteTime"],
+      description:
+        "The number of blocks for which a proposal can still be voted on after it's unlocked",
+      type: "number",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const blocks = await requiredNumber(args.blocks, {
-        name: "blocks",
-        message: "Enter extra voting time (in blocks)",
-      });
-
-      signale.success(encodeChangeExtraVotingTime(blocks));
-    },
-  });
+  handler: async ({ options, next }) => {
+    const blocks = await options.blocks({
+      prompt: "Enter extra voting time (in blocks)",
+    });
+    const encoded = encodeChangeExtraVotingTime(blocks);
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeChangeExtraVotingTime(duration: number): string {
   return encodeFunctionData({
-    abi: CoreVoting__factory.abi,
+    abi: CoreVoting.abi,
     functionName: "changeExtraVotingTime",
-    args: [duration],
+    args: [BigInt(duration)],
   });
 }

@@ -1,4 +1,4 @@
-import { CoreVoting } from "@council/artifacts/dist/CoreVoting";
+import { CoreVoting } from "@council/artifacts/CoreVoting";
 import { BALLOTS } from "src/models/coreVoting/constants";
 
 export type CoreVotingAbi = typeof CoreVoting.abi;

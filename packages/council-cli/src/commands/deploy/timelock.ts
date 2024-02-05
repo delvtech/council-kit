@@ -1,85 +1,69 @@
-import { Timelock__factory } from "@council/typechain";
+import { Timelock } from "@council/artifacts/Timelock";
+import { command } from "clide-js";
 import signale from "signale";
-import { chainOption, requiredChain } from "src/options/chain";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { WriteOptions } from "src/reusable-options/write-options.js";
+import { PrivateKeyAccount } from "viem";
 import { Chain } from "viem/chains";
+import {
+  DeployedContract,
+  deployContract,
+} from "../../utils/deployContract.js";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "timelock [OPTIONS]",
-    aliases: ["Timelock"],
-    describe: "Deploy a Timelock contract",
+export default command({
+  description: "Deploy a Timelock contract",
 
-    builder: (yargs) => {
-      return yargs.options({
-        t: {
-          alias: ["time", "wait-time", "waitTime"],
-          describe:
-            "The time (in seconds) to wait until a proposal can be executed",
-          type: "number",
-        },
-        o: {
-          alias: ["owner"],
-          describe:
-            "The contract owner's address (e.g., a CoreVoting contract)",
-          type: "string",
-        },
-        g: {
-          alias: ["gsc"],
-          describe: "The address of the GSC contract",
-          type: "string",
-        },
-        c: chainOption,
-        r: rpcUrlOption,
-        w: walletKeyOption,
-      });
+  options: {
+    t: {
+      alias: ["time", "wait-time", "waitTime"],
+      description:
+        "The time (in seconds) to wait until a proposal can be executed",
+      type: "number",
+      required: true,
     },
-
-    handler: async (args) => {
-      const time = await requiredNumber(args.time, {
-        name: "time",
-        message: "Enter wait time (in seconds)",
-      });
-
-      const owner = await requiredString(args.owner, {
-        name: "owner",
-        message: "Enter owner address (e.g., a CoreVoting contract)",
-      });
-
-      const gsc = await requiredString(args.gsc, {
-        name: "gsc",
-        message: "Enter GSC address",
-      });
-
-      const chain = await requiredChain(args.chain);
-      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-      const walletKey = await requiredWalletKey(args.walletKey);
-      const account = privateKeyToAccount(walletKey as Hex);
-
-      signale.pending("Deploying Timelock...");
-
-      const { address } = await deployTimelock({
-        waitTime: time,
-        owner,
-        gsc,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (txHash) => {
-          signale.pending(`Timelock deployment tx submitted: ${txHash}`);
-        },
-      });
-
-      signale.success(`Timelock deployed @ ${address}`);
+    o: {
+      alias: ["owner"],
+      description: "The contract owner's address (e.g., a CoreVoting contract)",
+      type: "string",
     },
-  });
+    g: {
+      alias: ["gsc"],
+      description: "The address of the GSC contract",
+      type: "string",
+      required: true,
+    },
+  },
+
+  handler: async ({ data, options, next }) => {
+    const { account, chain, rpcUrl } = data as WriteOptions;
+
+    const time = await options.time({
+      prompt: "Enter wait time (in seconds)",
+    });
+
+    const owner = (await options.owner()) || account.address;
+
+    const gsc = await options.gsc({
+      prompt: "Enter GSC address",
+    });
+
+    signale.pending("Deploying Timelock...");
+
+    const deployData = await deployTimelock({
+      waitTime: time,
+      owner,
+      gsc,
+      account,
+      rpcUrl,
+      chain,
+      onSubmitted: (txHash) => {
+        signale.pending(`Timelock deployment tx submitted: ${txHash}`);
+      },
+    });
+
+    signale.success(`Timelock deployed @ ${deployData.address}`);
+    next(deployData);
+  },
+});
 
 export interface DeployTimelockOptions {
   waitTime: number;
@@ -101,9 +85,9 @@ export async function deployTimelock({
   onSubmitted,
 }: DeployTimelockOptions): Promise<DeployedContract> {
   return await deployContract({
-    abi: Timelock__factory.abi,
-    args: [waitTime, owner, gsc],
-    bytecode: Timelock__factory.bytecode,
+    abi: Timelock.abi,
+    args: [BigInt(waitTime), owner as `0x${string}`, gsc as `0x${string}`],
+    bytecode: Timelock.bytecode,
     account,
     rpcUrl,
     chain,

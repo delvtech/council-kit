@@ -1,129 +1,135 @@
-import { Ballot, CouncilContext, VotingContract } from "@council/sdk";
-import { getDefaultProvider, Wallet } from "ethers";
+import { Ballot } from "@delvtech/council-core";
+import { ViemReadWriteCouncil } from "@delvtech/council-viem";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredArray } from "src/options/utils/requiredArray";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredOption } from "src/options/utils/requiredOption";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { DAY_IN_BLOCKS } from "src/utils/constants";
-import { createCommandModule } from "src/utils/createCommandModule";
+import { createPublicClient, createWalletClient, http } from "viem";
+import {
+  getWriteOptions,
+  writeOptions,
+} from "../../reusable-options/write-options.js";
+import { DAY_IN_BLOCKS } from "../../utils/constants.js";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "create [OPTIONS]",
-  describe: "Create a proposal",
+export default command({
+  description: "Create a proposal",
 
-  builder: (yargs) => {
-    return yargs.options({
-      a: {
-        alias: ["address"],
-        describe: "The voting contract address",
-        type: "string",
-      },
-      v: {
-        alias: ["vaults"],
-        describe:
-          "The addresses of the approved voting vaults to draw voting power from. This will be used to verify that the signer has enough voting power to create a proposal.",
-        type: "array",
-        string: true,
-      },
-      t: {
-        alias: ["targets"],
-        describe: "A list of addresses to call.",
-        type: "array",
-        string: true,
-      },
-      d: {
-        alias: ["calldatas"],
-        describe: "Encoded call data for each target.",
-        type: "array",
-        string: true,
-      },
-      l: {
-        alias: ["last-call"],
-        describe:
-          "The block after which the proposal can no longer be executed.",
-        type: "number",
-      },
-      b: {
-        alias: ["ballot"],
-        describe: "The initial vote from the signer's account",
-        type: "string",
-        choices: ["yes", "no", "maybe"],
-        default: "yes",
-      },
-      w: walletKeyOption,
-      r: rpcUrlOption,
-    });
+  options: {
+    a: {
+      alias: ["address"],
+      description: "The voting contract address",
+      type: "string",
+      required: true,
+    },
+    v: {
+      alias: ["vaults"],
+      description:
+        "The addresses of the approved voting vaults to draw voting power from. This will be used to verify that the signer has enough voting power to create a proposal.",
+      type: "array",
+      string: true,
+      required: true,
+    },
+    t: {
+      alias: ["targets"],
+      description: "A list of addresses to call.",
+      type: "array",
+      string: true,
+      required: true,
+    },
+    d: {
+      alias: ["calldatas"],
+      description: "Encoded call data for each target.",
+      type: "array",
+      string: true,
+      required: true,
+    },
+    l: {
+      alias: ["last-call"],
+      description:
+        "The block after which the proposal can no longer be executed.",
+      type: "number",
+      required: true,
+    },
+    b: {
+      alias: ["ballot"],
+      description:
+        "The initial vote from the signer's account (yes, no, maybe).",
+      type: "string",
+      default: "yes",
+    },
+    ...writeOptions,
   },
 
-  handler: async (args) => {
-    const address = await requiredString(args.address, {
-      name: "address",
-      message: "Enter voting contract address",
+  handler: async ({ options, next }) => {
+    const { account, chain, rpcUrl } = await getWriteOptions(options);
+
+    const address = await options.address({
+      prompt: "Enter voting contract address",
     });
 
-    const vaults = await requiredArray(args.vaults, {
-      name: "targets",
-      message: "Enter voting vault addresses",
+    const vaults = await options.vaults({
+      prompt: "Enter voting vault addresses",
     });
 
-    const targets = await requiredArray(args.targets, {
-      name: "targets",
-      message: "Enter target addresses",
+    const targets = await options.targets({
+      prompt: "Enter target addresses",
     });
 
-    const calldatas = await requiredArray(args.calldatas, {
-      name: "calldatas",
-      message: "Enter call data for each target",
+    const calldatas = await options.calldatas({
+      prompt: "Enter call data for each target",
     });
 
-    const ballot = await requiredOption(args.ballot, {
-      name: "ballot",
-      message: "Select initial ballot",
-      type: "select",
-      choices: [
-        {
-          title: "Yes",
-          value: "yes",
-        },
-        {
-          title: "No",
-          value: "no",
-        },
-        {
-          title: "Abstain",
-          value: "maybe",
-        },
-      ],
+    const ballot = await options.ballot({
+      prompt: {
+        message: "Select initial ballot",
+        type: "select",
+        choices: [
+          {
+            title: "Yes",
+            value: "yes",
+          },
+          {
+            title: "No",
+            value: "no",
+          },
+          {
+            title: "Abstain",
+            value: "maybe",
+          },
+        ],
+      },
+      validate: (value) => {
+        if (value === "yes" || value === "no" || value === "maybe") {
+          return true;
+        }
+        return false;
+      },
     });
 
-    const walletKey = await requiredWalletKey(args.walletKey);
-    const rpcURL = await requiredRpcUrl(args.rpcUrl);
+    const transport = http(rpcUrl);
+    const publicClient = createPublicClient({ transport, chain });
+    const walletClient = createWalletClient({ transport, chain, account });
+    const currentBlock = await publicClient.getBlockNumber();
 
-    const provider = getDefaultProvider(rpcURL);
-    const context = new CouncilContext(provider);
-    const votingContract = new VotingContract(address, [], context);
-
-    const signer = new Wallet(walletKey, provider);
-    const currentBlock = await provider.getBlockNumber();
-
-    const lastCall = await requiredNumber(args.lastCall, {
-      name: "last-call",
-      message: "Enter the last call block",
-      initial: currentBlock + DAY_IN_BLOCKS * 90,
+    const lastCall = await options.lastCall({
+      prompt: {
+        message: "Enter the last call block",
+        initial: Number(currentBlock + DAY_IN_BLOCKS * 90n),
+      },
     });
 
-    signale.success(
-      await votingContract.createProposal(
-        signer,
-        vaults,
-        targets,
-        calldatas,
-        lastCall,
-        ballot as Ballot,
-      ),
-    );
+    const council = new ViemReadWriteCouncil({ publicClient, walletClient });
+    const coreVoting = council.coreVoting({
+      address: address as `0x${string}`,
+    });
+
+    const hash = await coreVoting.createProposal({
+      ballot: ballot as Ballot,
+      calldatas: calldatas as `0x${string}`[],
+      lastCall: BigInt(lastCall),
+      targets: targets as `0x${string}`[],
+      vaults: vaults as `0x${string}`[],
+    });
+
+    signale.success(hash);
+    next(hash);
   },
 });

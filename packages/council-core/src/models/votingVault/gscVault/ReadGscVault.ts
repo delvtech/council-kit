@@ -1,4 +1,4 @@
-import { GSCVault } from "@council/artifacts/dist/GSCVault";
+import { GSCVault } from "@council/artifacts/GSCVault";
 import { CachedReadContract } from "@council/evm-client";
 import { ReadContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";

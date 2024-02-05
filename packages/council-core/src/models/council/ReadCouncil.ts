@@ -27,7 +27,7 @@ export class ReadCouncil extends Model {
     vaults,
   }: {
     address: `0x${string}`;
-    vaults: (ReadVotingVault | `0x${string}`)[];
+    vaults?: (ReadVotingVault | `0x${string}`)[];
   }): ReadCoreVoting {
     return new ReadCoreVoting({
       address,

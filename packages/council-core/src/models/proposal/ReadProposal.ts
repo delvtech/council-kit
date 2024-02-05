@@ -1,4 +1,4 @@
-import { CoreVoting } from "@council/artifacts/dist/CoreVoting";
+import { CoreVoting } from "@council/artifacts/CoreVoting";
 import { ContractReadOptions, Event, Transaction } from "@council/evm-client";
 import { ReadCoreVoting } from "src/models/coreVoting/ReadCoreVoting";
 import { Actions, Ballot, VoteResults } from "src/models/coreVoting/types";
