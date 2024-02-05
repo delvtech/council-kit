@@ -1,9 +1,11 @@
 import { CouncilContext, GSCVault } from "@council/sdk";
-import { addresses } from "src/addresses/addressList.json";
+import { getElementAddress } from "src/addresses/elementAddresses";
 import { provider } from "src/provider";
 
 // wrap the script in an async function so we can await promises
 export async function getGSCMembers(): Promise<void> {
+  const addresses = await getElementAddress();
+
   // create a CouncilContext instance
   const context = new CouncilContext(provider);
 

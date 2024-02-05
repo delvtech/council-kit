@@ -1,10 +1,8 @@
-const base = require("@council/prettier-config");
-
 module.exports = {
-  ...base,
+  ...require("@council/prettier-config"),
   plugins: [
-    ...base.plugins,
     require("prettier-plugin-tailwindcss"),
+    require("prettier-plugin-organize-imports"),
   ],
-  tailwindConfig: "./tailwind.config.cjs",
+  tailwindConfig: "./tailwind.config.js",
 };

@@ -6,7 +6,7 @@ import {
 } from "@council/sdk";
 import { CoreVoting__factory } from "@council/typechain";
 import { BigNumber, utils, Wallet } from "ethers";
-import { addresses } from "src/addresses/addressList.json";
+import { getElementAddress } from "src/addresses/elementAddresses";
 import { provider } from "src/provider";
 
 // approx 90 days in blocks assuming 12 seconds a block
@@ -14,6 +14,8 @@ const NINETY_DAYS_IN_BLOCKS = (90 * 24 * 60 * 60) / 12;
 
 // wrap the script in an async function so we can await promises
 export async function createProposal(): Promise<void> {
+  const addresses = await getElementAddress();
+
   // create a CouncilContext instance
   const context = new CouncilContext(provider);
 
