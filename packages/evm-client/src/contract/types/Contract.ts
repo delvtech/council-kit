@@ -21,7 +21,7 @@ export interface ReadContract<TAbi extends Abi = Abi> {
   /**
    * Reads a specified function from the contract.
    */
-  read<TFunctionName extends FunctionName<TAbi>>(
+  read<TFunctionName extends FunctionName<TAbi, "pure" | "view">>(
     ...args: ContractReadArgs<TAbi, TFunctionName>
   ): Promise<FunctionReturn<TAbi, TFunctionName>>;
 

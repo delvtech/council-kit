@@ -115,6 +115,9 @@ export class ReadVestingVault extends ReadVotingVault {
 
     if (typeof blockNumber !== "bigint") {
       const block = await getBlock(this.network, blockNumber);
+      if (block.blockNumber === null) {
+        return 0n;
+      }
       blockNumber = block.blockNumber;
     }
 
@@ -308,6 +311,9 @@ export class ReadVestingVault extends ReadVotingVault {
 
     if (typeof blockNumber !== "bigint") {
       const block = await getBlock(this.network, blockNumber);
+      if (block.blockNumber === null) {
+        return 0n;
+      }
       blockNumber = block.blockNumber;
     }
 

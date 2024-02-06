@@ -2,7 +2,7 @@ import {
   CachedReadWriteContract,
   ContractWriteOptions,
 } from "@council/evm-client";
-import { CachedReadWriteContractFactory } from "src/contract/factory";
+import { ReadWriteContractFactory } from "src/contract/factory";
 import { ReadAirdrop } from "src/models/airdrop/ReadAirdrop";
 import { AirdropAbi } from "src/models/airdrop/types";
 import { ReadWriteContractModelOptions } from "src/models/Model";
@@ -19,7 +19,7 @@ interface ReadWriteAirdropOptions extends ReadWriteContractModelOptions {}
  */
 export class ReadWriteAirdrop extends ReadAirdrop {
   declare contract: CachedReadWriteContract<AirdropAbi>;
-  declare contractFactory: CachedReadWriteContractFactory;
+  declare contractFactory: ReadWriteContractFactory;
 
   constructor(options: ReadWriteAirdropOptions) {
     super(options);

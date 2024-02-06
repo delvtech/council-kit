@@ -10,12 +10,12 @@ export interface CreateViemReadContractFactoryOptions {
 }
 
 export function createViemReadContractFactory(
-  options: CreateViemReadContractFactoryOptions,
+  factoryOptions: CreateViemReadContractFactoryOptions,
 ): CachedReadContractFactory {
-  return (factoryOptions) => {
+  return (instanceOptions) => {
     return createViemCachedReadContract({
-      ...options,
       ...factoryOptions,
+      ...instanceOptions,
     });
   };
 }

@@ -2,7 +2,7 @@ import {
   CachedReadWriteContract,
   ContractWriteOptions,
 } from "@council/evm-client";
-import { CachedReadWriteContractFactory } from "src/contract/factory";
+import { ReadWriteContractFactory } from "src/contract/factory";
 import { ReadWriteContractModelOptions } from "src/models/Model";
 import { ReadWriteToken } from "src/models/token/ReadWriteToken";
 import { ReadVestingVault } from "src/models/votingVault/vestingVault/ReadVestingVault";
@@ -12,7 +12,7 @@ interface ReadWriteVestingVaultOptions extends ReadWriteContractModelOptions {}
 
 export class ReadWriteVestingVault extends ReadVestingVault {
   declare vestingVaultContract: CachedReadWriteContract<VestingVaultAbi>;
-  declare contractFactory: CachedReadWriteContractFactory;
+  declare contractFactory: ReadWriteContractFactory;
 
   constructor(options: ReadWriteVestingVaultOptions) {
     super(options);

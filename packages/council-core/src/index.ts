@@ -1,7 +1,7 @@
 export type {
-  CachedContractFactoryOptions,
-  CachedReadContractFactory,
-  CachedReadWriteContractFactory,
+  ReadContractFactoryOptions as CachedContractFactoryOptions,
+  ReadContractFactory as CachedReadContractFactory,
+  ReadWriteContractFactory as CachedReadWriteContractFactory,
 } from "src/contract/factory";
 export { BlockNotFoundError } from "src/errors/BlockNotFound";
 export {

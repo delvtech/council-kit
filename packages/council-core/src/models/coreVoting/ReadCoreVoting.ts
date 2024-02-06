@@ -181,7 +181,7 @@ export class ReadCoreVoting extends Model {
     voter?: ReadVoter | `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
-  }): Promise<ReadVote[]> {
+  } = {}): Promise<ReadVote[]> {
     const voteEvents = await this.contract.getEvents("Voted", {
       filter: {
         voter: typeof voter === "string" || !voter ? voter : voter.address,

@@ -1,5 +1,5 @@
 import { Network } from "@council/evm-client";
-import { CachedReadContractFactory } from "src/contract/factory";
+import { ReadContractFactory } from "src/contract/factory";
 import { ReadAirdrop } from "src/models/airdrop/ReadAirdrop";
 import { ReadCoreVoting } from "src/models/coreVoting/ReadCoreVoting";
 import { Model, ReadModelOptions } from "src/models/Model";
@@ -13,7 +13,7 @@ import { ReadVestingVault } from "src/models/votingVault/vestingVault/ReadVestin
 export interface ReadCouncilOptions extends ReadModelOptions {}
 
 export class ReadCouncil extends Model {
-  protected _contractFactory: CachedReadContractFactory;
+  protected _contractFactory: ReadContractFactory;
   protected _network: Network;
 
   constructor({ contractFactory, network, name }: ReadCouncilOptions) {

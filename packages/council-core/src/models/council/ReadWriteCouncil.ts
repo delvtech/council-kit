@@ -1,4 +1,4 @@
-import { CachedReadWriteContractFactory } from "src/contract/factory";
+import { ReadWriteContractFactory } from "src/contract/factory";
 import { ReadWriteAirdrop } from "src/models/airdrop/ReadWriteAirdrop";
 import { ReadWriteCoreVoting } from "src/models/coreVoting/ReadWriteCoreVoting";
 import { ReadCouncil } from "src/models/council/ReadCouncil";
@@ -12,7 +12,7 @@ import { ReadWriteVestingVault } from "src/models/votingVault/vestingVault/ReadW
 export interface ReadWriteCouncilOptions extends ReadWriteModelOptions {}
 
 export class ReadWriteCouncil extends ReadCouncil {
-  protected declare _contractFactory: CachedReadWriteContractFactory;
+  protected declare _contractFactory: ReadWriteContractFactory;
 
   constructor(options: ReadWriteCouncilOptions) {
     super(options);

@@ -18,7 +18,6 @@
   },
   "devDependencies": {
     "@council/eslint-config": "*",
-    "@council/prettier-config": "*",
     "@council/tsconfig": "*",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",

@@ -7,7 +7,7 @@ export function createViemNetwork(publicClient: PublicClient): Network {
       const block = await publicClient.getBlock(args);
 
       if (!block) {
-        return;
+        return undefined;
       }
 
       return { blockNumber: block.number, timestamp: block.timestamp };

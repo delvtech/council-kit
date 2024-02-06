@@ -2,7 +2,7 @@ import {
   CachedReadWriteContract,
   ContractWriteOptions,
 } from "@council/evm-client";
-import { CachedReadWriteContractFactory } from "src/contract/factory";
+import { ReadWriteContractFactory } from "src/contract/factory";
 import { ReadWriteContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";
 import { ReadGscVault } from "src/models/votingVault/gscVault/ReadGscVault";
@@ -14,7 +14,7 @@ export interface ReadWriteGSCVaultOptions
 
 export class ReadWriteGSCVault extends ReadGscVault {
   declare gscVaultContract: CachedReadWriteContract<GscVaultAbi>;
-  declare contractFactory: CachedReadWriteContractFactory;
+  declare contractFactory: ReadWriteContractFactory;
 
   constructor(options: ReadWriteGSCVaultOptions) {
     super(options);

@@ -12,10 +12,6 @@ export type FunctionName<
   { stateMutability: TAbiStateMutability }
 >["name"];
 
-type Union1 = "foo" | "bar" | "baz";
-type Union2 = "qux" | "quux" | "corge";
-type Combined = Union1 | Union2;
-
 /**
  * Get a user-friendly argument type for an abi function, which is determined by
  * it's inputs:

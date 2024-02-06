@@ -1,5 +1,6 @@
 export interface Block {
-  blockNumber: bigint;
+  /** `null` if pending */
+  blockNumber: bigint | null;
   timestamp: bigint;
 }
 

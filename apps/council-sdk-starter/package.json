@@ -28,7 +28,6 @@
     "viem": "2.7.3"
   },
   "devDependencies": {
-    "@council/prettier-config": "*",
     "@council/tsconfig": "*",
     "dotenv": "^16.0.3",
     "ts-node": "^10.9.1",

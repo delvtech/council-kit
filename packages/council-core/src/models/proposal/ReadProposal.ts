@@ -325,7 +325,13 @@ export class ReadProposal extends Model {
       return false;
     }
 
-    if (block.blockNumber < unlockBlock || block.blockNumber > lastCallBlock) {
+    const blockNumber = block.blockNumber;
+
+    if (
+      blockNumber === null ||
+      blockNumber < unlockBlock ||
+      blockNumber > lastCallBlock
+    ) {
       return false;
     }
 

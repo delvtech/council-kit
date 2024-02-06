@@ -91,7 +91,7 @@ export class ReadLockingVault extends ReadVotingVault {
   }: {
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
-  }): Promise<ReadVoter[]> {
+  } = {}): Promise<ReadVoter[]> {
     const powerByVoter = await this._getPowerByVoter({
       fromBlock,
       toBlock,
@@ -126,7 +126,7 @@ export class ReadLockingVault extends ReadVotingVault {
     address?: `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
-  }): Promise<VoterPowerBreakdown[]> {
+  } = {}): Promise<VoterPowerBreakdown[]> {
     const voteChangeEvents = await this.lockingVaultContract.getEvents(
       "VoteChange",
       {
@@ -241,7 +241,11 @@ export class ReadLockingVault extends ReadVotingVault {
 
     if (typeof blockNumber !== "bigint") {
       const block = await getBlock(this.network, atBlock);
-      blockNumber = block.blockNumber;
+      blockNumber = block.blockNumber ?? undefined;
+    }
+
+    if (blockNumber === undefined) {
+      return 0n;
     }
 
     return this.lockingVaultContract.read("queryVotePowerView", {
@@ -258,7 +262,7 @@ export class ReadLockingVault extends ReadVotingVault {
     atBlock,
   }: {
     atBlock?: BlockLike;
-  }): Promise<bigint> {
+  } = {}): Promise<bigint> {
     const powerByVoter = await this._getPowerByVoter({
       toBlock: atBlock,
     });
@@ -301,7 +305,7 @@ export class ReadLockingVault extends ReadVotingVault {
 
     if (typeof toBlock !== "bigint") {
       const { blockNumber } = await getBlock(this.network, toBlock);
-      toBlock = blockNumber;
+      toBlock = blockNumber ?? undefined;
     }
 
     const voteChangeEvents = await this.lockingVaultContract.getEvents(
@@ -344,7 +348,7 @@ export class ReadLockingVault extends ReadVotingVault {
     address?: `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
-  }): Promise<Record<`0x${string}`, bigint>> {
+  } = {}): Promise<Record<`0x${string}`, bigint>> {
     const voteChangeEvents = await this.lockingVaultContract.getEvents(
       "VoteChange",
       {

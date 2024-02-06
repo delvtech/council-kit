@@ -56,7 +56,7 @@ export class ReadGscVault extends ReadVotingVault {
     atBlock,
   }: {
     atBlock?: BlockLike;
-  }): Promise<bigint> {
+  } = {}): Promise<bigint> {
     return this.gscVaultContract.read(
       "votingPowerBound",
       undefined,
@@ -75,7 +75,7 @@ export class ReadGscVault extends ReadVotingVault {
   }: {
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
-  }): Promise<ReadVoter[]> {
+  } = {}): Promise<ReadVoter[]> {
     const latestJoinTimestampByMember: Record<`0x${string}`, bigint> = {};
 
     const joinEvents = await this.gscVaultContract.getEvents(
@@ -179,7 +179,7 @@ export class ReadGscVault extends ReadVotingVault {
    * Get the time (in MS) that a new GSC member must wait after joining before
    * they can vote.
    */
-  getIdleDuration({ atBlock }: { atBlock?: BlockLike }): Promise<bigint> {
+  getIdleDuration({ atBlock }: { atBlock?: BlockLike } = {}): Promise<bigint> {
     return this.gscVaultContract.read(
       "idleDuration",
       undefined,

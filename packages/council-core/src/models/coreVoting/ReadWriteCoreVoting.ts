@@ -2,7 +2,7 @@ import {
   CachedReadWriteContract,
   ContractWriteOptions,
 } from "@council/evm-client";
-import { CachedReadWriteContractFactory } from "src/contract/factory";
+import { ReadWriteContractFactory } from "src/contract/factory";
 import { BALLOTS } from "src/models/coreVoting/constants";
 import { ReadCoreVoting } from "src/models/coreVoting/ReadCoreVoting";
 import { Ballot, CoreVotingAbi } from "src/models/coreVoting/types";
@@ -18,7 +18,7 @@ export interface ReadWriteCoreVotingOptions
 
 export class ReadWriteCoreVoting extends ReadCoreVoting {
   declare contract: CachedReadWriteContract<CoreVotingAbi>;
-  declare contractFactory: CachedReadWriteContractFactory;
+  declare contractFactory: ReadWriteContractFactory;
 
   constructor(options: ReadWriteCoreVotingOptions) {
     super(options);

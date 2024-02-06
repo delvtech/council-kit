@@ -59,6 +59,7 @@ export type AbiEntry<
  * type BalanceOutput = AbiArrayType<Erc20Abi, "function", "balanceOf", "outputs">;
  * // -> [bigint]
  */
+// TODO: This might be able to have a couple steps removed
 export type AbiArrayType<
   TAbi extends Abi,
   TItemType extends AbiItemType = AbiItemType,
@@ -147,7 +148,9 @@ type WithDefaultNames<TParameters extends readonly AbiParameter[]> = {
 };
 
 /**
- * Convert an array or tuple of named abi parameters to an object type. The keys
+ * Convert an array or tuple of named abi parameters to an object type with the
+ * parameter names as keys and their primitive types as values. If a parameter
+ * has no name, it's index is used as the key.
  */
 type NamedParametersToObject<
   TParameters extends readonly NamedAbiParameter[],

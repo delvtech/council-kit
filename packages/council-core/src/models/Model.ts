@@ -4,8 +4,8 @@ import {
   Network,
 } from "@council/evm-client";
 import {
-  CachedReadContractFactory,
-  CachedReadWriteContractFactory,
+  ReadContractFactory,
+  ReadWriteContractFactory,
 } from "src/contract/factory";
 
 interface ModelOptions {
@@ -21,7 +21,7 @@ interface ModelOptions {
  * @category Models
  */
 export interface ReadModelOptions extends ModelOptions {
-  contractFactory: CachedReadContractFactory;
+  contractFactory: ReadContractFactory;
 }
 
 /**
@@ -31,7 +31,7 @@ export interface ReadModelOptions extends ModelOptions {
 export class Model {
   name: string;
   network: Network;
-  contractFactory: CachedReadContractFactory;
+  contractFactory: ReadContractFactory;
 
   constructor({ name, network, contractFactory }: ReadModelOptions) {
     this.name = name ?? this.constructor.name;
@@ -44,7 +44,7 @@ export class Model {
  * @category Models
  */
 export interface ReadWriteModelOptions extends ModelOptions {
-  contractFactory: CachedReadWriteContractFactory;
+  contractFactory: ReadWriteContractFactory;
 }
 
 // Contract models

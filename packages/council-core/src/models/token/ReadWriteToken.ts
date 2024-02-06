@@ -2,7 +2,7 @@ import {
   CachedReadWriteContract,
   ContractWriteOptions,
 } from "@council/evm-client";
-import { CachedReadWriteContractFactory } from "src/contract/factory";
+import { ReadWriteContractFactory } from "src/contract/factory";
 import { ReadWriteContractModelOptions } from "src/models/Model";
 import { ReadToken } from "src/models/token/ReadToken";
 import { ERC20Abi } from "src/models/token/types";
@@ -17,7 +17,7 @@ export interface ReadWriteTokenOptions extends ReadWriteContractModelOptions {}
  */
 export class ReadWriteToken extends ReadToken {
   declare contract: CachedReadWriteContract<ERC20Abi>;
-  declare contractFactory: CachedReadWriteContractFactory;
+  declare contractFactory: ReadWriteContractFactory;
 
   constructor(options: ReadWriteTokenOptions) {
     super(options);
