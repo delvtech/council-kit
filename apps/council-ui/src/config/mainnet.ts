@@ -256,7 +256,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
           "Revised proposal to unwind the GSC treasury, transferring the unwound assets to the main treasury.",
         paragraphSummary:
           "The GSC treasury is a gnosis safe currently containing 24 different assets in balancer pools. These assets came from protocol fees traded on the Element protocol. In order to unwind the assets, the LP positions are withdrawn from the Balancer pools. After withdrawal, principal tokens are redeemed through the Element protocol. Once redeemed, the base assets are transferred and consolidated to the main treasury.",
-      },,
+      },
       5: {
         descriptionURL:
           "https://docs.google.com/document/d/17tR4ZjibQyfAma3QfklA0FTA4n6S3lGEXXWMzT75K-k/edit",
