@@ -11,26 +11,22 @@ export default command({
   description: "Set an account's token allowance",
 
   options: {
-    a: {
-      alias: ["address"],
+    address: {
       description: "The token contract address",
       type: "string",
       required: true,
     },
-    o: {
-      alias: ["owner"],
+    owner: {
       description: "The address of the token owner",
       type: "string",
       required: true,
     },
-    s: {
-      alias: ["spender"],
+    spender: {
       description: "The address of the token spender",
       type: "string",
       required: true,
     },
-    b: {
-      alias: ["allowance"],
+    allowance: {
       description:
         "The amount of tokens the spender is allowed to spend from the owner's account",
       type: "string",
@@ -39,12 +35,12 @@ export default command({
     ...writeOptions,
   },
 
-  handler: async ({ options, next }) => {
+  handler: async ({ options, context, next }) => {
     const {
       account: signerAccount,
       chain,
       rpcUrl,
-    } = await getWriteOptions(options);
+    } = await getWriteOptions(options, context);
 
     const address = await options.address({
       prompt: "Enter token contract address",

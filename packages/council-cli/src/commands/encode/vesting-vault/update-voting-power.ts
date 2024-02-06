@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for VestingVault.updateVotingPower",
 
   options: {
-    a: {
-      alias: ["address", "who"],
+    address: {
+      alias: ["who"],
       description: "The address to update voting power for",
       type: "string",
       required: true,

@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for VestingVault.removeGrant",
 
   options: {
-    a: {
-      alias: ["address", "who"],
+    address: {
+      alias: ["who"],
       description: "The grant owner",
       type: "string",
       required: true,

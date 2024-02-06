@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for OptimisticGrants.claim",
 
   options: {
-    r: {
-      alias: ["recipient", "destination"],
+    recipient: {
+      alias: ["destination"],
       description: "The address to send the tokens to",
       type: "string",
       required: true,

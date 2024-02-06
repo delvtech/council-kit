@@ -8,5 +8,6 @@ export default command({
   description: "Deploy a contract or combination of contracts",
   requiresSubcommand: true,
   options: writeOptions,
-  handler: async ({ options, next }) => next(await getWriteOptions(options)),
+  handler: async ({ options, context, next }) =>
+    next(await getWriteOptions(options, context)),
 });

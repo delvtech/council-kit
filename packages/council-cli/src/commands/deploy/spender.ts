@@ -13,42 +13,38 @@ export default command({
   description: "Deploy a Spender contract",
 
   options: {
-    o: {
-      alias: ["owner"],
+    owner: {
       description: "The contract owner's address (e.g., a Timelock contract)",
       type: "string",
     },
-    a: {
-      alias: ["spender"],
+    spender: {
       description: "The first address authorized to spend tokens",
       type: "string",
     },
-    t: {
-      alias: ["token"],
+    token: {
       description: "The address of the ERC20 token contract",
       type: "string",
       required: true,
     },
-    s: {
-      alias: ["small", "small-spend-limit", "smallSpendLimit"],
+    small: {
+      alias: ["small-spend-limit"],
       description: "The small spend proposal limit",
       type: "string",
       required: true,
     },
-    m: {
-      alias: ["medium", "medium-spend-limit", "mediumSpendLimit"],
+    medium: {
+      alias: ["medium-spend-limit"],
       description: "The medium spend proposal limit",
       type: "string",
       required: true,
     },
-    h: {
-      alias: ["high", "high-spend-limit", "highSpendLimit"],
+    high: {
+      alias: ["high-spend-limit"],
       description: "The high spend proposal limit",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision to use. The limit options will be multiplied by (10 ** decimals). For example, if the small limit is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",

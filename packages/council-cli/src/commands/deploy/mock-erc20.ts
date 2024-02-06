@@ -13,14 +13,12 @@ export default command({
   description: "Deploy a MockERC20 contract for use as a mock voting token",
 
   options: {
-    n: {
-      alias: ["name"],
+    name: {
       description: "The name of the token",
       type: "string",
       required: true,
     },
-    s: {
-      alias: ["symbol"],
+    symbol: {
       description: "The symbol of the token",
       type: "string",
       required: true,

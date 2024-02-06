@@ -13,8 +13,7 @@ export default command({
   description: "Deploy a Treasury contract",
 
   options: {
-    o: {
-      alias: ["owner"],
+    owner: {
       description: "The contract owner's address (e.g., a Timelock contract)",
       type: "string",
       required: true,

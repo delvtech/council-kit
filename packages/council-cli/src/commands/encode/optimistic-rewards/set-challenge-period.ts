@@ -7,8 +7,7 @@ export default command({
   description: "Encode call data for OptimisticRewards.setChallengePeriod",
 
   options: {
-    p: {
-      alias: ["period"],
+    period: {
       description: "The new challenge period (in seconds)",
       type: "number",
       required: true,

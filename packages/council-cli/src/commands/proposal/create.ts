@@ -13,43 +13,38 @@ export default command({
   description: "Create a proposal",
 
   options: {
-    a: {
-      alias: ["address"],
+    address: {
       description: "The voting contract address",
       type: "string",
       required: true,
     },
-    v: {
-      alias: ["vaults"],
+    vaults: {
       description:
         "The addresses of the approved voting vaults to draw voting power from. This will be used to verify that the signer has enough voting power to create a proposal.",
       type: "array",
       string: true,
       required: true,
     },
-    t: {
-      alias: ["targets"],
+    targets: {
       description: "A list of addresses to call.",
       type: "array",
       string: true,
       required: true,
     },
-    d: {
-      alias: ["calldatas"],
+    calldatas: {
+      alias: ["data"],
       description: "Encoded call data for each target.",
       type: "array",
       string: true,
       required: true,
     },
-    l: {
-      alias: ["last-call"],
+    "last-call": {
       description:
         "The block after which the proposal can no longer be executed.",
       type: "number",
       required: true,
     },
-    b: {
-      alias: ["ballot"],
+    ballot: {
       description:
         "The initial vote from the signer's account (yes, no, maybe).",
       type: "string",
@@ -58,8 +53,8 @@ export default command({
     ...writeOptions,
   },
 
-  handler: async ({ options, next }) => {
-    const { account, chain, rpcUrl } = await getWriteOptions(options);
+  handler: async ({ options, context, next }) => {
+    const { account, chain, rpcUrl } = await getWriteOptions(options, context);
 
     const address = await options.address({
       prompt: "Enter voting contract address",

@@ -11,20 +11,17 @@ export default command({
   description: "Mint tokens",
 
   options: {
-    a: {
-      alias: ["address"],
+    address: {
       describe: "The token contract address",
       type: "string",
       required: true,
     },
-    f: {
-      alias: ["account"],
+    account: {
       describe: "The account to mint tokens for",
       type: "string",
       required: true,
     },
-    t: {
-      alias: ["amount"],
+    amount: {
       describe: "The amount of tokens to mint",
       type: "string",
       required: true,
@@ -32,12 +29,12 @@ export default command({
     ...writeOptions,
   },
 
-  handler: async ({ options, next }) => {
+  handler: async ({ options, context, next }) => {
     const {
       account: signerAccount,
       chain,
       rpcUrl,
-    } = await getWriteOptions(options);
+    } = await getWriteOptions(options, context);
 
     const address = await options.address({
       prompt: "Enter token contract address",

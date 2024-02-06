@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for Authorizable.authorize",
 
   options: {
-    a: {
-      alias: ["address", "who"],
+    address: {
+      alias: ["who"],
       description: "The address to authorize",
       type: "string",
       required: true,

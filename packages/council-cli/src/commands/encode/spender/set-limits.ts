@@ -25,8 +25,7 @@ export default command({
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The amount options will be multiplied by (10 ** decimals). For example, if small is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",

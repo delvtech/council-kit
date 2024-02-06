@@ -7,14 +7,13 @@ export default command({
   description: "Encode call data for CoreVoting.changeVaultStatus",
 
   options: {
-    v: {
-      alias: ["vault"],
+    vault: {
       description: "The voting vault's address",
       type: "string",
       required: true,
     },
-    a: {
-      alias: ["approved", "is-valid"],
+    approved: {
+      alias: ["is-valid"],
       description: "Whether or not the vault should be approved",
       type: "boolean",
       required: true,

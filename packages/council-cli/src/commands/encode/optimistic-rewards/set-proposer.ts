@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for OptimisticRewards.setProposer",
 
   options: {
-    a: {
-      alias: ["address", "proposer"],
+    address: {
+      alias: ["proposer"],
       description: "The address of the new proposer",
       type: "string",
       required: true,

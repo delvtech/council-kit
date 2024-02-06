@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for Airdrop.reclaim",
 
   options: {
-    r: {
-      alias: ["recipient", "destination"],
+    recipient: {
+      alias: ["destination"],
       description: "The recipient of the reclaimed funds",
       type: "string",
       required: true,

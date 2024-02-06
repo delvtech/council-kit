@@ -7,14 +7,13 @@ export default command({
   description: "Encode call data for CoreVoting.setDefaultQuorum",
 
   options: {
-    p: {
-      alias: ["power", "quorum"],
+    power: {
+      alias: ["quorum"],
       description: "The new base quorum",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The quorum option will be multiplied by (10 ** decimals). For example, if quorum is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",

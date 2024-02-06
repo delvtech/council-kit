@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for VestingVault.changeDelegation",
 
   options: {
-    a: {
-      alias: ["address", "new-delegate", "newDelegate"],
+    address: {
+      alias: ["new-delegate", "newDelegate"],
       description: "The amount of tokens to deposit",
       type: "string",
       required: true,

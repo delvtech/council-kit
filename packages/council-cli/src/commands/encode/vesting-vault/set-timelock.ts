@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for VestingVault.setTimelock",
 
   options: {
-    a: {
-      alias: ["address", "timelock"],
+    address: {
+      alias: ["timelock"],
       description: "The new timelock address",
       type: "string",
       required: true,

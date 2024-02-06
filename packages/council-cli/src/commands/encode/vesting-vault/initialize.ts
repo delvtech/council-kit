@@ -7,14 +7,12 @@ export default command({
   description: "Encode call data for VestingVault.initialize",
 
   options: {
-    m: {
-      alias: ["manager"],
+    manager: {
       description: "The address that will be able add and remove grants",
       type: "string",
       required: true,
     },
-    t: {
-      alias: ["timelock"],
+    timelock: {
       description:
         "The address that will be able to change the unvested multiplier, the manager, and the timelock",
       type: "string",

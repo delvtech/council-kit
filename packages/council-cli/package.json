@@ -9,10 +9,11 @@
     "dist"
   ],
   "scripts": {
-    "council": "npm run dev",
+    "council": "node -r dotenv/config dist/council.js",
     "dev": "NODE_ENV=development tesm-node -r dotenv/config src/council.ts",
-    "prod": "node -r dotenv/config dist/council.js",
-    "build": "rimraf dist && tsc"
+    "prod": "tesm-node -r dotenv/config src/council.ts",
+    "build": "rimraf dist && tsc",
+    "watch": "rimraf dist && tsc --watch"
   },
   "dependencies": {
     "@council/artifacts": "*",
@@ -20,7 +21,7 @@
     "ajv": "^8.12.0",
     "cfonts": "^3.2.0",
     "cli-table": "^0.3.11",
-    "clide-js": "^0.1.1",
+    "clide-js": "^0.1.2-alpha.0",
     "clide-plugin-command-menu": "^0.0.7",
     "colors": "^1.4.0",
     "json-schema-typed": "^8.0.1",

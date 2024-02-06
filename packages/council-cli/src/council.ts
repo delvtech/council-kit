@@ -12,6 +12,7 @@ run({
     // Interactive prompts for incomplete commands
     commandMenu({
       title: "Council CLI",
+      titleColors: ["#D89DFF", "#519BFF"],
       skip: (options) => !!options.help,
     }),
   ],

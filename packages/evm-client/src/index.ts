@@ -12,8 +12,6 @@ export {
   createCachedReadWriteContract,
   type CreateCachedReadWriteContractOptions,
 } from "src/contract/factories/createCachedReadWriteContract";
-export { ReadContractStub } from "src/contract/stubs/ReadContractStub";
-export { ReadWriteContractStub } from "src/contract/stubs/ReadWriteContractStub";
 export type {
   AbiArrayType,
   AbiEntry,
@@ -56,7 +54,6 @@ export { getAbiEntry } from "src/contract/utils/getAbiEntry";
 export { AbiEntryNotFoundError } from "src/errors/AbiEntryNotFound";
 
 // Network
-export { NetworkStub } from "src/network/stubs/NetworkStub";
 export type { Block, BlockTag } from "src/network/types/Block";
 export type {
   Network,

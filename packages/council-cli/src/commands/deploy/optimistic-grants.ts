@@ -13,14 +13,12 @@ export default command({
   description: "Deploy an OptimisticGrants contract",
 
   options: {
-    t: {
-      alias: ["token"],
+    token: {
       description: "The address of the ERC20 token to distribute",
       type: "string",
       required: true,
     },
-    g: {
-      alias: ["governance"],
+    governance: {
       description:
         "The governance contract's address for ACL (e.g., a Timelock contract)",
       type: "string",

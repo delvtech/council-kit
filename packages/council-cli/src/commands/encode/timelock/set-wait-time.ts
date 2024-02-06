@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for Timelock.setWaitTime",
 
   options: {
-    t: {
-      alias: ["time", "wait-time"],
+    time: {
+      alias: ["wait-time"],
       description: "The new wait time (in seconds)",
       type: "number",
       required: true,

@@ -13,37 +13,35 @@ export default command({
   description: "Deploy a CoreVoting contract",
 
   options: {
-    o: {
-      alias: ["owner", "timelock"],
+    owner: {
+      alias: ["timelock"],
       description: "The contract owner's address (e.g., a Timelock contract)",
       type: "string",
     },
-    q: {
-      alias: ["quorum", "base-quorum"],
+    quorum: {
+      alias: ["base-quorum"],
       description: "The default quorum for proposals",
       type: "string",
       required: true,
     },
-    m: {
-      alias: ["min-power", "min-proposal-power"],
+    "min-power": {
+      alias: ["min-proposal-power"],
       description: "The minimum voting power required to create a proposal",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision to use. The quorum and power options will be multiplied by (10 ** decimals). For example, if quorum is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",
       default: 18,
     },
-    g: {
-      alias: ["gsc"],
+    gsc: {
       description: "The address of the Governance Steering Committee contract",
       type: "string",
     },
-    v: {
-      alias: ["vaults", "voting-vaults"],
+    vaults: {
+      alias: ["voting-vaults"],
       description: "The addresses of the approved voting vaults",
       type: "array",
     },
@@ -66,10 +64,10 @@ export default command({
 
     const gsc = (await options.gsc()) || owner;
 
-    const vaults =
-      (await options.vaults({
-        prompt: "Enter approved voting vaults",
-      })) || [];
+    const maybeVaults = await options.vaults({
+      prompt: "Enter approved voting vaults",
+    });
+    const vaults = maybeVaults?.filter((v) => !!v) || [];
 
     signale.pending("Deploying CoreVoting...");
 
@@ -122,8 +120,8 @@ export async function deployCoreVoting({
     abi: CoreVoting.abi,
     args: [
       owner as `0x${string}`,
-      parseUnits(quorum as `${number}`, decimals),
-      parseUnits(minPower as `${number}`, decimals),
+      parseUnits(quorum, decimals),
+      parseUnits(minPower, decimals),
       gsc as `0x${string}`,
       vaults as `0x${string}`[],
     ],

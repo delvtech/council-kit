@@ -13,35 +13,32 @@ export default command({
   description: "Deploy a OptimisticRewards contract",
 
   options: {
-    o: {
-      alias: ["owner", "governance"],
+    owner: {
+      alias: ["governance"],
       description: "The contract owner's address (e.g., a Timelock contract)",
       type: "string",
     },
-    r: {
-      alias: ["root", "starting-root", "startingRoot"],
+    root: {
+      alias: ["starting-root"],
       description: "The starting merkle root",
       type: "string",
       required: true,
     },
-    p: {
-      alias: ["proposer"],
+    proposer: {
       description: "The address that can propose new roots",
       type: "string",
     },
-    c: {
-      alias: ["revoker", "challenger"],
+    revoker: {
+      alias: ["challenger"],
       description: "The address that can remove proposed reward roots",
       type: "string",
     },
-    t: {
-      alias: ["token"],
+    token: {
       description: "The address of the ERC20 token to distribute",
       type: "string",
       required: true,
     },
-    v: {
-      alias: ["locking-vault", "lockingVault"],
+    "locking-vault": {
       description:
         "The address of the locking vault contract that will be used when calling Airdrop.claimAndDelegate()",
       type: "string",

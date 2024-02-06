@@ -5,6 +5,11 @@ import { command } from "clide-js";
 import colors from "colors";
 import signale from "signale";
 import { Address, createPublicClient, createWalletClient, http } from "viem";
+import {
+  ContractInfo,
+  DEFAULT_DEPLOYMENTS_DIR,
+  getDeploymentStore,
+} from "../../deploymentStore.js";
 import { WriteOptions } from "../../reusable-options/write-options.js";
 import { DAY_IN_BLOCKS, DAY_IN_SECONDS } from "../../utils/constants.js";
 import { DeployedContract } from "../../utils/deployContract.js";
@@ -17,11 +22,6 @@ import deployMockErc20Command from "./mock-erc20.js";
 import deploySimpleProxyCommand from "./simple-proxy.js";
 import deployTimelockCommand from "./timelock.js";
 import deployTreasuryCommand from "./treasury.js";
-import {
-  ContractInfo,
-  DEFAULT_DEPLOYMENTS_DIR,
-  getDeploymentStore,
-} from "./utils/deploymentStore.js";
 
 const defaults = {
   tokenAddress: process.env.VOTING_TOKEN_ADDRESS,
@@ -154,22 +154,21 @@ export default command({
       type: "number",
       default: defaults.gscIdleDuration,
     },
-    o: {
+    out: {
       alias: ["out-dir"],
       description:
         "The directory to write the contract addresses to; relative to the current working directory.",
       type: "string",
       default: defaults.outDir,
     },
-    n: {
-      alias: ["name"],
+    name: {
       description: "The name of the deployment.",
       type: "string",
       default: defaults.name,
     },
   },
 
-  handler: async ({ data, options, next, context }) => {
+  handler: async ({ data, options, fork, next }) => {
     const { account, chain, rpcUrl } = data as WriteOptions;
 
     const publicClient = createPublicClient({
@@ -226,7 +225,7 @@ export default command({
         prompt: "Enter voting token symbol",
       });
 
-      const tokenDeployData: DeployedContract = await context.invokeCommands({
+      const tokenDeployData: DeployedContract = await fork({
         commands: [deployMockErc20Command],
         initialData: data,
         optionValues: {
@@ -249,17 +248,16 @@ export default command({
       prompt: "Enter GSC quorum",
     });
 
-    const gscCoreVotingDeployData: DeployedContract =
-      await context.invokeCommands({
-        commands: [deployCoreVotingCommand],
-        initialData: data,
-        optionValues: {
-          owner: account.address,
-          quorum: gscQuorum,
-          minPower: gscQuorum,
-          decimals,
-        },
-      });
+    const gscCoreVotingDeployData: DeployedContract = await fork({
+      commands: [deployCoreVotingCommand],
+      initialData: data,
+      optionValues: {
+        owner: account.address,
+        quorum: gscQuorum,
+        minPower: gscQuorum,
+        decimals,
+      },
+    });
     contractInfos.push({
       name: "GSCCoreVoting",
       ...gscCoreVotingDeployData,
@@ -314,7 +312,7 @@ export default command({
       prompt: `Enter timelock wait time ${colors.dim("(in seconds)")}`,
     });
 
-    const timelockDeployData: DeployedContract = await context.invokeCommands({
+    const timelockDeployData: DeployedContract = await fork({
       commands: [deployTimelockCommand],
       initialData: data,
       optionValues: {
@@ -338,15 +336,13 @@ export default command({
     });
 
     if (!treasuryAddress) {
-      const treasuryDeployData: DeployedContract = await context.invokeCommands(
-        {
-          commands: [deployTreasuryCommand],
-          initialData: data,
-          optionValues: {
-            owner: timelockDeployData.address,
-          },
+      const treasuryDeployData: DeployedContract = await fork({
+        commands: [deployTreasuryCommand],
+        initialData: data,
+        optionValues: {
+          owner: timelockDeployData.address,
         },
-      );
+      });
       contractInfos.push({
         name: "Treasury",
         ...treasuryDeployData,
@@ -376,29 +372,27 @@ export default command({
       );
     }
 
-    const lockingVaultDeployData: DeployedContract =
-      await context.invokeCommands({
-        commands: [deployLockingVaultCommand],
-        initialData: data,
-        optionValues: {
-          token: votingTokenAddress,
-          staleBlockLag,
-        },
-      });
+    const lockingVaultDeployData: DeployedContract = await fork({
+      commands: [deployLockingVaultCommand],
+      initialData: data,
+      optionValues: {
+        token: votingTokenAddress,
+        staleBlockLag,
+      },
+    });
     contractInfos.push({
       name: "LockingVault",
       ...lockingVaultDeployData,
     });
 
-    const lockVaultProxyDeployData: DeployedContract =
-      await context.invokeCommands({
-        commands: [deploySimpleProxyCommand],
-        initialData: data,
-        optionValues: {
-          owner: timelockDeployData.address,
-          implementation: lockingVaultDeployData.address,
-        },
-      });
+    const lockVaultProxyDeployData: DeployedContract = await fork({
+      commands: [deploySimpleProxyCommand],
+      initialData: data,
+      optionValues: {
+        owner: timelockDeployData.address,
+        implementation: lockingVaultDeployData.address,
+      },
+    });
 
     contractInfos.push({
       name: "LockingVaultProxy",
@@ -417,19 +411,17 @@ export default command({
       prompt: "Enter minimum proposal power",
     });
 
-    const coreVotingDeployData: DeployedContract = await context.invokeCommands(
-      {
-        commands: [deployCoreVotingCommand],
-        initialData: data,
-        optionValues: {
-          quorum: baseQuorum,
-          minPower: minProposalPower,
-          decimals,
-          gsc: gscCoreVotingDeployData.address,
-          vaults: [lockVaultProxyDeployData.address],
-        },
+    const coreVotingDeployData: DeployedContract = await fork({
+      commands: [deployCoreVotingCommand],
+      initialData: data,
+      optionValues: {
+        quorum: baseQuorum,
+        minPower: minProposalPower,
+        decimals,
+        gsc: gscCoreVotingDeployData.address,
+        vaults: [lockVaultProxyDeployData.address],
       },
-    );
+    });
     contractInfos.push({
       name: "CoreVoting",
       ...coreVotingDeployData,
@@ -484,7 +476,7 @@ export default command({
       prompt: "Enter GSC voting power bound",
     });
 
-    const gscVaultDeployData: DeployedContract = await context.invokeCommands({
+    const gscVaultDeployData: DeployedContract = await fork({
       commands: [deployGscVaultCommand],
       initialData: data,
       optionValues: {

@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for LockingVault.changeDelegation",
 
   options: {
-    a: {
-      alias: ["address", "new-delegate"],
+    address: {
+      alias: ["new-delegate"],
       description: "The address to delegate to",
       type: "string",
       required: true,

@@ -7,13 +7,12 @@ export default command({
   description: "Encode call data for Timelock.execute",
 
   options: {
-    t: {
-      alias: ["targets"],
+    targets: {
       description: "A list of target addresses the timelock contract will call",
       type: "array",
       required: true,
     },
-    d: {
+    data: {
       alias: ["calldatas"],
       description: "Encoded call data for each target",
       type: "array",

@@ -11,14 +11,13 @@ export default command({
   description: "Execute a proposal",
 
   options: {
-    a: {
-      alias: ["address"],
+    address: {
       description: "The voting contract address",
       type: "string",
       required: true,
     },
-    p: {
-      alias: ["id"],
+    id: {
+      alias: ["proposal"],
       description: "The id of the proposal to execute",
       type: "number",
       required: true,
@@ -26,8 +25,8 @@ export default command({
     ...writeOptions,
   },
 
-  handler: async ({ options, end, next }) => {
-    const { account, chain, rpcUrl } = await getWriteOptions(options);
+  handler: async ({ options, context, end, next }) => {
+    const { account, chain, rpcUrl } = await getWriteOptions(options, context);
 
     const address = await options.address({
       prompt: "Enter voting contract address",

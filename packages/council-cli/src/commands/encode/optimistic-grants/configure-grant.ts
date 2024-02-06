@@ -7,27 +7,23 @@ export default command({
   description: "Encode call data for a OptimisticGrants.configureGrant",
 
   options: {
-    o: {
-      alias: ["owner"],
+    owner: {
       description: "The address of the grant owner",
       type: "string",
       required: true,
     },
-    a: {
-      alias: ["amount"],
+    amount: {
       description: "The amount of tokens to grant",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",
       default: 18,
     },
-    e: {
-      alias: ["expiration"],
+    expiration: {
       description: "The expiration timestamp (in seconds) of the grant",
       type: "number",
       required: true,

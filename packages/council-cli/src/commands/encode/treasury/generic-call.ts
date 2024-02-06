@@ -7,14 +7,13 @@ export default command({
   description: "Encode call data for Treasury.genericCall",
 
   options: {
-    t: {
-      alias: ["target"],
+    target: {
       description: `The address of the target contract`,
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["data", "calldata", "call-data", "callData"],
+    data: {
+      alias: ["calldata", "call-data"],
       description: "The encoded call data",
       type: "string",
       required: true,

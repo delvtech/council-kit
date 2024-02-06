@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for VestingVault.setManager",
 
   options: {
-    a: {
-      alias: ["address", "manager"],
+    address: {
+      alias: ["manager"],
       description: "The new manager address",
       type: "string",
       required: true,

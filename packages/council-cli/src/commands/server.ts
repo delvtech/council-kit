@@ -6,32 +6,26 @@ export default command({
   description: "Start a local ethereum node",
 
   options: {
-    // -h is reserved for --help
     host: {
-      alias: ["hostname"],
-      description: "The hostname to listen on",
+      description: "The host to listen on",
       type: "string",
-      default: "localhost",
+      default: "127.0.0.1",
     },
-    p: {
-      alias: ["port"],
+    port: {
       description: "The port to listen on",
       type: "number",
       default: 8545,
     },
-    b: {
-      alias: ["balance"],
+    balance: {
       description: "The ETH balance to assign to each account",
       type: "number",
       default: 1_000,
     },
-    t: {
-      alias: ["block-time"],
+    "block-time": {
       description: "The blockTime in seconds for automatic mining",
       type: "number",
     },
-    c: {
-      alias: ["chain-id"],
+    "chain-id": {
       description: "The id to use for the local blockchain",
       type: "number",
       default: 31337,
@@ -39,8 +33,7 @@ export default command({
   },
 
   handler: async ({ options, end }) => {
-    const { balance, blockTime, chainId, hostname, port } =
-      await options.values;
+    const { balance, blockTime, chainId, host, port } = await options.values;
 
     hre.config.networks.hardhat = {
       ...hre.config.networks.hardhat,
@@ -62,7 +55,7 @@ export default command({
     };
 
     hre.run("node", {
-      hostname,
+      hostname: host,
       port,
     });
 

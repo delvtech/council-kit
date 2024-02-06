@@ -7,48 +7,42 @@ export default command({
   description: "Encode call data for VestingVault.addGrantAndDelegate",
 
   options: {
-    w: {
-      alias: ["who", "address"],
+    who: {
+      alias: ["address"],
       description: "The grant recipient",
       type: "string",
       required: true,
     },
-    a: {
-      alias: ["amount"],
+    amount: {
       description: "The total grant value",
       type: "string",
       required: true,
     },
-    p: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",
       default: 18,
     },
-    s: {
-      alias: ["start-time", "startTime"],
+    "start-time": {
       description:
         "An optional non standard start time (in seconds). If set to zero then the start time will be made the block this is executed in",
       type: "number",
       default: 0,
     },
-    e: {
-      alias: ["expiration"],
+    expiration: {
       description:
         "The timestamp (in seconds) when the grant ends and all tokens are unlocked",
       type: "number",
       required: true,
     },
-    c: {
-      alias: ["cliff"],
+    cliff: {
       description:
         "The timestamp (in seconds) when the grant begins vesting. No tokens will be unlocked until this timestamp has been reached",
       type: "number",
       required: true,
     },
-    d: {
-      alias: ["delegate"],
+    delegate: {
       description:
         "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate",
       type: "string",
@@ -120,7 +114,7 @@ export function encodeAddGrantAndDelegate({
     functionName: "addGrantAndDelegate",
     args: [
       who as `0x${string}`,
-      parseUnits(amount as `${number}`, decimals),
+      parseUnits(amount, decimals),
       BigInt(startTime),
       BigInt(expiration),
       BigInt(cliff),

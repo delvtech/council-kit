@@ -11,8 +11,7 @@ export default command({
   description: "Encode call data for Timelock.increaseTime",
 
   options: {
-    t: {
-      alias: ["time"],
+    time: {
       description: "The amount of time (in seconds) to increase by",
       type: "number",
       required: true,

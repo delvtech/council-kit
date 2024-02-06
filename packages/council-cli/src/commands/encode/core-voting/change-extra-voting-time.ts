@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for CoreVoting.changeExtraVotingTime",
 
   options: {
-    b: {
-      alias: ["blocks", "extra-vote-time", "extraVoteTime"],
+    blocks: {
+      alias: ["extra-vote-time"],
       description:
         "The number of blocks for which a proposal can still be voted on after it's unlocked",
       type: "number",

@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for GSCVault.setIdleDuration",
 
   options: {
-    t: {
-      alias: ["time", "idle-duration", "idleDuration"],
+    time: {
+      alias: ["idle-duration"],
       description:
         "The time (in seconds) new members must wait before they can vote",
       type: "number",

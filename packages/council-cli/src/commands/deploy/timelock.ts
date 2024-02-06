@@ -13,20 +13,18 @@ export default command({
   description: "Deploy a Timelock contract",
 
   options: {
-    t: {
-      alias: ["time", "wait-time", "waitTime"],
+    time: {
+      alias: ["wait-time"],
       description:
         "The time (in seconds) to wait until a proposal can be executed",
       type: "number",
       required: true,
     },
-    o: {
-      alias: ["owner"],
+    owner: {
       description: "The contract owner's address (e.g., a CoreVoting contract)",
       type: "string",
     },
-    g: {
-      alias: ["gsc"],
+    gsc: {
       description: "The address of the GSC contract",
       type: "string",
       required: true,

@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for GSCVault.setCoreVoting",
 
   options: {
-    a: {
-      alias: ["address", "new-voting"],
+    address: {
+      alias: ["new-voting"],
       description: "The new core voting contract address",
       type: "string",
       required: true,

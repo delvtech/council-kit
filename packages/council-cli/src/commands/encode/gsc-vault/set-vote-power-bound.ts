@@ -7,14 +7,13 @@ export default command({
   description: "Encode call data for GSCVault.setVotePowerBound",
 
   options: {
-    p: {
-      alias: ["power", "new-bound", "newBound"],
+    bound: {
+      alias: ["power"],
       description: "The new required voting power to become a member",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The power option will be multiplied by (10 ** decimals). For example, if power is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",

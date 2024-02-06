@@ -13,32 +13,30 @@ export default command({
   description: "Deploy an Airdrop contract",
 
   options: {
-    o: {
-      alias: ["owner", "governance"],
+    owner: {
+      alias: ["governance"],
       description: "The contract owner's address (e.g., a Timelock contract)",
       type: "string",
     },
-    r: {
-      alias: ["root", "merkle-root"],
+    root: {
+      alias: ["merkle-root"],
       description: "The merkle root of the airdrop",
       type: "string",
       required: true,
     },
-    t: {
-      alias: ["token"],
+    token: {
       description: "The address of the ERC20 token contract",
       type: "string",
       required: true,
     },
-    v: {
+    vault: {
       alias: ["locking-vault"],
       description:
         "The address of the locking vault contract that will be used when calling OptimisticRewards.claimAndDelegate()",
       type: "string",
       required: true,
     },
-    e: {
-      alias: ["expiration"],
+    expiration: {
       description:
         "The expiration timestamp (in seconds) after which the funds can be reclaimed by the owner",
       type: "number",

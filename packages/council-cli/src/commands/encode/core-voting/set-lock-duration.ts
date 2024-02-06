@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for CoreVoting.setLockDuration",
 
   options: {
-    b: {
-      alias: ["blocks", "lock-duration"],
+    blocks: {
+      alias: ["lock-duration"],
       description:
         "The number of blocks that must pass before a new proposal can be executed",
       type: "number",

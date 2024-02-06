@@ -7,8 +7,7 @@ export default command({
   description: "Encode call data for CoreVoting.setCustomQuorum",
 
   options: {
-    t: {
-      alias: ["target"],
+    target: {
       description: "The address to set a custom quorum for",
       type: "string",
       required: true,
@@ -19,15 +18,14 @@ export default command({
       type: "string",
       required: true,
     },
-    p: {
-      alias: ["power", "quorum"],
+    power: {
+      alias: ["quorum"],
       description:
         "A new base quorum for the specific function (e.g. 0x12345678)",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The power option will be multiplied by (10 ** decimals). For example, if power is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",
@@ -68,7 +66,7 @@ export function encodeSetCustomQuorum(
     args: [
       target as `0x${string}`,
       selector as `0x${string}`,
-      parseUnits(quorum as `${number}`, decimals),
+      parseUnits(quorum, decimals),
     ],
   });
 }

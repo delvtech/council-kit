@@ -11,20 +11,17 @@ export default command({
   description: "Set an account's token balance",
 
   options: {
-    a: {
-      alias: ["address"],
+    address: {
       description: "The token contract address",
       type: "string",
       required: true,
     },
-    f: {
-      alias: ["account"],
+    account: {
       description: "The account to set balance for",
       type: "string",
       required: true,
     },
-    b: {
-      alias: ["balance"],
+    balance: {
       description: "The new balance (as a decimal string) for the account",
       type: "string",
       required: true,
@@ -32,12 +29,12 @@ export default command({
     ...writeOptions,
   },
 
-  handler: async ({ options, next }) => {
+  handler: async ({ options, context, next }) => {
     const {
       account: singerAccount,
       chain,
       rpcUrl,
-    } = await getWriteOptions(options);
+    } = await getWriteOptions(options, context);
 
     const address = await options.address({
       prompt: "Enter token contract address",

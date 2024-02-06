@@ -9,27 +9,23 @@ export default command({
   description: "Encode call data for Treasury.sendFunds",
 
   options: {
-    t: {
-      alias: ["token"],
+    token: {
       description: `The address of token to send (${ETH_CONSTANT} to send ETH)`,
       type: "string",
       required: true,
     },
-    a: {
-      alias: ["amount"],
+    amount: {
       description: "The amount to send",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",
       default: 18,
     },
-    r: {
-      alias: ["recipient"],
+    recipient: {
       description: "The address to send the funds to",
       type: "string",
       required: true,
@@ -72,7 +68,7 @@ export function encodeSendFunds(
     functionName: "sendFunds",
     args: [
       token as `0x${string}`,
-      parseUnits(amount as `${number}`, decimals),
+      parseUnits(amount, decimals),
       recipient as `0x${string}`,
     ],
   });

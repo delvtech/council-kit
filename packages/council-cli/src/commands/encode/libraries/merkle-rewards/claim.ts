@@ -7,33 +7,30 @@ export default command({
   description: "Encode call data for MerkleRewards.claim",
 
   options: {
-    a: {
-      alias: ["amount"],
+    amount: {
       description: "The amount of rewards to claim",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",
       default: 18,
     },
-    t: {
-      alias: ["total-grant", "totalGrant"],
+    "total-grant": {
       description: "The total grant amount",
       type: "string",
       required: true,
     },
-    m: {
-      alias: ["proof", "merkle-proof", "merkleProof"],
+    proof: {
+      alias: ["merkle-proof"],
       description: "The merkle proof for the claim",
       type: "array",
       required: true,
     },
-    r: {
-      alias: ["recipient", "destination"],
+    recipient: {
+      alias: ["destination"],
       description: "The address which will be credited with funds",
       type: "string",
       required: true,

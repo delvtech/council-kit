@@ -9,24 +9,23 @@ export default command({
   description: "Get the delegate of a given account.",
 
   options: {
-    v: {
-      alias: ["address"],
+    address: {
       description: "The LockingVault contract address",
       type: "string",
       required: true,
     },
-    a: {
-      alias: ["account"],
+    account: {
+      alias: ["voter"],
       description: "The account to get the delegate of",
       type: "string",
       required: true,
     },
-    c: chainOption,
-    r: rpcUrlOption,
+    chain: chainOption,
+    rpc: rpcUrlOption,
   },
 
-  handler: async ({ options, next }) => {
-    const chain = await getChain(options.chain);
+  handler: async ({ options, context, next }) => {
+    const chain = await getChain(options.chain, context);
 
     const rpcUrl = await options.rpc({
       prompt: "Enter RPC URL",

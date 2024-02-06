@@ -1,4 +1,4 @@
-import { JsonStore } from "../../../utils/config/JsonStore.js";
+import { JsonStore } from "./utils/config/JsonStore.js";
 
 export const DEFAULT_DEPLOYMENTS_DIR = "./deployments";
 

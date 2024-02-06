@@ -7,8 +7,7 @@ export default command({
   description: "Encode call data for VestingVault.changeUnvestedMultiplier",
 
   options: {
-    m: {
-      alias: ["multiplier"],
+    multiplier: {
       description: "The new multiplier as a percentage",
       type: "number",
       required: true,

@@ -1,5 +1,4 @@
-import { createPublicClient, http } from "viem";
-import { hardhat } from "viem/chains";
+import hre from "hardhat";
 
 interface MineOptions {
   blocks: number;
@@ -11,19 +10,23 @@ interface MineOptions {
  * @param blocks The number of blocks to mine
  * @returns The new current block number
  */
-export async function mine({ blocks, rpcUrl }: MineOptions): Promise<number> {
-  const publicClient = createPublicClient({
-    chain: hardhat,
-    transport: http(rpcUrl),
-  });
+export async function mine({ blocks }: MineOptions): Promise<number> {
+  const blockHex = `0x${blocks.toString(16)}`;
+  hre.network.provider.send("hardhat_mine", [blockHex]);
+  return hre.network.provider.send("eth_blockNumber");
 
-  await publicClient.request({
-    // @ts-expect-error: evm_mine is not a valid method
-    method: "evm_mine",
-    // @ts-expect-error: Type '"evm_mine"' is not assignable to type
-    // '"eth_uninstallFilter"'
-    params: [{ blocks }],
-  });
+  // const publicClient = createPublicClient({
+  //   chain: hardhat,
+  //   transport: http(rpcUrl),
+  // });
 
-  return Number(await publicClient.getBlockNumber());
+  // await publicClient.request({
+  //   // @ts-expect-error: evm_mine is not a valid method
+  //   method: "evm_mine",
+  //   // @ts-expect-error: Type '"evm_mine"' is not assignable to type
+  //   // '"eth_uninstallFilter"'
+  //   params: [blocks],
+  // });
+
+  // return Number(await publicClient.getBlockNumber());
 }

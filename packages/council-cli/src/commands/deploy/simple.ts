@@ -3,6 +3,11 @@ import { command } from "clide-js";
 import colors from "colors";
 import signale from "signale";
 import { createPublicClient, createWalletClient, http } from "viem";
+import {
+  ContractInfo,
+  DEFAULT_DEPLOYMENTS_DIR,
+  getDeploymentStore,
+} from "../../deploymentStore.js";
 import { WriteOptions } from "../../reusable-options/write-options.js";
 import { DAY_IN_BLOCKS } from "../../utils/constants.js";
 import { DeployedContract } from "../../utils/deployContract.js";
@@ -13,11 +18,6 @@ import deployLockingVaultCommand from "./locking-vault.js";
 import deployMockErc20Command from "./mock-erc20.js";
 import deploySimpleProxyCommand from "./simple-proxy.js";
 import deployTreasury from "./treasury.js";
-import {
-  ContractInfo,
-  DEFAULT_DEPLOYMENTS_DIR,
-  getDeploymentStore,
-} from "./utils/deploymentStore.js";
 
 const defaults = {
   tokenAddress: process.env.VOTING_TOKEN_ADDRESS,
@@ -97,7 +97,7 @@ export default command({
       default: Number(defaults.staleBlockLag),
       required: true,
     },
-    o: {
+    out: {
       alias: ["out-dir"],
       description:
         "The directory to write the contract addresses to; relative to the current working directory.",
@@ -105,15 +105,14 @@ export default command({
       default: defaults.outDir,
       required: true,
     },
-    n: {
-      alias: ["name"],
+    name: {
       description: "The name of the deployment.",
       type: "string",
       default: defaults.name,
     },
   },
 
-  handler: async ({ data, options, next, context }) => {
+  handler: async ({ data, options, fork, next }) => {
     const { account, chain, rpcUrl } = data as WriteOptions;
 
     const publicClient = createPublicClient({
@@ -170,7 +169,7 @@ export default command({
         prompt: "Enter voting token symbol",
       });
 
-      const tokenDeployData: DeployedContract = await context.invokeCommands({
+      const tokenDeployData: DeployedContract = await fork({
         commands: [deployMockErc20Command],
         initialData: data,
         optionValues: {
@@ -199,17 +198,15 @@ export default command({
       prompt: "Enter minimum proposal power",
     });
 
-    const coreVotingDeployData: DeployedContract = await context.invokeCommands(
-      {
-        commands: [deployCoreVotingCommand],
-        initialData: data,
-        optionValues: {
-          quorum: baseQuorum,
-          minPower: minProposalPower,
-          decimals,
-        },
+    const coreVotingDeployData: DeployedContract = await fork({
+      commands: [deployCoreVotingCommand],
+      initialData: data,
+      optionValues: {
+        quorum: baseQuorum,
+        minPower: minProposalPower,
+        decimals,
       },
-    );
+    });
 
     contractInfos.push({
       name: "CoreVoting",
@@ -278,29 +275,27 @@ export default command({
       );
     }
 
-    const lockingVaultDeployData: DeployedContract =
-      await context.invokeCommands({
-        commands: [deployLockingVaultCommand],
-        initialData: data,
-        optionValues: {
-          token: votingTokenAddress,
-          staleBlockLag,
-        },
-      });
+    const lockingVaultDeployData: DeployedContract = await fork({
+      commands: [deployLockingVaultCommand],
+      initialData: data,
+      optionValues: {
+        token: votingTokenAddress,
+        staleBlockLag,
+      },
+    });
     contractInfos.push({
       name: "LockingVault",
       ...lockingVaultDeployData,
     });
 
-    const lockVaultProxyDeployData: DeployedContract =
-      await context.invokeCommands({
-        commands: [deploySimpleProxyCommand],
-        initialData: data,
-        optionValues: {
-          owner: coreVotingDeployData.address,
-          implementation: lockingVaultDeployData.address,
-        },
-      });
+    const lockVaultProxyDeployData: DeployedContract = await fork({
+      commands: [deploySimpleProxyCommand],
+      initialData: data,
+      optionValues: {
+        owner: coreVotingDeployData.address,
+        implementation: lockingVaultDeployData.address,
+      },
+    });
     contractInfos.push({
       name: "LockingVaultProxy",
       ...lockVaultProxyDeployData,
@@ -337,15 +332,13 @@ export default command({
     if (!treasuryAddress) {
       signale.pending("Deploying Treasury...");
 
-      const treasuryDeployData: DeployedContract = await context.invokeCommands(
-        {
-          commands: [deployTreasury],
-          initialData: data,
-          optionValues: {
-            owner: coreVotingDeployData.address,
-          },
+      const treasuryDeployData: DeployedContract = await fork({
+        commands: [deployTreasury],
+        initialData: data,
+        optionValues: {
+          owner: coreVotingDeployData.address,
         },
-      );
+      });
 
       contractInfos.push({
         name: "Treasury",

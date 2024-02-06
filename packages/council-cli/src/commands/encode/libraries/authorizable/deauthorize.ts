@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for Authorizable.deauthorize",
 
   options: {
-    a: {
-      alias: ["address", "who"],
+    address: {
+      alias: ["who"],
       description: "The address to remove authorization from",
       type: "string",
       required: true,

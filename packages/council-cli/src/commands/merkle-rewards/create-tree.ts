@@ -22,33 +22,30 @@ export default command({
     "Create a merkle tree for rewards (e.g., airdrop) from a list of addresses and reward amounts. The output is a JSON file with the merkle root and each leaf by address with it's proof.",
 
   options: {
-    p: {
-      alias: ["accounts-path"],
+    "accounts-path": {
       description:
         'The path to the json file with the addresses and amounts listed as an array of objects with address and amount properties. The amount property is a decimal string that will be scaled based on the decimals option. For example, [{"address": "0x1234...", "amount": "100.5"}, ...].',
       type: "string",
     },
-    a: {
-      alias: ["addresses"],
+    addresses: {
       description:
         "A list of recipient addresses to include in the merkle tree.",
       type: "array",
     },
-    m: {
-      alias: ["amounts"],
+    amounts: {
       description:
         "A list of amounts to reward each address. Must be same length as addresses.",
       type: "array",
     },
-    d: {
-      alias: ["decimals", "token-decimals"],
+    decimals: {
+      alias: ["token-decimals"],
       description:
         "The decimal precision used by the token contract. The amounts will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000.",
       type: "number",
       default: 18,
     },
-    o: {
-      alias: ["out-path"],
+    out: {
+      alias: ["out-dir"],
       description:
         "The directory to write the merkle tree info to; relative to the current working directory.",
       type: "string",
@@ -93,16 +90,16 @@ export default command({
       accounts: Object.fromEntries(accountsEntries),
     };
 
-    const outPath = await options.outPath({
+    const outDir = await options.outDir({
       prompt: `Enter the path to write the merkle tree info to ${colors.dim(
         "(optional)",
       )}`,
     });
 
-    if (outPath) {
+    if (outDir) {
       const store = new JsonStore({
-        path: path.dirname(outPath),
-        name: path.basename(outPath),
+        path: path.dirname(outDir),
+        name: path.basename(outDir),
       });
 
       store.set(merkleTreeInfo);

@@ -7,8 +7,8 @@ export default command({
   description: "Encode call data for Authorizable.setOwner",
 
   options: {
-    a: {
-      alias: ["address", "who"],
+    address: {
+      alias: ["who"],
       description: "The address to set as the owner",
       type: "string",
       required: true,

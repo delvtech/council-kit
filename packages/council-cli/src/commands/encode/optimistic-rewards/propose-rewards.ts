@@ -7,8 +7,7 @@ export default command({
   description: "Encode call data for OptimisticRewards.proposeRewards",
 
   options: {
-    r: {
-      alias: ["root"],
+    root: {
       description: "The merkle root of the proposed new rewards",
       type: "string",
       required: true,

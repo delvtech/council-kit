@@ -13,13 +13,12 @@ export default command({
   description: "Deploy a SimpleProxy contract",
 
   options: {
-    o: {
-      alias: ["owner"],
+    owner: {
       describe: "The contract owner's address (e.g., a Timelock contract)",
       type: "string",
     },
-    i: {
-      alias: ["implementation", "first-implementation"],
+    implementation: {
+      alias: ["first-implementation"],
       describe: "The address that calls to the proxy will be forwarded to",
       type: "string",
       required: true,
@@ -48,7 +47,7 @@ export default command({
     });
 
     signale.success(`SimpleProxy deployed @ ${deployData.address}`);
-    next(deployData);
+    return next(deployData);
   },
 });
 

@@ -13,27 +13,24 @@ export default command({
   description: "Deploy a GSCVault contract",
 
   options: {
-    c: {
-      alias: ["core-voting", "coreVoting"],
+    "core-voting": {
       description: "The address of the CoreVoting contract",
       type: "string",
       required: true,
     },
-    b: {
-      alias: ["bound", "voting-power-bound"],
+    bound: {
+      alias: ["voting-power-bound"],
       description: "The minimum voting power required to become a member",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision to use. The bound option will be multiplied by (10 ** decimals). For example, if bound is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",
       default: 18,
     },
-    o: {
-      alias: ["owner"],
+    owner: {
       description: "The owner of the contract (e.g., a Timelock contract)",
       type: "string",
     },

@@ -13,14 +13,13 @@ export default command({
   description: "Deploy a VestingVault contract",
 
   options: {
-    t: {
-      alias: ["token"],
+    token: {
       description: "The address of the ERC20 token contract",
       type: "string",
       required: true,
     },
-    l: {
-      alias: ["lag", "stale-block-lag"],
+    lag: {
+      alias: ["stale-block-lag"],
       description:
         "The number of blocks before the delegation history is forgotten",
       type: "number",

@@ -7,14 +7,13 @@ export default command({
   description: "Encode call data for CoreVoting.setMinProposalPower",
 
   options: {
-    p: {
-      alias: ["power", "min-proposal-power"],
+    power: {
+      alias: ["min-proposal-power"],
       description: "The minimum voting power required to create a proposal",
       type: "string",
       required: true,
     },
-    d: {
-      alias: ["decimals"],
+    decimals: {
       description:
         "The decimal precision used by the contract. The power option will be multiplied by (10 ** decimals). For example, if power is 100 and decimals is 18, then the result will be 100000000000000000000",
       type: "number",
@@ -42,6 +41,6 @@ export function encodeSetMinProposalPower(
   return encodeFunctionData({
     abi: CoreVoting.abi,
     functionName: "setMinProposalPower",
-    args: [parseUnits(power as `${number}`, decimals)],
+    args: [parseUnits(power, decimals)],
   });
 }
