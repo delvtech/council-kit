@@ -1,17 +1,9 @@
 // Cache
-export { createLruSimpleCache } from "src/cache/factories/createLruSimpleCache";
 export type { SimpleCache, SimpleCacheKey } from "src/cache/types/SimpleCache";
-export { createSimpleCacheKey } from "src/cache/utils/createSimpleCacheKey";
 
 // Contract
-export {
-  createCachedReadContract,
-  type CreateCachedReadContractOptions,
-} from "src/contract/factories/createCachedReadContract";
-export {
-  createCachedReadWriteContract,
-  type CreateCachedReadWriteContractOptions,
-} from "src/contract/factories/createCachedReadWriteContract";
+export type { CreateCachedReadContractOptions } from "src/contract/factories/createCachedReadContract";
+export type { CreateCachedReadWriteContractOptions } from "src/contract/factories/createCachedReadWriteContract";
 export type {
   AbiArrayType,
   AbiEntry,
@@ -46,12 +38,6 @@ export type {
   FunctionName,
   FunctionReturn,
 } from "src/contract/types/Function";
-export { arrayToFriendly } from "src/contract/utils/arrayToFriendly";
-export { friendlyToArray } from "src/contract/utils/friendlyToArray";
-export { getAbiEntry } from "src/contract/utils/getAbiEntry";
-
-// Errors
-export { AbiEntryNotFoundError } from "src/errors/AbiEntryNotFound";
 
 // Network
 export type { Block, BlockTag } from "src/network/types/Block";

@@ -5,9 +5,12 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
@@ -22,7 +25,6 @@
   },
   "devDependencies": {
     "@council/eslint-config": "*",
-    "@council/evm-client": "*",
     "@council/tsconfig": "*",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
@@ -30,5 +32,8 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }

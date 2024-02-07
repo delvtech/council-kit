@@ -1,20 +1,36 @@
+// Council Core Re-exports
+export * from "@delvtech/council-core/airdrop";
+export * from "@delvtech/council-core/errors";
+export * from "@delvtech/council-core/factory";
+export * from "@delvtech/council-core/model";
+export * from "@delvtech/council-core/proposal";
+export { ReadToken, type ReadTokenOptions } from "@delvtech/council-core/token";
+export * from "@delvtech/council-core/vaults";
+export * from "@delvtech/council-core/vote";
+export * from "@delvtech/council-core/voter";
+export * from "@delvtech/council-core/voting";
+
+// Client Re-exports
+export * from "@council/evm-client-viem";
+
+// Overrides
 export {
-  createViemReadContractFactory,
-  type CreateViemReadContractFactoryOptions,
-} from "src/contract/createViemReadContractFactory";
+  createReadContractFactory,
+  type CreateReadContractFactoryOptions,
+} from "src/contract/createReadContractFactory";
 export {
-  createViemReadWriteContractFactory,
-  type CreateViemReadWriteContractFactoryOptions,
-} from "src/contract/createViemReadWriteContractFactory";
+  createReadWriteContractFactory,
+  type CreateReadWriteContractFactoryOptions,
+} from "src/contract/createReadWriteContractFactory";
 export {
-  ViemReadCouncil,
-  type ViemReadCouncilOptions,
-} from "src/models/council/ViemReadCouncil";
+  ReadCouncil,
+  type ReadCouncilOptions,
+} from "src/models/council/ReadCouncil";
 export {
-  ViemReadWriteCouncil,
-  type ViemReadWriteCouncilOptions,
-} from "src/models/council/ViemReadWriteCouncil";
+  ReadWriteCouncil,
+  type ReadWriteCouncilOptions,
+} from "src/models/council/ReadWriteCouncil";
 export {
-  ViemReadWriteMockToken,
-  type ViemReadWriteMockTokenOptions,
-} from "src/models/token/ViemReadWriteMockToken";
+  ReadWriteMockToken,
+  type ReadWriteMockTokenOptions,
+} from "src/models/token/ReadWriteMockToken";

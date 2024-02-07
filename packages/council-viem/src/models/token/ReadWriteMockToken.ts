@@ -1,10 +1,9 @@
-import { SimpleCache } from "@council/evm-client";
-import { createViemNetwork } from "@council/evm-client-viem";
-import { ReadWriteMockToken } from "@delvtech/council-core";
-import { createViemReadWriteContractFactory } from "src/contract/createViemReadWriteContractFactory";
+import { SimpleCache, createNetwork } from "@council/evm-client-viem";
+import { ReadWriteMockToken as BaseReadWriteMockToken } from "@delvtech/council-core";
+import { createReadWriteContractFactory } from "src/contract/createReadWriteContractFactory";
 import { PublicClient, WalletClient } from "viem";
 
-export interface ViemReadWriteMockTokenOptions {
+export interface ReadWriteMockTokenOptions {
   address: `0x${string}`;
   publicClient: PublicClient;
   walletClient: WalletClient;
@@ -16,19 +15,19 @@ export interface ViemReadWriteMockTokenOptions {
   namespace?: string;
 }
 
-export class ViemReadWriteMockToken extends ReadWriteMockToken {
+export class ReadWriteMockToken extends BaseReadWriteMockToken {
   constructor({
     address,
     publicClient,
     walletClient,
     cache,
     namespace,
-  }: ViemReadWriteMockTokenOptions) {
+  }: ReadWriteMockTokenOptions) {
     super({
       address,
       name: namespace,
-      network: createViemNetwork(publicClient),
-      contractFactory: createViemReadWriteContractFactory({
+      network: createNetwork(publicClient),
+      contractFactory: createReadWriteContractFactory({
         publicClient,
         walletClient,
         cache,

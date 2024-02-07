@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "viem": ">=2"
+    "ethers": ">=6"
   },
   "dependencies": {
     "@council/evm-client": "*"

@@ -5,9 +5,33 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "default": "./dist/errors.js"
+    },
+    "./factories": {
+      "types": "./dist/factories.d.ts",
+      "default": "./dist/factories.js"
+    },
+    "./stubs": {
+      "types": "./dist/stubs.d.ts",
+      "default": "./dist/stubs.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "default": "./dist/types.js"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "default": "./dist/utils.js"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
@@ -28,5 +52,8 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }

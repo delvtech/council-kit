@@ -16,9 +16,9 @@ import {
   decodeFunctionData,
   encodeFunctionData,
 } from "viem";
-import { createViemReadWriteContract } from "./createViemReadWriteContract";
+import { createReadWriteContract } from "./createReadWriteContract";
 
-export interface CreateViemReadContractOptions<TAbi extends Abi = Abi> {
+export interface CreateReadContractOptions<TAbi extends Abi = Abi> {
   abi: TAbi;
   address: Address;
   publicClient: PublicClient;
@@ -30,14 +30,14 @@ export interface ViemReadContract<TAbi extends Abi = Abi>
 }
 
 /**
- * A viem implementation of the ReadContract interface.
+ * Create a viem implementation of the ReadContract interface.
  * @see https://viem.sh/
  */
-export function createViemReadContract<TAbi extends Abi = Abi>({
+export function createReadContract<TAbi extends Abi = Abi>({
   abi,
   address,
   publicClient,
-}: CreateViemReadContractOptions<TAbi>): ViemReadContract<TAbi> {
+}: CreateReadContractOptions<TAbi>): ViemReadContract<TAbi> {
   return {
     abi,
     address,
@@ -46,7 +46,7 @@ export function createViemReadContract<TAbi extends Abi = Abi>({
      * Connect a signer to upgrade the contract to a read-write contract.
      */
     connectWallet(walletClient: WalletClient) {
-      return createViemReadWriteContract({
+      return createReadWriteContract({
         address,
         abi,
         publicClient,
@@ -57,7 +57,7 @@ export function createViemReadContract<TAbi extends Abi = Abi>({
 
     async read(functionName, args, options) {
       const argsArray = friendlyToArray({
-        abi: abi,
+        abi,
         type: "function",
         name: functionName,
         kind: "inputs",
@@ -66,7 +66,7 @@ export function createViemReadContract<TAbi extends Abi = Abi>({
 
       const output = await publicClient.readContract({
         abi: abi as Abi,
-        address: address,
+        address,
         functionName,
         args: argsArray,
         ...options,
@@ -85,7 +85,7 @@ export function createViemReadContract<TAbi extends Abi = Abi>({
 
     async simulateWrite(functionName, args, options) {
       const argsArray = friendlyToArray({
-        abi: abi,
+        abi,
         type: "function",
         name: functionName,
         kind: "inputs",
@@ -94,7 +94,7 @@ export function createViemReadContract<TAbi extends Abi = Abi>({
 
       const { result } = await publicClient.simulateContract({
         abi: abi as Abi,
-        address: address,
+        address,
         functionName,
         args: argsArray,
         ...createSimulateContractParameters(options),

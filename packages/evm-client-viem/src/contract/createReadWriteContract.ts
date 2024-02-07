@@ -4,29 +4,29 @@ import {
   ReadWriteContract,
 } from "@council/evm-client";
 import {
-  createViemReadContract,
-  CreateViemReadContractOptions,
-} from "src/contract/createViemReadContract";
+  createReadContract,
+  CreateReadContractOptions,
+} from "src/contract/createReadContract";
 import { createSimulateContractParameters } from "src/contract/utils/createSimulateContractParameters";
 import { Abi, WalletClient } from "viem";
 
-export interface ViemReadWriteContractOptions<TAbi extends Abi = Abi>
-  extends CreateViemReadContractOptions<TAbi> {
+export interface ReadWriteContractOptions<TAbi extends Abi = Abi>
+  extends CreateReadContractOptions<TAbi> {
   walletClient: WalletClient;
   readContract?: ReadContract<TAbi>;
 }
 
 /**
- * A viem implementation of the ReadWriteContract interface.
+ * Create a viem implementation of the ReadWriteContract interface.
  * @see https://viem.sh/
  */
-export function createViemReadWriteContract<TAbi extends Abi = Abi>({
+export function createReadWriteContract<TAbi extends Abi = Abi>({
   abi,
   address,
   publicClient,
   walletClient,
-  readContract = createViemReadContract({ abi, address, publicClient }),
-}: ViemReadWriteContractOptions<TAbi>): ReadWriteContract<TAbi> {
+  readContract = createReadContract({ abi, address, publicClient }),
+}: ReadWriteContractOptions<TAbi>): ReadWriteContract<TAbi> {
   return {
     ...readContract,
 

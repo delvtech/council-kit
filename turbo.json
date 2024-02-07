@@ -13,10 +13,11 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**"],
       "env": [
-        "NEXT_PUBLIC_MAINNET_ALCHEMY_KEY",
-        "NEXT_PUBLIC_GOERLI_ALCHEMY_KEY",
+        "NEXT_PUBLIC_MAINNET_RPC_URL",
+        "NEXT_PUBLIC_GOERLI_RPC_URL",
         "NEXT_PUBLIC_LOCAL_RPC_URL",
-        "NEXT_PUBLIC_COUNCIL_UI_BASE_PATH"
+        "NEXT_PUBLIC_COUNCIL_UI_BASE_PATH",
+        "NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID"
       ]
     },
     "council-sdk-starter#build": {

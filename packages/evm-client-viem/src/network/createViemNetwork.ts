@@ -1,7 +1,7 @@
 import { Network } from "@council/evm-client";
 import { PublicClient, TransactionLegacy, rpcTransactionType } from "viem";
 
-export function createViemNetwork(publicClient: PublicClient): Network {
+export function createNetwork(publicClient: PublicClient): Network {
   return {
     async getBlock(args) {
       const block = await publicClient.getBlock(args);

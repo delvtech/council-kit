@@ -42,12 +42,52 @@
   },
   "exports": {
     ".": {
-      "types": {
-        "import": "./dist/index.d.ts",
-        "require": "./dist/index.d.cts"
-      },
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./airdrop": {
+      "types": "./dist/airdrop.d.ts",
+      "default": "./dist/airdrop.js"
+    },
+    "./council": {
+      "types": "./dist/council.d.ts",
+      "default": "./dist/council.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "default": "./dist/errors.js"
+    },
+    "./factory": {
+      "types": "./dist/factory.d.ts",
+      "default": "./dist/factory.js"
+    },
+    "./model": {
+      "types": "./dist/model.d.ts",
+      "default": "./dist/model.js"
+    },
+    "./proposal": {
+      "types": "./dist/proposal.d.ts",
+      "default": "./dist/proposal.js"
+    },
+    "./token": {
+      "types": "./dist/token.d.ts",
+      "default": "./dist/token.js"
+    },
+    "./vaults": {
+      "types": "./dist/vaults.d.ts",
+      "default": "./dist/vaults.js"
+    },
+    "./vote": {
+      "types": "./dist/vote.d.ts",
+      "default": "./dist/vote.js"
+    },
+    "./voter": {
+      "types": "./dist/voter.d.ts",
+      "default": "./dist/voter.js"
+    },
+    "./voting": {
+      "types": "./dist/voting.d.ts",
+      "default": "./dist/voting.js"
     }
   },
   "main": "dist/index.js",
