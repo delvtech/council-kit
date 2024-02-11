@@ -1,40 +1,65 @@
-import { Ballot } from "@council/sdk";
+import { Ballot } from "@delvtech/council-viem";
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVaultURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import useVotingPowerByVault from "src/ui/vaults/hooks/useVotingPowerByVault";
+import { useVote } from "src/ui/voting/hooks/useVote";
+import { useAccount } from "wagmi";
+import { ProposalVotingSkeleton } from "./ProposalVotingSkeleton";
+import { useSubmitVote } from "./hooks/useSubmitVote";
 
 interface ProposalVotingProps {
-  account: string | undefined;
-  accountBallot?: Ballot | null;
-  atBlock: number | undefined;
-  disabled?: boolean;
-  onVote: (ballot: Ballot) => void;
+  coreVotingAddress: `0x${string}`;
+  createdBlock: bigint;
+  proposalId: bigint;
+  vaults: `0x${string}`[];
 }
 
 export function ProposalVoting({
-  account,
-  accountBallot,
-  atBlock,
-  disabled,
-  onVote,
+  coreVotingAddress,
+  createdBlock,
+  proposalId,
+  vaults,
 }: ProposalVotingProps): ReactElement {
-  const { data: votingPowerByVault } = useVotingPowerByVault(account, atBlock);
+  const isConnected = useAccount().isConnected;
 
+  const { votingPowerByVault } = useVotingPowerByVault({
+    vaults,
+    atBlock: createdBlock,
+  });
   const totalVotingPower = votingPowerByVault?.reduce(
-    (total, vault) => total + +vault.votingPower,
-    0,
+    (total, vault) => total + vault.votingPower,
+    BigInt(0),
   );
 
-  return (
+  const { vote, status } = useVote({
+    proposalId,
+    coreVotingAddress,
+  });
+  const { submitVote, status: submitVoteStatus } = useSubmitVote();
+
+  function handleVote(ballot: Ballot) {
+    submitVote?.({
+      proposalId,
+      coreVotingAddress,
+      ballot,
+    });
+  }
+
+  const disabled =
+    !isConnected || !submitVote || submitVoteStatus === "pending";
+
+  return status === "pending" ? (
+    <ProposalVotingSkeleton />
+  ) : (
     <div className="flex flex-col gap-y-4">
       <div className="flex">
         <h3 className="text-lg font-medium">Vaults</h3>
         <h3 className="ml-auto text-lg font-medium">Voting Power</h3>
       </div>
-      <div className="flex flex-col overflow-y-auto max-h-64 gap-y-4">
+      <div className="flex max-h-64 flex-col gap-y-4 overflow-y-auto">
         {votingPowerByVault?.map((vault) => (
           <div className="flex" key={vault.name}>
             <Link
@@ -55,30 +80,30 @@ export function ProposalVoting({
         </p>
       </div>
 
-      <div className="m-auto daisy-btn-group">
+      <div className="daisy-btn-group m-auto">
         <button
           className={classNames("daisy-btn daisy-btn-lg", {
-            "daisy-btn-active": accountBallot === "yes",
+            "daisy-btn-active": vote?.ballot === "yes",
           })}
-          onClick={() => onVote("yes")}
+          onClick={() => handleVote("yes")}
           disabled={disabled}
         >
           YES
         </button>
         <button
           className={classNames("daisy-btn daisy-btn-lg", {
-            "daisy-btn-active": accountBallot === "no",
+            "daisy-btn-active": vote?.ballot === "no",
           })}
-          onClick={() => onVote("no")}
+          onClick={() => handleVote("no")}
           disabled={disabled}
         >
           NO
         </button>
         <button
           className={classNames("daisy-btn daisy-btn-lg", {
-            "daisy-btn-active": accountBallot === "maybe",
+            "daisy-btn-active": vote?.ballot === "maybe",
           })}
-          onClick={() => onVote("maybe")}
+          onClick={() => handleVote("maybe")}
           disabled={disabled}
         >
           ABSTAIN

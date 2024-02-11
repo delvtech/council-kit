@@ -1,4 +1,4 @@
-import { ViemReadWriteCouncil } from "@delvtech/council-viem";
+import { ReadWriteCouncil } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import colors from "colors";
 import signale from "signale";
@@ -8,7 +8,7 @@ import {
   DEFAULT_DEPLOYMENTS_DIR,
   getDeploymentStore,
 } from "../../deploymentStore.js";
-import { WriteOptions } from "../../reusable-options/write-options.js";
+import { WriteOptions } from "../../reusable-options/writeOptions.js";
 import { DAY_IN_BLOCKS } from "../../utils/constants.js";
 import { DeployedContract } from "../../utils/deployContract.js";
 import { stringifyBigInts } from "../../utils/stringifyBigInts.js";
@@ -124,7 +124,7 @@ export default command({
       transport: http(rpcUrl),
       chain,
     });
-    const council = new ViemReadWriteCouncil({ publicClient, walletClient });
+    const council = new ReadWriteCouncil({ publicClient, walletClient });
 
     const contractInfos: ContractInfo[] = [];
 

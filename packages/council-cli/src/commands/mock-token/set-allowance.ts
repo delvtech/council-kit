@@ -1,11 +1,11 @@
-import { ViemReadWriteMockToken } from "@delvtech/council-viem";
+import { ReadWriteMockToken } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import signale from "signale";
 import { createPublicClient, createWalletClient, http, parseUnits } from "viem";
 import {
   getWriteOptions,
   writeOptions,
-} from "../../reusable-options/write-options.js";
+} from "../../reusable-options/writeOptions.js";
 
 export default command({
   description: "Set an account's token allowance",
@@ -70,7 +70,7 @@ export default command({
       account: signerAccount,
     });
 
-    const token = new ViemReadWriteMockToken({
+    const token = new ReadWriteMockToken({
       address: address as `0x${string}`,
       publicClient,
       walletClient,

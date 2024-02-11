@@ -1,12 +1,11 @@
-import { Ballot } from "@delvtech/council-core";
-import { ViemReadWriteCouncil } from "@delvtech/council-viem";
+import { Ballot, ReadWriteCouncil } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import signale from "signale";
 import { createPublicClient, createWalletClient, http } from "viem";
 import {
   getWriteOptions,
   writeOptions,
-} from "../../reusable-options/write-options.js";
+} from "../../reusable-options/writeOptions.js";
 import { DAY_IN_BLOCKS } from "../../utils/constants.js";
 
 export default command({
@@ -111,7 +110,7 @@ export default command({
       },
     });
 
-    const council = new ViemReadWriteCouncil({ publicClient, walletClient });
+    const council = new ReadWriteCouncil({ publicClient, walletClient });
     const coreVoting = council.coreVoting({
       address: address as `0x${string}`,
     });

@@ -10,18 +10,18 @@ import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
-import { useChainId } from "src/ui/network/useChainId";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 
 interface ProposalStatsRowProps {
-  votingContractName: string;
-  votingContractAddress: string;
-  createdBy: string | null;
-  createdTransactionHash: string | null;
-  endsAtDate: Date | null;
-  unlockAtDate: Date | null;
-  lastCallAtDate: Date | null;
-  executedTransactionHash: string | null;
+  votingContractName?: string;
+  votingContractAddress: `0x${string}`;
+  createdBy: `0x${string}` | undefined;
+  createdTransactionHash: `0x${string}` | undefined;
+  endsAtDate: Date | undefined;
+  unlockAtDate: Date | undefined;
+  lastCallAtDate: Date | undefined;
+  executedTransactionHash: `0x${string}` | undefined;
   status: ProposalStatus;
   className?: string;
 }
@@ -39,7 +39,7 @@ export function ProposalStatsRow({
   className,
 }: ProposalStatsRowProps): ReactElement {
   const createdByDisplayName = useDisplayName(createdBy);
-  const chainId = useChainId();
+  const chainId = useSupportedChainId();
   return (
     <div className={classNames("flex flex-wrap gap-4", className)}>
       <Stat

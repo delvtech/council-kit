@@ -1,4 +1,4 @@
-import { formatDuration, intervalToDuration, isPast } from "date-fns";
+import { Duration, formatDuration, intervalToDuration, isPast } from "date-fns";
 
 export interface FormatTimeLeftOptions {
   /**
@@ -32,7 +32,7 @@ export function formatTimeLeft(
     return "less than a minute";
   }
 
-  let format = ["minutes"];
+  let format: (keyof Duration)[] = ["minutes"];
 
   if (months) {
     format = ["months"];

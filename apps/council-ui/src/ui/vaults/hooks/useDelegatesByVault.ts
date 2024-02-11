@@ -1,42 +1,72 @@
-import { LockingVault, VestingVault, Voter } from "@council/sdk";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
-import { getVaultConfig } from "src/vaults/vaults";
+import {
+  BlockLike,
+  ReadLockingVault,
+  ReadVestingVault,
+  ReadVoter,
+  ReadVotingVault,
+} from "@delvtech/council-viem";
+import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useAccount } from "wagmi";
 
+interface UseDelegatesByVaultOptions {
+  vaults: (ReadVotingVault | `0x${string}`)[];
+  account?: `0x${string}`;
+  atBlock?: BlockLike;
+}
+
 /**
- * Get an object representing the connected wallet's delegates by vault address.
+ * Get an object representing a wallet's delegates by vault address.
+ * @param account The account to get delegates for. If not provided, the
+ * connected account will be used.
  */
-export function useDelegatesByVault(): UseQueryResult<Record<string, Voter>> {
-  const { address } = useAccount();
-  const { coreVoting } = useCouncil();
-  const chainId = useChainId();
+export function useDelegatesByVault({
+  vaults: _vaults,
+  account,
+  atBlock,
+}: UseDelegatesByVaultOptions): {
+  delegatesByVault: Record<`0x${string}`, ReadVoter> | undefined;
+  status: QueryStatus;
+} {
+  const chainId = useSupportedChainId();
+  const vaultConfigs = useCouncilConfig().coreVoting.vaults;
+  const council = useReadCouncil();
 
-  return useQuery({
-    queryKey: ["delegates-by-vault", address, chainId],
-    enabled: !!address,
-    queryFn: !!address
+  const { address: connectedAccount } = useAccount();
+  const accountToUse = account ?? connectedAccount;
+
+  const enabled = !!accountToUse;
+
+  const { data, status } = useQuery({
+    queryKey: ["delegates-by-vault", accountToUse, chainId],
+    enabled,
+    queryFn: enabled
       ? async () => {
-          const delegatesByVault: Record<string, Voter> = {};
+          const delegatesByVault: Record<`0x${string}`, ReadVoter> = {};
 
-          for (const vault of coreVoting.vaults) {
-            const config = getVaultConfig(vault.address, chainId);
+          const vaults = _vaults.map((vault) =>
+            typeof vault === "string" ? council.votingVault(vault) : vault,
+          );
 
-            if (!config) {
-              continue;
-            }
+          for (const vault of vaults) {
+            const config = vaultConfigs.find(
+              ({ address }) => address === vault.address,
+            );
 
-            let typedDelegationVault: LockingVault | VestingVault | undefined =
-              undefined;
+            let typedDelegationVault:
+              | ReadLockingVault
+              | ReadVestingVault
+              | undefined;
 
-            switch (config.type) {
+            switch (config?.type) {
               case "FrozenLockingVault":
               case "LockingVault":
-                typedDelegationVault = vault as LockingVault;
+                typedDelegationVault = vault as ReadLockingVault;
                 break;
               case "VestingVault":
-                typedDelegationVault = vault as VestingVault;
+                typedDelegationVault = vault as ReadVestingVault;
                 break;
               case "GSCVault":
               // GSCVault does not have delegation, do nothing
@@ -44,8 +74,11 @@ export function useDelegatesByVault(): UseQueryResult<Record<string, Voter>> {
             }
 
             if (typedDelegationVault) {
-              const delegate = await typedDelegationVault.getDelegate(address);
-              delegatesByVault[config.address] = delegate;
+              const delegate = await typedDelegationVault.getDelegate({
+                account: accountToUse,
+                atBlock,
+              });
+              delegatesByVault[vault.address] = delegate;
             }
           }
 
@@ -53,4 +86,9 @@ export function useDelegatesByVault(): UseQueryResult<Record<string, Voter>> {
         }
       : undefined,
   });
+
+  return {
+    delegatesByVault: data,
+    status,
+  };
 }

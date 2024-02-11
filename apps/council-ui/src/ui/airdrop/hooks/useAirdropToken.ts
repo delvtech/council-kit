@@ -1,15 +1,24 @@
-import { Token } from "@council/sdk";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { useCouncil } from "src/ui/council/useCouncil";
+import { ReadToken } from "@delvtech/council-viem";
+import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { useReadAirdrop } from "src/ui/airdrop/hooks/useReadAirdrop";
 
 /**
- * Fetch the token for the airdrop.
+ * Fetch the token for the configured airdrop.
  */
-export function useAirdropToken(): UseQueryResult<Token | undefined> {
-  const { airdrop } = useCouncil();
-  return useQuery({
+export function useAirdropToken(): {
+  airdropToken: ReadToken | undefined;
+  status: QueryStatus;
+} {
+  const airdrop = useReadAirdrop();
+
+  const { data, status } = useQuery({
     queryKey: ["airdropToken", airdrop?.address],
     enabled: !!airdrop,
     queryFn: !!airdrop ? () => airdrop.getToken() : undefined,
   });
+
+  return {
+    airdropToken: data,
+    status,
+  };
 }

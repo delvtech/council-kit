@@ -4,7 +4,7 @@ import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { useChainId } from "src/ui/network/useChainId";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
   PARTICIPANTS_TIP,
   WALLETS_DELEGATED_TIP,
@@ -28,7 +28,7 @@ export function VestingVaultStatsRow({
   tokenAddress,
   tokenSymbol,
 }: VestingVaultStatsRowProps): ReactElement {
-  const chainId = useChainId();
+  const chainId = useSupportedChainId();
   return (
     <div className="flex flex-wrap gap-4">
       {accountVotingPower && (

@@ -1,13 +1,10 @@
-import { LockingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { ethers, Signer } from "ethers";
-import { isAddress } from "ethers/lib/utils";
 import { ReactElement } from "react";
-import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
+import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
+import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { DepositAndWithdrawForm } from "src/ui/vaults/DepositAndWithdrawForm";
@@ -19,25 +16,32 @@ import { LockingVaultStatsRow } from "src/ui/vaults/lockingVault/LockingVaultSta
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
-import { useAccount, useSigner } from "wagmi";
+import { isAddress } from "viem";
+import { useAccount, usePublicClient } from "wagmi";
 
 interface LockingVaultDetailsProps {
-  address: string;
+  address: `0x${string}`;
 }
 
 export function LockingVaultDetails({
   address,
 }: LockingVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
-  const chainId = useChainId();
-  const { data: signer } = useSigner();
+  const chainId = useSupportedChainId();
   const { data, status, error } = useLockingVaultDetailsData(address, account);
+  const publicClient = usePublicClient();
 
-  const { mutate: changeDelegate, isLoading: isDelegating } =
-    useChangeDelegate(address);
-  const { mutate: deposit, isLoading: isDepositing } = useDeposit(address);
-  const { mutate: withdraw, isLoading: isWithdrawing } = useWithdraw(address);
-  const { mutate: approve, isLoading: isApproving } = useApprove(address);
+  const { changeDelegate, status: changeDelegateStatus } = useChangeDelegate();
+  const { deposit, status: depositStatus } = useDeposit();
+  const { withdraw, status: withdrawStatus } = useWithdraw();
+  const { approve, status: approveStatus } = useApprove();
+
+  const isTransacting = [
+    changeDelegateStatus,
+    depositStatus,
+    withdrawStatus,
+    approveStatus,
+  ].some((status) => status === "pending");
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
@@ -47,11 +51,11 @@ export function LockingVaultDetails({
   }
 
   async function handleDelegate(delegate: string): Promise<void> {
-    let address: string | null | undefined = delegate;
+    let delegateAddress: string | null | undefined = delegate;
     if (!isAddress(delegate)) {
-      address = await signer?.provider?.resolveName(delegate);
+      delegateAddress = await publicClient?.getEnsAddress({ name: delegate });
     }
-    if (!address) {
+    if (!delegateAddress) {
       makeTransactionErrorToast(
         `Could not find address for ${delegate}`,
         undefined,
@@ -59,9 +63,9 @@ export function LockingVaultDetails({
       );
       return;
     }
-    return changeDelegate({
-      signer: signer as Signer,
-      delegate: address,
+    return changeDelegate?.({
+      newDelegate: delegateAddress as `0x${string}`,
+      vaultAddress: address,
     });
   }
 
@@ -79,6 +83,7 @@ export function LockingVaultDetails({
           participants={data.participants}
           tokenAddress={data.tokenAddress}
           tokenSymbol={data.tokenSymbol}
+          decimals={data.decimals}
         />
       }
       actions={
@@ -88,21 +93,29 @@ export function LockingVaultDetails({
             balance={data.tokenBalance}
             allowance={data.tokenAllowance}
             depositedBalance={data.depositedBalance}
-            disabled={!signer || isApproving || isDepositing || isWithdrawing}
-            onApprove={() => approve({ signer: signer as Signer })}
+            disabled={
+              !account || !deposit || !withdraw || !approve || isTransacting
+            }
+            onApprove={() => approve?.(address)}
             onDeposit={(amount) =>
-              deposit({ signer: signer as Signer, amount })
+              deposit?.({
+                amount,
+                vaultAddress: address,
+              })
             }
             onWithdraw={(amount) =>
-              withdraw({ signer: signer as Signer, amount })
+              withdraw?.({
+                amount,
+                vaultAddress: address,
+              })
             }
+            decimals={data.decimals}
           />
 
           <ChangeDelegateForm
-            currentDelegate={data.delegate || ethers.constants.AddressZero}
-            depositedBalance={data.depositedBalance}
+            currentDelegate={data.delegate}
             onDelegate={handleDelegate}
-            disabled={!signer || !+data.depositedBalance || isDelegating}
+            disabled={!account || !data.depositedBalance || isTransacting}
           />
         </>
       }
@@ -111,56 +124,57 @@ export function LockingVaultDetails({
 }
 
 interface LockingVaultDetailsData {
-  accountVotingPower: string;
-  activeProposalCount: number;
-  delegate?: string;
+  accountVotingPower: bigint;
+  delegate?: `0x${string}`;
   delegatedToAccount: number;
-  depositedBalance: string;
+  depositedBalance: bigint;
   descriptionURL: string | undefined;
   paragraphSummary: string | undefined;
   name: string | undefined;
   participants: number;
-  tokenAddress: string;
-  tokenAllowance: string;
-  tokenBalance: string;
+  tokenAddress: `0x${string}`;
+  tokenAllowance: bigint;
+  tokenBalance: bigint;
   tokenSymbol: string;
+  decimals: number;
 }
 
 function useLockingVaultDetailsData(
-  address: string,
-  account: string | undefined,
+  address: `0x${string}`,
+  account: `0x${string}` | undefined,
 ): UseQueryResult<LockingVaultDetailsData> {
-  const { context } = useCouncil();
-  const chainId = useChainId();
-  const coreVotingConfig = councilConfigs[chainId].coreVoting;
-  const vaultConfig = coreVotingConfig.vaults.find(
-    (vault) => vault.address === address,
-  );
+  const council = useReadCouncil();
+  const vaultConfig = useVaultConfig(address);
 
   return useQuery({
-    queryKey: ["lockingVaultDetails", address, account],
-    queryFn: async () => {
-      const lockingVault = new LockingVault(address, context);
+    queryKey: ["lockingVaultDetails", address, account, vaultConfig],
+    queryFn: async (): Promise<LockingVaultDetailsData> => {
+      const lockingVault = council.lockingVault(address);
       const token = await lockingVault.getToken();
       const delegate = account
-        ? await lockingVault.getDelegate(account)
+        ? await lockingVault.getDelegate({ account })
         : undefined;
       const accountVotingPower = account
-        ? await lockingVault.getVotingPower(account)
-        : "0";
+        ? await lockingVault.getVotingPower({ account })
+        : BigInt(0);
 
       return {
         accountVotingPower,
 
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
-        tokenBalance: account ? await token.getBalanceOf(account) : "0",
+        tokenBalance: account
+          ? await token.getBalanceOf({ account })
+          : BigInt(0),
         tokenAllowance: account
-          ? await token.getAllowance(account, address)
-          : "0",
+          ? await token.getAllowance({
+              owner: account,
+              spender: address,
+            })
+          : BigInt(0),
         depositedBalance: account
-          ? await lockingVault.getDepositedBalance(account)
-          : "0",
+          ? await lockingVault.getDepositedBalance({ account })
+          : BigInt(0),
 
         delegate: delegate?.address,
         descriptionURL: vaultConfig?.descriptionURL,
@@ -168,8 +182,9 @@ function useLockingVaultDetailsData(
         name: vaultConfig?.name,
         participants: (await lockingVault.getVoters()).length,
         delegatedToAccount: account
-          ? (await lockingVault.getDelegatorsTo(account)).length
+          ? (await lockingVault.getDelegatorsTo({ account })).length
           : 0,
+        decimals: await token.getDecimals(),
       };
     },
   });

@@ -1,12 +1,12 @@
 import { ReadWriteContractFactory } from "src/contract/factory";
+import { ReadWriteModelOptions } from "src/models/Model";
 import { ReadWriteAirdrop } from "src/models/airdrop/ReadWriteAirdrop";
 import { ReadWriteCoreVoting } from "src/models/coreVoting/ReadWriteCoreVoting";
 import { ReadCouncil } from "src/models/council/ReadCouncil";
-import { ReadWriteModelOptions } from "src/models/Model";
 import { ReadWriteToken } from "src/models/token/ReadWriteToken";
-import { ReadWriteGSCVault } from "src/models/votingVault/gscVault/ReadWriteGscVault";
-import { ReadWriteLockingVault } from "src/models/votingVault/lockingVault/ReadWriteLockingVault";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
+import { ReadWriteGscVault } from "src/models/votingVault/gscVault/ReadWriteGscVault";
+import { ReadWriteLockingVault } from "src/models/votingVault/lockingVault/ReadWriteLockingVault";
 import { ReadWriteVestingVault } from "src/models/votingVault/vestingVault/ReadWriteVestingVault";
 
 export interface ReadWriteCouncilOptions extends ReadWriteModelOptions {}
@@ -49,8 +49,8 @@ export class ReadWriteCouncil extends ReadCouncil {
     });
   }
 
-  gscVault(address: `0x${string}`): ReadWriteGSCVault {
-    return new ReadWriteGSCVault({
+  gscVault(address: `0x${string}`): ReadWriteGscVault {
+    return new ReadWriteGscVault({
       address,
       contractFactory: this._contractFactory,
       network: this._network,

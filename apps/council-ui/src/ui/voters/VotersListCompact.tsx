@@ -1,12 +1,12 @@
-import { VoterWithPower } from "@council/sdk";
+import { VoterWithPower } from "@delvtech/council-viem";
 import { ReactElement, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import {
-  SortableGridTable,
   SortOptions,
+  SortableGridTable,
 } from "src/ui/base/tables/SortableGridTable";
-import { useBulkEnsRecords } from "src/ui/ens/useBulkEnsRecords";
+import { useBulkEnsRecords } from "src/ui/ens/hooks/useBulkEnsRecords";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 
 interface VotersListCompactProps {
@@ -31,7 +31,7 @@ export function VotersListCompact({
         default:
           sorted = voters
             .slice()
-            .sort((a, b) => +a.votingPower - +b.votingPower);
+            .sort((a, b) => (a.votingPower >= b.votingPower ? 1 : -1));
           break;
       }
 

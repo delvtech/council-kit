@@ -1,105 +1,111 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { ReactElement, useMemo, useState } from "react";
-import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
-import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { Page } from "src/ui/base/Page";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
-import { GSCOnlyToggle } from "src/ui/voters/GSCOnlyToggle";
-import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
-import { VoterRowData } from "src/ui/voters/types";
-import { VoterList } from "src/ui/voters/VoterList/VoterList";
-import { VoterListSkeleton } from "src/ui/voters/VoterList/VoterListSkeleton";
+// import { useQuery, UseQueryResult } from "@tanstack/react-query";
+// import { ReactElement, useMemo, useState } from "react";
+// import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
+// import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+// import { Page } from "src/ui/base/Page";
+// import { useCouncil } from "src/ui/council/useCouncil";
+// import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+// import { GSCOnlyToggle } from "src/ui/voters/GSCOnlyToggle";
+// import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
+// import { VoterRowData } from "src/ui/voters/types";
+// import { VoterList } from "src/ui/voters/VoterList/VoterList";
+// import { VoterListSkeleton } from "src/ui/voters/VoterList/VoterListSkeleton";
 
-const DEFAULT_LIST_SIZE = 100;
+import { ReactElement } from "react";
 
-export default function Voters(): ReactElement {
-  const { data: voters, status, error } = useVoterPageData();
-  const { results, search } = useVotersSearch(voters);
-  const [listSize, setListSize] = useState(DEFAULT_LIST_SIZE);
-  const [gscOnly, setGscOnly] = useState(false);
+// const DEFAULT_LIST_SIZE = 100;
 
-  const filteredResults = useMemo(() => {
-    if (gscOnly) {
-      return results.filter(({ isGSCMember }) => isGSCMember);
-    }
-    return results;
-  }, [gscOnly, results]);
-
-  if (status === "error") {
-    return <ErrorMessage error={error} />;
-  }
-
-  return (
-    <Page>
-      <div className="max-w-3xl px-4 m-auto space-y-10">
-        <div>
-          <h1 className="text-5xl font-bold">Voters</h1>
-          <p className="mt-6 text-lg">
-            Voters are accounts that currently have voting power. You can search
-            by partial keywords using ENS names or addresses.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <input
-            type="text"
-            placeholder="Search by ENS or address"
-            className="w-full daisy-input-bordered daisy-input"
-            onChange={(e) => search(e.target.value as string)}
-            disabled={status !== "success"}
-          />
-          <GSCOnlyToggle
-            on={gscOnly}
-            onToggle={setGscOnly}
-            disabled={status !== "success"}
-          />
-        </div>
-
-        {status === "success" ? (
-          <VoterList
-            voters={filteredResults}
-            size={listSize}
-            onSizeChange={(newSize) => setListSize(newSize)}
-          />
-        ) : (
-          <VoterListSkeleton />
-        )}
-      </div>
-    </Page>
-  );
+export default function VotersPage(): ReactElement {
+  return <div>VotersPage</div>;
 }
 
-export function useVoterPageData(): UseQueryResult<VoterRowData[]> {
-  const {
-    coreVoting,
-    gscVoting,
-    context: { provider },
-  } = useCouncil();
-  const chainId = useChainId();
+// export default function VotersPage(): ReactElement {
+//   const { data: voters, status, error } = useVoterPageData();
+//   const { results, search } = useVotersSearch(voters);
+//   const [listSize, setListSize] = useState(DEFAULT_LIST_SIZE);
+//   const [gscOnly, setGscOnly] = useState(false);
 
-  return useQuery<VoterRowData[]>({
-    queryKey: ["voter-list-page", chainId],
-    queryFn: async () => {
-      const voterPowerBreakdowns = await coreVoting.getVotingPowerBreakdown();
-      const gscMembers = (await gscVoting?.getVoters()) || [];
-      const gscMemberAddresses = gscMembers.map(({ address }) => address);
-      const ensRecords = await getBulkEnsRecords(
-        voterPowerBreakdowns.map(({ voter }) => voter.address),
-        provider,
-      );
+//   const filteredResults = useMemo(() => {
+//     if (gscOnly) {
+//       return results.filter(({ isGSCMember }) => isGSCMember);
+//     }
+//     return results;
+//   }, [gscOnly, results]);
 
-      return voterPowerBreakdowns.map(({ voter, votingPower, delegators }) => ({
-        address: voter.address,
-        ensName: ensRecords[voter.address],
-        votingPower,
-        numberOfDelegators: delegators.length,
-        isGSCMember: gscMemberAddresses.includes(voter.address),
-      }));
-    },
+//   if (status === "error") {
+//     return <ErrorMessage error={error} />;
+//   }
 
-    // This is an expensive query and do not want to refetch.
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
-}
+//   return (
+//     <Page>
+//       <div className="m-auto max-w-3xl space-y-10 px-4">
+//         <div>
+//           <h1 className="text-5xl font-bold">Voters</h1>
+//           <p className="mt-6 text-lg">
+//             Voters are accounts that currently have voting power. You can search
+//             by partial keywords using ENS names or addresses.
+//           </p>
+//         </div>
+
+//         <div className="flex items-center gap-4">
+//           <input
+//             type="text"
+//             placeholder="Search by ENS or address"
+//             className="daisy-input daisy-input-bordered w-full"
+//             onChange={(e) => search(e.target.value as string)}
+//             disabled={status !== "success"}
+//           />
+//           <GSCOnlyToggle
+//             on={gscOnly}
+//             onToggle={setGscOnly}
+//             disabled={status !== "success"}
+//           />
+//         </div>
+
+//         {status === "success" ? (
+//           <VoterList
+//             voters={filteredResults}
+//             size={listSize}
+//             onSizeChange={(newSize) => setListSize(newSize)}
+//           />
+//         ) : (
+//           <VoterListSkeleton />
+//         )}
+//       </div>
+//     </Page>
+//   );
+// }
+
+// export function useVoterPageData(): UseQueryResult<VoterRowData[]> {
+//   const {
+//     coreVoting,
+//     gscVoting,
+//     context: { provider },
+//   } = useCouncil();
+//   const chainId = useSupportedChainId();
+
+//   return useQuery<VoterRowData[]>({
+//     queryKey: ["voter-list-page", chainId],
+//     queryFn: async () => {
+//       const voterPowerBreakdowns = await coreVoting.getVotingPowerBreakdown();
+//       const gscMembers = (await gscVoting?.getVoters()) || [];
+//       const gscMemberAddresses = gscMembers.map(({ address }) => address);
+//       const ensRecords = await getBulkEnsRecords(
+//         voterPowerBreakdowns.map(({ voter }) => voter.address),
+//         provider,
+//       );
+
+//       return voterPowerBreakdowns.map(({ voter, votingPower, delegators }) => ({
+//         address: voter.address,
+//         ensName: ensRecords[voter.address],
+//         votingPower,
+//         numberOfDelegators: delegators.length,
+//         isGSCMember: gscMemberAddresses.includes(voter.address),
+//       }));
+//     },
+
+//     // This is an expensive query and do not want to refetch.
+//     refetchOnWindowFocus: false,
+//     staleTime: Infinity,
+//   });
+// }

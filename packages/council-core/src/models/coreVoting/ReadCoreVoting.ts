@@ -1,14 +1,14 @@
 import { CoreVoting } from "@council/artifacts/CoreVoting";
 import { CachedReadContract } from "@council/evm-client";
+import { Model, ReadContractModelOptions } from "src/models/Model";
+import { ReadVote } from "src/models/ReadVote";
+import { ReadVoter } from "src/models/ReadVoter";
 import {
   BALLOTS,
   EXECUTED_PROPOSAL_HASH,
 } from "src/models/coreVoting/constants";
 import { CoreVotingAbi } from "src/models/coreVoting/types";
-import { Model, ReadContractModelOptions } from "src/models/Model";
 import { ReadProposal } from "src/models/proposal/ReadProposal";
-import { ReadVote } from "src/models/ReadVote";
-import { ReadVoter } from "src/models/ReadVoter";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
 import { BlockLike } from "src/utils/blockToReadOptions";
 
@@ -42,12 +42,14 @@ export class ReadCoreVoting extends Model {
     vaults = [],
   }: ReadCoreVotingOptions) {
     super({ contractFactory, network, name });
+
     this.contract = contractFactory({
       abi: CoreVoting.abi,
       address,
       cache,
       namespace,
     });
+
     this.vaults = vaults.map((vault) =>
       vault instanceof ReadVotingVault
         ? vault
@@ -117,18 +119,18 @@ export class ReadCoreVoting extends Model {
    *   as merkle proofs.
    */
   async getVotingPower({
-    voter,
+    account,
     atBlock,
     extraData,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
     extraData?: `0x${string}`[];
   }): Promise<bigint> {
     const vaultPowers = await Promise.all(
       this.vaults.map((vault, i) =>
         vault.getVotingPower({
-          voter,
+          account: account,
           atBlock,
           extraData: extraData?.[i],
         }),
@@ -141,14 +143,14 @@ export class ReadCoreVoting extends Model {
    * Get a casted vote for a given address on a given proposal id.
    */
   async getVote({
-    voter,
+    account,
     proposalId,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     proposalId: bigint;
   }): Promise<ReadVote | undefined> {
     const { castBallot, votingPower } = await this.contract.read("votes", {
-      "0": voter instanceof ReadVoter ? voter.address : voter,
+      "0": account instanceof ReadVoter ? account.address : account,
       "1": proposalId,
     });
 
@@ -162,7 +164,7 @@ export class ReadCoreVoting extends Model {
       network: this.network,
       power: votingPower,
       proposal: (await this.getProposal({ id: proposalId }))!,
-      voter,
+      voter: account,
     });
   }
 
@@ -173,18 +175,19 @@ export class ReadCoreVoting extends Model {
    */
   async getVotes({
     proposalId,
-    voter,
+    account,
     fromBlock,
     toBlock,
   }: {
     proposalId?: bigint;
-    voter?: ReadVoter | `0x${string}`;
+    account?: ReadVoter | `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
   } = {}): Promise<ReadVote[]> {
     const voteEvents = await this.contract.getEvents("Voted", {
       filter: {
-        voter: typeof voter === "string" || !voter ? voter : voter.address,
+        voter:
+          typeof account === "string" || !account ? account : account.address,
         proposalId,
       },
       fromBlock,
@@ -222,16 +225,16 @@ export class ReadCoreVoting extends Model {
    * the address has voted on every proposal they were able to.
    */
   async getParticipation({
-    voter,
+    account,
     fromBlock,
     toBlock,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
   }): Promise<[number, number]> {
     const votes = await this.getVotes({
-      voter,
+      account: account,
       fromBlock,
       toBlock,
     });
@@ -244,7 +247,7 @@ export class ReadCoreVoting extends Model {
           async (proposal) =>
             // could be null if the proposal has been deleted and the created
             // block can't be fetched.
-            ((await proposal.getVotingPower({ voter })) || 0n) > 0n,
+            ((await proposal.getVotingPower({ account: account })) || 0n) > 0n,
         ),
     );
     const missedVotesCount = proposalsNotVoted.filter(Boolean).length;

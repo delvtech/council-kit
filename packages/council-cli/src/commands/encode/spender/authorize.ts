@@ -1,2 +1,2 @@
-import authorize from "../libraries/authorizable/authorize.js";
+import authorize from "../authorizable/authorize.js";
 export default authorize;

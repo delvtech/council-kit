@@ -1,4 +1,5 @@
-import { Ballot } from "@council/sdk";
+import { Ballot } from "@delvtech/council-viem";
+import assertNever from "assert-never";
 import { ReactElement } from "react";
 
 interface FormattedBallotProps {
@@ -17,5 +18,8 @@ export default function FormattedBallot({
 
     case "maybe":
       return <h2 className="font-bold uppercase">ABSTAIN</h2>;
+
+    default:
+      assertNever(ballot);
   }
 }

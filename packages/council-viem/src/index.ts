@@ -9,6 +9,7 @@ export * from "@delvtech/council-core/vaults";
 export * from "@delvtech/council-core/vote";
 export * from "@delvtech/council-core/voter";
 export * from "@delvtech/council-core/voting";
+export * from "@delvtech/council-core/utils";
 
 // Client Re-exports
 export * from "@council/evm-client-viem";

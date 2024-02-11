@@ -63,7 +63,7 @@ export class ReadWriteAirdrop extends ReadAirdrop {
     merkleProof: `0x${string}`[];
     recipient: `0x${string}`;
     options?: ContractWriteOptions;
-  }): Promise<string> {
+  }): Promise<`0x${string}`> {
     const hash = await this.contract.write(
       "claim",
       {
@@ -106,7 +106,7 @@ export class ReadWriteAirdrop extends ReadAirdrop {
     merkleProof: `0x${string}`[];
     recipient: `0x${string}`;
     options?: ContractWriteOptions;
-  }): Promise<string> {
+  }): Promise<`0x${string}`> {
     const hash = await this.contract.write(
       "claimAndDelegate",
       {

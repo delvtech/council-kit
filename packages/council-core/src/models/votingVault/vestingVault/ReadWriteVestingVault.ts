@@ -28,20 +28,20 @@ export class ReadWriteVestingVault extends ReadVestingVault {
 
   /**
    * Change current delegate.
-   * @param signer - The Signer of the address delegating.
-   * @param delegate - The address to delegate to.
+   * @param delegate - The address to delegate to. Defaults to the signer's
+   * address.
    * @returns The transaction hash.
    */
   async changeDelegate({
     delegate,
     options,
   }: {
-    delegate: `0x${string}`;
+    delegate?: `0x${string}`;
     options?: ContractWriteOptions;
   }): Promise<`0x${string}`> {
     const hash = await this.vestingVaultContract.write(
       "delegate",
-      delegate,
+      delegate ?? (await this.vestingVaultContract.getSignerAddress()),
       options,
     );
     this.contract.clearCache();
@@ -50,7 +50,6 @@ export class ReadWriteVestingVault extends ReadVestingVault {
 
   /**
    * Claim a grant and withdraw the tokens.
-   * @param signer - The Signer of the wallet with a grant to claim.
    * @returns The transaction hash.
    */
   async claim({

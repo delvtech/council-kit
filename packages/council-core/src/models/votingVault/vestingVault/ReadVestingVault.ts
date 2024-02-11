@@ -85,15 +85,15 @@ export class ReadVestingVault extends ReadVotingVault {
    * Get the grant data for a given address.
    */
   getGrant({
-    voter,
+    account,
     atBlock,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<FunctionReturn<VestingVaultAbi, "getGrant">> {
     return this.vestingVaultContract.read(
       "getGrant",
-      voter instanceof ReadVoter ? voter.address : voter,
+      typeof account === "string" ? account : account.address,
       blockToReadOptions(atBlock),
     );
   }
@@ -101,14 +101,14 @@ export class ReadVestingVault extends ReadVotingVault {
   /**
    * Gets the amount of tokens currently claimable from the grant.
    * Mimics internal function https://github.com/delvtech/council/blob/main/contracts/vaults/VestingVault.sol#L434
-   * @param address - The grantee address.
+   * @param account - The grantee account address.
    * @returns The amount of claimable tokens.
    */
   async getWithdrawableAmount({
-    voter,
+    account,
     atBlock,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<bigint> {
     let blockNumber = atBlock;
@@ -123,7 +123,7 @@ export class ReadVestingVault extends ReadVotingVault {
 
     const { allocation, created, cliff, expiration, withdrawn } =
       await this.getGrant({
-        voter,
+        account: account,
         atBlock,
       });
 
@@ -178,18 +178,18 @@ export class ReadVestingVault extends ReadVotingVault {
    * amount of power delegated to them by each delegator. This is a convenience
    * method to fetch voting power and delegation data for a large number of
    * voters in a single call.
-   * @param address - Get a breakdown for a specific address.
+   * @param account - Get a breakdown for a specific account.
    * @param fromBlock - Include all voters that had power on or after this block
    * number.
    * @param toBlock - Include all voters that had power on or before this block
    * number.
    */
   async getVotingPowerBreakdown({
-    address,
+    account,
     fromBlock,
     toBlock,
   }: {
-    address?: `0x${string}`;
+    account?: `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
   } = {}): Promise<VoterPowerBreakdown[]> {
@@ -198,7 +198,7 @@ export class ReadVestingVault extends ReadVotingVault {
       "VoteChange",
       {
         filter: {
-          to: address,
+          to: account,
         },
         fromBlock,
         toBlock,
@@ -296,15 +296,15 @@ export class ReadVestingVault extends ReadVotingVault {
   /**
    * Get the voting power for a given address at a given block without
    * accounting for the stale block lag.
-   * @param voter
+   * @param account
    * @param atBlock
    * @returns The historical voting power of the given address.
    */
   async getHistoricalVotingPower({
-    voter,
+    account,
     atBlock,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<bigint> {
     let blockNumber = atBlock;
@@ -318,7 +318,7 @@ export class ReadVestingVault extends ReadVotingVault {
     }
 
     return this.vestingVaultContract.read("queryVotePowerView", {
-      user: voter instanceof ReadVoter ? voter.address : voter,
+      user: typeof account === "string" ? account : account.address,
       blockNumber,
     });
   }
@@ -339,17 +339,17 @@ export class ReadVestingVault extends ReadVotingVault {
   }
 
   /**
-   * Get the current delegate of a given address.
+   * Get the current delegate of a given account.
    */
   async getDelegate({
-    voter,
+    account,
     atBlock,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<ReadVoter> {
     const { delegatee } = await this.getGrant({
-      voter,
+      account,
       atBlock,
     });
     return new ReadVoter({

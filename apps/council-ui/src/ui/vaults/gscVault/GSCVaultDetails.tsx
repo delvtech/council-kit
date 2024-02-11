@@ -1,34 +1,33 @@
-import { GSCVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
-import { councilConfigs } from "src/config/council.config";
-import { VaultConfig, VotingContractConfig } from "src/config/CouncilConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
-import { GSCMembersTable } from "src/ui/vaults/gscVault/GSCMembersTable/GSCMembersTable";
-import { GSCVaultsStatsRow } from "src/ui/vaults/gscVault/GSCVaultStatsRow/GSCVaultStatsRow";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { GscMembersTable } from "src/ui/vaults/gscVault/GscMembersTable";
+import { GSCVaultsStatsRow } from "src/ui/vaults/gscVault/GscVaultStatsRow";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import {
-  getGSCMembers,
-  GSCMemberInfo,
-} from "src/vaults/gscVault/getGSCMembers";
-import { getGSCStatus } from "src/vaults/gscVault/getGSCStatus";
-import { GSCStatus } from "src/vaults/gscVault/types";
-import { useAccount } from "wagmi";
+  getGscMembers,
+  GscMemberInfo,
+} from "src/vaults/gscVault/getGscMembers";
+import { getGscStatus } from "src/vaults/gscVault/getGscStatus";
+import { GscStatus } from "src/vaults/gscVault/types";
+import { PublicClient } from "viem";
+import { useAccount, usePublicClient } from "wagmi";
+import { useReadGscVault } from "./hooks/useReadGscVault";
 
-interface GSCVaultDetailsProps {
-  address: string;
+interface GscVaultDetailsProps {
+  address: `0x${string}`;
 }
 
-export function GSCVaultDetails({
+export function GscVaultDetails({
   address: vaultAddress,
-}: GSCVaultDetailsProps): ReactElement {
+}: GscVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
-  const { data, status, error } = useGSCVaultDetails({
+  const { data, status, error } = useGscVaultDetails({
     vaultAddress,
     account,
   });
@@ -50,18 +49,16 @@ export function GSCVaultDetails({
       }
       statsRow={
         <GSCVaultsStatsRow
-          gscVaultAddress={vaultAddress}
           accountMembership={data.gscStatus}
           membersCount={data.members.length}
           requiredVotingPower={data.requiredVotingPower}
         />
       }
       actions={
-        <div className="flex flex-col w-full  gap-8 sm:flex-row">
-          <GSCMembersTable
+        <div className="flex w-full flex-col  gap-8 sm:flex-row">
+          <GscMembersTable
             members={data.members}
             requiredVotingPower={data.requiredVotingPower}
-            gscVaultAddress={vaultAddress}
           />
         </div>
       }
@@ -70,53 +67,45 @@ export function GSCVaultDetails({
 }
 
 interface GSCVaultDetailsData {
-  gscStatus: GSCStatus;
+  gscStatus: GscStatus;
   paragraphSummary: string | undefined;
   descriptionURL: string | undefined;
   name: string | undefined;
-  members: GSCMemberInfo[];
-  requiredVotingPower: string;
+  members: GscMemberInfo[];
+  requiredVotingPower: bigint;
 }
 
-function useGSCVaultDetails({
+function useGscVaultDetails({
   vaultAddress,
   account,
 }: {
-  vaultAddress: string;
-  account: string | undefined;
+  vaultAddress: `0x${string}`;
+  account: `0x${string}` | undefined;
 }): UseQueryResult<GSCVaultDetailsData> {
-  const { context, coreVoting, gscVoting } = useCouncil();
-  const chainId = useChainId();
+  const coreVoting = useReadCoreVoting();
+  const config = useCouncilConfig();
+  const vaultConfig = config.gscVoting?.vault;
+  const gscVault = useReadGscVault();
+  const publicClient = usePublicClient();
 
-  const coreVotingConfig = councilConfigs[chainId].coreVoting;
-  // safe to cast because this component should never be rendered unless it's
-  // already known that there's a GSC Core Voting in the system.
-  // See: pages/vaults/details.tsx
-  const gscCoreVotingConfig = councilConfigs[chainId]
-    .gscVoting as VotingContractConfig;
-  const vaultConfig = gscCoreVotingConfig.vaults.find(
-    (vault) => vault.address === vaultAddress,
-  ) as VaultConfig;
+  const enabled = !!gscVault && !!vaultConfig;
 
-  const queryEnabled = !!gscVoting;
   return useQuery({
     queryKey: ["gscLockingVaultDetails", vaultAddress, account],
-    enabled: queryEnabled,
-    queryFn: queryEnabled
+    enabled,
+    queryFn: enabled
       ? async (): Promise<GSCVaultDetailsData> => {
-          const gscVault = new GSCVault(vaultAddress, context);
-
           const requiredVotingPower = await gscVault.getRequiredVotingPower();
-          const members = await getGSCMembers(
+          const members = await getGscMembers({
+            client: publicClient as PublicClient,
             gscVault,
-            coreVotingConfig.vaults.map((vault) => vault.address),
-            context.provider,
-          );
+            approvedVaults: coreVoting.vaults,
+          });
 
-          const gscStatus = await getGSCStatus({
-            coreVoting,
-            gscVoting,
-            address: account,
+          const gscStatus = await getGscStatus({
+            account,
+            qualifyingVaults: coreVoting.vaults,
+            gscVault,
           });
 
           return {

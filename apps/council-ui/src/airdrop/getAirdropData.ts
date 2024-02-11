@@ -1,8 +1,8 @@
 import { councilConfigs, SupportedChainId } from "src/config/council.config";
 
 export interface AirdropData {
-  amount: string;
-  proof: string[];
+  amount: bigint;
+  proof: `0x${string}`[];
 }
 
 /**
@@ -74,7 +74,10 @@ export async function getAirdropData(
     );
   }
 
-  return data;
+  return {
+    amount: BigInt(data.amount),
+    proof: data.proof,
+  };
 }
 
 /**

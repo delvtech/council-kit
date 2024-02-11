@@ -1,7 +1,7 @@
 import { GSCVault } from "@council/artifacts/GSCVault";
 import { command } from "clide-js";
 import signale from "signale";
-import { WriteOptions } from "src/reusable-options/write-options.js";
+import { WriteOptions } from "src/reusable-options/writeOptions.js";
 import { PrivateKeyAccount, parseUnits } from "viem";
 import { Chain } from "viem/chains";
 import {

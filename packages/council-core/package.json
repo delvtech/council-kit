@@ -73,6 +73,10 @@
       "types": "./dist/token.d.ts",
       "default": "./dist/token.js"
     },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "default": "./dist/utils.js"
+    },
     "./vaults": {
       "types": "./dist/vaults.d.ts",
       "default": "./dist/vaults.js"

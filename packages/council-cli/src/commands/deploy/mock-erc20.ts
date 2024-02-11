@@ -1,7 +1,7 @@
 import { MockERC20 } from "@council/artifacts/MockERC20";
 import { command } from "clide-js";
 import signale from "signale";
-import { WriteOptions } from "src/reusable-options/write-options.js";
+import { WriteOptions } from "src/reusable-options/writeOptions.js";
 import { PrivateKeyAccount } from "viem";
 import { Chain } from "viem/chains";
 import {

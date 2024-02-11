@@ -43,7 +43,7 @@ export class ReadVoter extends Model {
         });
       }
       return vault.getVotingPower({
-        voter: this.address,
+        account: this.address,
         atBlock,
         extraData: extraData?.[i],
       });
@@ -60,7 +60,7 @@ export class ReadVoter extends Model {
     fromBlock,
     toBlock,
   }: {
-    coreVoting: `0x${string}`;
+    coreVoting: ReadCoreVoting | `0x${string}`;
     proposalId?: bigint;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
@@ -75,7 +75,7 @@ export class ReadVoter extends Model {
         : coreVoting;
     return _coreVoting.getVotes({
       proposalId,
-      voter: this,
+      account: this,
       fromBlock,
       toBlock,
     });
@@ -107,7 +107,7 @@ export class ReadVoter extends Model {
           })
         : coreVoting;
     return _coreVoting.getParticipation({
-      voter: this,
+      account: this,
       fromBlock,
       toBlock,
     });

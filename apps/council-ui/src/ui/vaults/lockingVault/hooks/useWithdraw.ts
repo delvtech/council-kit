@@ -1,55 +1,40 @@
-import { LockingVault } from "@council/sdk";
-import {
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { Signer } from "ethers";
-import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
-import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
-import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
+import { MutationStatus } from "@tanstack/react-query";
+import { useWrite } from "src/ui/contract/hooks/useWrite";
+import { useReadWriteCouncil } from "src/ui/council/hooks/useReadWriteCouncil";
 
-interface WithdrawArguments {
-  signer: Signer;
-  amount: string;
+export interface WithdrawOptions {
+  vaultAddress: `0x${string}`;
+  amount: bigint;
 }
 
-export function useWithdraw(
-  vaultAddress: string,
-): UseMutationResult<string, unknown, WithdrawArguments> {
-  const { context } = useCouncil();
-  const chainId = useChainId();
-  const queryClient = useQueryClient();
-  let transactionHash: string;
-  return useMutation(
-    async ({ signer, amount }: WithdrawArguments): Promise<string> => {
-      const vault = new LockingVault(vaultAddress, context);
-      return vault.withdraw(signer, amount, {
-        onSubmitted: (hash) => {
-          makeTransactionSubmittedToast("Withdrawing", hash, chainId);
-          transactionHash = hash;
-        },
+export function useWithdraw(): {
+  withdraw: ((options: WithdrawOptions) => void) | undefined;
+  status: MutationStatus;
+  transactionHash: `0x${string}` | undefined;
+} {
+  const council = useReadWriteCouncil();
+  const enabled = !!council;
+
+  const { write, status, transactionHash } = useWrite({
+    writeFn: ({
+      vaultAddress,
+      amount,
+    }: WithdrawOptions): Promise<`0x${string}`> => {
+      if (!enabled) {
+        throw new Error(
+          "Connection to council not available. Check your wallet connection.",
+        );
+      }
+
+      return council.lockingVault(vaultAddress).withdraw({
+        amount,
       });
     },
-    {
-      onSuccess: (hash, { amount }) => {
-        makeTransactionSuccessToast(
-          `Successfully withdrew ${amount}!`,
-          hash,
-          chainId,
-        );
-        queryClient.invalidateQueries();
-      },
-      onError(error, { amount }) {
-        makeTransactionErrorToast(
-          `Failed to withdraw ${amount}`,
-          transactionHash,
-          chainId,
-        );
-        console.error(error);
-      },
-    },
-  );
+  });
+
+  return {
+    withdraw: enabled ? write : undefined,
+    status,
+    transactionHash,
+  };
 }

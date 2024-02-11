@@ -8,7 +8,7 @@ import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAird
 import { AirdropIcon } from "src/ui/base/svg/20/AirdropIcon";
 import PushIcon from "src/ui/base/svg/PushLogo";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
-import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
+import { useWrongNetworkEffect } from "src/ui/network/hooks/useWrongNetworkEffect";
 import { usePushSubscribe } from "src/ui/push/usePushSubscribe";
 import { useAccount } from "wagmi";
 
@@ -16,7 +16,7 @@ export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
   const { toggleUserStatus, loading, isSubscribed } = usePushSubscribe();
-  const { data: claimableAmount } = useClaimableAirdropAmount();
+  const { claimableAmount } = useClaimableAirdropAmount();
 
   useWrongNetworkEffect();
 
@@ -24,7 +24,7 @@ export function Navigation(): ReactElement {
     <div className="daisy-navbar bg-base-200 ">
       <div className="daisy-navbar-start">
         <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn-ghost daisy-btn lg:hidden">
+          <label tabIndex={0} className="daisy-btn daisy-btn-ghost lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -42,7 +42,7 @@ export function Navigation(): ReactElement {
           </label>
           <ul
             tabIndex={0}
-            className="daisy-dropdown-content daisy-menu rounded-box mt-3 w-52 bg-base-200 p-2 shadow"
+            className="daisy-menu daisy-dropdown-content mt-3 w-52 rounded-box bg-base-200 p-2 shadow"
           >
             <li>
               <Link
@@ -96,11 +96,11 @@ export function Navigation(): ReactElement {
           council-reference-ui
         </div>
 
-        <ul className="ml-4 items-center p-0 hidden lg:flex">
+        <ul className="ml-4 hidden items-center p-0 lg:flex">
           <li>
             <Link
               className={classNames(
-                "hover:text-primary focus:text-primary px-4 py-3 transition-all font-medium",
+                "px-4 py-3 font-medium transition-all hover:text-primary focus:text-primary",
                 {
                   "text-primary": pathname.startsWith(Routes.PROPOSALS),
                 },
@@ -113,7 +113,7 @@ export function Navigation(): ReactElement {
           <li>
             <Link
               className={classNames(
-                "hover:text-primary focus:text-primary px-4 py-3 transition-all font-medium",
+                "px-4 py-3 font-medium transition-all hover:text-primary focus:text-primary",
                 {
                   "text-primary": pathname.startsWith(Routes.VAULTS),
                 },
@@ -126,7 +126,7 @@ export function Navigation(): ReactElement {
           <li>
             <Link
               className={classNames(
-                "hover:text-primary focus:text-primary px-4 py-3 transition-all font-medium",
+                "px-4 py-3 font-medium transition-all hover:text-primary focus:text-primary",
                 {
                   "text-primary":
                     pathname.startsWith(Routes.VOTERS) &&
@@ -142,7 +142,7 @@ export function Navigation(): ReactElement {
             <li>
               <Link
                 className={classNames(
-                  "hover:text-primary focus:text-primary px-4 py-3 transition-all font-medium",
+                  "px-4 py-3 font-medium transition-all hover:text-primary focus:text-primary",
                   {
                     "text-primary":
                       pathname.startsWith(Routes.VOTERS) &&
@@ -174,15 +174,15 @@ export function Navigation(): ReactElement {
             </span>
           </Tooltip>
         )}
-        {!!claimableAmount && !!+claimableAmount && (
+        {!!claimableAmount && (
           <Link
             href={"/airdrop"}
-            className="flex text-sm font-bold whitespace-nowrap gap-2 items-center rounded-xl px-5 py-2 md:bg-white bg-accent group"
+            className="group flex items-center gap-2 whitespace-nowrap rounded-xl bg-accent px-5 py-2 text-sm font-bold md:bg-white"
           >
             <span className="text-accent-content md:text-accent">
               <AirdropIcon />
             </span>
-            <span className="hidden md:block md:text-gray-800 text-accent-content">
+            <span className="hidden text-accent-content md:block md:text-gray-800">
               Claim airdrop
             </span>
           </Link>

@@ -1,2 +1,2 @@
-import deauthorize from "../libraries/authorizable/deauthorize.js";
+import deauthorize from "../authorizable/deauthorize.js";
 export default deauthorize;

@@ -4,11 +4,11 @@ export {
 } from "src/models/votingVault/ReadVotingVault";
 export {
   ReadGscVault,
-  type ReadGSCVaultOptions,
+  type ReadGscVaultOptions as ReadGSCVaultOptions,
 } from "src/models/votingVault/gscVault/ReadGscVault";
 export {
-  ReadWriteGSCVault,
-  type ReadWriteGSCVaultOptions,
+  ReadWriteGscVault as ReadWriteGSCVault,
+  type ReadWriteGscVaultOptions as ReadWriteGSCVaultOptions,
 } from "src/models/votingVault/gscVault/ReadWriteGscVault";
 export {
   ReadLockingVault,

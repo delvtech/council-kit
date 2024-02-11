@@ -48,11 +48,11 @@ export class ReadVotingVault extends Model {
    *   such as merkle proofs.
    */
   async getVotingPower({
-    voter,
+    account,
     atBlock = "latest",
     extraData = "0x00",
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
     extraData?: `0x${string}`;
   }): Promise<bigint> {
@@ -69,7 +69,7 @@ export class ReadVotingVault extends Model {
     return this.contract.simulateWrite("queryVotePower", {
       blockNumber,
       extraData,
-      user: typeof voter === "string" ? voter : voter.address,
+      user: typeof account === "string" ? account : account.address,
     });
   }
 }

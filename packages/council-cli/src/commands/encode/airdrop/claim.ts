@@ -1,2 +1,2 @@
-import claim from "../libraries/merkle-rewards/claim.js";
+import claim from "../merkle-rewards/claim.js";
 export default claim;

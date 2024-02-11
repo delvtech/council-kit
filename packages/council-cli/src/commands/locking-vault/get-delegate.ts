@@ -1,4 +1,4 @@
-import { ViemReadCouncil } from "@delvtech/council-viem";
+import { ReadCouncil } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import signale from "signale";
 import { createPublicClient, http } from "viem";
@@ -42,11 +42,11 @@ export default command({
     const transport = http(rpcUrl);
     const publicClient = createPublicClient({ transport, chain });
 
-    const council = new ViemReadCouncil({ publicClient });
+    const council = new ReadCouncil({ publicClient });
     const lockingVault = council.lockingVault(address as `0x${string}`);
 
     const delegate = await lockingVault.getDelegate({
-      voter: account as `0x${string}`,
+      account: account as `0x${string}`,
     });
 
     signale.success(delegate.address);

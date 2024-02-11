@@ -25,18 +25,16 @@ export class ReadWriteToken extends ReadToken {
 
   /**
    * Give a spending allowance to a given spender.
-   * @param owner - The address of the owner.
    * @param spender - The address of the spender.
    * @param amount - The amount of tokens the spender can spend.
    * @returns The transaction hash.
    */
   async approve({
-    owner,
     spender,
     amount,
     options,
   }: {
-    owner: `0x${string}`;
+    owner?: `0x${string}`;
     spender: `0x${string}`;
     amount: bigint;
     options?: ContractWriteOptions;
@@ -50,7 +48,7 @@ export class ReadWriteToken extends ReadToken {
       options,
     );
     this.contract.deleteRead("allowance", {
-      0: owner,
+      0: await this.contract.getSignerAddress(),
       1: spender,
     });
     return hash;

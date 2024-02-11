@@ -1,5 +1,5 @@
+import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useEnsName } from "wagmi";
-import { formatAddress } from "./formatAddress";
 
 export function useDisplayName(
   address: string | null | undefined,

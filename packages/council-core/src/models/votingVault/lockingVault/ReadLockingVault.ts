@@ -59,15 +59,15 @@ export class ReadLockingVault extends ReadVotingVault {
    * vault.
    */
   async getDepositedBalance({
-    voter,
+    account,
     atBlock,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<bigint> {
     const deposits = await this.lockingVaultContract.read(
       "deposits",
-      voter instanceof ReadVoter ? voter.address : voter,
+      typeof account === "string" ? account : account.address,
       blockToReadOptions(atBlock),
     );
     return deposits[1];
@@ -112,18 +112,18 @@ export class ReadLockingVault extends ReadVotingVault {
    * amount of power delegated to them by each delegator. This is a convenience
    * method to fetch voting power and delegation data for a large number of
    * voters in a single call.
-   * @param address - Get a breakdown for a specific address.
+   * @param account - Get a breakdown for a specific account.
    * @param fromBlock - Include all voters that had power on or after this block
    * number.
    * @param toBlock - Include all voters that had power on or before this block
    * number.
    */
   async getVotingPowerBreakdown({
-    address,
+    account,
     fromBlock,
     toBlock,
   }: {
-    address?: `0x${string}`;
+    account?: `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
   } = {}): Promise<VoterPowerBreakdown[]> {
@@ -131,7 +131,7 @@ export class ReadLockingVault extends ReadVotingVault {
       "VoteChange",
       {
         filter: {
-          to: address,
+          to: account,
         },
         fromBlock,
         toBlock,
@@ -231,10 +231,10 @@ export class ReadLockingVault extends ReadVotingVault {
    * accounting for the stale block lag.
    */
   async getHistoricalVotingPower({
-    address,
+    account,
     atBlock,
   }: {
-    address: `0x${string}`;
+    account: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<bigint> {
     let blockNumber = atBlock;
@@ -249,7 +249,7 @@ export class ReadLockingVault extends ReadVotingVault {
     }
 
     return this.lockingVaultContract.read("queryVotePowerView", {
-      user: address,
+      user: account,
       blockNumber,
     });
   }
@@ -270,18 +270,18 @@ export class ReadLockingVault extends ReadVotingVault {
   }
 
   /**
-   * Get the current delegate of a given address.
+   * Get the current delegate of a given account.
    */
   async getDelegate({
-    voter,
+    account,
     atBlock,
   }: {
-    voter: `0x${string}`;
+    account: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<ReadVoter> {
     const { 0: address } = await this.lockingVaultContract.read(
       "deposits",
-      voter,
+      account,
       blockToReadOptions(atBlock),
     );
     return new ReadVoter({
@@ -292,13 +292,13 @@ export class ReadLockingVault extends ReadVotingVault {
   }
 
   /**
-   * Get all voters delegated to a given address in this vault.
+   * Get all voters delegated to a given account in this vault.
    */
   async getDelegatorsTo({
-    address,
+    account,
     atBlock,
   }: {
-    address: `0x${string}`;
+    account: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<ReadVoter[]> {
     let toBlock = atBlock;
@@ -312,7 +312,7 @@ export class ReadLockingVault extends ReadVotingVault {
       "VoteChange",
       {
         filter: {
-          to: address,
+          to: account,
         },
         toBlock,
       },
@@ -323,7 +323,7 @@ export class ReadLockingVault extends ReadVotingVault {
       args: { from, amount },
     } of voteChangeEvents) {
       // ignore self-delegation
-      if (from !== address) {
+      if (from !== account) {
         powerByDelegators[from] = powerByDelegators[from] ?? 0n + amount;
       }
     }
@@ -341,11 +341,11 @@ export class ReadLockingVault extends ReadVotingVault {
   }
 
   private async _getPowerByVoter({
-    address,
+    account,
     fromBlock,
     toBlock,
   }: {
-    address?: `0x${string}`;
+    account?: `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
   } = {}): Promise<Record<`0x${string}`, bigint>> {
@@ -353,7 +353,7 @@ export class ReadLockingVault extends ReadVotingVault {
       "VoteChange",
       {
         filter: {
-          to: address,
+          to: account,
         },
         fromBlock,
         toBlock,

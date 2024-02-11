@@ -50,10 +50,12 @@ export class ReadWriteLockingVault extends ReadLockingVault {
 
   /**
    * Deposit tokens into this vault.
-   * @param account - The address to credit this deposit to.
+   * @param account - The address to credit this deposit to. Defaults to the
+   *  signer's address.
    * @param amount - The amount of tokens to deposit. (formatted decimal string)
-   * @param firstDelegate - The address to delegate the resulting voting power to
-   *   if the account doesn't already have a delegate.
+   * @param firstDelegate - The address to delegate the resulting voting power
+   *   to if the account doesn't already have a delegate. Defaults to funded
+   *   account being credited.
    * @returns The transaction hash.
    */
   async deposit({
@@ -62,17 +64,19 @@ export class ReadWriteLockingVault extends ReadLockingVault {
     firstDelegate,
     options,
   }: {
-    account: `0x${string}`;
+    account?: `0x${string}`;
     amount: bigint;
     firstDelegate?: `0x${string}`;
     options?: ContractWriteOptions;
   }): Promise<`0x${string}`> {
+    const fundedAccount =
+      account ?? (await this.lockingVaultContract.getSignerAddress());
     const hash = await this.lockingVaultContract.write(
       "deposit",
       {
         amount,
-        fundedAccount: account,
-        firstDelegation: firstDelegate ?? account,
+        fundedAccount,
+        firstDelegation: firstDelegate ?? fundedAccount,
       },
       options,
     );

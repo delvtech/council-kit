@@ -1,5 +1,4 @@
-import { VoteResults } from "@council/sdk";
-import { parseEther } from "ethers/lib/utils";
+import { VoteResults } from "@delvtech/council-viem";
 
 export type ProposalStatus =
   | "UNKNOWN"
@@ -9,19 +8,23 @@ export type ProposalStatus =
   | "EXECUTED";
 
 export interface GetProposalStatusOptions {
-  isExecuted: boolean;
-  lastCallDate: Date | null;
-  currentQuorum: string;
-  requiredQuorum: string | null;
-  results: VoteResults;
+  lastCallDate: Date | undefined;
+  requiredQuorum: bigint | undefined;
+  currentQuorum?: bigint;
+  isExecuted?: boolean;
+  results?: VoteResults;
 }
 
 export function getProposalStatus({
-  isExecuted,
   lastCallDate,
-  currentQuorum,
   requiredQuorum,
-  results,
+  currentQuorum = BigInt(0),
+  isExecuted = false,
+  results = {
+    yes: BigInt(0),
+    no: BigInt(0),
+    maybe: BigInt(0),
+  },
 }: GetProposalStatusOptions): ProposalStatus {
   if (isExecuted) {
     return "EXECUTED";
@@ -32,10 +35,7 @@ export function getProposalStatus({
   }
 
   if (new Date() > lastCallDate) {
-    if (
-      +currentQuorum >= +requiredQuorum &&
-      parseEther(results.yes).gt(parseEther(results.no))
-    ) {
+    if (currentQuorum >= requiredQuorum && results.yes > results.no) {
       return "EXPIRED";
     } else {
       return "FAILED";

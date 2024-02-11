@@ -9,14 +9,14 @@ import { ReadGscVault } from "src/models/votingVault/gscVault/ReadGscVault";
 import { GscVaultAbi } from "src/models/votingVault/gscVault/types";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
 
-export interface ReadWriteGSCVaultOptions
+export interface ReadWriteGscVaultOptions
   extends ReadWriteContractModelOptions {}
 
-export class ReadWriteGSCVault extends ReadGscVault {
+export class ReadWriteGscVault extends ReadGscVault {
   declare gscVaultContract: CachedReadWriteContract<GscVaultAbi>;
   declare contractFactory: ReadWriteContractFactory;
 
-  constructor(options: ReadWriteGSCVaultOptions) {
+  constructor(options: ReadWriteGscVaultOptions) {
     super(options);
   }
 
@@ -81,15 +81,15 @@ export class ReadWriteGSCVault extends ReadGscVault {
    * Remove a member that's become ineligible from this GSC vault. A member
    * becomes ineligible when the voting power in the vaults they joined with
    * drops below the required minimum.
-   * @param member - The address of the ineligible member to kick.
+   * @param account - The address of the ineligible member to kick.
    * @returns The transaction hash.
    */
   async kick({
-    member,
+    account,
     extraVaultData = [],
     options,
   }: {
-    member: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     /**
      * The extra data the vaults need to load the member's voting power
      */
@@ -100,7 +100,7 @@ export class ReadWriteGSCVault extends ReadGscVault {
       "kick",
       {
         extraData: extraVaultData,
-        who: typeof member === "string" ? member : member.address,
+        who: typeof account === "string" ? account : account.address,
       },
       options,
     );

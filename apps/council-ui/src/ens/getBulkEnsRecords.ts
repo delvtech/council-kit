@@ -1,6 +1,9 @@
-import { ENS } from "@ensdomains/ensjs";
-import { providers } from "ethers";
+import { createEnsPublicClient } from "@ensdomains/ensjs";
+import { getName } from "@ensdomains/ensjs/public";
 import chunk from "lodash.chunk";
+import { chains, transports } from "src/network/config";
+import { PublicClient } from "viem";
+import { UsePublicClientReturnType } from "wagmi";
 
 export type EnsRecords = Record<string, string | null>;
 
@@ -13,12 +16,16 @@ export type EnsRecords = Record<string, string | null>;
  * @returns {Record<string, string | null>} A record of addresses to ens name. The name is nullable.
  */
 export async function getBulkEnsRecords(
-  addresses: string[],
-  provider: providers.Provider,
+  addresses: `0x${string}`[],
+  client: PublicClient | UsePublicClientReturnType,
   options?: { chunkSize?: number },
 ): Promise<EnsRecords> {
-  const ENSInstance = new ENS();
-  await ENSInstance.setProvider(provider as providers.JsonRpcProvider); // safe to cast
+  const chain = client?.chain || chains[0];
+
+  const ensClient = createEnsPublicClient({
+    chain: chains[0] as any,
+    transport: transports[chain.id],
+  });
 
   // spit array in chunks to paginate bulk requests
   const chunkedAddresses = chunk(addresses, options?.chunkSize ?? 100);
@@ -27,10 +34,12 @@ export async function getBulkEnsRecords(
   const chunkedResults = await Promise.all(
     chunkedAddresses.map(async (chunk): Promise<[string, string | null][]> => {
       // batch call of ens names using MultiCall
-      const batch = await ENSInstance.batch(
-        ...chunk.map((address) => {
-          return ENSInstance.getName.batch(address);
-        }),
+      const batch = await ensClient.ensBatch(
+        ...chunk.map((address) =>
+          getName.batch({
+            address,
+          }),
+        ),
       );
 
       // batch may not exist if gas limited was reached when reading

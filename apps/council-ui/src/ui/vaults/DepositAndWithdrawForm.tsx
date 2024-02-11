@@ -1,23 +1,25 @@
 import assertNever from "assert-never";
 import classNames from "classnames";
-import { parseEther } from "ethers/lib/utils";
 import { ReactElement, useState } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { NumericInput } from "src/ui/base/forms/NumericInput";
+import { formatUnits, parseUnits } from "viem";
 
 interface DepositAndWithdrawFormProps {
   symbol: string;
-  balance: string;
-  allowance: string;
-  depositedBalance: string;
+  decimals: number;
+  balance: bigint;
+  allowance: bigint;
+  depositedBalance: bigint;
   onApprove: () => void;
-  onDeposit: (amount: string) => void;
-  onWithdraw: (amount: string) => void;
+  onDeposit: (amount: bigint) => void;
+  onWithdraw: (amount: bigint) => void;
   disabled?: boolean;
 }
 
 export function DepositAndWithdrawForm({
   symbol,
+  decimals,
   balance,
   allowance,
   depositedBalance,
@@ -29,13 +31,12 @@ export function DepositAndWithdrawForm({
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
-
-  const isApproved = parseEther(allowance).gte(
-    parseEther(depositAmount || "0"),
-  );
+  const isApproved = allowance >= parseUnits(depositAmount, decimals);
+  const balanceFormatted = formatUnits(balance, decimals);
+  const depositedBalanceFormatted = formatUnits(depositedBalance, decimals);
 
   return (
-    <div className="flex flex-col p-4 basis-1/2 gap-y-4 daisy-card bg-base-200 h-fit">
+    <div className="daisy-card flex h-fit basis-1/2 flex-col gap-y-4 bg-base-200 p-4">
       <div className="flex gap-x-4">
         <button onClick={() => setActiveTab("deposit")}>
           <h2
@@ -65,23 +66,25 @@ export function DepositAndWithdrawForm({
                 <NumericInput
                   placeholder="Amount"
                   value={depositAmount}
-                  maxButtonValue={balance}
+                  maxButtonValue={balanceFormatted}
                   onChange={setDepositAmount}
                   infoText={
                     <span className="text-lg">
                       Balance:{" "}
                       <span className="text-lg font-bold">
-                        {formatBalance(balance, 4)} {symbol}
+                        {formatBalance(balanceFormatted, 4)} {symbol}
                       </span>
                     </span>
                   }
-                  disabled={disabled || !+balance}
+                  disabled={disabled || !balance}
                 />
                 {isApproved ? (
                   <button
                     className="daisy-btn daisy-btn-primary"
-                    onClick={() => onDeposit(depositAmount)}
-                    disabled={disabled || !+balance}
+                    onClick={() =>
+                      onDeposit(parseUnits(depositAmount, decimals))
+                    }
+                    disabled={disabled || !balance}
                   >
                     Deposit
                   </button>
@@ -103,22 +106,24 @@ export function DepositAndWithdrawForm({
                 <NumericInput
                   placeholder="Amount"
                   value={withdrawAmount}
-                  maxButtonValue={depositedBalance}
+                  maxButtonValue={depositedBalanceFormatted}
                   onChange={setWithdrawAmount}
                   infoText={
                     <span className="text-lg">
                       Deposited:{" "}
                       <span className="text-lg font-bold">
-                        {formatBalance(depositedBalance, 4)} {symbol}
+                        {formatBalance(depositedBalanceFormatted, 4)} {symbol}
                       </span>
                     </span>
                   }
-                  disabled={disabled || !+depositedBalance}
+                  disabled={disabled || !depositedBalance}
                 />
                 <button
                   className="daisy-btn daisy-btn-primary"
-                  onClick={() => onWithdraw(withdrawAmount)}
-                  disabled={disabled || !+depositedBalance}
+                  onClick={() =>
+                    onWithdraw(parseUnits(withdrawAmount, decimals))
+                  }
+                  disabled={disabled || !depositedBalance}
                 >
                   Withdraw
                 </button>

@@ -5,6 +5,7 @@ export * from "src/exports/factory";
 export * from "src/exports/model";
 export * from "src/exports/proposal";
 export * from "src/exports/token";
+export * from "src/exports/utils";
 export * from "src/exports/vaults";
 export * from "src/exports/vote";
 export * from "src/exports/voter";

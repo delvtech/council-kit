@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { useChainId } from "src/ui/network/useChainId";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
   PARTICIPANTS_TIP,
   WALLETS_DELEGATED_TIP,
@@ -12,11 +12,12 @@ import {
 } from "src/ui/vaults/tooltips";
 
 interface LockingVaultStatsRowProps {
-  accountVotingPower: string;
+  accountVotingPower: bigint;
   delegatedToAccount: number;
   participants: number;
-  tokenAddress: string;
+  tokenAddress: `0x${string}`;
   tokenSymbol: string;
+  decimals: number;
 }
 
 export function LockingVaultStatsRow({
@@ -25,22 +26,24 @@ export function LockingVaultStatsRow({
   participants,
   tokenAddress,
   tokenSymbol,
+  decimals,
 }: LockingVaultStatsRowProps): ReactElement {
-  const chainId = useChainId();
+  const chainId = useSupportedChainId();
+  const votingPowerFormatted = formatUnitsBalance({
+    balance: accountVotingPower,
+    decimals,
+  });
+
   return (
     <div className="flex flex-wrap gap-4">
-      {accountVotingPower && (
-        <Stat
-          label={
-            <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
-              Your voting power
-            </DefinitionTooltip>
-          }
-          value={
-            +accountVotingPower ? formatBalance(accountVotingPower) : "None"
-          }
-        />
-      )}
+      <Stat
+        label={
+          <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
+            Your voting power
+          </DefinitionTooltip>
+        }
+        value={votingPowerFormatted}
+      />
 
       {delegatedToAccount >= 0 && (
         <Stat

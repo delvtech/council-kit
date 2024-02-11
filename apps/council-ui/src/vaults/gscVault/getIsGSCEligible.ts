@@ -1,25 +1,31 @@
-import { GSCVotingContract, VotingContract } from "@council/sdk";
-import { parseEther } from "ethers/lib/utils";
+import {
+  ReadGscVault,
+  ReadVoter,
+  ReadVotingVault,
+} from "@delvtech/council-viem";
 
-interface GetIsGSCEligibleOptions {
-  address: string;
-  coreVoting: VotingContract;
-  gscVoting?: GSCVotingContract;
+interface GetIsGscEligibleOptions {
+  account: `0x${string}` | ReadVoter;
+  qualifyingVaults: ReadVotingVault[];
+  gscVault?: ReadGscVault;
 }
 
-export async function getIsGSCEligible({
-  address,
-  coreVoting,
-  gscVoting,
-}: GetIsGSCEligibleOptions): Promise<boolean> {
-  if (!gscVoting) {
+export async function getIsGscEligible({
+  account,
+  qualifyingVaults,
+  gscVault,
+}: GetIsGscEligibleOptions): Promise<boolean> {
+  if (!gscVault) {
     return false;
   }
 
-  const votingPower = await coreVoting.getVotingPower(address);
-  const requiredVotingPower = await gscVoting.getRequiredVotingPower();
+  let qualifyingVotingPower = BigInt(0);
+  for (const vault of qualifyingVaults) {
+    qualifyingVotingPower += await vault.getVotingPower({ account });
+  }
 
-  if (parseEther(votingPower).gt(parseEther(requiredVotingPower))) {
+  const requiredVotingPower = await gscVault.getRequiredVotingPower();
+  if (qualifyingVotingPower > requiredVotingPower) {
     return true;
   }
 

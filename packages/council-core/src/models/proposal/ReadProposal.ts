@@ -1,10 +1,10 @@
 import { CoreVoting } from "@council/artifacts/CoreVoting";
 import { ContractReadOptions, Event, Transaction } from "@council/evm-client";
-import { ReadCoreVoting } from "src/models/coreVoting/ReadCoreVoting";
-import { Actions, Ballot, VoteResults } from "src/models/coreVoting/types";
 import { Model, ReadModelOptions } from "src/models/Model";
 import { ReadVote } from "src/models/ReadVote";
 import { ReadVoter } from "src/models/ReadVoter";
+import { ReadCoreVoting } from "src/models/coreVoting/ReadCoreVoting";
+import { Actions, Ballot, VoteResults } from "src/models/coreVoting/types";
 import { BlockLike } from "src/utils/blockToReadOptions";
 
 export interface BaseProposalOptions {
@@ -194,9 +194,15 @@ export class ReadProposal extends Model {
    * the Proposal wasn't executed.
    * @returns The transaction hash
    */
-  async getExecutedTransactionHash(): Promise<`0x${string}` | undefined> {
+  async getExecutedTransaction(): Promise<Transaction | undefined> {
     const executedEvent = await this._getExecutedEvent();
-    return executedEvent?.transactionHash;
+    const hash = executedEvent?.transactionHash;
+    const transaction = hash && (await this.network.getTransaction(hash));
+    if (!transaction) {
+      // TODO: ErrorHandling
+      throw new Error("Proposal not found");
+    }
+    return transaction;
   }
 
   /**
@@ -204,13 +210,13 @@ export class ReadProposal extends Model {
    * @param address - The address that casted the vote.
    */
   async getVote({
-    voter,
+    account,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
   }): Promise<ReadVote | undefined> {
     return this.coreVoting.getVote({
       proposalId: this.id,
-      voter,
+      account,
     });
   }
 
@@ -220,17 +226,17 @@ export class ReadProposal extends Model {
    * @param toBlock - Include all votes casted on or before this block.
    */
   async getVotes({
-    voter,
+    account,
     fromBlock,
     toBlock,
   }: {
-    voter?: ReadVoter | `0x${string}`;
+    account?: ReadVoter | `0x${string}`;
     fromBlock?: BlockLike;
     toBlock?: BlockLike;
   } = {}): Promise<ReadVote[]> {
     return this.coreVoting.getVotes({
       proposalId: this.id,
-      voter,
+      account,
       fromBlock,
       toBlock,
     });
@@ -245,14 +251,14 @@ export class ReadProposal extends Model {
    *   as merkle proofs.
    */
   async getVotingPower({
-    voter,
+    account,
     extraData,
   }: {
-    voter: ReadVoter | `0x${string}`;
+    account: ReadVoter | `0x${string}`;
     extraData?: `0x${string}`[];
   }): Promise<bigint> {
     return this.coreVoting.getVotingPower({
-      voter,
+      account,
       atBlock: this.created,
       extraData,
     });

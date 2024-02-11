@@ -1,29 +1,42 @@
-import { GSCVault, Voter } from "@council/sdk";
-import { Provider } from "@ethersproject/providers";
+import {
+  ReadGscVault,
+  ReadVoter,
+  ReadVotingVault,
+} from "@delvtech/council-viem";
 import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
+import { PublicClient } from "viem";
 
-export interface GSCMemberInfo {
-  member: Voter;
-  qualifyingVotingPower: string;
+export interface GscMemberInfo {
+  member: ReadVoter;
+  qualifyingVotingPower: bigint;
   ensName: string | null;
 }
 
-export async function getGSCMembers(
-  gscVault: GSCVault,
-  coreVotingApprovedVaults: string[],
-  provider: Provider,
-): Promise<GSCMemberInfo[]> {
+export async function getGscMembers({
+  client,
+  approvedVaults,
+  gscVault,
+}: {
+  gscVault: ReadGscVault;
+  approvedVaults: (ReadVotingVault | `0x${string}`)[];
+  client: PublicClient;
+}): Promise<GscMemberInfo[]> {
   const members = await gscVault.getVoters();
 
+  // TODO: Why did we do this again? Won't this hide kickable members?
   // GSC Members must have enough qualifying voting power in the
   // coreVoting approved vaults to be in good standing.
   const membersQualifyingVotingPower = await Promise.all(
-    members.map((member) => member.getVotingPower(coreVotingApprovedVaults)),
+    members.map((member) =>
+      member.getVotingPower({
+        vaults: approvedVaults,
+      }),
+    ),
   );
 
   const memberENSNames = await getBulkEnsRecords(
     members.map((member) => member.address),
-    provider,
+    client,
   );
 
   const membersWithQualifyingVotePowerAndEnsRecord = members.map(

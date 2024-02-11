@@ -6,8 +6,8 @@ import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { tooltipByStatus } from "src/ui/proposals/tooltips";
 
 interface QuorumProps {
-  current: string;
-  required: string | null;
+  current: bigint;
+  required: bigint | undefined;
   status: ProposalStatus;
 }
 
@@ -22,7 +22,7 @@ export function Quorum({
         <div className="flex">
           <Tooltip content={tooltipByStatus[status]} className="ml-auto">
             <div
-              className={classNames("font-bold daisy-badge", {
+              className={classNames("daisy-badge font-bold", {
                 "daisy-badge-error": status === "FAILED",
                 "daisy-badge-info": status === "IN PROGRESS",
                 "daisy-badge-success": status === "EXECUTED",
@@ -42,7 +42,7 @@ export function Quorum({
       />
 
       {status === "EXECUTED" ? (
-        <p className="font-bold uppercase text-right">Quorum met</p>
+        <p className="text-right font-bold uppercase">Quorum met</p>
       ) : required ? (
         <div className="flex justify-between gap-x-1">
           <h3 className="mr-6 font-medium uppercase">Quorum</h3>
@@ -57,8 +57,8 @@ export function Quorum({
 }
 
 interface QuorumBarProps {
-  currentQuorum: string;
-  requiredQuorum: string | null;
+  currentQuorum: bigint;
+  requiredQuorum: bigint | undefined;
   status: ProposalStatus | undefined;
 }
 
@@ -70,7 +70,7 @@ function QuorumBar({
   if (status === "EXECUTED") {
     return (
       <progress
-        className="w-full daisy-progress daisy-progress-success"
+        className="daisy-progress daisy-progress-success w-full"
         value={100}
         max={100}
       />
@@ -78,18 +78,18 @@ function QuorumBar({
   }
 
   if (!requiredQuorum || status === "UNKNOWN") {
-    return <progress className="w-full daisy-progress" value={0} max={100} />;
+    return <progress className="daisy-progress w-full" value={0} max={100} />;
   }
 
   return (
     <progress
-      className={classNames("w-full daisy-progress", {
+      className={classNames("daisy-progress w-full", {
         "daisy-progress-info": status === "IN PROGRESS",
         "daisy-progress-error": status === "FAILED",
         "daisy-progress-warning": status === "EXPIRED",
       })}
-      value={currentQuorum}
-      max={requiredQuorum}
+      value={String(currentQuorum)}
+      max={String(requiredQuorum)}
     />
   );
 }

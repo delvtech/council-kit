@@ -74,19 +74,18 @@ export const mainnetCouncilConfig: CouncilConfig = {
     name: "GSC",
     address: "0x40309f197e7f94B555904DF0f788a3F48cF326aB",
     descriptionURL: "https://moreinfo.com",
-    vaults: [
-      {
-        name: "GSC Vault",
-        address: "0xcA870E8aa4FCEa85b5f0c6F4209C8CBA9265B940",
-        type: "GSCVault",
+    vault: {
+      name: "GSC Vault",
+      address: "0xcA870E8aa4FCEa85b5f0c6F4209C8CBA9265B940",
+      type: "GSCVault",
 
-        sentenceSummary:
-          "The Governance Steering Council (GSC) vault gives one vote to each member that has surpassed a pre-established threshold of delegated Voting Power defined by the DAO.",
-        paragraphSummary:
-          "The Governance Steering Council (GSC) vault gives one vote to each member that has surpassed a pre-established threshold of delegated Voting Power defined by the DAO. Members of the council can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
-        descriptionURL: "https://moreinfo.com",
-      },
-    ],
+      sentenceSummary:
+        "The Governance Steering Council (GSC) vault gives one vote to each member that has surpassed a pre-established threshold of delegated Voting Power defined by the DAO.",
+      paragraphSummary:
+        "The Governance Steering Council (GSC) vault gives one vote to each member that has surpassed a pre-established threshold of delegated Voting Power defined by the DAO. Members of the council can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
+      descriptionURL: "https://moreinfo.com",
+    },
+
     proposals: {
       0: { descriptionURL: "", targets: [], calldatas: [] },
       1: { descriptionURL: "", targets: [], calldatas: [] },

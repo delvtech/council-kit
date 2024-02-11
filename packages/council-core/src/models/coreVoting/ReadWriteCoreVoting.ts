@@ -16,7 +16,9 @@ export interface ReadWriteCoreVotingOptions
   vaults?: (ReadVotingVault | `0x${string}`)[];
 }
 
-export class ReadWriteCoreVoting extends ReadCoreVoting {
+export class ReadWriteCoreVoting<
+  TVaults extends ReadVotingVault[] = ReadVotingVault[],
+> extends ReadCoreVoting {
   declare contract: CachedReadWriteContract<CoreVotingAbi>;
   declare contractFactory: ReadWriteContractFactory;
 
@@ -169,7 +171,7 @@ export class ReadWriteCoreVoting extends ReadCoreVoting {
     } else {
       this.vaults = this.vaults.filter(
         ({ address }) => address !== vault.address,
-      );
+      ) as TVaults;
     }
 
     this.contract.deleteRead("approvedVaults", vault.address);

@@ -2,7 +2,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
 
 interface DepositStepProps {
-  account: string;
+  account: string | undefined;
   setAccount: (account: string) => void;
   delegate?: string;
   setDelegate?: (delegate: string) => void;

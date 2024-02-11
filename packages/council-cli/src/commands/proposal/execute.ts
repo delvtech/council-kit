@@ -1,11 +1,11 @@
-import { ViemReadWriteCouncil } from "@delvtech/council-viem";
+import { ReadWriteCouncil } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import signale from "signale";
 import { createPublicClient, createWalletClient, http } from "viem";
 import {
   getWriteOptions,
   writeOptions,
-} from "../../reusable-options/write-options.js";
+} from "../../reusable-options/writeOptions.js";
 
 export default command({
   description: "Execute a proposal",
@@ -40,7 +40,7 @@ export default command({
     const publicClient = createPublicClient({ transport, chain });
     const walletClient = createWalletClient({ transport, chain, account });
 
-    const council = new ViemReadWriteCouncil({ publicClient, walletClient });
+    const council = new ReadWriteCouncil({ publicClient, walletClient });
     const coreVoting = council.coreVoting({
       address: address as `0x${string}`,
     });

@@ -1,23 +1,25 @@
-import { Vote } from "@council/sdk";
+import { ReadVote } from "@delvtech/council-viem";
 import { useEffect } from "react";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
-import { useCouncil } from "src/ui/council/useCouncil";
+import { useReadGscVault } from "src/ui/vaults/gscVault/hooks/useReadGscVault";
 
 export function useFilterVotesByGSCOnlyEffect(
-  votes: Vote[],
+  votes: ReadVote[],
   gscOnly: boolean,
-  setFilteredVotes: (votes: Vote[]) => void,
+  setFilteredVotes: (votes: ReadVote[]) => void,
 ): void {
-  const { gscVoting } = useCouncil();
+  const gscVault = useReadGscVault();
 
   return useEffect(() => {
-    if (gscOnly && gscVoting) {
-      asyncFilter(votes, (vote) =>
-        gscVoting.getIsMember(vote.voter.address),
+    if (gscOnly && gscVault) {
+      asyncFilter(votes, ({ voter }) =>
+        gscVault.getIsMember({
+          account: voter,
+        }),
       ).then((filteredVotes) => setFilteredVotes(filteredVotes));
     } else {
       // reset filter
       setFilteredVotes(votes);
     }
-  }, [gscOnly]);
+  }, [gscOnly, gscVault]);
 }

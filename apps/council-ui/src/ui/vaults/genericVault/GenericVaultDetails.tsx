@@ -1,11 +1,10 @@
-import { VotingVault } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
+import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
@@ -13,7 +12,7 @@ import { useAccount } from "wagmi";
 import { GenericVaultStatsRow } from "./GenericVaultStatsRow";
 
 interface GenericVaultDetailsProps {
-  address: string;
+  address: `0x${string}`;
 }
 
 export function GenericVaultDetails({
@@ -38,10 +37,7 @@ export function GenericVaultDetails({
         <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
       }
       statsRow={
-        <GenericVaultStatsRow
-          accountVotingPower={data.accountVotingPower}
-          participants={data.participants}
-        />
+        <GenericVaultStatsRow accountVotingPower={data.accountVotingPower} />
       }
     />
   );
@@ -52,15 +48,14 @@ interface GenericVaultDetailsData {
   descriptionURL: string | undefined;
   paragraphSummary: string | undefined;
   name: string | undefined;
-  participants?: number;
 }
 
 function useGenericVaultDetailsData(
-  address: string,
-  account: string | undefined,
+  address: `0x${string}`,
+  account: `0x${string}` | undefined,
 ): UseQueryResult<GenericVaultDetailsData> {
-  const { context } = useCouncil();
-  const chainId = useChainId();
+  const council = useReadCouncil();
+  const chainId = useSupportedChainId();
   const coreVotingConfig = councilConfigs[chainId].coreVoting;
   const vaultConfig = coreVotingConfig.vaults.find(
     (vault) => vault.address === address,
@@ -69,9 +64,9 @@ function useGenericVaultDetailsData(
   return useQuery({
     queryKey: ["genericVaultDetails", address, account],
     queryFn: async () => {
-      const vault = new VotingVault(address, context);
+      const vault = council.votingVault(address);
       const accountVotingPower = account
-        ? await vault.getVotingPower(account)
+        ? await vault.getVotingPower({ account })
         : "0";
 
       return {
@@ -79,9 +74,6 @@ function useGenericVaultDetailsData(
         descriptionURL: vaultConfig?.descriptionURL,
         paragraphSummary: vaultConfig?.paragraphSummary,
         name: vaultConfig?.name,
-        participants: vault.getVoters
-          ? (await vault.getVoters()).length
-          : undefined,
       };
     },
   });

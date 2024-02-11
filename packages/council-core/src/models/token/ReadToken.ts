@@ -87,15 +87,15 @@ export class ReadToken extends Model {
    * Get the token balance of a given address
    */
   getBalanceOf({
-    address,
+    account,
     atBlock,
   }: {
-    address: `0x${string}`;
+    account: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<bigint> {
     return this.contract.read(
       "balanceOf",
-      address,
+      account,
       blockToReadOptions(atBlock),
     );
   }

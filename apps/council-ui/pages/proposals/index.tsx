@@ -1,20 +1,20 @@
-import { getBlockDate } from "@council/sdk";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
-import { parseEther } from "ethers/lib/utils";
 import { ReactElement } from "react";
-import { councilConfigs } from "src/config/council.config";
 import { getProposalStatus } from "src/proposals/getProposalStatus";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
+import { getBlockDate } from "src/ui/base/utils/getBlockDate";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { useReadGscVoting } from "src/ui/council/hooks/useReadGscVoting";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
   ProposalRowData,
   ProposalsTable,
 } from "src/ui/proposals/ProposalTable/ProposalsTable";
 import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalTable/ProposalsTableSkeleton";
-import { useAccount } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
@@ -26,7 +26,7 @@ export default function ProposalsPage(): ReactElement {
 
       {(() => {
         switch (status) {
-          case "loading":
+          case "pending":
             return (
               <div className="w-full">
                 <ProposalsTableSkeleton />
@@ -36,8 +36,8 @@ export default function ProposalsPage(): ReactElement {
           case "error":
             return (
               <div className="daisy-mockup-code">
-                <code className="block px-6 whitespace-pre-wrap text-error">
-                  {error ? (error as string).toString() : "Unknown error"}
+                <code className="block whitespace-pre-wrap px-6 text-error">
+                  {error ? String(error) : "Unknown error"}
                 </code>
               </div>
             );
@@ -70,14 +70,17 @@ export default function ProposalsPage(): ReactElement {
 }
 
 function useProposalsPageData(
-  account: string | undefined,
+  account: `0x${string}` | undefined,
 ): UseQueryResult<ProposalRowData[]> {
-  const { context, coreVoting, gscVoting } = useCouncil();
-  const chainId = useChainId();
-  const proposalsConfig = councilConfigs[chainId].coreVoting.proposals;
+  const coreVoting = useReadCoreVoting();
+  const gscVoting = useReadGscVoting();
+  const chainId = useSupportedChainId();
+  const config = useCouncilConfig();
+  const client = usePublicClient();
+
   return useQuery({
-    queryKey: ["proposalsPage", account],
-    queryFn: async () => {
+    queryKey: ["proposalsPage", account, chainId],
+    queryFn: async (): Promise<ProposalRowData[]> => {
       let allProposals = await coreVoting.getProposals();
 
       if (gscVoting) {
@@ -87,42 +90,49 @@ function useProposalsPageData(
 
       return await Promise.all(
         allProposals.map(async (proposal) => {
-          const proposalConfig = proposalsConfig[proposal.id];
-          const createdBlock = await proposal.getCreatedBlock();
-          const expirationBlock = await proposal.getExpirationBlock();
-          const votingEnds = expirationBlock
-            ? await getBlockDate(expirationBlock, context.provider, {
-                estimateFutureDates: true,
-              })
-            : null;
+          const vote = account
+            ? await proposal.getVote({ account })
+            : undefined;
+
+          const currentQuorum = await proposal.getCurrentQuorum();
+          const requiredQuorum = await proposal.getRequiredQuorum();
+          const isExecuted = await proposal.getIsExecuted();
+          const results = await proposal.getResults();
+
           const lastCall = await proposal.getLastCallBlock();
           const lastCallDate = lastCall
-            ? await getBlockDate(lastCall, context.provider, {
-                estimateFutureDates: true,
-              })
-            : null;
-          const currentQuorum = await proposal.getCurrentQuorum();
-          const vote = account ? await proposal.getVote(account) : null;
-          return {
-            status: getProposalStatus({
-              isExecuted: await proposal.getIsExecuted(),
-              currentQuorum,
-              lastCallDate,
-              requiredQuorum: await proposal.getRequiredQuorum(),
-              results: await proposal.getResults(),
-            }),
-            votingContractAddress: proposal.votingContract.address,
-            votingContractName: proposal.votingContract.name,
+            ? await getBlockDate(lastCall, client)
+            : undefined;
+
+          const createdDate = await getBlockDate(proposal.created, client);
+          const votingEnds = await getBlockDate(proposal.expiration, client);
+
+          const status = getProposalStatus({
+            isExecuted,
+            currentQuorum,
+            lastCallDate,
+            requiredQuorum,
+            results,
+          });
+
+          const isGsc = proposal.coreVoting.address === gscVoting?.address;
+          const proposalConfig = isGsc
+            ? config.gscVoting?.proposals[String(proposal.id)]
+            : config.coreVoting.proposals[String(proposal.id)];
+
+          const result: ProposalRowData = {
+            status,
+            coreVotingAddress: proposal.coreVoting.address,
+            votingContractName: proposal.coreVoting.name,
             id: proposal.id,
-            created:
-              createdBlock &&
-              (await getBlockDate(createdBlock, context.provider)),
+            created: createdDate,
             votingEnds,
             currentQuorum,
-            ballot: vote && parseEther(vote.power).gt(0) ? vote.ballot : null,
+            ballot: vote && vote.power > BigInt(0) ? vote.ballot : undefined,
             sentenceSummary: proposalConfig?.sentenceSummary,
             title: proposalConfig?.title,
           };
+          return result;
         }),
       );
     },

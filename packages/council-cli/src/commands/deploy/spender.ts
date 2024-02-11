@@ -3,7 +3,7 @@ import { command } from "clide-js";
 import signale from "signale";
 import { PrivateKeyAccount, parseUnits } from "viem";
 import { Chain } from "viem/chains";
-import { WriteOptions } from "../../reusable-options/write-options.js";
+import { WriteOptions } from "../../reusable-options/writeOptions.js";
 import {
   DeployedContract,
   deployContract,

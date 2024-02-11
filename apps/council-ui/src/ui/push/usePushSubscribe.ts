@@ -4,13 +4,13 @@ import { useCallback, useEffect, useState } from "react";
 
 import { ENV } from "@pushprotocol/restapi/src/lib/constants";
 import { councilConfigs } from "src/config/council.config";
-import { useChainId } from "src/ui/network/useChainId";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useAccount, useSignTypedData } from "wagmi";
 import { UsePushSubscribeType } from "./types";
 
 export function usePushSubscribe(): UsePushSubscribeType {
   const { address } = useAccount();
-  const chainId = useChainId();
+  const chainId = useSupportedChainId();
   const [loading, setLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -63,10 +63,11 @@ export function usePushSubscribe(): UsePushSubscribeType {
       throw new Error("FAILURE");
     }
   }
+
   function generatePayload(): SubscribeOptionsType {
     const { env, channel } = config;
-    const payload = {
-      signer: { _signTypedData },
+    const payload: SubscribeOptionsType = {
+      signer: { _signTypedData } as any,
       channelAddress: `eip155:${chainId}:${channel}`, // channel address in CAIP
       userAddress: `eip155:${chainId}:${address}`, // user address in CAIP
       env: env as ENV,

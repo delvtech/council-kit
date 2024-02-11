@@ -15,6 +15,7 @@ export default defineConfig({
     "src/exports/model.ts",
     "src/exports/proposal.ts",
     "src/exports/token.ts",
+    "src/exports/utils.ts",
     "src/exports/vaults.ts",
     "src/exports/vote.ts",
     "src/exports/voter.ts",

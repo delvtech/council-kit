@@ -1,2 +1,2 @@
-import claimAndDelegate from "../libraries/merkle-rewards/claim-and-delegate.js";
+import claimAndDelegate from "../merkle-rewards/claim-and-delegate.js";
 export default claimAndDelegate;

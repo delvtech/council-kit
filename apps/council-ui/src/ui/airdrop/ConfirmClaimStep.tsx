@@ -8,7 +8,7 @@ import { useAirdropToken } from "./hooks/useAirdropToken";
 import { useClaimableAirdropAmount } from "./hooks/useClaimableAirdropAmount";
 
 interface ConfirmClaimStepProps {
-  recipient: string;
+  recipient: string | undefined;
   onBack: () => void;
   onConfirm: (() => void) | undefined;
 }
@@ -18,19 +18,19 @@ export default function ConfirmClaimStep({
   onBack,
   onConfirm,
 }: ConfirmClaimStepProps): ReactElement {
-  const { data: claimableAmount } = useClaimableAirdropAmount();
-  const { data: token } = useAirdropToken();
-  const { data: symbol } = useTokenSymbol(token?.address);
-
+  const { claimableAmountFormatted } = useClaimableAirdropAmount();
+  const { airdropToken } = useAirdropToken();
+  const { symbol } = useTokenSymbol(airdropToken?.address);
   const displayName = useDisplayName(recipient);
+
   return (
     <>
       <div className="daisy-stats daisy-stats-vertical">
         <div className="daisy-stat bg-base-200">
           <div className="daisy-stat-title">Send</div>
           <div className="daisy-stat-value">
-            {claimableAmount && symbol ? (
-              `${formatBalance(claimableAmount, 4)} ${symbol}`
+            {claimableAmountFormatted && symbol ? (
+              `${formatBalance(claimableAmountFormatted, 4)} ${symbol}`
             ) : (
               <Skeleton />
             )}
@@ -42,16 +42,16 @@ export default function ConfirmClaimStep({
         </div>
       </div>
       <div className="flex justify-center gap-2 sm:gap-4">
-        <button className="daisy-btn gap-2 grow" onClick={onBack}>
-          <ArrowLeftIcon className="w-4 h-4 fill-current" />
+        <button className="daisy-btn grow gap-2" onClick={onBack}>
+          <ArrowLeftIcon className="h-4 w-4 fill-current" />
           Back
         </button>
         <button
-          className="daisy-btn daisy-btn-primary gap-2 grow"
+          className="daisy-btn daisy-btn-primary grow gap-2"
           disabled={!onConfirm}
           onClick={onConfirm}
         >
-          <CheckIcon className="w-4 h-4 fill-current" />
+          <CheckIcon className="h-4 w-4 fill-current" />
           Confirm
         </button>
       </div>

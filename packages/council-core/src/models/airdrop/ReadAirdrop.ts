@@ -53,7 +53,7 @@ export class ReadAirdrop extends Model {
   /**
    * Get The merkle root with deposits encoded into it as hash [address, amount]
    */
-  getMerkleRoot(): Promise<string> {
+  getMerkleRoot(): Promise<`0x${string}`> {
     return this.contract.read("rewardsRoot");
   }
 
@@ -72,15 +72,15 @@ export class ReadAirdrop extends Model {
    * Get the amount that an address has already claimed.
    */
   async getClaimedAmount({
-    recipient,
+    account,
     atBlock,
   }: {
-    recipient: `0x${string}`;
+    account: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<bigint> {
     return await this.contract.read(
       "claimed",
-      recipient,
+      account,
       blockToReadOptions(atBlock),
     );
   }
