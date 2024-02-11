@@ -1,6 +1,7 @@
 {
   "name": "@council/artifacts",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "license": "MIT",
   "type": "module",
   "files": [
     "artifacts"
@@ -17,8 +18,9 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build:src": "sh scripts/build-src.sh src",
-    "build": "npm run build:src && tsc --build --force"
+    "build:src": "sh scripts/build_src.sh main",
+    "build": "npm run build:src && tsc --build --force",
+    "build:new": "rm -rf src && npm run build"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
