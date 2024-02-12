@@ -1,7 +1,7 @@
 import {
   CachedReadWriteContract,
   ContractWriteOptions,
-} from "@council/evm-client";
+} from "@delvtech/evm-client";
 import { ReadWriteContractFactory } from "src/contract/factory";
 import { ReadAirdrop } from "src/models/airdrop/ReadAirdrop";
 import { AirdropAbi } from "src/models/airdrop/types";

@@ -1,20 +1,4 @@
-// Council Core Re-exports
-export * from "@delvtech/council-core/airdrop";
-export * from "@delvtech/council-core/errors";
-export * from "@delvtech/council-core/factory";
-export * from "@delvtech/council-core/model";
-export * from "@delvtech/council-core/proposal";
-export { ReadToken, type ReadTokenOptions } from "@delvtech/council-core/token";
-export * from "@delvtech/council-core/vaults";
-export * from "@delvtech/council-core/vote";
-export * from "@delvtech/council-core/voter";
-export * from "@delvtech/council-core/voting";
-export * from "@delvtech/council-core/utils";
-
-// Client Re-exports
-export * from "@council/evm-client-viem";
-
-// Overrides
+// Client
 export {
   createReadContractFactory,
   type CreateReadContractFactoryOptions,
@@ -23,6 +7,11 @@ export {
   createReadWriteContractFactory,
   type CreateReadWriteContractFactoryOptions,
 } from "src/contract/createReadWriteContractFactory";
+
+// Client Re-exports
+export * from "@delvtech/evm-client-viem";
+
+// Council
 export {
   ReadCouncil,
   type ReadCouncilOptions,
@@ -35,3 +24,16 @@ export {
   ReadWriteMockToken,
   type ReadWriteMockTokenOptions,
 } from "src/models/token/ReadWriteMockToken";
+
+// Council Core Re-exports
+export * from "@delvtech/council-core/airdrop";
+export * from "@delvtech/council-core/errors";
+export * from "@delvtech/council-core/factory";
+export * from "@delvtech/council-core/model";
+export * from "@delvtech/council-core/proposal";
+export { ReadToken, type ReadTokenOptions } from "@delvtech/council-core/token";
+export * from "@delvtech/council-core/utils";
+export * from "@delvtech/council-core/vaults";
+export * from "@delvtech/council-core/vote";
+export * from "@delvtech/council-core/voter";
+export * from "@delvtech/council-core/voting";

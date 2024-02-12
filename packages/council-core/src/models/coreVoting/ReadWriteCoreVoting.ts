@@ -1,7 +1,7 @@
 import {
   CachedReadWriteContract,
   ContractWriteOptions,
-} from "@council/evm-client";
+} from "@delvtech/evm-client";
 import { ReadWriteContractFactory } from "src/contract/factory";
 import { BALLOTS } from "src/models/coreVoting/constants";
 import { ReadCoreVoting } from "src/models/coreVoting/ReadCoreVoting";

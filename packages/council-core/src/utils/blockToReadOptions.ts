@@ -1,4 +1,4 @@
-import { BlockTag, ContractReadOptions } from "@council/evm-client";
+import { BlockTag, ContractReadOptions } from "@delvtech/evm-client";
 
 export type BlockLike = BlockTag | bigint;
 

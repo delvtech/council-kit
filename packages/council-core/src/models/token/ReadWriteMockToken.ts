@@ -1,4 +1,4 @@
-import { ContractWriteOptions } from "@council/evm-client";
+import { ContractWriteOptions } from "@delvtech/evm-client";
 import { ReadWriteToken } from "src/models/token/ReadWriteToken";
 
 export class ReadWriteMockToken extends ReadWriteToken {

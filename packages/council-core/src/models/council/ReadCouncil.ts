@@ -1,4 +1,4 @@
-import { Network } from "@council/evm-client";
+import { Network } from "@delvtech/evm-client";
 import { ReadContractFactory } from "src/contract/factory";
 import { ReadAirdrop } from "src/models/airdrop/ReadAirdrop";
 import { ReadCoreVoting } from "src/models/coreVoting/ReadCoreVoting";

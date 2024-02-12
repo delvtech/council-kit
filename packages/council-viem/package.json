@@ -20,8 +20,8 @@
     "viem": ">=2"
   },
   "dependencies": {
-    "@council/evm-client-viem": "*",
-    "@delvtech/council-core": "*"
+    "@delvtech/council-core": "*",
+    "@delvtech/evm-client-viem": "^0.0.2"
   },
   "devDependencies": {
     "@council/eslint-config": "*",

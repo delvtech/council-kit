@@ -2,7 +2,7 @@ import {
   CreateCachedReadContractOptions,
   CreateCachedReadWriteContractOptions,
   Network,
-} from "@council/evm-client";
+} from "@delvtech/evm-client";
 import {
   ReadContractFactory,
   ReadWriteContractFactory,

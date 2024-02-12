@@ -1,20 +1,20 @@
 import { CachedReadWriteContractFactory } from "@delvtech/council-core";
-import { createCachedReadWriteContract } from "@delvtech/evm-client-viem";
+import { createCachedReadWriteContract } from "@delvtech/evm-client-ethers";
+import { Signer } from "ethers";
 import { CreateReadContractFactoryOptions } from "src/contract/createReadContractFactory";
-import { WalletClient } from "viem";
 
 export interface CreateReadWriteContractFactoryOptions
   extends CreateReadContractFactoryOptions {
-  walletClient: WalletClient;
+  signer: Signer;
 }
 
 export function createReadWriteContractFactory(
-  factoryOptions: CreateReadWriteContractFactoryOptions,
+  options: CreateReadWriteContractFactoryOptions,
 ): CachedReadWriteContractFactory {
-  return (instanceOptions) => {
+  return (factoryOptions) => {
     return createCachedReadWriteContract({
+      ...options,
       ...factoryOptions,
-      ...instanceOptions,
     });
   };
 }

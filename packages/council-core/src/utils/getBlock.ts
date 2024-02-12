@@ -1,6 +1,6 @@
-import { Block, Network } from "@council/evm-client";
-import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
+import { Block, Network } from "@delvtech/evm-client";
 import { BlockNotFoundError } from "src/errors/BlockNotFound";
+import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
 
 /**
  * A utility that tries to fetch a block from a given network and throws an

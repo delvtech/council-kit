@@ -1,9 +1,0 @@
-{
-  "root": true,
-  "extends": [
-    "@council/eslint-config"
-  ],
-  "ignorePatterns": [
-    "generated.ts"
-  ]
-}

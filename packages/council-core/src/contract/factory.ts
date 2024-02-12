@@ -3,7 +3,7 @@ import {
   CachedReadWriteContract,
   CreateCachedReadContractOptions,
   CreateCachedReadWriteContractOptions,
-} from "@council/evm-client";
+} from "@delvtech/evm-client";
 import { Abi } from "abitype";
 
 interface BaseContractFactoryOptions<TAbi extends Abi = Abi> {

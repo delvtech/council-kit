@@ -5,9 +5,12 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
@@ -17,12 +20,11 @@
     "ethers": ">=6"
   },
   "dependencies": {
-    "@council/evm-client-ethers": "*",
-    "@delvtech/council-core": "*"
+    "@delvtech/council-core": "*",
+    "@delvtech/evm-client-ethers": "^0.0.2"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
-    "@council/evm-client": "*",
     "@council/tsconfig": "*",
     "ethers": "^6.10.0",
     "tsup": "^8.0.1",
@@ -30,5 +32,8 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }

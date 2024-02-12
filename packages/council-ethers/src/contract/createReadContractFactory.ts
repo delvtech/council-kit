@@ -2,22 +2,22 @@ import { CachedReadContractFactory } from "@delvtech/council-core";
 import {
   SimpleCache,
   createCachedReadContract,
-} from "@delvtech/evm-client-viem";
-import { PublicClient } from "viem";
+} from "@delvtech/evm-client-ethers";
+import { Provider } from "ethers";
 
 export interface CreateReadContractFactoryOptions {
-  publicClient: PublicClient;
+  provider: Provider;
   cache?: SimpleCache;
   namespace?: string;
 }
 
 export function createReadContractFactory(
-  factoryOptions: CreateReadContractFactoryOptions,
+  options: CreateReadContractFactoryOptions,
 ): CachedReadContractFactory {
-  return (instanceOptions) => {
+  return (factoryOptions) => {
     return createCachedReadContract({
+      ...options,
       ...factoryOptions,
-      ...instanceOptions,
     });
   };
 }

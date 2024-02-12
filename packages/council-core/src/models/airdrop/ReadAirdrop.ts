@@ -1,5 +1,5 @@
 import { Airdrop as AirdropArtifact } from "@council/artifacts/Airdrop";
-import { CachedReadContract } from "@council/evm-client";
+import { CachedReadContract } from "@delvtech/evm-client";
 import { AirdropAbi } from "src/models/airdrop/types";
 import { Model, ReadContractModelOptions } from "src/models/Model";
 import { ReadToken } from "src/models/token/ReadToken";

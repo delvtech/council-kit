@@ -1,1 +1,1 @@
-# Viem integrations for the @council/evm-client
+# Viem integrations for the @delvtech/evm-client

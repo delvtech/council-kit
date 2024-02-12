@@ -1,5 +1,5 @@
 import { IVotingVault } from "@council/artifacts/IVotingVault";
-import { CachedReadContract } from "@council/evm-client";
+import { CachedReadContract } from "@delvtech/evm-client";
 import { Model, ReadContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";
 import { VotingVaultAbi } from "src/models/votingVault/types";

@@ -1,4 +1,4 @@
-import { ContractWriteOptions } from "@council/evm-client";
+import { ContractWriteOptions } from "@delvtech/evm-client";
 
 import { BALLOTS } from "src/models/coreVoting/constants";
 import { ReadWriteCoreVoting } from "src/models/coreVoting/ReadWriteCoreVoting";

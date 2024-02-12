@@ -1,5 +1,5 @@
 import { CoreVoting } from "@council/artifacts/CoreVoting";
-import { ContractReadOptions, Event, Transaction } from "@council/evm-client";
+import { ContractReadOptions, Event, Transaction } from "@delvtech/evm-client";
 import { Model, ReadModelOptions } from "src/models/Model";
 import { ReadVote } from "src/models/ReadVote";
 import { ReadVoter } from "src/models/ReadVoter";

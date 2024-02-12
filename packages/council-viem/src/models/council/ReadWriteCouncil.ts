@@ -1,8 +1,8 @@
-import { createNetwork } from "@council/evm-client-viem";
 import {
   ReadWriteCouncil as BaseReadWriteCouncil,
   ReadCouncil,
 } from "@delvtech/council-core";
+import { createNetwork } from "@delvtech/evm-client-viem";
 import { createReadWriteContractFactory } from "src/contract/createReadWriteContractFactory";
 import { ReadCouncilOptions } from "src/models/council/ReadCouncil";
 import { WalletClient } from "viem";

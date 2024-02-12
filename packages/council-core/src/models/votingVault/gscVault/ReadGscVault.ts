@@ -1,5 +1,5 @@
 import { GSCVault } from "@council/artifacts/GSCVault";
-import { CachedReadContract } from "@council/evm-client";
+import { CachedReadContract } from "@delvtech/evm-client";
 import { ReadContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
