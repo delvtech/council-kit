@@ -5,7 +5,7 @@ import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { GscMembersTableHeader } from "src/ui/vaults/gscVault/GscMembersTableHeader";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
-import { GscMemberInfo } from "src/vaults/gscVault/getGscMembers";
+import { GscMemberInfo } from "src/utils/gscVault/getGscMembers";
 
 interface GscMembersTableProps {
   members: GscMemberInfo[];

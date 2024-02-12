@@ -1,4 +1,3 @@
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { councilConfigs } from "src/config/council.config";
 import { http } from "wagmi";
 import { goerli, hardhat, mainnet } from "wagmi/chains";
@@ -21,18 +20,3 @@ export const transports = Object.fromEntries(
     return [id, http(rpcUrlsByChainId[id])];
   }),
 );
-
-const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
-
-if (!projectId) {
-  throw new Error(
-    "Missing WalletConnect project ID. Please set the NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID variable in your environment.",
-  );
-}
-
-export const config = getDefaultConfig({
-  appName: "Council",
-  projectId,
-  chains: chains as any,
-  transports,
-});

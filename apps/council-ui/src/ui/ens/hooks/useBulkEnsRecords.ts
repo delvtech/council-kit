@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
+import { EnsRecords, getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
 import { usePublicClient } from "wagmi";
 
 export function useBulkEnsRecords(

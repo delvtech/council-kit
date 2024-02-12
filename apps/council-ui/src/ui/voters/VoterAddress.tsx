@@ -8,7 +8,7 @@ import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useIsGscMember } from "src/ui/vaults/gscVault/hooks/useIsGscMember";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
-import { getAllVaultConfigs } from "src/vaults/vaults";
+import { getAllVaultConfigs } from "src/utils/vaults/vaults";
 
 interface VoterAddressProps {
   address: `0x${string}`;

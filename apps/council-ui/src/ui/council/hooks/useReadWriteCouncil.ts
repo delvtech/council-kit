@@ -1,6 +1,6 @@
 import { ReadWriteCouncil } from "@delvtech/council-viem";
 import { useMemo } from "react";
-import { sdkCache } from "src/sdk/sdkCache";
+import { sdkCache } from "src/lib/councilSdk";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { PublicClient, WalletClient } from "viem";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";

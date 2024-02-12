@@ -4,19 +4,19 @@ import type { AppProps } from "next/app";
 import { ReactElement } from "react";
 import { Toaster } from "react-hot-toast";
 import { Tooltip, TooltipProvider } from "react-tooltip";
-import { reactQueryClient } from "src/clients/reactQuery";
-import { wagmiClient } from "src/clients/wagmi";
+import { reactQueryClient } from "src/lib/reactQuery";
+import { rainbowKitConfig } from "src/lib/rainbowKit";
 import { councilConfigs } from "src/config/council.config";
 import { chains } from "src/provider";
 import { CouncilClientProvider } from "src/ui/council/CouncilProvider";
 import { Navigation } from "src/ui/navigation/Navigation";
-import { WagmiConfig } from "wagmi";
+import { WagmiProvider } from "wagmi";
 
 console.log(councilConfigs);
 
 function App({ Component, pageProps }: AppProps): ReactElement {
   return (
-    <WagmiConfig client={wagmiClient}>
+    <WagmiProvider config={rainbowKitConfig}>
       <RainbowKitProvider chains={chains}>
         <QueryClientProvider client={reactQueryClient}>
           <CouncilClientProvider>
@@ -35,7 +35,7 @@ function App({ Component, pageProps }: AppProps): ReactElement {
           </CouncilClientProvider>
         </QueryClientProvider>
       </RainbowKitProvider>
-    </WagmiConfig>
+    </WagmiProvider>
   );
 }
 

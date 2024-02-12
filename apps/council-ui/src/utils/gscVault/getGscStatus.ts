@@ -3,8 +3,8 @@ import {
   ReadVoter,
   ReadVotingVault,
 } from "@delvtech/council-viem";
-import { getIsGscEligible } from "src/vaults/gscVault/getIsGscEligible";
-import { GscStatus } from "src/vaults/gscVault/types";
+import { getIsGscEligible } from "src/utils/gscVault/getIsGscEligible";
+import { GscStatus } from "src/utils/gscVault/types";
 
 interface GetGscStatusOptions {
   qualifyingVaults: ReadVotingVault[];

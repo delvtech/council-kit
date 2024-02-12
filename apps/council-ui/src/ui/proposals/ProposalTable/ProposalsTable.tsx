@@ -3,8 +3,8 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
-import { formatTimeLeft } from "src/dates/formatTimeLeft";
-import { ProposalStatus } from "src/proposals/getProposalStatus";
+import { formatTimeLeft } from "src/utils/formatTimeLeft";
+import { ProposalStatus } from "src/utils/getProposalStatus";
 import { makeProposalURL } from "src/routes";
 import {
   SortableGridTable,

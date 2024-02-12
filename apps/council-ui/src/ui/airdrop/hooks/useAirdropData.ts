@@ -1,5 +1,5 @@
 import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { AirdropData, getAirdropData } from "src/airdrop/getAirdropData";
+import { AirdropData, getAirdropData } from "src/utils/getAirdropData";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useAccount } from "wagmi";
 

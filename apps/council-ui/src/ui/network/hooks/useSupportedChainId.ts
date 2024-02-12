@@ -1,5 +1,5 @@
 import { SupportedChainId } from "src/config/council.config";
-import { chains } from "src/network/config";
+import { chains } from "src/lib/rainbowKit";
 import { useChainId } from "wagmi";
 
 const allChainIds = chains.map(({ id }) => id);

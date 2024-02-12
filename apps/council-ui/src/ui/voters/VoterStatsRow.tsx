@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { GscStatus } from "src/vaults/gscVault/types";
+import { GscStatus } from "src/utils/gscVault/types";
 
 interface VoterStatsRowProps {
   gscStatus: GscStatus | null;

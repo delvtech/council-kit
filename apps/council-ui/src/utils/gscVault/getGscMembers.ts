@@ -3,7 +3,7 @@ import {
   ReadVoter,
   ReadVotingVault,
 } from "@delvtech/council-viem";
-import { getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
+import { getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
 import { PublicClient } from "viem";
 
 export interface GscMemberInfo {

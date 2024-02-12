@@ -1,6 +1,6 @@
 import { Ballot, ReadVote } from "@delvtech/council-viem";
 import { ReactElement, useMemo, useState } from "react";
-import { EnsRecords } from "src/ens/getBulkEnsRecords";
+import { EnsRecords } from "src/utils/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import {

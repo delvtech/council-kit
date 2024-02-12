@@ -1,7 +1,7 @@
 import { createEnsPublicClient } from "@ensdomains/ensjs";
 import { getName } from "@ensdomains/ensjs/public";
 import chunk from "lodash.chunk";
-import { chains, transports } from "src/network/config";
+import { chains, transports } from "src/lib/wagmi";
 import { PublicClient } from "viem";
 import { UsePublicClientReturnType } from "wagmi";
 

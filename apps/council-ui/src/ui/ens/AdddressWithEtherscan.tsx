@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { ReactElement } from "react";
-import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
+import { makeEtherscanAddressURL } from "src/utils/makeEtherscanAddressURL";
 import { Address } from "src/ui/base/Address";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";

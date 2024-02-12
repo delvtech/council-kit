@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { ReactElement } from "react";
-import { ProposalStatus } from "src/proposals/getProposalStatus";
+import { ProposalStatus } from "src/utils/getProposalStatus";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { tooltipByStatus } from "src/ui/proposals/tooltips";

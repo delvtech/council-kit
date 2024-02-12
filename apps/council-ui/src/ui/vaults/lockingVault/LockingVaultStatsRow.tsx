@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
+import { makeEtherscanAddressURL } from "src/utils/makeEtherscanAddressURL";
 import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";

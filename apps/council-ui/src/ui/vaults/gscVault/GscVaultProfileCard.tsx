@@ -7,7 +7,7 @@ import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";
-import { getIsGscMember } from "src/vaults/gscVault/getGscStatus";
+import { getIsGscMember } from "src/utils/gscVault/getGscStatus";
 import { useReadGscVault } from "./hooks/useReadGscVault";
 
 interface GSCVaultProfileCardProps {

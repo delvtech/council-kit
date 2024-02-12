@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { ReactElement } from "react";
-import { getProposalStatus } from "src/proposals/getProposalStatus";
+import { getProposalStatus } from "src/utils/getProposalStatus";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
