@@ -9,7 +9,7 @@ if (!projectId) {
   );
 }
 
-export const rainbowKitConfig = getDefaultConfig({
+export const wagmiConfig = getDefaultConfig({
   appName: "Council",
   projectId,
   chains: chains as any,
