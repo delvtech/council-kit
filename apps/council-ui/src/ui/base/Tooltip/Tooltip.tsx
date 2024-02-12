@@ -2,19 +2,53 @@ import classNames from "classnames";
 import { ReactElement } from "react";
 // TODO: Add dependency-cruiser rule to enforce nobody imports directly from
 // react-tooltip outside of this file and app.tsx.
-import { ITooltipWrapper, TooltipWrapper } from "react-tooltip";
+import {
+  Tooltip as BaseTooltip,
+  PlacesType,
+  PositionStrategy,
+  VariantType,
+} from "react-tooltip";
 
-// Re-exporting for naming only is usually bad, but in this case it's worth it
-// since TooltipWrapper isn't intuitive to remember and react-tooltip has a
-// `Tooltip` component that we *shouldn't use*.
-export const Tooltip = TooltipWrapper;
+export interface ToolTipOptions
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  content: string;
+  place?: PlacesType;
+  positionStrategy?: PositionStrategy;
+  variant?: VariantType;
+}
+
+// Re-exporting to simplify the API and enforce proper usage.
+export function Tooltip({
+  content,
+  place = "top",
+  positionStrategy,
+  variant,
+  children,
+  ...passThruProps
+}: ToolTipOptions): ReactElement {
+  return (
+    <>
+      <a
+        {...passThruProps}
+        data-tooltip-id="tooltipsy"
+        data-tooltip-content={content}
+        data-tooltip-place={place}
+        data-tooltip-variant={variant}
+        data-tooltip-position-strategy={positionStrategy}
+      >
+        {children}
+      </a>
+      <BaseTooltip id="tooltipsy" />
+    </>
+  );
+}
 
 export function DefinitionTooltip({
   className,
   ...passThruProps
-}: ITooltipWrapper): ReactElement {
+}: ToolTipOptions): ReactElement {
   return (
-    <TooltipWrapper
+    <Tooltip
       {...passThruProps}
       className={classNames(
         "cursor-help border-b border-dotted border-current",
