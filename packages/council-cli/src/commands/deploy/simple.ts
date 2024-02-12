@@ -171,7 +171,6 @@ export default command({
 
       const tokenDeployData: DeployedContract = await fork({
         commands: [deployMockErc20Command],
-        initialData: data,
         optionValues: {
           name: tokenName,
           symbol: tokenSymbol,
@@ -200,7 +199,6 @@ export default command({
 
     const coreVotingDeployData: DeployedContract = await fork({
       commands: [deployCoreVotingCommand],
-      initialData: data,
       optionValues: {
         quorum: baseQuorum,
         minPower: minProposalPower,
@@ -277,7 +275,6 @@ export default command({
 
     const lockingVaultDeployData: DeployedContract = await fork({
       commands: [deployLockingVaultCommand],
-      initialData: data,
       optionValues: {
         token: votingTokenAddress,
         staleBlockLag,
@@ -290,7 +287,6 @@ export default command({
 
     const lockVaultProxyDeployData: DeployedContract = await fork({
       commands: [deploySimpleProxyCommand],
-      initialData: data,
       optionValues: {
         owner: coreVotingDeployData.address,
         implementation: lockingVaultDeployData.address,
@@ -334,7 +330,6 @@ export default command({
 
       const treasuryDeployData: DeployedContract = await fork({
         commands: [deployTreasury],
-        initialData: data,
         optionValues: {
           owner: coreVotingDeployData.address,
         },

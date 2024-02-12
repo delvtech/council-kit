@@ -227,7 +227,6 @@ export default command({
 
       const tokenDeployData: DeployedContract = await fork({
         commands: [deployMockErc20Command],
-        initialData: data,
         optionValues: {
           name: tokenName,
           symbol: tokenSymbol,
@@ -250,7 +249,6 @@ export default command({
 
     const gscCoreVotingDeployData: DeployedContract = await fork({
       commands: [deployCoreVotingCommand],
-      initialData: data,
       optionValues: {
         owner: account.address,
         quorum: gscQuorum,
@@ -314,7 +312,6 @@ export default command({
 
     const timelockDeployData: DeployedContract = await fork({
       commands: [deployTimelockCommand],
-      initialData: data,
       optionValues: {
         waitTime: timelockWaitTime,
         gsc: gscCoreVotingDeployData.address,
@@ -338,7 +335,6 @@ export default command({
     if (!treasuryAddress) {
       const treasuryDeployData: DeployedContract = await fork({
         commands: [deployTreasuryCommand],
-        initialData: data,
         optionValues: {
           owner: timelockDeployData.address,
         },
@@ -374,7 +370,6 @@ export default command({
 
     const lockingVaultDeployData: DeployedContract = await fork({
       commands: [deployLockingVaultCommand],
-      initialData: data,
       optionValues: {
         token: votingTokenAddress,
         staleBlockLag,
@@ -387,7 +382,6 @@ export default command({
 
     const lockVaultProxyDeployData: DeployedContract = await fork({
       commands: [deploySimpleProxyCommand],
-      initialData: data,
       optionValues: {
         owner: timelockDeployData.address,
         implementation: lockingVaultDeployData.address,
@@ -413,7 +407,6 @@ export default command({
 
     const coreVotingDeployData: DeployedContract = await fork({
       commands: [deployCoreVotingCommand],
-      initialData: data,
       optionValues: {
         quorum: baseQuorum,
         minPower: minProposalPower,
@@ -478,7 +471,6 @@ export default command({
 
     const gscVaultDeployData: DeployedContract = await fork({
       commands: [deployGscVaultCommand],
-      initialData: data,
       optionValues: {
         coreVoting: coreVotingDeployData.address,
         votingPowerBound: gscVotingPowerBound,

@@ -21,7 +21,7 @@
     "ajv": "^8.12.0",
     "cfonts": "^3.2.0",
     "cli-table": "^0.3.11",
-    "clide-js": "^0.1.2-alpha.0",
+    "clide-js": "^0.1.2",
     "clide-plugin-command-menu": "^0.0.7",
     "colors": "^1.4.0",
     "json-schema-typed": "^8.0.1",
