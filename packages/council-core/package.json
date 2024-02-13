@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@delvtech/evm-client": "^0.0.2"
+    "@delvtech/evm-client": "^0.0.3"
   },
   "dependencies": {
     "@council/artifacts": "*",
@@ -92,6 +92,46 @@
     "./voting": {
       "types": "./dist/voting.d.ts",
       "default": "./dist/voting.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "airdrop": [
+        "./dist/airdrop.d.ts"
+      ],
+      "council": [
+        "./dist/council.d.ts"
+      ],
+      "error": [
+        "./dist/error.d.ts"
+      ],
+      "factory": [
+        "./dist/factory.d.ts"
+      ],
+      "model": [
+        "./dist/model.d.ts"
+      ],
+      "proposal": [
+        "./dist/proposal.d.ts"
+      ],
+      "token": [
+        "./dist/token.d.ts"
+      ],
+      "utils": [
+        "./dist/utils.d.ts"
+      ],
+      "vaults": [
+        "./dist/vaults.d.ts"
+      ],
+      "vote": [
+        "./dist/vote.d.ts"
+      ],
+      "voter": [
+        "./dist/voter.d.ts"
+      ],
+      "voting": [
+        "./dist/voting.d.ts"
+      ]
     }
   },
   "main": "dist/index.js",

@@ -400,21 +400,28 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@delvtech/evm-client-ethers@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@delvtech/evm-client-ethers/-/evm-client-ethers-0.0.2.tgz#51eead9fe8828c0516d52b57002f6082654c616f"
-  integrity sha512-7c2BSvPmHgwH0uo17o+x9Ks568NY41ti26AS/EsCSrOKxGmgsOSwDIYK2NHAu/bI/xAd4gTyVf94Ot1fzPLglQ==
+"@delvtech/evm-client-ethers@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@delvtech/evm-client-ethers/-/evm-client-ethers-0.0.3.tgz#5e90146f257b0f5f7380b3be11a3fa2fdf4b4d20"
+  integrity sha512-mJfha9AQsHwcM2xaSYftZ8mJ/j0jhNED2kAed/hlmqRSxDXYOUTv1glXkykPgeypR/fONeTxCGXxaZjdioAZEQ==
   dependencies:
-    "@delvtech/evm-client" "~0.0.2"
+    "@delvtech/evm-client" "0.0.3"
 
-"@delvtech/evm-client-viem@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@delvtech/evm-client-viem/-/evm-client-viem-0.0.2.tgz#97a954135b43b04c128984f5d0f03a5cd89408e8"
-  integrity sha512-f4T7dHnBPmfEJyQihfaypCqYu39PFUwIkTk0+ebzKqF3NQLfKwTnWtQHTFLAZZK4SeleN2oOakhs4WsbcFcJWA==
+"@delvtech/evm-client-viem@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@delvtech/evm-client-viem/-/evm-client-viem-0.0.3.tgz#9582abce787601fecb826f575e21d66174116ac4"
+  integrity sha512-HNKa1IctJRw9kFYQy9i5RHFx5zuegVkmaWcWfzn9OxwGZ/1QtK/RwdHfYvMASLURdvQEjaJwfQuhpbs5pP9R3A==
   dependencies:
-    "@delvtech/evm-client" "~0.0.2"
+    "@delvtech/evm-client" "0.0.3"
 
-"@delvtech/evm-client@^0.0.2", "@delvtech/evm-client@~0.0.2":
+"@delvtech/evm-client@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@delvtech/evm-client/-/evm-client-0.0.3.tgz#68a64f7574eb81a82cdb58cbb462e38394931563"
+  integrity sha512-Y9a3CsF/3zomW5mTbyuGQa6VXArIjGG7epmstgBxewMuy/4QmLpsTSc3sr65UPhoBOCV2Uzyfn6oplYYDFaaIw==
+  dependencies:
+    lru-cache "^10.0.1"
+
+"@delvtech/evm-client@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@delvtech/evm-client/-/evm-client-0.0.2.tgz#db4eb9a2b989bfad19c59c634baabd432bd0ba78"
   integrity sha512-xree3GtpC0C5lJIEM/Ye5ekfPUgLiAI6XC9D3E6CVjIWzUMtELQaXdkhzyDTcZiHHK2Jt6TfgKDtCax4LQzcAw==
