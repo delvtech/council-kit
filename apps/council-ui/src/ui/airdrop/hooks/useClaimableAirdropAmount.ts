@@ -34,7 +34,7 @@ export function useClaimableAirdropAmount(): {
     queryFn: enabled
       ? async () => {
           if (!airdropData || !airdropData.amount) {
-            return BigInt(0);
+            return 0n;
           }
           const claimed = await airdrop.getClaimedAmount({ account });
           return airdropData.amount - claimed;
@@ -48,7 +48,7 @@ export function useClaimableAirdropAmount(): {
       : "0";
 
   return {
-    claimableAmount: data ?? BigInt(0),
+    claimableAmount: data ?? 0n,
     claimableAmountFormatted: claimableAmountFormatted as `${number}`,
     status,
   };

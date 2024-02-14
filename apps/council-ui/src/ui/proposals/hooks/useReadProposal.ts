@@ -49,7 +49,7 @@ export function useReadProposal({
   const enabled = id !== undefined;
 
   const { data, status } = useQuery({
-    queryKey: ["proposal", id, coreVotingAddressToUse, vaultsToUse],
+    queryKey: ["proposal", String(id), coreVotingAddressToUse, vaultsToUse],
     enabled,
     queryFn: enabled
       ? () =>

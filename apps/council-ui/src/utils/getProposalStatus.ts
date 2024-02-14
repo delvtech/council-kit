@@ -18,12 +18,12 @@ export interface GetProposalStatusOptions {
 export function getProposalStatus({
   lastCallDate,
   requiredQuorum,
-  currentQuorum = BigInt(0),
+  currentQuorum = 0n,
   isExecuted = false,
   results = {
-    yes: BigInt(0),
-    no: BigInt(0),
-    maybe: BigInt(0),
+    yes: 0n,
+    no: 0n,
+    maybe: 0n,
   },
 }: GetProposalStatusOptions): ProposalStatus {
   if (isExecuted) {

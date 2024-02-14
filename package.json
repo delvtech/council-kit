@@ -13,6 +13,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
+    "typecheck": "turbo run typecheck",
     "postinstall": "husky install"
   },
   "devDependencies": {

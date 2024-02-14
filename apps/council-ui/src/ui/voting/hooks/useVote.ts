@@ -28,7 +28,7 @@ export function useVote({
   const enabled = !!accountToUse;
 
   const { data, status } = useQuery({
-    queryKey: ["vote", proposalId, accountToUse],
+    queryKey: ["vote", String(proposalId), accountToUse],
     enabled,
     queryFn: enabled
       ? async () => {

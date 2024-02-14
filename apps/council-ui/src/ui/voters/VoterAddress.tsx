@@ -4,11 +4,11 @@ import { ReactElement } from "react";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useIsGscMember } from "src/ui/vaults/gscVault/hooks/useIsGscMember";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
-import { getAllVaultConfigs } from "src/utils/vaults/vaults";
 
 interface VoterAddressProps {
   address: `0x${string}`;
@@ -34,7 +34,12 @@ export function VoterAddress({
   const { delegatesByVault } = useDelegatesByVault({
     vaults: coreVotingVaults.vaults,
   });
-  const allVaults = getAllVaultConfigs(chainId);
+  const config = useCouncilConfig();
+  const allVaults = config.coreVoting.vaults;
+  if (config.gscVoting) {
+    allVaults.push(config.gscVoting.vault);
+  }
+
   const vaultNames = allVaults
     .map((vaultConfig) => {
       if (delegatesByVault?.[vaultConfig.address]?.address === address) {

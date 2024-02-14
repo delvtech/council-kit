@@ -156,25 +156,23 @@ function useLockingVaultDetailsData(
         : undefined;
       const accountVotingPower = account
         ? await lockingVault.getVotingPower({ account })
-        : BigInt(0);
+        : 0n;
 
       return {
         accountVotingPower,
 
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
-        tokenBalance: account
-          ? await token.getBalanceOf({ account })
-          : BigInt(0),
+        tokenBalance: account ? await token.getBalanceOf({ account }) : 0n,
         tokenAllowance: account
           ? await token.getAllowance({
               owner: account,
               spender: address,
             })
-          : BigInt(0),
+          : 0n,
         depositedBalance: account
           ? await lockingVault.getDepositedBalance({ account })
-          : BigInt(0),
+          : 0n,
 
         delegate: delegate?.address,
         descriptionURL: vaultConfig?.descriptionURL,

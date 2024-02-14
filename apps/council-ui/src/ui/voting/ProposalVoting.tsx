@@ -31,7 +31,7 @@ export function ProposalVoting({
   });
   const totalVotingPower = votingPowerByVault?.reduce(
     (total, vault) => total + vault.votingPower,
-    BigInt(0),
+    0n,
   );
 
   const { vote, status } = useVote({

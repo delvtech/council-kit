@@ -19,7 +19,7 @@ export async function getIsGscEligible({
     return false;
   }
 
-  let qualifyingVotingPower = BigInt(0);
+  let qualifyingVotingPower = 0n;
   for (const vault of qualifyingVaults) {
     qualifyingVotingPower += await vault.getVotingPower({ account });
   }

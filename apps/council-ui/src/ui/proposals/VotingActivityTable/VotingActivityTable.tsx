@@ -1,14 +1,14 @@
 import { Ballot, ReadVote } from "@delvtech/council-viem";
 import { ReactElement, useMemo, useState } from "react";
-import { EnsRecords } from "src/utils/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import {
   SortOptions,
   SortableGridTable,
 } from "src/ui/base/tables/SortableGridTable";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
+import { EnsRecords } from "src/utils/getBulkEnsRecords";
 
 type SortField = "votingPower" | "ballot";
 
@@ -57,7 +57,7 @@ export function VotingActivityTable({
                 address={voter.address}
                 label={voterEnsRecords[voter.address] || undefined}
               />,
-              formatBalance(power),
+              formatVotingPower(power),
               <FormattedBallot key={`${i}-ballot`} ballot={ballot} />,
             ],
           };

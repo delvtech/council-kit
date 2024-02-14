@@ -66,7 +66,7 @@ export default command({
     // Sum all the amounts
     const amountTotal = accounts.reduce(
       (sum, { amount }) => sum + parseUnits(amount, decimals),
-      BigInt(0),
+      0n,
     );
 
     // Get the total unique addresses

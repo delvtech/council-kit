@@ -8,8 +8,8 @@ export function VoteResultBar({ yes, no, maybe }: VoteResults): ReactElement {
     return <div>Unknown</div>;
   }
 
-  const yesPercent = (yes / resultsTotal) * BigInt(100);
-  const maybePercent = (maybe / resultsTotal) * BigInt(100);
+  const yesPercent = (yes / resultsTotal) * 100n;
+  const maybePercent = (maybe / resultsTotal) * 100n;
 
   return (
     <svg height="10" width="100%">

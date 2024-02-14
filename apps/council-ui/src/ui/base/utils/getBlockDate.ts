@@ -1,6 +1,6 @@
 import { UsePublicClientReturnType } from "wagmi";
 
-const blockTime = BigInt(12);
+const blockTime = 12n;
 
 /**
  * Get the date of a mined block or estimate the date of a future block.

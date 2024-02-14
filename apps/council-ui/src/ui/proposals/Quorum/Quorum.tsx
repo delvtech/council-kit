@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import { ReactElement } from "react";
-import { ProposalStatus } from "src/utils/getProposalStatus";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { tooltipByStatus } from "src/ui/proposals/tooltips";
+import { ProposalStatus } from "src/utils/getProposalStatus";
 
 interface QuorumProps {
   current: bigint;
@@ -47,8 +47,8 @@ export function Quorum({
         <div className="flex justify-between gap-x-1">
           <h3 className="mr-6 font-medium uppercase">Quorum</h3>
           <span>
-            {formatBalance(current, 0)} /
-            <span className="font-bold"> {formatBalance(required, 0)}</span>
+            {formatVotingPower(current, 0)} /
+            <span className="font-bold"> {formatVotingPower(required, 0)}</span>
           </span>{" "}
         </div>
       ) : null}

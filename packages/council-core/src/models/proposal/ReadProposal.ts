@@ -143,14 +143,11 @@ export class ReadProposal extends Model {
    * the Proposal doesn't exist.
    * @returns The transaction hash
    */
-  async getCreatedTransaction(): Promise<Transaction> {
-    const { transactionHash } = await this._getCreatedEvent();
+  async getCreatedTransaction(): Promise<Transaction | undefined> {
+    const createdEvent = await this._getCreatedEvent();
     const transaction =
-      transactionHash && (await this.network.getTransaction(transactionHash));
-    if (!transaction) {
-      // TODO: ErrorHandling
-      throw new Error("Proposal not found");
-    }
+      createdEvent?.transactionHash &&
+      (await this.network.getTransaction(createdEvent?.transactionHash));
     return transaction;
   }
 
@@ -198,10 +195,6 @@ export class ReadProposal extends Model {
     const executedEvent = await this._getExecutedEvent();
     const hash = executedEvent?.transactionHash;
     const transaction = hash && (await this.network.getTransaction(hash));
-    if (!transaction) {
-      // TODO: ErrorHandling
-      throw new Error("Proposal not found");
-    }
     return transaction;
   }
 
@@ -289,15 +282,24 @@ export class ReadProposal extends Model {
         powerByBallot[ballot] += power;
       }
     } else {
+      // FIXME: This is returning a single bigint (this may change when there
+      // are more than one ballot types)
       const proposalVotingPower = await this.coreVoting.contract.read(
         "getProposalVotingPower",
         this.id,
         options,
       );
-      console.log("proposalVotingPower", proposalVotingPower);
-      powerByBallot.yes = proposalVotingPower[0];
-      powerByBallot.no = proposalVotingPower[1];
-      powerByBallot.maybe = proposalVotingPower[2];
+      if (Array.isArray(proposalVotingPower)) {
+        powerByBallot.yes = proposalVotingPower[0];
+        powerByBallot.no = proposalVotingPower[1];
+        powerByBallot.maybe = proposalVotingPower[2];
+      } else {
+        return {
+          yes: proposalVotingPower as unknown as bigint,
+          no: 0n,
+          maybe: 0n,
+        };
+      }
     }
 
     return powerByBallot;
@@ -381,12 +383,12 @@ export class ReadProposal extends Model {
    * Get the event that was emitted when this proposal was created.
    */
   protected async _getCreatedEvent(): Promise<
-    Event<typeof CoreVoting.abi, "ProposalCreated">
+    Event<typeof CoreVoting.abi, "ProposalCreated"> | undefined
   > {
     const createdEvents = await this._getCreatedEvents();
     return createdEvents.find(
       ({ args: { proposalId } }) => proposalId === this.id,
-    )!;
+    );
   }
 
   /**

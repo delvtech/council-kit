@@ -7,10 +7,12 @@ export function useGscMembers(): {
   status: QueryStatus;
 } {
   const gscVault = useReadGscVault();
+  const enabled = !!gscVault?.address;
 
   const { data, status } = useQuery({
-    queryKey: ["gsc-status", gscVault?.address],
-    queryFn: async () => gscVault?.getMembers(),
+    queryKey: ["gsc-gsc-members", gscVault?.address],
+    enabled,
+    queryFn: enabled ? async () => gscVault?.getMembers() : undefined,
   });
 
   return {

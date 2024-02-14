@@ -1,4 +1,7 @@
-import { createEnsPublicClient } from "@ensdomains/ensjs";
+import {
+  UnsupportedNetworkError,
+  createEnsPublicClient,
+} from "@ensdomains/ensjs";
 import { getName } from "@ensdomains/ensjs/public";
 import chunk from "lodash.chunk";
 import { chains, transports } from "src/lib/wagmi";
@@ -22,10 +25,18 @@ export async function getBulkEnsRecords(
 ): Promise<EnsRecords> {
   const chain = client?.chain || chains[0];
 
-  const ensClient = createEnsPublicClient({
-    chain: chains[0] as any,
-    transport: transports[chain.id],
-  });
+  let ensClient: ReturnType<typeof createEnsPublicClient>;
+  try {
+    ensClient = createEnsPublicClient({
+      chain: chains[0] as any,
+      transport: transports[chain.id],
+    }) as ReturnType<typeof createEnsPublicClient>;
+  } catch (error) {
+    // Not every network is supported by ENS, so we return null for all addresses
+    if (error instanceof UnsupportedNetworkError) {
+      return Object.fromEntries(addresses.map((address) => [address, null]));
+    }
+  }
 
   // spit array in chunks to paginate bulk requests
   const chunkedAddresses = chunk(addresses, options?.chunkSize ?? 100);
