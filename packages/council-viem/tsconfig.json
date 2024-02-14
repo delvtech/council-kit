@@ -1,6 +1,6 @@
 {
   "extends": "@council/tsconfig/base.json",
-  "include": ["src"],
+  "include": ["src", "test"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "rootDir": ".",
@@ -9,8 +9,8 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["src/*"],
     },
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+  },
 }

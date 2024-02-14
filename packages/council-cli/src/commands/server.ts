@@ -4,6 +4,7 @@ import { parseUnits } from "viem";
 
 export default command({
   description: "Start a local ethereum node",
+  isMiddleware: false,
 
   options: {
     host: {

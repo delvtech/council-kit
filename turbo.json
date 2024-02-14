@@ -58,6 +58,9 @@
       "outputs": ["dist/**"],
       "env": ["NODE_ENV"]
     },
+    "@delvtech/council-viem": {
+      "env": ["TEST_RPC_URL"]
+    },
     "lint": {
       "dependsOn": ["^build"],
       "outputs": []

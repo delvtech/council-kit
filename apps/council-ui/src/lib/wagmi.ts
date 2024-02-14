@@ -16,7 +16,7 @@ export const chains = Object.values(allChains).filter(({ id }) =>
 );
 
 export const transports = Object.fromEntries(
-  Object.entries(allChains).map(([id]) => {
+  chains.map(({ id }) => {
     return [id, http(rpcUrlsByChainId[id])];
   }),
 );

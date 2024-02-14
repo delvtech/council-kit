@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement } from "react";
-import { makeEtherscanTransactionURL } from "src/utils/makeEtherscanTransactionURL";
+import { makeEtherscanTransactionURL } from "src/utils/etherscan/makeEtherscanTransactionURL";
 import { ProposalStatus } from "src/utils/getProposalStatus";
 import { makeVoterURL } from "src/routes";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";

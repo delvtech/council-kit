@@ -400,31 +400,24 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@delvtech/evm-client-ethers@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@delvtech/evm-client-ethers/-/evm-client-ethers-0.0.3.tgz#5e90146f257b0f5f7380b3be11a3fa2fdf4b4d20"
-  integrity sha512-mJfha9AQsHwcM2xaSYftZ8mJ/j0jhNED2kAed/hlmqRSxDXYOUTv1glXkykPgeypR/fONeTxCGXxaZjdioAZEQ==
+"@delvtech/evm-client-ethers@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@delvtech/evm-client-ethers/-/evm-client-ethers-0.0.7.tgz#ba501234baefcf22ec416eccb1bed085ee0e7864"
+  integrity sha512-qZFDsFs+lo/c4ByjWsftJKFRzVyzgN2Ghgje8Y1bW4vE6HoAOMjp9JeuFp7bfuJfTScDmHTFxyhSzxhjaBEpcA==
   dependencies:
-    "@delvtech/evm-client" "0.0.3"
+    "@delvtech/evm-client" "0.0.7"
 
-"@delvtech/evm-client-viem@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@delvtech/evm-client-viem/-/evm-client-viem-0.0.3.tgz#9582abce787601fecb826f575e21d66174116ac4"
-  integrity sha512-HNKa1IctJRw9kFYQy9i5RHFx5zuegVkmaWcWfzn9OxwGZ/1QtK/RwdHfYvMASLURdvQEjaJwfQuhpbs5pP9R3A==
+"@delvtech/evm-client-viem@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@delvtech/evm-client-viem/-/evm-client-viem-0.0.8.tgz#749112ed83e49b2ee586d65482dd08981038dd5b"
+  integrity sha512-fDt76rbJ5b72PZ4Q8lHW0icg6hMz/SFBP7OO1iK12j4zY7IwO70ShqNK0vGgAsLlWBgLlDd/r1vL3mlkSB+/zA==
   dependencies:
-    "@delvtech/evm-client" "0.0.3"
+    "@delvtech/evm-client" "0.0.7"
 
-"@delvtech/evm-client@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@delvtech/evm-client/-/evm-client-0.0.3.tgz#68a64f7574eb81a82cdb58cbb462e38394931563"
-  integrity sha512-Y9a3CsF/3zomW5mTbyuGQa6VXArIjGG7epmstgBxewMuy/4QmLpsTSc3sr65UPhoBOCV2Uzyfn6oplYYDFaaIw==
-  dependencies:
-    lru-cache "^10.0.1"
-
-"@delvtech/evm-client@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@delvtech/evm-client/-/evm-client-0.0.2.tgz#db4eb9a2b989bfad19c59c634baabd432bd0ba78"
-  integrity sha512-xree3GtpC0C5lJIEM/Ye5ekfPUgLiAI6XC9D3E6CVjIWzUMtELQaXdkhzyDTcZiHHK2Jt6TfgKDtCax4LQzcAw==
+"@delvtech/evm-client@0.0.7", "@delvtech/evm-client@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@delvtech/evm-client/-/evm-client-0.0.7.tgz#c39e5ac1123bcd238ef996a77d573d79d1a33f7e"
+  integrity sha512-lDIB/KAgesd3KhxWlzXZ9hlgqvWsa0Aqypgo92Ght0XZy9nIOr4xFz958kbWumZBAzTd3hysCm+StlXHRboeNw==
   dependencies:
     lru-cache "^10.0.1"
 
@@ -2447,10 +2440,10 @@
     video-stream-merger "^4.0.1"
     viem "^1.20.3"
 
-"@rainbow-me/rainbowkit@^2.0.0-beta.4":
-  version "2.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-2.0.0-beta.4.tgz#47535abc6b33bca736c28823ec9d55670fc388eb"
-  integrity sha512-1hfyZlxVcPqybfB5nPsINGIGu1vvK2uXnkBgwbEOyaWXO52giVGPZ2Nillq0kdXn3lFircWTPNF9TnIcqdgCgw==
+"@rainbow-me/rainbowkit@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-2.0.0.tgz#5ff8487b0f25b159963ee8750396b2db86491c79"
+  integrity sha512-M25y8twG7iL5P5I5Zml/dyl9ISZQYjODpxdstyMxb5pOl7qPg+sl4f/b18ZEPjdcgJ7751HMSirt25WtfPFSMQ==
   dependencies:
     "@vanilla-extract/css" "1.14.0"
     "@vanilla-extract/dynamic" "2.1.0"
@@ -4541,10 +4534,10 @@ cli-truncate@^4.0.0:
     slice-ansi "^5.0.0"
     string-width "^7.0.0"
 
-clide-js@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/clide-js/-/clide-js-0.1.2.tgz#2786eee6ff2b9d453d635eda1b0b413c997cd7a0"
-  integrity sha512-5xfhgkkZE2W2Gwcyayk4fOPt6ni0/oI7V25pHk4duY9um+SJTFCBpjwda2jRTP5iFVQHp0ONWbtK+lx28J93yQ==
+clide-js@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/clide-js/-/clide-js-0.1.3.tgz#6f500578d453714c8e51f32acd59ddc743e5e3c0"
+  integrity sha512-D8qIBdg4ZwD+zsoliDc079h1Dm0hIf1219jppPZeINmG/qIoi5CZCJVA7ToHIf74h4oVON5IEObszFd0pG5XPg==
   dependencies:
     cliui "^8.0.1"
     prompts "^2.4.2"

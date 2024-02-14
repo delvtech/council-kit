@@ -6,7 +6,7 @@ import { chainOption, getChain } from "../../reusable-options/chain.js";
 import { rpcUrlOption } from "../../reusable-options/rpc-url.js";
 
 export default command({
-  description: "Get the delegate of a given account.",
+  description: "Get the balance of a given account.",
 
   options: {
     address: {
@@ -16,7 +16,7 @@ export default command({
     },
     account: {
       alias: ["voter"],
-      description: "The account to get the delegate of",
+      description: "The account to get the balance of",
       type: "string",
       required: true,
     },
@@ -36,7 +36,7 @@ export default command({
     });
 
     const account = await options.account({
-      prompt: "Enter account to get delegate of",
+      prompt: "Enter account to get balance of",
     });
 
     const transport = http(rpcUrl);
@@ -45,11 +45,11 @@ export default command({
     const council = new ReadCouncil({ publicClient });
     const lockingVault = council.lockingVault(address as `0x${string}`);
 
-    const delegate = await lockingVault.getDelegate({
+    const balance = await lockingVault.getDepositedBalance({
       account: account as `0x${string}`,
     });
 
-    signale.info(delegate.address);
-    next(delegate);
+    signale.info(balance);
+    next(balance);
   },
 });

@@ -12,12 +12,12 @@ export interface CreateReadContractFactoryOptions {
 }
 
 export function createReadContractFactory(
-  options: CreateReadContractFactoryOptions,
+  factoryOptions: CreateReadContractFactoryOptions,
 ): CachedReadContractFactory {
-  return (factoryOptions) => {
+  return (instanceOptions) => {
     return createCachedReadContract({
-      ...options,
       ...factoryOptions,
+      ...instanceOptions,
     });
   };
 }

@@ -16,7 +16,7 @@
     "@heroicons/react": "^2.1.1",
     "@metamask/jazzicon": "^2.0.0",
     "@pushprotocol/restapi": "^1.6.6",
-    "@rainbow-me/rainbowkit": "^2.0.0-beta.4",
+    "@rainbow-me/rainbowkit": "^2.0.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tanstack/react-query": "^5.18.1",
     "assert-never": "^1.2.1",

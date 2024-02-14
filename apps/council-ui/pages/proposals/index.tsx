@@ -1,7 +1,6 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { ReactElement } from "react";
-import { getProposalStatus } from "src/utils/getProposalStatus";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
@@ -14,6 +13,7 @@ import {
   ProposalsTable,
 } from "src/ui/proposals/ProposalTable/ProposalsTable";
 import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalTable/ProposalsTableSkeleton";
+import { getProposalStatus } from "src/utils/getProposalStatus";
 import { useAccount, usePublicClient } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {
@@ -95,6 +95,7 @@ function useProposalsPageData(
             : undefined;
 
           const currentQuorum = await proposal.getCurrentQuorum();
+
           const requiredQuorum = await proposal.getRequiredQuorum();
           const isExecuted = await proposal.getIsExecuted();
           const results = await proposal.getResults();

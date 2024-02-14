@@ -12,7 +12,7 @@ import { WriteOptions } from "../../reusable-options/writeOptions.js";
 import { DAY_IN_BLOCKS } from "../../utils/constants.js";
 import { DeployedContract } from "../../utils/deployContract.js";
 import { stringifyBigInts } from "../../utils/stringifyBigInts.js";
-import { mine } from "../../viem/utils/mine.js";
+import { mine } from "../server/mine.js";
 import deployCoreVotingCommand from "./core-voting.js";
 import deployLockingVaultCommand from "./locking-vault.js";
 import deployMockErc20Command from "./mock-erc20.js";
@@ -266,7 +266,10 @@ export default command({
         `Fast forwarding block height by ${staleBlockLag} blocks...`,
       );
 
-      const blockNumber = await mine({ blocks: staleBlockLag, rpcUrl });
+      const blockNumber = await mine({
+        blocks: staleBlockLag,
+        client: publicClient,
+      });
 
       signale.success(
         `Successfully fast forwarded block height to ${blockNumber}`,

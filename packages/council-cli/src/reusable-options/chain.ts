@@ -5,7 +5,7 @@ import {
   SupportedChain,
   formatChainName,
   supportedChains,
-} from "../viem/chains.js";
+} from "../lib/viem.js";
 
 // TODO: Add a way to register new chains that updates the chain prompt and
 // makes it possible to use the custom chain name in environment variables.

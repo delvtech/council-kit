@@ -289,14 +289,15 @@ export class ReadProposal extends Model {
         powerByBallot[ballot] += power;
       }
     } else {
-      const [yes, no, maybe] = await this.coreVoting.contract.read(
+      const proposalVotingPower = await this.coreVoting.contract.read(
         "getProposalVotingPower",
         this.id,
         options,
       );
-      powerByBallot.yes = yes;
-      powerByBallot.no = no;
-      powerByBallot.maybe = maybe;
+      console.log("proposalVotingPower", proposalVotingPower);
+      powerByBallot.yes = proposalVotingPower[0];
+      powerByBallot.no = proposalVotingPower[1];
+      powerByBallot.maybe = proposalVotingPower[2];
     }
 
     return powerByBallot;

@@ -14,6 +14,8 @@
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest --reporter=verbose",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -21,14 +23,15 @@
   },
   "dependencies": {
     "@delvtech/council-core": "*",
-    "@delvtech/evm-client-viem": "^0.0.3"
+    "@delvtech/evm-client-viem": "^0.0.8"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
     "@council/tsconfig": "*",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "viem": "^2.7.3"
+    "viem": "^2.7.3",
+    "vitest": "^1.2.1"
   },
   "publishConfig": {
     "access": "public"

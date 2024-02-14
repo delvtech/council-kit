@@ -20,8 +20,8 @@ export const supportedChains = {
 
 export type SupportedChain = keyof typeof supportedChains;
 
-export function formatChainName<K extends string>(key: K): HyphenCase<K> {
-  return key.replace(" ", "-").toLowerCase() as HyphenCase<K>;
+export function formatChainName<K extends string>(name: K): HyphenCase<K> {
+  return name.replace(" ", "-").toLowerCase() as HyphenCase<K>;
 }
 
 export type HyphenCase<T extends string> = T extends `${infer A}${infer B}`
