@@ -1,4 +1,4 @@
-import { SimpleProxy } from "@council/artifacts/SimpleProxy";
+import { SimpleProxy } from "@delvtech/council-artifacts/SimpleProxy";
 import { command } from "clide-js";
 import signale from "signale";
 import { PrivateKeyAccount } from "viem";

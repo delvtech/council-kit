@@ -1,4 +1,4 @@
-import { CoreVoting } from "@council/artifacts/CoreVoting";
+import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
 import { command } from "clide-js";
 import signale from "signale";
 import { encodeFunctionData, parseUnits } from "viem";

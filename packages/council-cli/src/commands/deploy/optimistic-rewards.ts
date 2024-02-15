@@ -1,4 +1,4 @@
-import { OptimisticRewards } from "@council/artifacts/OptimisticRewards";
+import { OptimisticRewards } from "@delvtech/council-artifacts/OptimisticRewards";
 import { command } from "clide-js";
 import signale from "signale";
 import { PrivateKeyAccount } from "viem";

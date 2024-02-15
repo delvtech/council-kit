@@ -1,3 +1,3 @@
-import { GSCVault } from "@council/artifacts/GSCVault";
+import { GSCVault } from "@delvtech/council-artifacts/GSCVault";
 
 export type GscVaultAbi = typeof GSCVault.abi;

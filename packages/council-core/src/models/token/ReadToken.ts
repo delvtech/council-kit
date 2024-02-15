@@ -1,4 +1,4 @@
-import { MockERC20 } from "@council/artifacts/MockERC20";
+import { MockERC20 } from "@delvtech/council-artifacts/MockERC20";
 import { CachedReadContract } from "@delvtech/evm-client";
 import { Model, ReadContractModelOptions } from "src/models/Model";
 import { ERC20Abi } from "src/models/token/types";

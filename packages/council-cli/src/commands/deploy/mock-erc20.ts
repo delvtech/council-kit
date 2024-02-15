@@ -1,4 +1,4 @@
-import { MockERC20 } from "@council/artifacts/MockERC20";
+import { MockERC20 } from "@delvtech/council-artifacts/MockERC20";
 import { command } from "clide-js";
 import signale from "signale";
 import { WriteOptions } from "src/reusable-options/writeOptions.js";

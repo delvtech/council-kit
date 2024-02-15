@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@council/artifacts": "*",
+    "@delvtech/council-artifacts": "*",
     "@delvtech/council-viem": "*",
     "@ensdomains/ensjs": "^3.4.3",
     "@heroicons/react": "^2.1.1",

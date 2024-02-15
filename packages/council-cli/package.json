@@ -16,7 +16,7 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "@council/artifacts": "*",
+    "@delvtech/council-artifacts": "*",
     "@delvtech/council-viem": "*",
     "ajv": "^8.12.0",
     "cfonts": "^3.2.0",

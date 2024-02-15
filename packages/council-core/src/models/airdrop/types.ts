@@ -1,3 +1,3 @@
-import { Airdrop } from "@council/artifacts/Airdrop";
+import { Airdrop } from "@delvtech/council-artifacts/Airdrop";
 
 export type AirdropAbi = typeof Airdrop.abi;

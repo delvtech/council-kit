@@ -1,4 +1,4 @@
-import { Timelock } from "@council/artifacts/Timelock";
+import { Timelock } from "@delvtech/council-artifacts/Timelock";
 import { command } from "clide-js";
 import signale from "signale";
 import { encodeFunctionData } from "viem";

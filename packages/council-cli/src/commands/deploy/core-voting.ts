@@ -1,4 +1,4 @@
-import { CoreVoting } from "@council/artifacts/CoreVoting";
+import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
 import { command } from "clide-js";
 import signale from "signale";
 import { PrivateKeyAccount, parseUnits } from "viem";
@@ -44,6 +44,7 @@ export default command({
       alias: ["voting-vaults"],
       description: "The addresses of the approved voting vaults",
       type: "array",
+      default: [],
     },
   },
 

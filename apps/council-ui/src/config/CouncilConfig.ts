@@ -72,7 +72,7 @@ export interface ProposalConfig {
    * A description to show on the proposal's details page.
    */
   paragraphSummary?: string;
-  descriptionURL: string;
+  descriptionURL?: string;
   targets: string[];
   calldatas: string[];
 }

@@ -1,4 +1,4 @@
-import { MerkleRewards } from "@council/artifacts/MerkleRewards";
+import { MerkleRewards } from "@delvtech/council-artifacts/MerkleRewards";
 import { command } from "clide-js";
 import signale from "signale";
 import { encodeFunctionData, parseUnits } from "viem";

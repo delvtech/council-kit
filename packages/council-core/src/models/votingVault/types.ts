@@ -1,4 +1,4 @@
-import { IVotingVault } from "@council/artifacts/IVotingVault";
+import { IVotingVault } from "@delvtech/council-artifacts/IVotingVault";
 import { ReadVoter } from "src/models/ReadVoter";
 
 export type VotingVaultAbi = typeof IVotingVault.abi;

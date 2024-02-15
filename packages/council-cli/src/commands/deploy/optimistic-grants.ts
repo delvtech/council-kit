@@ -1,4 +1,4 @@
-import { OptimisticGrants } from "@council/artifacts/OptimisticGrants";
+import { OptimisticGrants } from "@delvtech/council-artifacts/OptimisticGrants";
 import { command } from "clide-js";
 import signale from "signale";
 import { WriteOptions } from "src/reusable-options/writeOptions.js";

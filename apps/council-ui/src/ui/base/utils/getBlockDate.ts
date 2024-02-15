@@ -1,3 +1,4 @@
+import { BlockNotFoundError } from "viem";
 import { UsePublicClientReturnType } from "wagmi";
 
 const blockTime = 12n;
@@ -13,9 +14,16 @@ export async function getBlockDate(
     return;
   }
 
-  const block = await client.getBlock({
-    blockNumber: blockNumber,
-  });
+  const block = await client
+    .getBlock({
+      blockNumber: blockNumber,
+    })
+    .catch((error) => {
+      if (error instanceof BlockNotFoundError) {
+        return undefined;
+      }
+    });
+
   if (block) {
     return new Date(Number(block.timestamp) * 1000);
   }

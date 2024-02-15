@@ -8,6 +8,7 @@ import {
   DEFAULT_DEPLOYMENTS_DIR,
   getDeploymentStore,
 } from "../../deploymentStore.js";
+import { freshDeployOption } from "../../reusable-options/deploy/fresh-deploy.js";
 import { WriteOptions } from "../../reusable-options/writeOptions.js";
 import { DAY_IN_BLOCKS } from "../../utils/constants.js";
 import { DeployedContract } from "../../utils/deployContract.js";
@@ -42,6 +43,7 @@ export default command({
     "Deploy a simple version of Council which includes 1 CoreVoting contract for general voting with power from a LockingVault deployed behind a SimpleProxy contract. Also deployed will be a Treasury, and if no voting token address is provided, a mock voting token.",
 
   options: {
+    fresh: freshDeployOption,
     "token-address": {
       description: "The address of the token used for voting.",
       type: "string",
@@ -127,6 +129,7 @@ export default command({
     const council = new ReadWriteCouncil({ publicClient, walletClient });
 
     const contractInfos: ContractInfo[] = [];
+    const isFreshDeploy = await options.freshDeploy();
 
     signale.pending("Deploying Council contracts...");
 
@@ -134,11 +137,15 @@ export default command({
     // 1. Voting Token
     // =========================================================================
 
-    let votingTokenAddress = await options.tokenAddress({
-      prompt: `Enter voting token address ${colors.dim(
-        "(leave blank to deploy a mock voting token)",
-      )}`,
-    });
+    let votingTokenAddress: string | undefined;
+
+    if (!isFreshDeploy) {
+      votingTokenAddress = await options.tokenAddress({
+        prompt: `Enter voting token address ${colors.dim(
+          "(leave blank to deploy a mock voting token)",
+        )}`,
+      });
+    }
 
     // Used to scale voting power to match the token's decimals
     let decimals = 18;
@@ -203,6 +210,7 @@ export default command({
         quorum: baseQuorum,
         minPower: minProposalPower,
         decimals,
+        vaults: isFreshDeploy ? [] : undefined,
       },
     });
 
@@ -322,11 +330,15 @@ export default command({
     // 4. Treasury
     // =========================================================================
 
-    const treasuryAddress = await options.treasuryAddress({
-      prompt: `Enter Treasury address ${colors.dim(
-        "(leave blank to deploy a new one)",
-      )}`,
-    });
+    let treasuryAddress: string | undefined;
+
+    if (!isFreshDeploy) {
+      treasuryAddress = await options.treasuryAddress({
+        prompt: `Enter Treasury address ${colors.dim(
+          "(leave blank to deploy a new one)",
+        )}`,
+      });
+    }
 
     if (!treasuryAddress) {
       signale.pending("Deploying Treasury...");

@@ -1,5 +1,5 @@
-import { CoreVoting } from "@council/artifacts/CoreVoting";
-import { Timelock } from "@council/artifacts/Timelock";
+import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
+import { Timelock } from "@delvtech/council-artifacts/Timelock";
 import { ReadWriteCouncil } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import colors from "colors";

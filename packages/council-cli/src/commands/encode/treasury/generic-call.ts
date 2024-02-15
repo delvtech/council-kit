@@ -1,4 +1,4 @@
-import { Treasury } from "@council/artifacts/Treasury";
+import { Treasury } from "@delvtech/council-artifacts/Treasury";
 import { command } from "clide-js";
 import signale from "signale";
 import { encodeFunctionData } from "viem";

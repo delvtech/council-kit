@@ -1,4 +1,4 @@
-import { Airdrop } from "@council/artifacts/Airdrop";
+import { Airdrop } from "@delvtech/council-artifacts/Airdrop";
 import { command } from "clide-js";
 import signale from "signale";
 import { PrivateKeyAccount } from "viem";

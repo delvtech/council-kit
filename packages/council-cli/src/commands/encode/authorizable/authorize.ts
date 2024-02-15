@@ -1,4 +1,4 @@
-import { Authorizable } from "@council/artifacts/Authorizable";
+import { Authorizable } from "@delvtech/council-artifacts/Authorizable";
 import { command } from "clide-js";
 import signale from "signale";
 import { encodeFunctionData } from "viem";

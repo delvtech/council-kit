@@ -1,4 +1,4 @@
-import { CoreVoting } from "@council/artifacts/CoreVoting";
+import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
 import { ContractReadOptions, Event, Transaction } from "@delvtech/evm-client";
 import { Model, ReadModelOptions } from "src/models/Model";
 import { ReadVote } from "src/models/ReadVote";
@@ -273,8 +273,14 @@ export class ReadProposal extends Model {
 
     // The proposal voting power is deleted when the proposal is executed, so we
     // have to get the results from vote events.
-    const isExecuted = await this.getIsExecuted();
+    const isExecuted = await this.getIsExecuted().catch(() => {
+      console.log("❌ inside getResults isExecuted");
+      return false;
+    });
     if (isExecuted) {
+      console.log(
+        `🚀 inside getResults for proposal ${this.id} isExecuted: ${isExecuted}`,
+      );
       const votes = await this.getVotes({
         toBlock: options?.blockNumber ?? options?.blockTag,
       });
@@ -288,6 +294,9 @@ export class ReadProposal extends Model {
         "getProposalVotingPower",
         this.id,
         options,
+      );
+      console.log(
+        `🗳️ inside getResults for proposal ${this.id} proposalVotingPower: ${proposalVotingPower}`,
       );
       if (Array.isArray(proposalVotingPower)) {
         powerByBallot.yes = proposalVotingPower[0];
@@ -421,7 +430,7 @@ export class ReadProposal extends Model {
     Event<typeof CoreVoting.abi, "ProposalExecuted">[]
   > {
     return await this.coreVoting.contract.getEvents("ProposalExecuted", {
-      fromBlock: this._unlock ?? this.created,
+      fromBlock: this.created,
       toBlock: this.expiration,
     });
   }

@@ -1,4 +1,4 @@
-import { GSCVault } from "@council/artifacts/GSCVault";
+import { GSCVault } from "@delvtech/council-artifacts/GSCVault";
 import { command } from "clide-js";
 import signale from "signale";
 import { encodeFunctionData, parseUnits } from "viem";

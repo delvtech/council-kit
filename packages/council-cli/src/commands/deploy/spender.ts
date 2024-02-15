@@ -1,4 +1,4 @@
-import { Spender } from "@council/artifacts/Spender";
+import { Spender } from "@delvtech/council-artifacts/Spender";
 import { command } from "clide-js";
 import signale from "signale";
 import { PrivateKeyAccount, parseUnits } from "viem";

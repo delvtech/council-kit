@@ -18,7 +18,7 @@
     "@delvtech/evm-client": "^0.0.6"
   },
   "dependencies": {
-    "@council/artifacts": "*",
+    "@delvtech/council-artifacts": "*",
     "big.js": "^6.2.1",
     "fast-json-stable-stringify": "^2.1.0",
     "lru-cache": "^10.2.0"

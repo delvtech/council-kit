@@ -1,4 +1,4 @@
-import { LockingVault } from "@council/artifacts/LockingVault";
+import { LockingVault } from "@delvtech/council-artifacts/LockingVault";
 import { command } from "clide-js";
 import signale from "signale";
 import { encodeFunctionData } from "viem";

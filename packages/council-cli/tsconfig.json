@@ -12,7 +12,7 @@
     // "target": "ESNext",
     "allowSyntheticDefaultImports": true,
 
-    // important to import JSON files from @council/artifacts
+    // important to import JSON files from @delvtech/council-artifacts
     "resolveJsonModule": true,
 
     // we don't need declaration files for a CLI

@@ -1,6 +1,6 @@
 import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { AirdropData, getAirdropData } from "src/utils/getAirdropData";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { AirdropData, getAirdropData } from "src/utils/getAirdropData";
 import { useAccount } from "wagmi";
 
 /**
@@ -16,14 +16,19 @@ export function useAirdropData(): {
 
   const enabled = !!address && !!chainId;
 
-  const { data, status } = useQuery<AirdropData | undefined>({
+  const { data, status } = useQuery<AirdropData | null>({
     queryKey: ["useAirdropData", address, chainId],
     enabled,
-    queryFn: enabled ? () => getAirdropData(address, chainId) : undefined,
+    queryFn: enabled
+      ? async () => {
+          const data = await getAirdropData(address, chainId);
+          return data || null;
+        }
+      : undefined,
   });
 
   return {
-    airdropData: data,
+    airdropData: data || undefined,
     status,
   };
 }

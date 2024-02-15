@@ -1,4 +1,4 @@
-import { VestingVault } from "@council/artifacts/VestingVault";
+import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
 import { command } from "clide-js";
 import signale from "signale";
 import { encodeFunctionData } from "viem";

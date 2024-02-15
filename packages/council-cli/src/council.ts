@@ -27,7 +27,6 @@ run({
     },
   },
 
-  // Apply default values to options after parsing if --yes or -y are passed
   afterParse: async ({ parsedOptions, context }) => {
     if (parsedOptions.yes) {
       for (const [key, config] of Object.entries(context.options)) {
