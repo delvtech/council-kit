@@ -29,12 +29,16 @@ export default command({
     "chain-id": {
       description: "The id to use for the local blockchain",
       type: "number",
-      default: 31337,
+      default: 1337,
     },
   },
 
   handler: async ({ options, end }) => {
-    const { balance, blockTime, chainId, host, port } = await options.values;
+    const host = await options.host();
+    const port = await options.port();
+    const balance = await options.balance();
+    const blockTime = await options.blockTime();
+    const chainId = await options.chainId();
 
     hre.config.networks.hardhat = {
       ...hre.config.networks.hardhat,

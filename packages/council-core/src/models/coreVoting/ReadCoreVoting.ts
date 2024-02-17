@@ -270,7 +270,7 @@ export class ReadCoreVoting extends Model {
     | undefined
   > {
     const { created, expiration, lastCall, proposalHash, quorum, unlock } =
-      await this.contract.read("proposals", id);
+      await this.contract.read("proposals", { 0: id });
 
     if (proposalHash !== EXECUTED_PROPOSAL_HASH) {
       return {

@@ -41,7 +41,7 @@ export class ReadWriteLockingVault extends ReadLockingVault {
   }): Promise<`0x${string}`> {
     const hash = await this.lockingVaultContract.write(
       "changeDelegation",
-      delegate,
+      { newDelegate: delegate },
       options,
     );
     this.contract.clearCache();
@@ -100,7 +100,7 @@ export class ReadWriteLockingVault extends ReadLockingVault {
   }): Promise<`0x${string}`> {
     const hash = await this.lockingVaultContract.write(
       "withdraw",
-      amount,
+      { amount },
       options,
     );
     this.contract.clearCache();

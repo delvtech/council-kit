@@ -273,14 +273,8 @@ export class ReadProposal extends Model {
 
     // The proposal voting power is deleted when the proposal is executed, so we
     // have to get the results from vote events.
-    const isExecuted = await this.getIsExecuted().catch(() => {
-      console.log("❌ inside getResults isExecuted");
-      return false;
-    });
+    const isExecuted = await this.getIsExecuted();
     if (isExecuted) {
-      console.log(
-        `🚀 inside getResults for proposal ${this.id} isExecuted: ${isExecuted}`,
-      );
       const votes = await this.getVotes({
         toBlock: options?.blockNumber ?? options?.blockTag,
       });
@@ -288,15 +282,10 @@ export class ReadProposal extends Model {
         powerByBallot[ballot] += power;
       }
     } else {
-      // FIXME: This is returning a single bigint (this may change when there
-      // are more than one ballot types)
       const proposalVotingPower = await this.coreVoting.contract.read(
         "getProposalVotingPower",
-        this.id,
+        { proposalId: this.id },
         options,
-      );
-      console.log(
-        `🗳️ inside getResults for proposal ${this.id} proposalVotingPower: ${proposalVotingPower}`,
       );
       if (Array.isArray(proposalVotingPower)) {
         powerByBallot.yes = proposalVotingPower[0];
@@ -420,7 +409,11 @@ export class ReadProposal extends Model {
     Event<typeof CoreVoting.abi, "ProposalExecuted"> | undefined
   > {
     const executedEvents = await this._getExecutedEvents();
-    return executedEvents.find(({ args }) => args === this.id);
+    const found = executedEvents.find(
+      ({ args }) => args.proposalId === this.id,
+    );
+
+    return found;
   }
 
   /**
@@ -429,9 +422,15 @@ export class ReadProposal extends Model {
   protected async _getExecutedEvents(): Promise<
     Event<typeof CoreVoting.abi, "ProposalExecuted">[]
   > {
-    return await this.coreVoting.contract.getEvents("ProposalExecuted", {
-      fromBlock: this.created,
-      toBlock: this.expiration,
-    });
+    const lastCallBlock = await this.getLastCallBlock();
+    const events = await this.coreVoting.contract.getEvents(
+      "ProposalExecuted",
+      {
+        fromBlock: this.created,
+        toBlock: lastCallBlock,
+      },
+    );
+
+    return events;
   }
 }

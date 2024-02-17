@@ -80,7 +80,7 @@ export class ReadAirdrop extends Model {
   }): Promise<bigint> {
     return await this.contract.read(
       "claimed",
-      account,
+      { 0: account },
       blockToReadOptions(atBlock),
     );
   }

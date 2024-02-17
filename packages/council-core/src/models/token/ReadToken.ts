@@ -95,7 +95,7 @@ export class ReadToken extends Model {
   }): Promise<bigint> {
     return this.contract.read(
       "balanceOf",
-      account,
+      { 0: account },
       blockToReadOptions(atBlock),
     );
   }

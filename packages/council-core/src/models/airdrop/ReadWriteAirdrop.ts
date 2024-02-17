@@ -75,8 +75,8 @@ export class ReadWriteAirdrop extends ReadAirdrop {
       options,
     );
     const token = await this.getToken();
-    token.contract.deleteRead("balanceOf", recipient);
-    this.contract.deleteRead("claimed", recipient);
+    token.contract.deleteRead("balanceOf", { 0: recipient });
+    this.contract.deleteRead("claimed", { 0: recipient });
     return hash;
   }
 
@@ -120,7 +120,7 @@ export class ReadWriteAirdrop extends ReadAirdrop {
     );
     const lockingVault = await this.getLockingVault();
     lockingVault.contract.clearCache();
-    this.contract.deleteRead("claimed", recipient);
+    this.contract.deleteRead("claimed", { 0: recipient });
     return hash;
   }
 
@@ -136,9 +136,13 @@ export class ReadWriteAirdrop extends ReadAirdrop {
     recipient: `0x${string}`;
     options?: ContractWriteOptions;
   }): Promise<`0x${string}`> {
-    const hash = await this.contract.write("reclaim", recipient, options);
+    const hash = await this.contract.write(
+      "reclaim",
+      { destination: recipient },
+      options,
+    );
     const token = await this.getToken();
-    token.contract.deleteRead("balanceOf", recipient);
+    token.contract.deleteRead("balanceOf", { 0: recipient });
     this.contract.clearCache();
     return hash;
   }

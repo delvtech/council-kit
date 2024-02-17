@@ -93,7 +93,9 @@ export class ReadVestingVault extends ReadVotingVault {
   }): Promise<FunctionReturn<VestingVaultAbi, "getGrant">> {
     return this.vestingVaultContract.read(
       "getGrant",
-      typeof account === "string" ? account : account.address,
+      {
+        _who: typeof account === "string" ? account : account.address,
+      },
       blockToReadOptions(atBlock),
     );
   }

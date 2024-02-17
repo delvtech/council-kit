@@ -25,7 +25,7 @@ export class ReadWriteMockToken extends ReadWriteToken {
       },
       options,
     );
-    this.contract.deleteRead("balanceOf", account);
+    this.contract.deleteRead("balanceOf", { 0: account });
     return hash;
   }
 
@@ -52,7 +52,7 @@ export class ReadWriteMockToken extends ReadWriteToken {
       },
       options,
     );
-    this.contract.deleteRead("balanceOf", account);
+    this.contract.deleteRead("balanceOf", { 0: account });
     return hash;
   }
 

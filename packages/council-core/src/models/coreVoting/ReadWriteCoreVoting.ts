@@ -128,7 +128,11 @@ export class ReadWriteCoreVoting<
     blocks: bigint;
     options?: ContractWriteOptions;
   }): Promise<`0x${string}`> {
-    const hash = await this.contract.write("setLockDuration", blocks, options);
+    const hash = await this.contract.write(
+      "setLockDuration",
+      { _lockDuration: blocks },
+      options,
+    );
     this.contract.deleteRead("lockDuration");
     return hash;
   }
@@ -174,7 +178,7 @@ export class ReadWriteCoreVoting<
       ) as TVaults;
     }
 
-    this.contract.deleteRead("approvedVaults", vault.address);
+    this.contract.deleteRead("approvedVaults", { 0: vault.address });
     return hash;
   }
 
@@ -194,7 +198,7 @@ export class ReadWriteCoreVoting<
   }): Promise<`0x${string}`> {
     const hash = await this.contract.write(
       "changeExtraVotingTime",
-      extraVoteBlocks,
+      { _extraVoteTime: extraVoteBlocks },
       options,
     );
     this.contract.deleteRead("extraVoteTime");

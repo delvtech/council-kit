@@ -153,7 +153,9 @@ export class ReadGscVault extends ReadVotingVault {
   }): Promise<Date | null> {
     const secondsTimestamp = await this.gscVaultContract.read(
       "members",
-      typeof account === "string" ? account : account.address,
+      {
+        0: typeof account === "string" ? account : account.address,
+      },
       blockToReadOptions(atBlock),
     );
     return secondsTimestamp ? new Date(Number(secondsTimestamp * 1000n)) : null;
@@ -182,7 +184,7 @@ export class ReadGscVault extends ReadVotingVault {
   getIdleDuration({ atBlock }: { atBlock?: BlockLike } = {}): Promise<bigint> {
     return this.gscVaultContract.read(
       "idleDuration",
-      undefined,
+      {},
       blockToReadOptions(atBlock),
     );
   }
@@ -228,7 +230,9 @@ export class ReadGscVault extends ReadVotingVault {
   }): Promise<ReadVotingVault[]> {
     const vaultAddresses = await this.gscVaultContract.read(
       "getUserVaults",
-      typeof account === "string" ? account : account.address,
+      {
+        who: typeof account === "string" ? account : account.address,
+      },
       blockToReadOptions(atBlock),
     );
     return vaultAddresses.map(

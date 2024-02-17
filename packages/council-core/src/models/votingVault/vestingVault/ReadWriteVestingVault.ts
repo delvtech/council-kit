@@ -36,12 +36,14 @@ export class ReadWriteVestingVault extends ReadVestingVault {
     delegate,
     options,
   }: {
-    delegate?: `0x${string}`;
+    delegate: `0x${string}`;
     options?: ContractWriteOptions;
   }): Promise<`0x${string}`> {
     const hash = await this.vestingVaultContract.write(
       "delegate",
-      delegate ?? (await this.vestingVaultContract.getSignerAddress()),
+      {
+        _to: delegate,
+      },
       options,
     );
     this.contract.clearCache();

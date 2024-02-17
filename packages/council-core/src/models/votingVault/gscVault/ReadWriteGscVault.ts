@@ -34,7 +34,7 @@ export class ReadWriteGscVault extends ReadGscVault {
   }): Promise<`0x${string}`> {
     const hash = await this.gscVaultContract.write(
       "setIdleDuration",
-      duration,
+      { _idleDuration: duration },
       options,
     );
     this.contract.clearCache();

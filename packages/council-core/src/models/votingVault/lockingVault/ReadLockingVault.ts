@@ -67,7 +67,9 @@ export class ReadLockingVault extends ReadVotingVault {
   }): Promise<bigint> {
     const deposits = await this.lockingVaultContract.read(
       "deposits",
-      typeof account === "string" ? account : account.address,
+      {
+        who: typeof account === "string" ? account : account.address,
+      },
       blockToReadOptions(atBlock),
     );
     return deposits[1];
@@ -281,7 +283,9 @@ export class ReadLockingVault extends ReadVotingVault {
   }): Promise<ReadVoter> {
     const { 0: address } = await this.lockingVaultContract.read(
       "deposits",
-      account,
+      {
+        who: account,
+      },
       blockToReadOptions(atBlock),
     );
     return new ReadVoter({
