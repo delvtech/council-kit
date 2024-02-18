@@ -10,19 +10,15 @@ export function useGscStatus(account: `0x${string}` | undefined): {
 } {
   const coreVoting = useReadCoreVoting();
   const gscVault = useReadGscVault();
-  const enabled = !!account;
 
   const { data, status } = useQuery({
     queryKey: ["gsc-status", account],
-    enabled,
-    queryFn: enabled
-      ? async () =>
-          getGscStatus({
-            account,
-            qualifyingVaults: coreVoting.vaults,
-            gscVault,
-          })
-      : undefined,
+    queryFn: () =>
+      getGscStatus({
+        account,
+        qualifyingVaults: coreVoting.vaults,
+        gscVault,
+      }),
   });
 
   return {

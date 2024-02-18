@@ -15,11 +15,7 @@ import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
   const { address } = useAccount();
-  const { data, status, error } = useVaultsPageData(address);
-
-  console.log("data", data);
-  console.log("status", status);
-  console.log("error", error);
+  const { data, status } = useVaultsPageData(address);
 
   return (
     <Page>
@@ -99,8 +95,6 @@ function useVaultsPageData(
   const coreVoting = useReadCoreVoting();
   const gscVoting = useReadGscVoting();
   const config = useCouncilConfig();
-
-  console.log("coreVoting", coreVoting);
 
   return useQuery({
     queryKey: ["vaultsPage", account],
