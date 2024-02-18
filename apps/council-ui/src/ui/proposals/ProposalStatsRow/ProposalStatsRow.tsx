@@ -1,17 +1,17 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement } from "react";
-import { makeEtherscanTransactionURL } from "src/utils/etherscan/makeEtherscanTransactionURL";
-import { ProposalStatus } from "src/utils/getProposalStatus";
 import { makeVoterURL } from "src/routes";
+import { Stat } from "src/ui/base/Stat";
+import { DefinitionTooltip } from "src/ui/base/Tooltip";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
-import { Stat } from "src/ui/base/Stat";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
+import { makeEtherscanTransactionURL } from "src/utils/etherscan/makeEtherscanTransactionURL";
+import { ProposalStatus } from "src/utils/getProposalStatus";
 
 interface ProposalStatsRowProps {
   votingContractName?: string;

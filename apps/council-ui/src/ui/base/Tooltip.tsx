@@ -28,7 +28,7 @@ export function Tooltip({
 }: ToolTipOptions): ReactElement {
   return (
     <>
-      <a
+      <span
         {...passThruProps}
         data-tooltip-id="tooltipsy"
         data-tooltip-content={content}
@@ -37,7 +37,7 @@ export function Tooltip({
         data-tooltip-position-strategy={positionStrategy}
       >
         {children}
-      </a>
+      </span>
       <BaseTooltip id="tooltipsy" />
     </>
   );

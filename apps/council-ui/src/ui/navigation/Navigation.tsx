@@ -7,7 +7,7 @@ import { makeVoterURL, Routes } from "src/routes";
 import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
 import { AirdropIcon } from "src/ui/base/svg/20/AirdropIcon";
 import PushIcon from "src/ui/base/svg/PushLogo";
-import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
+import { Tooltip } from "src/ui/base/Tooltip";
 import { useWrongNetworkEffect } from "src/ui/network/hooks/useWrongNetworkEffect";
 import { usePushSubscribe } from "src/ui/push/usePushSubscribe";
 import { useAccount } from "wagmi";
@@ -27,7 +27,7 @@ export function Navigation(): ReactElement {
           <label tabIndex={0} className="daisy-btn daisy-btn-ghost lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="size-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

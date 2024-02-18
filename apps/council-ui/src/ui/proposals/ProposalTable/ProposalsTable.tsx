@@ -3,16 +3,16 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
-import { formatTimeLeft } from "src/utils/formatTimeLeft";
-import { ProposalStatus } from "src/utils/getProposalStatus";
 import { makeProposalURL } from "src/routes";
+import { Tooltip } from "src/ui/base/Tooltip";
 import {
-  SortableGridTable,
   SortOptions,
+  SortableGridTable,
 } from "src/ui/base/tables/SortableGridTable";
-import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { tooltipByStatus } from "src/ui/proposals/tooltips";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
+import { formatTimeLeft } from "src/utils/formatTimeLeft";
+import { ProposalStatus } from "src/utils/getProposalStatus";
 import { useAccount } from "wagmi";
 
 export interface ProposalRowData {

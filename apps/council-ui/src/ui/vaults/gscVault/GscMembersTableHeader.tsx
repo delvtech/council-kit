@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
-import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { DefinitionTooltip } from "src/ui/base/Tooltip";
 
 export function GscMembersTableHeader(): ReactElement {
   return (

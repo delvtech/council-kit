@@ -1,7 +1,7 @@
 import { BuildingLibraryIcon, UserCircleIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import { ReactElement } from "react";
-import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
+import { Tooltip } from "src/ui/base/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";

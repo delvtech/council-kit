@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVaultURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
-import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { DefinitionTooltip } from "src/ui/base/Tooltip";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { GenericVaultCardSkeleton } from "src/ui/vaults/GenericVaultCard";

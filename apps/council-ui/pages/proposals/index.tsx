@@ -20,10 +20,6 @@ export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
   const { data, error, status } = useProposalsPageData(address);
 
-  console.log("data", data);
-  console.log("status", status);
-  console.log("error", error);
-
   return (
     <Page>
       <h1 className="text-5xl font-bold">Proposals</h1>

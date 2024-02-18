@@ -1,15 +1,15 @@
 import { ReactElement } from "react";
-import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
+import { Stat } from "src/ui/base/Stat";
+import { DefinitionTooltip } from "src/ui/base/Tooltip";
 import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import ExternalLink from "src/ui/base/links/ExternalLink";
-import { Stat } from "src/ui/base/Stat";
-import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
   PARTICIPANTS_TIP,
   WALLETS_DELEGATED_TIP,
   YOUR_VOTING_POWER_TIP,
 } from "src/ui/vaults/tooltips";
+import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
 
 interface LockingVaultStatsRowProps {
   accountVotingPower: bigint;

@@ -3,15 +3,15 @@ import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
 import { makeVaultURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { DefinitionTooltip } from "src/ui/base/Tooltip";
+import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import { TVP_TIP } from "src/ui/vaults/tooltips";
 
 interface GenericVaultCardProps {
-  address: string;
+  address: `0x${string}`;
   name: string;
-  tvp?: string;
-  votingPower?: string;
+  tvp?: bigint;
+  votingPower?: bigint;
   sentenceSummary?: string;
 }
 
@@ -24,10 +24,10 @@ export function GenericVaultCard({
 }: GenericVaultCardProps): ReactElement {
   return (
     <Link href={makeVaultURL(address)}>
-      <div className="h-72 daisy-card bg-base-200 hover:shadow-xl transition-shadow">
+      <div className="daisy-card h-72 bg-base-200 transition-shadow hover:shadow-xl">
         <div className="daisy-card-body justify-between">
           <div>
-            <h2 className="text-2xl daisy-card-title">{name}</h2>
+            <h2 className="daisy-card-title text-2xl">{name}</h2>
             <Address address={address} className="text-lg" />
             {/* Description */}
             <span className="mt-4 line-clamp-3" title={sentenceSummary}>
@@ -35,23 +35,25 @@ export function GenericVaultCard({
             </span>
           </div>
 
-          <div className="flex-col daisy-card-actions gap-y-2">
+          <div className="daisy-card-actions flex-col gap-y-2">
             {/* Total Voting Power */}
-            <div className="flex justify-between w-full">
+            <div className="flex w-full justify-between">
               <span>
                 <DefinitionTooltip content={TVP_TIP}>
                   Total voting power:
                 </DefinitionTooltip>
               </span>
               <span className="font-bold">
-                {tvp ? formatBalance(tvp) : "None"}
+                {tvp ? formatUnitsBalance({ balance: tvp }) : "None"}
               </span>
             </div>
 
-            <div className="flex justify-between w-full">
+            <div className="flex w-full justify-between">
               <span>Your voting power:</span>
               <span className="font-bold">
-                {votingPower ? formatBalance(votingPower) : "None"}
+                {votingPower
+                  ? formatUnitsBalance({ balance: votingPower })
+                  : "None"}
               </span>
             </div>
           </div>
@@ -63,13 +65,13 @@ export function GenericVaultCard({
 
 export function GenericVaultCardSkeleton(): ReactElement {
   return (
-    <div className="w-full sm:w-80 sm:h-72 daisy-card bg-base-300">
+    <div className="daisy-card w-full bg-base-300 sm:h-72 sm:w-80">
       <div className="daisy-card-body gap-6">
         <h2 className="w-32">
           <Skeleton count={2} />
         </h2>
 
-        <div className="flex-col daisy-card-actions gap-y-6">
+        <div className="daisy-card-actions flex-col gap-y-6">
           <div className="w-full">
             <Skeleton count={6} />
           </div>

@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { Stat } from "src/ui/base/Stat";
-import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
+import { DefinitionTooltip } from "src/ui/base/Tooltip";
 import { YOUR_VOTING_POWER_TIP } from "src/ui/vaults/tooltips";
 
 interface GeneircVaultStatsRowProps {
