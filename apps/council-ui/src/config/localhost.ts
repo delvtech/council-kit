@@ -2,7 +2,7 @@ import { CouncilConfig } from "src/config/CouncilConfig";
 
 export const localhostCouncilConfig: CouncilConfig = {
   version: "",
-  chainId: 31337,
+  chainId: 1337,
   timelock: {
     address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
   },

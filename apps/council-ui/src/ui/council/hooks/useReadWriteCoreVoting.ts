@@ -10,21 +10,19 @@ export function useReadWriteCoreVoting(): ReadWriteCoreVoting | undefined {
   const council = useReadWriteCouncil();
   const { coreVoting } = useCouncilConfig();
 
-  return useMemo(
-    () =>
-      council?.coreVoting({
-        address: coreVoting.address,
-        vaults: coreVoting.vaults.map((vault) => {
-          switch (vault.type) {
-            case "LockingVault":
-              return council.lockingVault(vault.address);
-            case "VestingVault":
-              return council.vestingVault(vault.address);
-            default:
-              return vault.address;
-          }
-        }),
+  return useMemo(() => {
+    return council?.coreVoting({
+      address: coreVoting.address,
+      vaults: coreVoting.vaults.map((vault) => {
+        switch (vault.type) {
+          case "LockingVault":
+            return council.lockingVault(vault.address);
+          case "VestingVault":
+            return council.vestingVault(vault.address);
+          default:
+            return vault.address;
+        }
       }),
-    [council, coreVoting.address, coreVoting.vaults],
-  );
+    });
+  }, [council, coreVoting.address, coreVoting.vaults]);
 }

@@ -10,13 +10,14 @@ export function useReadWriteGscVoting(): ReadWriteCoreVoting | undefined {
   const council = useReadWriteCouncil();
   const { gscVoting } = useCouncilConfig();
 
-  return useMemo(
-    () =>
-      gscVoting &&
-      council?.coreVoting({
-        address: gscVoting.address,
-        vaults: [council.gscVault(gscVoting?.vault.address)],
-      }),
-    [council, gscVoting],
-  );
+  return useMemo(() => {
+    if (!gscVoting || !council) {
+      return undefined;
+    }
+
+    return council.coreVoting({
+      address: gscVoting.address,
+      vaults: [council.gscVault(gscVoting.vault.address)],
+    });
+  }, [council, gscVoting]);
 }

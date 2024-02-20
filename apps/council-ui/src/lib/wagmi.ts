@@ -1,13 +1,14 @@
 import { councilConfigs } from "src/config/council.config";
 import { http } from "wagmi";
-import { goerli, hardhat, mainnet } from "wagmi/chains";
+import { goerli, hardhat, localhost, mainnet } from "wagmi/chains";
 
 const configuredChainIds = Object.keys(councilConfigs);
 
-const allChains = [mainnet, goerli, hardhat];
+const allChains = [mainnet, goerli, hardhat, localhost];
 const rpcUrlsByChainId: Record<string, string | undefined> = {
   1: process.env.NEXT_PUBLIC_MAINNET_RPC_URL,
   5: process.env.NEXT_PUBLIC_GOERLI_RPC_URL,
+  1337: process.env.NEXT_PUBLIC_LOCAL_RPC_URL,
   31337: process.env.NEXT_PUBLIC_LOCAL_RPC_URL,
 };
 
