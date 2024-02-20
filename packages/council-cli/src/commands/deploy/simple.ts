@@ -269,15 +269,16 @@ export default command({
 
     const localChainIds: number[] = [hardhat.id, localhost.id, foundry.id];
     if (localChainIds.includes(chain.id)) {
+      const blocksToMine = staleBlockLag * 2;
       // Calling queryVotePower on a voting vault that has a stale block lag larger
       // than the current block height will result in an error. To avoid this, we
       // we fast forward the block height by the stale block lag.
       signale.pending(
-        `Fast forwarding block height by ${staleBlockLag} blocks...`,
+        `Fast forwarding block height by ${blocksToMine} blocks...`,
       );
 
       const blockNumber = await mine({
-        blocks: staleBlockLag,
+        blocks: blocksToMine,
         client: publicClient,
       });
 

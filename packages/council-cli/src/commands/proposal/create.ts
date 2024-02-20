@@ -114,7 +114,10 @@ export default command({
     const lastCall = await options.lastCall({
       prompt: {
         message: "Enter the last call block",
-        initial: String(currentBlock + DAY_IN_BLOCKS * 90n),
+        initial: String(currentBlock + DAY_IN_BLOCKS * 14n),
+        validate: (value) => {
+          return !isNaN(Number(value));
+        },
       },
     });
 
