@@ -16,7 +16,11 @@ export class ReadCouncil extends Model {
   protected _contractFactory: ReadContractFactory;
   protected _network: Network;
 
-  constructor({ contractFactory, network, name }: ReadCouncilOptions) {
+  constructor({
+    name = "Council",
+    contractFactory,
+    network,
+  }: ReadCouncilOptions) {
     super({ contractFactory, network, name });
     this._contractFactory = contractFactory;
     this._network = network;

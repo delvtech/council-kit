@@ -19,12 +19,12 @@ export class ReadVotingVault extends Model {
   contract: CachedReadContract<VotingVaultAbi>;
 
   constructor({
+    name = "Voting Vault",
     address,
     contractFactory,
     network,
     cache,
     namespace,
-    name,
   }: ReadVotingVaultOptions) {
     super({ name, network, contractFactory });
     this.contract = contractFactory({

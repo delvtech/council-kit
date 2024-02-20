@@ -20,12 +20,12 @@ export class ReadLockingVault extends ReadVotingVault {
   lockingVaultContract: CachedReadContract<LockingVaultAbi>;
 
   constructor({
+    name = "Locking Vault",
     address,
     contractFactory,
     network,
     cache,
     namespace,
-    name,
   }: ReadLockingVaultOptions) {
     super({
       address,

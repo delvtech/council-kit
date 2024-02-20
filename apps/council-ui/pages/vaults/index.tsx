@@ -109,8 +109,6 @@ function useVaultsPageData(
           ({ address }) => address === vault.address,
         );
 
-        console.log("vault", vault);
-
         let tvp: bigint | undefined = undefined;
         if (
           vault instanceof ReadLockingVault ||

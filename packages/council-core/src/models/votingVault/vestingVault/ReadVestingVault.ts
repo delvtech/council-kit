@@ -24,12 +24,12 @@ export class ReadVestingVault extends ReadVotingVault {
   vestingVaultContract: CachedReadContract<VestingVaultAbi>;
 
   constructor({
+    name = "Vesting Vault",
     address,
     contractFactory,
     network,
     cache,
     namespace,
-    name,
   }: ReadVestingVaultOptions) {
     super({
       address,

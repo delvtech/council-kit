@@ -1,4 +1,4 @@
-import { Ballot } from "@delvtech/council-viem";
+import { Ballot, ReadVotingVault } from "@delvtech/council-viem";
 import { MutationStatus } from "@tanstack/react-query";
 import { useWrite } from "src/ui/contract/hooks/useWrite";
 import { useReadWriteCouncil } from "src/ui/council/hooks/useReadWriteCouncil";
@@ -7,6 +7,7 @@ interface SubmitVoteOptions {
   coreVotingAddress: `0x${string}`;
   proposalId: bigint;
   ballot: Ballot;
+  vaults: (ReadVotingVault | `0x${string}`)[];
 }
 
 export function useSubmitVote(): {
@@ -22,6 +23,7 @@ export function useSubmitVote(): {
       coreVotingAddress,
       proposalId,
       ballot,
+      vaults,
     }: SubmitVoteOptions) => {
       if (!enabled) {
         throw new Error(
@@ -40,7 +42,7 @@ export function useSubmitVote(): {
         );
       }
 
-      return proposal.vote({ ballot });
+      return proposal.vote({ ballot, vaults });
     },
   });
 

@@ -58,7 +58,7 @@ export class ReadWriteProposal extends ReadProposal {
   async vote({
     ballot,
     vaults: _vaults = this.coreVoting.vaults,
-    extraVaultData = [],
+    extraVaultData: _extraVaultData,
     options,
   }: {
     ballot: Ballot;
@@ -85,6 +85,11 @@ export class ReadWriteProposal extends ReadProposal {
 
     const signerAddress = await this.coreVoting.contract.getSignerAddress();
     const vaultsWithPower = await getVaultsWithPower(signerAddress, vaults);
+
+    const extraVaultData = vaultsWithPower.map(({ address }) => {
+      const index = _vaults.indexOf(address);
+      return _extraVaultData?.[index] || "0x";
+    });
 
     const hash = this.coreVoting.contract.write(
       "vote",

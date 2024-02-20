@@ -3,12 +3,12 @@ import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement } from "react";
 import { makeVaultURL } from "src/routes";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import useVotingPowerByVault from "src/ui/vaults/hooks/useVotingPowerByVault";
+import { ProposalVotingSkeleton } from "src/ui/voting/ProposalVotingSkeleton";
+import { useSubmitVote } from "src/ui/voting/hooks/useSubmitVote";
 import { useVote } from "src/ui/voting/hooks/useVote";
 import { useAccount } from "wagmi";
-import { ProposalVotingSkeleton } from "./ProposalVotingSkeleton";
-import { useSubmitVote } from "./hooks/useSubmitVote";
 
 interface ProposalVotingProps {
   coreVotingAddress: `0x${string}`;
@@ -45,6 +45,7 @@ export function ProposalVoting({
       proposalId,
       coreVotingAddress,
       ballot,
+      vaults,
     });
   }
 
@@ -68,7 +69,9 @@ export function ProposalVoting({
             >
               <h3>{vault.name}</h3>
             </Link>
-            <p className="ml-auto">{formatBalance(vault.votingPower)}</p>
+            <p className="ml-auto">
+              {formatUnitsBalance({ balance: vault.votingPower })}
+            </p>
           </div>
         ))}
       </div>
@@ -76,7 +79,7 @@ export function ProposalVoting({
       <div className="flex">
         <h2 className="text-lg">Total Voting Power</h2>
         <p className="ml-auto text-lg font-bold">
-          {formatBalance(totalVotingPower ?? 0)}
+          {formatUnitsBalance({ balance: totalVotingPower ?? 0 })}
         </p>
       </div>
 

@@ -1,7 +1,17 @@
 import { ContractWriteOptions } from "@delvtech/evm-client";
-import { ReadWriteToken } from "src/models/token/ReadWriteToken";
+import {
+  ReadWriteToken,
+  ReadWriteTokenOptions,
+} from "src/models/token/ReadWriteToken";
 
 export class ReadWriteMockToken extends ReadWriteToken {
+  constructor({ name = "Mock Token", ...rest }: ReadWriteTokenOptions) {
+    super({
+      name,
+      ...rest,
+    });
+  }
+
   /**
    * Mint new tokens
    * @param account - The account to add tokens to.

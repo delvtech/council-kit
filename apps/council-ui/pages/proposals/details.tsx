@@ -45,7 +45,6 @@ export default function ProposalPage(): ReactElement {
     id,
     account.address,
   );
-  console.log("@@@@@@@@@@@@@@@@ data", data);
   const { gscMembers } = useGscMembers();
 
   // // voting activity filtering
@@ -171,11 +170,6 @@ export default function ProposalPage(): ReactElement {
               createdBlock={data.createdAtBlock}
               proposalId={id}
               vaults={usedCoreVoting.vaults.map(({ address }) => address)}
-              // accountBallot={data?.accountBallot}
-              // disabled={
-              //   !signer || !data?.isActive || !votingPower || !+votingPower
-              // }
-              // onVote={handleVote}
             />
           ) : (
             <ProposalVotingSkeleton />
@@ -238,7 +232,6 @@ function useProposalDetailsPageData(
     enabled,
     queryFn: enabled
       ? async (): Promise<ProposalDetailsPageData> => {
-          console.log("!!!!! inside proposalDetailsPage queryFn");
           const createdTransaction = await proposal.getCreatedTransaction();
           const createdAtDate = proposal.created
             ? await getBlockDate(proposal.created, client)

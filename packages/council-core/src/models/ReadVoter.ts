@@ -15,8 +15,11 @@ export interface ReadVoterOptions extends ReadModelOptions {
 export class ReadVoter extends Model {
   address: `0x${string}`;
 
-  constructor({ address, ...rest }: ReadVoterOptions) {
-    super(rest);
+  constructor({ address, name = `Voter`, ...rest }: ReadVoterOptions) {
+    super({
+      name,
+      ...rest,
+    });
     this.address = address;
   }
 

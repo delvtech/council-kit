@@ -16,12 +16,12 @@ export class ReadToken extends Model {
   contract: CachedReadContract<ERC20Abi>;
 
   constructor({
+    name = "Token",
     address,
     contractFactory,
     network,
     cache,
     namespace,
-    name,
   }: ReadTokenOptions) {
     super({ name, network, contractFactory });
     this.contract = contractFactory({

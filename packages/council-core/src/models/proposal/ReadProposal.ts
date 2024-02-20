@@ -48,6 +48,7 @@ export class ReadProposal extends Model {
    *   created.
    */
   constructor({
+    name = "Proposal",
     id,
     coreVoting,
     contractFactory,
@@ -55,7 +56,6 @@ export class ReadProposal extends Model {
     created,
     expiration,
     lastCall,
-    name,
     proposalHash,
     requiredQuorum,
     unlock,

@@ -19,12 +19,12 @@ export class ReadGscVault extends ReadVotingVault {
   gscVaultContract: CachedReadContract<GscVaultAbi>;
 
   constructor({
+    name = "GSC Vault",
     address,
     contractFactory,
     network,
     cache,
     namespace,
-    name,
   }: ReadGscVaultOptions) {
     super({
       address,
@@ -110,7 +110,10 @@ export class ReadGscVault extends ReadVotingVault {
       // NOTE: the kickEvents store `when` as a block number whereas the
       // joinEvents store `when` as a timestamp, so we must convert the block
       // number to a timestamp so we can compare them.
-      const { timestamp: kickedTimestamp } = await getBlockOrThrow(this.network, when);
+      const { timestamp: kickedTimestamp } = await getBlockOrThrow(
+        this.network,
+        when,
+      );
 
       if (
         latestJoinTimestampByMember[who] &&

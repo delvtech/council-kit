@@ -20,13 +20,13 @@ export class ReadVote extends Model {
   voter: ReadVoter;
 
   constructor({
+    name = "Vote",
     ballot,
     contractFactory,
     network,
     power,
     proposal,
     voter,
-    name,
   }: ReadVoteOptions) {
     super({ contractFactory, network, name });
     this.ballot = ballot;

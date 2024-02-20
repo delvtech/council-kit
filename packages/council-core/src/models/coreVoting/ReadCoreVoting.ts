@@ -33,12 +33,12 @@ export class ReadCoreVoting extends Model {
    *   approved for this voting contract.
    */
   constructor({
+    name = "Core Voting",
     address,
     contractFactory,
     network,
     cache,
     namespace,
-    name,
     vaults = [],
   }: ReadCoreVotingOptions) {
     super({ contractFactory, network, name });

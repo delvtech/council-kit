@@ -18,12 +18,12 @@ export class ReadAirdrop extends Model {
   contract: CachedReadContract<AirdropAbi>;
 
   constructor({
+    name = "Airdrop",
     address,
     contractFactory,
     network,
     cache,
     namespace,
-    name,
   }: ReadAirdropOptions) {
     super({ contractFactory, name, network });
     this.contract = contractFactory({
