@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { SupportedChainId } from "src/config/council.config";
 import { chains } from "src/lib/wagmi";
 import { useChainId } from "wagmi";
@@ -8,9 +9,10 @@ const defaultChainId = chains[0].id as SupportedChainId;
 export function useSupportedChainId(): SupportedChainId {
   const chainId = useChainId() as SupportedChainId;
 
-  if (allChainIds.includes(chainId)) {
-    return chainId;
-  }
-
-  return defaultChainId;
+  return useMemo(() => {
+    if (allChainIds.includes(chainId)) {
+      return chainId;
+    }
+    return defaultChainId;
+  }, [chainId]);
 }

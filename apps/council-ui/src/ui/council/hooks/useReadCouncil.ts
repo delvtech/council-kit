@@ -16,8 +16,6 @@ export function useReadCouncil(): ReadCouncil {
       throw new Error("Public client is not available");
     }
 
-    console.log("Making new ReadCouncil");
-
     return new ReadCouncil({
       publicClient,
       cache: sdkCache,
