@@ -14,9 +14,6 @@ export default function VaultPage(): ReactElement {
 
   const vaultConfig = useVaultConfig(address);
 
-  console.log("address", address);
-  console.log("vaultConfig", vaultConfig);
-
   if (!address || !vaultConfig) {
     replace("/vaults");
   }

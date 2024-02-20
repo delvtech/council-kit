@@ -44,7 +44,7 @@ export function useVotingPower({
       : undefined,
   });
 
-  const votingPower = data?.reduce((a, b) => a + b);
+  const votingPower = data?.reduce((a, b) => a + b, 0n);
 
   return {
     votingPower,

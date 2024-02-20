@@ -15,7 +15,7 @@ export function useReadWriteGscVoting(): ReadWriteCoreVoting | undefined {
       gscVoting &&
       council?.coreVoting({
         address: gscVoting.address,
-        vaults: [gscVoting?.vault.address],
+        vaults: [council.gscVault(gscVoting?.vault.address)],
       }),
     [council, gscVoting],
   );

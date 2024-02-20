@@ -4,7 +4,7 @@ import { ReadContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
 import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
-import { getBlock } from "src/utils/getBlock";
+import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
 import { GscVaultAbi } from "./types";
 
 export interface ReadGscVaultOptions extends ReadContractModelOptions {}
@@ -110,7 +110,7 @@ export class ReadGscVault extends ReadVotingVault {
       // NOTE: the kickEvents store `when` as a block number whereas the
       // joinEvents store `when` as a timestamp, so we must convert the block
       // number to a timestamp so we can compare them.
-      const { timestamp: kickedTimestamp } = await getBlock(this.network, when);
+      const { timestamp: kickedTimestamp } = await getBlockOrThrow(this.network, when);
 
       if (
         latestJoinTimestampByMember[who] &&

@@ -7,7 +7,7 @@ import { LockingVaultAbi } from "src/models/votingVault/lockingVault/types";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
 import { VoterPowerBreakdown } from "src/models/votingVault/types";
 import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
-import { getBlock } from "src/utils/getBlock";
+import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
 import { getOrSet } from "src/utils/getOrSet";
 
 export interface ReadLockingVaultOptions extends ReadContractModelOptions {}
@@ -242,7 +242,7 @@ export class ReadLockingVault extends ReadVotingVault {
     let blockNumber = atBlock;
 
     if (typeof blockNumber !== "bigint") {
-      const block = await getBlock(this.network, atBlock);
+      const block = await getBlockOrThrow(this.network, atBlock);
       blockNumber = block.blockNumber ?? undefined;
     }
 
@@ -268,7 +268,7 @@ export class ReadLockingVault extends ReadVotingVault {
     const powerByVoter = await this._getPowerByVoter({
       toBlock: atBlock,
     });
-    return Object.values(powerByVoter).reduce((sum, power) => sum + power);
+    return Object.values(powerByVoter).reduce((sum, power) => sum + power, 0n);
   }
 
   /**
@@ -308,7 +308,7 @@ export class ReadLockingVault extends ReadVotingVault {
     let toBlock = atBlock;
 
     if (typeof toBlock !== "bigint") {
-      const { blockNumber } = await getBlock(this.network, toBlock);
+      const { blockNumber } = await getBlockOrThrow(this.network, toBlock);
       toBlock = blockNumber ?? undefined;
     }
 

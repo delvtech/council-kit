@@ -15,7 +15,9 @@ import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
   const { address } = useAccount();
-  const { data, status } = useVaultsPageData(address);
+  const { data, status, error } = useVaultsPageData(address);
+
+  console.log({ data, status, error });
 
   return (
     <Page>
@@ -106,6 +108,8 @@ function useVaultsPageData(
         const vaultConfig = config.coreVoting.vaults.find(
           ({ address }) => address === vault.address,
         );
+
+        console.log("vault", vault);
 
         let tvp: bigint | undefined = undefined;
         if (

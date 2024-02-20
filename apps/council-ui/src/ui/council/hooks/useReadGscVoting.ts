@@ -4,7 +4,7 @@ import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
 
 /**
- * Use a ReadCoreVoting instance for configured gsc voting contract.
+ * Use a ReadCoreVoting instance for the configured gsc voting contract.
  */
 export function useReadGscVoting(): ReadCoreVoting | undefined {
   const council = useReadCouncil();
@@ -15,7 +15,7 @@ export function useReadGscVoting(): ReadCoreVoting | undefined {
       gscVoting &&
       council.coreVoting({
         address: gscVoting.address,
-        vaults: [gscVoting.vault.address],
+        vaults: [council.gscVault(gscVoting.vault.address)],
       }),
 
     [council, gscVoting],

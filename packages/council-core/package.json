@@ -49,6 +49,10 @@
       "types": "./dist/airdrop.d.ts",
       "default": "./dist/airdrop.js"
     },
+    "./contract": {
+      "types": "./dist/contract.d.ts",
+      "default": "./dist/contract.js"
+    },
     "./council": {
       "types": "./dist/council.d.ts",
       "default": "./dist/council.js"
@@ -56,10 +60,6 @@
     "./errors": {
       "types": "./dist/errors.d.ts",
       "default": "./dist/errors.js"
-    },
-    "./factory": {
-      "types": "./dist/factory.d.ts",
-      "default": "./dist/factory.js"
     },
     "./model": {
       "types": "./dist/model.d.ts",
@@ -99,14 +99,14 @@
       "airdrop": [
         "./dist/airdrop.d.ts"
       ],
+      "contract": [
+        "./dist/contract.d.ts"
+      ],
       "council": [
         "./dist/council.d.ts"
       ],
       "error": [
         "./dist/error.d.ts"
-      ],
-      "factory": [
-        "./dist/factory.d.ts"
       ],
       "model": [
         "./dist/model.d.ts"

@@ -7,7 +7,7 @@ import { ReadToken } from "src/models/token/ReadToken";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
 import { VoterPowerBreakdown } from "src/models/votingVault/types";
 import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
-import { getBlock } from "src/utils/getBlock";
+import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
 import { getOrSet } from "src/utils/getOrSet";
 
 const vestingVaultAbi = VestingVault.abi;
@@ -116,7 +116,7 @@ export class ReadVestingVault extends ReadVotingVault {
     let blockNumber = atBlock;
 
     if (typeof blockNumber !== "bigint") {
-      const block = await getBlock(this.network, blockNumber);
+      const block = await getBlockOrThrow(this.network, blockNumber);
       if (block.blockNumber === null) {
         return 0n;
       }
@@ -312,7 +312,7 @@ export class ReadVestingVault extends ReadVotingVault {
     let blockNumber = atBlock;
 
     if (typeof blockNumber !== "bigint") {
-      const block = await getBlock(this.network, blockNumber);
+      const block = await getBlockOrThrow(this.network, blockNumber);
       if (block.blockNumber === null) {
         return 0n;
       }
@@ -337,7 +337,7 @@ export class ReadVestingVault extends ReadVotingVault {
     const powerByVoter = await this._getPowerByVoter({
       toBlock: atBlock,
     });
-    return Object.values(powerByVoter).reduce((sum, power) => sum + power);
+    return Object.values(powerByVoter).reduce((sum, power) => sum + power, 0n);
   }
 
   /**

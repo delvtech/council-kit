@@ -84,7 +84,7 @@ export function DepositAndWithdrawForm({
                     onClick={() =>
                       onDeposit(parseUnits(depositAmount, decimals))
                     }
-                    disabled={disabled || !balance}
+                    disabled={disabled || !balance || !depositAmount}
                   >
                     Deposit
                   </button>

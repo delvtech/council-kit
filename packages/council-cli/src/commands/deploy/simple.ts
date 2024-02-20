@@ -3,6 +3,7 @@ import { command } from "clide-js";
 import colors from "colors";
 import signale from "signale";
 import { createPublicClient, createWalletClient, http } from "viem";
+import { foundry, hardhat, localhost } from "viem/chains";
 import {
   ContractInfo,
   DEFAULT_DEPLOYMENTS_DIR,
@@ -266,7 +267,8 @@ export default command({
       prompt: "Enter stale block lag",
     });
 
-    if (chain.id === 31337) {
+    const localChainIds: number[] = [hardhat.id, localhost.id, foundry.id];
+    if (localChainIds.includes(chain.id)) {
       // Calling queryVotePower on a voting vault that has a stale block lag larger
       // than the current block height will result in an error. To avoid this, we
       // we fast forward the block height by the stale block lag.

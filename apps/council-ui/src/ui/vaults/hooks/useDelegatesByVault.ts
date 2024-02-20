@@ -63,8 +63,6 @@ export function useDelegatesByVault({
             switch (config?.type) {
               case "FrozenLockingVault":
               case "LockingVault":
-                typedDelegationVault = vault as ReadLockingVault;
-                break;
               case "VestingVault":
                 typedDelegationVault = vault as ReadVestingVault;
                 break;

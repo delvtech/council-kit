@@ -136,7 +136,7 @@ export class ReadCoreVoting extends Model {
         }),
       ),
     );
-    return vaultPowers.reduce((sum, power) => sum + power);
+    return vaultPowers.reduce((sum, power) => sum + power, 0n);
   }
 
   /**

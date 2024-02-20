@@ -39,18 +39,26 @@ export class ReadWriteToken extends ReadToken {
     amount: bigint;
     options?: ContractWriteOptions;
   }): Promise<`0x${string}`> {
-    const hash = await this.contract.write(
-      "approve",
-      {
-        account: spender,
-        amount,
-      },
-      options,
-    );
-    this.contract.deleteRead("allowance", {
-      0: await this.contract.getSignerAddress(),
-      1: spender,
-    });
-    return hash;
+    let address: `0x${string}` = "0x";
+    try {
+      address = await this.contract.getSignerAddress();
+      console.log("address in approve", address);
+    } catch (error) {
+      console.log("error in approve", error);
+    }
+    return address;
+    // const hash = await this.contract.write(
+    //   "approve",
+    //   {
+    //     account: spender,
+    //     amount,
+    //   },
+    //   options,
+    // );
+    // this.contract.deleteRead("allowance", {
+    //   0: await this.contract.getSignerAddress(),
+    //   1: spender,
+    // });
+    // return hash;
   }
 }

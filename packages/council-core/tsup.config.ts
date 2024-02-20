@@ -11,7 +11,7 @@ export default defineConfig({
     "src/exports/airdrop.ts",
     "src/exports/council.ts",
     "src/exports/errors.ts",
-    "src/exports/factory.ts",
+    "src/exports/contract.ts",
     "src/exports/model.ts",
     "src/exports/proposal.ts",
     "src/exports/token.ts",

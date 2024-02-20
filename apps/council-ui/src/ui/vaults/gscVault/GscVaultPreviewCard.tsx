@@ -40,8 +40,6 @@ export function GSCVaultPreviewCard({
       ? "pending"
       : "success";
 
-  console.log("queryStatus", queryStatus);
-
   switch (queryStatus) {
     case "pending":
       return <GenericVaultCardSkeleton />;

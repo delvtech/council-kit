@@ -309,7 +309,7 @@ export class ReadProposal extends Model {
    */
   async getCurrentQuorum(): Promise<bigint> {
     const results = await this.getResults();
-    return Object.values(results).reduce((sum, val) => sum + val);
+    return Object.values(results).reduce((sum, val) => sum + val, 0n);
   }
 
   /**

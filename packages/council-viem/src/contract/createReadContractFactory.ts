@@ -1,4 +1,4 @@
-import { CachedReadContractFactory } from "@delvtech/council-core";
+import { ReadContractFactory } from "@delvtech/council-core";
 import {
   SimpleCache,
   createCachedReadContract,
@@ -13,8 +13,22 @@ export interface CreateReadContractFactoryOptions {
 
 export function createReadContractFactory(
   factoryOptions: CreateReadContractFactoryOptions,
-): CachedReadContractFactory {
+): ReadContractFactory {
   return (instanceOptions) => {
+    // const options = {
+    //   ...factoryOptions,
+    //   ...instanceOptions,
+    // };
+
+    // const viemReadContract = createReadContract({
+    //   abi: options.abi,
+    //   address: options.address,
+    //   publicClient: options.publicClient,
+    // });
+
+    // const viemNetwork = createNetwork(options.publicClient);
+
+    // Adds custom event fetching logic to the base contract before caching.
     return createCachedReadContract({
       ...factoryOptions,
       ...instanceOptions,

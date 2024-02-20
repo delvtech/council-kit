@@ -48,7 +48,7 @@ export class ReadVoter extends Model {
         extraData: extraData?.[i],
       });
     });
-    return (await Promise.all(vaultPowers)).reduce((sum, val) => sum + val);
+    return (await Promise.all(vaultPowers)).reduce((sum, val) => sum + val, 0n);
   }
 
   /**

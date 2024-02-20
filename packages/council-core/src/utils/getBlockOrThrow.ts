@@ -7,7 +7,7 @@ import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
  * error if no block is found.
  * @throws `BlockNotFoundError`
  */
-export async function getBlock(
+export async function getBlockOrThrow(
   network: Network,
   block?: BlockLike,
 ): Promise<Block> {

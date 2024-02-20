@@ -2,27 +2,21 @@ import {
   CachedReadContract,
   CachedReadWriteContract,
   CreateCachedReadContractOptions,
-  CreateCachedReadWriteContractOptions,
 } from "@delvtech/evm-client";
 import { Abi } from "abitype";
+import { Prettify } from "src/types";
 
-interface BaseContractFactoryOptions<TAbi extends Abi = Abi> {
-  abi: TAbi;
-  address: `0x${string}`;
-}
-
-export interface ReadContractFactoryOptions<TAbi extends Abi = Abi>
-  extends Omit<CreateCachedReadContractOptions, "contract">,
-    BaseContractFactoryOptions<TAbi> {}
+export type ContractFactoryOptions<TAbi extends Abi = Abi> = Prettify<
+  Omit<CreateCachedReadContractOptions, "contract"> & {
+    abi: TAbi;
+    address: `0x${string}`;
+  }
+>;
 
 export type ReadContractFactory = <TAbi extends Abi = Abi>(
-  options: ReadContractFactoryOptions<TAbi>,
+  options: ContractFactoryOptions<TAbi>,
 ) => CachedReadContract<TAbi>;
 
-export interface ReadWriteContractFactoryOptions<TAbi extends Abi = Abi>
-  extends Omit<CreateCachedReadWriteContractOptions, "contract">,
-    BaseContractFactoryOptions<TAbi> {}
-
 export type ReadWriteContractFactory = <TAbi extends Abi = Abi>(
-  options: ReadWriteContractFactoryOptions<TAbi>,
+  options: ContractFactoryOptions<TAbi>,
 ) => CachedReadWriteContract<TAbi>;
