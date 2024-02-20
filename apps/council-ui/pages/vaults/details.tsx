@@ -6,7 +6,8 @@ import { FrozenLockingVaultDetails } from "src/ui/vaults/frozenLockingVault/Froz
 import { GenericVaultDetails } from "src/ui/vaults/genericVault/GenericVaultDetails";
 import { GscVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
 import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
-// import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
+import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
+// import { VestingVaultDetails } from"src/ui/vaults/vestingVault/VestingVaultDetails";
 
 export default function VaultPage(): ReactElement {
   const { query, replace } = useRouter();
@@ -32,8 +33,7 @@ export default function VaultPage(): ReactElement {
             return <LockingVaultDetails address={address} />;
 
           case "VestingVault":
-            // return <VestingVaultDetails address={address} />;
-            return <p>Vesting Vault</p>;
+            return <VestingVaultDetails address={address} />;
 
           case "GSCVault":
             return <GscVaultDetails address={address} />;

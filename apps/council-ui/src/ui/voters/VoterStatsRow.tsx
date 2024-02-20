@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
-import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { GscStatus } from "src/utils/gscVault/types";
 
 interface VoterStatsRowProps {
@@ -25,10 +25,7 @@ export function VoterStatsRow({
   }
   return (
     <div className="flex flex-wrap gap-4">
-      <Stat
-        label="Voting Power"
-        value={formatUnitsBalance({ balance: votingPower, displayDecimals: 0 })}
-      />
+      <Stat label="Voting Power" value={formatVotingPower(votingPower, 0)} />
       <Stat
         label={
           <span>

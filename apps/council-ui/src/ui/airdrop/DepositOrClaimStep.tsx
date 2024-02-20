@@ -1,11 +1,11 @@
 import { BuildingLibraryIcon, WalletIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
+import { useAirdropToken } from "src/ui/airdrop/hooks/useAirdropToken";
+import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { AirdropIcon } from "src/ui/base/svg/24/AirdropIcon";
 import { useTokenSymbol } from "src/ui/token/hooks/useTokenSymbol";
-import { useAirdropToken } from "./hooks/useAirdropToken";
-import { useClaimableAirdropAmount } from "./hooks/useClaimableAirdropAmount";
 
 interface DepositOrClaimStepProps {
   onDeposit: (() => void) | undefined;
@@ -54,7 +54,7 @@ export default function DepositOrClaimStep({
             disabled={!onClaim}
             onClick={onClaim}
           >
-            <WalletIcon className="h-5 w-5 fill-current" />
+            <WalletIcon className="size-5 fill-current" />
             Claim
           </button>
           <button
@@ -62,7 +62,7 @@ export default function DepositOrClaimStep({
             disabled={!onDeposit}
             onClick={onDeposit}
           >
-            <BuildingLibraryIcon className="h-5 w-5 fill-current" />
+            <BuildingLibraryIcon className="size-5 fill-current" />
             Deposit
           </button>
         </div>

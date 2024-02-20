@@ -1,11 +1,11 @@
 import { ReactElement } from "react";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
 import { YOUR_VOTING_POWER_TIP } from "src/ui/vaults/tooltips";
 
 interface GeneircVaultStatsRowProps {
-  accountVotingPower: string;
+  accountVotingPower: bigint;
 }
 
 export function GenericVaultStatsRow({
@@ -19,7 +19,9 @@ export function GenericVaultStatsRow({
             Your voting power
           </DefinitionTooltip>
         }
-        value={+accountVotingPower ? formatBalance(accountVotingPower) : "None"}
+        value={
+          accountVotingPower ? formatVotingPower(accountVotingPower) : "None"
+        }
       />
     </div>
   );

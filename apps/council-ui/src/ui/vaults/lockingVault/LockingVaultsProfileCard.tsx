@@ -7,6 +7,7 @@ import { makeVoterURL } from "src/routes";
 import { Tooltip } from "src/ui/base/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
 import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
@@ -76,9 +77,7 @@ export function LockingVaultProfileCard({
           label: "Voting Power",
           value:
             votingPowerBreakdown && votingPowerBreakdown.votingPower
-              ? formatUnitsBalance({
-                  balance: votingPowerBreakdown.votingPower,
-                })
+              ? formatVotingPower(votingPowerBreakdown.votingPower)
               : "None",
         },
         {

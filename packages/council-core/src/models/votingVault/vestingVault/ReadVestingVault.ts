@@ -365,17 +365,17 @@ export class ReadVestingVault extends ReadVotingVault {
    * Get all voters delegated to a given address in this vault.
    */
   async getDelegatorsTo({
-    address,
+    account,
     atBlock,
   }: {
-    address: `0x${string}`;
+    account: `0x${string}`;
     atBlock?: BlockLike;
   }): Promise<ReadVoter[]> {
     const voteChangeEvents = await this.vestingVaultContract.getEvents(
       "VoteChange",
       {
         filter: {
-          to: address,
+          to: account,
         },
         toBlock: atBlock,
       },
@@ -386,7 +386,7 @@ export class ReadVestingVault extends ReadVotingVault {
       args: { from, amount },
     } of voteChangeEvents) {
       // ignore self-delegation
-      if (from !== address) {
+      if (from !== account) {
         powerByDelegators[from] = powerByDelegators[from] ?? 0n + amount;
       }
     }

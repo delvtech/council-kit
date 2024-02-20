@@ -1,7 +1,7 @@
 import { VoterWithPower } from "@delvtech/council-viem";
 import { ReactElement, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import {
   SortOptions,
   SortableGridTable,
@@ -70,7 +70,7 @@ export function VotersListCompact({
               address={voter.address}
               ensName={ensRecords?.[voter.address]}
             />,
-            formatBalance(votingPower, 0),
+            formatVotingPower(votingPower, 0),
           ],
         };
       })}

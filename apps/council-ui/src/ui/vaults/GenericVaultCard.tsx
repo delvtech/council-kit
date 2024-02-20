@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import { makeVaultURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
-import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { TVP_TIP } from "src/ui/vaults/tooltips";
 
 interface GenericVaultCardProps {
@@ -44,16 +44,14 @@ export function GenericVaultCard({
                 </DefinitionTooltip>
               </span>
               <span className="font-bold">
-                {tvp ? formatUnitsBalance({ balance: tvp }) : "None"}
+                {tvp ? formatVotingPower(tvp) : "None"}
               </span>
             </div>
 
             <div className="flex w-full justify-between">
               <span>Your voting power:</span>
               <span className="font-bold">
-                {votingPower
-                  ? formatUnitsBalance({ balance: votingPower })
-                  : "None"}
+                {votingPower ? formatVotingPower(votingPower) : "None"}
               </span>
             </div>
           </div>

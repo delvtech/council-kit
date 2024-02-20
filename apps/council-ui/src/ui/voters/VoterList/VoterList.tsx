@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { ReactElement, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
-import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import {
   SortableGridTable,
   SortOptions,
@@ -105,10 +105,7 @@ export function VoterList({
                     ensName={ensName}
                   />,
                   numberOfDelegators,
-                  formatUnitsBalance({
-                    balance: votingPower,
-                    displayDecimals: 0,
-                  }),
+                  formatVotingPower(votingPower, 0),
                   <span key={`${address}-chevron`}>
                     <ChevronRightIcon className="size-6 stroke-current opacity-40 transition-all group-hover:opacity-100" />
                   </span>,
@@ -132,10 +129,7 @@ export function VoterList({
                     ensName={ensName}
                   />,
                   numberOfDelegators,
-                  formatUnitsBalance({
-                    balance: votingPower,
-                    displayDecimals: 0,
-                  }),
+                  formatVotingPower(votingPower, 0),
                   <span key={`${address}-chevron`}>
                     <ChevronRightIcon className="size-6 stroke-current opacity-40 transition-all group-hover:opacity-100" />
                   </span>,

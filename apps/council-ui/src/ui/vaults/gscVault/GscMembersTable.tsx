@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { makeVoterURL } from "src/routes";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { GscMembersTableHeader } from "src/ui/vaults/gscVault/GscMembersTableHeader";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";
@@ -53,7 +53,7 @@ function GSCMembersTableRow({
     <GridTableRowLink href={makeVoterURL(member.address)}>
       <VoterAddress address={member.address} ensName={ensName} />
       <span className="flex items-center">
-        {formatBalance(qualifyingVotingPower)}
+        {formatVotingPower(qualifyingVotingPower)}
       </span>
 
       <span className="flex items-center">

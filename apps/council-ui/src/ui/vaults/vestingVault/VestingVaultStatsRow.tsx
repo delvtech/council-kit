@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
@@ -12,11 +12,11 @@ import {
 import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
 
 interface VestingVaultStatsRowProps {
-  accountVotingPower: string;
-  unvestedMultiplier: number;
+  accountVotingPower: bigint;
+  unvestedMultiplier: bigint;
   delegatedToAccount: number;
   participants: number;
-  tokenAddress: string;
+  tokenAddress: `0x${string}`;
   tokenSymbol: string;
 }
 
@@ -31,14 +31,14 @@ export function VestingVaultStatsRow({
   const chainId = useSupportedChainId();
   return (
     <div className="flex flex-wrap gap-4">
-      {accountVotingPower && (
+      {accountVotingPower > 0 && (
         <Stat
           label={
             <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
               Your voting power
             </DefinitionTooltip>
           }
-          value={formatBalance(accountVotingPower)}
+          value={formatVotingPower(accountVotingPower)}
         />
       )}
 
@@ -51,7 +51,7 @@ export function VestingVaultStatsRow({
         value={`${unvestedMultiplier}%`}
       />
 
-      {delegatedToAccount >= 0 && (
+      {delegatedToAccount && (
         <Stat
           label={
             <DefinitionTooltip content={WALLETS_DELEGATED_TIP}>
@@ -62,7 +62,7 @@ export function VestingVaultStatsRow({
         />
       )}
 
-      {participants >= 0 && (
+      {participants && (
         <Stat
           label={
             <DefinitionTooltip content={PARTICIPANTS_TIP}>

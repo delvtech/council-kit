@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
-import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
@@ -17,7 +17,6 @@ interface LockingVaultStatsRowProps {
   participants: number;
   tokenAddress: `0x${string}`;
   tokenSymbol: string;
-  decimals: number;
 }
 
 export function LockingVaultStatsRow({
@@ -26,13 +25,9 @@ export function LockingVaultStatsRow({
   participants,
   tokenAddress,
   tokenSymbol,
-  decimals,
 }: LockingVaultStatsRowProps): ReactElement {
   const chainId = useSupportedChainId();
-  const votingPowerFormatted = formatUnitsBalance({
-    balance: accountVotingPower,
-    decimals,
-  });
+  const votingPowerFormatted = formatVotingPower(accountVotingPower);
 
   return (
     <div className="flex flex-wrap gap-4">

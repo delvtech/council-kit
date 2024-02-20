@@ -83,7 +83,6 @@ export function LockingVaultDetails({
           participants={data.participants}
           tokenAddress={data.tokenAddress}
           tokenSymbol={data.tokenSymbol}
-          decimals={data.decimals}
         />
       }
       actions={

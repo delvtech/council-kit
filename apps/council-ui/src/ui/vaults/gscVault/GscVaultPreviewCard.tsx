@@ -5,7 +5,6 @@ import { ReactElement } from "react";
 import { makeVaultURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { GenericVaultCardSkeleton } from "src/ui/vaults/GenericVaultCard";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
@@ -66,9 +65,7 @@ export function GSCVaultPreviewCard({
                   <span>GSC members:</span>
                   <span className="text-right font-bold">
                     <DefinitionTooltip content="The number of members currently residing on the Governance Steering Council.">
-                      {gscMembers?.length
-                        ? formatBalance(gscMembers.length)
-                        : "None"}
+                      {gscMembers?.length || "None"}
                     </DefinitionTooltip>
                   </span>
                 </div>

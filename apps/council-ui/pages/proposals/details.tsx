@@ -47,6 +47,8 @@ export default function ProposalPage(): ReactElement {
   );
   const { gscMembers } = useGscMembers();
 
+  console.log("coreVoting", coreVoting);
+
   // // voting activity filtering
   const [gscOnly, setGscOnly] = useState(false);
   const filteredVotes = useMemo(() => {

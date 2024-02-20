@@ -33,7 +33,7 @@ export function VoterAddress({
     vaults: coreVotingVaults.vaults,
   });
   const config = useCouncilConfig();
-  const allVaults = config.coreVoting.vaults;
+  const allVaults = config.coreVoting.vaults.slice();
   if (config.gscVoting) {
     allVaults.push(config.gscVoting.vault);
   }

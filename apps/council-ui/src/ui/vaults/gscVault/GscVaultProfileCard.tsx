@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { ReactElement } from "react";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
@@ -50,11 +50,11 @@ export function GSCVaultProfileCard({
         },
         {
           label: "Required voting power",
-          value: formatBalance(requiredVotingPower),
+          value: formatVotingPower(requiredVotingPower),
         },
         {
           label: "Qualifying voting power",
-          value: formatBalance(qualifyingVotingPower),
+          value: formatVotingPower(qualifyingVotingPower),
         },
       ]}
       button={{
