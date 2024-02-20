@@ -1,5 +1,6 @@
 import { BlockLike, ReadVotingVault } from "@delvtech/council-core";
 import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { formatEther } from "viem";
@@ -33,6 +34,8 @@ export default function useVotingPowerByVault({
 } {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
+  const config = useCouncilConfig();
+
   const vaults = _vaults.map((vault) =>
     typeof vault === "string" ? council.votingVault(vault) : vault,
   );
@@ -49,14 +52,28 @@ export default function useVotingPowerByVault({
       ? async () => {
           return Promise.all(
             vaults.map(async (vault) => {
+              let name = vault.name;
+
+              if (vault.address === config.gscVoting?.vault.address) {
+                name = config.gscVoting?.vault.name;
+              }
+
+              const vaultConfig = config.coreVoting.vaults.find(
+                ({ address }) => address === vault.address,
+              );
+
+              if (vaultConfig) {
+                name = vaultConfig.name;
+              }
+
               const votingPower = await vault.getVotingPower({
                 account: accountToUse,
                 atBlock,
               });
+
               return {
-                name: vault.name,
+                name,
                 address: vault.address,
-                // safe to cast because this function only is ran when string is non-nullable
                 votingPower,
                 /**
                  * All voting power is formatted as a string with 18 decimal places.

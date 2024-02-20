@@ -15,9 +15,7 @@ import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
   const { address } = useAccount();
-  const { data, status, error } = useVaultsPageData(address);
-
-  console.log({ data, status, error });
+  const { data, status } = useVaultsPageData(address);
 
   return (
     <Page>

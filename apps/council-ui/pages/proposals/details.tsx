@@ -169,7 +169,7 @@ export default function ProposalPage(): ReactElement {
               coreVotingAddress={votingContractAddress}
               createdBlock={data.createdAtBlock}
               proposalId={id}
-              vaults={usedCoreVoting.vaults.map(({ address }) => address)}
+              vaults={usedCoreVoting.vaults}
             />
           ) : (
             <ProposalVotingSkeleton />
@@ -304,10 +304,6 @@ function useProposalDetailsPageData(
         }
       : undefined,
   });
-
-  if (error) {
-    console.error("!!!!!!!!!!!! Failed to fetch proposal details", error);
-  }
 
   return {
     // proposalExists: data?.proposalExists ?? false,

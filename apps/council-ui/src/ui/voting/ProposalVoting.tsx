@@ -1,4 +1,4 @@
-import { Ballot } from "@delvtech/council-viem";
+import { Ballot, ReadVotingVault } from "@delvtech/council-viem";
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement } from "react";
@@ -14,7 +14,7 @@ interface ProposalVotingProps {
   coreVotingAddress: `0x${string}`;
   createdBlock: bigint;
   proposalId: bigint;
-  vaults: `0x${string}`[];
+  vaults: (ReadVotingVault | `0x${string}`)[];
 }
 
 export function ProposalVoting({
