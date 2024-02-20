@@ -17,6 +17,12 @@ export const localhostCouncilConfig: CouncilConfig = {
         type: "LockingVault",
         descriptionURL: "https://moreinfo.com",
       },
+      {
+        name: "Locking Vault 2",
+        address: "0x959922be3caee4b8cd9a407cc3ac1c251c2007b1",
+        type: "LockingVault",
+        descriptionURL: "https://moreinfo.com",
+      },
     ],
     proposals: {},
   },

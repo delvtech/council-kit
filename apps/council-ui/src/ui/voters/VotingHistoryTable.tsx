@@ -2,7 +2,7 @@ import { ReadVote } from "@delvtech/council-viem";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { makeProposalURL } from "src/routes";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
@@ -54,7 +54,7 @@ function VoteHistoryRow({ vote }: { vote: ReadVote }): ReactElement {
           </p>
         )}
       </span>
-      <span>{formatBalance(vote.power)}</span>
+      <span>{formatUnitsBalance({ balance: vote.power })}</span>
       <span>
         <FormattedBallot ballot={vote.ballot} />
       </span>

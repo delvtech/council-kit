@@ -7,12 +7,13 @@ import {
 } from "@delvtech/council-viem";
 import { QueryStatus, useQuery } from "@tanstack/react-query";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
 import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useAccount } from "wagmi";
 
 interface UseDelegatesByVaultOptions {
-  vaults: (ReadVotingVault | `0x${string}`)[];
+  vaults?: (ReadVotingVault | `0x${string}`)[];
   account?: `0x${string}`;
   atBlock?: BlockLike;
 }
@@ -26,13 +27,14 @@ export function useDelegatesByVault({
   vaults: _vaults,
   account,
   atBlock,
-}: UseDelegatesByVaultOptions): {
+}: UseDelegatesByVaultOptions = {}): {
   delegatesByVault: Record<`0x${string}`, ReadVoter> | undefined;
   status: QueryStatus;
 } {
   const chainId = useSupportedChainId();
   const vaultConfigs = useCouncilConfig().coreVoting.vaults;
   const council = useReadCouncil();
+  const coreVoting = useReadCoreVoting();
 
   const { address: connectedAccount } = useAccount();
   const accountToUse = account ?? connectedAccount;
@@ -46,9 +48,10 @@ export function useDelegatesByVault({
       ? async () => {
           const delegatesByVault: Record<`0x${string}`, ReadVoter> = {};
 
-          const vaults = _vaults.map((vault) =>
-            typeof vault === "string" ? council.votingVault(vault) : vault,
-          );
+          const vaults =
+            _vaults?.map((vault) =>
+              typeof vault === "string" ? council.votingVault(vault) : vault,
+            ) || coreVoting.vaults;
 
           for (const vault of vaults) {
             const config = vaultConfigs.find(

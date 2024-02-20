@@ -6,7 +6,6 @@ import { WalletIcon } from "src/ui/base/WalletIcon";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useIsGscMember } from "src/ui/vaults/gscVault/hooks/useIsGscMember";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
 
@@ -28,7 +27,6 @@ export function VoterAddress({
   className,
   iconSize,
 }: VoterAddressProps): ReactElement {
-  const chainId = useSupportedChainId();
   const { isGscMember } = useIsGscMember(address);
   const coreVotingVaults = useReadCoreVoting();
   const { delegatesByVault } = useDelegatesByVault({
