@@ -1,159 +1,179 @@
-// import { LockingVault, VoterPowerBreakdown } from "@council/sdk";
-// import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
-// import { useQuery } from "@tanstack/react-query";
-// import { constants } from "ethers";
-// import Link from "next/link";
-// import { ReactElement } from "react";
-// import { makeVoterURL } from "src/routes";
-// import { formatBalance } from "src/ui/base/formatting/formatBalance";
-// import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
-// import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
-// import { WalletIcon } from "src/ui/base/WalletIcon";
-// import { useCouncil } from "src/ui/council/useCouncil";
-// import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-// import { DelegatorListModal } from "src/ui/vaults/DelegatorListModal";
-// import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
-// import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
-// import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
-// import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
-// import { getVaultConfig } from "src/vaults/vaults";
-// import { useAccount, useSigner } from "wagmi";
+import { VoterPowerBreakdown } from "@delvtech/council-viem";
+import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { ReactElement } from "react";
+import { makeVoterURL } from "src/routes";
+import { Tooltip } from "src/ui/base/Tooltip";
+import { WalletIcon } from "src/ui/base/WalletIcon";
+import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
+import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
+import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
+import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { DelegatorListModal } from "src/ui/vaults/DelegatorListModal";
+import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
+import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
+import { useReadGscVault } from "src/ui/vaults/gscVault/hooks/useReadGscVault";
+import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
+import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
+import { zeroAddress } from "viem";
+import { useAccount } from "wagmi";
 
-// interface LockingVaultProfileCardProps {
-//   address: string;
-//   profileAddress: string;
-// }
+interface LockingVaultProfileCardProps {
+  address: `0x${string}`;
+  profileAddress: `0x${string}`;
+}
 
-// export function LockingVaultProfileCard({
-//   address,
-//   profileAddress,
-// }: LockingVaultProfileCardProps): ReactElement {
-//   // data
-//   const { data } = useLockingVaultProfileCardData(address, profileAddress);
-//   const profileName = useDisplayName(profileAddress);
-//   const delegateName = useDisplayName(data?.delegate.address);
-//   const { address: account } = useAccount();
-//   const { data: accountDelegate } = useDelegate(address, account);
+export function LockingVaultProfileCard({
+  address,
+  profileAddress,
+}: LockingVaultProfileCardProps): ReactElement {
+  // data
+  const { data } = useLockingVaultProfileCardData(address, profileAddress);
+  const profileName = useDisplayName(profileAddress);
+  const delegateName = useDisplayName(data?.delegate.address);
+  const { address: account } = useAccount();
+  const { delegate: accountDelegate } = useDelegate({
+    account,
+    vault: address,
+  });
 
-//   // config
-//   const chainId = useSupportedChainId();
-//   const config = getVaultConfig(address, chainId);
-//   const name = config?.name || "Locking Vault";
+  // config
+  const config = useVaultConfig(address);
+  const name = config?.name || "Locking Vault";
 
-//   // delegate transaction
-//   const { data: signer } = useSigner();
-//   const { mutate: changeDelegate } = useChangeDelegate(address);
+  // delegate transaction
+  const { changeDelegate } = useChangeDelegate();
 
-//   if (!data) {
-//     return <VaultProfileCardSkeleton address={address} name={name} />;
-//   }
+  if (!data) {
+    return <VaultProfileCardSkeleton address={address} name={name} />;
+  }
 
-//   const {
-//     balance,
-//     tokenSymbol,
-//     votingPowerBreakdown,
-//     delegate,
-//     delegateIsGSCMember,
-//   } = data || {};
+  const {
+    balance,
+    tokenSymbol,
+    votingPowerBreakdown,
+    delegate,
+    delegateIsGSCMember,
+    decimals,
+  } = data || {};
 
-//   return (
-//     <VaultProfileCard
-//       address={address}
-//       name={name}
-//       stats={[
-//         {
-//           label: "Tokens Deposited",
-//           value: +balance ? `${formatBalance(balance)} ${tokenSymbol}` : "None",
-//         },
-//         {
-//           label: "Voting Power",
-//           value:
-//             votingPowerBreakdown && +votingPowerBreakdown.votingPower
-//               ? formatBalance(votingPowerBreakdown.votingPower)
-//               : "None",
-//         },
-//         {
-//           label: "Current Delegate",
-//           value:
-//             delegate.address === constants.AddressZero ? (
-//               "None"
-//             ) : (
-//               <Link
-//                 href={makeVoterURL(delegate.address)}
-//                 className="flex items-center hover:underline"
-//               >
-//                 <WalletIcon
-//                   className="mr-1"
-//                   address={delegate.address}
-//                   size={16}
-//                 />
-//                 {delegateName}
-//                 {delegateIsGSCMember && (
-//                   <Tooltip content="GSC Member">
-//                     <BuildingLibraryIcon className="w-5 h-5 ml-1 fill-warning" />
-//                   </Tooltip>
-//                 )}
-//               </Link>
-//             ),
-//         },
-//         {
-//           label: "# of Delegators",
-//           value: votingPowerBreakdown?.delegators.length ? (
-//             <>
-//               <label
-//                 htmlFor={`delegator-modal-${address}`}
-//                 className="underline hover:no-underline hover:cursor-pointer text-secondary"
-//               >
-//                 {votingPowerBreakdown.delegators.length}
-//               </label>
-//               <DelegatorListModal
-//                 id={`delegator-modal-${address}`}
-//                 delegators={votingPowerBreakdown.delegators}
-//                 delegateAddress={profileAddress}
-//                 delegateName={profileName}
-//               />
-//             </>
-//           ) : (
-//             "None"
-//           ),
-//         },
-//       ]}
-//       button={{
-//         text: "Delegate",
-//         disabled: !signer || accountDelegate?.address === profileAddress,
-//         onClick: () =>
-//           signer && changeDelegate({ delegate: profileAddress, signer }),
-//       }}
-//     />
-//   );
-// }
+  return (
+    <VaultProfileCard
+      address={address}
+      name={name}
+      stats={[
+        {
+          label: "Tokens Deposited",
+          value: balance
+            ? `${formatUnitsBalance({
+                balance,
+                decimals,
+              })} ${tokenSymbol}`
+            : "None",
+        },
+        {
+          label: "Voting Power",
+          value:
+            votingPowerBreakdown && votingPowerBreakdown.votingPower
+              ? formatUnitsBalance({
+                  balance: votingPowerBreakdown.votingPower,
+                })
+              : "None",
+        },
+        {
+          label: "Current Delegate",
+          value:
+            delegate.address === zeroAddress ? (
+              "None"
+            ) : (
+              <Link
+                href={makeVoterURL(delegate.address)}
+                className="flex items-center hover:underline"
+              >
+                <WalletIcon
+                  className="mr-1"
+                  address={delegate.address}
+                  size={16}
+                />
+                {delegateName}
+                {delegateIsGSCMember && (
+                  <Tooltip content="GSC Member">
+                    <BuildingLibraryIcon className="ml-1 size-5 fill-warning" />
+                  </Tooltip>
+                )}
+              </Link>
+            ),
+        },
+        {
+          label: "# of Delegators",
+          value: votingPowerBreakdown?.votingPowerByDelegator.length ? (
+            <>
+              <label
+                htmlFor={`delegator-modal-${address}`}
+                className="text-secondary underline hover:cursor-pointer hover:no-underline"
+              >
+                {votingPowerBreakdown.votingPowerByDelegator.length}
+              </label>
+              <DelegatorListModal
+                id={`delegator-modal-${address}`}
+                delegators={votingPowerBreakdown.votingPowerByDelegator}
+                delegateAddress={profileAddress}
+                delegateName={profileName}
+              />
+            </>
+          ) : (
+            "None"
+          ),
+        },
+      ]}
+      button={{
+        text: "Delegate",
+        disabled:
+          !changeDelegate || accountDelegate?.address === profileAddress,
+        onClick: () =>
+          changeDelegate!({
+            vaultAddress: address,
+            newDelegate: profileAddress,
+          }),
+      }}
+    />
+  );
+}
 
-// function useLockingVaultProfileCardData(
-//   address: string,
-//   profileAddress: string,
-// ) {
-//   const { context, gscVoting } = useCouncil();
-//   return useQuery({
-//     queryKey: ["locking-vault-profile-card", address, profileAddress],
-//     queryFn: async () => {
-//       const lockingVault = new LockingVault(address, context);
-//       const votingPowerBreakdowns = await lockingVault.getVotingPowerBreakdown(
-//         profileAddress,
-//       );
+function useLockingVaultProfileCardData(
+  address: `0x${string}`,
+  profileAddress: `0x${string}`,
+) {
+  const council = useReadCouncil();
+  const gscVault = useReadGscVault();
+  return useQuery({
+    queryKey: ["locking-vault-profile-card", address, profileAddress],
+    queryFn: async () => {
+      const lockingVault = council.lockingVault(address);
+      const votingPowerBreakdowns = await lockingVault.getVotingPowerBreakdown({
+        account: profileAddress,
+      });
 
-//       const token = await lockingVault.getToken();
-//       const delegate = await lockingVault.getDelegate(profileAddress);
+      const token = await lockingVault.getToken();
+      const delegate = await lockingVault.getDelegate({
+        account: profileAddress,
+      });
 
-//       return {
-//         balance: await lockingVault.getDepositedBalance(profileAddress),
-//         tokenSymbol: await token.getSymbol(),
-//         votingPowerBreakdown: votingPowerBreakdowns[0] as
-//           | VoterPowerBreakdown
-//           | undefined,
-//         delegate,
-//         delegateIsGSCMember:
-//           gscVoting && (await gscVoting.getIsMember(delegate.address)),
-//       };
-//     },
-//   });
-// }
+      return {
+        balance: await lockingVault.getDepositedBalance({
+          account: profileAddress,
+        }),
+        decimals: await token.getDecimals(),
+        tokenSymbol: await token.getSymbol(),
+        votingPowerBreakdown: votingPowerBreakdowns[0] as
+          | VoterPowerBreakdown
+          | undefined,
+        delegate,
+        delegateIsGSCMember:
+          gscVault &&
+          (await gscVault.getIsMember({ account: delegate.address })),
+      };
+    },
+  });
+}

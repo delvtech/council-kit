@@ -16,6 +16,7 @@ import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
 import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";
+import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
 import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
 import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
@@ -26,12 +27,12 @@ import { useEnsName } from "wagmi";
 
 export default function VoterPage(): ReactElement {
   const { query } = useRouter();
-  const { address } = query as { address: `0x${string}` | undefined };
+  const { address: account } = query as { address: `0x${string}` | undefined };
   const coreVoting = useReadCoreVoting();
-  const { data, status } = useVoterData(address);
-  const displayName = useDisplayName(address);
+  const { data, status } = useVoterData(account);
+  const displayName = useDisplayName(account);
 
-  if (!address) {
+  if (!account) {
     return (
       <ErrorMessage error="No address provided or address is malformed." />
     );
@@ -48,7 +49,7 @@ export default function VoterPage(): ReactElement {
           crumbs={[{ href: Routes.VOTERS, content: "All voters" }]}
           currentPage={displayName}
         />
-        <VoterHeader address={address} />
+        <VoterHeader address={account} />
       </div>
 
       {status === "success" ? (
@@ -68,7 +69,7 @@ export default function VoterPage(): ReactElement {
           <h2 className="text-2xl font-bold">
             Voting Vaults ({numVotingVaults})
           </h2>
-          {/* <VoterVaultsList address={address} /> */}
+          <VoterVaultsList account={account} />
         </div>
       ) : (
         <div className="flex flex-col gap-y-4">
@@ -185,6 +186,9 @@ export function useVoterData(
               return createdBy?.address === account;
             },
           );
+
+          console.log("tvp", tvp);
+          console.log("votingPower", votingPower);
 
           return {
             votingHistory,
