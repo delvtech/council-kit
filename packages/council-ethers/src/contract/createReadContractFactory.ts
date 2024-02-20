@@ -1,7 +1,11 @@
-import { CachedReadContractFactory } from "@delvtech/council-core";
+import {
+  ReadContractFactory,
+  extendReadContract,
+} from "@delvtech/council-core";
 import {
   SimpleCache,
-  createCachedReadContract,
+  createNetwork,
+  createReadContract,
 } from "@delvtech/evm-client-ethers";
 import { Provider } from "ethers";
 
@@ -13,11 +17,26 @@ export interface CreateReadContractFactoryOptions {
 
 export function createReadContractFactory(
   factoryOptions: CreateReadContractFactoryOptions,
-): CachedReadContractFactory {
+): ReadContractFactory {
   return (instanceOptions) => {
-    return createCachedReadContract({
+    const options = {
       ...factoryOptions,
       ...instanceOptions,
+    };
+
+    const viemReadContract = createReadContract({
+      abi: options.abi,
+      address: options.address,
+      provider: options.provider,
+    });
+
+    const viemNetwork = createNetwork(options.provider);
+
+    // Adds custom event fetching logic to the base contract before caching.
+    return extendReadContract({
+      ...options,
+      contract: viemReadContract,
+      network: viemNetwork,
     });
   };
 }

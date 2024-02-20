@@ -27,8 +27,8 @@ export {
 
 // Council Core Re-exports
 export * from "@delvtech/council-core/airdrop";
+export * from "@delvtech/council-core/contract";
 export * from "@delvtech/council-core/errors";
-export * from "@delvtech/council-core/factory";
 export * from "@delvtech/council-core/model";
 export * from "@delvtech/council-core/proposal";
 export { ReadToken, type ReadTokenOptions } from "@delvtech/council-core/token";
