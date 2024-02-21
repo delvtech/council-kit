@@ -7,10 +7,10 @@ import {
   createNetwork,
   createReadContract,
 } from "@delvtech/evm-client-viem";
-import { Client } from "viem";
+import { PublicClient } from "viem";
 
 export interface CreateReadContractFactoryOptions {
-  client: Client;
+  publicClient: PublicClient;
   cache?: SimpleCache;
   namespace?: string;
 }
@@ -27,10 +27,10 @@ export function createReadContractFactory(
     const viemReadContract = createReadContract({
       abi: options.abi,
       address: options.address,
-      client: options.client,
+      publicClient: options.publicClient,
     });
 
-    const viemNetwork = createNetwork(options.client);
+    const viemNetwork = createNetwork(options.publicClient);
 
     // Adds custom event fetching logic to the base contract before caching.
     return extendReadContract({

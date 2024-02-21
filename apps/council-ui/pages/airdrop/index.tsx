@@ -9,6 +9,7 @@ import DepositStep from "src/ui/airdrop/DepositStep";
 import { useAirdropVault } from "src/ui/airdrop/hooks/useAirdropLockingVault";
 import { useClaimAirdrop } from "src/ui/airdrop/hooks/useClaimAirdrop";
 import { useClaimAndDelegateAirdrop } from "src/ui/airdrop/hooks/useClaimAndDelegateAirdrop";
+import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
 import useRouterSteps from "src/ui/router/hooks/useRouterSteps";
 import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
 import { zeroAddress } from "viem";
@@ -47,7 +48,8 @@ export default function AirdropPage(): ReactElement {
     setDelegateAddress((previousValue) => previousValue || account.address);
   }, [account.address]);
 
-  const { claimAirdrop, hasClaimableAirdrop } = useClaimAirdrop();
+  const { claimableAmount } = useClaimableAirdropAmount();
+  const { claimAirdrop } = useClaimAirdrop();
   const { claimAndDelegateAirdrop } = useClaimAndDelegateAirdrop();
 
   return (
@@ -105,8 +107,8 @@ export default function AirdropPage(): ReactElement {
           case "confirm-deposit":
             return (
               <ConfirmDepositStep
-                account={recipientAddress}
-                delegate={delegateAddress}
+                account={recipientAddress as `0x${string}`}
+                delegate={delegateAddress as `0x${string}`}
                 onBack={() => goToStep("deposit")}
                 onConfirm={
                   claimAndDelegateAirdrop
@@ -131,7 +133,7 @@ export default function AirdropPage(): ReactElement {
           case "confirm-claim":
             return (
               <ConfirmClaimStep
-                recipient={recipientAddress}
+                recipient={recipientAddress as `0x${string}`}
                 onBack={() => goToStep("claim")}
                 onConfirm={
                   claimAirdrop
@@ -149,11 +151,9 @@ export default function AirdropPage(): ReactElement {
             return (
               <DepositOrClaimStep
                 onDeposit={
-                  hasClaimableAirdrop ? () => goToStep("deposit") : undefined
+                  claimableAmount ? () => goToStep("deposit") : undefined
                 }
-                onClaim={
-                  hasClaimableAirdrop ? () => goToStep("claim") : undefined
-                }
+                onClaim={claimableAmount ? () => goToStep("claim") : undefined}
               />
             );
         }

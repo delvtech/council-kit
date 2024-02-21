@@ -8,8 +8,8 @@ import { useAirdropToken } from "./hooks/useAirdropToken";
 import { useClaimableAirdropAmount } from "./hooks/useClaimableAirdropAmount";
 
 interface ConfirmDepositStepProps {
-  account: string | undefined;
-  delegate?: string;
+  account: `0x${string}` | undefined;
+  delegate?: `0x${string}`;
   onBack: () => void;
   onConfirm: (() => void) | undefined;
 }
@@ -53,7 +53,7 @@ export default function ConfirmDepositStep({
       </div>
       <div className="flex justify-center gap-2 sm:gap-4">
         <button className="daisy-btn grow gap-2" onClick={onBack}>
-          <ArrowLeftIcon className="h-4 w-4 fill-current" />
+          <ArrowLeftIcon className="size-4 fill-current" />
           Back
         </button>
         <button
@@ -61,7 +61,7 @@ export default function ConfirmDepositStep({
           disabled={!onConfirm}
           onClick={onConfirm}
         >
-          <CheckIcon className="h-4 w-4 fill-current" />
+          <CheckIcon className="size-4 fill-current" />
           Confirm
         </button>
       </div>

@@ -96,7 +96,7 @@ export default function VoterPage(): ReactElement {
 }
 
 interface VoterHeaderProps {
-  address: string;
+  address: `0x${string}`;
 }
 
 function VoterHeader({ address }: VoterHeaderProps) {

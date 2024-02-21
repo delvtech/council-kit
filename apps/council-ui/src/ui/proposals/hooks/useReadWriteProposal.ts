@@ -46,15 +46,20 @@ export function useReadProposal({
     vaultsToUse = [gscVoting.vault.address];
   }
 
+  const enabled = !!coreVotingAddressToUse;
+
   const { data, status } = useQuery({
     queryKey: ["proposal", id, coreVotingAddressToUse, vaultsToUse],
-    queryFn: () =>
-      council
-        ?.coreVoting({
-          address: coreVotingAddressToUse,
-          vaults: vaultsToUse,
-        })
-        .getProposal({ id }),
+    enabled,
+    queryFn: enabled
+      ? () =>
+          council
+            ?.coreVoting({
+              address: coreVotingAddressToUse!,
+              vaults: vaultsToUse,
+            })
+            .getProposal({ id })
+      : undefined,
   });
 
   return {

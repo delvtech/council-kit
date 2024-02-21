@@ -44,7 +44,7 @@ export function GenericVaultDetails({
 }
 
 interface GenericVaultDetailsData {
-  accountVotingPower: string;
+  accountVotingPower: bigint;
   descriptionURL: string | undefined;
   paragraphSummary: string | undefined;
   name: string | undefined;
@@ -67,7 +67,7 @@ function useGenericVaultDetailsData(
       const vault = council.votingVault(address);
       const accountVotingPower = account
         ? await vault.getVotingPower({ account })
-        : "0";
+        : 0n;
 
       return {
         accountVotingPower,

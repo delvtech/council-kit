@@ -68,18 +68,18 @@ export function FrozenLockingVaultDetails({
 }
 
 interface LockingVaultDetailsData {
-  accountVotingPower: `${number}`;
+  accountVotingPower: bigint;
   activeProposalCount: number;
   delegate?: `0x${string}`;
   delegatedToAccount: number;
-  depositedBalance: `${number}`;
+  depositedBalance: bigint;
   paragraphSummary: string | undefined;
   descriptionURL: string | undefined;
   name: string | undefined;
   participants: number;
   tokenAddress: `0x${string}`;
-  tokenAllowance: `${number}`;
-  tokenBalance: `${number}`;
+  tokenAllowance: bigint;
+  tokenBalance: bigint;
   tokenSymbol: string;
 }
 
@@ -104,23 +104,21 @@ function useFrozenLockingVaultDetailsData(
             : undefined;
           const accountVotingPower = account
             ? await lockingVault.getVotingPower({ account })
-            : "0";
+            : 0n;
 
           return {
             accountVotingPower,
             tokenAddress: token.address,
             tokenSymbol: await token.getSymbol(),
-            tokenBalance: account
-              ? await token.getBalanceOf({ address: account })
-              : "0",
+            tokenBalance: account ? await token.getBalanceOf({ account }) : 0n,
 
             tokenAllowance: account
               ? await token.getAllowance({ owner: account, spender: address })
-              : "0",
+              : 0n,
 
             depositedBalance: account
               ? await lockingVault.getDepositedBalance({ account })
-              : "0",
+              : 0n,
 
             delegate: delegate?.address,
             descriptionURL: vaultConfig?.descriptionURL,

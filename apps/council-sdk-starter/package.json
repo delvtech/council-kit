@@ -4,18 +4,10 @@
   "description": "Boilerplate to get started using the council-sdk fast!",
   "license": "MIT",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/types.d.ts",
-  "source": "src/index.ts",
-  "alias": {
-    "src": "./src"
-  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "watch": "parcel watch",
-    "build": "parcel build",
     "createProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/createProposal.ts",
     "executeProposal": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/executeProposal.ts",
     "setLockDuration": "ts-node -r dotenv/config -r tsconfig-paths/register src/scripts/setLockDuration.ts",
