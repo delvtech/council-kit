@@ -233,7 +233,7 @@ export class ReadVestingVault extends ReadVotingVault {
       if (from !== to) {
         breakdownByVoter[to].powerFromAllDelegators += amount;
         breakdownByVoter[to].powerByDelegator[from] =
-          breakdownByVoter[to].powerByDelegator[from] ?? 0n + amount;
+          (breakdownByVoter[to].powerByDelegator[from] ?? 0n) + amount;
       }
     }
 
@@ -387,7 +387,7 @@ export class ReadVestingVault extends ReadVotingVault {
     } of voteChangeEvents) {
       // ignore self-delegation
       if (from !== account) {
-        powerByDelegators[from] = powerByDelegators[from] ?? 0n + amount;
+        powerByDelegators[from] = (powerByDelegators[from] ?? 0n) + amount;
       }
     }
 
@@ -427,7 +427,7 @@ export class ReadVestingVault extends ReadVotingVault {
     for (const {
       args: { to, amount },
     } of voteChangeEvents) {
-      powerByVoter[to] = powerByVoter[to] ?? 0n + amount;
+      powerByVoter[to] = (powerByVoter[to] ?? 0n) + amount;
     }
 
     return Object.fromEntries(

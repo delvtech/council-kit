@@ -112,6 +112,9 @@ function useVestingVaultDetailsData(
         ? await vestingVault.getVotingPower({ account })
         : 0n;
 
+      const voters = await vestingVault.getVoters();
+      console.log("vesting vault voters", voters);
+
       return {
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
@@ -132,7 +135,7 @@ function useVestingVaultDetailsData(
         name: vaultConfig?.name,
         accountVotingPower,
         unvestedMultiplier: await vestingVault.getUnvestedMultiplier(),
-        participants: (await vestingVault.getVoters()).length,
+        participants: voters.length,
         delegatedToAccount: account
           ? (await vestingVault.getDelegatorsTo({ account })).length
           : 0,

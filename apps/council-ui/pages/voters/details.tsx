@@ -10,7 +10,6 @@ import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Page } from "src/ui/base/Page";
 import { asyncFilter } from "src/ui/base/utils/asyncFilter";
 import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
@@ -151,7 +150,6 @@ interface VoterData {
 export function useVoterData(
   account: `0x${string}` | undefined,
 ): UseQueryResult<VoterData> {
-  const council = useReadCouncil();
   const coreVoting = useReadCoreVoting();
   const { gscStatus } = useGscStatus(account);
 
@@ -161,7 +159,6 @@ export function useVoterData(
     enabled: queryEnabled,
     queryFn: queryEnabled
       ? async (): Promise<VoterData> => {
-          const voter = council.voter(account);
           // display voting history in reverse chronological order, ie: most
           // recent proposals first
           // TODO: Where does GSC Voting history fit in this?
@@ -186,9 +183,6 @@ export function useVoterData(
               return createdBy?.address === account;
             },
           );
-
-          console.log("tvp", tvp);
-          console.log("votingPower", votingPower);
 
           return {
             votingHistory,

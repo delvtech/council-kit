@@ -104,6 +104,12 @@ export function useVoterPageData(): UseQueryResult<VoterRowData[]> {
         publicClient,
       );
 
+      console.log({
+        voterPowerBreakdowns,
+        mergedBreakdowns,
+        ensRecords,
+      });
+
       return mergedBreakdowns.map(
         ({ voter, votingPower, votingPowerByDelegator }) => {
           return {

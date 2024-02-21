@@ -31,16 +31,18 @@ export function VestingVaultStatsRow({
   const chainId = useSupportedChainId();
   return (
     <div className="flex flex-wrap gap-4">
-      {accountVotingPower > 0 && (
-        <Stat
-          label={
-            <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
-              Your voting power
-            </DefinitionTooltip>
-          }
-          value={formatVotingPower(accountVotingPower)}
-        />
-      )}
+      <Stat
+        label={
+          <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
+            Your voting power
+          </DefinitionTooltip>
+        }
+        value={
+          accountVotingPower > 0
+            ? formatVotingPower(accountVotingPower)
+            : "None"
+        }
+      />
 
       <Stat
         label={
@@ -51,16 +53,14 @@ export function VestingVaultStatsRow({
         value={`${unvestedMultiplier}%`}
       />
 
-      {delegatedToAccount && (
-        <Stat
-          label={
-            <DefinitionTooltip content={WALLETS_DELEGATED_TIP}>
-              Wallets delegated to you
-            </DefinitionTooltip>
-          }
-          value={delegatedToAccount || "None"}
-        />
-      )}
+      <Stat
+        label={
+          <DefinitionTooltip content={WALLETS_DELEGATED_TIP}>
+            Wallets delegated to you
+          </DefinitionTooltip>
+        }
+        value={delegatedToAccount || "None"}
+      />
 
       {participants && (
         <Stat
