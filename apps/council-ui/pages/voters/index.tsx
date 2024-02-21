@@ -105,8 +105,6 @@ export function useVoterPageData(): UseQueryResult<VoterRowData[]> {
       );
 
       console.log({
-        voterPowerBreakdowns,
-        mergedBreakdowns,
         ensRecords,
       });
 

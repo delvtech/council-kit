@@ -23,12 +23,30 @@ export async function getBulkEnsRecords(
   client: PublicClient | UsePublicClientReturnType,
   options?: { chunkSize?: number },
 ): Promise<EnsRecords> {
-  const chain = client?.chain || chains[0];
+  let chain: any = client?.chain || chains[0];
+
+  // ensjs is currently incompatible with viem v2. There's a PR to fix this
+  // here: https://github.com/ensdomains/ensjs-v3/pull/175.
+  // Until then, we have to manually patch the chain definition for mainnet to
+  // look like the one ensjs expects.
+  if (chain.id === 1) {
+    chain = {
+      ...chain,
+      network: "homestead",
+      contracts: {
+        ...chain.contracts,
+        ensUniversalResolver: {
+          address: "0xc0497E381f536Be9ce14B0dD3817cBcAe57d2F62",
+          blockCreated: 16966585,
+        },
+      },
+    };
+  }
 
   let ensClient: ReturnType<typeof createEnsPublicClient>;
   try {
     ensClient = createEnsPublicClient({
-      chain: chains[0] as any,
+      chain: chain,
       transport: transports[chain.id],
     }) as ReturnType<typeof createEnsPublicClient>;
   } catch (error) {
@@ -46,11 +64,11 @@ export async function getBulkEnsRecords(
     chunkedAddresses.map(async (chunk): Promise<[string, string | null][]> => {
       // batch call of ens names using MultiCall
       const batch = await ensClient.ensBatch(
-        ...chunk.map((address) =>
-          getName.batch({
+        ...chunk.map((address) => {
+          return getName.batch({
             address,
-          }),
-        ),
+          });
+        }),
       );
 
       // batch may not exist if gas limited was reached when reading
