@@ -22,7 +22,6 @@ export function useApprove(): {
       }
 
       const token = await council.lockingVault(vaultAddress).getToken();
-      console.log("token", token);
       return token.approve({
         amount: maxUint256,
         owner: address,

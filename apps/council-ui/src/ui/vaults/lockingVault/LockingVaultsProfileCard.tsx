@@ -154,8 +154,6 @@ function useLockingVaultProfileCardData(
         account: profileAddress,
       });
 
-      console.log({ votingPowerBreakdowns });
-
       const token = await lockingVault.getToken();
       const delegate = await lockingVault.getDelegate({
         account: profileAddress,

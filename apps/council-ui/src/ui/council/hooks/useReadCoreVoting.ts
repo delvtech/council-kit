@@ -9,23 +9,8 @@ import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
 export function useReadCoreVoting(): ReadCoreVoting {
   const council = useReadCouncil();
   const { coreVoting } = useCouncilConfig();
-  // const ref = useRef<string>();
-
-  // useEffect(() => {
-  //   console.log('council changed')
-  // }, [council])
-
-  // useEffect(() => {
-  //   console.log('coreVoting.address changed from', ref.current, 'to', coreVoting.address)
-
-  // }, [coreVoting.address])
-
-  // useEffect(() => {
-  //   console.log('coreVoting.vaults changed')
-  // }, [coreVoting.vaults])
 
   return useMemo(() => {
-    // console.log("Making new coreVoting with vaults:", coreVoting.vaults);
     return council.coreVoting({
       address: coreVoting.address,
       vaults: coreVoting.vaults.map((vault) => {

@@ -3,9 +3,9 @@ import { CachedReadContract } from "@delvtech/evm-client";
 import { ReadContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
+import { GscVaultAbi } from "src/models/votingVault/gscVault/types";
 import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
 import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
-import { GscVaultAbi } from "./types";
 
 export interface ReadGscVaultOptions extends ReadContractModelOptions {}
 

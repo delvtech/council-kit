@@ -112,9 +112,6 @@ function useVestingVaultDetailsData(
         ? await vestingVault.getVotingPower({ account })
         : 0n;
 
-      const voters = await vestingVault.getVoters();
-      console.log("vesting vault voters", voters);
-
       return {
         tokenAddress: token.address,
         tokenSymbol: await token.getSymbol(),
@@ -123,10 +120,10 @@ function useVestingVaultDetailsData(
         grantBalanceWithdrawn: grant?.withdrawn || 0n,
         paragraphSummary: vaultConfig?.paragraphSummary,
         unlockDate: grant
-          ? await getBlockDate(grant.unlockBlock, publicClient)
+          ? await getBlockDate(grant.cliff, publicClient)
           : undefined,
         expirationDate: grant
-          ? await getBlockDate(grant.expirationBlock, publicClient)
+          ? await getBlockDate(grant.expiration, publicClient)
           : undefined,
         delegate: account
           ? (await vestingVault.getDelegate({ account })).address
@@ -135,7 +132,7 @@ function useVestingVaultDetailsData(
         name: vaultConfig?.name,
         accountVotingPower,
         unvestedMultiplier: await vestingVault.getUnvestedMultiplier(),
-        participants: voters.length,
+        participants: (await vestingVault.getVoters()).length,
         delegatedToAccount: account
           ? (await vestingVault.getDelegatorsTo({ account })).length
           : 0,

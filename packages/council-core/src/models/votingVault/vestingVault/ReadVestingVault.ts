@@ -1,17 +1,18 @@
 import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
-import { CachedReadContract, FunctionReturn } from "@delvtech/evm-client";
+import { CachedReadContract } from "@delvtech/evm-client";
 import Big from "big.js";
 import { ReadContractModelOptions } from "src/models/Model";
 import { ReadVoter } from "src/models/ReadVoter";
 import { ReadToken } from "src/models/token/ReadToken";
 import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
 import { VoterPowerBreakdown } from "src/models/votingVault/types";
+import {
+  Grant,
+  VestingVaultAbi,
+} from "src/models/votingVault/vestingVault/types";
 import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
 import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
 import { getOrSet } from "src/utils/getOrSet";
-
-const vestingVaultAbi = VestingVault.abi;
-type VestingVaultAbi = typeof vestingVaultAbi;
 
 export interface ReadVestingVaultOptions extends ReadContractModelOptions {}
 
@@ -40,7 +41,7 @@ export class ReadVestingVault extends ReadVotingVault {
       name,
     });
     this.vestingVaultContract = contractFactory({
-      abi: vestingVaultAbi,
+      abi: VestingVault.abi,
       address,
       cache,
       namespace,
@@ -90,7 +91,7 @@ export class ReadVestingVault extends ReadVotingVault {
   }: {
     account: ReadVoter | `0x${string}`;
     atBlock?: BlockLike;
-  }): Promise<FunctionReturn<VestingVaultAbi, "getGrant">> {
+  }): Promise<Grant> {
     return this.vestingVaultContract.read(
       "getGrant",
       {
