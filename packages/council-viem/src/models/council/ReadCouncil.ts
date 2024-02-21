@@ -1,10 +1,10 @@
 import { ReadCouncil as BaseReadCouncil } from "@delvtech/council-core";
 import { SimpleCache, createNetwork } from "@delvtech/evm-client-viem";
 import { createReadContractFactory } from "src/contract/createReadContractFactory";
-import { PublicClient } from "viem";
+import { Client } from "viem";
 
 export interface ReadCouncilOptions {
-  publicClient: PublicClient;
+  client: Client;
   cache?: SimpleCache;
   /**
    * A namespace to distinguish this instance from others in the cache by
@@ -14,12 +14,12 @@ export interface ReadCouncilOptions {
 }
 
 export class ReadCouncil extends BaseReadCouncil {
-  constructor({ publicClient, cache, namespace }: ReadCouncilOptions) {
+  constructor({ client, cache, namespace }: ReadCouncilOptions) {
     super({
       name: namespace,
-      network: createNetwork(publicClient),
+      network: createNetwork(client),
       contractFactory: createReadContractFactory({
-        publicClient,
+        client,
         cache,
         namespace,
       }),

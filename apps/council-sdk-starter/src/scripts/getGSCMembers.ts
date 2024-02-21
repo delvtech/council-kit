@@ -1,16 +1,20 @@
-import { CouncilContext, GSCVault } from "@council/sdk";
-import { getElementAddress } from "src/addresses/elementAddresses";
-import { provider } from "src/provider";
+import { ReadWriteCouncil } from "@delvtech/council-viem";
+import { elementAddresses } from "src/addresses/ElementMainnetAddressList";
+import { publicClient, walletClient } from "src/client";
 
 // wrap the script in an async function so we can await promises
 export async function getGSCMembers(): Promise<void> {
-  const addresses = await getElementAddress();
+  if (!walletClient) {
+    throw new Error(
+      "Wallet client not available. Ensure the WALLET_PRIVATE_KEY environment variable is set.",
+    );
+  }
 
-  // create a CouncilContext instance
-  const context = new CouncilContext(provider);
+  // create a ReadWriteCouncil instance
+  const council = new ReadWriteCouncil({ publicClient, walletClient });
 
-  // create a GSCVault instance
-  const gscVault = new GSCVault(addresses.gscVault, context);
+  // create a ReadGscVault instance
+  const gscVault = council.gscVault(elementAddresses.gscVault); // <-- replace with the LockingVault contract address
 
   // get all members
   const members = await gscVault.getMembers();
@@ -20,14 +24,16 @@ export async function getGSCMembers(): Promise<void> {
   for (const member of members) {
     console.log("fetching", member.address);
 
-    // get the  voting vaults used to prove the member meets the minimum voting
-    // power requirement
-    const votingPowerVaults = await gscVault.getMemberVaults(member.address);
+    // get the voting vaults that were used to prove the member meets the
+    // minimum voting power requirement
+    const votingPowerVaults = await gscVault.getMemberVaults({
+      account: member.address,
+    });
 
     memberStats.push({
       address: member.address,
-      joinDate: await gscVault.getJoinDate(member.address),
-      votingPower: await member.getVotingPower(votingPowerVaults),
+      joinDate: await gscVault.getJoinDate({ account: member.address }),
+      votingPower: await member.getVotingPower({ vaults: votingPowerVaults }),
     });
   }
 
