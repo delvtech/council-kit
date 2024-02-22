@@ -1,5 +1,5 @@
 import { BlockLike, ReadVotingVault } from "@delvtech/council-core";
-import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { FetchStatus, QueryStatus, useQuery } from "@tanstack/react-query";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
@@ -31,6 +31,7 @@ export default function useVotingPowerByVault({
       }[]
     | undefined;
   status: QueryStatus;
+  fetchStatus: FetchStatus;
 } {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
@@ -45,8 +46,8 @@ export default function useVotingPowerByVault({
 
   const enabled = !!accountToUse;
 
-  const { data, status } = useQuery({
-    queryKey: ["votingPowerByVault", account, chainId],
+  const { data, status, fetchStatus } = useQuery({
+    queryKey: ["votingPowerByVault", account, chainId, Number(atBlock)],
     enabled,
     queryFn: enabled
       ? async () => {
@@ -89,5 +90,6 @@ export default function useVotingPowerByVault({
   return {
     votingPowerByVault: data,
     status,
+    fetchStatus,
   };
 }

@@ -95,16 +95,15 @@ export function Navigation(): ReactElement {
         <div className="ml-2 whitespace-nowrap text-xl text-base-content">
           council-reference-ui
         </div>
+      </div>
 
-        <ul className="ml-4 hidden items-center p-0 lg:flex">
+      <div className="daisy-navbar-center hidden lg:flex">
+        <ul className="daisy-menu daisy-menu-horizontal px-1">
           <li>
             <Link
-              className={classNames(
-                "px-4 py-3 font-medium transition-all hover:text-primary focus:text-primary",
-                {
-                  "text-primary": pathname.startsWith(Routes.PROPOSALS),
-                },
-              )}
+              className={classNames("px-4 py-3 font-medium", {
+                "!text-primary": pathname.startsWith(Routes.PROPOSALS),
+              })}
               href={Routes.PROPOSALS}
             >
               proposals
@@ -112,12 +111,9 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <Link
-              className={classNames(
-                "px-4 py-3 font-medium transition-all hover:text-primary focus:text-primary",
-                {
-                  "text-primary": pathname.startsWith(Routes.VAULTS),
-                },
-              )}
+              className={classNames("px-4 py-3 font-medium", {
+                "!text-primary": pathname.startsWith(Routes.VAULTS),
+              })}
               href={Routes.VAULTS}
             >
               vaults
@@ -125,14 +121,11 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <Link
-              className={classNames(
-                "px-4 py-3 font-medium transition-all hover:text-primary focus:text-primary",
-                {
-                  "text-primary":
-                    pathname.startsWith(Routes.VOTERS) &&
-                    address !== query.address,
-                },
-              )}
+              className={classNames("px-4 py-3 font-medium", {
+                "!text-primary":
+                  pathname.startsWith(Routes.VOTERS) &&
+                  address !== query.address,
+              })}
               href={Routes.VOTERS}
             >
               voters
@@ -141,14 +134,11 @@ export function Navigation(): ReactElement {
           {address && (
             <li>
               <Link
-                className={classNames(
-                  "px-4 py-3 font-medium transition-all hover:text-primary focus:text-primary",
-                  {
-                    "text-primary":
-                      pathname.startsWith(Routes.VOTERS) &&
-                      address === query.address,
-                  },
-                )}
+                className={classNames("px-4 py-3 font-medium", {
+                  "!text-primary":
+                    pathname.startsWith(Routes.VOTERS) &&
+                    address === query.address,
+                })}
                 href={makeVoterURL(address)}
               >
                 profile
