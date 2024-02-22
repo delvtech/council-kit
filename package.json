@@ -14,7 +14,8 @@
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "typecheck": "turbo run typecheck",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "test": "turbo test"
   },
   "devDependencies": {
     "@parcel/packager-ts": "2.8.0",

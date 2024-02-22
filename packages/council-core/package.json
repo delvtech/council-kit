@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@delvtech/evm-client": "^0.1.0"
+    "@delvtech/evm-client": "^0.1.1"
   },
   "dependencies": {
     "@delvtech/council-artifacts": "*",
@@ -26,12 +26,13 @@
   "devDependencies": {
     "@council/eslint-config": "*",
     "@council/tsconfig": "*",
-    "@delvtech/evm-client": "^0.1.0",
+    "@delvtech/evm-client": "^0.1.1",
     "@jest/globals": "^29.7.0",
     "@types/big.js": "^6.2.2",
     "abitype": "^1.0.0",
     "dotenv": "^16.4.1",
     "nodemon": "^3.0.3",
+    "sinon": "^17.0.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.1.0",
     "tsup": "^8.0.1",
