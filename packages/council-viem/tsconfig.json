@@ -1,6 +1,6 @@
 {
   "extends": "@council/tsconfig/base.json",
-  "include": ["src", "test"],
+  "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "rootDir": ".",
