@@ -25,8 +25,7 @@
   "devDependencies": {
     "@council/eslint-config": "*",
     "@council/tsconfig": "*",
-    "@openzeppelin/contracts": "^4.2.0",
-    "hardhat": "^2.19.4",
+    "hardhat": "^2.20.1",
     "typescript": "^5.3.3"
   }
 }

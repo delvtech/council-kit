@@ -7,9 +7,7 @@
     "nextjs.json"
   ],
   "dependencies": {
-    "@tsconfig/node-lts": "^20.1.1"
-  },
-  "devDependencies": {
+    "@tsconfig/node-lts": "^20.1.1",
     "@tsconfig/recommended": "^1.0.3"
   }
 }

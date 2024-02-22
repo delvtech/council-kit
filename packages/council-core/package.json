@@ -8,8 +8,6 @@
     "watch": "tsup --watch",
     "docs": "typedoc",
     "watch:docs": "typedoc --watch",
-    "example": "ts-node -r dotenv/config -r tsconfig-paths/register src/example/index.ts",
-    "watch:example": "nodemon -r dotenv/config -r tsconfig-paths/register src/example/index.ts",
     "test": "vitest run",
     "test:watch": "vitest --reporter=verbose",
     "typecheck": "tsc --noEmit"
@@ -29,16 +27,16 @@
     "@delvtech/evm-client": "^0.1.1",
     "@types/big.js": "^6.2.2",
     "abitype": "^1.0.0",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.4.5",
     "nodemon": "^3.0.3",
     "sinon": "^17.0.1",
     "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.1.0",
-    "tsup": "^8.0.1",
-    "typedoc": "^0.25.7",
+    "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.0.2",
+    "typedoc": "^0.25.8",
     "typedoc-plugin-markdown": "^3.17.1",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.1"
+    "vitest": "^1.3.1"
   },
   "exports": {
     ".": {
