@@ -167,7 +167,6 @@ export default function ProposalPage(): ReactElement {
           {data ? (
             <ProposalVoting
               coreVotingAddress={votingContractAddress}
-              createdBlock={data.createdAtBlock}
               proposalId={id}
               vaults={usedCoreVoting.vaults}
             />
