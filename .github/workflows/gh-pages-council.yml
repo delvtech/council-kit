@@ -10,7 +10,7 @@ on:
     branches: ["main"]
     paths:
       - "apps/council-ui/**"
-      - ".github/workflows/deploy-council-ui-to-gh-pages.yml"
+      - ".github/workflows/gh-pages-council.yml"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -60,8 +60,8 @@ jobs:
 
       - name: Build with Next.js
         env:
-          NEXT_PUBLIC_MAINNET_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
-          NEXT_PUBLIC_GOERLI_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
+          NEXT_PUBLIC_MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_UR }}
+          NEXT_PUBLIC_GOERLI_RPC_URL: ${{ secrets.GOERLI_RPC_URL }}
           NEXT_PUBLIC_COUNCIL_UI_BASE_PATH: ${{ secrets.COUNCIL_UI_BASE_PATH }}
         run: npx turbo run build --filter=council-ui
 
