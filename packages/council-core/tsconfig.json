@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@council/tsconfig/base.json",
-  "include": ["src", "types.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "module": "ESNext",
@@ -12,9 +12,9 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["src/*"],
     },
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
-  }
+    "allowSyntheticDefaultImports": true,
+  },
 }
