@@ -23,7 +23,7 @@ describe("ReadLockingVault", () => {
     const lockingVault = council.lockingVault("0x");
     // The model doesn't know that the factory creates stubbed contracts.
     const contractStub =
-      lockingVault.lockingVaultContract as unknown as CachedReadContractStub<LockingVaultAbi>;
+      lockingVault.lockingVaultContract as CachedReadContractStub<LockingVaultAbi>;
 
     return { council, lockingVault, contractStub };
   }
