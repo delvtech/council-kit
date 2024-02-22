@@ -22,7 +22,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "os-browserify": "^0.3.0",
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "turbo": "latest"
@@ -36,12 +36,12 @@
   "resolutions": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "@types/react": "18.2.54",
-    "prettier": "^3.2.4",
+    "@types/react": "18.2.57",
+    "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "viem": "^2.7.3",
-    "wagmi": "^2.5.5"
+    "viem": "^2.7.12",
+    "wagmi": "^2.5.7"
   },
   "engines": {
     "node": ">=18.0.0"

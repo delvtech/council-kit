@@ -2,9 +2,6 @@
   "extends": "@council/tsconfig/base.json",
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "paths": {
-    "src/*": ["./src/*"]
-  },
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -22,6 +19,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "rootDir": ".",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"]
+    }
   }
 }

@@ -1,8 +1,13 @@
-import { createPublicClient, createWalletClient, http } from "viem";
+import {
+  PublicClient,
+  createPublicClient,
+  createWalletClient,
+  http,
+} from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
-export const publicClient = createPublicClient({
-  transport: http(process.env.PROVIDER_URI),
+export const publicClient: PublicClient = createPublicClient({
+  transport: http(process.env.RPC_URL),
 });
 
 export const walletClient =
@@ -11,5 +16,5 @@ export const walletClient =
     account: privateKeyToAccount(
       process.env.WALLET_PRIVATE_KEY as `0x${string}`,
     ),
-    transport: http(process.env.PROVIDER_URI),
+    transport: http(process.env.RPC_URL),
   });

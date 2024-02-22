@@ -6,8 +6,8 @@
     "rootDir": ".",
     "baseUrl": ".",
     "resolveJsonModule": true,
-    "module": "esnext",
-    "target": "esnext",
-    "moduleResolution": "Bundler",
-  },
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "bundler"
+  }
 }

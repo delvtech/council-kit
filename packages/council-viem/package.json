@@ -30,7 +30,7 @@
     "@council/tsconfig": "*",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "viem": "^2.7.3",
+    "viem": "^2.7.12",
     "vitest": "^1.2.1"
   },
   "publishConfig": {
