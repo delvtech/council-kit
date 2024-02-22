@@ -3834,6 +3834,11 @@ chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.1:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
+changesets@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/changesets/-/changesets-1.0.2.tgz#d4eb67f826c6b5e19b56ced4f5add72e1e0cadb8"
+  integrity sha512-lnXvvqJEcK0z/6RtwKNLbejazl+Hxd1bocMcNgfLHWb4rGxuqkO/LdeGNzwIx3jHj+fNWZ6AGgK5AqNBwva4Xg==
+
 check-error@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.3.tgz#a6502e4312a7ee969f646e83bb3ddd56281bd694"

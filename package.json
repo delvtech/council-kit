@@ -15,9 +15,11 @@
     "format:check": "turbo run format:check",
     "typecheck": "turbo run typecheck",
     "postinstall": "husky install",
-    "test": "turbo test"
+    "test": "turbo test",
+    "release": "turbo build && changeset publish"
   },
   "devDependencies": {
+    "changesets": "^1.0.2",
     "eslint": "^8.56.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
