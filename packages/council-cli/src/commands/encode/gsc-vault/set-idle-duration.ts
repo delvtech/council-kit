@@ -1,40 +1,35 @@
-import { GSCVault__factory } from "@council/typechain";
+import { GSCVault } from "@delvtech/council-artifacts/GSCVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-idle-duration [OPTIONS]",
-    aliases: ["setIdleDuration"],
-    describe: "Encode call data for GSCVault.setIdleDuration",
+export default command({
+  description: "Encode call data for GSCVault.setIdleDuration",
 
-    builder: (yargs) => {
-      return yargs.options({
-        t: {
-          alias: ["time", "idle-duration", "idleDuration"],
-          describe:
-            "The time (in seconds) new members must wait before they can vote",
-          type: "number",
-        },
-      });
+  options: {
+    time: {
+      alias: ["idle-duration"],
+      description:
+        "The time (in seconds) new members must wait before they can vote",
+      type: "number",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const time = await requiredNumber(args.time, {
-        name: "time",
-        message: "Enter new idle time (in seconds)",
-      });
-
-      signale.success(encodeSetIdleDuration(time));
-    },
-  });
+  handler: async ({ options, next }) => {
+    const time = await options.time({
+      prompt: "Enter new idle time (in seconds)",
+    });
+    const encoded = encodeSetIdleDuration(time);
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetIdleDuration(time: number): string {
   return encodeFunctionData({
-    abi: GSCVault__factory.abi,
+    abi: GSCVault.abi,
     functionName: "setIdleDuration",
-    args: [time],
+    args: [BigInt(time)],
   });
 }

@@ -1,44 +1,46 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
-import { GSCVaultProfileCard } from "src/ui/vaults/gscVault/GSCVaultProfileCard/GSCVaultProfileCard";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { GSCVaultProfileCard } from "src/ui/vaults/gscVault/GscVaultProfileCard";
+import { useReadGscVault } from "src/ui/vaults/gscVault/hooks/useReadGscVault";
 import { useVaultVotingPower } from "src/ui/vaults/hooks/useVaultVotingPower";
 import { LockingVaultProfileCard } from "src/ui/vaults/lockingVault/LockingVaultsProfileCard";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { VestingVaultProfileCard } from "src/ui/vaults/vestingVault/VestingVaultProfileCard";
-import { getIsGSCEligible } from "src/vaults/gscVault/getIsGSCEligible";
-import { getVaultConfig } from "src/vaults/vaults";
+import { getIsGscEligible } from "src/utils/gscVault/getIsGscEligible";
 
 interface VoterVaultsListProps {
-  address: string;
+  account: `0x${string}`;
 }
 
 export function VoterVaultsList({
-  address,
+  account,
 }: VoterVaultsListProps): ReactElement {
-  const { coreVoting, gscVoting } = useCouncil();
-  const { data: isGSCRelevant } = useIsGSCRelevant(address);
-
-  const chainId = useChainId();
+  const coreVoting = useReadCoreVoting();
+  const config = useCouncilConfig();
+  const gscVault = useReadGscVault();
+  const { data: isGSCRelevant } = useIsGSCRelevant(account);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row w-full gap-6">
+    <div className="grid w-full grid-flow-row grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {/* core voting vaults */}
       {coreVoting.vaults.map((vault) => {
-        const config = getVaultConfig(vault.address, chainId);
+        const vaultConfig = config.coreVoting.vaults.find(
+          (v) => v.address === vault.address,
+        );
 
-        switch (config?.type) {
+        switch (vaultConfig?.type) {
           case "LockingVault":
           case "FrozenLockingVault":
             return (
               <LockingVaultProfileCard
                 key={vault.address}
                 address={vault.address}
-                profileAddress={address}
+                profileAddress={account}
               />
             );
           case "VestingVault":
@@ -46,24 +48,24 @@ export function VoterVaultsList({
               <VestingVaultProfileCard
                 key={vault.address}
                 address={vault.address}
-                profileAddress={address}
+                profileAddress={account}
               />
             );
           default:
             return (
               <DefaultVaultProfileCard
-                address={address}
-                profileAddress={address}
+                address={account}
+                profileAddress={account}
               />
             );
         }
       })}
 
       {/* gsc vault */}
-      {isGSCRelevant && !!gscVoting && (
+      {isGSCRelevant && !!gscVault && (
         <GSCVaultProfileCard
-          address={gscVoting.vaults[0].address}
-          profileAddress={address}
+          address={gscVault.address}
+          profileAddress={account}
         />
       )}
     </div>
@@ -74,32 +76,40 @@ export function VoterVaultsList({
  * Get a boolean indicating that the GSC is relevant to this voter because they
  * are either a member or eligible.
  */
-function useIsGSCRelevant(address: string): UseQueryResult<boolean> {
-  const { coreVoting, gscVoting } = useCouncil();
+function useIsGSCRelevant(account: `0x${string}`): UseQueryResult<boolean> {
+  const gscVault = useReadGscVault();
+  const coreVoting = useReadCoreVoting();
   return useQuery({
-    queryKey: ["is-gsc-relevant", address],
+    queryKey: ["is-gsc-relevant", account],
     queryFn: async () => {
-      if (!gscVoting) {
+      if (!gscVault) {
         return false;
       }
-      if (await gscVoting.getIsMember(address)) {
+      if (await gscVault.getIsMember({ account })) {
         return true;
       }
-      return getIsGSCEligible({ address, coreVoting, gscVoting });
+      return getIsGscEligible({
+        account,
+        gscVault,
+        qualifyingVaults: coreVoting.vaults,
+      });
     },
   });
 }
 
 interface DefaultVaultProfileCardProps {
-  address: string;
-  profileAddress: string;
+  address: `0x${string}`;
+  profileAddress: `0x${string}`;
 }
 
 function DefaultVaultProfileCard({
   address,
   profileAddress,
 }: DefaultVaultProfileCardProps) {
-  const { data: votingPower } = useVaultVotingPower(address, profileAddress);
+  const { votingPower } = useVaultVotingPower({
+    vaultAddress: address,
+    account: profileAddress,
+  });
   const name = `Voting Vault ${formatAddress(address)}`;
 
   if (!votingPower) {
@@ -113,7 +123,7 @@ function DefaultVaultProfileCard({
       stats={[
         {
           label: "Voting Power",
-          value: +votingPower ? formatBalance(votingPower) : "None",
+          value: votingPower ? formatVotingPower(votingPower) : "None",
         },
       ]}
     />

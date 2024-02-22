@@ -1,76 +1,89 @@
-import { CouncilContext, MockToken } from "@council/sdk";
-import { getDefaultProvider, Wallet } from "ethers";
+import { ReadWriteMockToken } from "@delvtech/council-viem";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredNumberString } from "src/options/utils/requiredNumberString";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { createCommandModule } from "src/utils/createCommandModule";
+import { createPublicClient, createWalletClient, http, parseUnits } from "viem";
+import {
+  getWriteOptions,
+  writeOptions,
+} from "../../reusable-options/writeOptions.js";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "set-allowance [OPTIONS]",
-  aliases: ["setAllowance"],
-  describe: "Set an account's token allowance",
+export default command({
+  description: "Set an account's token allowance",
 
-  builder: (yargs) => {
-    return yargs.options({
-      a: {
-        alias: ["address"],
-        describe: "The token contract address",
-        type: "string",
-      },
-      o: {
-        alias: ["owner"],
-        describe: "The address of the token owner",
-        type: "string",
-      },
-      s: {
-        alias: ["spender"],
-        describe: "The address of the token spender",
-        type: "string",
-      },
-      b: {
-        alias: ["balance"],
-        describe:
-          "The amount of tokens the spender is allowed to spend from the owner's account",
-        type: "string",
-      },
-      w: walletKeyOption,
-      r: rpcUrlOption,
-    });
+  options: {
+    address: {
+      description: "The token contract address",
+      type: "string",
+      required: true,
+    },
+    owner: {
+      description: "The address of the token owner",
+      type: "string",
+      required: true,
+    },
+    spender: {
+      description: "The address of the token spender",
+      type: "string",
+      required: true,
+    },
+    allowance: {
+      description:
+        "The amount of tokens the spender is allowed to spend from the owner's account",
+      type: "string",
+      required: true,
+    },
+    ...writeOptions,
   },
 
-  handler: async (args) => {
-    const address = await requiredString(args.address, {
-      name: "address",
-      message: "Enter token contract address",
+  handler: async ({ options, context, next }) => {
+    const {
+      account: signerAccount,
+      chain,
+      rpcUrl,
+    } = await getWriteOptions(options, context);
+
+    const address = await options.address({
+      prompt: "Enter token contract address",
     });
 
-    const owner = await requiredString(args.owner, {
-      name: "owner",
-      message: "Enter the token owner's address",
+    const owner = await options.owner({
+      prompt: "Enter the token owner's address",
     });
 
-    const spender = await requiredString(args.spender, {
-      name: "spender",
-      message: "Enter the token spender's address",
+    const spender = await options.spender({
+      prompt: "Enter the token spender's address",
     });
 
-    const amount = await requiredNumberString(args.balance, {
-      name: "amount",
-      message:
-        "Enter amount of tokens the spender is allowed to spend from the owner's account",
+    const allowance = await options.allowance({
+      prompt: {
+        message:
+          "Enter amount of tokens the spender is allowed to spend from the owner's account",
+        initial: "0.0",
+      },
     });
 
-    const walletKey = await requiredWalletKey(args.walletKey);
-    const rpcURL = await requiredRpcUrl(args.rpcUrl);
+    const transport = http(rpcUrl);
+    const publicClient = createPublicClient({ transport, chain });
+    const walletClient = createWalletClient({
+      transport,
+      chain,
+      account: signerAccount,
+    });
 
-    const provider = getDefaultProvider(rpcURL);
-    const context = new CouncilContext(provider);
-    const token = new MockToken(address, context);
+    const token = new ReadWriteMockToken({
+      address: address as `0x${string}`,
+      publicClient,
+      walletClient,
+    });
 
-    const signer = new Wallet(walletKey, provider);
+    const decimals = await token.getDecimals();
+    const hash = await token.setAllowance({
+      allowance: parseUnits(allowance, decimals),
+      spender: spender as `0x${string}`,
+      owner: owner as `0x${string}`,
+    });
 
-    signale.success(await token.setAllowance(signer, owner, spender, amount));
+    signale.success(hash);
+    next(hash);
   },
 });

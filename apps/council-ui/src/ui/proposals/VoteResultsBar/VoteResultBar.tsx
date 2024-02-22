@@ -1,28 +1,15 @@
-import { formatEther } from "ethers/lib/utils";
+import { VoteResults } from "@delvtech/council-viem";
 import { ReactElement } from "react";
 
-interface VoteResultBarProps {
-  yesResults: string;
-  noResults: string;
-  maybeResults: string;
-}
-
-export function VoteResultBar({
-  yesResults,
-  noResults,
-  maybeResults,
-}: VoteResultBarProps): ReactElement {
-  const resultsTotal =
-    +formatEther(yesResults) +
-    +formatEther(noResults) +
-    +formatEther(maybeResults);
+export function VoteResultBar({ yes, no, maybe }: VoteResults): ReactElement {
+  const resultsTotal = yes + no + maybe;
 
   if (!resultsTotal) {
     return <div>Unknown</div>;
   }
 
-  const yesPercent = (+formatEther(yesResults) / resultsTotal) * 100;
-  const maybePercent = (+formatEther(maybeResults) / resultsTotal) * 100;
+  const yesPercent = (yes / resultsTotal) * 100n;
+  const maybePercent = (maybe / resultsTotal) * 100n;
 
   return (
     <svg height="10" width="100%">

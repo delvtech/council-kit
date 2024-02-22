@@ -1,37 +1,47 @@
-import { Vote, Voter } from "@council/sdk";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useGSCStatus } from "src/ui/vaults/gscVault/useGSCStatus";
-import { GSCStatus } from "src/vaults/gscVault/types";
+import { ReadVote } from "@delvtech/council-viem";
+import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
+import { GscStatus } from "src/utils/gscVault/types";
 
 interface VoterStatistics {
-  votingHistory: Vote[];
-  votingPower: string;
-  gscStatus: GSCStatus | null;
+  votingHistory: ReadVote[];
+  votingPower: bigint;
+  gscStatus: GscStatus | undefined;
 }
 
-export function useVoterStats(
-  address: string | undefined,
-): UseQueryResult<VoterStatistics> {
-  const { context, coreVoting } = useCouncil();
-  const { data: gscStatus } = useGSCStatus(address);
-  return useQuery({
-    queryKey: ["voter-stats", address],
-    enabled: !!address,
-    queryFn: async () => {
-      const voter = new Voter(address as string, context);
-      const votingHistory = await voter.getVotes(coreVoting.address);
-      const votingPower = await voter.getVotingPower(
-        coreVoting.vaults.map((vault) => vault.address),
-      );
+export function useVoterStats(address: `0x${string}` | undefined): {
+  data: VoterStatistics | undefined;
+  status: QueryStatus;
+} {
+  const coreVoting = useReadCoreVoting();
+  const council = useReadCouncil();
+  const { gscStatus } = useGscStatus(address);
 
-      return {
-        votingHistory: votingHistory,
-        votingPower,
-        gscStatus: gscStatus ?? null,
-      };
-    },
+  const enabled = !!address;
+
+  const { data, status } = useQuery({
+    queryKey: ["voter-stats", address],
+    enabled,
+    queryFn: enabled
+      ? async () => {
+          const voter = council.voter(address);
+          const votingHistory = await voter.getVotes({ coreVoting });
+          const votingPower = await coreVoting.getVotingPower({
+            account: voter,
+          });
+
+          return {
+            votingHistory: votingHistory,
+            votingPower,
+            gscStatus: gscStatus,
+          };
+        }
+      : undefined,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
+
+  return { data, status };
 }

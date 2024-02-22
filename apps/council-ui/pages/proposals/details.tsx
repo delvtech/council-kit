@@ -1,105 +1,78 @@
-import { Ballot, getBlockDate, Proposal, Vote } from "@council/sdk";
-import { useQuery } from "@tanstack/react-query";
+import { Ballot, ReadVote } from "@delvtech/council-viem";
+import { QueryStatus, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { councilConfigs } from "src/config/council.config";
-import { EnsRecords, getBulkEnsRecords } from "src/ens/getBulkEnsRecords";
-import {
-  getProposalStatus,
-  ProposalStatus,
-} from "src/proposals/getProposalStatus";
 import { Routes } from "src/routes";
 import { Breadcrumbs } from "src/ui/base/Breadcrumbs";
-import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Page } from "src/ui/base/Page";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
+import ExternalLink from "src/ui/base/links/ExternalLink";
+import { getBlockDate } from "src/ui/base/utils/getBlockDate";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { useReadGscVoting } from "src/ui/council/hooks/useReadGscVoting";
 import { ProposalStatsRow } from "src/ui/proposals/ProposalStatsRow/ProposalStatsRow";
 import { ProposalStatsRowSkeleton } from "src/ui/proposals/ProposalStatsRow/ProposalStatsRowSkeleton";
 import { Quorum } from "src/ui/proposals/Quorum/Quorum";
 import { QuorumBarSkeleton } from "src/ui/proposals/Quorum/QuorumSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTable/VotingActivityTableSkeleton";
-import { useGSCMemberAddresses } from "src/ui/vaults/gscVault/useGSCMemberAddresses";
-import { useVotingPower } from "src/ui/vaults/hooks/useVotingPower";
-import { GSCOnlyToggle } from "src/ui/voters/GSCOnlyToggle";
-import { useGSCVote } from "src/ui/voting/hooks/useGSCVote";
-import { useVote } from "src/ui/voting/hooks/useVote";
+import { useReadProposal } from "src/ui/proposals/hooks/useReadProposal";
+import { useGscMembers } from "src/ui/vaults/gscVault/hooks/useGscMembers";
+import { GSCOnlyToggle } from "src/ui/voters/GscOnlyToggle";
 import { ProposalVoting } from "src/ui/voting/ProposalVoting";
 import { ProposalVotingSkeleton } from "src/ui/voting/ProposalVotingSkeleton";
-import { useAccount, useBlockNumber, useSigner } from "wagmi";
+import { EnsRecords, getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
+import { ProposalStatus, getProposalStatus } from "src/utils/getProposalStatus";
+import { useAccount, usePublicClient } from "wagmi";
 
 export default function ProposalPage(): ReactElement {
   const { query, replace } = useRouter();
   const { id: idParam, votingContract: votingContractAddressParam } = query;
 
-  const id = +(idParam as string);
-  const votingContractAddress = votingContractAddressParam as string;
+  const id = BigInt((idParam as string) || 0);
+  const votingContractAddress = votingContractAddressParam as `0x${string}`;
 
-  const { data: signer } = useSigner();
-  const { address } = useAccount();
-  const { data: blockNumber } = useBlockNumber();
+  const account = useAccount();
 
-  const { data, error, status } = useProposalDetailsPageData(
+  const coreVoting = useReadCoreVoting();
+  const gscVoting = useReadGscVoting();
+  const usedCoreVoting =
+    votingContractAddress === gscVoting?.address ? gscVoting : coreVoting;
+
+  const { data, status } = useProposalDetailsPageData(
     votingContractAddress,
     id,
-    address,
+    account.address,
   );
-  const { data: gscMemberAddresses } = useGSCMemberAddresses();
+  const { gscMembers } = useGscMembers();
 
-  // voting activity filtering
+  // // voting activity filtering
   const [gscOnly, setGscOnly] = useState(false);
   const filteredVotes = useMemo(() => {
-    if (data && gscOnly && gscMemberAddresses) {
+    if (data?.votes && gscOnly && gscMembers) {
       return dedupeVotes(data.votes).filter(({ voter }) =>
-        gscMemberAddresses.includes(voter.address),
+        gscMembers.some((member) => member.address === voter.address),
       );
     }
     return dedupeVotes(data?.votes);
-  }, [data, gscOnly, gscMemberAddresses]);
+  }, [data, gscOnly, gscMembers]);
 
-  const { data: votingPower } = useVotingPower(address);
-  const { mutate: vote } = useVote();
-  const { mutate: gscVote } = useGSCVote();
-
-  const handleVote = (ballot: Ballot) => {
-    if (!data || !signer) {
-      return;
-    }
-    const voteArgs = {
-      signer,
-      proposalId: id,
-      ballot,
-    };
-    if (data.type === "gsc") {
-      return gscVote(voteArgs);
-    }
-    return vote(voteArgs);
-  };
-
-  const { coreVoting, gscVoting } = useCouncil();
-  if (
-    ![coreVoting.address, gscVoting?.address].includes(votingContractAddress) ||
-    !votingContractAddressParam ||
-    !idParam
-  ) {
+  // // Redirect to proposals page if the voting contract is not found.
+  if (!usedCoreVoting) {
     replace("/proposals");
     // Returning empty fragment is to remove the undefined type from the query params.
     return <></>;
   }
 
-  if (status === "error") {
-    return <ErrorMessage error={error} />;
-  }
-
   const proposalTitle = data?.title ?? `Proposal ${id}`;
+
+  // return <>{status}</>;
 
   return (
     <Page>
       <div className="space-y-2">
-        {status === "loading" ? (
+        {status === "pending" ? (
           <Skeleton containerClassName="block w-1/3" />
         ) : (
           <Breadcrumbs
@@ -107,11 +80,11 @@ export default function ProposalPage(): ReactElement {
             currentPage={proposalTitle}
           />
         )}
-        <div className="flex flex-col w-full md:flex-row gap-y-8">
-          <div className="flex flex-col w-full md:max-w-lg">
-            <h1 className="mb-1 text-4xl font-bold w-full">
-              {status === "loading" ? (
-                <Skeleton className="w-full h-16" />
+        <div className="flex w-full flex-col gap-y-8 md:flex-row">
+          <div className="flex w-full flex-col md:max-w-lg">
+            <h1 className="mb-1 w-full text-4xl font-bold">
+              {status === "pending" ? (
+                <Skeleton className="h-16 w-full" />
               ) : (
                 proposalTitle
               )}
@@ -124,9 +97,9 @@ export default function ProposalPage(): ReactElement {
           </div>
 
           <div className="w-full sm:ml-auto md:w-96">
-            {status === "success" ? (
+            {data ? (
               <Quorum
-                current={data.currentQuorum}
+                current={data.currentQuorum || 0n}
                 required={data.requiredQuorum}
                 status={data.status}
               />
@@ -137,7 +110,7 @@ export default function ProposalPage(): ReactElement {
         </div>
       </div>
 
-      {status === "success" ? (
+      {data ? (
         <ProposalStatsRow
           votingContractName={data.votingContractName}
           votingContractAddress={votingContractAddress}
@@ -145,7 +118,7 @@ export default function ProposalPage(): ReactElement {
           createdTransactionHash={data.createdTransactionHash}
           endsAtDate={data.endsAtDate}
           unlockAtDate={data.unlockedAtDate}
-          lastCallAtDate={data.lastCallAtDate}
+          lastCallAtDate={data.lastCallDate}
           executedTransactionHash={data.executedTransactionHash}
           status={data.status}
           className="mb-2"
@@ -154,9 +127,9 @@ export default function ProposalPage(): ReactElement {
         <ProposalStatsRowSkeleton />
       )}
 
-      <div className="flex flex-wrap w-full gap-20 sm:gap-y-0">
+      <div className="flex w-full flex-wrap gap-20 sm:gap-y-0">
         <div className="flex min-w-[280px] grow flex-col gap-y-4 sm:basis-[50%]">
-          {status === "success" ? (
+          {data ? (
             data.paragraphSummary && (
               <p className="mb-5 text-lg">{data.paragraphSummary}</p>
             )
@@ -168,7 +141,7 @@ export default function ProposalPage(): ReactElement {
               Voting Activity {filteredVotes && `(${filteredVotes.length})`}
             </h1>
 
-            {gscMemberAddresses && (
+            {gscMembers && (
               <GSCOnlyToggle
                 on={gscOnly}
                 onToggle={setGscOnly}
@@ -178,7 +151,7 @@ export default function ProposalPage(): ReactElement {
             )}
           </div>
 
-          {status === "success" && filteredVotes ? (
+          {data && filteredVotes ? (
             <VotingActivityTable
               votes={filteredVotes}
               voterEnsRecords={data.voterEnsRecords}
@@ -191,15 +164,11 @@ export default function ProposalPage(): ReactElement {
         <div className="grow basis-[300px] md:grow-0">
           <h2 className="mb-2 text-2xl font-medium">Your Vote</h2>
 
-          {status === "success" ? (
+          {data ? (
             <ProposalVoting
-              atBlock={data.createdAtBlock || blockNumber}
-              account={address}
-              accountBallot={data?.accountBallot}
-              disabled={
-                !signer || !data?.isActive || !votingPower || !+votingPower
-              }
-              onVote={handleVote}
+              coreVotingAddress={votingContractAddress}
+              proposalId={id}
+              vaults={usedCoreVoting.vaults}
             />
           ) : (
             <ProposalVotingSkeleton />
@@ -211,133 +180,135 @@ export default function ProposalPage(): ReactElement {
 }
 
 interface ProposalDetailsPageData {
+  proposalExists: boolean;
   type: "core" | "gsc";
-  votingContractName: string;
   status: ProposalStatus;
   isActive: boolean;
-  currentQuorum: string;
-  requiredQuorum: string | null;
-  createdAtBlock: number | null;
-  createdBy: string | null;
-  createdAtDate: Date | null;
-  createdTransactionHash: string | null;
-  endsAtDate: Date | null;
-  unlockedAtDate: Date | null;
-  lastCallAtDate: Date | null;
-  votes: Vote[];
-  accountBallot?: Ballot;
+  votes?: ReadVote[];
   voterEnsRecords: EnsRecords;
-  descriptionURL: string | null;
+  createdAtBlock: bigint;
+  currentQuorum: bigint;
+  createdTransactionHash?: `0x${string}`;
+  votingContractName?: string;
+  requiredQuorum?: bigint;
+  createdBy?: `0x${string}`;
+  createdAtDate?: Date;
+  endsAtDate?: Date;
+  unlockedAtDate?: Date;
+  lastCallDate?: Date;
+  accountBallot?: Ballot;
+  descriptionURL?: string;
   title?: string;
-  paragraphSummary: string | null;
-  executedTransactionHash: string | null;
+  paragraphSummary?: string;
+  executedTransactionHash?: `0x${string}`;
 }
 
 function useProposalDetailsPageData(
-  votingContractAddress?: string,
-  id?: number,
-  account?: string,
-) {
-  const { context, coreVoting, gscVoting } = useCouncil();
-  const provider = context.provider;
-  const chainId = useChainId();
-  const proposalConfigs = councilConfigs[chainId].coreVoting.proposals;
-  const votingContractName = councilConfigs[chainId].coreVoting.name;
+  coreVotingAddress?: `0x${string}`,
+  id?: bigint,
+  account?: `0x${string}`,
+): {
+  // proposalExists: boolean;
+  data: ProposalDetailsPageData | undefined;
+  status: QueryStatus;
+} {
+  const gscVoting = useReadGscVoting();
+  const config = useCouncilConfig();
+  const client = usePublicClient();
+  const { proposal } = useReadProposal({
+    id,
+    coreVoting: coreVotingAddress,
+  });
 
-  const queryEnabled = votingContractAddress !== undefined && id !== undefined;
-  return useQuery<ProposalDetailsPageData>({
-    queryKey: ["proposalDetailsPage", id],
-    enabled: queryEnabled,
-    queryFn: queryEnabled
+  const isGsc = coreVotingAddress === gscVoting?.address;
+  const votingConfig = isGsc ? config.gscVoting : config.coreVoting;
+  const votingContractName = votingConfig?.name;
+
+  const enabled = !!proposal;
+
+  const { data, status, error } = useQuery<ProposalDetailsPageData>({
+    queryKey: ["proposalDetailsPage", coreVotingAddress, String(proposal?.id)],
+    enabled,
+    queryFn: enabled
       ? async (): Promise<ProposalDetailsPageData> => {
-          let proposal: Proposal | undefined;
-          let type: ProposalDetailsPageData["type"] = "core";
+          const createdTransaction = await proposal.getCreatedTransaction();
+          const createdAtDate = proposal.created
+            ? await getBlockDate(proposal.created, client)
+            : undefined;
 
-          if (votingContractAddress === coreVoting.address) {
-            proposal = coreVoting.getProposal(id);
-          } else if (votingContractAddress === gscVoting?.address) {
-            type = "gsc";
-            proposal = gscVoting.getProposal(id);
-          } else {
-            throw new Error(
-              `No config found for voting contract address ${votingContractAddress}, See src/config.`,
-            );
-          }
-
-          const createdTransactionHash =
-            await proposal.getCreatedTransactionHash();
-          const createdAtBlock = await proposal.getCreatedBlock();
-          const createdAtDate = createdAtBlock
-            ? await getBlockDate(createdAtBlock, provider)
-            : null;
-
-          const expirationBlock = await proposal.getExpirationBlock();
-          const endsAtDate = expirationBlock
-            ? await getBlockDate(expirationBlock, context.provider, {
-                estimateFutureDates: true,
-              })
-            : null;
+          const endsAtDate = proposal.expiration
+            ? await getBlockDate(proposal.expiration, client)
+            : undefined;
 
           const unlockedAtBlock = await proposal.getUnlockBlock();
           const unlockedAtDate = unlockedAtBlock
-            ? await getBlockDate(unlockedAtBlock, provider, {
-                estimateFutureDates: true,
-              })
-            : null;
+            ? await getBlockDate(unlockedAtBlock, client)
+            : undefined;
 
           const lastCallBlock = await proposal.getLastCallBlock();
-          const lastCallAtDate = lastCallBlock
-            ? await getBlockDate(lastCallBlock, provider, {
-                estimateFutureDates: true,
-              })
-            : null;
+          const lastCallDate = lastCallBlock
+            ? await getBlockDate(lastCallBlock, client)
+            : undefined;
 
           const votes = await proposal.getVotes();
           const voterEnsRecords = await getBulkEnsRecords(
-            Array.from(new Set(votes.map((vote) => vote.voter.address))),
-            provider,
+            Array.from(new Set(votes?.map(({ voter }) => voter.address))),
+            client,
           );
 
+          const isExecuted = await proposal.getIsExecuted();
           const currentQuorum = await proposal.getCurrentQuorum();
           const requiredQuorum = await proposal.getRequiredQuorum();
           const results = await proposal.getResults();
+          const isActive = await proposal.getIsActive();
+          const createdBy = await proposal.getCreatedBy();
 
-          const proposalConfig = proposalConfigs[id];
+          const accountBallot = account
+            ? (await proposal.getVote({ account }))?.ballot
+            : undefined;
+
+          const proposalConfig = votingConfig?.proposals[String(id)];
+          const executedTransaction = await proposal.getExecutedTransaction();
 
           return {
-            type,
+            proposalExists: !!proposal,
+            type: isGsc ? "gsc" : "core",
             votingContractName,
             status: getProposalStatus({
-              isExecuted: await proposal.getIsExecuted(),
-              lastCallDate: lastCallAtDate,
+              isExecuted,
+              lastCallDate,
               currentQuorum,
               requiredQuorum,
               results,
             }),
-            isActive: await proposal.getIsActive(),
+            isActive: isActive ?? false,
             currentQuorum,
             requiredQuorum,
-            createdAtBlock,
-            createdBy: await proposal.getCreatedBy(),
+            createdAtBlock: proposal.created,
+            createdBy: createdBy?.address,
             createdAtDate,
             endsAtDate,
             unlockedAtDate,
-            lastCallAtDate: lastCallAtDate,
-            votes: await proposal.getVotes(),
+            lastCallDate,
+            votes,
             voterEnsRecords,
-            createdTransactionHash,
-            accountBallot: account
-              ? (await proposal.getVote(account))?.ballot
-              : undefined,
-            descriptionURL: proposalConfig?.descriptionURL ?? null,
-            paragraphSummary: proposalConfig?.paragraphSummary ?? null,
+            createdTransactionHash: createdTransaction?.hash,
+            accountBallot,
+            descriptionURL: proposalConfig?.descriptionURL,
+            paragraphSummary: proposalConfig?.paragraphSummary,
             title: proposalConfig?.title,
-            executedTransactionHash:
-              await proposal.getExecutedTransactionHash(),
+            executedTransactionHash: executedTransaction?.hash,
           };
+          // return "ProposalDetailsPageData";
         }
       : undefined,
   });
+
+  return {
+    // proposalExists: data?.proposalExists ?? false,
+    data,
+    status,
+  };
 }
 
 /**
@@ -345,12 +316,12 @@ function useProposalDetailsPageData(
  */
 // TODO: This function breaks the build when only the generic signature is used.
 // The overload signature fixes the build and maintains a strong return type.
-function dedupeVotes<T extends Vote[] | undefined>(votes: T): T;
-function dedupeVotes(votes: Vote[] | undefined): Vote[] | undefined {
+function dedupeVotes<T extends ReadVote[] | undefined>(votes: T): T;
+function dedupeVotes(votes: ReadVote[] | undefined): ReadVote[] | undefined {
   if (!votes) {
     return votes;
   }
-  const byVoterAddress: Record<string, Vote> = {};
+  const byVoterAddress: Record<string, ReadVote> = {};
   for (const vote of votes) {
     byVoterAddress[vote.voter.address] = vote;
   }

@@ -4,10 +4,10 @@
   "private": true,
   "files": [
     "base.json",
-    "nextjs.json",
-    "react-library.json"
+    "nextjs.json"
   ],
-  "devDependencies": {
-    "@council/eslint-config": "*"
+  "dependencies": {
+    "@tsconfig/node-lts": "^20.1.1",
+    "@tsconfig/recommended": "^1.0.3"
   }
 }

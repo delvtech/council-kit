@@ -1,0 +1,143 @@
+{
+  "name": "@delvtech/council-core",
+  "version": "0.0.1",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "docs": "typedoc",
+    "watch:docs": "typedoc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest --reporter=verbose",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@delvtech/evm-client": "^0.1.1"
+  },
+  "dependencies": {
+    "@delvtech/council-artifacts": "*",
+    "big.js": "^6.2.1",
+    "fast-json-stable-stringify": "^2.1.0",
+    "lru-cache": "^10.2.0"
+  },
+  "devDependencies": {
+    "@council/eslint-config": "*",
+    "@council/tsconfig": "*",
+    "@delvtech/evm-client": "^0.1.1",
+    "@types/big.js": "^6.2.2",
+    "abitype": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.0.3",
+    "sinon": "^17.0.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.0.2",
+    "typedoc": "^0.25.8",
+    "typedoc-plugin-markdown": "^3.17.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.3.1"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./airdrop": {
+      "types": "./dist/airdrop.d.ts",
+      "default": "./dist/airdrop.js"
+    },
+    "./contract": {
+      "types": "./dist/contract.d.ts",
+      "default": "./dist/contract.js"
+    },
+    "./council": {
+      "types": "./dist/council.d.ts",
+      "default": "./dist/council.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "default": "./dist/errors.js"
+    },
+    "./model": {
+      "types": "./dist/model.d.ts",
+      "default": "./dist/model.js"
+    },
+    "./proposal": {
+      "types": "./dist/proposal.d.ts",
+      "default": "./dist/proposal.js"
+    },
+    "./token": {
+      "types": "./dist/token.d.ts",
+      "default": "./dist/token.js"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "default": "./dist/utils.js"
+    },
+    "./vaults": {
+      "types": "./dist/vaults.d.ts",
+      "default": "./dist/vaults.js"
+    },
+    "./vote": {
+      "types": "./dist/vote.d.ts",
+      "default": "./dist/vote.js"
+    },
+    "./voter": {
+      "types": "./dist/voter.d.ts",
+      "default": "./dist/voter.js"
+    },
+    "./voting": {
+      "types": "./dist/voting.d.ts",
+      "default": "./dist/voting.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "airdrop": [
+        "./dist/airdrop.d.ts"
+      ],
+      "contract": [
+        "./dist/contract.d.ts"
+      ],
+      "council": [
+        "./dist/council.d.ts"
+      ],
+      "error": [
+        "./dist/error.d.ts"
+      ],
+      "model": [
+        "./dist/model.d.ts"
+      ],
+      "proposal": [
+        "./dist/proposal.d.ts"
+      ],
+      "token": [
+        "./dist/token.d.ts"
+      ],
+      "utils": [
+        "./dist/utils.d.ts"
+      ],
+      "vaults": [
+        "./dist/vaults.d.ts"
+      ],
+      "vote": [
+        "./dist/vote.d.ts"
+      ],
+      "voter": [
+        "./dist/voter.d.ts"
+      ],
+      "voting": [
+        "./dist/voting.d.ts"
+      ]
+    }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

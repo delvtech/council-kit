@@ -1,39 +1,55 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { formatUnits, parseUnits } from "ethers/lib/utils";
-import { useCouncil } from "src/ui/council/useCouncil";
+import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { useReadAirdrop } from "src/ui/airdrop/hooks/useReadAirdrop";
+import { useTokenDecimals } from "src/ui/token/hooks/useTokenDecimals";
+import { formatUnits } from "viem";
 import { useAccount } from "wagmi";
 import { useAirdropData } from "./useAirdropData";
+import { useAirdropToken } from "./useAirdropToken";
 
 /**
- * Fetch the amount of an airdrop that can still be claimed by the connected
- * wallet address.
+ * Fetch the amount that can still be claimed from the configured airdrop by the
+ * connected wallet address.
  */
-export function useClaimableAirdropAmount(): UseQueryResult<string> {
-  const { airdrop } = useCouncil();
-  const { address } = useAccount();
-  const { data, status } = useAirdropData();
+export function useClaimableAirdropAmount(): {
+  claimableAmount: bigint;
+  claimableAmountFormatted: `${number}`;
+  status: QueryStatus;
+} {
+  const airdrop = useReadAirdrop();
+  const { address: account } = useAccount();
+  const { airdropData, status: dataStatus } = useAirdropData();
+  const { airdropToken } = useAirdropToken();
+  const { decimals } = useTokenDecimals(airdropToken);
 
-  const enabled = !!airdrop && !!address && status !== "loading";
+  const enabled = !!airdrop && !!account && dataStatus === "success";
 
-  return useQuery<string>({
-    queryKey: ["claimableAirdropAmount", airdrop?.address, address, data],
+  const { data, status } = useQuery<bigint>({
+    queryKey: [
+      "useClaimableAirdropAmount",
+      airdrop?.address,
+      account,
+      airdropData,
+    ],
     enabled,
     queryFn: enabled
       ? async () => {
-          if (!data || !+data.amount) {
-            return "0";
+          if (!airdropData || !airdropData.amount) {
+            return 0n;
           }
-
-          const claimed = await airdrop.getClaimedAmount(address);
-          const token = await airdrop.getToken();
-          const decimals = await token.getDecimals();
-
-          const amountBigNumber = parseUnits(data.amount, decimals);
-          const claimedBigNumber = parseUnits(claimed, decimals);
-          const claimableBigNumber = amountBigNumber.sub(claimedBigNumber);
-
-          return formatUnits(claimableBigNumber, decimals);
+          const claimed = await airdrop.getClaimedAmount({ account });
+          return airdropData.amount - claimed;
         }
       : undefined,
   });
+
+  const claimableAmountFormatted =
+    data !== undefined && decimals !== undefined
+      ? formatUnits(data, decimals)
+      : "0";
+
+  return {
+    claimableAmount: data ?? 0n,
+    claimableAmountFormatted: claimableAmountFormatted as `${number}`,
+    status,
+  };
 }

@@ -1,20 +1,19 @@
-import { ReactElement, useEffect, useState } from "react";
-
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import classNames from "classnames";
-import { constants } from "ethers";
+import { ReactElement, useEffect, useState } from "react";
 import ClaimStep from "src/ui/airdrop/ClaimStep";
 import ConfirmClaimStep from "src/ui/airdrop/ConfirmClaimStep";
 import ConfirmDepositStep from "src/ui/airdrop/ConfirmDepositStep";
 import DepositOrClaimStep from "src/ui/airdrop/DepositOrClaimStep";
 import DepositStep from "src/ui/airdrop/DepositStep";
-import { useAirdropLockingVault } from "src/ui/airdrop/hooks/useAirdropLockingVault";
-import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
+import { useAirdropVault } from "src/ui/airdrop/hooks/useAirdropLockingVault";
 import { useClaimAirdrop } from "src/ui/airdrop/hooks/useClaimAirdrop";
 import { useClaimAndDelegateAirdrop } from "src/ui/airdrop/hooks/useClaimAndDelegateAirdrop";
-import useRouterSteps from "src/ui/router/useRouterSteps";
+import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
+import useRouterSteps from "src/ui/router/hooks/useRouterSteps";
 import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
-import { useAccount, useSigner } from "wagmi";
+import { zeroAddress } from "viem";
+import { useAccount } from "wagmi";
 
 export default function AirdropPage(): ReactElement {
   // Utilities to help with routing between steps
@@ -26,43 +25,38 @@ export default function AirdropPage(): ReactElement {
     ],
   });
 
-  // Determine if the user has any claimable airdrop tokens
-  const { data: claimableAmount } = useClaimableAirdropAmount();
-
   // The address that will receive the airdrop
-  const [recipientAddress, setRecipientAddress] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState<string>();
 
   // The address to delegate to if the user chooses to deposit
-  const [delegateAddress, setDelegateAddress] = useState("");
+  const [delegateAddress, setDelegateAddress] = useState<string>();
 
   // Determine if the user needs to choose a delegate
-  const { data: lockingVault } = useAirdropLockingVault();
-  const { data: currentDelegate } = useDelegate(
-    lockingVault?.address,
-    recipientAddress,
-  );
+  const { airdropVault } = useAirdropVault();
+  const { delegate: currentDelegate } = useDelegate({
+    account: recipientAddress as `0x${string}`,
+    vault: airdropVault,
+  });
   const needsDelegate =
-    currentDelegate && currentDelegate.address === constants.AddressZero;
+    currentDelegate && currentDelegate.address === zeroAddress;
 
   // Set the recipient and delegate addresses to the connected wallet if they
   // haven't been set yet
-  const { address } = useAccount();
+  const account = useAccount();
   useEffect(() => {
-    setRecipientAddress((previousValue) => previousValue || address || "");
-    setDelegateAddress((previousValue) => previousValue || address || "");
-  }, [address]);
+    setRecipientAddress((previousValue) => previousValue || account.address);
+    setDelegateAddress((previousValue) => previousValue || account.address);
+  }, [account.address]);
 
-  const { data: signer } = useSigner();
-  const { mutate: claimAndDelegate } = useClaimAndDelegateAirdrop();
-  const { mutate: claim } = useClaimAirdrop();
-
-  const hasClaimableAmount = !!claimableAmount && !!+claimableAmount;
+  const { claimableAmount } = useClaimableAirdropAmount();
+  const { claimAirdrop } = useClaimAirdrop();
+  const { claimAndDelegateAirdrop } = useClaimAndDelegateAirdrop();
 
   return (
-    <section className="mx-auto max-w-lg flex flex-col justify-center gap-16 mt-14 text-center px-[6vw] box-content">
+    <section className="mx-auto mt-14 box-content flex max-w-lg flex-col justify-center gap-16 px-[6vw] text-center">
       <div className="flex flex-col justify-center gap-8">
         <h1 className="text-5xl font-bold">Airdrop Claim</h1>
-        <ul className="daisy-steps m-auto text-sm w-full">
+        <ul className="daisy-steps m-auto w-full text-sm">
           <li
             data-content="1"
             className={classNames("daisy-step", {
@@ -90,7 +84,7 @@ export default function AirdropPage(): ReactElement {
         </ul>
       </div>
       {(() => {
-        if (!address) {
+        if (!account) {
           return (
             <div className="flex justify-center">
               <ConnectButton />
@@ -113,16 +107,15 @@ export default function AirdropPage(): ReactElement {
           case "confirm-deposit":
             return (
               <ConfirmDepositStep
-                account={recipientAddress}
-                delegate={delegateAddress}
+                account={recipientAddress as `0x${string}`}
+                delegate={delegateAddress as `0x${string}`}
                 onBack={() => goToStep("deposit")}
                 onConfirm={
-                  signer && claimableAmount && +claimableAmount
+                  claimAndDelegateAirdrop
                     ? () =>
-                        claimAndDelegate({
-                          signer,
-                          recipient: recipientAddress,
-                          delegate: delegateAddress,
+                        claimAndDelegateAirdrop({
+                          recipient: recipientAddress as `0x${string}`,
+                          delegate: delegateAddress as `0x${string}`,
                         })
                     : undefined
                 }
@@ -140,14 +133,13 @@ export default function AirdropPage(): ReactElement {
           case "confirm-claim":
             return (
               <ConfirmClaimStep
-                recipient={recipientAddress}
+                recipient={recipientAddress as `0x${string}`}
                 onBack={() => goToStep("claim")}
                 onConfirm={
-                  signer && claimableAmount && +claimableAmount
+                  claimAirdrop
                     ? () =>
-                        claim({
-                          signer,
-                          recipient: recipientAddress,
+                        claimAirdrop({
+                          recipient: recipientAddress as `0x${string}`,
                         })
                     : undefined
                 }
@@ -159,11 +151,9 @@ export default function AirdropPage(): ReactElement {
             return (
               <DepositOrClaimStep
                 onDeposit={
-                  hasClaimableAmount ? () => goToStep("deposit") : undefined
+                  claimableAmount ? () => goToStep("deposit") : undefined
                 }
-                onClaim={
-                  hasClaimableAmount ? () => goToStep("claim") : undefined
-                }
+                onClaim={claimableAmount ? () => goToStep("claim") : undefined}
               />
             );
         }

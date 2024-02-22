@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { ReactElement, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import {
   SortableGridTable,
   SortOptions,
@@ -28,7 +28,7 @@ export function VoterList({
     direction: "DESC",
   });
 
-  const { data: delegatesByVault = {} } = useDelegatesByVault();
+  const { delegatesByVault = {} } = useDelegatesByVault();
   // Memoized to prevent invalidating sortedVoters on every render.
   const delegateAddresses = useMemo(
     () => Object.values(delegatesByVault).map(({ address }) => address),
@@ -51,7 +51,7 @@ export function VoterList({
         default:
           sorted = voters
             .slice()
-            .sort((a, b) => +a.votingPower - +b.votingPower);
+            .sort((a, b) => (a.votingPower >= b.votingPower ? 1 : -1));
           break;
       }
 
@@ -76,7 +76,7 @@ export function VoterList({
         headingRowClassName="grid-cols-[1.5fr_1fr_1fr_56px]"
         bodyRowClassName="group grid-cols-[1.5fr_1fr_1fr_56px]"
         emptyTableElement={
-          <h2 className="mt-4 text-lg text-center">No voters to show</h2>
+          <h2 className="mt-4 text-center text-lg">No voters to show</h2>
         }
         onSort={setSortOptions}
         defaultSortOptions={sortOptions}
@@ -105,9 +105,9 @@ export function VoterList({
                     ensName={ensName}
                   />,
                   numberOfDelegators,
-                  formatBalance(votingPower, 0),
+                  formatVotingPower(votingPower, 0),
                   <span key={`${address}-chevron`}>
-                    <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
+                    <ChevronRightIcon className="size-6 stroke-current opacity-40 transition-all group-hover:opacity-100" />
                   </span>,
                 ],
                 className: isLastDelegate
@@ -129,9 +129,9 @@ export function VoterList({
                     ensName={ensName}
                   />,
                   numberOfDelegators,
-                  formatBalance(votingPower, 0),
+                  formatVotingPower(votingPower, 0),
                   <span key={`${address}-chevron`}>
-                    <ChevronRightIcon className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100" />
+                    <ChevronRightIcon className="size-6 stroke-current opacity-40 transition-all group-hover:opacity-100" />
                   </span>,
                 ],
               };

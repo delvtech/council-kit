@@ -13,20 +13,19 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
-    "postinstall": "husky install"
+    "typecheck": "turbo run typecheck",
+    "postinstall": "husky install",
+    "test": "turbo test"
   },
   "devDependencies": {
-    "@parcel/packager-ts": "2.8.0",
-    "@parcel/transformer-typescript-types": "2.8.0",
+    "eslint": "^8.56.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "os-browserify": "^0.3.0",
-    "prettier": "latest",
-    "turbo": "latest",
-    "typescript": ">=3.0.0"
-  },
-  "resolutions": {
-    "typescript": "4.7.4"
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "turbo": "latest"
   },
   "lint-staged": {
     "{apps,packages}/**/*.{gql,graphql,js,jsx,ts,tsx,json}": [
@@ -34,9 +33,18 @@
       "prettier --write"
     ]
   },
-  "engines": {
-    "node": ">=14.0.0"
+  "resolutions": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "@types/react": "18.2.57",
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "viem": "^2.7.12",
+    "wagmi": "^2.5.7"
   },
-  "dependencies": {},
-  "packageManager": "yarn@1.22.18"
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "yarn@1.22.21"
 }

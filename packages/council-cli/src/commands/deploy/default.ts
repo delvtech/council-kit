@@ -1,43 +1,27 @@
-import {
-  CoreVoting__factory,
-  GSCVault__factory,
-  MockERC20__factory,
-  Timelock__factory,
-} from "@council/typechain";
+import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
+import { Timelock } from "@delvtech/council-artifacts/Timelock";
+import { ReadWriteCouncil } from "@delvtech/council-viem";
+import { command } from "clide-js";
 import colors from "colors";
 import signale from "signale";
-import { chainOption, requiredChain } from "src/options/chain";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { stringifyBigInts } from "src/utils/bigint/stringifyBigInts";
-import {
-  DAY_IN_BLOCKS,
-  DAY_IN_SECONDS,
-  ZERO_ADDRESS,
-} from "src/utils/constants";
-import { createCommandModule } from "src/utils/createCommandModule";
-import {
-  Address,
-  createPublicClient,
-  createWalletClient,
-  Hex,
-  http,
-} from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import { deployCoreVoting } from "./core-voting";
-import { deployGSCVault } from "./gsc-vault";
-import { deployLockingVault } from "./locking-vault";
-import { deployMockERC20 } from "./mock-erc20";
-import { deploySimpleProxy } from "./simple-proxy";
-import { deployTimelock } from "./timelock";
-import { deployTreasury } from "./treasury";
+import { Address, createPublicClient, createWalletClient, http } from "viem";
 import {
   ContractInfo,
   DEFAULT_DEPLOYMENTS_DIR,
   getDeploymentStore,
-} from "./utils/deploymentStore";
+} from "../../deploymentStore.js";
+import { WriteOptions } from "../../reusable-options/writeOptions.js";
+import { DAY_IN_BLOCKS, DAY_IN_SECONDS } from "../../utils/constants.js";
+import { DeployedContract } from "../../utils/deployContract.js";
+import { stringifyBigInts } from "../../utils/stringifyBigInts.js";
+import { mine } from "../server/mine.js";
+import deployCoreVotingCommand from "./core-voting.js";
+import deployGscVaultCommand from "./gsc-vault.js";
+import deployLockingVaultCommand from "./locking-vault.js";
+import deployMockErc20Command from "./mock-erc20.js";
+import deploySimpleProxyCommand from "./simple-proxy.js";
+import deployTimelockCommand from "./timelock.js";
+import deployTreasuryCommand from "./treasury.js";
 
 const defaults = {
   tokenAddress: process.env.VOTING_TOKEN_ADDRESS,
@@ -51,9 +35,11 @@ const defaults = {
   extraVotingBlocks: process.env.EXTRA_VOTING_BLOCKS
     ? +process.env.EXTRA_VOTING_BLOCKS
     : undefined,
-  timelockWaitTime: +(process.env.TIMELOCK_WAIT_TIME || DAY_IN_SECONDS * 3),
+  timelockWaitTime: process.env.TIMELOCK_WAIT_TIME
+    ? +process.env.TIMELOCK_WAIT_TIME
+    : DAY_IN_SECONDS * 3n,
   treasuryAddress: process.env.TREASURY_ADDRESS,
-  staleBlockLag: DAY_IN_BLOCKS * 28,
+  staleBlockLag: DAY_IN_BLOCKS * 28n,
   gscQuorum: process.env.GSC_QUORUM || "3",
   gscLockDuration: process.env.GSC_LOCK_DURATION
     ? +process.env.GSC_LOCK_DURATION
@@ -69,138 +55,132 @@ const defaults = {
   name: "default",
 };
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "default [OPTIONS]",
-  describe:
+export default command({
+  description:
     "Deploy a default version of Council which includes 2 CoreVoting contracts - 1 for general voting with power from a LockingVault deployed behind a SimpleProxy contract, and another for GSC voting with membership in a GSCVault. Also deployed will be a Timelock, Treasury, and if no voting token address is provided, a mock voting token.",
 
-  builder: (yargs) => {
-    const result = yargs.options({
-      "token-address": {
-        describe: "The address of the token used for voting.",
-        type: "string",
-        default: defaults.tokenAddress,
-      },
-      "token-name": {
-        describe:
-          "The name of the mock token to be deployed for voting if no token address is provided.",
-        type: "string",
-        default: defaults.tokenName,
-      },
-      "token-symbol": {
-        describe:
-          "The symbol of the mock token to be deployed for voting if no token address is provided.",
-        type: "string",
-        default: defaults.tokenSymbol,
-      },
-      "base-quorum": {
-        describe:
-          "The minimum voting power required for a proposal to pass. Will be scaled by 10 ** token.decimals.",
-        type: "string",
-        default: defaults.baseQuorum,
-      },
-      "min-proposal-power": {
-        describe:
-          "The minimum voting power required to create a proposal. Will be scaled by 10 ** token.decimals.",
-        type: "string",
-        default: defaults.minProposalPower,
-      },
-      "lock-duration": {
-        describe:
-          "The number of blocks a proposal must wait before it can be executed.",
-        type: "number",
-        default: defaults.lockDuration,
-      },
-      "extra-voting-blocks": {
-        describe:
-          "The number of blocks for which a proposal can still be voted on after it's unlocked.",
-        type: "number",
-        default: defaults.extraVotingBlocks,
-      },
-      "timelock-wait-time": {
-        describe:
-          "The amount of time (in seconds) a proposal must wait in the timelock before it can be executed.",
-        type: "number",
-        default: defaults.timelockWaitTime,
-      },
-      "treasury-address": {
-        describe: "The address of the treasury contract.",
-        type: "string",
-        default: defaults.treasuryAddress,
-      },
-      "stale-block-lag": {
-        describe:
-          "The number of blocks before the delegation history is forgotten. Voting power can't be used on proposals that are older than the stale block lag.",
-        type: "number",
-        default: defaults.staleBlockLag,
-      },
-      "gsc-quorum": {
-        describe:
-          "The minimum voting power required for a GSC proposal to pass.",
-        type: "string",
-        default: defaults.gscQuorum,
-      },
-      "gsc-lock-duration": {
-        describe:
-          "The number of blocks a GSC proposal must wait before it can be executed.",
-        type: "number",
-        default: defaults.gscLockDuration,
-      },
-      "gsc-extra-voting-blocks": {
-        describe:
-          "The number of blocks for which a GSC proposal can still be voted on after it's unlocked.",
-        type: "number",
-        default: defaults.gscExtraVotingBlocks,
-      },
-      "gsc-voting-power-bound": {
-        describe:
-          "The minimum voting power required to become a member of the GSC. Will be scaled by 10 ** token.decimals.",
-        type: "string",
-        default: defaults.gscVotingPowerBound,
-      },
-      "gsc-idle-duration": {
-        describe:
-          "The amount of time (in seconds) a new GSC member must wait after joining before they can vote.",
-        type: "number",
-        default: defaults.gscIdleDuration,
-      },
-      o: {
-        alias: ["out-dir"],
-        describe:
-          "The directory to write the contract addresses to; relative to the current working directory.",
-        type: "string",
-        default: defaults.outDir,
-      },
-      n: {
-        alias: ["name"],
-        describe: "The name of the deployment.",
-        type: "string",
-        default: defaults.name,
-      },
-      c: chainOption,
-      r: rpcUrlOption,
-      w: walletKeyOption,
-    });
-    return result;
+  options: {
+    "token-address": {
+      description: "The address of the token used for voting.",
+      type: "string",
+      default: defaults.tokenAddress,
+    },
+    "token-name": {
+      description:
+        "The name of the mock token to be deployed for voting if no token address is provided.",
+      type: "string",
+      default: defaults.tokenName,
+    },
+    "token-symbol": {
+      description:
+        "The symbol of the mock token to be deployed for voting if no token address is provided.",
+      type: "string",
+      default: defaults.tokenSymbol,
+    },
+    "base-quorum": {
+      description:
+        "The minimum voting power required for a proposal to pass. Will be scaled by 10 ** token.decimals.",
+      type: "string",
+      default: defaults.baseQuorum,
+      required: true,
+    },
+    "min-proposal-power": {
+      description:
+        "The minimum voting power required to create a proposal. Will be scaled by 10 ** token.decimals.",
+      type: "string",
+      default: defaults.minProposalPower,
+      required: true,
+    },
+    "lock-duration": {
+      description:
+        "The number of blocks a proposal must wait before it can be executed.",
+      type: "number",
+      default: defaults.lockDuration,
+    },
+    "extra-voting-blocks": {
+      description:
+        "The number of blocks for which a proposal can still be voted on after it's unlocked.",
+      type: "number",
+      default: defaults.extraVotingBlocks,
+    },
+    "timelock-wait-time": {
+      description:
+        "The amount of time (in seconds) a proposal must wait in the timelock before it can be executed.",
+      type: "number",
+      default: Number(defaults.timelockWaitTime),
+      required: true,
+    },
+    "treasury-address": {
+      description: "The address of the treasury contract.",
+      type: "string",
+      default: defaults.treasuryAddress,
+    },
+    "stale-block-lag": {
+      description:
+        "The number of blocks before the delegation history is forgotten. Voting power can't be used on proposals that are older than the stale block lag.",
+      type: "number",
+      default: Number(defaults.staleBlockLag),
+      required: true,
+    },
+    "gsc-quorum": {
+      description:
+        "The minimum voting power required for a GSC proposal to pass.",
+      type: "string",
+      default: defaults.gscQuorum,
+      required: true,
+    },
+    "gsc-lock-duration": {
+      description:
+        "The number of blocks a GSC proposal must wait before it can be executed.",
+      type: "number",
+      default: defaults.gscLockDuration,
+    },
+    "gsc-extra-voting-blocks": {
+      description:
+        "The number of blocks for which a GSC proposal can still be voted on after it's unlocked.",
+      type: "number",
+      default: defaults.gscExtraVotingBlocks,
+    },
+    "gsc-voting-power-bound": {
+      description:
+        "The minimum voting power required to become a member of the GSC. Will be scaled by 10 ** token.decimals.",
+      type: "string",
+      default: defaults.gscVotingPowerBound,
+      required: true,
+    },
+    "gsc-idle-duration": {
+      description:
+        "The amount of time (in seconds) a new GSC member must wait after joining before they can vote.",
+      type: "number",
+      default: defaults.gscIdleDuration,
+    },
+    out: {
+      alias: ["out-dir"],
+      description:
+        "The directory to write the contract addresses to; relative to the current working directory.",
+      type: "string",
+      default: defaults.outDir,
+    },
+    name: {
+      description: "The name of the deployment.",
+      type: "string",
+      default: defaults.name,
+    },
   },
 
-  handler: async (args) => {
-    const chain = await requiredChain(args.chain);
-    const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-    const walletKey = await requiredWalletKey(args.walletKey);
-
-    const account = privateKeyToAccount(walletKey as Hex);
+  handler: async ({ data, options, fork, next }) => {
+    const { account, chain, rpcUrl } = data as WriteOptions;
 
     const publicClient = createPublicClient({
       transport: http(rpcUrl),
       chain,
     });
-
     const walletClient = createWalletClient({
       account,
       transport: http(rpcUrl),
       chain,
     });
+    const council = new ReadWriteCouncil({ publicClient, walletClient });
 
     const contractInfos: ContractInfo[] = [];
 
@@ -210,13 +190,10 @@ export const { command, describe, builder, handler } = createCommandModule({
     // 1. Voting Token
     // =========================================================================
 
-    let votingTokenAddress = await requiredString(args.tokenAddress, {
-      name: "token-address",
-      message: `Enter voting token address ${colors.dim(
+    let votingTokenAddress = await options.tokenAddress({
+      prompt: `Enter voting token address ${colors.dim(
         "(leave blank to deploy a mock voting token)",
       )}`,
-      initial: defaults.tokenAddress,
-      validate: () => true,
     });
 
     // Used to scale voting power to match the token's decimals
@@ -226,17 +203,9 @@ export const { command, describe, builder, handler } = createCommandModule({
     if (votingTokenAddress) {
       signale.pending("Fetching data from voting token...");
 
-      const tokenName = (await publicClient.readContract({
-        abi: MockERC20__factory.abi,
-        address: votingTokenAddress as Address,
-        functionName: "name",
-      })) as string;
-
-      decimals = (await publicClient.readContract({
-        abi: MockERC20__factory.abi,
-        address: votingTokenAddress as Address,
-        functionName: "decimals",
-      })) as number;
+      const token = council.token(votingTokenAddress as `0x${string}`);
+      const tokenName = await token.getName();
+      decimals = await token.getDecimals();
 
       signale.success(`Data successfully fetched from voting token`);
 
@@ -248,119 +217,88 @@ export const { command, describe, builder, handler } = createCommandModule({
 
     // Deploy a mock voting token if no voting token address was provided
     if (!votingTokenAddress) {
-      const tokenName = await requiredString(args.tokenName, {
-        name: "token-name",
-        message: "Enter voting token name",
-        initial: defaults.tokenName,
+      const tokenName = await options.tokenName({
+        prompt: "Enter voting token name",
       });
 
-      const tokenSymbol = await requiredString(args.tokenSymbol, {
-        name: "token-symbol",
-        message: "Enter voting token symbol",
-        initial: defaults.tokenSymbol,
+      const tokenSymbol = await options.tokenSymbol({
+        prompt: "Enter voting token symbol",
       });
 
-      signale.pending("Deploying MockERC20...");
-
-      const mockERC20 = await deployMockERC20({
-        tokenName,
-        tokenSymbol,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (hash) => {
-          signale.pending(`MockERC20 deployment tx submitted: ${hash}`);
+      const tokenDeployData: DeployedContract = await fork({
+        commands: [deployMockErc20Command],
+        optionValues: {
+          name: tokenName,
+          symbol: tokenSymbol,
         },
       });
-
-      signale.success(`MockERC20 deployed @ ${mockERC20.address}`);
-      votingTokenAddress = mockERC20.address;
-
       contractInfos.push({
         name: tokenName,
-        ...mockERC20,
+        ...tokenDeployData,
       });
+      votingTokenAddress = tokenDeployData.address;
     }
 
     // =========================================================================
     // 2. GSC CoreVoting
     // =========================================================================
 
-    const gscQuorum = await requiredString(args.gscQuorum, {
-      name: "gsc-quorum",
-      message: "Enter GSC quorum",
-      initial: defaults.gscQuorum,
+    const gscQuorum = await options.gscQuorum({
+      prompt: "Enter GSC quorum",
     });
 
-    signale.pending("Deploying GSC CoreVoting...");
-
-    const gscCoreVoting = await deployCoreVoting({
-      quorum: gscQuorum,
-      // As long as you're a member, you can create a proposal
-      minPower: "1",
-      // All members get 1 vote
-      decimals: 0,
-      // There is no GSC for the GSC
-      gsc: ZERO_ADDRESS,
-      // The GSC vault depends on the regular CoreVoting contract being deployed
-      // first so we'll approve it later
-      vaults: [],
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (hash) => {
-        signale.pending(`GSC CoreVoting deployment tx submitted: ${hash}`);
+    const gscCoreVotingDeployData: DeployedContract = await fork({
+      commands: [deployCoreVotingCommand],
+      optionValues: {
+        owner: account.address,
+        quorum: gscQuorum,
+        minPower: gscQuorum,
+        decimals,
       },
     });
-
-    signale.success(`GSC CoreVoting deployed @ ${gscCoreVoting.address}`);
-
     contractInfos.push({
       name: "GSCCoreVoting",
-      ...gscCoreVoting,
+      ...gscCoreVotingDeployData,
     });
 
+    const gscCoreVoting = council.coreVoting({
+      address: gscCoreVotingDeployData.address,
+    });
+    const gscLockDuration = await options.gscLockDuration();
+
     // Set the GSC CoreVoting lock duration if provided
-    if (args.gscLockDuration) {
+    if (gscLockDuration) {
       signale.pending(
-        `Setting GSC CoreVoting lock duration to ${args.gscLockDuration}...`,
+        `Setting GSC CoreVoting lock duration to ${gscLockDuration}...`,
       );
 
-      const hash = await walletClient.writeContract({
-        abi: CoreVoting__factory.abi,
-        address: gscCoreVoting.address as Address,
-        functionName: "setLockDuration",
-        args: [args.gscLockDuration],
+      const hash = await gscCoreVoting.setLockDuration({
+        blocks: BigInt(gscLockDuration),
       });
 
       signale.pending(`GSC CoreVoting lock duration tx submitted: ${hash}`);
-
       await publicClient.waitForTransactionReceipt({ hash });
-
       signale.success(
-        `Successfully set GSC CoreVoting lock duration to ${args.gscLockDuration}`,
+        `Successfully set GSC CoreVoting lock duration to ${gscLockDuration}`,
       );
     }
 
+    const gscExtraVotingBlocks = await options.gscExtraVotingBlocks();
+
     // Set the GSC CoreVoting extra voting time if provided
-    if (args.gscExtraVotingBlocks) {
+    if (gscExtraVotingBlocks) {
       signale.pending(
-        `Setting GSC CoreVoting extra voting time to ${args.gscExtraVotingBlocks}...`,
+        `Setting GSC CoreVoting extra voting time to ${gscExtraVotingBlocks}...`,
       );
 
-      const hash = await walletClient.writeContract({
-        abi: CoreVoting__factory.abi,
-        address: gscCoreVoting.address as Address,
-        functionName: "changeExtraVotingTime",
-        args: [args.gscExtraVotingBlocks],
+      const hash = await gscCoreVoting.changeExtraVotingTime({
+        extraVoteBlocks: BigInt(gscExtraVotingBlocks),
       });
 
       signale.pending(`GSC CoreVoting extra voting time tx submitted: ${hash}`);
-
       await publicClient.waitForTransactionReceipt({ hash });
-
       signale.success(
-        `Successfully set GSC CoreVoting extra voting time to ${args.gscExtraVotingBlocks}`,
+        `Successfully set GSC CoreVoting extra voting time to ${gscExtraVotingBlocks}`,
       );
     }
 
@@ -368,64 +306,42 @@ export const { command, describe, builder, handler } = createCommandModule({
     // 3. Timelock
     // =========================================================================
 
-    const timelockWaitTime = await requiredNumber(args.timelockWaitTime, {
-      name: "timelock-wait-time",
-      message: `Enter timelock wait time ${colors.dim("(in seconds)")}`,
-      initial: defaults.timelockWaitTime,
+    const timelockWaitTime = await options.timelockWaitTime({
+      prompt: `Enter timelock wait time ${colors.dim("(in seconds)")}`,
     });
 
-    signale.pending("Deploying Timelock...");
-
-    const timelock = await deployTimelock({
-      waitTime: timelockWaitTime,
-      gsc: gscCoreVoting.address,
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (hash) => {
-        signale.pending(`Timelock deployment tx submitted: ${hash}`);
+    const timelockDeployData: DeployedContract = await fork({
+      commands: [deployTimelockCommand],
+      optionValues: {
+        waitTime: timelockWaitTime,
+        gsc: gscCoreVotingDeployData.address,
       },
     });
-
-    signale.success(`Timelock deployed @ ${timelock.address}`);
-
     contractInfos.push({
       name: "Timelock",
-      ...timelock,
+      ...timelockDeployData,
     });
 
     // =========================================================================
     // 4. Treasury
     // =========================================================================
 
-    let treasuryAddress = await requiredString(args.treasuryAddress, {
-      name: "treasury-address",
-      message: `Enter Treasury address ${colors.dim(
+    const treasuryAddress = await options.treasuryAddress({
+      prompt: `Enter Treasury address ${colors.dim(
         "(leave blank to deploy a new one)",
       )}`,
-      initial: defaults.treasuryAddress,
-      validate: () => true,
     });
 
     if (!treasuryAddress) {
-      signale.pending("Deploying Treasury...");
-
-      const treasury = await deployTreasury({
-        owner: timelock.address,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (hash) => {
-          signale.pending(`Treasury deployment tx submitted: ${hash}`);
+      const treasuryDeployData: DeployedContract = await fork({
+        commands: [deployTreasuryCommand],
+        optionValues: {
+          owner: timelockDeployData.address,
         },
       });
-
-      signale.success(`Treasury deployed @ ${treasury.address}`);
-      treasuryAddress = treasury.address;
-
       contractInfos.push({
         name: "Treasury",
-        ...treasury,
+        ...treasuryDeployData,
       });
     }
 
@@ -433,128 +349,111 @@ export const { command, describe, builder, handler } = createCommandModule({
     // 5. Voting Vaults
     // =========================================================================
 
-    const staleBlockLag = await requiredNumber(args.staleBlockLag, {
-      name: "stale-block-lag",
-      message: "Enter stale block lag",
-      initial: defaults.staleBlockLag,
+    const staleBlockLag = await options.staleBlockLag({
+      prompt: "Enter stale block lag",
     });
 
-    signale.pending("Deploying LockingVault...");
+    if (chain.id === 31337) {
+      const blocksToMine = staleBlockLag * 2;
+      // Calling queryVotePower on a voting vault that has a stale block lag larger
+      // than the current block height will result in an error. To avoid this, we
+      // we fast forward the block height by the stale block lag.
+      signale.pending(
+        `Fast forwarding block height by ${blocksToMine} blocks...`,
+      );
 
-    const lockingVault = await deployLockingVault({
-      token: votingTokenAddress,
-      staleBlockLag,
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (hash) => {
-        signale.pending(`LockingVault deployment tx submitted: ${hash}`);
+      const blockNumber = await mine({
+        blocks: blocksToMine,
+        client: publicClient,
+      });
+
+      signale.success(
+        `Successfully fast forwarded block height to ${blockNumber}`,
+      );
+    }
+
+    const lockingVaultDeployData: DeployedContract = await fork({
+      commands: [deployLockingVaultCommand],
+      optionValues: {
+        token: votingTokenAddress,
+        staleBlockLag,
       },
     });
-
-    signale.success(`LockingVault deployed @ ${lockingVault.address}`);
-
     contractInfos.push({
       name: "LockingVault",
-      ...lockingVault,
+      ...lockingVaultDeployData,
     });
 
-    signale.pending("Deploying LockingVault SimpleProxy...");
-
-    const lockingVaultProxy = await deploySimpleProxy({
-      owner: timelock.address,
-      implementation: lockingVault.address,
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (hash) => {
-        signale.pending(
-          `LockingVault SimpleProxy deployment tx submitted: ${hash}`,
-        );
+    const lockVaultProxyDeployData: DeployedContract = await fork({
+      commands: [deploySimpleProxyCommand],
+      optionValues: {
+        owner: timelockDeployData.address,
+        implementation: lockingVaultDeployData.address,
       },
     });
-
-    signale.success(
-      `LockingVault SimpleProxy deployed @ ${lockingVaultProxy.address}`,
-    );
 
     contractInfos.push({
       name: "LockingVaultProxy",
-      ...lockingVaultProxy,
+      ...lockVaultProxyDeployData,
     });
 
     // =========================================================================
     // 6. CoreVoting
     // =========================================================================
 
-    const baseQuorum = await requiredString(args.baseQuorum, {
-      name: "base-quorum",
-      message: "Enter base quorum",
-      initial: defaults.baseQuorum,
+    const baseQuorum = await options.baseQuorum({
+      prompt: "Enter base quorum",
     });
 
-    const minProposalPower = await requiredString(args.minProposalPower, {
-      name: "min-proposal-power",
-      message: "Enter minimum proposal power",
-      initial: defaults.minProposalPower,
+    const minProposalPower = await options.minProposalPower({
+      prompt: "Enter minimum proposal power",
     });
 
-    signale.pending("Deploying CoreVoting...");
-
-    const coreVoting = await deployCoreVoting({
-      quorum: baseQuorum,
-      minPower: minProposalPower,
-      decimals,
-      gsc: gscCoreVoting.address,
-      vaults: [lockingVaultProxy.address],
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (hash) => {
-        signale.pending(`CoreVoting deployment tx submitted: ${hash}`);
+    const coreVotingDeployData: DeployedContract = await fork({
+      commands: [deployCoreVotingCommand],
+      optionValues: {
+        quorum: baseQuorum,
+        minPower: minProposalPower,
+        decimals,
+        gsc: gscCoreVotingDeployData.address,
+        vaults: [lockVaultProxyDeployData.address],
       },
     });
-
-    signale.success(`CoreVoting deployed @ ${coreVoting.address}`);
-
     contractInfos.push({
       name: "CoreVoting",
-      ...coreVoting,
+      ...coreVotingDeployData,
     });
 
-    // Set the CoreVoting lock duration if provided
-    if (args.lockDuration) {
-      signale.pending(
-        `Setting CoreVoting lock duration to ${args.lockDuration}...`,
-      );
+    const coreVoting = council.coreVoting({
+      address: coreVotingDeployData.address,
+    });
+    const lockDuration = await options.lockDuration();
 
-      const hash = await walletClient.writeContract({
-        abi: CoreVoting__factory.abi,
-        address: coreVoting.address as Address,
-        functionName: "setLockDuration",
-        args: [args.lockDuration],
+    // Set the CoreVoting lock duration if provided
+    if (lockDuration) {
+      signale.pending(`Setting CoreVoting lock duration to ${lockDuration}...`);
+
+      const hash = await coreVoting.setLockDuration({
+        blocks: BigInt(lockDuration),
       });
 
       signale.pending(`CoreVoting lock duration tx submitted: ${hash}`);
-
       await publicClient.waitForTransactionReceipt({ hash });
-
       signale.success(
-        `Successfully set CoreVoting lock duration to ${args.lockDuration}`,
+        `Successfully set CoreVoting lock duration to ${lockDuration}`,
       );
     }
 
+    const extraVotingBlocks = await options.extraVotingBlocks();
+
     // Set the CoreVoting extra voting time if provided
-    if (args.extraVotingBlocks) {
+    if (extraVotingBlocks) {
       signale.pending(
-        `Setting CoreVoting extra voting time to ${args.extraVotingBlocks}...`,
+        `Setting CoreVoting extra voting time to ${extraVotingBlocks}...`,
       );
 
-      const hash = await walletClient.writeContract({
-        abi: CoreVoting__factory.abi,
-        address: coreVoting.address as Address,
-        functionName: "changeExtraVotingTime",
-        args: [args.extraVotingBlocks],
+      const hash = await coreVoting.changeExtraVotingTime({
+        extraVoteBlocks: BigInt(extraVotingBlocks),
       });
 
       signale.pending(`CoreVoting extra voting time tx submitted: ${hash}`);
@@ -562,7 +461,7 @@ export const { command, describe, builder, handler } = createCommandModule({
       await publicClient.waitForTransactionReceipt({ hash });
 
       signale.success(
-        `Successfully set CoreVoting extra voting time to ${args.extraVotingBlocks}`,
+        `Successfully set CoreVoting extra voting time to ${extraVotingBlocks}`,
       );
     }
 
@@ -570,70 +469,54 @@ export const { command, describe, builder, handler } = createCommandModule({
     // 6. GSCVault
     // =========================================================================
 
-    const gscVotingPowerBound = await requiredString(args.gscVotingPowerBound, {
-      name: "gsc-voting-power-bound",
-      message: "Enter GSC voting power bound",
-      initial: defaults.gscVotingPowerBound,
+    const gscVotingPowerBound = await options.gscVotingPowerBound({
+      prompt: "Enter GSC voting power bound",
     });
 
-    signale.pending("Deploying GSCVault...");
-
-    const gscVault = await deployGSCVault({
-      coreVoting: coreVoting.address,
-      votingPowerBound: gscVotingPowerBound,
-      decimals,
-      owner: timelock.address,
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (hash) => {
-        signale.pending(`GSCVault deployment tx submitted: ${hash}`);
+    const gscVaultDeployData: DeployedContract = await fork({
+      commands: [deployGscVaultCommand],
+      optionValues: {
+        coreVoting: coreVotingDeployData.address,
+        votingPowerBound: gscVotingPowerBound,
+        decimals,
+        owner: timelockDeployData.address,
       },
     });
-
-    signale.success(`GSCVault deployed @ ${gscVault.address}`);
-
     contractInfos.push({
       name: "GSCVault",
-      ...gscVault,
+      ...gscVaultDeployData,
     });
 
+    const gscIdleDuration = await options.gscIdleDuration();
+
     // Set the GSCVault idle duration if provided
-    if (args.gscIdleDuration) {
+    if (gscIdleDuration) {
       signale.pending(
-        `Setting GSCVault idle duration to ${args.gscIdleDuration}...`,
+        `Setting GSCVault idle duration to ${gscIdleDuration}...`,
       );
 
-      const hash = await walletClient.writeContract({
-        abi: GSCVault__factory.abi,
-        address: gscVault.address as Address,
-        functionName: "setIdleDuration",
-        args: [args.gscIdleDuration],
+      const gscVault = council.gscVault(gscCoreVotingDeployData.address);
+      const hash = await gscVault.setIdleDuration({
+        duration: BigInt(gscIdleDuration),
       });
 
       signale.pending(`GSCVault idle duration tx submitted: ${hash}`);
-
       await publicClient.waitForTransactionReceipt({ hash });
-
       signale.success(
-        `Successfully set GSCVault idle duration to ${args.gscIdleDuration}`,
+        `Successfully set GSCVault idle duration to ${gscIdleDuration}`,
       );
     }
 
     // Approve the GSCVault to be used by the GSC CoreVoting contract
     signale.pending("Changing GSCVault status in GSC CoreVoting");
 
-    const gscVaultStatusHash = await walletClient.writeContract({
-      abi: CoreVoting__factory.abi,
-      address: gscCoreVoting.address as Address,
-      functionName: "changeVaultStatus",
-      args: [gscVault.address, true],
+    const gscVaultStatusHash = await coreVoting.changeVaultStatus({
+      vault: gscVaultDeployData.address,
+      isValid: true,
     });
 
     signale.pending(`GSCVault status tx submitted: ${gscVaultStatusHash}`);
-
     await publicClient.waitForTransactionReceipt({ hash: gscVaultStatusHash });
-
     signale.success("Successfully changed GSCVault status in GSC CoreVoting");
 
     // =========================================================================
@@ -643,68 +526,57 @@ export const { command, describe, builder, handler } = createCommandModule({
     signale.pending("Setting GSC CoreVoting owner to Timelock...");
 
     const gscCoreVotingOwnerHash = await walletClient.writeContract({
-      abi: CoreVoting__factory.abi,
-      address: gscCoreVoting.address as Address,
+      abi: CoreVoting.abi,
+      address: gscCoreVotingDeployData.address as Address,
       functionName: "setOwner",
-      args: [timelock.address],
+      args: [timelockDeployData.address],
     });
 
     signale.pending(
       `GSC CoreVoting owner tx submitted: ${gscCoreVotingOwnerHash}`,
     );
-
     await publicClient.waitForTransactionReceipt({
       hash: gscCoreVotingOwnerHash,
     });
-
     signale.success("Successfully set GSC CoreVoting owner to Timelock");
     signale.pending("Setting CoreVoting owner to Timelock...");
 
     const coreVotingOwnerHash = await walletClient.writeContract({
-      abi: CoreVoting__factory.abi,
+      abi: CoreVoting.abi,
       address: coreVoting.address as Address,
       functionName: "setOwner",
-      args: [timelock.address],
+      args: [timelockDeployData.address],
     });
 
     signale.pending(`CoreVoting owner tx submitted: ${coreVotingOwnerHash}`);
-
     await publicClient.waitForTransactionReceipt({ hash: coreVotingOwnerHash });
     signale.success("Successfully set CoreVoting owner to Timelock");
-
     signale.pending("Setting Timelock owner to CoreVoting...");
 
     const timelockOwnerHash = await walletClient.writeContract({
-      abi: Timelock__factory.abi,
-      address: timelock.address as Address,
+      abi: Timelock.abi,
+      address: timelockDeployData.address,
       functionName: "setOwner",
       args: [coreVoting.address],
     });
 
     signale.pending(`Timelock owner tx submitted: ${timelockOwnerHash}`);
-
     await publicClient.waitForTransactionReceipt({ hash: timelockOwnerHash });
-
     signale.success("Successfully set Timelock owner to CoreVoting");
 
     // =========================================================================
     // 8. Save the addresses
     // =========================================================================
 
-    const deploymentName = await requiredString(args.name, {
-      name: "name",
-      message: "Enter deployment name",
-      initial: defaults.name,
+    const deploymentName = await options.name({
+      prompt: "Enter deployment name",
     });
 
-    const outDir = await requiredString(args.outDir, {
-      name: "out-dir",
-      message: "Enter output directory",
-      initial: defaults.outDir,
+    const outDir = await options.outDir({
+      prompt: "Enter output directory",
     });
 
     const store = getDeploymentStore(deploymentName, chain.id, outDir);
-
     await store.set({
       name: deploymentName,
       chainId: chain.id,
@@ -729,5 +601,7 @@ export const { command, describe, builder, handler } = createCommandModule({
       console.log(`${contractInfo.name}: ${contractInfo.address}`);
     });
     console.log(colors.dim(`${"=".repeat(80)}`));
+
+    next(contractInfos);
   },
 });

@@ -1,47 +1,40 @@
-import { VestingVault } from "@council/sdk";
-import {
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { Signer } from "ethers";
-import index from "react-hot-toast";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
-import { useCouncil } from "src/ui/council/useCouncil";
+import { MutationStatus } from "@tanstack/react-query";
+import { useWrite } from "src/ui/contract/hooks/useWrite";
+import { useReadWriteCouncil } from "src/ui/council/hooks/useReadWriteCouncil";
 
-interface ChangeDelegateArguments {
-  signer: Signer;
-  delegate: string;
+export interface ChangeDelegateOptions {
+  vaultAddress: `0x${string}`;
+  newDelegate: `0x${string}`;
 }
 
-export function useChangeDelegate(
-  vaultAddress: string,
-): UseMutationResult<string, unknown, ChangeDelegateArguments> {
-  const { context } = useCouncil();
-  const queryClient = useQueryClient();
-  let toastId: string;
-  return useMutation(
-    ({ signer, delegate }: ChangeDelegateArguments): Promise<string> => {
-      const vault = new VestingVault(vaultAddress, context);
-      return vault.changeDelegate(signer, delegate, {
-        onSubmitted: () => (toastId = index.loading("Delegating")),
-      });
+export function useChangeDelegate(): {
+  changeDelegate: ((options: ChangeDelegateOptions) => void) | undefined;
+  status: MutationStatus;
+  transactionHash: `0x${string}` | undefined;
+} {
+  const council = useReadWriteCouncil();
+  const enabled = !!council;
+
+  const { write, status, transactionHash } = useWrite({
+    writeFn: ({
+      newDelegate,
+      vaultAddress,
+    }: ChangeDelegateOptions): Promise<`0x${string}`> => {
+      if (!enabled) {
+        throw new Error(
+          "Connection to council not available. Check your wallet connection.",
+        );
+      }
+
+      return council
+        .vestingVault(vaultAddress)
+        .changeDelegate({ delegate: newDelegate });
     },
-    {
-      onSuccess: (_, { delegate }) => {
-        index.success(`Successfully delegated to ${formatAddress(delegate)}!`, {
-          id: toastId,
-        });
-        // Invalidates the UI cache so that components will refetch the latest data.
-        // Note, the SDK has its own data cache that is cleared when we call changeDelegate.
-        queryClient.invalidateQueries();
-      },
-      onError(error, { delegate }) {
-        index.error(`Failed to delegate to ${formatAddress(delegate)}!`, {
-          id: toastId,
-        });
-        console.error(error);
-      },
-    },
-  );
+  });
+
+  return {
+    changeDelegate: enabled ? write : undefined,
+    status,
+    transactionHash,
+  };
 }

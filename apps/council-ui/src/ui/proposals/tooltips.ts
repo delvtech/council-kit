@@ -1,4 +1,4 @@
-import { ProposalStatus } from "src/proposals/getProposalStatus";
+import { ProposalStatus } from "src/utils/getProposalStatus";
 
 export const EXECUTED_STATUS = "This proposal passed and was executed.";
 export const EXPIRED_STATUS =

@@ -1,107 +1,94 @@
-import { VestingVault__factory } from "@council/typechain";
+import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "add-grant-and-delegate [OPTIONS]",
-    aliases: ["addGrantAndDelegate"],
-    describe: "Encode call data for VestingVault.addGrantAndDelegate",
+export default command({
+  description: "Encode call data for VestingVault.addGrantAndDelegate",
 
-    builder: (yargs) => {
-      return yargs.options({
-        w: {
-          alias: ["who", "address"],
-          describe: "The grant recipient",
-          type: "string",
-        },
-        a: {
-          alias: ["amount"],
-          describe: "The total grant value",
-          type: "string",
-        },
-        p: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-        s: {
-          alias: ["start-time", "startTime"],
-          describe:
-            "An optional non standard start time (in seconds). If set to zero then the start time will be made the block this is executed in",
-          type: "number",
-          default: 0,
-        },
-        e: {
-          alias: ["expiration"],
-          describe:
-            "The timestamp (in seconds) when the grant ends and all tokens are unlocked",
-          type: "number",
-        },
-        c: {
-          alias: ["cliff"],
-          describe:
-            "The timestamp (in seconds) when the grant begins vesting. No tokens will be unlocked until this timestamp has been reached",
-          type: "number",
-        },
-        d: {
-          alias: ["delegate"],
-          describe:
-            "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate",
-          type: "string",
-        },
-      });
+  options: {
+    who: {
+      alias: ["address"],
+      description: "The grant recipient",
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const who = await requiredString(args.who, {
-        name: "who",
-        message: "Enter recipient address",
-      });
-
-      const amount = await requiredString(args.amount, {
-        name: "amount",
-        message: "Enter total grant amount",
-      });
-
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
-
-      const expiration = await requiredNumber(args.expiration, {
-        name: "expiration",
-        message: "Enter expiration timestamp (in seconds)",
-      });
-
-      const cliff = await requiredNumber(args.cliff, {
-        name: "cliff",
-        message: "Enter cliff timestamp (in seconds)",
-      });
-
-      const delegate = await requiredString(args.delegate, {
-        name: "delegate",
-        message: "Enter delegate address",
-      });
-
-      signale.success(
-        encodeAddGrantAndDelegate({
-          who,
-          amount,
-          decimals,
-          startTime: args.startTime,
-          expiration,
-          cliff,
-          delegate,
-        }),
-      );
+    amount: {
+      description: "The total grant value",
+      type: "string",
+      required: true,
     },
-  });
+    decimals: {
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    "start-time": {
+      description:
+        "An optional non standard start time (in seconds). If set to zero then the start time will be made the block this is executed in",
+      type: "number",
+      default: 0,
+    },
+    expiration: {
+      description:
+        "The timestamp (in seconds) when the grant ends and all tokens are unlocked",
+      type: "number",
+      required: true,
+    },
+    cliff: {
+      description:
+        "The timestamp (in seconds) when the grant begins vesting. No tokens will be unlocked until this timestamp has been reached",
+      type: "number",
+      required: true,
+    },
+    delegate: {
+      description:
+        "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate",
+      type: "string",
+      required: true,
+    },
+  },
+
+  handler: async ({ options, next }) => {
+    const who = await options.who({
+      prompt: "Enter recipient address",
+    });
+
+    const amount = await options.amount({
+      prompt: "Enter total grant amount",
+    });
+
+    const decimals = await options.decimals();
+
+    const startTime = await options.startTime();
+
+    const expiration = await options.expiration({
+      prompt: "Enter expiration timestamp (in seconds)",
+    });
+
+    const cliff = await options.cliff({
+      prompt: "Enter cliff timestamp (in seconds)",
+    });
+
+    const delegate = await options.delegate({
+      prompt: "Enter delegate address",
+    });
+
+    const encoded = encodeAddGrantAndDelegate({
+      who,
+      amount,
+      decimals,
+      startTime,
+      expiration,
+      cliff,
+      delegate,
+    });
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 interface EncodeAddGrantAndDelegateOptions {
   who: string;
@@ -123,15 +110,15 @@ export function encodeAddGrantAndDelegate({
   delegate,
 }: EncodeAddGrantAndDelegateOptions): string {
   return encodeFunctionData({
-    abi: VestingVault__factory.abi,
+    abi: VestingVault.abi,
     functionName: "addGrantAndDelegate",
     args: [
-      who,
-      parseUnits(amount as `${number}`, decimals),
-      startTime,
-      expiration,
-      cliff,
-      delegate,
+      who as `0x${string}`,
+      parseUnits(amount, decimals),
+      BigInt(startTime),
+      BigInt(expiration),
+      BigInt(cliff),
+      delegate as `0x${string}`,
     ],
   });
 }

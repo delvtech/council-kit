@@ -1,54 +1,35 @@
-import { Timelock__factory } from "@council/typechain";
+import { Timelock } from "@delvtech/council-artifacts/Timelock";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredCallHash } from "src/options/utils/requiredCallHash";
-import { createCommandModule } from "src/utils/createCommandModule";
+import {
+  callHashOptions,
+  getCallHash,
+} from "src/reusable-options/call-hash.js";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "stop-call [OPTIONS]",
-    aliases: ["stopCall"],
-    describe: "Encode call data for Timelock.stopCall",
+export default command({
+  description: "Encode call data for Timelock.stopCall",
 
-    builder: (yargs) => {
-      return yargs.options({
-        h: {
-          alias: ["call-hash", "callHash"],
-          describe: "The hash entry to remove",
-          type: "string",
-        },
-        t: {
-          alias: ["targets"],
-          describe:
-            "A list of addresses to call. This will be used with the `-d | --calldatas` option to create a call hash if one isn't provided via the `-h | --call-hash` option.",
-          type: "array",
-          string: true,
-        },
-        d: {
-          alias: ["calldatas"],
-          describe:
-            "Encoded call data for each target. This will be used with the `-t | --targets` option to create a call hash if one isn't provided via the `-h | --call-hash` option.",
-          type: "array",
-          string: true,
-        },
-      });
-    },
+  options: callHashOptions,
 
-    handler: async (args) => {
-      const callHash = await requiredCallHash(
-        args.callHash,
-        args.targets,
-        args.calldatas,
-      );
+  handler: async ({ options, next }) => {
+    const callHash = await getCallHash(
+      options.callHash,
+      options.targets,
+      options.calldatas,
+    );
 
-      signale.success(encodeStopCall(callHash));
-    },
-  });
+    const encoded = encodeStopCall(callHash);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeStopCall(callHash: string): string {
   return encodeFunctionData({
-    abi: Timelock__factory.abi,
+    abi: Timelock.abi,
     functionName: "stopCall",
-    args: [callHash],
+    args: [callHash as `0x${string}`],
   });
 }

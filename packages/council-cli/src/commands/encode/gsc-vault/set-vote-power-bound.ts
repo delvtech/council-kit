@@ -1,44 +1,36 @@
-import { GSCVault__factory } from "@council/typechain";
+import { GSCVault } from "@delvtech/council-artifacts/GSCVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredNumberString } from "src/options/utils/requiredNumberString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, aliases, builder, handler } = createCommandModule({
-  command: "set-vote-power-bound [OPTIONS]",
-  aliases: ["setVotePowerBound"],
-  describe: "Encode call data for GSCVault.setVotePowerBound",
+export default command({
+  description: "Encode call data for GSCVault.setVotePowerBound",
 
-  builder: (yargs) => {
-    return yargs.options({
-      p: {
-        alias: ["power", "new-bound", "newBound"],
-        describe: "The new required voting power to become a member",
-        type: "string",
-      },
-      d: {
-        alias: ["decimals"],
-        describe:
-          "The decimal precision used by the contract. The power option will be multiplied by (10 ** decimals). For example, if power is 100 and decimals is 18, then the result will be 100000000000000000000",
-        type: "number",
-      },
-    });
+  options: {
+    bound: {
+      alias: ["power"],
+      description: "The new required voting power to become a member",
+      type: "string",
+      required: true,
+    },
+    decimals: {
+      description:
+        "The decimal precision used by the contract. The power option will be multiplied by (10 ** decimals). For example, if power is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
   },
 
-  handler: async (args) => {
-    const power = await requiredNumberString(args.power, {
-      name: "power",
-      message: "Enter new voting power bound",
+  handler: async ({ options, next }) => {
+    const power = await options.power({
+      prompt: "Enter new voting power bound",
     });
 
-    const decimals = await requiredNumber(args.decimals, {
-      name: "decimals",
-      message: "Enter decimal precision",
-      initial: 18,
-    });
+    const decimals = await options.decimals();
 
-    signale.success(encodeSetVotePowerBound(power, decimals));
+    const encoded = encodeSetVotePowerBound(power, decimals);
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
@@ -47,8 +39,8 @@ export function encodeSetVotePowerBound(
   decimals: number,
 ): string {
   return encodeFunctionData({
-    abi: GSCVault__factory.abi,
+    abi: GSCVault.abi,
     functionName: "setVotePowerBound",
-    args: [parseUnits(power as `${number}`, decimals)],
+    args: [parseUnits(power, decimals)],
   });
 }

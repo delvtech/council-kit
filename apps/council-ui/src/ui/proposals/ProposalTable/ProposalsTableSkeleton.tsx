@@ -22,7 +22,7 @@ export function ProposalsTableSkeleton(): ReactElement {
           <Skeleton />
           <Skeleton />
           <span>
-            <ChevronRightIcon className="w-6 h-6 stroke-base-content opacity-40" />
+            <ChevronRightIcon className="size-6 stroke-base-content opacity-40" />
           </span>
         </GridTableRow>
       ))}

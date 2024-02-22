@@ -1,49 +1,45 @@
-import { Timelock__factory } from "@council/typechain";
+import { Timelock } from "@delvtech/council-artifacts/Timelock";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredArray } from "src/options/utils/requiredArray";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "execute [OPTIONS]",
-  describe: "Encode call data for Timelock.execute",
+export default command({
+  description: "Encode call data for Timelock.execute",
 
-  builder: (yargs) => {
-    return yargs.options({
-      t: {
-        alias: ["targets"],
-        describe: "A list of target addresses the timelock contract will call",
-        type: "array",
-        string: true,
-      },
-      d: {
-        alias: ["calldatas"],
-        describe: "Encoded call data for each target",
-        type: "array",
-        string: true,
-      },
-    });
+  options: {
+    targets: {
+      description: "A list of target addresses the timelock contract will call",
+      type: "array",
+      required: true,
+    },
+    data: {
+      alias: ["calldatas"],
+      description: "Encoded call data for each target",
+      type: "array",
+      required: true,
+    },
   },
 
-  handler: async (args) => {
-    const targets = await requiredArray(args.targets, {
-      name: "targets",
-      message: "Enter target addresses",
+  handler: async ({ options, next }) => {
+    const targets = await options.targets({
+      prompt: "Enter target addresses",
     });
 
-    const calldatas = await requiredArray(args.calldatas, {
-      name: "calldatas",
-      message: "Enter call data for each target",
+    const calldatas = await options.calldatas({
+      prompt: "Enter call data for each target",
     });
 
-    signale.success(encodeExecute(targets, calldatas));
+    const encoded = encodeExecute(targets, calldatas);
+
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
 export function encodeExecute(targets: string[], calldatas: string[]): string {
   return encodeFunctionData({
-    abi: Timelock__factory.abi,
+    abi: Timelock.abi,
     functionName: "execute",
-    args: [targets, calldatas],
+    args: [targets as `0x${string}`[], calldatas as `0x${string}`[]],
   });
 }

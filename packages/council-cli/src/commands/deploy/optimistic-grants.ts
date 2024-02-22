@@ -1,74 +1,58 @@
-import { OptimisticGrants__factory } from "@council/typechain";
+import { OptimisticGrants } from "@delvtech/council-artifacts/OptimisticGrants";
+import { command } from "clide-js";
 import signale from "signale";
-import { chainOption, requiredChain } from "src/options/chain";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { WriteOptions } from "src/reusable-options/writeOptions.js";
+import { PrivateKeyAccount } from "viem";
 import { Chain } from "viem/chains";
+import {
+  DeployedContract,
+  deployContract,
+} from "../../utils/deployContract.js";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "optimistic-grants [OPTIONS]",
-    aliases: ["OptimisticGrants"],
-    describe: "Deploy an OptimisticGrants contract",
+export default command({
+  description: "Deploy an OptimisticGrants contract",
 
-    builder: (yargs) => {
-      return yargs.options({
-        t: {
-          alias: ["token"],
-          describe: "The address of the ERC20 token to distribute",
-          type: "string",
-        },
-        g: {
-          alias: ["governance"],
-          describe:
-            "The governance contract's address for ACL (e.g., a Timelock contract)",
-          type: "string",
-        },
-        c: chainOption,
-        u: rpcUrlOption,
-        w: walletKeyOption,
-      });
+  options: {
+    token: {
+      description: "The address of the ERC20 token to distribute",
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const token = await requiredString(args.token, {
-        name: "token",
-        message: "Enter token address",
-      });
-
-      const governance = await requiredString(args.governance, {
-        name: "governance",
-        message: "Enter governance address (e.g., a Timelock contract)",
-      });
-
-      const chain = await requiredChain(args.chain);
-      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-      const walletKey = await requiredWalletKey(args.walletKey);
-      const account = privateKeyToAccount(walletKey as Hex);
-
-      signale.pending("Deploying OptimisticGrants...");
-
-      const { address } = await deployOptimisticGrants({
-        token,
-        governance,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (txHash) => {
-          signale.pending(
-            `OptimisticGrants deployment tx submitted: ${txHash}`,
-          );
-        },
-      });
-
-      signale.success(`OptimisticGrants deployed @ ${address}`);
+    governance: {
+      description:
+        "The governance contract's address for ACL (e.g., a Timelock contract)",
+      type: "string",
+      required: true,
     },
-  });
+  },
+  handler: async ({ data, options, next }) => {
+    const { account, chain, rpcUrl } = data as WriteOptions;
+
+    const token = await options.token({
+      prompt: "Enter token address",
+    });
+
+    const governance = await options.governance({
+      prompt: "Enter governance address (e.g., a Timelock contract)",
+    });
+
+    signale.pending("Deploying OptimisticGrants...");
+
+    const deployData = await deployOptimisticGrants({
+      token,
+      governance,
+      account,
+      rpcUrl,
+      chain,
+      onSubmitted: (txHash) => {
+        signale.pending(`OptimisticGrants deployment tx submitted: ${txHash}`);
+      },
+    });
+
+    signale.success(`OptimisticGrants deployed @ ${deployData.address}`);
+    next(deployData);
+  },
+});
 
 export interface DeployOptimisticGrantsOptions {
   token: string;
@@ -88,9 +72,9 @@ export async function deployOptimisticGrants({
   onSubmitted,
 }: DeployOptimisticGrantsOptions): Promise<DeployedContract> {
   return deployContract({
-    abi: OptimisticGrants__factory.abi,
-    args: [token, governance],
-    bytecode: OptimisticGrants__factory.bytecode,
+    abi: OptimisticGrants.abi,
+    args: [token as `0x${string}`, governance as `0x${string}`],
+    bytecode: OptimisticGrants.bytecode,
     account,
     rpcUrl,
     chain,

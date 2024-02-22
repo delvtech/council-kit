@@ -1,55 +1,46 @@
-import { CoreVoting__factory } from "@council/typechain";
+import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredNumberString } from "src/options/utils/requiredNumberString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-default-quorum [OPTIONS]",
-    aliases: ["setDefaultQuorum"],
-    describe: "Encode call data for CoreVoting.setDefaultQuorum",
+export default command({
+  description: "Encode call data for CoreVoting.setDefaultQuorum",
 
-    builder: (yargs) => {
-      return yargs.options({
-        p: {
-          alias: ["power", "quorum"],
-          describe: "The new base quorum",
-          type: "string",
-        },
-        d: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision used by the contract. The quorum option will be multiplied by (10 ** decimals). For example, if quorum is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-      });
+  options: {
+    power: {
+      alias: ["quorum"],
+      description: "The new base quorum",
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const power = await requiredNumberString(args.power, {
-        name: "power",
-        message: "Enter new base quorum",
-      });
-
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
-
-      signale.success(encodeSetDefaultQuorum(power, decimals));
+    decimals: {
+      description:
+        "The decimal precision used by the contract. The quorum option will be multiplied by (10 ** decimals). For example, if quorum is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
     },
-  });
+  },
+
+  handler: async ({ options, next }) => {
+    const power = await options.power({
+      prompt: "Enter new base quorum",
+    });
+
+    const decimals = await options.decimals();
+
+    const encoded = encodeSetDefaultQuorum(power, decimals);
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetDefaultQuorum(
   quorum: string,
   decimals: number,
 ): string {
   return encodeFunctionData({
-    abi: CoreVoting__factory.abi,
+    abi: CoreVoting.abi,
     functionName: "setDefaultQuorum",
-    args: [parseUnits(quorum as `${number}`, decimals)],
+    args: [parseUnits(quorum, decimals)],
   });
 }

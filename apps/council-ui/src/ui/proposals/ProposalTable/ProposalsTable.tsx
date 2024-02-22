@@ -1,29 +1,29 @@
-import { Ballot } from "@council/sdk";
+import { Ballot } from "@delvtech/council-viem";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement, useMemo, useState } from "react";
-import { formatTimeLeft } from "src/dates/formatTimeLeft";
-import { ProposalStatus } from "src/proposals/getProposalStatus";
 import { makeProposalURL } from "src/routes";
+import { Tooltip } from "src/ui/base/Tooltip";
 import {
-  SortableGridTable,
   SortOptions,
+  SortableGridTable,
 } from "src/ui/base/tables/SortableGridTable";
-import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
 import { tooltipByStatus } from "src/ui/proposals/tooltips";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
+import { formatTimeLeft } from "src/utils/formatTimeLeft";
+import { ProposalStatus } from "src/utils/getProposalStatus";
 import { useAccount } from "wagmi";
 
 export interface ProposalRowData {
   status: ProposalStatus;
-  ballot: Ballot | null;
-  created: Date | null;
-  currentQuorum: string;
-  id: number;
-  votingContractAddress: string;
+  ballot: Ballot | undefined;
+  created: Date | undefined;
+  currentQuorum: bigint;
+  id: bigint;
+  coreVotingAddress: `0x${string}`;
   votingContractName: string;
-  votingEnds: Date | null;
+  votingEnds: Date | undefined;
   sentenceSummary?: string;
   title?: string;
 }
@@ -70,7 +70,7 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
               status,
               ballot,
               id,
-              votingContractAddress,
+              coreVotingAddress: votingContractAddress,
               votingContractName,
               votingEnds,
               sentenceSummary,
@@ -103,7 +103,7 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
 
                 <ChevronRightIcon
                   key={`${id}-chevron`}
-                  className="w-6 h-6 transition-all stroke-current opacity-40 group-hover:opacity-100"
+                  className="size-6 stroke-current opacity-40 transition-all group-hover:opacity-100"
                 />,
               ],
             }),
@@ -112,9 +112,9 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
       </div>
 
       {/* Mobile */}
-      <div className="md:hidden flex flex-col gap-6 h-full">
+      <div className="flex h-full flex-col gap-6 md:hidden">
         {!sortedData.length ? (
-          <div className="bg-base-200 p-10 text-center rounded-b-lg">
+          <div className="rounded-b-lg bg-base-200 p-10 text-center">
             <p className="text-lg">Nothing to show.</p>
           </div>
         ) : (
@@ -124,9 +124,8 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
                 status,
                 ballot,
                 id,
-                votingContractAddress,
+                coreVotingAddress: votingContractAddress,
                 votingContractName,
-                votingEnds,
                 sentenceSummary,
                 title,
               },
@@ -135,10 +134,10 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
               <Link
                 key={i}
                 href={makeProposalURL(votingContractAddress, id)}
-                className="daisy-card bg-base-200 hover:shadow-xl transition-shadow"
+                className="daisy-card bg-base-200 transition-shadow hover:shadow-xl"
               >
                 <div className="daisy-card-body justify-between">
-                  <h3 className="text-2xl daisy-card-title">
+                  <h3 className="daisy-card-title text-2xl">
                     {title ?? `${votingContractName} Proposal ${id}`}
                   </h3>
                   {sentenceSummary && (
@@ -148,12 +147,12 @@ export function ProposalsTable({ rowData }: ProposalsTableProps): ReactElement {
                         : sentenceSummary}
                     </p>
                   )}
-                  <div className="mt-4 grid grid-flow-col auto-cols-fr border-t border-base-300">
-                    <div className=" px-4 py-2 flex flex-col justify-center border-r border-base-300">
+                  <div className="mt-4 grid auto-cols-fr grid-flow-col border-t border-base-300">
+                    <div className=" flex flex-col justify-center border-r border-base-300 px-4 py-2">
                       <span className="text-sm opacity-60">Status</span>
                       <StatusBadge status={status} />
                     </div>
-                    <div className=" px-4 py-2 flex flex-col justify-center">
+                    <div className=" flex flex-col justify-center px-4 py-2">
                       <span className="text-sm opacity-60">Your Ballot</span>
                       {ballot ? (
                         <FormattedBallot ballot={ballot} />
@@ -182,9 +181,9 @@ function sortProposalRowData(
 ) {
   if (key === "status") {
     if (direction === "ASC") {
-      return data.slice().sort((a, b) => +a.currentQuorum - +b.currentQuorum);
+      return data.slice().sort((a, b) => (b.status >= a.status ? 1 : -1));
     } else {
-      return data.slice().sort((a, b) => +b.currentQuorum - +a.currentQuorum);
+      return data.slice().sort((a, b) => (a.status >= b.status ? 1 : -1));
     }
   }
   // safe to assume the desired sort field is voting ends column
@@ -210,7 +209,7 @@ function StatusBadge({ status }: { status: ProposalStatus }) {
   return (
     <Tooltip content={tooltipByStatus[status]}>
       <div
-        className={classNames("font-bold daisy-badge", {
+        className={classNames("daisy-badge font-bold", {
           "daisy-badge-error": status === "FAILED",
           "daisy-badge-info": status === "IN PROGRESS",
           "daisy-badge-success": status === "EXECUTED",

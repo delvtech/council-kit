@@ -1,68 +1,49 @@
-import { Timelock__factory } from "@council/typechain";
+import { Timelock } from "@delvtech/council-artifacts/Timelock";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredCallHash } from "src/options/utils/requiredCallHash";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { createCommandModule } from "src/utils/createCommandModule";
+import {
+  callHashOptions,
+  getCallHash,
+} from "src/reusable-options/call-hash.js";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "increase-time [OPTIONS]",
-    aliases: ["increaseTime"],
-    describe: "Encode call data for Timelock.increaseTime",
+export default command({
+  description: "Encode call data for Timelock.increaseTime",
 
-    builder: (yargs) => {
-      return yargs.options({
-        t: {
-          alias: ["time"],
-          describe: "The amount of time (in seconds) to increase by",
-          type: "number",
-        },
-        h: {
-          alias: ["call-hash", "callHash"],
-          describe: "The hash entry to increase time for",
-          type: "string",
-        },
-        a: {
-          alias: ["targets"],
-          describe:
-            "A list of addresses to call. This will be used with the `-d | --calldatas` option to create a call hash if one isn't provided via the `-h | --call-hash` option.",
-          type: "array",
-          string: true,
-        },
-        d: {
-          alias: ["calldatas"],
-          describe:
-            "Encoded call data for each target. This will be used with the `-t | --targets` option to create a call hash if one isn't provided via the `-h | --call-hash` option.",
-          type: "array",
-          string: true,
-        },
-      });
+  options: {
+    time: {
+      description: "The amount of time (in seconds) to increase by",
+      type: "number",
+      required: true,
     },
+    ...callHashOptions,
+  },
 
-    handler: async (args) => {
-      const timeValue = await requiredNumber(args.time, {
-        name: "time",
-        message: "Enter amount of time (in seconds) to increase by",
-      });
+  handler: async ({ options, next }) => {
+    const timeValue = await options.time({
+      prompt: "Enter amount of time (in seconds) to increase by",
+    });
 
-      const callHash = await requiredCallHash(
-        args.callHash,
-        args.targets,
-        args.calldatas,
-      );
+    const callHash = await getCallHash(
+      options.callHash,
+      options.targets,
+      options.calldatas,
+    );
 
-      signale.success(encodeIncreaseTime(timeValue.toString(), callHash));
-    },
-  });
+    const encoded = encodeIncreaseTime(timeValue.toString(), callHash);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeIncreaseTime(
   timeValue: string,
   callHash: string,
 ): string {
   return encodeFunctionData({
-    abi: Timelock__factory.abi,
+    abi: Timelock.abi,
     functionName: "increaseTime",
-    args: [timeValue, callHash],
+    args: [BigInt(timeValue), callHash as `0x${string}`],
   });
 }

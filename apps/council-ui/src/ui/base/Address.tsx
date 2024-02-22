@@ -4,7 +4,7 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 
 interface AddressProps {
-  address: string;
+  address: `0x${string}`;
   /**
    * If provided this will be rendered instead of the formatted address.
    */

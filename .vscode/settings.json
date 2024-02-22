@@ -11,5 +11,17 @@
 			"url": "./packages/council-deploy/src/deployments/deployments.schema.json"
 		}
 	],
-	"markdown.extension.toc.levels": "2..6"
+	"markdown.extension.toc.levels": "2..6",
+	"cSpell.words": [
+		"abitype",
+		"calldatas",
+		"Delegators",
+		"delvtech",
+		"merkle",
+		"Timelock",
+		"tsup",
+		"typecheck",
+		"unvested",
+		"Viem"
+	]
 }

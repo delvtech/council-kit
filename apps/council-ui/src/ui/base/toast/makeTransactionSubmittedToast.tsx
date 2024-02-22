@@ -1,7 +1,7 @@
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import toast from "react-hot-toast";
 import { SupportedChainId } from "src/config/council.config";
-import { makeEtherscanTransactionURL } from "src/etherscan/makeEtherscanTransactionURL";
+import { makeEtherscanTransactionURL } from "src/utils/etherscan/makeEtherscanTransactionURL";
 
 export function makeTransactionSubmittedToast(
   message: string,

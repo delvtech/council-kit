@@ -1,20 +1,19 @@
-import { Ballot, Vote } from "@council/sdk";
-import { FixedNumber } from "ethers";
+import { Ballot, ReadVote } from "@delvtech/council-viem";
 import { ReactElement, useMemo, useState } from "react";
-import { EnsRecords } from "src/ens/getBulkEnsRecords";
 import { makeVoterURL } from "src/routes";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import {
-  SortableGridTable,
   SortOptions,
+  SortableGridTable,
 } from "src/ui/base/tables/SortableGridTable";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
+import { EnsRecords } from "src/utils/getBulkEnsRecords";
 
 type SortField = "votingPower" | "ballot";
 
 interface VotingActivityTableProps {
-  votes: Vote[];
+  votes: ReadVote[];
   voterEnsRecords: EnsRecords;
 }
 
@@ -33,7 +32,7 @@ export function VotingActivityTable({
   );
 
   return (
-    <div className="w-full overflow-auto max-h-96">
+    <div className="max-h-96 w-full overflow-auto">
       <SortableGridTable
         headingRowClassName="grid-cols-[2fr-1fr-1fr]"
         bodyRowClassName="grid-cols-[2fr-1fr-1fr]"
@@ -58,7 +57,7 @@ export function VotingActivityTable({
                 address={voter.address}
                 label={voterEnsRecords[voter.address] || undefined}
               />,
-              formatBalance(power),
+              formatVotingPower(power),
               <FormattedBallot key={`${i}-ballot`} ballot={ballot} />,
             ],
           };
@@ -75,25 +74,16 @@ const ballotSortIndexes: Record<Ballot, number> = {
   no: 0,
 };
 
-function sortVotes({ key, direction }: SortOptions<SortField>, data: Vote[]) {
+function sortVotes(
+  { key, direction }: SortOptions<SortField>,
+  data: ReadVote[],
+) {
   switch (key) {
     case "votingPower":
       if (direction === "ASC") {
-        return data
-          .slice()
-          .sort((a, b) =>
-            FixedNumber.from(a.power)
-              .subUnsafe(FixedNumber.from(b.power))
-              .toUnsafeFloat(),
-          );
+        return data.slice().sort((a, b) => (a.power >= b.power ? 1 : -1));
       }
-      return data
-        .slice()
-        .sort((a, b) =>
-          FixedNumber.from(b.power)
-            .subUnsafe(FixedNumber.from(a.power))
-            .toUnsafeFloat(),
-        );
+      return data.slice().sort((a, b) => (b.power >= a.power ? 1 : -1));
     case "ballot":
       if (direction === "ASC") {
         return data

@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Input, InputProps } from "./Input";
+import { Input, InputProps } from "src/ui/base/forms/Input";
 
 export interface NumericInputProps extends InputProps {
   maxButtonValue?: string | number;

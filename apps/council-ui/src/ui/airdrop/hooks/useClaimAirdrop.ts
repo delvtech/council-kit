@@ -1,72 +1,42 @@
-import { UseMutationResult, useQueryClient } from "@tanstack/react-query";
-import { Signer } from "ethers";
-import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
-import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
-import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
-import { useMutation } from "wagmi";
+import { MutationStatus } from "@tanstack/react-query";
+import { useReadWriteAirdrop } from "src/ui/airdrop/hooks/useReadWriteAirdrop";
+import { useWrite } from "src/ui/contract/hooks/useWrite";
 import { useAirdropData } from "./useAirdropData";
 import { useClaimableAirdropAmount } from "./useClaimableAirdropAmount";
 
-interface ClaimArguments {
-  signer: Signer;
-  recipient: string;
+interface ClaimOptions {
+  recipient: `0x${string}`;
 }
 
-export function useClaimAirdrop(): UseMutationResult<
-  string,
-  unknown,
-  ClaimArguments
-> {
-  const { airdrop } = useCouncil();
-  const { data: claimableAmount } = useClaimableAirdropAmount();
-  const { data } = useAirdropData();
-  const chainId = useChainId();
-  const queryClient = useQueryClient();
+export function useClaimAirdrop(): {
+  claimAirdrop: ((options: ClaimOptions) => void) | undefined;
+  transactionHash: `0x${string}` | undefined;
+  status: MutationStatus;
+} {
+  const airdrop = useReadWriteAirdrop();
+  const { airdropData } = useAirdropData();
+  const { claimableAmount } = useClaimableAirdropAmount();
 
-  let transactionHash: string;
-  return useMutation<string, unknown, ClaimArguments>({
-    mutationFn: ({ signer, recipient }: ClaimArguments) => {
-      if (!airdrop) {
-        throw new Error("No airdrop configured");
-      }
-      if (!claimableAmount) {
-        throw new Error("No claimable amount");
-      }
-      if (!data) {
-        throw new Error("No airdrop data found");
+  const enabled = !!airdrop && !!claimableAmount && !!airdropData;
+
+  const { write, status, transactionHash } = useWrite({
+    writeFn: ({ recipient }: ClaimOptions) => {
+      if (!enabled) {
+        throw new Error("No claimable airdrop found");
       }
 
-      return airdrop.claim(
-        signer,
-        claimableAmount,
-        data?.amount,
-        data?.proof,
+      return airdrop.claim({
+        amount: claimableAmount,
+        merkleProof: airdropData.proof,
         recipient,
-        {
-          onSubmitted: (hash) => {
-            makeTransactionSubmittedToast("Claiming airdrop", hash, chainId);
-            transactionHash = hash;
-          },
-        },
-      );
-    },
-    onSuccess: (hash) => {
-      makeTransactionSuccessToast(
-        `Successfully claimed airdrop!`,
-        hash,
-        chainId,
-      );
-      queryClient.invalidateQueries();
-    },
-    onError(error) {
-      makeTransactionErrorToast(
-        `Failed to claim airdrop`,
-        transactionHash,
-        chainId,
-      );
-      console.error(error);
+        totalGrant: airdropData.amount,
+      });
     },
   });
+
+  return {
+    claimAirdrop: enabled ? write : undefined,
+    transactionHash,
+    status,
+  };
 }

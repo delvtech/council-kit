@@ -1,64 +1,56 @@
-import { LockingVault__factory } from "@council/typechain";
+import { LockingVault } from "@delvtech/council-artifacts/LockingVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, describe, builder, handler } = createCommandModule({
-  command: "deposit [OPTIONS]",
-  describe: "Encode call data for LockingVault.deposit",
+export default command({
+  description: "Encode call data for LockingVault.deposit",
 
-  builder: (yargs) => {
-    return yargs.options({
-      f: {
-        alias: ["account", "funded-account", "fundedAccount"],
-        describe: "The address to credit this deposit to",
-        type: "string",
-      },
-      a: {
-        alias: ["amount"],
-        describe: "The amount of tokens to deposit",
-        type: "string",
-      },
-      p: {
-        alias: ["decimals"],
-        describe:
-          "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-        type: "number",
-      },
-      d: {
-        alias: ["delegate", "first-delegate", "firstDelegate"],
-        describe:
-          "The address to delegate the resulting voting power to if the account doesn't already have a delegate",
-        type: "string",
-      },
-    });
+  options: {
+    account: {
+      alias: ["funded-account"],
+      description: "The address to credit this deposit to",
+      type: "string",
+      required: true,
+    },
+    amount: {
+      description: "The amount of tokens to deposit",
+      type: "string",
+      required: true,
+    },
+    decimals: {
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    delegate: {
+      alias: ["first-delegate"],
+      description:
+        "The address to delegate the resulting voting power to if the account doesn't already have a delegate",
+      type: "string",
+      required: true,
+    },
   },
 
-  handler: async (args) => {
-    const account = await requiredString(args.account, {
-      name: "account",
-      message: "Enter account address",
+  handler: async ({ options, next }) => {
+    const account = await options.account({
+      prompt: "Enter account address",
     });
 
-    const amount = await requiredString(args.amount, {
-      name: "amount",
-      message: "Enter amount to deposit",
+    const amount = await options.amount({
+      prompt: "Enter amount to deposit",
     });
 
-    const decimals = await requiredNumber(args.decimals, {
-      name: "decimals",
-      message: "Enter decimal precision",
-      initial: 18,
+    const decimals = await options.decimals();
+
+    const delegate = await options.delegate({
+      prompt: "Enter first delegate address",
     });
 
-    const delegate = await requiredString(args.delegate, {
-      name: "delegate",
-      message: "Enter first delegate address",
-    });
-
-    signale.success(encodeDeposit(account, amount, decimals, delegate));
+    const encoded = encodeDeposit(account, amount, decimals, delegate);
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
@@ -69,8 +61,12 @@ export function encodeDeposit(
   delegate: string,
 ): string {
   return encodeFunctionData({
-    abi: LockingVault__factory.abi,
+    abi: LockingVault.abi,
     functionName: "deposit",
-    args: [account, parseUnits(amount as `${number}`, decimals), delegate],
+    args: [
+      account as `0x${string}`,
+      parseUnits(amount, decimals),
+      delegate as `0x${string}`,
+    ],
   });
 }

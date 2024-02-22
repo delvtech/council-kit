@@ -1,63 +1,51 @@
 {
-  "name": "@council/cli",
+  "name": "@delvtech/council-cli",
   "version": "0.0.1",
   "license": "MIT",
-  "source": "src/council.ts",
-  "main": "dist/index.js",
+  "type": "module",
+  "main": "dist/council.js",
+  "bin": "dist/council.js",
   "files": [
     "dist"
   ],
-  "bin": {
-    "council": "dist/index.js"
-  },
-  "alias": {
-    "src": "./src"
-  },
   "scripts": {
-    "council": "ts-node -r dotenv/config -r tsconfig-paths/register --files src/council",
-    "build": "tsup",
-    "docs": "typedoc",
-    "watch:docs": "typedoc --watch"
+    "council": "node -r dotenv/config dist/council.js",
+    "dev": "NODE_ENV=development tesm-node -r dotenv/config src/council.ts",
+    "prod": "tesm-node -r dotenv/config src/council.ts",
+    "build": "rimraf dist && tsc",
+    "watch": "tsc --watch"
   },
   "dependencies": {
-    "@council/deploy": "*",
-    "@council/sdk": "*",
-    "@council/typechain": "*",
+    "@delvtech/council-artifacts": "*",
+    "@delvtech/council-viem": "*",
     "ajv": "^8.12.0",
-    "cfonts": "^3.1.1",
+    "cfonts": "^3.2.0",
     "cli-table": "^0.3.11",
+    "clide-js": "^0.1.3",
+    "clide-plugin-command-menu": "^0.0.7",
     "colors": "^1.4.0",
-    "ganache": "^7.8.0",
     "json-schema-typed": "^8.0.1",
-    "merkletreejs": "^0.3.10",
-    "node-fetch-native": "^1.1.1",
-    "prompts": "^2.4.2",
-    "signale": "^1.4.0",
-    "viem": "^0.3.26",
-    "yargs": "^17.7.1"
+    "merkletreejs": "^0.3.11",
+    "node-fetch-native": "^1.6.2",
+    "signale": "^1.4.0"
   },
   "devDependencies": {
     "@council/eslint-config": "*",
-    "@council/prettier-config": "*",
     "@council/tsconfig": "*",
-    "@types/cli-table": "^0.3.1",
-    "@types/node": "^18.16.1",
-    "@types/prompts": "^2.4.4",
-    "@types/signale": "^1.4.4",
-    "@types/yargs": "^17.0.24",
-    "dotenv": "^16.0.3",
-    "ethers": "^5.7.2",
-    "nodemon": "^2.0.20",
-    "prettier-plugin-organize-imports": "^3.2.2",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.1.0",
-    "tsup": "^6.7.0",
-    "typedoc": "^0.23.24",
-    "typedoc-plugin-markdown": "^3.14.0",
-    "typescript": "^4.7.4"
+    "@types/cli-table": "^0.3.4",
+    "@types/node": "^20.11.19",
+    "@types/prompts": "^2.4.9",
+    "@types/signale": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.20.1",
+    "rimraf": "^5.0.5",
+    "tesm-node": "^1.3.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "viem": "^2.7.12"
   },
   "peerDependencies": {
-    "ethers": ">=5.6"
+    "viem": ">=2"
   },
   "publishConfig": {
     "access": "public"

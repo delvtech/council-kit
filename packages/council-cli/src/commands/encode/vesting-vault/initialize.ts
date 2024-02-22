@@ -1,49 +1,45 @@
-import { VestingVault__factory } from "@council/typechain";
+import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "initialize [OPTIONS]",
-    describe: "Encode call data for VestingVault.initialize",
+export default command({
+  description: "Encode call data for VestingVault.initialize",
 
-    builder: (yargs) => {
-      return yargs.options({
-        m: {
-          alias: ["manager"],
-          describe: "The address that will be able add and remove grants",
-          type: "string",
-        },
-        t: {
-          alias: ["timelock"],
-          describe:
-            "The address that will be able to change the unvested multiplier, the manager, and the timelock",
-          type: "string",
-        },
-      });
+  options: {
+    manager: {
+      description: "The address that will be able add and remove grants",
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const manager = await requiredString(args.manager, {
-        name: "manager",
-        message: "Enter manager address",
-      });
-
-      const timelock = await requiredString(args.timelock, {
-        name: "timelock",
-        message: "Enter timelock address",
-      });
-
-      signale.success(encodeInitialize(manager, timelock));
+    timelock: {
+      description:
+        "The address that will be able to change the unvested multiplier, the manager, and the timelock",
+      type: "string",
+      required: true,
     },
-  });
+  },
+
+  handler: async ({ options, next }) => {
+    const manager = await options.manager({
+      prompt: "Enter manager address",
+    });
+
+    const timelock = await options.timelock({
+      prompt: "Enter timelock address",
+    });
+
+    const encoded = encodeInitialize(manager, timelock);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeInitialize(manager: string, timelock: string): string {
   return encodeFunctionData({
-    abi: VestingVault__factory.abi,
+    abi: VestingVault.abi,
     functionName: "initialize",
-    args: [manager, timelock],
+    args: [manager as `0x${string}`, timelock as `0x${string}`],
   });
 }
