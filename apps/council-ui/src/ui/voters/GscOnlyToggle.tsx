@@ -18,12 +18,12 @@ export function GSCOnlyToggle({
   return (
     <label
       className={classNames(
-        "flex items-center gap-1 cursor-pointer daisy-label whitespace-nowrap",
+        "daisy-label flex cursor-pointer items-center gap-1 whitespace-nowrap",
         className,
       )}
     >
-      <BuildingLibraryIcon className="w-5 h-5 fill-warning mb-[2px]" />
-      <span className="mr-1 font-medium daisy-label-text">Show GSC Only</span>
+      <BuildingLibraryIcon className="mb-[2px] size-5 fill-warning" />
+      <span className="daisy-label-text mr-1 font-medium">Show GSC Only</span>
       <input
         type="checkbox"
         className="daisy-toggle daisy-toggle-warning"
