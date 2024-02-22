@@ -12,10 +12,13 @@ export function Page({
 }: PropsWithChildren<PageProps>): ReactElement {
   return (
     // https://daisyui.com/docs/colors
-    <SkeletonTheme baseColor="hsl(var(--b3))" highlightColor="hsl(var(--b1))">
+    <SkeletonTheme
+      baseColor="oklch(var(--b3))"
+      highlightColor="oklch(var(--b1))"
+    >
       <div
         className={classNames(
-          "flex flex-col max-w-6xl px-4 m-auto my-16 gap-y-10 bg-base",
+          "bg-base m-auto my-16 flex max-w-6xl flex-col gap-y-10 px-4",
           className,
         )}
       >
