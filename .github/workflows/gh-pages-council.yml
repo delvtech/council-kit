@@ -8,6 +8,9 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+    paths:
+      - "apps/council-ui/**"
+      - ".github/workflows/deploy-council-ui-to-gh-pages.yml"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
