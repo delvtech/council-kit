@@ -11,8 +11,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@delvtech/council-artifacts": "*",
-    "@delvtech/council-viem": "*",
+    "@delvtech/council-artifacts": "^0.0.0",
+    "@delvtech/council-viem": "^0.0.0",
     "@ensdomains/ensjs": "^3.4.4",
     "@heroicons/react": "^2.1.1",
     "@metamask/jazzicon": "^2.0.0",

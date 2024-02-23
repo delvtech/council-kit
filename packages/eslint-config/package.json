@@ -1,6 +1,7 @@
 {
   "name": "@council/eslint-config",
   "version": "0.0.0",
+  "private": true,
   "main": ".eslintrc.js",
   "license": "MIT",
   "devDependencies": {
