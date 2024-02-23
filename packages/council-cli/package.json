@@ -4,7 +4,9 @@
   "license": "MIT",
   "type": "module",
   "main": "dist/council.js",
-  "bin": "dist/council.js",
+  "bin": {
+    "council": "dist/council.js"
+  },
   "files": [
     "dist"
   ],
