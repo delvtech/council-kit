@@ -1,6 +1,6 @@
 {
   "name": "council-sdk-starter",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Boilerplate to get started using the council-sdk fast!",
   "license": "MIT",
   "private": true,
@@ -14,7 +14,7 @@
     "getProposalResults": "tesm-node -r dotenv/config src/scripts/getProposalResults.ts"
   },
   "dependencies": {
-    "@delvtech/council-viem": "^0.0.0",
+    "@delvtech/council-viem": "^0.0.1",
     "viem": "^2.7.12"
   },
   "devDependencies": {
