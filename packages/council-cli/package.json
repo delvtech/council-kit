@@ -1,6 +1,6 @@
 {
   "name": "@delvtech/council-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "type": "module",
   "main": "dist/council.js",
@@ -16,8 +16,8 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "@delvtech/council-artifacts": "^0.0.1",
-    "@delvtech/council-viem": "^0.0.1",
+    "@delvtech/council-artifacts": "^0.0.2",
+    "@delvtech/council-viem": "^0.0.2",
     "ajv": "^8.12.0",
     "cfonts": "^3.2.0",
     "cli-table": "^0.3.11",
