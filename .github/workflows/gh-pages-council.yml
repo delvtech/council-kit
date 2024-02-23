@@ -10,7 +10,7 @@ on:
     branches: ["main"]
     paths:
       - "apps/council-ui/**"
-      - ".github/workflows/deploy-council-ui-to-gh-pages.yml"
+      - ".github/workflows/gh-pages-council.yml"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -26,23 +26,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
         with:
-          node-version: "16"
+          node-version: 20
           cache: "yarn"
+
       - name: Setup Pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v4
         with:
           # Automatically inject basePath in your Next.js configuration file and disable
           # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
+
       - name: Restore cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             apps/council-ui/.next/cache
@@ -51,16 +54,20 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+
       - name: Install dependencies
         run: yarn
+
       - name: Build with Next.js
         env:
-          NEXT_PUBLIC_MAINNET_ALCHEMY_KEY: ${{ secrets.MAINNET_ALCHEMY_KEY }}
-          NEXT_PUBLIC_GOERLI_ALCHEMY_KEY: ${{ secrets.GOERLI_ALCHEMY_KEY }}
+          NEXT_PUBLIC_MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
+          NEXT_PUBLIC_GOERLI_RPC_URL: ${{ secrets.GOERLI_RPC_URL }}
           NEXT_PUBLIC_COUNCIL_UI_BASE_PATH: ${{ secrets.COUNCIL_UI_BASE_PATH }}
         run: npx turbo run build --filter=council-ui
+
       - name: Static HTML export of Next.js
         run: yarn workspace council-ui run export
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
@@ -76,4 +83,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4

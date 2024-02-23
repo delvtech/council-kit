@@ -20,7 +20,7 @@
     "ethers": ">=6"
   },
   "dependencies": {
-    "@delvtech/council-core": "*",
+    "@delvtech/council-core": "0.0.0",
     "@delvtech/evm-client-ethers": "^0.1.1"
   },
   "devDependencies": {
