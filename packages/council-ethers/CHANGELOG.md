@@ -1,5 +1,11 @@
 # @delvtech/council-ethers
 
+## 0.0.2
+
+### Patch Changes
+
+- @delvtech/council-core@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes
