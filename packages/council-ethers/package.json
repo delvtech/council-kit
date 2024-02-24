@@ -1,6 +1,6 @@
 {
   "name": "@delvtech/council-ethers",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
@@ -20,7 +20,7 @@
     "ethers": ">=6"
   },
   "dependencies": {
-    "@delvtech/council-core": "0.0.2",
+    "@delvtech/council-core": "0.0.3",
     "@delvtech/evm-client-ethers": "^0.1.1"
   },
   "devDependencies": {

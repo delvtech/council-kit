@@ -1,5 +1,11 @@
 # @delvtech/council-artifacts
 
+## 0.0.3
+
+### Patch Changes
+
+- a5ed20e: Remove hardhat dependency
+
 ## 0.0.2
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @delvtech/council-core
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [a5ed20e]
+  - @delvtech/council-artifacts@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes
