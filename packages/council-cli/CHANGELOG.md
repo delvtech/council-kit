@@ -1,5 +1,14 @@
 # @delvtech/council-cli
 
+## 0.0.3
+
+### Patch Changes
+
+- a5ed20e: Make Hardhat a peer dependency and add more error handling
+- Updated dependencies [a5ed20e]
+  - @delvtech/council-artifacts@0.0.3
+  - @delvtech/council-viem@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes

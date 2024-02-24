@@ -1,6 +1,6 @@
 {
   "name": "@delvtech/council-core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -16,7 +16,7 @@
     "@delvtech/evm-client": "^0.1.1"
   },
   "dependencies": {
-    "@delvtech/council-artifacts": "^0.0.2",
+    "@delvtech/council-artifacts": "^0.0.3",
     "big.js": "^6.2.1",
     "fast-json-stable-stringify": "^2.1.0",
     "lru-cache": "^10.2.0"
