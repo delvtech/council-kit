@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { help, run } from "clide-js";
 import { commandMenu } from "clide-plugin-command-menu";
+import signale from "signale";
 
 run({
   plugins: [
@@ -34,4 +35,6 @@ run({
       }
     }
   },
+}).catch((error) => {
+  signale.error(error);
 });

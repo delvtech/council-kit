@@ -4,7 +4,9 @@
   "license": "MIT",
   "type": "module",
   "main": "dist/council.js",
-  "bin": "dist/council.js",
+  "bin": {
+    "council": "dist/council.js"
+  },
   "files": [
     "dist"
   ],
@@ -14,6 +16,15 @@
     "prod": "tesm-node -r dotenv/config src/council.ts",
     "build": "rimraf dist && tsc",
     "watch": "tsc --watch"
+  },
+  "peerDependencies": {
+    "viem": ">=2",
+    "hardhat": ">=2"
+  },
+  "peerDependenciesMeta": {
+    "hardhat": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@delvtech/council-artifacts": "^0.0.2",
@@ -43,9 +54,6 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "viem": "^2.7.12"
-  },
-  "peerDependencies": {
-    "viem": ">=2"
   },
   "publishConfig": {
     "access": "public"
