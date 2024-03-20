@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { help, run } from "clide-js";
 import { commandMenu } from "clide-plugin-command-menu";
+import "dotenv/config";
 import signale from "signale";
 
 run({
