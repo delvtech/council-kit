@@ -1,5 +1,11 @@
 # @delvtech/council-cli
 
+## 0.0.4
+
+### Patch Changes
+
+- 1c28998: Fix dotenv parsing
+
 ## 0.0.3
 
 ### Patch Changes
