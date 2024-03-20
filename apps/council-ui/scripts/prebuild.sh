@@ -1,10 +1,12 @@
 #!/bin/bash
 set -e
 
-# Set the environment variables from the .env file
-set -o allexport
-source .env
-set +o allexport
+# Set the environment variables from the .env file if it exists
+if [ -f .env ]; then
+  set -o allexport
+  source .env
+  set +o allexport
+fi
 
 # Get the WalletConnect domain verification code from the
 # WALLET_CONNECT_DOMAIN_VERIFICATION_CODE environment variable
