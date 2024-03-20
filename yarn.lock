@@ -2081,10 +2081,10 @@
     video-stream-merger "^4.0.1"
     viem "^1.20.3"
 
-"@rainbow-me/rainbowkit@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-2.0.0.tgz#5ff8487b0f25b159963ee8750396b2db86491c79"
-  integrity sha512-M25y8twG7iL5P5I5Zml/dyl9ISZQYjODpxdstyMxb5pOl7qPg+sl4f/b18ZEPjdcgJ7751HMSirt25WtfPFSMQ==
+"@rainbow-me/rainbowkit@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-2.0.2.tgz#6122e349b7b87e4bb57ece374747c21915816ae7"
+  integrity sha512-xm/3iWxwL/ATVVWjtYVGviTJ4ldXwcvaic+bQnGg/pqzf8zKONkuzd5gNWLw0ft1iNG2IPHL1ABP9UoR2Trlaw==
   dependencies:
     "@vanilla-extract/css" "1.14.0"
     "@vanilla-extract/dynamic" "2.1.0"
@@ -10579,7 +10579,7 @@ video-stream-merger@^4.0.1:
   resolved "https://registry.yarnpkg.com/video-stream-merger/-/video-stream-merger-4.0.1.tgz#b0061251bd211121d1256ccf9e2be9477e59d5cb"
   integrity sha512-VazYSr8tk6S/zkOq5jpR/ryy1HnGxm5XCw+d2Ejpqy1m6d71oZpyFG82dUkgAo7dg/lk3k4TqvJPtuRUtR8URA==
 
-viem@^1.0.0, viem@^1.1.4, viem@^1.20.3, viem@^2.7.12:
+viem@^1.0.0, viem@^1.1.4, viem@^1.20.3, viem@^2.7.12, viem@^2.8.16:
   version "2.7.12"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.7.12.tgz#c79f68d77f5e46c3b78443df54afb067cbc827c3"
   integrity sha512-NbV+Bycw0I4X8y6A04mgJ6+Imt7xXwflgnqisR3JXoJRNc77YSaQCscFN/dmwGLESTkgegJvi+j4nZY32GTpwQ==
@@ -10676,7 +10676,7 @@ vscode-textmate@^8.0.0:
   resolved "https://registry.yarnpkg.com/vscode-textmate/-/vscode-textmate-8.0.0.tgz#2c7a3b1163ef0441097e0b5d6389cd5504b59e5d"
   integrity sha512-AFbieoL7a5LMqcnOF04ji+rpXadgOXnZsxQr//r83kLPr7biP7am3g9zbaZIaBGwBRWeSvoMD4mgPdX3e4NWBg==
 
-wagmi@^2.5.7:
+wagmi@^2.5.11, wagmi@^2.5.7:
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.5.7.tgz#dc5bdba16e8d5a3e8d7af6ab545cf438b564d9d1"
   integrity sha512-xSuteMXFKvra4xDddqZbZv/gQlcg3X+To5AoZW7WoAm0iVlF8/vEGpQzCWy6KZs2z1szxPrr0YnH3Zr1Qj4E/A==
