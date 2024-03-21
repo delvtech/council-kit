@@ -189,6 +189,14 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
       },
+      15: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-16: Main Treasury - 3",
+        sentenceSummary: "Revised proposal to unwind the main treasury.",
+        paragraphSummary:
+          "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
+      },
     },
   },
   gscVoting: {
