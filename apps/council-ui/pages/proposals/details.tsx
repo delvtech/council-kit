@@ -47,7 +47,7 @@ export default function ProposalPage(): ReactElement {
   );
   const { gscMembers } = useGscMembers();
 
-  // // voting activity filtering
+  // voting activity filtering
   const [gscOnly, setGscOnly] = useState(false);
   const filteredVotes = useMemo(() => {
     if (data?.votes && gscOnly && gscMembers) {
@@ -58,7 +58,7 @@ export default function ProposalPage(): ReactElement {
     return dedupeVotes(data?.votes);
   }, [data, gscOnly, gscMembers]);
 
-  // // Redirect to proposals page if the voting contract is not found.
+  // Redirect to proposals page if the voting contract is not found.
   if (!usedCoreVoting) {
     replace("/proposals");
     // Returning empty fragment is to remove the undefined type from the query params.
@@ -66,8 +66,6 @@ export default function ProposalPage(): ReactElement {
   }
 
   const proposalTitle = data?.title ?? `Proposal ${id}`;
-
-  // return <>{status}</>;
 
   return (
     <Page>
@@ -155,6 +153,9 @@ export default function ProposalPage(): ReactElement {
             <VotingActivityTable
               votes={filteredVotes}
               voterEnsRecords={data.voterEnsRecords}
+              // The GSC voting contract does not count voting power, you either
+              // can or cannot vote and the voting power will always be 1 wei.
+              showVotingPower={!data.isGsc}
             />
           ) : (
             <VotingActivityTableSkeleton />
@@ -181,7 +182,7 @@ export default function ProposalPage(): ReactElement {
 
 interface ProposalDetailsPageData {
   proposalExists: boolean;
-  type: "core" | "gsc";
+  isGsc: boolean;
   status: ProposalStatus;
   isActive: boolean;
   votes?: ReadVote[];
@@ -226,7 +227,7 @@ function useProposalDetailsPageData(
 
   const enabled = !!proposal;
 
-  const { data, status, error } = useQuery<ProposalDetailsPageData>({
+  const { data, status } = useQuery<ProposalDetailsPageData>({
     queryKey: ["proposalDetailsPage", coreVotingAddress, String(proposal?.id)],
     enabled,
     queryFn: enabled
@@ -272,7 +273,7 @@ function useProposalDetailsPageData(
 
           return {
             proposalExists: !!proposal,
-            type: isGsc ? "gsc" : "core",
+            isGsc,
             votingContractName,
             status: getProposalStatus({
               isExecuted,

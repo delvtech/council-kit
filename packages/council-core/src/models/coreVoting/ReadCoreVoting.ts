@@ -204,13 +204,18 @@ export class ReadCoreVoting extends Model {
       },
     } of voteEvents) {
       const proposal = await this.getProposal({ id: proposalId });
+      if (!proposal) {
+        throw new Error(
+          `Vote event for proposal ${proposalId} from voter ${voter} references a non-existent proposal.`,
+        );
+      }
       votes.push(
         new ReadVote({
           ballot: BALLOTS[castBallot],
           contractFactory: this.contractFactory,
           network: this.network,
           power: votingPower,
-          proposal: proposal!,
+          proposal,
           voter,
         }),
       );
