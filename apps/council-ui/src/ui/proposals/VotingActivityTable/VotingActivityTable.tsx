@@ -1,8 +1,9 @@
 import { Ballot, ReadVote } from "@delvtech/council-viem";
-import { ReactElement, useMemo, useState } from "react";
+import { ReactElement, ReactNode, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import {
+  Column,
   SortOptions,
   SortableGridTable,
 } from "src/ui/base/tables/SortableGridTable";
@@ -15,11 +16,17 @@ type SortField = "votingPower" | "ballot";
 interface VotingActivityTableProps {
   votes: ReadVote[];
   voterEnsRecords: EnsRecords;
+  /**
+   * Whether to show the voting power used by each voter.
+   * @default true
+   */
+  showVotingPower?: boolean;
 }
 
 export function VotingActivityTable({
   votes,
   voterEnsRecords,
+  showVotingPower = true,
 }: VotingActivityTableProps): ReactElement {
   const [sortOptions, setSortOptions] = useState<SortOptions<SortField>>({
     key: "votingPower",
@@ -31,35 +38,50 @@ export function VotingActivityTable({
     [sortOptions, votes],
   );
 
+  const cols = useMemo(() => {
+    const cols: Column<SortField>[] = ["Voter"];
+
+    if (showVotingPower) {
+      cols.push({
+        cell: "Voting Power",
+        sortKey: "votingPower",
+      });
+    }
+
+    cols.push({
+      cell: "Ballot",
+      sortKey: "ballot",
+    });
+
+    return cols;
+  }, [showVotingPower]);
+
   return (
     <div className="max-h-96 w-full overflow-auto">
       <SortableGridTable
-        headingRowClassName="grid-cols-[2fr-1fr-1fr]"
-        bodyRowClassName="grid-cols-[2fr-1fr-1fr]"
+        headingRowClassName={
+          showVotingPower ? "grid-cols-[2fr_1fr_1fr]" : "grid-cols-[2fr_1fr]"
+        }
+        bodyRowClassName={
+          showVotingPower ? "grid-cols-[2fr_1fr_1fr]" : "grid-cols-[2fr_1fr]"
+        }
         onSort={setSortOptions}
-        cols={[
-          "Voter",
-          {
-            cell: "Voting Power",
-            sortKey: "votingPower",
-          },
-          {
-            cell: "Ballot",
-            sortKey: "ballot",
-          },
-        ]}
+        cols={cols}
         rows={sortedData.map(({ voter, power, ballot }, i) => {
+          const cells: ReactNode[] = [
+            <VoterAddress
+              key={`${i}-address`}
+              address={voter.address}
+              label={voterEnsRecords[voter.address] || undefined}
+            />,
+          ];
+          if (showVotingPower) {
+            cells.push(formatVotingPower(power));
+          }
+          cells.push(<FormattedBallot key={`${i}-ballot`} ballot={ballot} />);
           return {
             href: makeVoterURL(voter.address),
-            cells: [
-              <VoterAddress
-                key={`${i}-address`}
-                address={voter.address}
-                label={voterEnsRecords[voter.address] || undefined}
-              />,
-              formatVotingPower(power),
-              <FormattedBallot key={`${i}-ballot`} ballot={ballot} />,
-            ],
+            cells,
           };
         })}
       />
