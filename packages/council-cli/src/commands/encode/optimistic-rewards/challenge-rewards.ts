@@ -1,21 +1,21 @@
-import { OptimisticRewards__factory } from "@council/typechain";
+import { OptimisticRewards } from "@delvtech/council-artifacts/OptimisticRewards";
+import { command } from "clide-js";
 import signale from "signale";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, handler } = createCommandModule({
-  command: "challenge-rewards [OPTIONS]",
-  aliases: ["challengeRewards"],
-  describe: "Encode call data for OptimisticRewards.challengeRewards",
+export default command({
+  description: "Encode call data for OptimisticRewards.challengeRewards",
 
-  handler: async () => {
-    signale.success(encodeChallengeRewards());
+  handler: async ({ next }) => {
+    const encoded = encodeChallengeRewards();
+    signale.success(encoded);
+    next(encoded);
   },
 });
 
 export function encodeChallengeRewards(): string {
   return encodeFunctionData({
-    abi: OptimisticRewards__factory.abi,
+    abi: OptimisticRewards.abi,
     functionName: "challengeRewards",
   });
 }

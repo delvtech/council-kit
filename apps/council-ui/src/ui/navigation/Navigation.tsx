@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { makeVoterURL, Routes } from "src/routes";
+import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
 import { makeImgSrc } from "src/ui/base/imgSrc";
+import { AirdropIcon } from "src/ui/base/svg/20/AirdropIcon";
 import PushIcon from "src/ui/base/svg/PushLogo";
-import { Tooltip } from "src/ui/base/Tooltip/Tooltip";
-import { useWrongNetworkEffect } from "src/ui/network/useWrongNetworkEffect";
+import { Tooltip } from "src/ui/base/Tooltip";
+import { useWrongNetworkEffect } from "src/ui/network/hooks/useWrongNetworkEffect";
 import { usePushSubscribe } from "src/ui/push/usePushSubscribe";
 import { useAccount } from "wagmi";
 
@@ -15,16 +17,18 @@ export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
   const { toggleUserStatus, loading, isSubscribed } = usePushSubscribe();
+  const { claimableAmount } = useClaimableAirdropAmount();
+
   useWrongNetworkEffect();
 
   return (
     <div className="daisy-navbar bg-base-200 ">
       <div className="daisy-navbar-start">
         <div className="daisy-dropdown">
-          <label tabIndex={0} className="daisy-btn-ghost daisy-btn lg:hidden">
+          <label tabIndex={0} className="daisy-btn daisy-btn-ghost lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="size-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -39,7 +43,7 @@ export function Navigation(): ReactElement {
           </label>
           <ul
             tabIndex={0}
-            className="daisy-dropdown-content daisy-menu rounded-box mt-3 w-52 bg-base-200 p-2 shadow"
+            className="daisy-menu daisy-dropdown-content mt-3 w-52 rounded-box bg-base-200 p-2 shadow"
           >
             <li>
               <Link
@@ -98,12 +102,13 @@ export function Navigation(): ReactElement {
           />
         </div>
       </div>
+
       <div className="daisy-navbar-center hidden lg:flex">
-        <ul className="daisy-menu daisy-menu-horizontal p-0">
+        <ul className="daisy-menu daisy-menu-horizontal px-1">
           <li>
             <Link
-              className={classNames({
-                "daisy-active": pathname.startsWith(Routes.PROPOSALS),
+              className={classNames("px-4 py-3 font-medium", {
+                "!text-primary": pathname.startsWith(Routes.PROPOSALS),
               })}
               href={Routes.PROPOSALS}
             >
@@ -112,8 +117,8 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <Link
-              className={classNames({
-                "daisy-active": pathname.startsWith(Routes.VAULTS),
+              className={classNames("px-4 py-3 font-medium", {
+                "!text-primary": pathname.startsWith(Routes.VAULTS),
               })}
               href={Routes.VAULTS}
             >
@@ -122,8 +127,8 @@ export function Navigation(): ReactElement {
           </li>
           <li>
             <Link
-              className={classNames({
-                "daisy-active":
+              className={classNames("px-4 py-3 font-medium", {
+                "!text-primary":
                   pathname.startsWith(Routes.VOTERS) &&
                   address !== query.address,
               })}
@@ -135,8 +140,8 @@ export function Navigation(): ReactElement {
           {address && (
             <li>
               <Link
-                className={classNames({
-                  "daisy-active":
+                className={classNames("px-4 py-3 font-medium", {
+                  "!text-primary":
                     pathname.startsWith(Routes.VOTERS) &&
                     address === query.address,
                 })}
@@ -148,7 +153,7 @@ export function Navigation(): ReactElement {
           )}
         </ul>
       </div>
-      <div className="daisy-navbar-end">
+      <div className="daisy-navbar-end flex gap-3">
         {address && toggleUserStatus && (
           <Tooltip
             content={`Subscribe to start recieving updates as notifications from PUSH`}
@@ -164,6 +169,19 @@ export function Navigation(): ReactElement {
               </button>
             </span>
           </Tooltip>
+        )}
+        {!!claimableAmount && (
+          <Link
+            href={"/airdrop"}
+            className="group flex items-center gap-2 whitespace-nowrap rounded-xl bg-accent px-5 py-2 text-sm font-bold md:bg-white"
+          >
+            <span className="text-accent-content md:text-accent">
+              <AirdropIcon />
+            </span>
+            <span className="hidden text-accent-content md:block md:text-gray-800">
+              Claim airdrop
+            </span>
+          </Link>
         )}
         <ConnectButton />
       </div>

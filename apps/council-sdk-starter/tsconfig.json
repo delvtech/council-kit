@@ -5,9 +5,9 @@
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
-    "paths": {
-      "src/*": ["src/*"]
-    },
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "bundler"
   }
 }

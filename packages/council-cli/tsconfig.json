@@ -1,19 +1,31 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@council/tsconfig/base.json",
   "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": ".",
-    "rootDir": "./src",
-    "outDir": "dist/",
+    // "module": "NodeNext",
+    // "moduleResolution": "NodeNext",
+    // "target": "ESNext",
     "allowSyntheticDefaultImports": true,
+
+    // important to import JSON files from @delvtech/council-artifacts
+    "resolveJsonModule": true,
 
     // we don't need declaration files for a CLI
     "declaration": false,
     "declarationMap": false,
 
-    "paths": {
-      "src/*": ["src/*"]
-    }
-  }
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node16",
+  },
 }

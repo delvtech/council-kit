@@ -1,98 +1,75 @@
-import { GSCVault__factory } from "@council/typechain";
+import { GSCVault } from "@delvtech/council-artifacts/GSCVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { chainOption, requiredChain } from "src/options/chain";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredNumberString } from "src/options/utils/requiredNumberString";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { WriteOptions } from "src/reusable-options/writeOptions.js";
+import { PrivateKeyAccount, parseUnits } from "viem";
 import { Chain } from "viem/chains";
+import {
+  DeployedContract,
+  deployContract,
+} from "../../utils/deployContract.js";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "gsc-vault [OPTIONS]",
-    aliases: ["GSCVault"],
-    describe: "Deploy a GSCVault contract",
+export default command({
+  description: "Deploy a GSCVault contract",
 
-    builder: (yargs) => {
-      return yargs.options({
-        c: {
-          alias: ["core-voting", "coreVoting"],
-          describe: "The address of the CoreVoting contract",
-          type: "string",
-        },
-        b: {
-          alias: ["bound", "voting-power-bound", "votingPowerBound"],
-          describe: "The minimum voting power required to become a member",
-          type: "string",
-        },
-        d: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision to use. The bound option will be multiplied by (10 ** decimals). For example, if bound is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-        o: {
-          alias: ["owner"],
-          describe: "The owner of the contract (e.g., a Timelock contract)",
-          type: "string",
-        },
-        n: chainOption,
-        r: rpcUrlOption,
-        w: walletKeyOption,
-      });
+  options: {
+    "core-voting": {
+      description: "The address of the CoreVoting contract",
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const coreVoting = await requiredString(args.coreVoting, {
-        name: "core-voting",
-        message: "Enter CoreVoting address",
-      });
-
-      const bound = await requiredNumberString(args.bound, {
-        name: "bound",
-        message: "Enter voting power bound",
-      });
-
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
-
-      const owner = await requiredString(args.owner, {
-        name: "owner",
-        message: "Enter owner address (e.g., a Timelock contract)",
-      });
-
-      const chain = await requiredChain(args.chain);
-      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-      const walletKey = await requiredWalletKey(args.walletKey);
-      const account = privateKeyToAccount(walletKey as Hex);
-
-      signale.pending("Deploying GSCVault...");
-
-      const { address } = await deployGSCVault({
-        coreVoting,
-        votingPowerBound: bound,
-        decimals,
-        owner,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (txHash) => {
-          signale.pending(`GSCVault deployment tx submitted: ${txHash}`);
-        },
-      });
-
-      signale.success(`GSCVault deployed @ ${address}`);
+    bound: {
+      alias: ["voting-power-bound"],
+      description: "The minimum voting power required to become a member",
+      type: "string",
+      required: true,
     },
-  });
+    decimals: {
+      description:
+        "The decimal precision to use. The bound option will be multiplied by (10 ** decimals). For example, if bound is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    owner: {
+      description: "The owner of the contract (e.g., a Timelock contract)",
+      type: "string",
+    },
+  },
+
+  handler: async ({ data, options, next }) => {
+    const { account, chain, rpcUrl } = data as WriteOptions;
+
+    const coreVoting = await options.coreVoting({
+      prompt: "Enter CoreVoting address",
+    });
+
+    const bound = await options.bound({
+      prompt: "Enter voting power bound",
+    });
+
+    const decimals = await options.decimals();
+
+    const owner = (await options.owner()) || account.address;
+
+    signale.pending("Deploying GSCVault...");
+
+    const deployData = await deployGSCVault({
+      coreVoting,
+      votingPowerBound: bound,
+      decimals,
+      owner,
+      account,
+      rpcUrl,
+      chain,
+      onSubmitted: (txHash) => {
+        signale.pending(`GSCVault deployment tx submitted: ${txHash}`);
+      },
+    });
+
+    signale.success(`GSCVault deployed @ ${deployData.address}`);
+    next(deployData);
+  },
+});
 
 export interface DeployGSCVaultOptions {
   coreVoting: string;
@@ -116,9 +93,13 @@ export async function deployGSCVault({
   onSubmitted,
 }: DeployGSCVaultOptions): Promise<DeployedContract> {
   return await deployContract({
-    abi: GSCVault__factory.abi,
-    args: [coreVoting, parseBigInt(votingPowerBound, decimals), owner],
-    bytecode: GSCVault__factory.bytecode,
+    abi: GSCVault.abi,
+    args: [
+      coreVoting as `0x${string}`,
+      parseUnits(votingPowerBound, decimals),
+      owner as `0x${string}`,
+    ],
+    bytecode: GSCVault.bytecode,
     account,
     rpcUrl,
     chain,

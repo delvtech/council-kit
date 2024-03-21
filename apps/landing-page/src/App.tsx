@@ -258,29 +258,28 @@ function App(): ReactElement {
                   rel="noreferrer"
                   className="transition-all hover:scale-105 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#1567ca] rounded-2xl"
                 >
-                  <img src={elementLogo} alt="Element Finance logo" />
+                  <img src={elementLogo} alt="Element Finance" />
                 </a>
               </div>
               <div>
                 <a
-                  href="https://twitter.com/GyroStable/status/1629157857097654275?s=20"
+                  href="https://www.arcadedao.xyz/"
                   target="_blank"
                   rel="noreferrer"
-                  className="transition-all hover:scale-105 hover:opacity-100 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833]/40 rounded-2xl relative overflow-hidden before:content-[''] before:absolute before:border-[6px] before:border-dashed before:border-primary-text-light/50 before:rounded-[22px] before:inset-[-5px] opacity-50"
+                  className="transition-all hover:scale-105 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#fff] rounded-2xl"
+                >
+                  <img src="/arcadedao-logo.png" width={220} alt="ArcadeDAO" />
+                </a>
+              </div>
+              <div>
+                <a
+                  href="https://gov.gyro.finance/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-all hover:scale-105 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833] rounded-2xl"
                 >
                   <img src="/gyroscope-logo.png" width={180} alt="Gyroscope" />
                 </a>
-                <p className="mt-3 text-center text-primary-text-light">
-                  COMING SOON!
-                </p>
-              </div>
-              <div>
-                <p className="transition-all text-5xl hover:scale-105 hover:opacity-100 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833]/40 rounded-2xl relative overflow-hidden before:content-[''] before:absolute before:border-[6px] before:border-dashed before:border-primary-text-light/50 before:rounded-[22px] before:inset-[-5px] opacity-50">
-                  🥷
-                </p>
-                <p className="mt-3 text-center text-primary-text-light">
-                  COMING SOON!
-                </p>
               </div>
             </div>
 

@@ -1,1 +1,2 @@
-export * from "src/commands/encode/libraries/authorizable/deauthorize";
+import deauthorize from "../authorizable/deauthorize.js";
+export default deauthorize;

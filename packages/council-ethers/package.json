@@ -1,0 +1,39 @@
+{
+  "name": "@delvtech/council-ethers",
+  "version": "0.0.3",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "ethers": ">=6"
+  },
+  "dependencies": {
+    "@delvtech/council-core": "0.0.3",
+    "@delvtech/evm-client-ethers": "^0.1.1"
+  },
+  "devDependencies": {
+    "@council/eslint-config": "*",
+    "@council/tsconfig": "*",
+    "ethers": "^6.11.1",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ]
+}

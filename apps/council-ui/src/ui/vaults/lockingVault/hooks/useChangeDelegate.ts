@@ -1,55 +1,40 @@
-interface ChangeDelegateArguments {
-  signer: Signer;
-  delegate: string;
-}
-import { LockingVault } from "@council/sdk";
-import {
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { Signer } from "ethers";
-import { formatAddress } from "src/ui/base/formatting/formatAddress";
-import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
-import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
-import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
+import { MutationStatus } from "@tanstack/react-query";
+import { useWrite } from "src/ui/contract/hooks/useWrite";
+import { useReadWriteCouncil } from "src/ui/council/hooks/useReadWriteCouncil";
 
-export function useChangeDelegate(
-  vaultAddress: string,
-): UseMutationResult<string, unknown, ChangeDelegateArguments> {
-  const { context } = useCouncil();
-  const chainId = useChainId();
-  const queryClient = useQueryClient();
-  let transactionHash: string;
-  return useMutation(
-    ({ signer, delegate }: ChangeDelegateArguments): Promise<string> => {
-      const vault = new LockingVault(vaultAddress, context);
-      return vault.changeDelegate(signer, delegate, {
-        onSubmitted: (hash) => {
-          makeTransactionSubmittedToast("Delegating", hash, chainId);
-          transactionHash = hash;
-        },
-      });
-    },
-    {
-      onSuccess: (hash, { delegate }) => {
-        makeTransactionSuccessToast(
-          `Successfully delegated to ${formatAddress(delegate)}!`,
-          hash,
-          chainId,
+export interface ChangeDelegateOptions {
+  vaultAddress: `0x${string}`;
+  newDelegate: `0x${string}`;
+}
+
+export function useChangeDelegate(): {
+  changeDelegate: ((options: ChangeDelegateOptions) => void) | undefined;
+  status: MutationStatus;
+  transactionHash: `0x${string}` | undefined;
+} {
+  const council = useReadWriteCouncil();
+  const enabled = !!council;
+
+  const { write, status, transactionHash } = useWrite({
+    writeFn: ({
+      newDelegate,
+      vaultAddress,
+    }: ChangeDelegateOptions): Promise<`0x${string}`> => {
+      if (!enabled) {
+        throw new Error(
+          "Connection to council not available. Check your wallet connection.",
         );
-        queryClient.invalidateQueries();
-      },
-      onError(error, { delegate }) {
-        makeTransactionErrorToast(
-          `Failed to delegate to ${formatAddress(delegate)}`,
-          transactionHash,
-          chainId,
-        );
-        console.error(error);
-      },
+      }
+
+      return council
+        .lockingVault(vaultAddress)
+        .changeDelegate({ delegate: newDelegate });
     },
-  );
+  });
+
+  return {
+    changeDelegate: enabled ? write : undefined,
+    status,
+    transactionHash,
+  };
 }

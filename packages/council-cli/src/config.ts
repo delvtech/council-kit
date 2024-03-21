@@ -1,13 +1,15 @@
-import { getOSConfigDir } from "./utils/getOSConfigDir";
-import { JSONStore } from "./utils/JSONStore";
+import { JsonStore } from "./utils/config/JsonStore.js";
+import { getOSConfigDir } from "./utils/config/getOSConfigDir.js";
 
-export interface CouncilClIConfig {
-  "rpc-url"?: string;
-}
+const configSettingNames = ["rpc-url"] as const;
+
+export type CouncilCliConfig = Partial<
+  Record<(typeof configSettingNames)[number], string>
+>;
 
 // TODO: Test if this will work in environments like an AWS Lambda and ensure
 // graceful fallbacks if not.
-export const config = new JSONStore<CouncilClIConfig>({
+export const config = new JsonStore<CouncilCliConfig>({
   path: getOSConfigDir("council"),
   name: "cli",
   defaults: {

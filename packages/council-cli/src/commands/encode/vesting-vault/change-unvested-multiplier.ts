@@ -1,39 +1,35 @@
-import { VestingVault__factory } from "@council/typechain";
+import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "change-unvested-multiplier [OPTIONS]",
-    aliases: ["changeUnvestedMultiplier"],
-    describe: "Encode call data for VestingVault.changeUnvestedMultiplier",
+export default command({
+  description: "Encode call data for VestingVault.changeUnvestedMultiplier",
 
-    builder: (yargs) => {
-      return yargs.options({
-        m: {
-          alias: ["multiplier"],
-          describe: "The new multiplier as a percentage",
-          type: "number",
-        },
-      });
+  options: {
+    multiplier: {
+      description: "The new multiplier as a percentage",
+      type: "number",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const multiplier = await requiredNumber(args.multiplier, {
-        name: "multiplier",
-        message: "Enter new multiplier (%)",
-      });
+  handler: async ({ options, next }) => {
+    const multiplier = await options.multiplier({
+      prompt: "Enter new multiplier (%)",
+    });
 
-      signale.success(encodeChangeUnvestedMultiplier(multiplier));
-    },
-  });
+    const encoded = encodeChangeUnvestedMultiplier(multiplier);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeChangeUnvestedMultiplier(multiplier: number): string {
   return encodeFunctionData({
-    abi: VestingVault__factory.abi,
+    abi: VestingVault.abi,
     functionName: "changeUnvestedMultiplier",
-    args: [multiplier],
+    args: [BigInt(multiplier)],
   });
 }

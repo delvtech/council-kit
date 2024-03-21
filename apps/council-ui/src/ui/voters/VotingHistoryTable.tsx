@@ -1,15 +1,15 @@
-import { Vote } from "@council/sdk";
+import { ReadVote } from "@delvtech/council-viem";
 import { ReactElement } from "react";
 import { councilConfigs } from "src/config/council.config";
 import { makeProposalURL } from "src/routes";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
-import { useChainId } from "src/ui/network/useChainId";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingHistoryTableProps {
-  history: Vote[];
+  history: ReadVote[];
 }
 
 export function VotingHistoryTable({
@@ -33,28 +33,28 @@ export function VotingHistoryTable({
   );
 }
 
-function VoteHistoryRow({ vote }: { vote: Vote }): ReactElement {
-  const chainId = useChainId();
+function VoteHistoryRow({ vote }: { vote: ReadVote }): ReactElement {
+  const chainId = useSupportedChainId();
   const proposalsConfig = councilConfigs[chainId].coreVoting.proposals;
   const proposal = vote.proposal;
-  const votingContract = proposal.votingContract;
-  const sentenceSummary = proposalsConfig[proposal.id]?.sentenceSummary;
+  const coreVoting = proposal.coreVoting;
+  const sentenceSummary = proposalsConfig[String(proposal.id)]?.sentenceSummary;
   return (
     <GridTableRowLink
       className="grid-cols-[3fr_1fr_1fr]"
-      href={makeProposalURL(votingContract.address, proposal.id)}
+      href={makeProposalURL(coreVoting.address, proposal.id)}
     >
       <span>
-        {votingContract.name} Proposal {proposal.id}
+        {coreVoting.name} Proposal {String(proposal.id)}
         {sentenceSummary && (
-          <p className="opacity-60 text-sm">
+          <p className="text-sm opacity-60">
             {sentenceSummary.length > 80
               ? `${sentenceSummary.slice(0, 80)}\u2026` // unicode for horizontal ellipses
               : sentenceSummary}
           </p>
         )}
       </span>
-      <span>{formatBalance(vote.power)}</span>
+      <span>{formatVotingPower(vote.power)}</span>
       <span>
         <FormattedBallot ballot={vote.ballot} />
       </span>

@@ -1,4 +1,4 @@
-import { Ballot } from "@council/sdk";
+import { Ballot } from "@delvtech/council-viem";
 
 export interface ProposalRowData {
   votingContractName: string;

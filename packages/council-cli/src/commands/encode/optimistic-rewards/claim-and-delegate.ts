@@ -1,1 +1,2 @@
-export * from "src/commands/encode/libraries/merkle-rewards/claim-and-delegate";
+import claimAndDelegate from "../merkle-rewards/claim-and-delegate.js";
+export default claimAndDelegate;

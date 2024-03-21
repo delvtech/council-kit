@@ -1,71 +1,58 @@
-import { MockERC20__factory } from "@council/typechain";
+import { MockERC20 } from "@delvtech/council-artifacts/MockERC20";
+import { command } from "clide-js";
 import signale from "signale";
-import { chainOption, requiredChain } from "src/options/chain";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { WriteOptions } from "src/reusable-options/writeOptions.js";
+import { PrivateKeyAccount } from "viem";
 import { Chain } from "viem/chains";
+import {
+  DeployedContract,
+  deployContract,
+} from "../../utils/deployContract.js";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "mock-erc20 [OPTIONS]",
-    aliases: ["MockERC20"],
-    describe: "Deploy a MockERC20 contract for use as a mock voting token",
+export default command({
+  description: "Deploy a MockERC20 contract for use as a mock voting token",
 
-    builder: (yargs) => {
-      return yargs.options({
-        n: {
-          alias: ["name"],
-          describe: "The name of the token",
-          type: "string",
-        },
-        s: {
-          alias: ["symbol"],
-          describe: "The symbol of the token",
-          type: "string",
-        },
-        c: chainOption,
-        r: rpcUrlOption,
-        w: walletKeyOption,
-      });
+  options: {
+    name: {
+      description: "The name of the token",
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const name = await requiredString(args.name, {
-        name: "name",
-        message: "Enter token name",
-      });
-
-      const symbol = await requiredString(args.symbol, {
-        name: "symbol",
-        message: "Enter token symbol",
-      });
-
-      const chain = await requiredChain(args.chain);
-      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-      const walletKey = await requiredWalletKey(args.walletKey);
-      const account = privateKeyToAccount(walletKey as Hex);
-
-      signale.pending("Deploying MockERC20...");
-
-      const { address } = await deployMockERC20({
-        tokenName: name,
-        tokenSymbol: symbol,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (txHash) => {
-          signale.pending(`MockERC20 deployment tx submitted: ${txHash}`);
-        },
-      });
-
-      signale.success(`MockERC20 deployed @ ${address}`);
+    symbol: {
+      description: "The symbol of the token",
+      type: "string",
+      required: true,
     },
-  });
+  },
+
+  handler: async ({ data, options, next }) => {
+    const { account, chain, rpcUrl } = data as WriteOptions;
+
+    const name = await options.name({
+      prompt: "Enter token name",
+    });
+
+    const symbol = await options.symbol({
+      prompt: "Enter token symbol",
+    });
+
+    signale.pending("Deploying MockERC20...");
+
+    const deployData = await deployMockERC20({
+      tokenName: name,
+      tokenSymbol: symbol,
+      account,
+      rpcUrl,
+      chain,
+      onSubmitted: (txHash) => {
+        signale.pending(`MockERC20 deployment tx submitted: ${txHash}`);
+      },
+    });
+
+    signale.success(`MockERC20 deployed @ ${deployData.address}`);
+    next(deployData);
+  },
+});
 
 export interface DeployMockERC20Options {
   tokenName: string;
@@ -85,9 +72,9 @@ export async function deployMockERC20({
   onSubmitted,
 }: DeployMockERC20Options): Promise<DeployedContract> {
   return await deployContract({
-    abi: MockERC20__factory.abi,
+    abi: MockERC20.abi,
     args: [tokenName, tokenSymbol, account.address],
-    bytecode: MockERC20__factory.bytecode,
+    bytecode: MockERC20.bytecode,
     account,
     rpcUrl,
     chain,

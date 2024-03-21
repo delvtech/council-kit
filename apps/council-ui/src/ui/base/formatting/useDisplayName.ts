@@ -1,12 +1,10 @@
+import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useEnsName } from "wagmi";
-import { formatAddress } from "./formatAddress";
 
 export function useDisplayName(
-  address: string | null | undefined,
+  address: `0x${string}` | undefined,
 ): string | undefined {
-  const { data: ensName } = useEnsName({
-    address: address as `0x{string}` | undefined,
-  });
+  const { data: ensName } = useEnsName({ address });
 
   // hooks don't let us bail out early, so we do this after the useEnsName call
   if (!address) {

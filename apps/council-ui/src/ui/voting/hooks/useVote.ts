@@ -1,59 +1,47 @@
-import { Ballot } from "@council/sdk";
-import {
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { Signer } from "ethers";
-import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
-import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
-import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
+import { ReadVote, ReadVoter } from "@delvtech/council-viem";
+import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useAccount } from "wagmi";
 
-interface VoteArguments {
-  signer: Signer;
-  proposalId: number;
-  ballot: Ballot;
+interface UseVoteOptions {
+  coreVotingAddress: `0x${string}`;
+  proposalId: bigint;
+  account?: ReadVoter | `0x${string}`;
 }
 
-export function useVote(): UseMutationResult<
-  string,
-  unknown,
-  VoteArguments,
-  unknown
-> {
-  const { coreVoting } = useCouncil();
-  const chainId = useChainId();
-  const queryClient = useQueryClient();
-  let transactionHash: string;
-  return useMutation(
-    async ({ signer, proposalId, ballot }: VoteArguments) => {
-      const proposal = coreVoting.getProposal(proposalId);
-      return proposal.vote(signer, ballot, {
-        onSubmitted: (hash) => {
-          makeTransactionSubmittedToast("Voting", hash, chainId);
-          transactionHash = hash;
-        },
-      });
-    },
-    {
-      onSuccess: (hash, { proposalId, ballot }) => {
-        makeTransactionSuccessToast(
-          `Successfully voted ${ballot} on Proposal ${proposalId}!`,
-          hash,
-          chainId,
-        );
-        queryClient.invalidateQueries();
-      },
-      onError: (error, { proposalId, ballot }) => {
-        makeTransactionErrorToast(
-          `Failed to vote ${ballot} on Proposal ${proposalId}.`,
-          transactionHash,
-          chainId,
-        );
-        console.error(error);
-      },
-    },
-  );
+export function useVote({
+  coreVotingAddress,
+  proposalId,
+  account,
+}: UseVoteOptions): {
+  vote: ReadVote | undefined;
+  status: QueryStatus;
+} {
+  const council = useReadCouncil();
+  const { address: connectedAccount } = useAccount();
+
+  let accountToUse = account || connectedAccount;
+  if (typeof accountToUse === "string") {
+    accountToUse = council.voter(accountToUse);
+  }
+
+  const enabled = !!accountToUse;
+
+  const { data, status } = useQuery({
+    queryKey: ["vote", String(proposalId), accountToUse],
+    enabled,
+    queryFn: enabled
+      ? async () => {
+          const account = accountToUse!;
+          return council
+            .coreVoting({ address: coreVotingAddress })
+            .getVote({ account, proposalId });
+        }
+      : undefined,
+  });
+
+  return {
+    vote: data,
+    status: status,
+  };
 }

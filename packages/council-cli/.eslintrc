@@ -1,3 +1,8 @@
 {
-  "extends": ["@council/eslint-config"]
+  "extends": ["@council/eslint-config"],
+  "rules": {
+    "turbo/no-undeclared-env-vars": "warn",
+    "no-console": "off",
+    "no-restricted-imports": "off",
+  },
 }

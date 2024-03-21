@@ -1,12 +1,17 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@council/tsconfig/nextjs.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
-  "paths": {
-    "src/*": ["./src/*"]
-  },
   "compilerOptions": {
+    "jsx": "preserve",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ESNext",
     "rootDir": ".",
-    "baseUrl": "."
-  }
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"],
+    },
+  },
 }

@@ -1,39 +1,34 @@
-import { OptimisticRewards__factory } from "@council/typechain";
+import { OptimisticRewards } from "@delvtech/council-artifacts/OptimisticRewards";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-challenge-period [OPTIONS]",
-    aliases: ["setChallengePeriod"],
-    describe: "Encode call data for OptimisticRewards.setChallengePeriod",
+export default command({
+  description: "Encode call data for OptimisticRewards.setChallengePeriod",
 
-    builder: (yargs) => {
-      return yargs.options({
-        p: {
-          alias: ["period"],
-          describe: "The new challenge period (in seconds)",
-          type: "number",
-        },
-      });
+  options: {
+    period: {
+      description: "The new challenge period (in seconds)",
+      type: "number",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const period = await requiredNumber(args.period, {
-        name: "period",
-        message: "Enter challenge period (in seconds)",
-      });
+  handler: async ({ options, next }) => {
+    const period = await options.period({
+      prompt: "Enter challenge period (in seconds)",
+    });
 
-      signale.success(encodeSetChallengePeriod(period));
-    },
-  });
+    const encoded = encodeSetChallengePeriod(period);
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetChallengePeriod(period: number): string {
   return encodeFunctionData({
-    abi: OptimisticRewards__factory.abi,
+    abi: OptimisticRewards.abi,
     functionName: "setChallengePeriod",
-    args: [period],
+    args: [BigInt(period)],
   });
 }

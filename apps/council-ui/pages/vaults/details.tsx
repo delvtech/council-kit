@@ -1,22 +1,19 @@
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { Page } from "src/ui/base/Page";
-import { useChainId } from "src/ui/network/useChainId";
+import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
 import { FrozenLockingVaultDetails } from "src/ui/vaults/frozenLockingVault/FrozenLockingVaultDetails";
 import { GenericVaultDetails } from "src/ui/vaults/genericVault/GenericVaultDetails";
-import { GSCVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
+import { GscVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
 import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
-import { getVaultConfig } from "src/vaults/vaults";
+// import { VestingVaultDetails } from"src/ui/vaults/vestingVault/VestingVaultDetails";
 
-export default function Vault(): ReactElement {
-  const {
-    query: { address },
-    replace,
-  } = useRouter();
+export default function VaultPage(): ReactElement {
+  const { query, replace } = useRouter();
+  const address = query.address as `0x${string}` | undefined;
 
-  const chainId = useChainId();
-  const vaultConfig = getVaultConfig(address?.toString() || "", chainId);
+  const vaultConfig = useVaultConfig(address);
 
   if (!address || !vaultConfig) {
     replace("/vaults");
@@ -25,24 +22,24 @@ export default function Vault(): ReactElement {
   return (
     <Page>
       {(() => {
-        if (!vaultConfig) {
+        if (!address || !vaultConfig) {
           return;
         }
         switch (vaultConfig.type) {
           case "FrozenLockingVault":
-            return <FrozenLockingVaultDetails address={address as string} />;
+            return <FrozenLockingVaultDetails address={address} />;
 
           case "LockingVault":
-            return <LockingVaultDetails address={address as string} />;
+            return <LockingVaultDetails address={address} />;
 
           case "VestingVault":
-            return <VestingVaultDetails address={address as string} />;
+            return <VestingVaultDetails address={address} />;
 
           case "GSCVault":
-            return <GSCVaultDetails address={address as string} />;
+            return <GscVaultDetails address={address} />;
 
           default:
-            return <GenericVaultDetails address={address as string} />;
+            return <GenericVaultDetails address={address} />;
         }
       })()}
     </Page>

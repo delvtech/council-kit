@@ -1,21 +1,21 @@
 import { ReactElement } from "react";
-import { makeEtherscanAddressURL } from "src/etherscan/makeEtherscanAddressURL";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
-import ExternalLink from "src/ui/base/links/ExternalLink";
 import { Stat } from "src/ui/base/Stat";
-import { DefinitionTooltip } from "src/ui/base/Tooltip/Tooltip";
-import { useChainId } from "src/ui/network/useChainId";
+import { DefinitionTooltip } from "src/ui/base/Tooltip";
+import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
+import ExternalLink from "src/ui/base/links/ExternalLink";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
   PARTICIPANTS_TIP,
   WALLETS_DELEGATED_TIP,
   YOUR_VOTING_POWER_TIP,
 } from "src/ui/vaults/tooltips";
+import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
 
 interface LockingVaultStatsRowProps {
-  accountVotingPower: string;
+  accountVotingPower: bigint;
   delegatedToAccount: number;
   participants: number;
-  tokenAddress: string;
+  tokenAddress: `0x${string}`;
   tokenSymbol: string;
 }
 
@@ -26,21 +26,19 @@ export function LockingVaultStatsRow({
   tokenAddress,
   tokenSymbol,
 }: LockingVaultStatsRowProps): ReactElement {
-  const chainId = useChainId();
+  const chainId = useSupportedChainId();
+  const votingPowerFormatted = formatVotingPower(accountVotingPower);
+
   return (
     <div className="flex flex-wrap gap-4">
-      {accountVotingPower && (
-        <Stat
-          label={
-            <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
-              Your voting power
-            </DefinitionTooltip>
-          }
-          value={
-            +accountVotingPower ? formatBalance(accountVotingPower) : "None"
-          }
-        />
-      )}
+      <Stat
+        label={
+          <DefinitionTooltip content={YOUR_VOTING_POWER_TIP}>
+            Your voting power
+          </DefinitionTooltip>
+        }
+        value={votingPowerFormatted}
+      />
 
       {delegatedToAccount >= 0 && (
         <Stat

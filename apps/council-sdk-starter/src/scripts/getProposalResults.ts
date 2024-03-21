@@ -1,18 +1,22 @@
-import { CouncilContext, VoteResults, VotingContract } from "@council/sdk";
-import { getElementAddress } from "src/addresses/elementAddresses";
-import { provider } from "src/provider";
+import { ReadWriteCouncil, VoteResults } from "@delvtech/council-viem";
+import { elementAddresses } from "src/addresses/ElementMainnetAddressList";
+import { publicClient, walletClient } from "src/client";
 
 // wrap the script in an async function so we can await promises
 export async function getProposalResults(): Promise<void> {
-  const addresses = await getElementAddress();
+  if (!walletClient) {
+    throw new Error(
+      "Wallet client not available. Ensure the WALLET_PRIVATE_KEY environment variable is set.",
+    );
+  }
 
-  // create a CouncilContext instance
-  const context = new CouncilContext(provider);
+  // create a ReadWriteCouncil instance
+  const council = new ReadWriteCouncil({ publicClient, walletClient });
 
-  // Create a VotingContract instance.
-  // The vaults array can be left empty since we won't be fetching any voting
-  // power data.
-  const coreVoting = new VotingContract(addresses.coreVoting, [], context);
+  // Create a ReadWriteCoreVoting instance.
+  const coreVoting = council.coreVoting({
+    address: elementAddresses.coreVoting, // <-- replace with the CoreVoting contract address
+  });
 
   // get all proposals
   const proposals = await coreVoting.getProposals();
@@ -20,7 +24,7 @@ export async function getProposalResults(): Promise<void> {
   // get results for all proposals and key them by id in a new object
   const resultsByProposalId: Record<number, VoteResults> = {};
   for (const proposal of proposals) {
-    resultsByProposalId[proposal.id] = await proposal.getResults();
+    resultsByProposalId[Number(proposal.id)] = await proposal.getResults();
   }
 
   console.table(resultsByProposalId);

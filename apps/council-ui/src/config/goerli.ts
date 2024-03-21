@@ -1,51 +1,25 @@
-import { goerliDeployments } from "@council/deploy";
 import { CouncilConfig } from "src/config/CouncilConfig";
-
-const { contracts: goerliContracts } =
-  goerliDeployments[goerliDeployments.length - 1];
-
-// Find the deployed contract addresses. These are safe to cast as strings
-// because we know the deployment contains these contracts in the
-// @council/deploy project.
-const goerliTimelockAddress = goerliContracts.find(
-  ({ name }) => name === "Timelock",
-)?.address as string;
-const goerliCoreVotingAddress = goerliContracts.find(
-  ({ name }) => name === "CoreVoting",
-)?.address as string;
-const lockingVaultProxyAddress = goerliContracts.find(
-  ({ name }) => name === "LockingVaultProxy",
-)?.address as string;
-const vestingVaultProxyAddress = goerliContracts.find(
-  ({ name }) => name === "VestingVaultProxy",
-)?.address as string;
-const gscVotingAddress = goerliContracts.find(
-  ({ name }) => name === "GSCCoreVoting",
-)?.address as string;
-const goerliGSCVaultAddress = goerliContracts.find(
-  ({ name }) => name === "GSCVault",
-)?.address as string;
 
 export const goerliCouncilConfig: CouncilConfig = {
   version: "",
   chainId: 5,
   timelock: {
-    address: goerliTimelockAddress,
+    address: "0x7e7eEc56D2C53E9203d5cF48E01560Da52ff5214",
   },
   coreVoting: {
     name: "Core Voting",
-    address: goerliCoreVotingAddress,
+    address: "0x1dcFAD45c31e0b4d9A3E3cb05013023d9A9Bbd11",
     descriptionURL: "https://moreinfo.com",
     vaults: [
       {
         name: "Locking Vault",
-        address: lockingVaultProxyAddress,
+        address: "0x4520da1DDFad1F48536A2a21CF5923dd2c2247e9",
         type: "LockingVault",
         descriptionURL: "https://moreinfo.com",
       },
       {
         name: "Vesting Vault",
-        address: vestingVaultProxyAddress,
+        address: "0x6dbE1aF34649d1efe5f6a708A1CF93bF2F422250",
         type: "VestingVault",
         descriptionURL: "https://moreinfo.com",
       },
@@ -74,20 +48,23 @@ export const goerliCouncilConfig: CouncilConfig = {
 
   gscVoting: {
     name: "GSC",
-    address: gscVotingAddress,
+    address: "0xd3f84fc6f50e421502e9f8e36b519E0D156BE6C8",
     descriptionURL: "https://moreinfo.com",
-    vaults: [
-      {
-        name: "GSC Vault",
-        address: goerliGSCVaultAddress,
-        type: "GSCVault",
-        descriptionURL: "https://moreinfo.com",
-      },
-    ],
+    vault: {
+      name: "GSC Vault",
+      address: "0xCFb73f8D5D29e5d936AdF86A8A739AE12b882E8D",
+      type: "GSCVault",
+      descriptionURL: "https://moreinfo.com",
+    },
     proposals: {
       0: { descriptionURL: "", targets: [], calldatas: [] },
       1: { descriptionURL: "", targets: [], calldatas: [] },
     },
+  },
+
+  airdrop: {
+    address: "0x8278a7951f9E3C88B1817223603635981D65bC63",
+    baseDataURL: "/api/airdrop",
   },
 
   /**

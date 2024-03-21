@@ -1,67 +1,56 @@
-import { Treasury__factory } from "@council/typechain";
+import { Treasury } from "@delvtech/council-artifacts/Treasury";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "approve [OPTIONS]",
-    describe: "Encode call data for Treasury.approve",
+export default command({
+  description: "Encode call data for Treasury.approve",
 
-    builder: (yargs) => {
-      return yargs.options({
-        t: {
-          alias: ["token"],
-          describe: `The address of the token to approve`,
-          type: "string",
-        },
-        a: {
-          alias: ["amount"],
-          describe: "The amount to approve",
-          type: "string",
-        },
-        d: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-        s: {
-          alias: ["spender"],
-          describe: "The address to approve",
-          type: "string",
-        },
-      });
+  options: {
+    token: {
+      description: `The address of the token to approve`,
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const token = await requiredString(args.token, {
-        name: "token",
-        message: "Enter token address",
-      });
-
-      const amount = await requiredString(args.amount, {
-        name: "amount",
-        message: "Enter amount to approve",
-      });
-
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
-
-      const spender = await requiredString(args.spender, {
-        name: "spender",
-        message: "Enter spender address",
-      });
-
-      signale.success(encodeApprove(token, amount, decimals, spender));
+    amount: {
+      description: "The amount to approve",
+      type: "string",
+      required: true,
     },
-  });
+    decimals: {
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    spender: {
+      description: "The address to approve",
+      type: "string",
+      required: true,
+    },
+  },
+
+  handler: async ({ options, next }) => {
+    const token = await options.token({
+      prompt: "Enter token address",
+    });
+
+    const amount = await options.amount({
+      prompt: "Enter amount to approve",
+    });
+
+    const decimals = await options.decimals();
+
+    const spender = await options.spender({
+      prompt: "Enter spender address",
+    });
+
+    const encoded = encodeApprove(token, amount, decimals, spender);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeApprove(
   token: string,
@@ -70,8 +59,12 @@ export function encodeApprove(
   spender: string,
 ): string {
   return encodeFunctionData({
-    abi: Treasury__factory.abi,
+    abi: Treasury.abi,
     functionName: "approve",
-    args: [token, parseBigInt(amount, decimals), spender],
+    args: [
+      token as `0x${string}`,
+      spender as `0x${string}`,
+      parseUnits(amount, decimals),
+    ],
   });
 }

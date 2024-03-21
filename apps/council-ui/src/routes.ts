@@ -7,14 +7,14 @@ export enum Routes {
 }
 
 export function makeProposalURL(
-  votingContractAddress: string,
-  id: number,
+  votingContractAddress: `0x${string}`,
+  id: bigint | number,
 ): UrlObject {
   return {
     pathname: "/proposals/details",
     query: {
       votingContract: votingContractAddress,
-      id,
+      id: String(id),
     },
   };
 }

@@ -1,123 +1,96 @@
-import { CoreVoting__factory } from "@council/typechain";
+import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
+import { command } from "clide-js";
 import signale from "signale";
-import { chainOption, requiredChain } from "src/options/chain";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredArray } from "src/options/utils/requiredArray";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredNumberString } from "src/options/utils/requiredNumberString";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { PrivateKeyAccount, parseUnits } from "viem";
 import { Chain } from "viem/chains";
+import { WriteOptions } from "../../reusable-options/writeOptions.js";
+import {
+  DeployedContract,
+  deployContract,
+} from "../../utils/deployContract.js";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "core-voting [OPTIONS]",
-    aliases: ["CoreVoting"],
-    describe: "Deploy a CoreVoting contract",
+export default command({
+  description: "Deploy a CoreVoting contract",
 
-    builder: (yargs) => {
-      return yargs.options({
-        o: {
-          alias: ["owner", "timelock"],
-          describe: "The contract owner's address (e.g., a Timelock contract)",
-          type: "string",
-        },
-        q: {
-          alias: ["quorum", "base-quorum", "baseQuorum"],
-          describe: "The default quorum for proposals",
-          type: "string",
-        },
-        m: {
-          alias: ["min-power", "min-proposal-power", "minProposalPower"],
-          describe: "The minimum voting power required to create a proposal",
-          type: "string",
-        },
-        d: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision to use. The quorum and power options will be multiplied by (10 ** decimals). For example, if quorum is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-        g: {
-          alias: ["gsc"],
-          describe: "The address of the Governance Steering Committee contract",
-          type: "string",
-        },
-        v: {
-          alias: ["vaults", "voting-vaults", "votingVaults"],
-          describe: "The addresses of the approved voting vaults",
-          type: "array",
-          string: true,
-        },
-        c: chainOption,
-        r: rpcUrlOption,
-        w: walletKeyOption,
-      });
+  options: {
+    owner: {
+      alias: ["timelock"],
+      description: "The contract owner's address (e.g., a Timelock contract)",
+      type: "string",
     },
-
-    handler: async (args) => {
-      const owner = await requiredString(args.owner, {
-        name: "owner",
-        message: "Enter owner address (e.g., a Timelock contract)",
-      });
-
-      const quorum = await requiredNumberString(args.quorum, {
-        name: "quorum",
-        message: "Enter default quorum",
-      });
-
-      const minPower = await requiredNumberString(args.minPower, {
-        name: "min-power",
-        message: "Enter minimum proposal power",
-      });
-
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
-
-      const gsc = await requiredString(args.gsc, {
-        name: "gsc",
-        message: "Enter GSC address",
-      });
-
-      const vaults = await requiredArray(args.vaults, {
-        name: "vaults",
-        message: "Enter approved voting vaults",
-        validate: () => true,
-      });
-
-      const chain = await requiredChain(args.chain);
-      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-      const walletKey = await requiredWalletKey(args.walletKey);
-      const account = privateKeyToAccount(walletKey as Hex);
-
-      signale.pending("Deploying CoreVoting...");
-
-      const { address } = await deployCoreVoting({
-        owner,
-        quorum,
-        minPower,
-        decimals,
-        gsc,
-        vaults,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (txHash) => {
-          signale.pending(`CoreVoting deployment tx submitted: ${txHash}`);
-        },
-      });
-
-      signale.success(`CoreVoting deployed @ ${address}`);
+    quorum: {
+      alias: ["base-quorum"],
+      description: "The default quorum for proposals",
+      type: "string",
+      required: true,
     },
-  });
+    "min-power": {
+      alias: ["min-proposal-power"],
+      description: "The minimum voting power required to create a proposal",
+      type: "string",
+      required: true,
+    },
+    decimals: {
+      description:
+        "The decimal precision to use. The quorum and power options will be multiplied by (10 ** decimals). For example, if quorum is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    gsc: {
+      description: "The address of the Governance Steering Committee contract",
+      type: "string",
+    },
+    vaults: {
+      alias: ["voting-vaults"],
+      description: "The addresses of the approved voting vaults",
+      type: "array",
+      default: [],
+    },
+  },
+
+  handler: async ({ data, options, next }) => {
+    const { account, chain, rpcUrl } = data as WriteOptions;
+
+    const owner = (await options.owner()) || account.address;
+
+    const quorum = await options.quorum({
+      prompt: "Enter default quorum",
+    });
+
+    const minPower = await options.minPower({
+      prompt: "Enter minimum proposal power",
+    });
+
+    const decimals = await options.decimals();
+
+    const gsc = (await options.gsc()) || owner;
+
+    const maybeVaults = await options.vaults({
+      prompt: "Enter approved voting vaults",
+    });
+    const vaults = maybeVaults?.filter((v) => !!v) || [];
+
+    signale.pending("Deploying CoreVoting...");
+
+    const deployData = await deployCoreVoting({
+      owner,
+      quorum,
+      minPower,
+      decimals,
+      gsc,
+      vaults,
+      account,
+      rpcUrl,
+      chain,
+      onSubmitted: (txHash) => {
+        signale.pending(`CoreVoting deployment tx submitted: ${txHash}`);
+      },
+    });
+
+    signale.success(`CoreVoting deployed @ ${deployData.address}`);
+    next(deployData);
+  },
+});
 
 export interface DeployCoreVotingOptions {
   quorum: string;
@@ -145,15 +118,15 @@ export async function deployCoreVoting({
   onSubmitted,
 }: DeployCoreVotingOptions): Promise<DeployedContract> {
   return await deployContract({
-    abi: CoreVoting__factory.abi,
+    abi: CoreVoting.abi,
     args: [
-      owner,
-      parseBigInt(quorum, decimals),
-      parseBigInt(minPower, decimals),
-      gsc,
-      vaults,
+      owner as `0x${string}`,
+      parseUnits(quorum, decimals),
+      parseUnits(minPower, decimals),
+      gsc as `0x${string}`,
+      vaults as `0x${string}`[],
     ],
-    bytecode: CoreVoting__factory.bytecode,
+    bytecode: CoreVoting.bytecode,
     account,
     rpcUrl,
     chain,

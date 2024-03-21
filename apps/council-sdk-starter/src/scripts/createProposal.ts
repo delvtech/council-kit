@@ -1,87 +1,76 @@
-import {
-  CouncilContext,
-  LockingVault,
-  VestingVault,
-  VotingContract,
-} from "@council/sdk";
-import { CoreVoting__factory } from "@council/typechain";
-import { BigNumber, utils, Wallet } from "ethers";
-import { getElementAddress } from "src/addresses/elementAddresses";
-import { provider } from "src/provider";
+import { ReadWriteCouncil } from "@delvtech/council-viem";
+import { publicClient, walletClient } from "src/client";
 
 // approx 90 days in blocks assuming 12 seconds a block
-const NINETY_DAYS_IN_BLOCKS = (90 * 24 * 60 * 60) / 12;
+const FOURTEEN_DAYS_IN_BLOCKS = (14n * 24n * 60n * 60n) / 12n;
 
 // wrap the script in an async function so we can await promises
 export async function createProposal(): Promise<void> {
-  const addresses = await getElementAddress();
+  if (!walletClient) {
+    throw new Error(
+      "Wallet client not available. Ensure the WALLET_PRIVATE_KEY environment variable is set.",
+    );
+  }
 
-  // create a CouncilContext instance
-  const context = new CouncilContext(provider);
+  // create a ReadWriteCouncil instance
+  const council = new ReadWriteCouncil({ publicClient, walletClient });
 
   // create model instances
-  const lockingVault = new LockingVault(addresses.lockingVault, context);
-  const vestingVault = new VestingVault(addresses.vestingVault, context);
-  const coreVoting = new VotingContract(
-    addresses.coreVoting,
-    [lockingVault, vestingVault],
-    context,
-  );
-
-  // create a signer for the proposal transaction
-  const signer = new Wallet(process.env.WALLET_PRIVATE_KEY as string, provider);
+  const lockingVault = council.lockingVault("0x"); // <-- replace with the LockingVault contract address
+  const vestingVault = council.vestingVault("0x"); // <-- replace with the VestingVault contract address
+  const coreVoting = council.coreVoting({
+    address: "0x", // <-- replace with the CoreVoting contract address
+    vaults: [lockingVault, vestingVault],
+  });
 
   // prep arguments
 
   // the vaults that will be used to cast the first vote
   const vaults = [];
+  const account = (await walletClient.getAddresses())[0];
 
   // trying to create a proposal with vaults you have no power in will throw an
   // uninitialized error.
-  const lockingVaultVotingPower = await lockingVault.getVotingPower(
-    signer.address,
-  );
-  if (+lockingVaultVotingPower > 0) {
+  const lockingVaultVotingPower = await lockingVault.getVotingPower({
+    account,
+  });
+  if (lockingVaultVotingPower > 0n) {
     vaults.push(lockingVault);
   }
-  const vestingVaultVotingPower = await vestingVault.getVotingPower(
-    signer.address,
-  );
-  if (+vestingVaultVotingPower > 0) {
+  const vestingVaultVotingPower = await vestingVault.getVotingPower({
+    account,
+  });
+  if (vestingVaultVotingPower > 0) {
     vaults.push(vestingVault);
   }
 
   // the target contract addresses for the proposal
   const targets = [coreVoting.address];
 
-  // get the core voting contract abi to encode call data
-  const coreVotingInterface = new utils.Interface(CoreVoting__factory.abi);
-
   // the proposed calls datas to send to the targets
   const calldatas = [
-    coreVotingInterface.encodeFunctionData("setDefaultQuorum", [
-      BigNumber.from(10),
-    ]),
+    coreVoting.contract.encodeFunctionData("setDefaultQuorum", {
+      quorum: 100n,
+    }),
   ];
 
-  const currentBlock = await provider.getBlockNumber();
+  const currentBlock = await publicClient.getBlockNumber();
 
   // the block number after which the proposal can no longer be executed
-  const lastCall = currentBlock + NINETY_DAYS_IN_BLOCKS;
+  const lastCall = currentBlock + FOURTEEN_DAYS_IN_BLOCKS;
 
   // the ballot to cast for the first vote
   const ballot = "yes";
 
-  const tx = await coreVoting.createProposal(
-    signer,
-    vaults,
-    targets,
+  const hash = await coreVoting.createProposal({
+    ballot,
     calldatas,
     lastCall,
-    ballot,
-  );
+    targets,
+    vaults,
+  });
 
-  console.log(tx);
+  console.log(hash);
 
   process.exit();
 }

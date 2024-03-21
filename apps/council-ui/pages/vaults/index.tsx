@@ -1,15 +1,16 @@
+import { ReadLockingVault, ReadVestingVault } from "@delvtech/council-viem";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
-import { useCouncil } from "src/ui/council/useCouncil";
-import { useChainId } from "src/ui/network/useChainId";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { useReadGscVoting } from "src/ui/council/hooks/useReadGscVoting";
 import {
   GenericVaultCard,
   GenericVaultCardSkeleton,
 } from "src/ui/vaults/GenericVaultCard";
-import { GSCVaultPreviewCard } from "src/ui/vaults/gscVault/GSCVaultPreviewCard/GSCVaultPreviewCard";
-import { getVaultConfig } from "src/vaults/vaults";
+import { GSCVaultPreviewCard } from "src/ui/vaults/gscVault/GscVaultPreviewCard";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
@@ -28,7 +29,7 @@ export default function VaultsPage(): ReactElement {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 grid-flow-row gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-flow-row grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {status === "success" ? (
           data.map((vault) => {
             switch (vault.name) {
@@ -64,7 +65,7 @@ export default function VaultsPage(): ReactElement {
         )}
       </div>
 
-      <div className="flex flex-wrap gap-4 mb-2 sm:flex-nowrap">
+      <div className="mb-2 flex flex-wrap gap-4 sm:flex-nowrap">
         <ExternalInfoCard
           header="Learn more about voting vaults"
           body="Check out this blog post to learn about various types of Voting
@@ -85,40 +86,62 @@ export default function VaultsPage(): ReactElement {
 }
 
 interface VaultData {
-  address: string;
+  address: `0x${string}`;
   name: string;
-  tvp: string | undefined;
-  votingPower: string | undefined;
+  tvp: bigint | undefined;
+  votingPower: bigint | undefined;
   sentenceSummary: string | undefined;
 }
 
 function useVaultsPageData(
-  account: string | undefined,
+  account: `0x${string}` | undefined,
 ): UseQueryResult<VaultData[]> {
-  const { coreVoting, gscVoting } = useCouncil();
-  const chainId = useChainId();
+  const coreVoting = useReadCoreVoting();
+  const gscVoting = useReadGscVoting();
+  const config = useCouncilConfig();
 
   return useQuery({
     queryKey: ["vaultsPage", account],
-    queryFn: (): Promise<VaultData[]> => {
-      let allVaults = coreVoting.vaults;
-      if (gscVoting) {
-        allVaults = [...allVaults, ...gscVoting.vaults];
+    queryFn: async (): Promise<VaultData[]> => {
+      const data: VaultData[] = [];
+
+      // core voting vaults
+      for (const vault of coreVoting.vaults) {
+        const vaultConfig = config.coreVoting.vaults.find(
+          ({ address }) => address === vault.address,
+        );
+
+        let tvp: bigint | undefined = undefined;
+        if (
+          vault instanceof ReadLockingVault ||
+          vault instanceof ReadVestingVault
+        ) {
+          tvp = await vault.getTotalVotingPower();
+        }
+
+        data.push({
+          address: vault.address,
+          name: vaultConfig?.name || vault.name,
+          tvp,
+          votingPower: account && (await vault.getVotingPower({ account })),
+          sentenceSummary: vaultConfig?.sentenceSummary,
+        });
       }
 
-      return Promise.all(
-        allVaults.map(async (vault) => {
-          const vaultConfig = getVaultConfig(vault.address, chainId);
-
-          return {
+      // gsc vault
+      if (gscVoting) {
+        for (const vault of gscVoting.vaults) {
+          data.push({
             address: vault.address,
-            name: vaultConfig?.name || vault.name,
-            tvp: await vault.getTotalVotingPower?.(),
-            votingPower: account && (await vault.getVotingPower(account)),
-            sentenceSummary: vaultConfig?.sentenceSummary,
-          };
-        }),
-      );
+            name: config.gscVoting!.vault.name,
+            tvp: undefined,
+            votingPower: account && (await vault.getVotingPower({ account })),
+            sentenceSummary: config.gscVoting!.vault.sentenceSummary,
+          });
+        }
+      }
+
+      return data;
     },
   });
 }

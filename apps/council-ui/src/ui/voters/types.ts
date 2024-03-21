@@ -1,7 +1,7 @@
 export interface VoterRowData {
-  address: string;
+  address: `0x${string}`;
   ensName: string | null;
-  votingPower: string;
+  votingPower: bigint;
   numberOfDelegators: number;
   isGSCMember: boolean;
 }

@@ -1,39 +1,36 @@
-import { VestingVault__factory } from "@council/typechain";
+import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredString } from "src/options/utils/requiredString";
-import { createCommandModule } from "src/utils/createCommandModule";
 import { encodeFunctionData } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "remove-grant [OPTIONS]",
-    aliases: ["removeGrant"],
-    describe: "Encode call data for VestingVault.removeGrant",
+export default command({
+  description: "Encode call data for VestingVault.removeGrant",
 
-    builder: (yargs) => {
-      return yargs.options({
-        a: {
-          alias: ["address", "who"],
-          describe: "The grant owner",
-          type: "string",
-        },
-      });
+  options: {
+    address: {
+      alias: ["who"],
+      description: "The grant owner",
+      type: "string",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const who = await requiredString(args.who, {
-        name: "who",
-        message: "Enter owner address",
-      });
+  handler: async ({ options, next }) => {
+    const who = await options.who({
+      prompt: "Enter owner address",
+    });
 
-      signale.success(encodeRemoveGrant(who));
-    },
-  });
+    const encoded = encodeRemoveGrant(who);
+
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeRemoveGrant(who: string): string {
   return encodeFunctionData({
-    abi: VestingVault__factory.abi,
+    abi: VestingVault.abi,
     functionName: "removeGrant",
-    args: [who],
+    args: [who as `0x${string}`],
   });
 }

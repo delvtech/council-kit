@@ -1,70 +1,55 @@
-import { OptimisticGrants__factory } from "@council/typechain";
+import { OptimisticGrants } from "@delvtech/council-artifacts/OptimisticGrants";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "configure-grant [function]",
-    aliases: ["configureGrant"],
-    describe: "Encode call data for a OptimisticGrants.configureGrant",
+export default command({
+  description: "Encode call data for a OptimisticGrants.configureGrant",
 
-    builder: (yargs) => {
-      return yargs.options({
-        o: {
-          alias: ["owner"],
-          describe: "The address of the grant owner",
-          type: "string",
-        },
-        a: {
-          alias: ["amount"],
-          describe: "The amount of tokens to grant",
-          type: "string",
-        },
-        d: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-        e: {
-          alias: ["expiration"],
-          describe: "The expiration timestamp (in seconds) of the grant",
-          type: "number",
-        },
-      });
+  options: {
+    owner: {
+      description: "The address of the grant owner",
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const owner = await requiredString(args.owner, {
-        name: "owner",
-        message: "Enter owner address",
-      });
-
-      const amount = await requiredString(args.amount, {
-        name: "amount",
-        message: "Enter amount to grant",
-      });
-
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
-
-      const expiration = await requiredNumber(args.expiration, {
-        name: "expiration",
-        message: "Enter expiration timestamp (in seconds)",
-      });
-
-      signale.success(
-        encodeConfigureGrant(owner, amount, decimals, expiration),
-      );
+    amount: {
+      description: "The amount of tokens to grant",
+      type: "string",
+      required: true,
     },
-  });
+    decimals: {
+      description:
+        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+    expiration: {
+      description: "The expiration timestamp (in seconds) of the grant",
+      type: "number",
+      required: true,
+    },
+  },
+
+  handler: async ({ options, next }) => {
+    const owner = await options.owner({
+      prompt: "Enter owner address",
+    });
+
+    const amount = await options.amount({
+      prompt: "Enter amount to grant",
+    });
+
+    const decimals = await options.decimals();
+
+    const expiration = await options.expiration({
+      prompt: "Enter expiration timestamp (in seconds)",
+    });
+
+    const encoded = encodeConfigureGrant(owner, amount, decimals, expiration);
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeConfigureGrant(
   owner: string,
@@ -73,8 +58,12 @@ export function encodeConfigureGrant(
   expiration: number,
 ): string {
   return encodeFunctionData({
-    abi: OptimisticGrants__factory.abi,
+    abi: OptimisticGrants.abi,
     functionName: "configureGrant",
-    args: [owner, parseBigInt(amount, decimals), expiration],
+    args: [
+      owner as `0x${string}`,
+      parseUnits(amount, decimals),
+      BigInt(expiration),
+    ],
   });
 }

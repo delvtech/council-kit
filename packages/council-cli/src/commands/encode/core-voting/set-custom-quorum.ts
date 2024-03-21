@@ -1,69 +1,58 @@
-import { CoreVoting__factory } from "@council/typechain";
+import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
+import { command } from "clide-js";
 import signale from "signale";
-import { requiredNumber } from "src/options/utils/requiredNumber";
-import { requiredNumberString } from "src/options/utils/requiredNumberString";
-import { requiredString } from "src/options/utils/requiredString";
-import { parseBigInt } from "src/utils/bigint/parseBigInt";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, parseUnits } from "viem";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "set-custom-quorum [OPTIONS]",
-    aliases: ["setCustomQuorum"],
-    describe: "Encode call data for CoreVoting.setCustomQuorum",
+export default command({
+  description: "Encode call data for CoreVoting.setCustomQuorum",
 
-    builder: (yargs) => {
-      return yargs.options({
-        t: {
-          alias: ["target"],
-          describe: "The address to set a custom quorum for",
-          type: "string",
-        },
-        f: {
-          alias: ["function", "selector"],
-          describe: "The function selector/name",
-          type: "string",
-        },
-        p: {
-          alias: ["power", "quorum"],
-          describe: "A new base quorum for the specific function",
-          type: "string",
-        },
-        d: {
-          alias: ["decimals"],
-          describe:
-            "The decimal precision used by the contract. The power option will be multiplied by (10 ** decimals). For example, if power is 100 and decimals is 18, then the result will be 100000000000000000000",
-          type: "number",
-        },
-      });
+  options: {
+    target: {
+      description: "The address to set a custom quorum for",
+      type: "string",
+      required: true,
     },
-
-    handler: async (args) => {
-      const target = await requiredString(args.target, {
-        name: "target",
-        message: "Enter target address",
-      });
-
-      const selector = await requiredString(args.function, {
-        name: "function",
-        message: "Enter function selector/name",
-      });
-
-      const power = await requiredNumberString(args.power, {
-        name: "power",
-        message: "Enter new base quorum",
-      });
-
-      const decimals = await requiredNumber(args.decimals, {
-        name: "decimals",
-        message: "Enter decimal precision",
-        initial: 18,
-      });
-
-      signale.success(encodeSetCustomQuorum(target, selector, power, decimals));
+    f: {
+      alias: ["function", "selector"],
+      description: "The 4 byte function selector to set a custom quorum for",
+      type: "string",
+      required: true,
     },
-  });
+    power: {
+      alias: ["quorum"],
+      description:
+        "A new base quorum for the specific function (e.g. 0x12345678)",
+      type: "string",
+      required: true,
+    },
+    decimals: {
+      description:
+        "The decimal precision used by the contract. The power option will be multiplied by (10 ** decimals). For example, if power is 100 and decimals is 18, then the result will be 100000000000000000000",
+      type: "number",
+      default: 18,
+    },
+  },
+
+  handler: async ({ options, next }) => {
+    const target = await options.target({
+      prompt: "Enter target address",
+    });
+
+    const selector = await options.selector({
+      prompt: "Enter 4 byte function selector",
+    });
+
+    const power = await options.power({
+      prompt: "Enter new base quorum",
+    });
+
+    const decimals = await options.decimals();
+
+    const encoded = encodeSetCustomQuorum(target, selector, power, decimals);
+    signale.success(encoded);
+    next(encoded);
+  },
+});
 
 export function encodeSetCustomQuorum(
   target: string,
@@ -72,8 +61,12 @@ export function encodeSetCustomQuorum(
   decimals: number,
 ): string {
   return encodeFunctionData({
-    abi: CoreVoting__factory.abi,
+    abi: CoreVoting.abi,
     functionName: "setCustomQuorum",
-    args: [target, selector, parseBigInt(quorum, decimals)],
+    args: [
+      target as `0x${string}`,
+      selector as `0x${string}`,
+      parseUnits(quorum, decimals),
+    ],
   });
 }

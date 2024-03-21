@@ -1,1 +1,2 @@
-export * from "src/commands/encode/libraries/authorizable/set-owner";
+import setOwner from "../authorizable/set-owner.js";
+export default setOwner;

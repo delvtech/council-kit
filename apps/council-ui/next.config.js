@@ -24,6 +24,11 @@ module.exports = (phase) => {
     swcMinify: false,
 
     basePath: process.env.NEXT_PUBLIC_COUNCIL_UI_BASE_PATH ?? "",
+
+    i18n: {
+      locales: ["en-US", "zh-CN"],
+      defaultLocale: "en-US",
+    },
   };
 };
 

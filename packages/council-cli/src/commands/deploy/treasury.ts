@@ -1,60 +1,46 @@
-import { Treasury__factory } from "@council/typechain";
+import { Treasury } from "@delvtech/council-artifacts/Treasury";
+import { command } from "clide-js";
 import signale from "signale";
-import { chainOption, requiredChain } from "src/options/chain";
-import { requiredRpcUrl, rpcUrlOption } from "src/options/rpc-url";
-import { requiredString } from "src/options/utils/requiredString";
-import { requiredWalletKey, walletKeyOption } from "src/options/wallet-key";
-import { createCommandModule } from "src/utils/createCommandModule";
-import { deployContract, DeployedContract } from "src/utils/deployContract";
-import { Hex, PrivateKeyAccount } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
+import { PrivateKeyAccount } from "viem";
 import { Chain } from "viem/chains";
+import { WriteOptions } from "../../reusable-options/writeOptions.js";
+import {
+  DeployedContract,
+  deployContract,
+} from "../../utils/deployContract.js";
 
-export const { command, aliases, describe, builder, handler } =
-  createCommandModule({
-    command: "treasury [OPTIONS]",
-    aliases: ["Treasury"],
-    describe: "Deploy a Treasury contract",
+export default command({
+  description: "Deploy a Treasury contract",
 
-    builder: (yargs) => {
-      return yargs.options({
-        o: {
-          alias: ["owner"],
-          describe: "The contract owner's address (e.g., a Timelock contract)",
-          type: "string",
-        },
-        c: chainOption,
-        r: rpcUrlOption,
-        w: walletKeyOption,
-      });
+  options: {
+    owner: {
+      description: "The contract owner's address (e.g., a Timelock contract)",
+      type: "string",
+      required: true,
     },
+  },
 
-    handler: async (args) => {
-      const owner = await requiredString(args.owner, {
-        name: "owner",
-        message: "Enter owner address (e.g., a Timelock contract)",
-      });
+  handler: async ({ data, options, next }) => {
+    const { account, chain, rpcUrl } = data as WriteOptions;
 
-      const chain = await requiredChain(args.chain);
-      const rpcUrl = await requiredRpcUrl(args.rpcUrl);
-      const walletKey = await requiredWalletKey(args.walletKey);
-      const account = privateKeyToAccount(walletKey as Hex);
+    const owner = (await options.owner()) || account.address;
 
-      signale.pending("Deploying Treasury...");
+    signale.pending("Deploying Treasury...");
 
-      const { address } = await deployTreasury({
-        owner,
-        account,
-        rpcUrl,
-        chain,
-        onSubmitted: (txHash) => {
-          signale.pending(`Treasury deployment tx submitted: ${txHash}`);
-        },
-      });
+    const deployData = await deployTreasury({
+      owner,
+      account,
+      rpcUrl,
+      chain,
+      onSubmitted: (txHash) => {
+        signale.pending(`Treasury deployment tx submitted: ${txHash}`);
+      },
+    });
 
-      signale.success(`Treasury deployed @ ${address}`);
-    },
-  });
+    signale.success(`Treasury deployed @ ${deployData.address}`);
+    next(deployData);
+  },
+});
 
 export interface DeployTreasuryOptions {
   account: PrivateKeyAccount;
@@ -72,9 +58,9 @@ export async function deployTreasury({
   onSubmitted,
 }: DeployTreasuryOptions): Promise<DeployedContract> {
   return await deployContract({
-    abi: Treasury__factory.abi,
-    args: [owner],
-    bytecode: Treasury__factory.bytecode,
+    abi: Treasury.abi,
+    args: [owner as `0x${string}`],
+    bytecode: Treasury.bytecode,
     account,
     rpcUrl,
     chain,
