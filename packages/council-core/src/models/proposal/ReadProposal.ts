@@ -422,12 +422,24 @@ export class ReadProposal extends Model {
   protected async _getExecutedEvents(): Promise<
     Event<typeof CoreVoting.abi, "ProposalExecuted">[]
   > {
-    const lastCallBlock = await this.getLastCallBlock();
+    let toBlock = await this.getLastCallBlock();
+    const latestBlock = await this.network.getBlock();
+
+    // Ensure we don't try to fetch a block range including blocks that don't
+    // exist yet.
+    if (
+      typeof toBlock === "bigint" &&
+      typeof latestBlock?.blockNumber === "bigint" &&
+      latestBlock.blockNumber < toBlock
+    ) {
+      toBlock = latestBlock.blockNumber;
+    }
+
     const events = await this.coreVoting.contract.getEvents(
       "ProposalExecuted",
       {
         fromBlock: this.created,
-        toBlock: lastCallBlock,
+        toBlock,
       },
     );
 
