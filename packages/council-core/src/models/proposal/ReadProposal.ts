@@ -428,8 +428,8 @@ export class ReadProposal extends Model {
     // Ensure we don't try to fetch a block range including blocks that don't
     // exist yet.
     if (
-      toBlock &&
-      latestBlock?.blockNumber &&
+      typeof toBlock === "bigint" &&
+      typeof latestBlock?.blockNumber === "bigint" &&
       latestBlock.blockNumber < toBlock
     ) {
       toBlock = latestBlock.blockNumber;
