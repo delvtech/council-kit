@@ -74,7 +74,7 @@ export default function VaultsPage(): ReactElement {
         <ExternalInfoCard
           header="Read the docs"
           body="Check out our documentation on voting vaults and other parts of the council protocol."
-          href="https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults"
+          href="https://docs-delv.gitbook.io/element-protocol-docs/governance-council/council-protocol-smart-contracts/voting-vaults"
         />
       </div>
     </Page>
