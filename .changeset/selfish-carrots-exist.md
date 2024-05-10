@@ -1,9 +1,9 @@
 ---
-"@delvtech/council-artifacts": patch
-"@delvtech/council-ethers": patch
-"@delvtech/council-core": patch
-"@delvtech/council-viem": patch
-"@delvtech/council-cli": patch
+"@delvtech/council-artifacts": minor
+"@delvtech/council-ethers": minor
+"@delvtech/council-core": minor
+"@delvtech/council-viem": minor
+"@delvtech/council-cli": minor
 ---
 
-Included license file
+Updated license to AGPL-3.0
