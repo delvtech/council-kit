@@ -71,14 +71,14 @@ export default function VaultsPage(): ReactElement {
           body="Check out this blog post to learn about various types of Voting
           Vaults available today and how this governance primitive can be
           extended to serve many more use cases."
-          href="https://blog.element.fi/voting-vaults-a-new-defi-and-governance-primitive-2/"
+          href="https://blog.delv.tech/voting-vaults-a-new-defi-and-governance-primitive-2/"
         />
         <ExternalInfoCard
           header="Want to dive deeper? Read the docs."
           body="Learn about the mechanics behind the current vault types,
           details on the underlying smart contracts, and how to create and
           propose new vaults."
-          href="https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults"
+          href="https://docs-delv.gitbook.io/element-developer-docs/governance-council/council-protocol-smart-contracts/voting-vaults"
         />
       </div>
     </Page>
