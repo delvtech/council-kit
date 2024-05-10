@@ -16,7 +16,7 @@ export function Footer(): ReactElement {
           </p>
           <p className="flex gap-4">
             <a
-              href="https://elementfi.s3.us-east-2.amazonaws.com/element-finance-terms-of-service.pdf"
+              href="https://delv-public.s3.us-east-2.amazonaws.com/delv-terms-of-service.pdf"
               className="transition-all text-primary-text hover:text-white"
               target="_blank"
               rel="noreferrer"
@@ -24,7 +24,7 @@ export function Footer(): ReactElement {
               Terms
             </a>
             <a
-              href="https://elementfi.s3.us-east-2.amazonaws.com/element-finance-privacy-policy.pdf"
+              href="https://delv-public.s3.us-east-2.amazonaws.com/delv-privacy-policy.pdf"
               className="transition-all text-primary-text hover:text-white"
               target="_blank"
               rel="noreferrer"

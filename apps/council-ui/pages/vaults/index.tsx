@@ -69,12 +69,12 @@ export default function VaultsPage(): ReactElement {
         <ExternalInfoCard
           header="Learn more about voting vaults"
           body="Read our intro post to learn more about voting vaults and the vision behind them."
-          href="https://blog.element.fi/voting-vaults-a-new-defi-and-governance-primitive-2/"
+          href="https://blog.delv.tech/voting-vaults-a-new-defi-and-governance-primitive-2/"
         />
         <ExternalInfoCard
           header="Read the docs"
           body="Check out our documentation on voting vaults and other parts of the council protocol."
-          href="https://docs.element.fi/governance-council/council-protocol-smart-contracts/voting-vaults"
+          href="https://docs-delv.gitbook.io/element-developer-docs/governance-council/council-protocol-smart-contracts/voting-vaults"
         />
       </div>
     </Page>

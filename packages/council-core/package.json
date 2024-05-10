@@ -1,7 +1,7 @@
 {
   "name": "@delvtech/council-core",
   "version": "0.0.3",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "type": "module",
   "scripts": {
     "build": "tsup",

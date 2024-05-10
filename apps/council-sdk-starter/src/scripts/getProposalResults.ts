@@ -1,5 +1,4 @@
 import { ReadWriteCouncil, VoteResults } from "@delvtech/council-viem";
-import { elementAddresses } from "src/addresses/ElementMainnetAddressList";
 import { publicClient, walletClient } from "src/client";
 
 // wrap the script in an async function so we can await promises
@@ -15,7 +14,7 @@ export async function getProposalResults(): Promise<void> {
 
   // Create a ReadWriteCoreVoting instance.
   const coreVoting = council.coreVoting({
-    address: elementAddresses.coreVoting, // <-- replace with the CoreVoting contract address
+    address: "0x", // <-- replace with the CoreVoting contract address
   });
 
   // get all proposals
