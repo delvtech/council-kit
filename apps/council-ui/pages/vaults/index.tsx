@@ -69,7 +69,7 @@ export default function VaultsPage(): ReactElement {
         <ExternalInfoCard
           header="Learn more about voting vaults"
           body="Read our intro post to learn more about voting vaults and the vision behind them."
-          href="https://blog.element.fi/voting-vaults-a-new-defi-and-governance-primitive-2/"
+          href="https://blog.delv.tech/voting-vaults-a-new-defi-and-governance-primitive-2/"
         />
         <ExternalInfoCard
           header="Read the docs"

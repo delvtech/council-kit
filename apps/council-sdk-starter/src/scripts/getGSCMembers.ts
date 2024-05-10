@@ -1,5 +1,4 @@
 import { ReadWriteCouncil } from "@delvtech/council-viem";
-import { elementAddresses } from "src/addresses/ElementMainnetAddressList";
 import { publicClient, walletClient } from "src/client";
 
 // wrap the script in an async function so we can await promises
@@ -14,7 +13,7 @@ export async function getGSCMembers(): Promise<void> {
   const council = new ReadWriteCouncil({ publicClient, walletClient });
 
   // create a ReadGscVault instance
-  const gscVault = council.gscVault(elementAddresses.gscVault); // <-- replace with the LockingVault contract address
+  const gscVault = council.gscVault("0x"); // <-- replace with the LockingVault contract address
 
   // get all members
   const members = await gscVault.getMembers();
