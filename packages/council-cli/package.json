@@ -1,7 +1,7 @@
 {
   "name": "@delvtech/council-cli",
   "version": "0.0.4",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "type": "module",
   "main": "dist/council.js",
   "bin": {
