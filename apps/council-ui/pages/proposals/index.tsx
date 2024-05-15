@@ -57,12 +57,12 @@ export default function ProposalsPage(): ReactElement {
         <ExternalInfoCard
           header="Learn about the proposal process."
           body="Check out the Element Governance Proposal Framework"
-          href="https://docs.element.fi/governance-council/element-governance-proposal-framework/the-governance-process/the-proposal-process-overview"
+          href="https://docs-delv.gitbook.io/element-developer-docs/governance-council/element-governance-proposal-framework/the-governance-process/the-proposal-process-overview"
         />
         <ExternalInfoCard
           header="How do I create an on-chain proposal?"
           body="Check out the Proposal Lifecycle Breakdown & Criteria"
-          href="https://docs.element.fi/governance-council/element-governance-proposal-framework/the-governance-process/the-proposal-lifecycles/protocol-executable-proposal-lifecycle-breakdown-and-criteria"
+          href="https://docs-delv.gitbook.io/element-developer-docs/governance-council/element-governance-proposal-framework/the-governance-process/the-proposal-lifecycles/protocol-executable-proposal-lifecycle-breakdown-and-criteria"
         />
       </div>
     </Page>
