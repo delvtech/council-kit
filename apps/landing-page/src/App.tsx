@@ -12,7 +12,7 @@ function App(): ReactElement {
   return (
     <>
       {/* ANNOUNCEMENT BANNER */}
-      <div className="h-10 relative z-10 bg-black flex items-center justify-center text-sm text-[#cac8dc]">
+      {/* <div className="h-10 relative z-10 bg-black flex items-center justify-center text-sm text-[#cac8dc]">
         <p>
           We&rsquo;ve updated our Privacy Policy. See the latest version{" "}
           <a
@@ -25,7 +25,7 @@ function App(): ReactElement {
           </a>
           .
         </p>
-      </div>
+      </div> */}
 
       <Navigation />
       <img src={cornerLinesLeft} className="absolute top-0 left-0 opacity-30" />
