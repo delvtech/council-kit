@@ -5,6 +5,7 @@ import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Input } from "src/ui/base/forms/Input";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 import { zeroAddress } from "viem";
+import { normalize } from "viem/ens";
 import { useEnsResolver } from "wagmi";
 
 interface ChangeDelegateFormProps {
@@ -24,10 +25,15 @@ export function ChangeDelegateForm({
   const isDelegateZeroAddress = currentDelegate === zeroAddress;
 
   const [newDelegate, setNewDelegate] = useState<string>("");
-  const { data: newDelegateAddress } = useEnsResolver({
-    name: newDelegate,
+  const { data: resolvedEnsAddress } = useEnsResolver({
+    name: normalize(newDelegate),
   });
   const isNotNew = newDelegate === currentDelegate;
+
+  const newDelegateAddress =
+    resolvedEnsAddress && resolvedEnsAddress !== zeroAddress
+      ? resolvedEnsAddress
+      : (newDelegate as `0x${string}`);
 
   return (
     <div className="daisy-card flex h-fit basis-1/2 flex-col gap-y-4 bg-base-200 p-4">
