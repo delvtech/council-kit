@@ -4217,10 +4217,10 @@ cli-truncate@^4.0.0:
     slice-ansi "^5.0.0"
     string-width "^7.0.0"
 
-clide-js@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/clide-js/-/clide-js-0.1.3.tgz#6f500578d453714c8e51f32acd59ddc743e5e3c0"
-  integrity sha512-D8qIBdg4ZwD+zsoliDc079h1Dm0hIf1219jppPZeINmG/qIoi5CZCJVA7ToHIf74h4oVON5IEObszFd0pG5XPg==
+clide-js@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/clide-js/-/clide-js-0.1.5.tgz#e884b6536e5972969f1ddd2d0fb0b21ab47856ee"
+  integrity sha512-BP//lZ6kSHNfRkPKP5rN+qfy6GP3acYbWV8JJYXXgjENKGnIyvYy3COZn47Gqm7TchRWCilA9Ph7tTG1x6fJ+w==
   dependencies:
     cliui "^8.0.1"
     prompts "^2.4.2"
