@@ -9,14 +9,12 @@ import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
-import {
-  getGscMembers,
-  GscMemberInfo,
-} from "src/utils/gscVault/getGscMembers";
+import { getGscMembers, GscMemberInfo } from "src/utils/gscVault/getGscMembers";
 import { getGscStatus } from "src/utils/gscVault/getGscStatus";
 import { GscStatus } from "src/utils/gscVault/types";
 import { PublicClient } from "viem";
 import { useAccount, usePublicClient } from "wagmi";
+import { useJoinGsc } from "./hooks/useJoinGsc";
 import { useReadGscVault } from "./hooks/useReadGscVault";
 
 interface GscVaultDetailsProps {
@@ -31,6 +29,7 @@ export function GscVaultDetails({
     vaultAddress,
     account,
   });
+  const { joinGsc, status: joinGscStatus } = useJoinGsc();
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
@@ -52,6 +51,7 @@ export function GscVaultDetails({
           accountMembership={data.gscStatus}
           membersCount={data.members.length}
           requiredVotingPower={data.requiredVotingPower}
+          onJoin={joinGsc}
         />
       }
       actions={
