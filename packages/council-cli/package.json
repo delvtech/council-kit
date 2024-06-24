@@ -1,7 +1,7 @@
 {
   "name": "@delvtech/council-cli",
   "version": "0.0.4",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "type": "module",
   "main": "dist/council.js",
   "bin": {
@@ -32,7 +32,7 @@
     "ajv": "^8.12.0",
     "cfonts": "^3.2.0",
     "cli-table": "^0.3.11",
-    "clide-js": "^0.1.3",
+    "clide-js": "^0.1.5",
     "clide-plugin-command-menu": "^0.0.7",
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",

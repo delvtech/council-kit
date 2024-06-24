@@ -1,6 +1,7 @@
 {
   "name": "council-kit",
   "version": "0.0.3",
+  "license": "AGPL-3.0",
   "private": true,
   "workspaces": [
     "apps/*",

@@ -11,6 +11,22 @@ import { Footer } from "./ui/Footer";
 function App(): ReactElement {
   return (
     <>
+      {/* ANNOUNCEMENT BANNER */}
+      {/* <div className="h-10 relative z-10 bg-black flex items-center justify-center text-sm text-[#cac8dc]">
+        <p>
+          This is an example announcement.{" "}
+          <a
+            href="#"
+            className="text-primary-text underline hover:text-white"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Check it out
+          </a>
+          .
+        </p>
+      </div> */}
+
       <Navigation />
       <img src={cornerLinesLeft} className="absolute top-0 left-0 opacity-30" />
 
@@ -336,11 +352,11 @@ function App(): ReactElement {
                   {/* <div className="absolute inset-0 shadow-[inset_0_0_40px_currentColor] text-dark opacity-40 transition-all group-hover:opacity-0"></div> */}
                   {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
 
-                  <div className="w-full h-full lg:max-w-none lg:w-auto">
+                  <div className="size-full lg:max-w-none lg:w-auto">
                     <img
                       src="/voting-vaults-banner.png"
                       alt="Voting vaults banner"
-                      className="object-cover w-full h-full lg:max-w-none"
+                      className="object-cover size-full lg:max-w-none"
                     />
                   </div>
                 </div>
@@ -359,11 +375,11 @@ function App(): ReactElement {
                   {/* <div className="absolute inset-0 shadow-[inset_0_0_40px_currentColor] text-dark opacity-40 transition-all group-hover:opacity-0"></div> */}
                   {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
 
-                  <div className="w-full h-full lg:max-w-none lg:w-auto">
+                  <div className="size-full lg:max-w-none lg:w-auto">
                     <img
                       src="/gsc-article-banner.png"
                       alt="Governance steering council article banner"
-                      className="object-cover w-full h-full lg:max-w-none"
+                      className="object-cover size-full lg:max-w-none"
                     />
                   </div>
                 </div>
@@ -381,11 +397,11 @@ function App(): ReactElement {
                   {/* image effects */}
                   {/* <div className="absolute inset-0 shadow-[inset_0_0_40px_currentColor] text-dark opacity-40 transition-all group-hover:opacity-0"></div> */}
                   {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
-                  <div className="w-full h-full lg:max-w-none lg:w-auto">
+                  <div className="size-full lg:max-w-none lg:w-auto">
                     <img
                       src="/element-governance-banner.jpg"
                       alt="element governance banner"
-                      className="object-cover w-full h-full lg:max-w-none"
+                      className="object-cover size-full lg:max-w-none"
                     />
                   </div>
                 </div>
