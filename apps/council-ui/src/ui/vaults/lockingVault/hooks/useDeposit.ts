@@ -17,6 +17,9 @@ export function useDeposit(): {
   const enabled = !!council;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Depositing...",
+    successMessage: "Deposited!",
+    errorMessage: "Failed to deposit.",
     writeFn: ({
       vaultAddress,
       amount,

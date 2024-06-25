@@ -23,6 +23,9 @@ export function useClaimAndDelegateAirdrop(): {
   const enabled = !!airdrop && !!claimableAmount && !!airdropData;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Claiming and delegating airdrop...",
+    successMessage: "Airdrop claimed and delegated!",
+    errorMessage: "Failed to claim and delegate airdrop.",
     writeFn: ({ delegate, recipient }: ClaimAndDelegateOptions) => {
       if (!enabled) {
         throw new Error("No claimable airdrop found");

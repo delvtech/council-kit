@@ -11,6 +11,9 @@ export function useClaimGrant(): {
   const enabled = !!council;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Claiming grant...",
+    successMessage: "Grant claimed!",
+    errorMessage: "Failed to claim grant.",
     writeFn: (vaultAddress: `0x${string}`) => {
       if (!enabled) {
         throw new Error(

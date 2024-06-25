@@ -16,6 +16,9 @@ export function useWithdraw(): {
   const enabled = !!council;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Withdrawing...",
+    successMessage: "Withdrawn!",
+    errorMessage: "Failed to withdraw.",
     writeFn: ({
       vaultAddress,
       amount,

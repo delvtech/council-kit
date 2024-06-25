@@ -9,17 +9,19 @@ interface GSCVaultStatsRowProps {
   accountMembership: GscStatus;
   membersCount: number;
   requiredVotingPower: bigint;
+  onJoin?: () => void;
 }
 
 export function GSCVaultsStatsRow({
   accountMembership,
   membersCount,
   requiredVotingPower,
+  onJoin,
 }: GSCVaultStatsRowProps): ReactElement {
   return (
     <div className="flex flex-wrap gap-4">
       {accountMembership && (
-        <GscMembershipStatusStat status={accountMembership} />
+        <GscMembershipStatusStat status={accountMembership} onJoin={onJoin} />
       )}
 
       {membersCount >= 0 && (

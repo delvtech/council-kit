@@ -18,7 +18,7 @@ export function GscMembershipStatusStat({
         <div className="flex items-center gap-2">
           {status}
 
-          {onJoin && (
+          {onJoin && status === "Eligible" && (
             <button
               className="daisy-btn daisy-btn-outline daisy-btn-primary daisy-btn-xs mt-1"
               onClick={onJoin}
