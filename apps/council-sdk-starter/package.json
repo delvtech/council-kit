@@ -11,11 +11,13 @@
     "setLockDuration": "tesm-node -r dotenv/config src/scripts/setLockDuration.ts",
     "changeVaultStatus": "tesm-node -r dotenv/config src/scripts/changeVaultStatus.ts",
     "getGSCMembers": "tesm-node -r dotenv/config ./src/scripts/getGSCMembers.ts",
-    "getProposalResults": "tesm-node -r dotenv/config src/scripts/getProposalResults.ts"
+    "getProposalResults": "tesm-node -r dotenv/config src/scripts/getProposalResults.ts",
+    "dev": "tesm-node -r dotenv/config src/scripts/dev.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@delvtech/council-viem": "^0.0.3",
-    "viem": "^2.7.12"
+    "viem": "^2.16.2"
   },
   "devDependencies": {
     "@council/tsconfig": "*",

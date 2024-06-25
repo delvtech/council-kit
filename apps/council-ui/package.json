@@ -36,7 +36,7 @@
     "react-hot-toast": "^2.4.1",
     "react-loading-skeleton": "^3.4.0",
     "react-tooltip": "^5.26.0",
-    "viem": "^2.8.16",
+    "viem": "^2.16.2",
     "wagmi": "^2.5.11"
   },
   "devDependencies": {
