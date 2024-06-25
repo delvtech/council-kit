@@ -11,6 +11,9 @@ export function useKickGscMember(): {
   const enabled = !!gscVault;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Kicking GSC member...",
+    successMessage: "GSC member kicked!",
+    errorMessage: "Failed to kick GSC member.",
     writeFn: async (account: `0x${string}`) => {
       if (!enabled) {
         throw new Error("GSC Vault not found");

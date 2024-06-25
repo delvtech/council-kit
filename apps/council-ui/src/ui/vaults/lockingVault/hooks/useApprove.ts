@@ -14,6 +14,9 @@ export function useApprove(): {
   const enabled = !!council && !!address;
 
   const { status, transactionHash, write } = useWrite({
+    pendingMessage: "Approving...",
+    successMessage: "Approved!",
+    errorMessage: "Failed to approve.",
     writeFn: async (vaultAddress: `0x${string}`) => {
       if (!enabled) {
         throw new Error(

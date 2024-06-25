@@ -22,8 +22,14 @@ export function useWrite<
   TFunction extends (...args: any[]) => Promise<`0x${string}`>,
 >({
   writeFn,
+  pendingMessage = "Transaction pending...",
+  successMessage = "Transaction successful!",
+  errorMessage = "Transaction failed.",
 }: {
   writeFn: TFunction;
+  pendingMessage?: string;
+  successMessage?: string;
+  errorMessage?: string;
 }): {
   write: TFunction;
   status: MutationStatus;
@@ -38,7 +44,7 @@ export function useWrite<
   const mutationFn = async (...args: Parameters<TFunction>) => {
     const hash = await writeFn(...args);
     setTransactionHash(hash);
-    makeTransactionSubmittedToast("Approving", hash, chainId);
+    makeTransactionSubmittedToast(pendingMessage, hash, chainId);
     await publicClient?.waitForTransactionReceipt({ hash });
     return hash;
   };
@@ -46,13 +52,13 @@ export function useWrite<
   const { mutate, status } = useMutation({
     mutationFn: mutationFn as TFunction,
     onSuccess: (hash) => {
-      makeTransactionSuccessToast("Successfully approved!", hash, chainId);
+      makeTransactionSuccessToast(successMessage, hash, chainId);
       // All query cache can be invalidated. The SDK uses it's own cache which
       // has built-in invalidation logic based on the methods called.
       queryClient.invalidateQueries();
     },
     onError(error) {
-      makeTransactionErrorToast("Failed to approve", transactionHash, chainId);
+      makeTransactionErrorToast(errorMessage, transactionHash, chainId);
       console.error(error);
     },
   });

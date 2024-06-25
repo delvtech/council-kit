@@ -16,6 +16,9 @@ export function useChangeDelegate(): {
   const enabled = !!council;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Changing delegate...",
+    successMessage: "Delegate changed!",
+    errorMessage: "Failed to change delegate.",
     writeFn: ({
       newDelegate,
       vaultAddress,

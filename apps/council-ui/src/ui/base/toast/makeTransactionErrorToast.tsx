@@ -9,7 +9,7 @@ export function makeTransactionErrorToast(
   chainId: SupportedChainId,
 ): void {
   toast.error(
-    <div className="flex gap-4 items-center">
+    <div className="flex items-center gap-4">
       <div>
         <p>{message}</p>
         {hash && (
@@ -17,6 +17,8 @@ export function makeTransactionErrorToast(
             <a
               href={makeEtherscanTransactionURL(hash, chainId)}
               className="underline"
+              target="_blank"
+              rel="noreferrer"
             >
               View on Etherscan
             </a>
@@ -25,9 +27,9 @@ export function makeTransactionErrorToast(
       </div>
       <button
         onClick={() => toast.dismiss(hash)}
-        className="daisy-btn daisy-btn-circle daisy-btn-sm daisy-btn-ghost group"
+        className="group daisy-btn daisy-btn-circle daisy-btn-ghost daisy-btn-sm"
       >
-        <XMarkIcon className="w-5 opacity-50 group-hover:opacity-100 transition-all" />
+        <XMarkIcon className="w-5 opacity-50 transition-all group-hover:opacity-100" />
       </button>
     </div>,
     {

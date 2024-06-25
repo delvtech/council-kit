@@ -65,10 +65,11 @@ export class ReadWriteGscVault extends ReadGscVault {
     const vaultAddresses = vaults.map((vault) =>
       typeof vault === "string" ? vault : vault.address,
     );
+    const extraData = vaultAddresses.map((_, i) => extraVaultData[i] || "0x");
     const hash = await this.gscVaultContract.write(
       "proveMembership",
       {
-        extraData: extraVaultData,
+        extraData,
         votingVaults: vaultAddresses,
       },
       options,

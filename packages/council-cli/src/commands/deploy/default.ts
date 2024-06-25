@@ -510,7 +510,7 @@ export default command({
     // Approve the GSCVault to be used by the GSC CoreVoting contract
     signale.pending("Changing GSCVault status in GSC CoreVoting");
 
-    const gscVaultStatusHash = await coreVoting.changeVaultStatus({
+    const gscVaultStatusHash = await gscCoreVoting.changeVaultStatus({
       vault: gscVaultDeployData.address,
       isValid: true,
     });

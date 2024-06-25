@@ -16,6 +16,9 @@ export function useJoinGsc(): {
   const enabled = !!address && !!coreVoting && !!gscVault;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Joining GSC...",
+    successMessage: "GSC joined!",
+    errorMessage: "Failed to join GSC.",
     writeFn: async () => {
       if (!enabled) {
         throw new Error("GSC Vault not found");

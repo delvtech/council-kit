@@ -20,6 +20,9 @@ export function useClaimAirdrop(): {
   const enabled = !!airdrop && !!claimableAmount && !!airdropData;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Claiming airdrop...",
+    successMessage: "Airdrop claimed!",
+    errorMessage: "Failed to claim airdrop.",
     writeFn: ({ recipient }: ClaimOptions) => {
       if (!enabled) {
         throw new Error("No claimable airdrop found");

@@ -19,6 +19,9 @@ export function useSubmitVote(): {
   const enabled = !!council;
 
   const { write, status, transactionHash } = useWrite({
+    pendingMessage: "Submitting vote...",
+    successMessage: "Vote submitted!",
+    errorMessage: "Failed to submit vote.",
     writeFn: async ({
       coreVotingAddress,
       proposalId,
