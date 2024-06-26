@@ -1,5 +1,16 @@
 # @delvtech/council-viem
 
+## 0.1.0
+
+### Minor Changes
+
+- e742438: Updated license to AGPL-3.0
+
+### Patch Changes
+
+- Updated dependencies [e742438]
+  - @delvtech/council-core@0.1.0
+
 ## 0.0.3
 
 ### Patch Changes
