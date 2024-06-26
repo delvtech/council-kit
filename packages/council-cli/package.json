@@ -15,7 +15,8 @@
     "dev": "NODE_ENV=development tesm-node src/council.ts",
     "prod": "tesm-node src/council.ts",
     "build": "rimraf dist && tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "viem": ">=2",
@@ -32,8 +33,8 @@
     "ajv": "^8.12.0",
     "cfonts": "^3.2.0",
     "cli-table": "^0.3.11",
-    "clide-js": "^0.1.5",
-    "clide-plugin-command-menu": "^0.0.7",
+    "clide-js": "^0.2.0",
+    "clide-plugin-command-menu": "^0.1.0",
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "json-schema-typed": "^8.0.1",

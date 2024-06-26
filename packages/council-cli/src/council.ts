@@ -15,7 +15,7 @@ run({
     commandMenu({
       title: "Council CLI",
       titleColors: ["#D89DFF", "#519BFF"],
-      skip: (options) => !!options.help,
+      enabled: (options) => !options.help,
     }),
   ],
 
