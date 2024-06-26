@@ -1,6 +1,6 @@
 {
   "name": "council-ui",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -12,8 +12,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@delvtech/council-artifacts": "^0.0.3",
-    "@delvtech/council-viem": "^0.0.3",
+    "@delvtech/council-artifacts": "^0.1.0",
+    "@delvtech/council-viem": "^0.1.0",
     "@ensdomains/ensjs": "^3.4.4",
     "@heroicons/react": "^2.1.1",
     "@metamask/jazzicon": "^2.0.0",

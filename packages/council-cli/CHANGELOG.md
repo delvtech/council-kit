@@ -1,5 +1,19 @@
 # @delvtech/council-cli
 
+## 0.1.0
+
+### Minor Changes
+
+- e742438: Updated license to AGPL-3.0
+
+### Patch Changes
+
+- 819bab6: Add more commands
+- Updated dependencies [819bab6]
+- Updated dependencies [e742438]
+  - @delvtech/council-artifacts@0.1.0
+  - @delvtech/council-viem@0.1.0
+
 ## 0.0.4
 
 ### Patch Changes
