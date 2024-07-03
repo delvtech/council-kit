@@ -26,42 +26,6 @@
       "outputs": ["dist/**"],
       "env": ["PROVIDER_URI", "WALLET_PRIVATE_KEY", "NODE_ENV"]
     },
-    "@council/sdk#build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "env": ["PROVIDER_URI", "EXAMPLE_WALLET_PRIVATE_KEY", "NODE_ENV"]
-    },
-    "@council/cli": {
-      "env": [
-        "RPC_URL",
-        "WALLET_PRIVATE_KEY",
-        "CHAIN",
-        "VOTING_TOKEN_ADDRESS",
-        "VOTING_TOKEN_DECIMALS",
-        "VOTING_TOKEN_NAME",
-        "VOTING_TOKEN_SYMBOL",
-        "BASE_QUORUM",
-        "MIN_PROPOSAL_POWER",
-        "LOCK_DURATION",
-        "EXTRA_VOTING_BLOCKS",
-        "TIMELOCK_WAIT_TIME",
-        "TREASURY_ADDRESS",
-        "STALE_BLOCK_LAG",
-        "GSC_QUORUM",
-        "GSC_LOCK_DURATION",
-        "GSC_EXTRA_VOTING_BLOCKS",
-        "GSC_VOTING_POWER_BOUND",
-        "GSC_IDLE_DURATION"
-      ]
-    },
-    "@council/cli#build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "env": ["NODE_ENV"]
-    },
-    "@delvtech/council-viem": {
-      "env": ["TEST_RPC_URL"]
-    },
     "lint": {
       "dependsOn": ["^build"],
       "outputs": []

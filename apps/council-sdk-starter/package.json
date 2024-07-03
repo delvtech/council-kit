@@ -1,6 +1,6 @@
 {
   "name": "council-sdk-starter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Boilerplate to get started using the council-sdk fast!",
   "license": "MIT",
   "private": true,
@@ -16,7 +16,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@delvtech/council-viem": "^0.0.3",
+    "@delvtech/council-viem": "^0.1.0",
     "viem": "^2.16.2"
   },
   "devDependencies": {

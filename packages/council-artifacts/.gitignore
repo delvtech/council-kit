@@ -1,5 +1,0 @@
-node_modules
-dist
-
-# Ignore temporary clones of the council repo used by the build script
-council-temp.*
