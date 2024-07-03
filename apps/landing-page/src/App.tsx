@@ -12,20 +12,29 @@ function App(): ReactElement {
   return (
     <>
       {/* ANNOUNCEMENT BANNER */}
-      {/* <div className="h-10 relative z-10 bg-black flex items-center justify-center text-sm text-[#cac8dc]">
+      <div className="h-10 relative z-10 bg-black flex items-center justify-center text-[#cac8dc]">
         <p>
-          We&rsquo;ve updated our Privacy Policy. See the latest version{" "}
+          We&apos;ve updated our{" "}
           <a
             href="https://delv-public.s3.us-east-2.amazonaws.com/delv-privacy-policy.pdf"
-            className="text-primary-text underline hover:text-white"
+            className="text-[#71F8F8]"
             target="_blank"
             rel="noreferrer"
           >
-            here
+            Privacy Policy
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://delv-public.s3.us-east-2.amazonaws.com/delv-terms-of-service.pdf"
+            className="text-[#71F8F8]"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Terms of Service
           </a>
           .
         </p>
-      </div> */}
+      </div>
 
       <Navigation />
       <img src={cornerLinesLeft} className="absolute top-0 left-0 opacity-30" />
