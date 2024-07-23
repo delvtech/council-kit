@@ -8,33 +8,38 @@ import { Navigation } from "src/ui/Navigation";
 import { GitHubIcon } from "src/ui/svg/GitHubIcon";
 import { Footer } from "./ui/Footer";
 
+const SHOW_ANNOUNCEMENT_BANNER = false;
+const ANNOUNCEMENT_BANNER_EXPIRY = new Date("07/18/2024");
+
 function App(): ReactElement {
   return (
     <>
       {/* ANNOUNCEMENT BANNER */}
-      <div className="h-10 relative z-10 bg-black flex items-center justify-center text-[#cac8dc]">
-        <p>
-          We&apos;ve updated our{" "}
-          <a
-            href="https://delv-public.s3.us-east-2.amazonaws.com/delv-privacy-policy.pdf"
-            className="text-[#71F8F8]"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Privacy Policy
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://delv-public.s3.us-east-2.amazonaws.com/delv-terms-of-service.pdf"
-            className="text-[#71F8F8]"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Terms of Service
-          </a>
-          .
-        </p>
-      </div>
+      {SHOW_ANNOUNCEMENT_BANNER && new Date() < ANNOUNCEMENT_BANNER_EXPIRY && (
+        <div className="h-10 relative z-10 bg-black flex items-center justify-center text-[#cac8dc]">
+          <p>
+            We&apos;ve updated our{" "}
+            <a
+              href="https://delv-public.s3.us-east-2.amazonaws.com/delv-privacy-policy.pdf"
+              className="text-[#71F8F8]"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://delv-public.s3.us-east-2.amazonaws.com/delv-terms-of-service.pdf"
+              className="text-[#71F8F8]"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Terms of Service
+            </a>
+            .
+          </p>
+        </div>
+      )}
 
       <Navigation />
       <img src={cornerLinesLeft} className="absolute top-0 left-0 opacity-30" />
