@@ -215,6 +215,13 @@ export const mainnetCouncilConfig: CouncilConfig = {
         paragraphSummary:
           "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
       },
+      18: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-31: Foundation Update and ELFI Request",
+        paragraphSummary:
+          "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
+      },
     },
   },
   gscVoting: {
@@ -309,7 +316,7 @@ export const mainnetCouncilConfig: CouncilConfig = {
         sentenceSummary:
           "Revised proposal to unwind the GSC treasury, transferring the unwound assets to the main treasury.",
         paragraphSummary:
-          "The GSC treasury is a gnosis safe currently containing 24 different assets in balancer pools. These assets came from protocol fees traded on the Element protocol. In order to unwind the assets, the LP positions are withdrawn from the Balancer pools. After withdrawal, principal tokens are redeemed through the Element protocol. Once redeemed, the base assets are transferred and consolidated to the main treasury.",
+          "This proposal is being submitted by the HyperVue Foundation (Formerly Element Foundation), a Cayman Islands entity created alongside the launch of the Element DAO in 2021 to aid and support the decisions proposed and made by stakeholders and owners of the Element protocol (ELFI holders & community members). \n\n As we begin a new chapter in line with the mainnet deployment of the Hyperdrive, the next version of the Element Protocol, the Foundation gears towards assisting the DAO and protocol to reach their full potential.",
       },
     },
   },
