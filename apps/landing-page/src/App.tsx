@@ -1,3 +1,4 @@
+import { InformationCircleIcon } from "@heroicons/react/16/solid";
 import { RocketLaunchIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
 import cornerLinesLeft from "src/assets/corner-lines-left.svg";
@@ -8,8 +9,8 @@ import { Navigation } from "src/ui/Navigation";
 import { GitHubIcon } from "src/ui/svg/GitHubIcon";
 import { Footer } from "./ui/Footer";
 
-const SHOW_ANNOUNCEMENT_BANNER = false;
-const ANNOUNCEMENT_BANNER_EXPIRY = new Date("07/18/2024");
+const SHOW_ANNOUNCEMENT_BANNER = true;
+const ANNOUNCEMENT_BANNER_EXPIRY = new Date("11/01/2024");
 
 function App(): ReactElement {
   return (
@@ -17,9 +18,10 @@ function App(): ReactElement {
       {/* ANNOUNCEMENT BANNER */}
       {SHOW_ANNOUNCEMENT_BANNER && new Date() < ANNOUNCEMENT_BANNER_EXPIRY && (
         <div className="h-10 relative z-10 bg-black flex items-center justify-center text-[#cac8dc]">
+          <InformationCircleIcon className="w-4 mr-2" />
           <p>
             We&apos;ve updated our{" "}
-            <a
+            {/* <a
               href="https://delv-public.s3.us-east-2.amazonaws.com/delv-privacy-policy.pdf"
               className="text-[#71F8F8]"
               target="_blank"
@@ -27,10 +29,10 @@ function App(): ReactElement {
             >
               Privacy Policy
             </a>{" "}
-            and{" "}
+            and{" "} */}
             <a
               href="https://delv-public.s3.us-east-2.amazonaws.com/delv-terms-of-service.pdf"
-              className="text-[#71F8F8]"
+              className="text-white hover:text-[#71F8F8] transition-all"
               target="_blank"
               rel="noreferrer"
             >
@@ -52,7 +54,7 @@ function App(): ReactElement {
             src={cornerLinesRight}
             className="absolute bottom-0 right-0 opacity-20"
           />
-          <div className="max-w-6xl box-content box-content px-[4vw] mx-auto grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] items-center py-10 md:pt-28 md:pb-40 gap-20 justify-items-center">
+          <div className="max-w-6xl box-content px-[4vw] mx-auto grid grid-cols-1 lg:grid-cols-[1.25fr_1fr] items-center py-10 md:pt-28 md:pb-40 gap-20 justify-items-center">
             <div className="flex flex-col justify-center">
               <h1 className="mb-6 text-6xl">
                 Build adaptable governance systems with{" "}
