@@ -99,7 +99,7 @@ export function Footer(): ReactElement {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="https://discord.gg/srgcTGccGe"
+                  href="https://delv.tech/discord"
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-3 transition-all group text-primary-text hover:text-white"
