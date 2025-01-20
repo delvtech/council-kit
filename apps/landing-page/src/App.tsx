@@ -10,7 +10,7 @@ import { GitHubIcon } from "src/ui/svg/GitHubIcon";
 import { Footer } from "./ui/Footer";
 
 const SHOW_ANNOUNCEMENT_BANNER = true;
-const ANNOUNCEMENT_BANNER_EXPIRY = new Date("11/01/2024");
+const ANNOUNCEMENT_BANNER_EXPIRY = new Date("2/04/2025");
 
 function App(): ReactElement {
   return (
