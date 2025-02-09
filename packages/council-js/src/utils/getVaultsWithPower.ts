@@ -1,4 +1,4 @@
-import { ReadVotingVault } from "src/models/votingVault/ReadVotingVault";
+import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 
 
 export async function getVaultsWithPower(
