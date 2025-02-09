@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@delvtech/drift": "^0.1.1",
+    "@delvtech/drift": "^0.1.2",
     "@delvtech/fixed-point-wasm": "^0.0.7",
     "@delvtech/council-artifacts": "^0.1.0"
   },
