@@ -1,46 +1,61 @@
-import { Adapter, ContractReadOptions } from "@delvtech/drift";
-import { Entity } from "src/entities/Entity";
+import { Adapter, Contract, ContractReadOptions } from "@delvtech/drift";
+import { Address } from "abitype";
+import { ContractEntityConfig, Entity } from "src/entities/Entity";
+import { TokenAbi, tokenAbi } from "src/entities/token/abi";
 
-export interface ReadToken<A extends Adapter = Adapter> extends Entity<A> {
-  address: `0x${string}`;
+export class ReadToken<A extends Adapter = Adapter> extends Entity<A> {
+  contract: Contract<TokenAbi, A>;
 
-  /**
-   * Get the name of this token
-   */
-  getName(): Promise<string>;
+  constructor({ address, ...config }: ContractEntityConfig<A>) {
+    super(config);
+    this.contract = this.drift.contract({
+      abi: tokenAbi,
+      address,
+    });
+  }
 
-  /**
-   * Get the symbol for this token.
-   */
-  getSymbol(): Promise<string>;
+  get address(): Address {
+    return this.contract.address;
+  }
 
-  /**
-   * Get the number of decimal places this token uses.
-   */
-  getDecimals(): Promise<number>;
+  getName(): Promise<string> {
+    return this.contract.read("name");
+  }
 
-  /**
-   * Get the spending allowance of a given spender for a given owner of this
-   * token.
-   */
+  getSymbol(): Promise<string> {
+    return this.contract.read("symbol");
+  }
+
+  getDecimals(): Promise<number> {
+    return this.contract.read("decimals");
+  }
+
   getAllowance({
     owner,
     spender,
     options,
   }: {
-    owner: `0x${string}`;
-    spender: `0x${string}`;
+    owner: Address;
+    spender: Address;
     options?: ContractReadOptions;
-  }): Promise<bigint>;
+  }): Promise<bigint> {
+    return this.contract.read("allowance", { owner, spender }, options);
+  }
 
-  /**
-   * Get the token balance of a given address
-   */
   getBalanceOf({
     account,
     options,
   }: {
-    account: `0x${string}`;
+    account: Address;
     options?: ContractReadOptions;
-  }): Promise<bigint>;
+  }): Promise<bigint> {
+    return this.contract.read("balanceOf", { account }, options);
+  }
+
+  /**
+   * Get the total supply of the token.
+   */
+  getTotalSupply(options?: ContractReadOptions): Promise<bigint> {
+    return this.contract.read("totalSupply", {}, options);
+  }
 }
