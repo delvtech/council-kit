@@ -1,49 +1,32 @@
 import { Airdrop as AirdropArtifact } from "@delvtech/council-artifacts/Airdrop";
-import { CachedReadContract } from "@delvtech/evm-client";
+import {
+  Adapter,
+  Address,
+  Contract,
+  ContractReadOptions,
+} from "@delvtech/drift";
 import { AirdropAbi } from "src/entities/airdrop/types";
-import { Model, ReadContractModelOptions } from "src/entities/Model";
+import { ContractEntityConfig, Entity } from "src/entities/Entity";
 import { ReadToken } from "src/entities/token/ReadToken";
 import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLockingVault";
-import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
 
-/**
- * @category Models
- */
-export interface ReadAirdropOptions extends ReadContractModelOptions {}
+export class ReadAirdrop<A extends Adapter = Adapter> extends Entity<A> {
+  contract: Contract<AirdropAbi, A>;
 
-/**
- * @category Models
- */
-export class ReadAirdrop extends Model {
-  contract: CachedReadContract<AirdropAbi>;
-
-  constructor({
-    name = "Airdrop",
-    address,
-    contractFactory,
-    network,
-    cache,
-    namespace,
-  }: ReadAirdropOptions) {
-    super({ contractFactory, name, network });
-    this.contract = contractFactory({
+  constructor({ address, ...config }: ContractEntityConfig<A>) {
+    super(config);
+    this.contract = this.drift.contract({
       abi: AirdropArtifact.abi,
       address,
-      cache,
-      namespace,
     });
   }
 
-  get address(): `0x${string}` {
+  get address(): Address {
     return this.contract.address;
-  }
-  get namespace(): string | undefined {
-    return this.contract.namespace;
   }
 
   /**
-   * Get a timestamp (in MS) of when the tokens can be reclaimed (removed by the
-   * owner).
+   * Get the date of when the tokens can be reclaimed (removed by the owner).
    */
   async getExpiration(): Promise<Date> {
     const secondsTimestamp = await this.contract.read("expiration");
@@ -53,7 +36,7 @@ export class ReadAirdrop extends Model {
   /**
    * Get The merkle root with deposits encoded into it as hash [address, amount]
    */
-  getMerkleRoot(): Promise<`0x${string}`> {
+  getMerkleRoot(): Promise<Address> {
     return this.contract.read("rewardsRoot");
   }
 
@@ -63,8 +46,7 @@ export class ReadAirdrop extends Model {
   async getToken(): Promise<ReadToken> {
     return new ReadToken({
       address: await this.contract.read("token"),
-      contractFactory: this.contractFactory,
-      network: this.network,
+      drift: this.drift,
     });
   }
 
@@ -73,16 +55,12 @@ export class ReadAirdrop extends Model {
    */
   async getClaimedAmount({
     account,
-    atBlock,
+    options,
   }: {
-    account: `0x${string}`;
-    atBlock?: BlockLike;
+    account: Address;
+    options?: ContractReadOptions;
   }): Promise<bigint> {
-    return await this.contract.read(
-      "claimed",
-      { 0: account },
-      blockToReadOptions(atBlock),
-    );
+    return await this.contract.read("claimed", [account], options);
   }
 
   /**
@@ -93,8 +71,7 @@ export class ReadAirdrop extends Model {
     const address = await this.contract.read("lockingVault");
     return new ReadLockingVault({
       address,
-      contractFactory: this.contractFactory,
-      network: this.network,
+      drift: this.drift,
     });
   }
 }

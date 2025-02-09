@@ -1,43 +1,23 @@
-import {
-  CachedReadWriteContract,
-  ContractWriteOptions,
-} from "@delvtech/evm-client";
-import { ReadWriteContractFactory } from "src/contract/factory";
+import { Address, Hash, ReadWriteAdapter } from "@delvtech/drift";
 import { ReadAirdrop } from "src/entities/airdrop/ReadAirdrop";
-import { AirdropAbi } from "src/entities/airdrop/types";
-import { ReadWriteContractModelOptions } from "src/entities/Model";
+import { EntityWriteParams } from "src/entities/Entity";
 import { ReadWriteToken } from "src/entities/token/ReadWriteToken";
 import { ReadWriteLockingVault } from "src/entities/votingVault/lockingVault/ReadWriteLockingVault";
 
-/**
- * @category Models
- */
-interface ReadWriteAirdropOptions extends ReadWriteContractModelOptions {}
-
-/**
- * @category Models
- */
-export class ReadWriteAirdrop extends ReadAirdrop {
-  declare contract: CachedReadWriteContract<AirdropAbi>;
-  declare contractFactory: ReadWriteContractFactory;
-
-  constructor(options: ReadWriteAirdropOptions) {
-    super(options);
-  }
-
-  override async getToken(): Promise<ReadWriteToken> {
+export class ReadWriteAirdrop<
+  A extends ReadWriteAdapter = ReadWriteAdapter,
+> extends ReadAirdrop<A> {
+  async getToken(): Promise<ReadWriteToken> {
     return new ReadWriteToken({
       address: await this.contract.read("token"),
-      contractFactory: this.contractFactory,
-      network: this.network,
+      drift: this.drift,
     });
   }
 
-  override async getLockingVault(): Promise<ReadWriteLockingVault> {
+  async getLockingVault(): Promise<ReadWriteLockingVault> {
     return new ReadWriteLockingVault({
       address: await this.contract.read("lockingVault"),
-      contractFactory: this.contractFactory,
-      network: this.network,
+      drift: this.drift,
     });
   }
 
@@ -48,36 +28,44 @@ export class ReadWriteAirdrop extends ReadAirdrop {
    * @param merkleProof - A set of hashes that can be used to reconstruct the
    * path from a user (leaf) node to the merkle root, verifying that the user is
    * part of the tree.
-   * @param recipient - The address which will be credited with funds.
+   * @param destination - The address which will be credited with funds.
    * @return - The transaction hash.
    */
-  async claim({
-    amount,
-    totalGrant,
-    merkleProof,
-    recipient,
+  claim({
+    args: { amount, totalGrant, merkleProof, recipient: destination },
     options,
-  }: {
+  }: EntityWriteParams<{
     amount: bigint;
     totalGrant: bigint;
-    merkleProof: `0x${string}`[];
-    recipient: `0x${string}`;
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
-    const hash = await this.contract.write(
+    merkleProof: Hash[];
+    recipient: Address;
+  }>): Promise<Hash> {
+    return this.contract.write(
       "claim",
       {
         amount,
-        destination: recipient,
+        destination,
         merkleProof,
         totalGrant,
       },
-      options,
+      {
+        ...options,
+        onMined: async (receipt) => {
+          if (receipt?.status === "success") {
+            // Invalidate the claimed amount for the recipient
+            this.contract.invalidateRead("claimed", [destination]);
+
+            // Invalidate the balance of the recipient. This requires reading
+            // the contract, but in most cases, the read will already be cached.
+            const token = await this.getToken();
+            token.contract.invalidateRead("balanceOf", {
+              account: destination,
+            });
+          }
+          options?.onMined?.(receipt);
+        },
+      },
     );
-    const token = await this.getToken();
-    token.contract.deleteRead("balanceOf", { 0: recipient });
-    this.contract.deleteRead("claimed", { 0: recipient });
-    return hash;
   }
 
   /**
@@ -89,61 +77,60 @@ export class ReadWriteAirdrop extends ReadAirdrop {
    * @param merkleProof - A set of hashes that can be used to reconstruct the
    * path from a user (leaf) node to the merkle root, verifying that the user is
    * part of the tree.
-   * @param recipient - The address which will be credited with funds.
+   * @param destination - The address which will be credited with funds.
    * @return - The transaction hash.
    */
-  async claimAndDelegate({
-    amount,
-    delegate,
-    totalGrant,
-    merkleProof,
-    recipient,
+  claimAndDelegate({
+    args: { amount, delegate, totalGrant, merkleProof, destination },
     options,
-  }: {
+  }: EntityWriteParams<{
     amount: bigint;
-    delegate: `0x${string}`;
+    delegate: Address;
     totalGrant: bigint;
-    merkleProof: `0x${string}`[];
-    recipient: `0x${string}`;
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
-    const hash = await this.contract.write(
+    merkleProof: Hash[];
+    destination: Address;
+  }>): Promise<Hash> {
+    return this.contract.write(
       "claimAndDelegate",
       {
         amount,
         delegate,
         totalGrant,
         merkleProof,
-        destination: recipient,
+        destination,
       },
-      options,
+      {
+        onMined: async (receipt) => {
+          if (receipt?.status === "success") this.contract.cache.clear();
+          options?.onMined?.(receipt);
+        },
+      },
     );
-    const lockingVault = await this.getLockingVault();
-    lockingVault.contract.clearCache();
-    this.contract.deleteRead("claimed", { 0: recipient });
-    return hash;
   }
 
   /**
    * Remove funds from the airdrop after expiration
-   * @param recipient - The address which will be credited with funds.
+   * @param destination - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   async reclaim({
-    recipient,
+    args: { destination },
     options,
-  }: {
-    recipient: `0x${string}`;
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
+  }: EntityWriteParams<{
+    destination: Address;
+  }>): Promise<Hash> {
     const hash = await this.contract.write(
       "reclaim",
-      { destination: recipient },
-      options,
+      { destination },
+      {
+        onMined: async (receipt) => {
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
+          options?.onMined?.(receipt);
+        },
+      },
     );
-    const token = await this.getToken();
-    token.contract.deleteRead("balanceOf", { 0: recipient });
-    this.contract.clearCache();
     return hash;
   }
 }

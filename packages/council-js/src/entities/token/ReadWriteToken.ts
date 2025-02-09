@@ -5,7 +5,7 @@ import { ReadToken } from "src/entities/token/ReadToken";
 export class ReadWriteToken<
   A extends ReadWriteAdapter = ReadWriteAdapter,
 > extends ReadToken<A> {
-  async approve({
+  approve({
     args: { spender, amount },
     options,
   }: EntityWriteParams<{
@@ -18,8 +18,7 @@ export class ReadWriteToken<
      */
     amount: bigint;
   }>): Promise<Hash> {
-    const owner = await this.contract.getSignerAddress();
-    const hash = await this.contract.write(
+    return this.contract.write(
       "approve",
       { spender, amount },
       {
@@ -35,6 +34,5 @@ export class ReadWriteToken<
         },
       },
     );
-    return hash;
   }
 }
