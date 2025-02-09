@@ -1,9 +1,9 @@
 import { ReadWriteAdapter, ReplaceProps } from "@delvtech/drift";
-import { SdkClient, SdkWriteParams } from "src/drift/SdkClient";
-import { ReadToken } from "src/token/ReadToken";
+import { Entity, EntityWriteParams } from "src/entities/Entity";
+import { ReadToken } from "src/entities/token/ReadToken";
 
 export interface ReadWriteToken<A extends ReadWriteAdapter = ReadWriteAdapter>
-  extends ReplaceProps<ReadToken<A>, SdkClient<A>> {
+  extends ReplaceProps<ReadToken<A>, Entity<A>> {
   /**
    * Give a spending allowance to a given spender.
    * @returns The transaction hash.
@@ -14,12 +14,7 @@ export interface ReadWriteToken<A extends ReadWriteAdapter = ReadWriteAdapter>
 /**
  * Params for approving a spending allowance on a {@linkcode ReadWriteToken}.
  */
-export type ApproveParams = SdkWriteParams<{
-  /**
-   * The address of the owner of the tokens. If not provided, the current
-   * account is used.
-   */
-  owner?: `0x${string}`;
+export type ApproveParams = EntityWriteParams<{
   /**
    * The address of the spender.
    */

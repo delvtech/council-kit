@@ -1,4 +1,4 @@
-import { IERC20 } from "@delvtech/hyperdrive-artifacts/IERC20";
+import { erc20 } from "@delvtech/drift/testing";
 
-export const erc20Abi = IERC20.abi;
-export type Erc20Abi = typeof erc20Abi;
+export type Erc20Abi = typeof erc20.abi;
+export const erc20Abi = erc20.abi;

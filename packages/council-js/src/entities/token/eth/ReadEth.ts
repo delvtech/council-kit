@@ -1,17 +1,13 @@
 import { Adapter, ContractReadOptions } from "@delvtech/drift";
-import { SdkClient, SdkClientConfig } from "src/drift/SdkClient";
-import { ReadToken } from "src/token/ReadToken";
+import { Entity } from "src/entities/Entity";
+import { ReadToken } from "src/entities/token/ReadToken";
 
 export class ReadEth<A extends Adapter = Adapter>
-  extends SdkClient<A>
+  extends Entity<A>
   implements ReadToken<A>
 {
   static address = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" as const;
   address = ReadEth.address;
-
-  constructor({ debugName = "ETH", ...restOptions }: SdkClientConfig<A>) {
-    super({ debugName, ...restOptions });
-  }
 
   async getName(): Promise<string> {
     return "Ethereum";

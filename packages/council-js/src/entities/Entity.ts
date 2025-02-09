@@ -1,32 +1,29 @@
 import {
   Adapter,
   Address,
-  ClientConfig,
   ContractWriteOptions,
   createDrift,
   Drift,
   OneOf,
   OnMinedParam,
+  SimpleCache,
 } from "@delvtech/drift";
 
 // Base //
 
 /**
- * Configuration options for an {@link SdkClient}.
+ * Configuration options for an {@link Entity}.
  */
-export type SdkClientConfig<A extends Adapter = Adapter> = OneOf<
+export type EntityConfig<A extends Adapter = Adapter> = OneOf<
   | {
       drift?: Drift<A>;
     }
-  | ClientConfig<A>
+  | {
+      cache?: SimpleCache;
+      chainId?: number;
+      rpcUrl?: string;
+    }
 > & {
-  /**
-   * An arbitrary name for the instance. This is for convenience only (e.g., for
-   * use as a display name or in logging) and has no affect on the client's
-   * behavior.
-   */
-  debugName?: string;
-
   /**
    * The earliest block to fetch events from.
    */
@@ -34,19 +31,12 @@ export type SdkClientConfig<A extends Adapter = Adapter> = OneOf<
 };
 
 /**
- * A base class for SDK clients.
+ * A base class for SDK entities.
  */
-export class SdkClient<A extends Adapter = Adapter> {
+export class Entity<A extends Adapter = Adapter> {
   drift: Drift<A>;
-  debugName: string;
 
-  constructor({
-    debugName,
-    drift,
-    earliestBlock,
-    ...driftConfig
-  }: SdkClientConfig<A> = {}) {
-    this.debugName = debugName ?? this.constructor.name;
+  constructor({ drift, earliestBlock, ...driftConfig }: EntityConfig<A> = {}) {
     this.drift = drift || createDrift(driftConfig);
 
     // Overwrite `fromBlock` if earlier than the `earliestBlock` option.
@@ -69,11 +59,11 @@ export class SdkClient<A extends Adapter = Adapter> {
 }
 
 /**
- * Params for write operations on an {@linkcode SdkClient}.
+ * Params for write operations on an {@linkcode Entity}.
  *
  * @template Args Additional parameters for the write operation.
  */
-export type SdkWriteParams<Args> = {
+export type EntityWriteParams<Args> = {
   args: Args;
   options?: ContractWriteOptions & OnMinedParam;
 };
@@ -81,18 +71,12 @@ export type SdkWriteParams<Args> = {
 // Contract //
 
 /**
- * Additional options required for clients that represent a specific contract.
+ * Configuration options for an {@linkcode Entity} that represents a specific
+ * contract.
  */
-export interface SdkContractOptions {
+export type ContractEntityConfig<A extends Adapter = Adapter> = {
   /**
    * The address of the contract.
    */
   address: Address;
-}
-
-/**
- * Configuration options for an {@linkcode SdkClient} that represents a specific
- * contract.
- */
-export type SdkContractConfig<A extends Adapter = Adapter> =
-  SdkClientConfig<A> & SdkContractOptions;
+} & EntityConfig<A>;

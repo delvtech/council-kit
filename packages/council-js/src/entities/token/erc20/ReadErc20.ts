@@ -1,21 +1,17 @@
 import { Adapter, Contract, ContractReadOptions } from "@delvtech/drift";
 import { Address } from "abitype";
-import { SdkClient, SdkContractConfig } from "src/drift/SdkClient";
-import { erc20Abi, Erc20Abi } from "src/token/erc20/abi";
-import { ReadToken } from "src/token/ReadToken";
+import { ContractEntityConfig, Entity } from "src/entities/Entity";
+import { erc20Abi, Erc20Abi } from "src/entities/token/erc20/abi";
+import { ReadToken } from "src/entities/token/ReadToken";
 
 export class ReadErc20<A extends Adapter = Adapter>
-  extends SdkClient<A>
+  extends Entity<A>
   implements ReadToken<A>
 {
   contract: Contract<Erc20Abi, A>;
 
-  constructor({
-    debugName = "ERC-20 Token",
-    address,
-    ...rest
-  }: SdkContractConfig<A>) {
-    super({ debugName, ...rest });
+  constructor({ address, ...config }: ContractEntityConfig<A>) {
+    super(config);
     this.contract = this.drift.contract({
       abi: erc20Abi,
       address,
