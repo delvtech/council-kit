@@ -1,4 +1,4 @@
-import { BlockLike, ReadVotingVault } from "@delvtech/council-core";
+import { BlockLike, ReadVotingVault } from "@delvtech/council-js";
 import { FetchStatus, QueryStatus, useQuery } from "@tanstack/react-query";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";

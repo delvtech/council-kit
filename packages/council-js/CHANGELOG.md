@@ -1,4 +1,4 @@
-# @delvtech/council-core
+# @delvtech/council-js
 
 ## 0.1.0
 
