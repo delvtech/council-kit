@@ -10,7 +10,12 @@ import {
   BALLOTS,
   EXECUTED_PROPOSAL_HASH,
 } from "src/entities/coreVoting/constants";
-import { Proposal, ProposalArgs, Vote } from "src/entities/coreVoting/types";
+import {
+  Proposal,
+  ProposalArgs,
+  Vote,
+  VoteResults,
+} from "src/entities/coreVoting/types";
 import { Blockish } from "src/utils/types";
 
 export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
@@ -71,6 +76,47 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
         };
       },
     );
+  }
+
+  /**
+   * Get the total voting power of all votes on a proposal by ballot.
+   */
+  async getProposalResults(
+    proposalId: bigint,
+    options?: ContractReadOptions,
+  ): Promise<VoteResults> {
+    const { createdBlock, lastCallBlock } =
+      (await this.getProposal(proposalId, options)) || {};
+    const latestBlock = lastCallBlock ? lastCallBlock + 1n : undefined;
+    const executedEvents = await this.contract.getEvents("ProposalExecuted", {
+      fromBlock: createdBlock,
+      toBlock: latestBlock,
+    });
+    const isExecuted = executedEvents.some(
+      ({ args }) => args.proposalId === proposalId,
+    );
+
+    // The proposal voting power is deleted when the proposal is executed, so we
+    // have to get the results from vote events.
+    if (isExecuted) {
+      const votes = await this.getVotes({ toBlock: latestBlock });
+      const results: VoteResults = {
+        yes: 0n,
+        no: 0n,
+        maybe: 0n,
+      };
+      for (const { ballot, votingPower } of votes) {
+        results[ballot] += votingPower;
+      }
+      return results;
+    }
+
+    const [yes, no, maybe] = await this.contract.read(
+      "getProposalVotingPower",
+      { proposalId },
+      options,
+    );
+    return { yes, no, maybe };
   }
 
   /**
