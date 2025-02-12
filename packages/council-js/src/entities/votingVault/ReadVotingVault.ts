@@ -44,7 +44,7 @@ export class ReadVotingVault<A extends Adapter = Adapter> extends Entity<A> {
     options,
   }: {
     voter: Address;
-    block: Blockish;
+    block?: Blockish;
     extraData?: Bytes;
     options?: ContractReadOptions;
   }): Promise<bigint> {

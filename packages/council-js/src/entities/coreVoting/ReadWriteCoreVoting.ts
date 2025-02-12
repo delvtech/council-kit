@@ -158,4 +158,34 @@ export class ReadWriteCoreVoting<
       },
     );
   }
+
+  /**
+   * Execute a proposal.
+   */
+  async executeProposal({
+    args: { proposalId, targets, calldatas },
+    options,
+  }: EntityWriteParams<{
+    proposalId: bigint;
+    targets: Address[];
+    calldatas: Bytes[];
+  }>): Promise<Hash> {
+    return this.contract.write(
+      "execute",
+      {
+        proposalId,
+        targets,
+        calldatas,
+      },
+      {
+        ...options,
+        onMined: async (receipt) => {
+          if (receipt?.status === "success") {
+            await this.contract.invalidateRead("proposals", [proposalId]);
+          }
+          options?.onMined?.(receipt);
+        },
+      },
+    );
+  }
 }
