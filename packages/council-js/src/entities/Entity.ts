@@ -1,11 +1,11 @@
 import {
   Adapter,
   Address,
+  ClientConfig,
   ContractWriteOptions,
   Drift,
   OnMinedParam,
   OneOf,
-  SimpleCache,
   createDrift,
 } from "@delvtech/drift";
 import { CouncilSdkError } from "src/error";
@@ -23,11 +23,7 @@ export type EntityConfig<A extends Adapter = Adapter> = OneOf<
   | {
       drift?: Drift<A>;
     }
-  | {
-      cache?: SimpleCache;
-      chainId?: number;
-      rpcUrl?: string;
-    }
+  | ClientConfig<A>
 > & {
   /**
    * The earliest block to fetch events from.
