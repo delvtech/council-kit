@@ -17,6 +17,7 @@ export type {
 // Council
 export { ReadCouncil } from "src/entities/council/ReadCouncil";
 export { ReadWriteCouncil } from "src/entities/council/ReadWriteCouncil";
+export { createCouncil } from "src/entities/council/createCouncil";
 
 // Voting vaults
 export { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
