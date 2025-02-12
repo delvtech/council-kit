@@ -1,7 +1,4 @@
-import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
 import { BALLOTS } from "src/entities/coreVoting/constants";
-
-export type CoreVotingAbi = typeof CoreVoting.abi;
 
 /**
  * A valid ballot option.
@@ -21,4 +18,24 @@ export type VoteResults = Record<Ballot, bigint>;
 export interface Actions {
   targets: `0x${string}`[] | readonly `0x${string}`[];
   calldatas: `0x${string}`[] | readonly `0x${string}`[];
+}
+
+export interface ProposalArgs {
+  proposalId: bigint;
+  createdBlock: bigint;
+  unlockBlock: bigint;
+  expirationBlock: bigint;
+}
+
+export interface Proposal extends ProposalArgs {
+  proposalHash: `0x${string}`;
+  requiredQuorum: bigint;
+  lastCallBlock: bigint;
+}
+
+export interface Vote {
+  proposalId: bigint;
+  ballot: Ballot;
+  votingPower: bigint;
+  voter: `0x${string}`;
 }

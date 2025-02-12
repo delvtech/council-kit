@@ -1,13 +1,14 @@
 import { GSCVault } from "@delvtech/council-artifacts/GSCVault";
-import { CachedReadContract } from "@delvtech/evm-client";
-import { ReadContractModelOptions } from "src/entities/Model";
-import { ReadVoter } from "src/entities/ReadVoter";
+import {
+  Adapter,
+  Address,
+  Contract,
+  ContractReadOptions,
+} from "@delvtech/drift";
+import { ContractEntityConfig } from "src/entities/Entity";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
-import { GscVaultAbi } from "src/entities/votingVault/gscVault/types";
-import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
 import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
-
-export interface ReadGscVaultOptions extends ReadContractModelOptions {}
+import { Blockish } from "src/utils/types";
 
 /**
  * A VotingVault for the Governance Steering Council in which each member has a
@@ -15,93 +16,60 @@ export interface ReadGscVaultOptions extends ReadContractModelOptions {}
  * voting vaults to remain eligible.
  * @category Models
  */
-export class ReadGscVault extends ReadVotingVault {
-  gscVaultContract: CachedReadContract<GscVaultAbi>;
+export class ReadGscVault<
+  A extends Adapter = Adapter,
+> extends ReadVotingVault<A> {
+  readonly gscVaultContract: Contract<typeof GSCVault.abi, A>;
 
-  constructor({
-    name = "GSC Vault",
-    address,
-    contractFactory,
-    network,
-    cache,
-    namespace,
-  }: ReadGscVaultOptions) {
-    super({
-      address,
-      contractFactory,
-      network,
-      cache,
-      namespace,
-      name,
-    });
-    this.gscVaultContract = contractFactory({
+  constructor(config: ContractEntityConfig<A>) {
+    super(config);
+    this.gscVaultContract = this.drift.contract({
       abi: GSCVault.abi,
-      address,
-      cache,
-      namespace,
+      address: this.address,
     });
-  }
-
-  get address(): `0x${string}` {
-    return this.contract.address;
-  }
-  get namespace(): string | undefined {
-    return this.contract.namespace;
   }
 
   /**
    * Get the amount of voting power required to join this vault.
    */
-  getRequiredVotingPower({
-    atBlock,
-  }: {
-    atBlock?: BlockLike;
-  } = {}): Promise<bigint> {
-    return this.gscVaultContract.read(
-      "votingPowerBound",
-      undefined,
-      blockToReadOptions(atBlock),
-    );
+  getRequiredVotingPower(options?: ContractReadOptions): Promise<bigint> {
+    return this.gscVaultContract.read("votingPowerBound", {}, options);
   }
 
   /**
    * Get all current members of this vault.
-   * @param fromBlock - The block number to start searching for members from.
-   * @param toBlock - The block number to stop searching for members at.
    */
-  async getMembers({
-    fromBlock,
-    toBlock,
-  }: {
-    fromBlock?: BlockLike;
-    toBlock?: BlockLike;
-  } = {}): Promise<ReadVoter[]> {
-    const latestJoinTimestampByMember: Record<`0x${string}`, bigint> = {};
+  async getMembers(
+    options: {
+      /**
+       * The block number to start searching for members from.
+       */
+      fromBlock?: Blockish;
+      /**
+       * The block number to stop searching for members at.
+       */
+      toBlock?: Blockish;
+    } = {},
+  ): Promise<Address[]> {
+    const latestJoinTimestampByMember: {
+      [member: Address]: bigint;
+    } = {};
 
     const joinEvents = await this.gscVaultContract.getEvents(
       "MembershipProved",
-      {
-        fromBlock,
-        toBlock,
-      },
+      options,
     );
 
     // Capture the latest join date of each address.
     for (const {
       args: { who, when },
     } of joinEvents) {
-      if (
-        !latestJoinTimestampByMember[who] ||
-        when > latestJoinTimestampByMember[who]
-      ) {
+      if (when > (latestJoinTimestampByMember[who] || -1n)) {
         latestJoinTimestampByMember[who] = when;
       }
     }
 
-    const kickEvents = await this.gscVaultContract.getEvents("Kicked", {
-      fromBlock,
-      toBlock,
-    });
+    const kickEvents = await this.gscVaultContract.getEvents("Kicked", options);
 
     // Ignore addresses that were kicked after their latest join date.
     for (const {
@@ -110,10 +78,9 @@ export class ReadGscVault extends ReadVotingVault {
       // NOTE: the kickEvents store `when` as a block number whereas the
       // joinEvents store `when` as a timestamp, so we must convert the block
       // number to a timestamp so we can compare them.
-      const { timestamp: kickedTimestamp } = await getBlockOrThrow(
-        this.network,
-        when,
-      );
+      const { timestamp: kickedTimestamp } = await getBlockOrThrow(this.drift, {
+        blockNumber: when,
+      });
 
       if (
         latestJoinTimestampByMember[who] &&
@@ -123,99 +90,62 @@ export class ReadGscVault extends ReadVotingVault {
       }
     }
 
-    return Object.entries(latestJoinTimestampByMember).map(
-      ([address]) =>
-        new ReadVoter({
-          address: address as `0x${string}`,
-          contractFactory: this.contractFactory,
-          network: this.network,
-        }),
-    );
-  }
-
-  /**
-   * Get all voters with voting power in this vault (alias for `getMembers`).
-   * @param fromBlock - The block number to start searching for voters from.
-   * @param toBlock - The block number to stop searching for voters at.
-   */
-  getVoters(
-    ...args: Parameters<ReadGscVault["getMembers"]>
-  ): Promise<ReadVoter[]> {
-    return this.getMembers(...args);
+    return Object.keys(latestJoinTimestampByMember) as Address[];
   }
 
   /**
    * Get the join date of a given address.
    */
-  async getJoinDate({
-    account,
-    atBlock,
-  }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<Date | null> {
+  async getJoinDate(
+    member: Address,
+    options?: ContractReadOptions,
+  ): Promise<Date | undefined> {
     const secondsTimestamp = await this.gscVaultContract.read(
       "members",
-      {
-        0: typeof account === "string" ? account : account.address,
-      },
-      blockToReadOptions(atBlock),
+      [member],
+      options,
     );
-    return secondsTimestamp ? new Date(Number(secondsTimestamp * 1000n)) : null;
+    return secondsTimestamp
+      ? new Date(Number(secondsTimestamp * 1000n))
+      : undefined;
   }
 
   /**
    * Get a boolean indicating whether a given voter is a current member.
    */
-  async getIsMember({
-    account,
-    atBlock,
-  }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<boolean> {
-    return !!(await this.getJoinDate({
-      account,
-      atBlock,
-    }));
+  async getIsMember(
+    voter: Address,
+    options?: ContractReadOptions,
+  ): Promise<boolean> {
+    return !!(await this.getJoinDate(voter, options));
   }
 
   /**
    * Get the time (in MS) that a new GSC member must wait after joining before
    * they can vote.
    */
-  getIdleDuration({ atBlock }: { atBlock?: BlockLike } = {}): Promise<bigint> {
-    return this.gscVaultContract.read(
+  async getIdleDuration(options?: ContractReadOptions): Promise<bigint> {
+    const seconds = await this.gscVaultContract.read(
       "idleDuration",
       {},
-      blockToReadOptions(atBlock),
+      options,
     );
+    return seconds * 1000n;
   }
 
   /**
    * Get a boolean indicating whether a member is still in the idle duration.
    * Idle members cannot vote.
    */
-  async getIsIdle({
-    account,
-    atBlock,
-  }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<boolean> {
-    const joinDate = await this.getJoinDate({
-      account,
-      atBlock,
-    });
+  async getIsIdle(
+    member: Address,
+    options?: ContractReadOptions,
+  ): Promise<boolean> {
+    const joinDate = await this.getJoinDate(member, options);
     const isMember = !!joinDate;
     return (
       isMember &&
-      joinDate.getTime() +
-        Number(
-          await this.getIdleDuration({
-            atBlock,
-          }),
-        ) >
+      joinDate.getTime() + Number(await this.getIdleDuration(options)) >
         Date.now()
     );
   }
@@ -224,26 +154,20 @@ export class ReadGscVault extends ReadVotingVault {
    * Get the voting vaults a member joined with. Used to prove the member meets
    * the minimum voting power requirement.
    */
-  async getMemberVaults({
-    account,
-    atBlock,
-  }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<ReadVotingVault[]> {
+  async getMemberVaults(
+    member: Address,
+    options?: ContractReadOptions,
+  ): Promise<ReadVotingVault[]> {
     const vaultAddresses = await this.gscVaultContract.read(
       "getUserVaults",
-      {
-        who: typeof account === "string" ? account : account.address,
-      },
-      blockToReadOptions(atBlock),
+      { who: member },
+      options,
     );
     return vaultAddresses.map(
       (address) =>
         new ReadVotingVault({
           address,
-          contractFactory: this.contractFactory,
-          network: this.network,
+          drift: this.drift,
         }),
     );
   }

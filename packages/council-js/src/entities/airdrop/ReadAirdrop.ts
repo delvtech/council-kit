@@ -1,22 +1,21 @@
-import { Airdrop as AirdropArtifact } from "@delvtech/council-artifacts/Airdrop";
+import { Airdrop } from "@delvtech/council-artifacts/Airdrop";
 import {
   Adapter,
   Address,
   Contract,
   ContractReadOptions,
 } from "@delvtech/drift";
-import { AirdropAbi } from "src/entities/airdrop/types";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
 import { ReadToken } from "src/entities/token/ReadToken";
 import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLockingVault";
 
 export class ReadAirdrop<A extends Adapter = Adapter> extends Entity<A> {
-  contract: Contract<AirdropAbi, A>;
+  contract: Contract<typeof Airdrop.abi, A>;
 
   constructor({ address, ...config }: ContractEntityConfig<A>) {
     super(config);
     this.contract = this.drift.contract({
-      abi: AirdropArtifact.abi,
+      abi: Airdrop.abi,
       address,
     });
   }
@@ -53,13 +52,10 @@ export class ReadAirdrop<A extends Adapter = Adapter> extends Entity<A> {
   /**
    * Get the amount that an address has already claimed.
    */
-  async getClaimedAmount({
-    account,
-    options,
-  }: {
-    account: Address;
-    options?: ContractReadOptions;
-  }): Promise<bigint> {
+  async getClaimedAmount(
+    account: Address,
+    options?: ContractReadOptions,
+  ): Promise<bigint> {
     return await this.contract.read("claimed", [account], options);
   }
 

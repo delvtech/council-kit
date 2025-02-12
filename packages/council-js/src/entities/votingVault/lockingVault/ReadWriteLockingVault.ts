@@ -1,111 +1,117 @@
 import {
-  CachedReadWriteContract,
+  Address,
   ContractWriteOptions,
-} from "@delvtech/evm-client";
-import { ReadWriteContractFactory } from "src/contract/factory";
-import { ReadWriteContractModelOptions } from "src/entities/Model";
+  Hash,
+  ReadWriteAdapter,
+} from "@delvtech/drift";
+import { EntityWriteParams } from "src/entities/Entity";
 import { ReadWriteToken } from "src/entities/token/ReadWriteToken";
 import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLockingVault";
-import { LockingVaultAbi } from "src/entities/votingVault/lockingVault/types";
 
-export interface ReadWriteLockingVaultOptions
-  extends ReadWriteContractModelOptions {}
-
-export class ReadWriteLockingVault extends ReadLockingVault {
-  declare lockingVaultContract: CachedReadWriteContract<LockingVaultAbi>;
-  declare contractFactory: ReadWriteContractFactory;
-
-  constructor(options: ReadWriteLockingVaultOptions) {
-    super(options);
-  }
-
-  override async getToken(): Promise<ReadWriteToken> {
+export class ReadWriteLockingVault<
+  A extends ReadWriteAdapter = ReadWriteAdapter,
+> extends ReadLockingVault<A> {
+  async getToken(): Promise<ReadWriteToken> {
     return new ReadWriteToken({
       address: await this.lockingVaultContract.read("token"),
-      contractFactory: this.contractFactory,
-      network: this.network,
+      drift: this.drift,
     });
   }
 
   /**
    * Change current delegate.
-   * @param delegate - The address to delegate to.
    * @returns The transaction hash.
    */
-  async changeDelegate({
-    delegate,
+  changeDelegate({
+    args,
     options,
-  }: {
-    delegate: `0x${string}`;
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
-    const hash = await this.lockingVaultContract.write(
-      "changeDelegation",
-      { newDelegate: delegate },
-      options,
-    );
-    this.contract.clearCache();
-    return hash;
+  }: EntityWriteParams<{
+    /**
+     * The address to delegate to.
+     */
+    newDelegate: Address;
+  }>): Promise<Hash> {
+    return this.lockingVaultContract.write("changeDelegation", args, {
+      ...options,
+      onMined: async (receipt) => {
+        if (receipt?.status === "success") {
+          this.contract.cache.clear();
+        }
+        options?.onMined?.(receipt);
+      },
+    });
   }
 
   /**
    * Deposit tokens into this vault.
-   * @param account - The address to credit this deposit to. Defaults to the
-   *  signer's address.
-   * @param amount - The amount of tokens to deposit. (formatted decimal string)
-   * @param firstDelegate - The address to delegate the resulting voting power
-   *   to if the account doesn't already have a delegate. Defaults to funded
-   *   account being credited.
    * @returns The transaction hash.
    */
   async deposit({
-    account,
-    amount,
-    firstDelegate,
+    args: { account, amount, firstDelegate },
     options,
-  }: {
-    account?: `0x${string}`;
+  }: EntityWriteParams<{
+    /**
+     * The amount of tokens to deposit. (formatted decimal string)
+     */
     amount: bigint;
-    firstDelegate?: `0x${string}`;
+    /**
+     * The address to credit this deposit to. Defaults to the signer's address.
+     */
+    account?: Address;
+    /**
+     * The address to delegate the resulting voting power to if the account
+     * doesn't already have a delegate. Defaults to funded account being
+     * credited.
+     */
+    firstDelegate?: Address;
     options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
+  }>): Promise<Hash> {
     const fundedAccount =
       account ?? (await this.lockingVaultContract.getSignerAddress());
-    const hash = await this.lockingVaultContract.write(
+    return this.lockingVaultContract.write(
       "deposit",
       {
         amount,
         fundedAccount,
         firstDelegation: firstDelegate ?? fundedAccount,
       },
-      options,
+      {
+        ...options,
+        onMined: async (receipt) => {
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
+          options?.onMined?.(receipt);
+        },
+      },
     );
-    this.contract.clearCache();
-    const token = await this.getToken();
-    token.contract.clearCache();
-    return hash;
   }
 
   /**
    * Withdraw tokens from this vault.
-   * @param amount - The amount of tokens to withdraw. (formatted decimal string)
    * @returns The transaction hash.
    */
-  async withdraw({
-    amount,
+  withdraw({
+    args,
     options,
-  }: {
+  }: EntityWriteParams<{
+    /**
+     * The amount of tokens to withdraw.
+     */
     amount: bigint;
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
-    const hash = await this.lockingVaultContract.write(
+  }>): Promise<Hash> {
+return this.lockingVaultContract.write(
       "withdraw",
-      { amount },
-      options,
+      args,
+      {
+        ...options,
+        onMined: async (receipt) => {
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
+          options?.onMined?.(receipt);
+        },
+      },
     );
-    this.contract.clearCache();
-    const token = await this.getToken();
-    token.contract.clearCache();
-    return hash;
   }
 }

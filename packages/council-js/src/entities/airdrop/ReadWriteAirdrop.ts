@@ -23,21 +23,29 @@ export class ReadWriteAirdrop<
 
   /**
    * Claims tokens from the airdrop and sends them to the user.
-   * @param amount - Amount of tokens to claim.
-   * @param totalGrant - The total amount of tokens the user was granted.
-   * @param merkleProof - A set of hashes that can be used to reconstruct the
-   * path from a user (leaf) node to the merkle root, verifying that the user is
-   * part of the tree.
-   * @param destination - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   claim({
     args: { amount, totalGrant, merkleProof, recipient: destination },
     options,
   }: EntityWriteParams<{
+    /**
+     * Amount of tokens to claim.
+     */
     amount: bigint;
+    /**
+     * The total amount of tokens the user was granted.
+     */
     totalGrant: bigint;
+    /**
+     * A set of hashes that can be used to reconstruct the path from a user
+     * (leaf) node to the merkle root, verifying that the user is part of the
+     * tree.
+     */
     merkleProof: Hash[];
+    /**
+     * The address which will be credited with funds.
+     */
     recipient: Address;
   }>): Promise<Hash> {
     return this.contract.write(
@@ -71,23 +79,33 @@ export class ReadWriteAirdrop<
   /**
    * Claims tokens from the airdrop, deposits it into the locking vault, and
    * delegates in a single transaction.
-   * @param amount - Amount of tokens to claim.
-   * @param delegate - The address the user will delegate to, WARNING - should not be zero.
-   * @param totalGrant - The total amount of tokens the user was granted.
-   * @param merkleProof - A set of hashes that can be used to reconstruct the
-   * path from a user (leaf) node to the merkle root, verifying that the user is
-   * part of the tree.
-   * @param destination - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   claimAndDelegate({
     args: { amount, delegate, totalGrant, merkleProof, destination },
     options,
   }: EntityWriteParams<{
+    /**
+     * Amount of tokens to claim.
+     */
     amount: bigint;
+    /**
+     * The address the user will delegate to, WARNING - should not be zero.
+     */
     delegate: Address;
+    /**
+     * The total amount of tokens the user was granted.
+     */
     totalGrant: bigint;
+    /**
+     * A set of hashes that can be used to reconstruct the path from a user
+     * (leaf) node to the merkle root, verifying that the user is part of the
+     * tree.
+     */
     merkleProof: Hash[];
+    /**
+     * The address which will be credited with funds.
+     */
     destination: Address;
   }>): Promise<Hash> {
     return this.contract.write(
@@ -101,7 +119,9 @@ export class ReadWriteAirdrop<
       },
       {
         onMined: async (receipt) => {
-          if (receipt?.status === "success") this.contract.cache.clear();
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
           options?.onMined?.(receipt);
         },
       },
@@ -110,13 +130,15 @@ export class ReadWriteAirdrop<
 
   /**
    * Remove funds from the airdrop after expiration
-   * @param destination - The address which will be credited with funds.
    * @return - The transaction hash.
    */
   async reclaim({
     args: { destination },
     options,
   }: EntityWriteParams<{
+    /**
+     * The address which will be credited with funds.
+     */
     destination: Address;
   }>): Promise<Hash> {
     const hash = await this.contract.write(

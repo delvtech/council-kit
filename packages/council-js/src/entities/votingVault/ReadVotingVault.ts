@@ -1,45 +1,30 @@
 import { IVotingVault } from "@delvtech/council-artifacts/IVotingVault";
-import { CachedReadContract } from "@delvtech/evm-client";
-import { Model, ReadContractModelOptions } from "src/entities/Model";
-import { ReadVoter } from "src/entities/ReadVoter";
+import {
+  Adapter,
+  Address,
+  Bytes,
+  Contract,
+  ContractReadOptions,
+} from "@delvtech/drift";
+import { ContractEntityConfig, Entity } from "src/entities/Entity";
 import { VotingVaultAbi } from "src/entities/votingVault/types";
-import { BlockLike } from "src/utils/blockToReadOptions";
 import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
-
-/**
- * @category Models
- */
-export interface ReadVotingVaultOptions extends ReadContractModelOptions {}
+import { Blockish } from "src/utils/types";
 
 /**
  * A vault which stores voting power by address
- * @category Models
  */
-export class ReadVotingVault extends Model {
-  contract: CachedReadContract<VotingVaultAbi>;
+export class ReadVotingVault<A extends Adapter = Adapter> extends Entity<A> {
+  readonly address: Address;
+  readonly contract: Contract<VotingVaultAbi, A>;
 
-  constructor({
-    name = "Voting Vault",
-    address,
-    contractFactory,
-    network,
-    cache,
-    namespace,
-  }: ReadVotingVaultOptions) {
-    super({ name, network, contractFactory });
-    this.contract = contractFactory({
+  constructor({ address, ...config }: ContractEntityConfig<A>) {
+    super(config);
+    this.address = address;
+    this.contract = this.drift.contract({
       abi: IVotingVault.abi,
       address,
-      cache,
-      namespace,
     });
-  }
-
-  get address(): `0x${string}` {
-    return this.contract.address;
-  }
-  get namespace(): string | undefined {
-    return this.contract.namespace;
   }
 
   /**
@@ -48,38 +33,46 @@ export class ReadVotingVault extends Model {
    *   such as merkle proofs.
    */
   async getVotingPower({
-    account,
-    atBlock = "latest",
-    extraData = "0x00",
+    voter,
+    /**
+     * The block to get voting power at. Usually the creation block of a
+     * proposal.
+     */
+    block,
+    // extraData = "0x00",
+    extraData = "0x",
+    options,
   }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-    extraData?: `0x${string}`;
+    voter: Address;
+    block: Blockish;
+    extraData?: Bytes;
+    options?: ContractReadOptions;
   }): Promise<bigint> {
-    let blockNumber = atBlock;
+    if (typeof block !== "bigint") {
+      const { number } = await getBlockOrThrow(this.drift, options);
 
-    if (typeof blockNumber !== "bigint") {
-      const block = await getBlockOrThrow(this.network, blockNumber);
-      if (block.blockNumber === null) {
+      // No block number available for the requested number, hash, or tag.
+      if (number === undefined) {
         return 0n;
       }
-      blockNumber = block.blockNumber;
+
+      block = number;
     }
 
-    try {
-      return await this.contract.simulateWrite("queryVotePower", {
-        blockNumber,
+    return this.contract
+      .simulateWrite("queryVotePower", {
+        blockNumber: block,
         extraData,
-        user: typeof account === "string" ? account : account.address,
-      });
-    } catch (error) {
-      // queryVotePower throws an uninitialized an error if the account is not
-      // found/hasn't ever had voting power.
-      if (error instanceof Error && error.message.includes("uninitialized")) {
-        return 0n;
-      }
+        user: voter,
+      })
+      .catch((error) => {
+        // queryVotePower throws an uninitialized an error if the account is not
+        // found/hasn't ever had voting power.
+        if (error instanceof Error && error.message.includes("uninitialized")) {
+          return 0n;
+        }
 
-      throw error;
-    }
+        throw error;
+      });
   }
 }

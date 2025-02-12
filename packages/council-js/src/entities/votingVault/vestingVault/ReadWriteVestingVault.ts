@@ -1,72 +1,69 @@
-import {
-  CachedReadWriteContract,
-  ContractWriteOptions,
-} from "@delvtech/evm-client";
-import { ReadWriteContractFactory } from "src/contract/factory";
-import { ReadWriteContractModelOptions } from "src/entities/Model";
+import { Address, Hash, OnMinedParam, ReadWriteAdapter } from "@delvtech/drift";
+import { ContractWriteOptions } from "@delvtech/evm-client";
+import { EntityWriteParams } from "src/entities/Entity";
 import { ReadWriteToken } from "src/entities/token/ReadWriteToken";
 import { ReadVestingVault } from "src/entities/votingVault/vestingVault/ReadVestingVault";
-import { VestingVaultAbi } from "src/entities/votingVault/vestingVault/types";
 
-interface ReadWriteVestingVaultOptions extends ReadWriteContractModelOptions {}
-
-export class ReadWriteVestingVault extends ReadVestingVault {
-  declare vestingVaultContract: CachedReadWriteContract<VestingVaultAbi>;
-  declare contractFactory: ReadWriteContractFactory;
-
-  constructor(options: ReadWriteVestingVaultOptions) {
-    super(options);
-  }
-
-  override async getToken(): Promise<ReadWriteToken> {
+export class ReadWriteVestingVault<
+  A extends ReadWriteAdapter = ReadWriteAdapter,
+> extends ReadVestingVault<A> {
+  async getToken(): Promise<ReadWriteToken> {
     return new ReadWriteToken({
       address: await this.vestingVaultContract.read("token"),
-      contractFactory: this.contractFactory,
-      network: this.network,
+      drift: this.drift,
     });
   }
 
   /**
    * Change current delegate.
-   * @param delegate - The address to delegate to. Defaults to the signer's
-   * address.
    * @returns The transaction hash.
    */
-  async changeDelegate({
-    delegate,
+  changeDelegate({
+    /**
+     * The address to delegate to. Defaults to the signer's
+     * address.
+     */
+    args: { delegate },
     options,
-  }: {
-    delegate: `0x${string}`;
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
-    const hash = await this.vestingVaultContract.write(
+  }: EntityWriteParams<{
+    delegate: Address;
+  }>): Promise<Hash> {
+    return this.vestingVaultContract.write(
       "delegate",
+      { _to: delegate },
       {
-        _to: delegate,
+        ...options,
+        onMined: (receipt) => {
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
+          options?.onMined?.(receipt);
+        },
       },
-      options,
     );
-    this.contract.clearCache();
-    return hash;
   }
 
   /**
    * Claim a grant and withdraw the tokens.
    * @returns The transaction hash.
    */
-  async claim({
+  claim({
     options,
   }: {
-    options?: ContractWriteOptions;
-  } = {}): Promise<`0x${string}`> {
-    const hash = await this.vestingVaultContract.write(
+    options?: ContractWriteOptions & OnMinedParam;
+  } = {}): Promise<Hash> {
+    return this.vestingVaultContract.write(
       "claim",
-      undefined,
-      options,
+      {},
+      {
+        ...options,
+        onMined: (receipt) => {
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
+          options?.onMined?.(receipt);
+        },
+      },
     );
-    const token = await this.getToken();
-    token.contract.clearCache();
-    this.contract.clearCache();
-    return hash;
   }
 }

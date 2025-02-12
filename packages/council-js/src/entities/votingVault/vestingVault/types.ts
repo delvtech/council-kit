@@ -1,5 +1,12 @@
-import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
-import { FunctionReturn } from "@delvtech/evm-client";
+import { Address } from "@delvtech/drift";
 
-export type VestingVaultAbi = typeof VestingVault.abi;
-export type Grant = FunctionReturn<VestingVaultAbi, "getGrant">;
+export type Grant = {
+  allocation: bigint;
+  withdrawn: bigint;
+  createdBlock: bigint;
+  expirationBlock: bigint;
+  cliffBlock: bigint;
+  latestVotingPower: bigint;
+  delegatee: Address;
+  range: readonly [bigint, bigint];
+};

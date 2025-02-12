@@ -1,290 +1,39 @@
 import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
-import { CachedReadContract } from "@delvtech/evm-client";
-import Big from "big.js";
-import { ReadContractModelOptions } from "src/entities/Model";
-import { ReadVoter } from "src/entities/ReadVoter";
+import {
+  Adapter,
+  Address,
+  Bytes,
+  Contract,
+  ContractReadOptions,
+} from "@delvtech/drift";
+import { fixed } from "@delvtech/fixed-point-wasm";
+import { ContractEntityConfig } from "src/entities/Entity";
 import { ReadToken } from "src/entities/token/ReadToken";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
-import { VoterPowerBreakdown } from "src/entities/votingVault/types";
 import {
-  Grant,
-  VestingVaultAbi,
-} from "src/entities/votingVault/vestingVault/types";
-import { BlockLike, blockToReadOptions } from "src/utils/blockToReadOptions";
+  VoterPowerBreakdown,
+  VoterWithPower,
+} from "src/entities/votingVault/types";
+import { Grant } from "src/entities/votingVault/vestingVault/types";
 import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
-import { getOrSet } from "src/utils/getOrSet";
-
-export interface ReadVestingVaultOptions extends ReadContractModelOptions {}
+import { Blockish } from "src/utils/types";
 
 /**
  * A VotingVault that gives voting power for receiving grants and applies a
  * multiplier on unvested tokens to reduce their voting power.
  * @category Models
  */
-export class ReadVestingVault extends ReadVotingVault {
-  vestingVaultContract: CachedReadContract<VestingVaultAbi>;
+export class ReadVestingVault<
+  A extends Adapter = Adapter,
+> extends ReadVotingVault<A> {
+  readonly vestingVaultContract: Contract<typeof VestingVault.abi, A>;
 
-  constructor({
-    name = "Vesting Vault",
-    address,
-    contractFactory,
-    network,
-    cache,
-    namespace,
-  }: ReadVestingVaultOptions) {
-    super({
-      address,
-      contractFactory,
-      network,
-      cache,
-      namespace,
-      name,
-    });
-    this.vestingVaultContract = contractFactory({
+  constructor(config: ContractEntityConfig<A>) {
+    super(config);
+    this.vestingVaultContract = this.drift.contract({
       abi: VestingVault.abi,
-      address,
-      cache,
-      namespace,
+      address: this.address,
     });
-  }
-
-  get address(): `0x${string}` {
-    return this.contract.address;
-  }
-  get namespace(): string | undefined {
-    return this.contract.namespace;
-  }
-
-  /**
-   * Get this vault's token.
-   */
-  async getToken(): Promise<ReadToken> {
-    return new ReadToken({
-      address: await this.vestingVaultContract.read("token"),
-      contractFactory: this.contractFactory,
-      network: this.network,
-    });
-  }
-
-  /**
-   * Get this vault's unvested multiplier, a number that represents the voting
-   * power of each unvested token as a percentage of a vested token. For example
-   * if unvested tokens have 50% voting power compared to vested ones, this
-   * value would be 50.
-   */
-  getUnvestedMultiplier({
-    atBlock,
-  }: { atBlock?: BlockLike } = {}): Promise<bigint> {
-    return this.vestingVaultContract.read(
-      "unvestedMultiplier",
-      undefined,
-      blockToReadOptions(atBlock),
-    );
-  }
-
-  /**
-   * Get the grant data for a given address.
-   */
-  getGrant({
-    account,
-    atBlock,
-  }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<Grant> {
-    return this.vestingVaultContract.read(
-      "getGrant",
-      {
-        _who: typeof account === "string" ? account : account.address,
-      },
-      blockToReadOptions(atBlock),
-    );
-  }
-
-  /**
-   * Gets the amount of tokens currently claimable from the grant.
-   * Mimics internal function https://github.com/delvtech/council/blob/main/contracts/vaults/VestingVault.sol#L434
-   * @param account - The grantee account address.
-   * @returns The amount of claimable tokens.
-   */
-  async getWithdrawableAmount({
-    account,
-    atBlock,
-  }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<bigint> {
-    let blockNumber = atBlock;
-
-    if (typeof blockNumber !== "bigint") {
-      const block = await getBlockOrThrow(this.network, blockNumber);
-      if (block.blockNumber === null) {
-        return 0n;
-      }
-      blockNumber = block.blockNumber;
-    }
-
-    const { allocation, created, cliff, expiration, withdrawn } =
-      await this.getGrant({
-        account: account,
-        atBlock,
-      });
-
-    // funds are not unlocked
-    if (blockNumber < cliff) {
-      return 0n;
-    }
-
-    // all funds are claimable
-    if (blockNumber >= expiration) {
-      return allocation - withdrawn;
-    }
-
-    const blocksSinceCreated = blockNumber - created;
-    const grantDuration = expiration - created;
-    const amount = Big(String(allocation))
-      .mul(String(blocksSinceCreated))
-      .div(String(grantDuration));
-
-    return BigInt(amount.toFixed()) - withdrawn;
-  }
-
-  /**
-   * Get all participants that have voting power in this vault.
-   * @param fromBlock - Include all voters that had power on or after this block number.
-   * @param toBlock - Include all voters that had power on or before this block number.
-   */
-  async getVoters({
-    fromBlock,
-    toBlock,
-  }: {
-    fromBlock?: BlockLike;
-    toBlock?: BlockLike;
-  } = {}): Promise<ReadVoter[]> {
-    const powerByVoter = await this._getPowerByVoter({
-      fromBlock,
-      toBlock,
-    });
-    return Object.keys(powerByVoter).map(
-      (address) =>
-        new ReadVoter({
-          address: address as `0x${string}`,
-          contractFactory: this.contractFactory,
-          network: this.network,
-        }),
-    );
-  }
-
-  /**
-   * Get all participants that have voting power in this vault along with their
-   * voting power, the amount of voting power being delegated to them, and the
-   * amount of power delegated to them by each delegator. This is a convenience
-   * method to fetch voting power and delegation data for a large number of
-   * voters in a single call.
-   * @param account - Get a breakdown for a specific account.
-   * @param fromBlock - Include all voters that had power on or after this block
-   * number.
-   * @param toBlock - Include all voters that had power on or before this block
-   * number.
-   */
-  async getVotingPowerBreakdown({
-    account,
-    fromBlock,
-    toBlock,
-  }: {
-    account?: `0x${string}`;
-    fromBlock?: BlockLike;
-    toBlock?: BlockLike;
-  } = {}): Promise<VoterPowerBreakdown[]> {
-    // const breakdownByVoter = await this._getPowerBreakdownByVoter(options);
-    const voteChangeEvents = await this.vestingVaultContract.getEvents(
-      "VoteChange",
-      {
-        filter: {
-          to: account,
-        },
-        fromBlock,
-        toBlock,
-      },
-    );
-
-    const breakdownByVoter: Record<
-      `0x${string}`,
-      {
-        power: bigint;
-        powerFromAllDelegators: bigint;
-        powerByDelegator: Record<`0x${string}`, bigint>;
-      }
-    > = {};
-
-    for (const {
-      args: { from, to, amount },
-    } of voteChangeEvents) {
-      if (!breakdownByVoter[to]) {
-        breakdownByVoter[to] = {
-          power: 0n,
-          powerFromAllDelegators: 0n,
-          powerByDelegator: {},
-        };
-      }
-
-      breakdownByVoter[to].power += amount;
-
-      // ignore self-delegation
-      if (from !== to) {
-        breakdownByVoter[to].powerFromAllDelegators += amount;
-        breakdownByVoter[to].powerByDelegator[from] =
-          (breakdownByVoter[to].powerByDelegator[from] ?? 0n) + amount;
-      }
-    }
-
-    const voterMap = new Map<`0x${string}`, ReadVoter>();
-
-    return Object.entries(breakdownByVoter)
-      .filter(([, { power }]) => power > 0)
-      .map(
-        ([_address, { power, powerByDelegator, powerFromAllDelegators }]) => {
-          const address = _address as `0x${string}`;
-
-          const voter = getOrSet({
-            key: address,
-            cache: voterMap,
-            callback: () =>
-              new ReadVoter({
-                address,
-                contractFactory: this.contractFactory,
-                network: this.network,
-              }),
-          });
-
-          const votingPowerByDelegator = Object.entries(powerByDelegator)
-            .filter(([, votingPower]) => votingPower > 0n)
-            .map(([_address, votingPower]) => {
-              const address = _address as `0x${string}`;
-              const voter = getOrSet({
-                key: address,
-                cache: voterMap,
-                callback: () =>
-                  new ReadVoter({
-                    address,
-                    contractFactory: this.contractFactory,
-                    network: this.network,
-                  }),
-              });
-              return {
-                voter,
-                votingPower,
-              };
-            });
-
-          return {
-            voter,
-            votingPower: power,
-            votingPowerFromAllDelegators: powerFromAllDelegators,
-            votingPowerByDelegator,
-          };
-        },
-      );
   }
 
   /**
@@ -297,142 +46,271 @@ export class ReadVestingVault extends ReadVotingVault {
   }
 
   /**
-   * Get the voting power for a given address at a given block without
-   * accounting for the stale block lag.
-   * @param account
-   * @param atBlock
-   * @returns The historical voting power of the given address.
+   * Get this vault's token.
    */
-  async getHistoricalVotingPower({
-    account,
-    atBlock,
-  }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<bigint> {
-    let blockNumber = atBlock;
-
-    if (typeof blockNumber !== "bigint") {
-      const block = await getBlockOrThrow(this.network, blockNumber);
-      if (block.blockNumber === null) {
-        return 0n;
-      }
-      blockNumber = block.blockNumber;
-    }
-
-    return this.vestingVaultContract.read("queryVotePowerView", {
-      user: typeof account === "string" ? account : account.address,
-      blockNumber,
+  async getToken(): Promise<ReadToken> {
+    return new ReadToken({
+      address: await this.vestingVaultContract.read("token"),
+      drift: this.drift,
     });
   }
 
   /**
-   * Get the sum of voting power held by all voters in this vault.
-   * @param atBlock - Get the total held at this block number.
+   * Get this vault's unvested multiplier, a number that represents the voting
+   * power of each unvested token as a percentage of a vested token. For example
+   * if unvested tokens have 50% voting power compared to vested ones, this
+   * value would be 50.
    */
-  async getTotalVotingPower({
-    atBlock,
-  }: {
-    atBlock?: BlockLike;
-  } = {}): Promise<bigint> {
-    const powerByVoter = await this._getPowerByVoter({
-      toBlock: atBlock,
-    });
-    return Object.values(powerByVoter).reduce((sum, power) => sum + power, 0n);
+  getUnvestedMultiplier(options?: ContractReadOptions): Promise<bigint> {
+    return this.vestingVaultContract.read("unvestedMultiplier", {}, options);
+  }
+
+  /**
+   * Get the grant data for a given address.
+   */
+  async getGrant(
+    account: Address,
+    options?: ContractReadOptions,
+  ): Promise<Grant> {
+    const {
+      allocation,
+      cliff,
+      created,
+      delegatee,
+      expiration,
+      latestVotingPower,
+      range,
+      withdrawn,
+    } = await this.vestingVaultContract.read(
+      "getGrant",
+      { _who: account },
+      options,
+    );
+    return {
+      allocation,
+      cliffBlock: cliff,
+      createdBlock: created,
+      delegatee,
+      expirationBlock: expiration,
+      latestVotingPower,
+      range,
+      withdrawn,
+    };
+  }
+
+  /**
+   * Gets the amount of tokens currently claimable from the grant.
+   *
+   * Mimics internal function
+   * {@linkcode https://github.com/delvtech/council/blob/5f7be330b05f1c3bebd0176882cc5c3429f0764f/contracts/vaults/VestingVault.sol#L434 _getWithdrawableAmount}.
+   *
+   * @param account - The grantee account address.
+   * @returns The amount of claimable tokens.
+   */
+  async getWithdrawableAmount(
+    account: Address,
+    options?: ContractReadOptions,
+  ): Promise<bigint> {
+    const { allocation, createdBlock, cliffBlock, expirationBlock, withdrawn } =
+      await this.getGrant(account, options);
+
+    let currentBlock = 0n;
+    if (typeof options?.block === "bigint") {
+      currentBlock = options.block;
+    } else {
+      const { number } = await getBlockOrThrow(this.drift, options);
+      if (number === undefined) {
+        return 0n;
+      }
+      currentBlock = number;
+    }
+
+    // funds are not unlocked
+    if (currentBlock < cliffBlock) {
+      return 0n;
+    }
+
+    // all funds are claimable
+    if (currentBlock >= expirationBlock) {
+      return allocation - withdrawn;
+    }
+
+    const vestedBlocks = currentBlock - createdBlock;
+    const grantDurationBlocks = expirationBlock - createdBlock;
+    const amount = fixed(allocation).mul(vestedBlocks).div(grantDurationBlocks);
+
+    return amount.bigint - withdrawn;
   }
 
   /**
    * Get the current delegate of a given account.
    */
-  async getDelegate({
-    account,
-    atBlock,
-  }: {
-    account: ReadVoter | `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<ReadVoter> {
-    const { delegatee } = await this.getGrant({
-      account,
-      atBlock,
+  async getDelegate(
+    account: Address,
+    options?: ContractReadOptions,
+  ): Promise<Address> {
+    const { delegatee } = await this.getGrant(account, options);
+    return delegatee;
+  }
+
+  /**
+   * Get all voters delegated to a given account in this vault.
+   */
+  async getDelegatorsTo(
+    voter: Address,
+    {
+      fromBlock,
+      toBlock,
+    }: {
+      fromBlock?: Blockish;
+      toBlock?: Blockish;
+    },
+  ): Promise<VoterWithPower[]> {
+    const breakdown = await this.getVotingPowerBreakdown({
+      voter,
+      fromBlock,
+      toBlock,
     });
-    return new ReadVoter({
-      address: delegatee,
-      contractFactory: this.contractFactory,
-      network: this.network,
+    return breakdown[0].delegators;
+  }
+
+  /**
+   * Get the voting power for a given address at a given block without
+   * accounting for the stale block lag.
+   */
+  async getHistoricalVotingPower({
+    voter,
+    /**
+     * The block to get voting power at. Usually the creation block of a
+     * proposal.
+     */
+    block,
+    options,
+  }: {
+    voter: Address;
+    block: Blockish;
+    extraData?: Bytes;
+    options?: ContractReadOptions;
+  }): Promise<bigint> {
+    if (typeof block !== "bigint") {
+      const { number } = await getBlockOrThrow(this.drift, options);
+
+      // No block number available for the requested hash or tag.
+      if (number === undefined) {
+        return 0n;
+      }
+
+      block = number;
+    }
+
+    return this.vestingVaultContract.read("queryVotePowerView", {
+      user: voter,
+      blockNumber: block,
     });
   }
 
   /**
-   * Get all voters delegated to a given address in this vault.
+   * Get the sum of voting power held by all voters in this vault.
    */
-  async getDelegatorsTo({
-    account,
-    atBlock,
-  }: {
-    account: `0x${string}`;
-    atBlock?: BlockLike;
-  }): Promise<ReadVoter[]> {
-    const voteChangeEvents = await this.vestingVaultContract.getEvents(
-      "VoteChange",
-      {
-        filter: {
-          to: account,
-        },
-        toBlock: atBlock,
-      },
-    );
-
-    const powerByDelegators: Record<`0x${string}`, bigint> = {};
-    for (const {
-      args: { from, amount },
-    } of voteChangeEvents) {
-      // ignore self-delegation
-      if (from !== account) {
-        powerByDelegators[from] = (powerByDelegators[from] ?? 0n) + amount;
-      }
-    }
-
-    return Object.entries(powerByDelegators)
-      .filter(([, power]) => power > 0)
-      .map(
-        ([address]) =>
-          new ReadVoter({
-            address: address as `0x${string}`,
-            contractFactory: this.contractFactory,
-            network: this.network,
-          }),
-      );
-  }
-
-  private async _getPowerByVoter({
-    address,
+  async getTotalVotingPower({
     fromBlock,
     toBlock,
   }: {
-    address?: `0x${string}`;
-    fromBlock?: BlockLike;
-    toBlock?: BlockLike;
-  } = {}): Promise<Record<`0x${string}`, bigint>> {
+    fromBlock?: Blockish;
+    toBlock?: Blockish;
+  } = {}): Promise<bigint> {
+    const breakdown = await this.getVotingPowerBreakdown({
+      fromBlock,
+      toBlock,
+    });
+    return Object.values(breakdown).reduce(
+      (sum, { votingPower }) => sum + votingPower,
+      0n,
+    );
+  }
+
+  /**
+   * Get all participants that have voting power in this vault along with their
+   * voting power, the amount of voting power being delegated to them, and the
+   * amount of power delegated to them by each delegator. This is a convenience
+   * method to fetch voting power and delegation data for a large number of
+   * voters in a single call.
+   */
+  async getVotingPowerBreakdown({
+    voter,
+    fromBlock,
+    toBlock,
+  }: {
+    /**
+     * Get a breakdown for a specific account.
+     */
+    voter?: Address;
+    fromBlock?: Blockish;
+    toBlock?: Blockish;
+  } = {}): Promise<VoterPowerBreakdown[]> {
     const voteChangeEvents = await this.vestingVaultContract.getEvents(
       "VoteChange",
       {
-        filter: {
-          to: address,
-        },
+        filter: { to: voter },
         fromBlock,
         toBlock,
       },
     );
 
-    const powerByVoter: Record<`0x${string}`, bigint> = {};
+    const breakdownByVoter: {
+      [voter: Address]: {
+        votingPower: bigint;
+        votingPowerFromDelegators: bigint;
+        powerByDelegator: {
+          [delegator: Address]: bigint;
+        };
+      };
+    } = {};
+
+    // Calculate the delegated voting power for each voter.
     for (const {
-      args: { to, amount },
+      args: { from, to, amount },
     } of voteChangeEvents) {
-      powerByVoter[to] = (powerByVoter[to] ?? 0n) + amount;
+      const breakdown = (breakdownByVoter[to] ||= {
+        votingPower: 0n,
+        votingPowerFromDelegators: 0n,
+        powerByDelegator: {},
+      });
+
+      breakdown.votingPower += amount;
+
+      // ignore self-delegation
+      if (from !== to) {
+        breakdown.votingPowerFromDelegators += amount;
+        breakdown.powerByDelegator[from] ??= 0n;
+        breakdown.powerByDelegator[from] += amount;
+      }
     }
 
-    return Object.fromEntries(
-      Object.entries(powerByVoter).filter(([, power]) => power > 0n),
-    );
+    // Convert objects to arrays and filter out voters with no voting power.
+    let breakdowns: VoterPowerBreakdown[] = [];
+    for (const [
+      voter,
+      { votingPower, votingPowerFromDelegators, powerByDelegator },
+    ] of Object.entries(breakdownByVoter)) {
+      if (votingPower <= 0n) continue;
+      let delegators: VoterWithPower[] = [];
+      for (const [delegator, power] of Object.entries(powerByDelegator)) {
+        if (votingPower <= 0n) continue;
+        delegators.push({
+          voter: delegator as Address,
+          votingPower: power,
+        });
+      }
+
+      breakdowns.push({
+        voter: voter as Address,
+        votingPower,
+        votingPowerFromDelegators,
+        delegators,
+      });
+    }
+
+    return breakdowns;
   }
 }

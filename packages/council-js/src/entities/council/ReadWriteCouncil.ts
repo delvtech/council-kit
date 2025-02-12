@@ -1,75 +1,54 @@
-import { ReadWriteContractFactory } from "src/contract/factory";
-import { ReadWriteModelOptions } from "src/entities/Model";
+import { Address, ReadWriteAdapter } from "@delvtech/drift";
 import { ReadWriteAirdrop } from "src/entities/airdrop/ReadWriteAirdrop";
 import { ReadWriteCoreVoting } from "src/entities/coreVoting/ReadWriteCoreVoting";
 import { ReadCouncil } from "src/entities/council/ReadCouncil";
 import { ReadWriteToken } from "src/entities/token/ReadWriteToken";
-import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 import { ReadWriteGscVault } from "src/entities/votingVault/gscVault/ReadWriteGscVault";
 import { ReadWriteLockingVault } from "src/entities/votingVault/lockingVault/ReadWriteLockingVault";
 import { ReadWriteVestingVault } from "src/entities/votingVault/vestingVault/ReadWriteVestingVault";
 
-export interface ReadWriteCouncilOptions extends ReadWriteModelOptions {}
-
-export class ReadWriteCouncil extends ReadCouncil {
-  protected declare _contractFactory: ReadWriteContractFactory;
-
-  constructor(options: ReadWriteCouncilOptions) {
-    super(options);
-  }
-
-  coreVoting({
-    address,
-    vaults,
-  }: {
-    address: `0x${string}`;
-    vaults?: (ReadVotingVault | `0x${string}`)[];
-  }): ReadWriteCoreVoting {
+export class ReadWriteCouncil<
+  A extends ReadWriteAdapter = ReadWriteAdapter,
+> extends ReadCouncil<A> {
+  coreVoting(address: Address) {
     return new ReadWriteCoreVoting({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
-      vaults,
+      drift: this.drift,
     });
   }
 
-  lockingVault(address: `0x${string}`): ReadWriteLockingVault {
+  lockingVault(address: Address) {
     return new ReadWriteLockingVault({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  vestingVault(address: `0x${string}`): ReadWriteVestingVault {
+  vestingVault(address: Address) {
     return new ReadWriteVestingVault({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  gscVault(address: `0x${string}`): ReadWriteGscVault {
+  gscVault(address: Address) {
     return new ReadWriteGscVault({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  airdrop(address: `0x${string}`): ReadWriteAirdrop {
+  airdrop(address: Address) {
     return new ReadWriteAirdrop({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  token(address: `0x${string}`): ReadWriteToken {
+  token(address: Address) {
     return new ReadWriteToken({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 }

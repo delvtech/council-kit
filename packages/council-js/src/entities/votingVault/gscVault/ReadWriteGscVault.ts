@@ -1,111 +1,116 @@
-import {
-  CachedReadWriteContract,
-  ContractWriteOptions,
-} from "@delvtech/evm-client";
-import { ReadWriteContractFactory } from "src/contract/factory";
-import { ReadWriteContractModelOptions } from "src/entities/Model";
-import { ReadVoter } from "src/entities/ReadVoter";
+import { Address, Bytes, Hash, ReadWriteAdapter } from "@delvtech/drift";
+import { EntityWriteParams } from "src/entities/Entity";
 import { ReadGscVault } from "src/entities/votingVault/gscVault/ReadGscVault";
-import { GscVaultAbi } from "src/entities/votingVault/gscVault/types";
-import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 
-export interface ReadWriteGscVaultOptions
-  extends ReadWriteContractModelOptions {}
-
-export class ReadWriteGscVault extends ReadGscVault {
-  declare gscVaultContract: CachedReadWriteContract<GscVaultAbi>;
-  declare contractFactory: ReadWriteContractFactory;
-
-  constructor(options: ReadWriteGscVaultOptions) {
-    super(options);
-  }
-
+export class ReadWriteGscVault<
+  A extends ReadWriteAdapter = ReadWriteAdapter,
+> extends ReadGscVault<A> {
   /**
    * Set the idle duration for a member in this GSC vault. The idle duration is
    * the amount of time a member must be a member before they can vote.
-   * @param duration - The new idle duration in seconds.
    */
-  async setIdleDuration({
-    duration,
+  setIdleDuration({
+    args: { duration },
     options,
-  }: {
+  }: EntityWriteParams<{
+    /**
+     * The new idle duration in seconds.
+     */
     duration: bigint;
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
-    const hash = await this.gscVaultContract.write(
+  }>): Promise<Hash> {
+    return this.gscVaultContract.write(
       "setIdleDuration",
       { _idleDuration: duration },
-      options,
+      {
+        ...options,
+        onMined: (receipt) => {
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
+          options?.onMined?.(receipt);
+        },
+      },
     );
-    this.contract.clearCache();
-    return hash;
   }
 
   /**
    * Become a member of this GSC vault.
-   * @param vaults - The addresses of the approved vaults the joining member has
-   *   voting power in. This is used to prove the joining member meets the
-   *   minimum voting power requirement. If voting power is moved to a different
-   *   vault, the member will become ineligible until they join again with the
-   *   new vault or risk being kicked.
    * @returns The transaction hash.
    */
-  async join({
-    vaults,
-    extraVaultData = [],
+  join({
+    args: { votingVaults, extraVaultData = [] },
     options,
-  }: {
-    vaults: (ReadVotingVault | `0x${string}`)[];
+  }: EntityWriteParams<{
+    /**
+     * The addresses of the approved vaults the joining member has
+     *   voting power in. This is used to prove the joining member meets the
+     *   minimum voting power requirement. If voting power is moved to a different
+     *   vault, the member will become ineligible until they join again with the
+     *   new vault or risk being kicked.
+     */
+    votingVaults: Address[];
     /**
      * Extra data given to the vaults to help calculation
      */
-    extraVaultData?: `0x${string}`[];
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
-    const vaultAddresses = vaults.map((vault) =>
-      typeof vault === "string" ? vault : vault.address,
-    );
-    const extraData = vaultAddresses.map((_, i) => extraVaultData[i] || "0x");
-    const hash = await this.gscVaultContract.write(
+    extraVaultData?: (Bytes | undefined)[];
+  }>): Promise<Hash> {
+    const extraData = votingVaults.map((_, i) => extraVaultData[i] || "0x");
+    return this.gscVaultContract.write(
       "proveMembership",
+      { votingVaults, extraData },
       {
-        extraData,
-        votingVaults: vaultAddresses,
+        ...options,
+        onMined: (receipt) => {
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
+          options?.onMined?.(receipt);
+        },
       },
-      options,
     );
-    this.contract.clearCache();
-    return hash;
   }
 
   /**
    * Remove a member that's become ineligible from this GSC vault. A member
    * becomes ineligible when the voting power in the vaults they joined with
    * drops below the required minimum.
-   * @param account - The address of the ineligible member to kick.
+   * @param account -
    * @returns The transaction hash.
    */
   async kick({
-    account,
-    extraVaultData = [],
+    args: { member, extraVaultData = [] },
     options,
-  }: {
-    account: ReadVoter | `0x${string}`;
+  }: EntityWriteParams<{
+    /**
+     * The address of the ineligible member to kick.
+     */
+    member: Address;
     /**
      * The extra data the vaults need to load the member's voting power
      */
-    extraVaultData?: `0x${string}`[];
-    options?: ContractWriteOptions;
-  }): Promise<`0x${string}`> {
-    const hash = await this.gscVaultContract.write(
+    extraVaultData?: (Bytes | undefined)[];
+  }>): Promise<`0x${string}`> {
+    let extraData: Bytes[];
+    if (!extraVaultData) {
+      // Get the member vaults to create the right amount of default extra data.
+      const memberVaults = await this.getMemberVaults(member);
+      extraData = memberVaults.map(() => "0x");
+    } else {
+      extraData = extraVaultData.map((_, i) => extraVaultData[i] || "0x");
+    }
+
+    return this.gscVaultContract.write(
       "kick",
+      { extraData, who: member },
       {
-        extraData: extraVaultData,
-        who: typeof account === "string" ? account : account.address,
+        ...options,
+        onMined: (receipt) => {
+          if (receipt?.status === "success") {
+            this.contract.cache.clear();
+          }
+          options?.onMined?.(receipt);
+        },
       },
-      options,
     );
-    this.contract.clearCache();
-    return hash;
   }
 }

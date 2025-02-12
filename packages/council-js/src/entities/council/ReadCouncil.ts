@@ -1,99 +1,60 @@
-import { Network } from "@delvtech/evm-client";
-import { ReadContractFactory } from "src/contract/factory";
+import { Adapter, Address } from "@delvtech/drift";
 import { ReadAirdrop } from "src/entities/airdrop/ReadAirdrop";
 import { ReadCoreVoting } from "src/entities/coreVoting/ReadCoreVoting";
-import { Model, ReadModelOptions } from "src/entities/Model";
-import { ReadVoter } from "src/entities/ReadVoter";
+import { Entity } from "src/entities/Entity";
 import { ReadToken } from "src/entities/token/ReadToken";
 import { ReadGscVault } from "src/entities/votingVault/gscVault/ReadGscVault";
 import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLockingVault";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 import { ReadVestingVault } from "src/entities/votingVault/vestingVault/ReadVestingVault";
 
-export interface ReadCouncilOptions extends ReadModelOptions {}
-
-export class ReadCouncil extends Model {
-  protected _contractFactory: ReadContractFactory;
-  protected _network: Network;
-
-  constructor({
-    name = "Council",
-    contractFactory,
-    network,
-  }: ReadCouncilOptions) {
-    super({ contractFactory, network, name });
-    this._contractFactory = contractFactory;
-    this._network = network;
-  }
-
-  coreVoting({
-    address,
-    vaults,
-  }: {
-    address: `0x${string}`;
-    vaults?: (ReadVotingVault | `0x${string}`)[];
-  }): ReadCoreVoting {
+export class ReadCouncil<A extends Adapter = Adapter> extends Entity<A> {
+  coreVoting(address: Address) {
     return new ReadCoreVoting({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
-      vaults,
+      drift: this.drift,
     });
   }
 
-  voter(address: `0x${string}`): ReadVoter {
-    return new ReadVoter({
-      address,
-      contractFactory: this._contractFactory,
-      network: this._network,
-    });
-  }
-
-  votingVault(address: `0x${string}`): ReadVotingVault {
+  votingVault(address: Address) {
     return new ReadVotingVault({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  lockingVault(address: `0x${string}`): ReadLockingVault {
+  lockingVault(address: Address) {
     return new ReadLockingVault({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  vestingVault(address: `0x${string}`): ReadVestingVault {
+  vestingVault(address: Address) {
     return new ReadVestingVault({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  gscVault(address: `0x${string}`): ReadGscVault {
+  gscVault(address: Address) {
     return new ReadGscVault({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  airdrop(address: `0x${string}`): ReadAirdrop {
+  airdrop(address: Address) {
     return new ReadAirdrop({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 
-  token(address: `0x${string}`): ReadToken {
+  token(address: Address) {
     return new ReadToken({
       address,
-      contractFactory: this._contractFactory,
-      network: this._network,
+      drift: this.drift,
     });
   }
 }
