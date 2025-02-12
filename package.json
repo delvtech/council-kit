@@ -15,7 +15,6 @@
     "format": "turbo run format",
     "format:check": "turbo run format:check",
     "typecheck": "turbo run typecheck",
-    "postinstall": "husky install",
     "test": "turbo test",
     "release": "turbo build && changeset publish"
   },
