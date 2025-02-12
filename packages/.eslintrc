@@ -1,5 +1,0 @@
-{
-  // fallback eslint config to prevent lint-staged from failing when packages
-  // don't contain an eslint config. Instead, we'll just ignore them.
-  "ignorePatterns": ["**/*"]
-}
