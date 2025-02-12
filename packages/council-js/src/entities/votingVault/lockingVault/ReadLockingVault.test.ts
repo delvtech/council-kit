@@ -1,10 +1,7 @@
-import { NetworkStub } from "@delvtech/evm-client/stubs";
-import { ReadCouncil } from "src/entities/council/ReadCouncil";
-import { LockingVaultAbi } from "src/entities/votingVault/lockingVault/types";
-import {
-  CachedReadContractStub,
-  stubContractFactory,
-} from "src/test/stubContractFactory";
+import { LockingVault } from "@delvtech/council-artifacts/LockingVault";
+import { createMockDrift } from "@delvtech/drift/testing";
+import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLockingVault";
+import { VoterPowerBreakdown } from "src/entities/votingVault/types";
 import { describe, expect, it } from "vitest";
 
 const ALICE = "0x123";
@@ -14,121 +11,117 @@ const DAVE = "0xabc";
 const EVE = "0xdef";
 
 describe("ReadLockingVault", () => {
-  function setupStub() {
-    const council = new ReadCouncil({
-      contractFactory: stubContractFactory,
-      network: new NetworkStub(),
+  const drift = createMockDrift();
+  function setupVault() {
+    const lockingVault = new ReadLockingVault({
+      address: "0x",
+      drift,
+    });
+    const contract = drift.contract({
+      address: lockingVault.address,
+      abi: LockingVault.abi,
     });
 
-    const lockingVault = council.lockingVault("0x");
-    // The model doesn't know that the factory creates stubbed contracts.
-    const contractStub =
-      lockingVault.lockingVaultContract as CachedReadContractStub<LockingVaultAbi>;
-
-    return { council, lockingVault, contractStub };
+    return { lockingVault, contract };
   }
 
   it("Accurately breaks down voting power", async () => {
-    const { contractStub, lockingVault } = setupStub();
+    const { contract, lockingVault } = setupVault();
 
-    contractStub.stubEvents(
-      "VoteChange",
-      { filter: { to: undefined }, fromBlock: undefined, toBlock: undefined },
-      [
-        // Alice receives 100
-        {
-          args: {
-            amount: 100n,
-            from: ALICE,
-            to: ALICE,
-          },
-          eventName: "VoteChange",
+    const foo = contract.onGetEvents("VoteChange").resolves([
+      // Alice receives 100
+      {
+        args: {
+          amount: 100n,
+          from: ALICE,
+          to: ALICE,
         },
-        // Bob delegates 100 to Alice
-        {
-          args: {
-            amount: 100n,
-            from: BOB,
-            to: ALICE,
-          },
-          eventName: "VoteChange",
+        eventName: "VoteChange",
+      },
+      // Bob delegates 100 to Alice
+      {
+        args: {
+          amount: 100n,
+          from: BOB,
+          to: ALICE,
         },
-        // Charlie delegates 100 to Alice
-        {
-          args: {
-            amount: 100n,
-            from: CHARLIE,
-            to: ALICE,
-          },
-          eventName: "VoteChange",
+        eventName: "VoteChange",
+      },
+      // Charlie delegates 100 to Alice
+      {
+        args: {
+          amount: 100n,
+          from: CHARLIE,
+          to: ALICE,
         },
-        // Dave delegates 100 to Alice
-        {
-          args: {
-            amount: 100n,
-            from: DAVE,
-            to: ALICE,
-          },
-          eventName: "VoteChange",
+        eventName: "VoteChange",
+      },
+      // Dave delegates 100 to Alice
+      {
+        args: {
+          amount: 100n,
+          from: DAVE,
+          to: ALICE,
         },
-        // Eve receives 100
-        {
-          args: {
-            amount: 100n,
-            from: EVE,
-            to: EVE,
-          },
-          eventName: "VoteChange",
+        eventName: "VoteChange",
+      },
+      // Eve receives 100
+      {
+        args: {
+          amount: 100n,
+          from: EVE,
+          to: EVE,
         },
-        // Bob changes his delegation of 100 from Alice to Eve
-        {
-          args: {
-            amount: -100n,
-            from: BOB,
-            to: ALICE,
-          },
-          eventName: "VoteChange",
+        eventName: "VoteChange",
+      },
+      // Bob changes his delegation of 100 from Alice to Eve
+      {
+        args: {
+          amount: -100n,
+          from: BOB,
+          to: ALICE,
         },
-        {
-          args: {
-            amount: 100n,
-            from: BOB,
-            to: EVE,
-          },
-          eventName: "VoteChange",
+        eventName: "VoteChange",
+      },
+      {
+        args: {
+          amount: 100n,
+          from: BOB,
+          to: EVE,
         },
-      ],
-    );
+        eventName: "VoteChange",
+      },
+    ]);
 
     const powerBreakdown = await lockingVault.getVotingPowerBreakdown();
 
     expect(powerBreakdown).toEqual([
       {
-        voter: expect.objectContaining({ address: ALICE }),
+        voter: ALICE,
         votingPower: 300n,
-        votingPowerFromAllDelegators: 200n,
-        votingPowerByDelegator: [
+        votingPowerFromDelegators: 200n,
+        delegators: [
           {
-            voter: expect.objectContaining({ address: CHARLIE }),
+            voter: CHARLIE,
             votingPower: 100n,
           },
           {
-            voter: expect.objectContaining({ address: DAVE }),
+            voter: DAVE,
             votingPower: 100n,
           },
         ],
       },
       {
-        voter: expect.objectContaining({ address: EVE }),
+        voter: EVE,
         votingPower: 200n,
-        votingPowerFromAllDelegators: 100n,
-        votingPowerByDelegator: [
+        votingPowerFromDelegators: 100n,
+        delegators: [
           {
-            voter: expect.objectContaining({ address: BOB }),
+            voter: BOB,
             votingPower: 100n,
           },
         ],
       },
-    ]);
+    ] satisfies VoterPowerBreakdown[]);
   });
 });

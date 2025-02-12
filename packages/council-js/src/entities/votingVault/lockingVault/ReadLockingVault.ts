@@ -215,19 +215,21 @@ export class ReadLockingVault<
       }
     }
 
-    // Convert objects to arrays and filter out voters with no voting power.
     let breakdowns: VoterPowerBreakdown[] = [];
-    for (const [
-      voter,
-      { votingPower, votingPowerFromDelegators, powerByDelegator },
-    ] of Object.entries(breakdownByVoter)) {
+
+    // Convert objects to arrays and filter out voters with no voting power.
+    for (const [voter, breakdown] of Object.entries(breakdownByVoter)) {
+      const { votingPower, votingPowerFromDelegators, powerByDelegator } =
+        breakdown;
       if (votingPower <= 0n) continue;
+
       let delegators: VoterWithPower[] = [];
-      for (const [delegator, power] of Object.entries(powerByDelegator)) {
+
+      for (const [delegator, votingPower] of Object.entries(powerByDelegator)) {
         if (votingPower <= 0n) continue;
         delegators.push({
           voter: delegator as Address,
-          votingPower: power,
+          votingPower,
         });
       }
 
