@@ -7,16 +7,14 @@ export function createCouncil<A extends Adapter = Adapter>({
   drift: _drift,
   earliestBlock,
   ...driftConfig
-}: EntityConfig<A> = {}): A extends ReadWriteAdapter
-  ? ReadWriteCouncil
-  : ReadCouncil {
+}: EntityConfig<A> = {}): Council<A> {
   const drift = _drift || createDrift(driftConfig);
 
   if (drift.isReadWrite()) {
     return new ReadWriteCouncil({
       drift: drift as any,
       earliestBlock,
-    });
+    }) as any;
   }
 
   return new ReadCouncil({
@@ -24,3 +22,7 @@ export function createCouncil<A extends Adapter = Adapter>({
     earliestBlock,
   }) as any;
 }
+
+export type Council<A extends Adapter = Adapter> = A extends ReadWriteAdapter
+  ? ReadWriteCouncil<A>
+  : ReadCouncil<A>;
