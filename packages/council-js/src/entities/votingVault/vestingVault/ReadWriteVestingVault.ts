@@ -1,5 +1,10 @@
-import { Address, Hash, OnMinedParam, ReadWriteAdapter } from "@delvtech/drift";
-import { ContractWriteOptions } from "@delvtech/evm-client";
+import {
+  Address,
+  ContractWriteOptions,
+  Hash,
+  OnMinedParam,
+  ReadWriteAdapter,
+} from "@delvtech/drift";
 import { EntityWriteParams } from "src/entities/Entity";
 import { ReadWriteToken } from "src/entities/token/ReadWriteToken";
 import { ReadVestingVault } from "src/entities/votingVault/vestingVault/ReadVestingVault";
