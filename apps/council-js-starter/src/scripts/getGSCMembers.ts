@@ -1,44 +1,29 @@
-import { ReadWriteCouncil } from "@delvtech/council-viem";
-import { publicClient, walletClient } from "src/client";
+import { council } from "src/client";
 
-// wrap the script in an async function so we can await promises
-export async function getGSCMembers(): Promise<void> {
-  if (!walletClient) {
-    throw new Error(
-      "Wallet client not available. Ensure the WALLET_PRIVATE_KEY environment variable is set.",
-    );
-  }
+const gscVault = council.gscVault("0x"); // <-- replace address
 
-  // create a ReadWriteCouncil instance
-  const council = new ReadWriteCouncil({ publicClient, walletClient });
+// get all members
+const members = await gscVault.getMembers();
 
-  // create a ReadGscVault instance
-  const gscVault = council.gscVault("0x"); // <-- replace with the LockingVault contract address
+// create an array of member stat objects
+const memberStats = [];
+for (const member of members) {
+  console.log("fetching", member);
 
-  // get all members
-  const members = await gscVault.getMembers();
+  // get the voting vaults that were used to prove the member meets the
+  // minimum voting power requirement
+  const votingPowerVaults = await gscVault.getMemberVaults(member);
+  const votingPowers = await Promise.all(
+    votingPowerVaults.map((vault) => vault.getVotingPower({ voter: member })),
+  );
 
-  // create an array of member stat objects
-  const memberStats = [];
-  for (const member of members) {
-    console.log("fetching", member.address);
-
-    // get the voting vaults that were used to prove the member meets the
-    // minimum voting power requirement
-    const votingPowerVaults = await gscVault.getMemberVaults({
-      account: member.address,
-    });
-
-    memberStats.push({
-      address: member.address,
-      joinDate: await gscVault.getJoinDate({ account: member.address }),
-      votingPower: await member.getVotingPower({ vaults: votingPowerVaults }),
-    });
-  }
-
-  console.table(memberStats);
-
-  process.exit();
+  memberStats.push({
+    address: member,
+    joinDate: await gscVault.getJoinDate(member),
+    votingPower: votingPowers.reduce((a, b) => a + b, 0n),
+  });
 }
 
-getGSCMembers();
+console.table(memberStats);
+
+process.exit();
