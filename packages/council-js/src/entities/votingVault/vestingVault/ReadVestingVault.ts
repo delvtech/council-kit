@@ -21,7 +21,6 @@ import { Blockish } from "src/utils/types";
 /**
  * A VotingVault that gives voting power for receiving grants and applies a
  * multiplier on unvested tokens to reduce their voting power.
- * @category Models
  */
 export class ReadVestingVault<
   A extends Adapter = Adapter,

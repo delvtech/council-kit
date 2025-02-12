@@ -18,7 +18,6 @@ import { Blockish } from "src/utils/types";
 
 /**
  * A VotingVault that gives voting power for depositing tokens.
- * @category Models
  */
 export class ReadLockingVault<
   A extends Adapter = Adapter,

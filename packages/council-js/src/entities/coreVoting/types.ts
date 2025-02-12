@@ -2,13 +2,11 @@ import { BALLOTS } from "src/entities/coreVoting/constants";
 
 /**
  * A valid ballot option.
- * @category Data Sources
  */
 export type Ballot = (typeof BALLOTS)[number];
 
 /**
  * The amount of voting power casted by ballot.
- * @category Data Sources
  */
 export type VoteResults = Record<Ballot, bigint>;
 

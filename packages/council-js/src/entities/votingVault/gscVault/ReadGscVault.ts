@@ -14,7 +14,6 @@ import { Blockish } from "src/utils/types";
  * A VotingVault for the Governance Steering Council in which each member has a
  * single vote and must maintain a minimum required voting power in the core
  * voting vaults to remain eligible.
- * @category Models
  */
 export class ReadGscVault<
   A extends Adapter = Adapter,
