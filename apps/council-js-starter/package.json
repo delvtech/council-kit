@@ -13,10 +13,12 @@
     "getGSCMembers": "tsx -r dotenv/config ./src/scripts/getGSCMembers.ts",
     "getProposalResults": "tsx -r dotenv/config src/scripts/getProposalResults.ts",
     "dev": "tsx -r dotenv/config src/scripts/dev.ts",
+    "dev:watch": "tsx -r dotenv/config --watch src/scripts/dev.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@delvtech/drift-viem": "^0.1.3",
+    "@delvtech/drift": "^0.2.0",
+    "@delvtech/drift-viem": "^0.2.0",
     "@delvtech/council-js": "^0.0.0",
     "viem": "^2.23.1"
   },

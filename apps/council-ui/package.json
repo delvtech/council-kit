@@ -12,8 +12,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@delvtech/drift-viem": "^0.1.3",
-    "@delvtech/council-artifacts": "^0.1.0",
+    "@delvtech/drift": "^0.2.0",
+    "@delvtech/drift-viem": "^0.2.0",
     "@delvtech/council-js": "^0.0.0",
     "@ensdomains/ensjs": "^4.0.2",
     "@heroicons/react": "^2.2.0",
