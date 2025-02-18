@@ -4,6 +4,7 @@ import {
   Address,
   Contract,
   ContractReadOptions,
+  EventLog,
 } from "@delvtech/drift";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
 import {
@@ -18,9 +19,11 @@ import {
 } from "src/entities/coreVoting/types";
 import { Blockish } from "src/utils/types";
 
+type CoreVotingAbi = typeof CoreVoting.abi;
+
 export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
   readonly address: Address;
-  readonly contract: Contract<typeof CoreVoting.abi, A>;
+  readonly contract: Contract<CoreVotingAbi, A>;
 
   constructor({ address, ...config }: ContractEntityConfig<A>) {
     super(config);
@@ -79,27 +82,41 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
   }
 
   /**
+   * Get the `ProposalExecuted` event for a given proposal id.
+   */
+  async getProposalExecution(
+    proposalId: bigint,
+    options?: ContractReadOptions,
+  ): Promise<EventLog<CoreVotingAbi, "ProposalExecuted"> | undefined> {
+    const proposal = await this.getProposal(proposalId, options);
+
+    // Proposals are deleted when they are executed.
+    if (proposal) {
+      return undefined;
+    }
+
+    const executedEvents = await this.contract.getEvents("ProposalExecuted", {
+      toBlock: options?.block,
+    });
+    return executedEvents.find(({ args }) => args.proposalId === proposalId);
+  }
+
+  /**
    * Get the total voting power of all votes on a proposal by ballot.
    */
-  async getProposalResults(
+  async getProposalVotingPower(
     proposalId: bigint,
     options?: ContractReadOptions,
   ): Promise<VoteResults> {
-    const { createdBlock, lastCallBlock } =
-      (await this.getProposal(proposalId, options)) || {};
-    const latestBlock = lastCallBlock ? lastCallBlock + 1n : undefined;
-    const executedEvents = await this.contract.getEvents("ProposalExecuted", {
-      fromBlock: createdBlock,
-      toBlock: latestBlock,
-    });
-    const isExecuted = executedEvents.some(
-      ({ args }) => args.proposalId === proposalId,
-    );
+    const execution = await this.getProposalExecution(proposalId, options);
 
     // The proposal voting power is deleted when the proposal is executed, so we
     // have to get the results from vote events.
-    if (isExecuted) {
-      const votes = await this.getVotes({ toBlock: latestBlock });
+    if (execution) {
+      const votes = await this.getVotes({
+        toBlock: options?.block,
+        proposalId,
+      });
       const results: VoteResults = {
         yes: 0n,
         no: 0n,
