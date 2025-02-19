@@ -7,7 +7,7 @@ export default defineConfig({
     },
     coverage: {
       // get coverage for all of source except the example dir
-      include: ["./src/{!(example),}/**/*.ts"]
-    }
+      include: ["./src/**/*.ts"],
+    },
   },
 });

@@ -108,11 +108,11 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
     proposalId: bigint,
     options?: ContractReadOptions,
   ): Promise<VoteResults> {
-    const execution = await this.getProposalExecution(proposalId, options);
+    const proposal = await this.getProposal(proposalId, options);
 
     // The proposal voting power is deleted when the proposal is executed, so we
     // have to get the results from vote events.
-    if (execution) {
+    if (!proposal) {
       const votes = await this.getVotes({
         toBlock: options?.block,
         proposalId,
