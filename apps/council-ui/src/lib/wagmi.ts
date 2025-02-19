@@ -1,6 +1,14 @@
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import {
+  injectedWallet,
+  metaMaskWallet,
+  rainbowWallet,
+  safeWallet,
+  walletConnectWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 import { councilConfigs } from "src/config/council.config";
 import { http } from "wagmi";
-import { goerli, hardhat, localhost, mainnet } from "wagmi/chains";
+import { Chain, goerli, hardhat, localhost, mainnet } from "wagmi/chains";
 
 const configuredChainIds = Object.keys(councilConfigs);
 
@@ -21,3 +29,28 @@ export const transports = Object.fromEntries(
     return [id, http(rpcUrlsByChainId[id])];
   }),
 );
+
+const walletConnectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
+const wallets = [injectedWallet, safeWallet, rainbowWallet, metaMaskWallet];
+
+// WalletConnect
+if (walletConnectId) {
+  wallets.push(walletConnectWallet);
+} else if (process.env.NODE_ENV === "development") {
+  console.warn(
+    "Missing WalletConnect project ID. Set the NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID variable in your environment to use WalletConnect.",
+  );
+}
+
+export const wagmiConfig = getDefaultConfig({
+  appName: "Council",
+  projectId: walletConnectId || "",
+  chains: allChains as Chain[] as [Chain, ...Chain[]],
+  transports,
+  wallets: [
+    {
+      groupName: "Wallets",
+      wallets,
+    },
+  ],
+});
