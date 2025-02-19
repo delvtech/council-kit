@@ -1,4 +1,4 @@
-import { getVaultsWithPower } from "@delvtech/council-core";
+import { getVaultsWithPower } from "@delvtech/council-js";
 import { MutationStatus } from "@tanstack/react-query";
 import { useWrite } from "src/ui/contract/hooks/useWrite";
 import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";

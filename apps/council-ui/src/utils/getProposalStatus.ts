@@ -1,4 +1,4 @@
-import { VoteResults } from "@delvtech/council-viem";
+import { VoteResults } from "@delvtech/council-js";
 
 export type ProposalStatus =
   | "UNKNOWN"

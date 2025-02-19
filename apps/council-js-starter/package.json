@@ -1,0 +1,29 @@
+{
+  "name": "council-js-starter",
+  "version": "0.0.4",
+  "description": "Boilerplate to get started using council-js fast!",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "createProposal": "tsx -r dotenv/config src/scripts/createProposal.ts",
+    "executeProposal": "tsx -r dotenv/config src/scripts/executeProposal.ts",
+    "setLockDuration": "tsx -r dotenv/config src/scripts/setLockDuration.ts",
+    "changeVaultStatus": "tsx -r dotenv/config src/scripts/changeVaultStatus.ts",
+    "getGSCMembers": "tsx -r dotenv/config ./src/scripts/getGSCMembers.ts",
+    "getProposalResults": "tsx -r dotenv/config src/scripts/getProposalResults.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@delvtech/drift": "^0.2.0",
+    "@delvtech/drift-viem": "^0.2.0",
+    "@delvtech/council-js": "^0.0.0",
+    "viem": "^2.23.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.3.3"
+  }
+}

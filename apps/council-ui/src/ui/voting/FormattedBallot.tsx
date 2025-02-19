@@ -1,4 +1,4 @@
-import { Ballot } from "@delvtech/council-viem";
+import { Ballot } from "@delvtech/council-js";
 import assertNever from "assert-never";
 import { ReactElement } from "react";
 
@@ -11,10 +11,10 @@ export default function FormattedBallot({
 }: FormattedBallotProps): ReactElement {
   switch (ballot) {
     case "yes":
-      return <h2 className="font-bold uppercase text-success">YES</h2>;
+      return <h2 className="text-success font-bold uppercase">YES</h2>;
 
     case "no":
-      return <h2 className="font-bold uppercase text-error">NO</h2>;
+      return <h2 className="text-error font-bold uppercase">NO</h2>;
 
     case "maybe":
       return <h2 className="font-bold uppercase">ABSTAIN</h2>;

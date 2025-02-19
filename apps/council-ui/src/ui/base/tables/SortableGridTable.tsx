@@ -42,6 +42,9 @@ interface SortableGridTableProps<K extends string> {
  *     },
  *     "Ballot"
  *    ]}
+ *   onSort={({ key, direction }) => {
+ *     // ...
+ *   }}
  *   rows={[
  *     ["Voter 1", "100", "YES"],
  *     ["Voter 2", "200", "YES"],
@@ -98,7 +101,7 @@ export function SortableGridTable<K extends string>({
               return (
                 <button
                   key={i}
-                  className="flex items-center gap-1 text-left hover:bg-base-300"
+                  className="hover:bg-base-300 flex items-center gap-1 text-left"
                   onClick={() => handleSortChange(col.sortKey as K)}
                 >
                   {col.cell}
@@ -206,7 +209,7 @@ function nextSortDirection(
 
 function DefaultEmptyTableElement() {
   return (
-    <div className="bg-base-200 p-10 text-center rounded-b-lg">
+    <div className="bg-base-200 rounded-b-lg p-10 text-center">
       <p className="text-lg">Nothing to show.</p>
     </div>
   );

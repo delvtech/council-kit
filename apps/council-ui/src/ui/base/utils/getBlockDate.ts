@@ -11,13 +11,11 @@ export async function getBlockDate(
   client: UsePublicClientReturnType,
 ): Promise<Date | undefined> {
   if (!client) {
-    return;
+    return; 
   }
 
   const block = await client
-    .getBlock({
-      blockNumber: blockNumber,
-    })
+    .getBlock({ blockNumber })
     .catch((error) => {
       if (error instanceof BlockNotFoundError) {
         return undefined;

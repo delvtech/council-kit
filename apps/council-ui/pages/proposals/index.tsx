@@ -5,14 +5,13 @@ import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
-import { useReadGscVoting } from "src/ui/council/hooks/useReadGscVoting";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
   ProposalRowData,
   ProposalsTable,
 } from "src/ui/proposals/ProposalTable/ProposalsTable";
 import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalTable/ProposalsTableSkeleton";
+import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
 import { getProposalStatus } from "src/utils/getProposalStatus";
 import { useAccount, usePublicClient } from "wagmi";
 
@@ -36,7 +35,7 @@ export default function ProposalsPage(): ReactElement {
           case "error":
             return (
               <div className="daisy-mockup-code">
-                <code className="block whitespace-pre-wrap px-6 text-error">
+                <code className="text-error block px-6 whitespace-pre-wrap">
                   {error ? String(error) : "Unknown error"}
                 </code>
               </div>
@@ -72,69 +71,86 @@ export default function ProposalsPage(): ReactElement {
 function useProposalsPageData(
   account: `0x${string}` | undefined,
 ): UseQueryResult<ProposalRowData[]> {
-  const coreVoting = useReadCoreVoting();
-  const gscVoting = useReadGscVoting();
   const chainId = useSupportedChainId();
   const config = useCouncilConfig();
   const client = usePublicClient();
+  const council = useReadCouncil();
 
   return useQuery({
     queryKey: ["proposalsPage", account, chainId],
     queryFn: async (): Promise<ProposalRowData[]> => {
-      let allProposals = await coreVoting.getProposals();
+      const coreVoting = council.coreVoting(config.coreVoting.address);
+      const gscVoting = config.gscVoting
+        ? council.coreVoting(config.gscVoting.address)
+        : undefined;
 
-      if (gscVoting) {
-        const gscProposals = await gscVoting.getProposals();
-        allProposals = [...allProposals, ...gscProposals];
+      const [coreProposals, gscProposals] = await Promise.all([
+        coreVoting.getProposals(),
+        gscVoting?.getProposals(),
+      ]);
+
+      const allProposals = coreProposals.map((proposal) => {
+        return {
+          ...proposal,
+          votingContract: coreVoting,
+        };
+      });
+
+      if (gscProposals) {
+        allProposals.push(
+          ...gscProposals.map((proposal) => {
+            return {
+              ...proposal,
+              votingContract: gscVoting!,
+            };
+          }),
+        );
       }
 
       return await Promise.all(
-        allProposals.map(async (proposal) => {
-          const vote = account
-            ? await proposal.getVote({ account })
-            : undefined;
+        allProposals.map(
+          async ({ expirationBlock, proposalId, votingContract }) => {
+            const [votingEnds, proposal, results, executionEvent, vote] =
+              await Promise.all([
+                getBlockDate(expirationBlock, client),
+                coreVoting.getProposal(proposalId),
+                coreVoting.getProposalVotingPower(proposalId),
+                coreVoting.getProposalExecution(proposalId),
+                account
+                  ? await coreVoting.getVote({ proposalId, voter: account })
+                  : undefined,
+              ]);
 
-          const currentQuorum = await proposal.getCurrentQuorum();
+            const lastCallDate = proposal?.lastCallBlock
+              ? await getBlockDate(proposal?.lastCallBlock, client)
+              : undefined;
 
-          const requiredQuorum = await proposal.getRequiredQuorum();
-          const isExecuted = await proposal.getIsExecuted();
-          const results = await proposal.getResults();
+            const status = getProposalStatus({
+              isExecuted: !!executionEvent,
+              currentQuorum: results.yes + results.no + results.maybe,
+              lastCallDate,
+              requiredQuorum: proposal?.requiredQuorum,
+              results,
+            });
 
-          const lastCall = await proposal.getLastCallBlock();
-          const lastCallDate = lastCall
-            ? await getBlockDate(lastCall, client)
-            : undefined;
+            const proposalConfig =
+              votingContract.address === gscVoting?.address
+                ? config.gscVoting?.proposals[String(proposalId)]
+                : config.coreVoting.proposals[String(proposalId)];
 
-          const createdDate = await getBlockDate(proposal.created, client);
-          const votingEnds = await getBlockDate(proposal.expiration, client);
+            const result: ProposalRowData = {
+              id: proposalId,
+              title: proposalConfig?.title,
+              sentenceSummary: proposalConfig?.sentenceSummary,
+              status,
+              ballot: vote?.votingPower ? vote.ballot : undefined,
+              votingEnds,
+              votingContract,
+            };
 
-          const status = getProposalStatus({
-            isExecuted,
-            currentQuorum,
-            lastCallDate,
-            requiredQuorum,
-            results,
-          });
-
-          const isGsc = proposal.coreVoting.address === gscVoting?.address;
-          const proposalConfig = isGsc
-            ? config.gscVoting?.proposals[String(proposal.id)]
-            : config.coreVoting.proposals[String(proposal.id)];
-
-          const result: ProposalRowData = {
-            status,
-            coreVotingAddress: proposal.coreVoting.address,
-            votingContractName: proposal.coreVoting.name,
-            id: proposal.id,
-            created: createdDate,
-            votingEnds,
-            currentQuorum,
-            ballot: vote && vote.power > BigInt(0) ? vote.ballot : undefined,
-            sentenceSummary: proposalConfig?.sentenceSummary,
-            title: proposalConfig?.title,
-          };
-          return result;
-        }),
+            return result;
+          },
+        ),
       );
     },
   });
