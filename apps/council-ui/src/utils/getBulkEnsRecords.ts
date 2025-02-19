@@ -1,5 +1,5 @@
 import {
-  UnsupportedNetworkError,
+  UnsupportedChainError,
   createEnsPublicClient,
 } from "@ensdomains/ensjs";
 import { getName } from "@ensdomains/ensjs/public";
@@ -50,8 +50,8 @@ export async function getBulkEnsRecords(
       transport: transports[chain.id],
     }) as ReturnType<typeof createEnsPublicClient>;
   } catch (error) {
-    // Not every network is supported by ENS, so we return null for all addresses
-    if (error instanceof UnsupportedNetworkError) {
+    // Not every chain is supported by ENS, so we return null for all addresses
+    if (error instanceof UnsupportedChainError) {
       return Object.fromEntries(addresses.map((address) => [address, null]));
     }
   }
