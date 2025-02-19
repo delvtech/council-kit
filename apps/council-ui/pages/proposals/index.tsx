@@ -109,35 +109,25 @@ function useProposalsPageData(
 
       return await Promise.all(
         allProposals.map(
-          async ({
-            createdBlock,
-            expirationBlock,
-            proposalId,
-            votingContract,
-          }) => {
-            const [proposal, results, executionEvent, vote] = await Promise.all(
-              [
+          async ({ expirationBlock, proposalId, votingContract }) => {
+            const [votingEnds, proposal, results, executionEvent, vote] =
+              await Promise.all([
+                getBlockDate(expirationBlock, client),
                 coreVoting.getProposal(proposalId),
                 coreVoting.getProposalVotingPower(proposalId),
                 coreVoting.getProposalExecution(proposalId),
                 account
                   ? await coreVoting.getVote({ proposalId, voter: account })
                   : undefined,
-              ],
-            );
+              ]);
 
-            const [lastCallDate, createdDate, votingEnds] = await Promise.all([
-              proposal?.lastCallBlock
-                ? getBlockDate(proposal?.lastCallBlock, client)
-                : undefined,
-              getBlockDate(createdBlock, client),
-              getBlockDate(expirationBlock, client),
-            ]);
+            const lastCallDate = proposal?.lastCallBlock
+              ? await getBlockDate(proposal?.lastCallBlock, client)
+              : undefined;
 
-            const currentQuorum = results.yes + results.no + results.maybe;
             const status = getProposalStatus({
               isExecuted: !!executionEvent,
-              currentQuorum,
+              currentQuorum: results.yes + results.no + results.maybe,
               lastCallDate,
               requiredQuorum: proposal?.requiredQuorum,
               results,
@@ -153,12 +143,11 @@ function useProposalsPageData(
               title: proposalConfig?.title,
               sentenceSummary: proposalConfig?.sentenceSummary,
               status,
-              created: createdDate,
-              currentQuorum,
               ballot: vote?.votingPower ? vote.ballot : undefined,
               votingEnds,
               votingContract,
             };
+
             return result;
           },
         ),
