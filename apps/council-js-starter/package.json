@@ -12,8 +12,6 @@
     "changeVaultStatus": "tsx -r dotenv/config src/scripts/changeVaultStatus.ts",
     "getGSCMembers": "tsx -r dotenv/config ./src/scripts/getGSCMembers.ts",
     "getProposalResults": "tsx -r dotenv/config src/scripts/getProposalResults.ts",
-    "dev": "tsx -r dotenv/config src/scripts/dev.ts",
-    "dev:watch": "tsx -r dotenv/config --watch src/scripts/dev.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
