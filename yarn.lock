@@ -428,15 +428,15 @@
     eventemitter3 "^5.0.1"
     preact "^10.24.2"
 
-"@delvtech/drift-viem@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@delvtech/drift-viem/-/drift-viem-0.2.0.tgz#93bd9db373e4c2237151cdaf2b108f23a1c6c766"
-  integrity sha512-rAs0E5jfYWzj0OaN+oUTjtGFZuCoWoKdRasry5J0TtnaMemiXoEcpNDgBWPJUgni6joBbRrBkEx9kau2nHNYEw==
+"@delvtech/drift-viem@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@delvtech/drift-viem/-/drift-viem-0.4.1.tgz#53291c6dcaabff2c70d1c5d97a78f82d5249ca73"
+  integrity sha512-GTkzDQOTKT4uvQQjVW4enA+UIU/08LVNYOqGcQ8IIa0NLCiTIsYWEXo43DSRxzMackb3fxsDqoKzOOUv0JpgLg==
 
-"@delvtech/drift@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@delvtech/drift/-/drift-0.2.0.tgz#dec25dafb3ada00454fc89b8dc11c61b2a70b456"
-  integrity sha512-5hU1s2Bx4QUWxVKMIpjMidzQkQ/GJUp1TeymFwSV+gt8aV/SKIfKTTxsMJDp/q2Vs/ncahdfmrWjBwg9ua/zmA==
+"@delvtech/drift@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@delvtech/drift/-/drift-0.4.1.tgz#19b08246cf69bab3c0d333e5a281e80ebb1c35ba"
+  integrity sha512-/iV6L9XFirIZqBoprj4btD5W67Oio+GpeUoPxoMeUCJWMp+GzpJkaPuNEq56vdCVg6mzdNothQ0TmWgQkMbMZw==
   dependencies:
     lodash.ismatch "^4.4.0"
     lru-cache "^11.0.2"
