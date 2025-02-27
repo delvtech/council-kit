@@ -14,7 +14,7 @@ export function useReadWriteCouncil({
 }: {
   chainId?: SupportedChainId;
 }): ReadWriteCouncil | undefined {
-  chainId ??= useSupportedChainId(chainId);
+  chainId = useSupportedChainId(chainId);
   const publicClient = usePublicClient({ chainId });
   const { data: walletClient } = useWalletClient({ chainId });
 

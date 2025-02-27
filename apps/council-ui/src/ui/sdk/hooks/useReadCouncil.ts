@@ -12,7 +12,7 @@ export function useReadCouncil({
 }: {
   chainId?: SupportedChainId;
 } = {}): ReadCouncil {
-  chainId ??= useSupportedChainId(chainId);
+  chainId = useSupportedChainId(chainId);
   return useMemo(
     () =>
       createCouncil({
