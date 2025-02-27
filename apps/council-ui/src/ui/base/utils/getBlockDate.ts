@@ -22,7 +22,8 @@ export async function getBlockDate(
     return undefined;
   }
 
+  // Estimate based on the latest block and the average block time
   const latestBlock = await drift.getBlockNumber();
-  const secondsLeft = (blockId - latestBlock) * blockTime;
-  return new Date(Date.now() + Number(secondsLeft) * 1000);
+  const msLeft = (blockId - latestBlock) * blockTime * 1000n;
+  return new Date(Date.now() + Number(msLeft));
 }
