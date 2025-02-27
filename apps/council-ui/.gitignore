@@ -3,3 +3,5 @@ out
 
 # WalletConnect domain verification code
 public/.well-known/walletconnect.txt
+
+tsconfig.tsbuildinfo
