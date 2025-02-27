@@ -14,11 +14,12 @@ import {
 } from "src/entities/coreVoting/constants";
 import {
   Proposal,
-  ProposalArgs,
+  ProposalStatus,
   Vote,
   VoteResults,
 } from "src/entities/coreVoting/types";
 import { convertToRangeBlock } from "src/utils/convertToRangeBlock";
+import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
 
 export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
   readonly address: Address;
@@ -33,106 +34,11 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
     });
   }
 
-  /**
-   * Get a proposal by id.
-   */
-  async getProposal(
-    proposalId: bigint,
+  getIsVaultApproved(
+    vault: Address,
     options?: ContractReadOptions,
-  ): Promise<Proposal | undefined> {
-    const { created, expiration, lastCall, proposalHash, quorum, unlock } =
-      await this.contract.read("proposals", [proposalId], options);
-    if (proposalHash !== EXECUTED_PROPOSAL_HASH) {
-      return {
-        proposalId,
-        createdBlock: created,
-        expirationBlock: expiration,
-        lastCallBlock: lastCall,
-        proposalHash,
-        requiredQuorum: quorum,
-        unlockBlock: unlock,
-      };
-    }
-  }
-
-  /**
-   * Get proposal creation events.
-   */
-  async getProposals(
-    options: {
-      fromBlock?: RangeBlock;
-      toBlock?: RangeBlock;
-    } = {},
-  ): Promise<ProposalArgs[]> {
-    const createdEvents = await this.contract.getEvents(
-      "ProposalCreated",
-      options,
-    );
-    return createdEvents.map(
-      ({ args: { proposalId, created, execution, expiration } }) => {
-        return {
-          proposalId,
-          createdBlock: created,
-          expirationBlock: expiration,
-          unlockBlock: execution,
-        };
-      },
-    );
-  }
-
-  /**
-   * Get the `ProposalExecuted` event for a given proposal id.
-   */
-  async getProposalExecution(
-    proposalId: bigint,
-    options?: ContractReadOptions,
-  ): Promise<EventLog<CoreVotingAbi, "ProposalExecuted"> | undefined> {
-    const proposal = await this.getProposal(proposalId, options);
-
-    // Proposals are deleted when they are executed.
-    if (proposal) {
-      return undefined;
-    }
-
-    const executedEvents = await this.contract.getEvents("ProposalExecuted", {
-      toBlock: await convertToRangeBlock(options?.block, this.drift),
-    });
-    return executedEvents.find(({ args }) => args.proposalId === proposalId);
-  }
-
-  /**
-   * Get the total voting power of all votes on a proposal by ballot.
-   */
-  async getProposalVotingPower(
-    proposalId: bigint,
-    options?: ContractReadOptions,
-  ): Promise<VoteResults> {
-    const proposal = await this.getProposal(proposalId, options);
-
-    // The proposal voting power is deleted when the proposal is executed, so we
-    // have to get the results from vote events.
-    if (!proposal) {
-      const votes = await this.getVotes({
-        toBlock: await convertToRangeBlock(options?.block, this.drift),
-        proposalId,
-      });
-      const results: VoteResults = {
-        yes: 0n,
-        no: 0n,
-        maybe: 0n,
-      };
-      for (const { ballot, votingPower } of votes) {
-        results[ballot] += votingPower;
-      }
-      return results;
-    }
-
-    const [yes, no, maybe] = await this.contract.read(
-      "getProposalVotingPower",
-      { proposalId },
-      options,
-    );
-    return { yes, no, maybe };
+  ): Promise<boolean> {
+    return this.contract.read("approvedVaults", [vault], options);
   }
 
   /**
@@ -191,10 +97,163 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
     });
   }
 
-  getIsVaultApproved(
-    vault: Address,
+  /**
+   * Get a proposal by id.
+   */
+  async getProposal(
+    proposalId: bigint,
     options?: ContractReadOptions,
-  ): Promise<boolean> {
-    return this.contract.read("approvedVaults", [vault], options);
+  ): Promise<Proposal> {
+    const { created, expiration, lastCall, proposalHash, quorum, unlock } =
+      await this.contract.read("proposals", [proposalId], options);
+
+    if (proposalHash === EXECUTED_PROPOSAL_HASH) {
+      const creationEvents = await this.contract.getEvents("ProposalCreated", {
+        toBlock: await convertToRangeBlock(options?.block, this.drift),
+      });
+      const creationEvent = creationEvents.find(
+        ({ args }) => args.proposalId === proposalId,
+      );
+
+      return {
+        proposalId,
+        proposalHash,
+        status: creationEvent ? "executed" : "unknown",
+        createdBlock: creationEvent?.args.created,
+        expirationBlock: creationEvent?.args.expiration,
+        unlockBlock: creationEvent?.args.execution,
+      } as Proposal;
+    }
+
+    return {
+      proposalId,
+      proposalHash,
+      createdBlock: created,
+      expirationBlock: expiration,
+      lastCallBlock: lastCall,
+      requiredQuorum: quorum,
+      unlockBlock: unlock,
+    };
+  }
+
+  /**
+   * Get proposal creation events.
+   */
+  async getProposalCreatedEvents(
+    options: {
+      fromBlock?: RangeBlock;
+      toBlock?: RangeBlock;
+    } = {},
+  ): Promise<EventLog<CoreVotingAbi, "ProposalCreated">[]> {
+    return this.contract.getEvents("ProposalCreated", options);
+  }
+
+  /**
+   * Get the status of a proposal.
+   */
+  async getProposalStatus(
+    proposalId: bigint,
+    options?: ContractReadOptions,
+  ): Promise<ProposalStatus> {
+    const { lastCall, proposalHash, quorum } = await this.contract.read(
+      "proposals",
+      [proposalId],
+      options,
+    );
+
+    if (proposalHash === EXECUTED_PROPOSAL_HASH) {
+      const creationEvents = await this.contract.getEvents("ProposalCreated", {
+        toBlock: await convertToRangeBlock(options?.block, this.drift),
+      });
+      const event = creationEvents.find(
+        ({ args }) => args.proposalId === proposalId,
+      );
+      if (event) {
+        return "executed";
+      }
+      return "unknown";
+    }
+
+    let currentBlock: bigint;
+
+    if (typeof options?.block === "bigint") {
+      currentBlock = options?.block;
+    } else {
+      const { number } = await getBlockOrThrow(this.drift, options);
+      currentBlock = number;
+    }
+
+    if (currentBlock > lastCall) {
+      const { total, yes, no } = await this.getProposalVotingPower(
+        proposalId,
+        options,
+      );
+      if (total >= quorum && yes > no) {
+        return "expired";
+      }
+      return "failed";
+    }
+
+    return "active";
+  }
+
+  /**
+   * Get the total voting power of all votes on a proposal by ballot.
+   */
+  async getProposalVotingPower(
+    proposalId: bigint,
+    options?: ContractReadOptions,
+  ): Promise<VoteResults> {
+    const proposal = await this.getProposal(proposalId, options);
+
+    // The proposal voting power is deleted when the proposal is executed, so we
+    // have to get the results from vote events.
+    if (
+      !proposal?.proposalHash ||
+      proposal.proposalHash === EXECUTED_PROPOSAL_HASH
+    ) {
+      const votes = await this.getVotes({
+        toBlock: await convertToRangeBlock(options?.block, this.drift),
+        proposalId,
+      });
+      const results: VoteResults = {
+        yes: 0n,
+        no: 0n,
+        maybe: 0n,
+        total: 0n,
+      };
+      for (const { ballot, votingPower } of votes) {
+        results[ballot] += votingPower;
+        results.total += votingPower;
+      }
+      return results;
+    }
+
+    const [yes, no, maybe] = await this.contract.read(
+      "getProposalVotingPower",
+      { proposalId },
+      options,
+    );
+    return { yes, no, maybe, total: yes + no + maybe };
+  }
+
+  /**
+   * Get the `ProposalExecuted` event for a given proposal id.
+   */
+  async getProposalExecution(
+    proposalId: bigint,
+    options?: ContractReadOptions,
+  ): Promise<EventLog<CoreVotingAbi, "ProposalExecuted"> | undefined> {
+    const proposal = await this.getProposal(proposalId, options);
+
+    // Proposals are deleted when they are executed.
+    if (proposal) {
+      return undefined;
+    }
+
+    const executedEvents = await this.contract.getEvents("ProposalExecuted", {
+      toBlock: await convertToRangeBlock(options?.block, this.drift),
+    });
+    return executedEvents.find(({ args }) => args.proposalId === proposalId);
   }
 }

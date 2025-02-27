@@ -10,7 +10,7 @@ export type {
   Actions,
   Ballot,
   Proposal,
-  ProposalArgs,
+  ProposalEventArgs as ProposalArgs,
   Vote,
   VoteResults,
 } from "src/entities/coreVoting/types";
