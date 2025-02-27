@@ -1,7 +1,7 @@
-import { ReadCouncil } from "@delvtech/council-js";
+import { createCouncil, ReadCouncil } from "@delvtech/council-js";
 import { useMemo } from "react";
 import { SupportedChainId } from "src/config/council.config";
-import { getCouncil } from "src/lib/sdk";
+import { getDrift } from "src/lib/drift";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
 /**
@@ -13,5 +13,11 @@ export function useReadCouncil({
   chainId?: SupportedChainId;
 } = {}): ReadCouncil {
   chainId ??= useSupportedChainId(chainId);
-  return useMemo(() => getCouncil({ chainId }), [chainId]);
+  return useMemo(
+    () =>
+      createCouncil({
+        drift: getDrift({ chainId }),
+      }),
+    [chainId],
+  );
 }
