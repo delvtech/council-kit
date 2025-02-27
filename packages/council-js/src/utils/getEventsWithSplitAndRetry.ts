@@ -18,16 +18,15 @@ export async function getEventsWithSplitAndRetry<
    * The maximum number of times to split failed event requests into smaller
    * requests before giving up. Defaults to 4.
    */
-  maxRetries = 4,
+  retries = 4,
 }: {
   params: GetEventsParams<A, E>;
   drift: Drift;
   earliestBlock?: bigint;
-  maxRetries?: number;
+  retries?: number;
 }): Promise<EventLog<A, E>[]> {
   let chunkedParams = [params];
   let error: Error | undefined;
-  let retries = maxRetries;
 
   while (retries) {
     let nextChunkedParams: GetEventsParams<A, E>[] = [];

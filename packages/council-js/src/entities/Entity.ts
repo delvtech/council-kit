@@ -32,9 +32,9 @@ export class Entity<A extends Adapter = Adapter> {
   drift: Drift<A>;
 
   constructor({ drift, earliestBlock, ...driftConfig }: EntityConfig<A> = {}) {
-    this.drift = (drift || createDrift(driftConfig)).extend({
-      // Override the `getEvents` method with
-      getEvents: ({ fromBlock = earliestBlock, ...restParams }) => {
+    this.drift = drift || createDrift(driftConfig);
+    this.drift.extend({
+      getEvents({ fromBlock = earliestBlock, ...restParams }) {
         // Overwrite `fromBlock` if earlier than the `earliestBlock` option.
         if (
           earliestBlock &&
@@ -51,7 +51,7 @@ export class Entity<A extends Adapter = Adapter> {
             fromBlock,
             ...restParams,
           },
-          drift: this.drift,
+          drift: this,
           earliestBlock,
         });
       },
