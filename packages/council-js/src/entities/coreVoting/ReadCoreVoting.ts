@@ -116,19 +116,30 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
         ({ args }) => args.proposalId === proposalId,
       );
 
+      if (!creationEvent) {
+        return {
+          proposalId,
+          proposalHash,
+          coreVoting: this.address,
+          status: "unknown",
+        };
+      }
+
       return {
         proposalId,
         proposalHash,
-        status: creationEvent ? "executed" : "unknown",
+        coreVoting: this.address,
+        status: "executed",
         createdBlock: creationEvent?.args.created,
         expirationBlock: creationEvent?.args.expiration,
         unlockBlock: creationEvent?.args.execution,
-      } as Proposal;
+      };
     }
 
     return {
       proposalId,
       proposalHash,
+      coreVoting: this.address,
       createdBlock: created,
       expirationBlock: expiration,
       lastCallBlock: lastCall,
@@ -154,6 +165,7 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
         result.push({
           blockNumber,
           transactionHash,
+          coreVoting: this.address,
           proposalId: args.proposalId,
           createdBlock: args.created,
           expirationBlock: args.expiration,

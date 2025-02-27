@@ -24,6 +24,7 @@ export type ProposalStatus =
  * The data emitted by the `ProposalCreated` event.
  */
 export type ProposalEventArgs = {
+  coreVoting: Address;
   proposalId: bigint;
   createdBlock: bigint;
   /**
@@ -76,6 +77,7 @@ export type ExecutedProposal = Replace<
  * An unknown proposal that has no information available.
  */
 export type UnknownProposal = {
+  coreVoting: Address;
   proposalId: bigint;
   proposalHash: typeof EXECUTED_PROPOSAL_HASH;
   status: "unknown";
