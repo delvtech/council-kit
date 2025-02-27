@@ -14,8 +14,12 @@ export { ReadWriteCoreVoting } from "src/entities/coreVoting/ReadWriteCoreVoting
 export type {
   Actions,
   Ballot,
+  ExecutedProposal,
   Proposal,
-  ProposalEventArgs as ProposalArgs,
+  ProposalEventArgs,
+  ProposalStatus,
+  ProposalWithState,
+  UnknownProposal,
   Vote,
   VoteResults,
 } from "src/entities/coreVoting/types";
