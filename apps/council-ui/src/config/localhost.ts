@@ -1,6 +1,6 @@
 import { CouncilConfig } from "src/config/types";
 
-export const localhostCouncilConfig: CouncilConfig = {
+export const localhostCouncilConfig = {
   version: "",
   chainId: 1337,
   timelock: {
@@ -37,4 +37,4 @@ export const localhostCouncilConfig: CouncilConfig = {
     address: "0x0165878a594ca255338adfa4d48449f69242eb8f",
     baseDataURL: "/api/airdrop",
   },
-};
+} as const satisfies CouncilConfig;

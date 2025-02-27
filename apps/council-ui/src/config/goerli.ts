@@ -1,6 +1,6 @@
 import { CouncilConfig } from "src/config/types";
 
-export const goerliCouncilConfig: CouncilConfig = {
+export const goerliCouncilConfig = {
   version: "",
   chainId: 5,
   timelock: {
@@ -74,4 +74,4 @@ export const goerliCouncilConfig: CouncilConfig = {
     channel: "0xbAE1338219a9BDDB38d38B77094e833995B703E2",
     env: "staging",
   },
-};
+} as const satisfies CouncilConfig;

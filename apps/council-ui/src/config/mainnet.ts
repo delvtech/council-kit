@@ -1,6 +1,6 @@
 import { CouncilConfig } from "src/config/types";
 
-export const mainnetCouncilConfig: CouncilConfig = {
+export const mainnetCouncilConfig = {
   version: "",
   chainId: 1,
   timelock: {
@@ -284,4 +284,4 @@ export const mainnetCouncilConfig: CouncilConfig = {
     channel: "0x349da2A6825284E9E181D46D664b95aecE86da56",
     env: "prod",
   },
-};
+} as const satisfies CouncilConfig;
