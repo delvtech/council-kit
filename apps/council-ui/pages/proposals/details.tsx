@@ -1,68 +1,60 @@
-import { Ballot, ReadVote } from "@delvtech/council-viem";
+import { ProposalStatus, Vote } from "@delvtech/council-js";
+import { Address, Hash, Transaction } from "@delvtech/drift";
 import { QueryStatus, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import { getVotingContractConfig } from "src/config/utils/getVotingContractConfig";
 import { Routes } from "src/routes";
 import { Breadcrumbs } from "src/ui/base/Breadcrumbs";
 import { Page } from "src/ui/base/Page";
 import ExternalLink from "src/ui/base/links/ExternalLink";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
-import { useReadGscVoting } from "src/ui/council/hooks/useReadGscVoting";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { ProposalStatsRow } from "src/ui/proposals/ProposalStatsRow/ProposalStatsRow";
 import { ProposalStatsRowSkeleton } from "src/ui/proposals/ProposalStatsRow/ProposalStatsRowSkeleton";
 import { Quorum } from "src/ui/proposals/Quorum/Quorum";
 import { QuorumBarSkeleton } from "src/ui/proposals/Quorum/QuorumSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTable/VotingActivityTableSkeleton";
-import { useReadProposal } from "src/ui/proposals/hooks/useReadProposal";
+import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
 import { useGscMembers } from "src/ui/vaults/gscVault/hooks/useGscMembers";
 import { GSCOnlyToggle } from "src/ui/voters/GscOnlyToggle";
 import { ProposalVoting } from "src/ui/voting/ProposalVoting";
 import { ProposalVotingSkeleton } from "src/ui/voting/ProposalVotingSkeleton";
 import { EnsRecords, getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
-import { ProposalStatus, getProposalStatus } from "src/utils/getProposalStatus";
-import { useAccount, usePublicClient } from "wagmi";
 
-export default function ProposalPage(): ReactElement {
+export default function ProposalPage(): ReactElement | null {
   const { query, replace } = useRouter();
-  const { id: idParam, votingContract: votingContractAddressParam } = query;
-
-  const id = BigInt((idParam as string) || 0);
-  const votingContractAddress = votingContractAddressParam as `0x${string}`;
-
-  const account = useAccount();
-
-  const coreVoting = useReadCoreVoting();
-  const gscVoting = useReadGscVoting();
-  const usedCoreVoting =
-    votingContractAddress === gscVoting?.address ? gscVoting : coreVoting;
+  const votingContractAddress = query.votingContract as Address;
+  const id = BigInt((query.id as string) || 0);
 
   const { data, status } = useProposalDetailsPageData(
     votingContractAddress,
     id,
-    account.address,
   );
+
   const { gscMembers } = useGscMembers();
 
-  // voting activity filtering
+  // filter votes by GSC members
   const [gscOnly, setGscOnly] = useState(false);
   const filteredVotes = useMemo(() => {
     if (data?.votes && gscOnly && gscMembers) {
-      return dedupeVotes(data.votes).filter(({ voter }) =>
-        gscMembers.some((member) => member.address === voter.address),
+      return dedupeVotes(data.votes)?.filter(({ voter }) =>
+        gscMembers.includes(voter),
       );
     }
     return dedupeVotes(data?.votes);
   }, [data, gscOnly, gscMembers]);
 
-  // Redirect to proposals page if the voting contract is not found.
-  if (!usedCoreVoting) {
+  const votingContractConfig = getVotingContractConfig({
+    chainId: useSupportedChainId(),
+    address: votingContractAddress,
+  });
+
+  if (!votingContractConfig) {
     replace("/proposals");
-    // Returning empty fragment is to remove the undefined type from the query params.
-    return <></>;
+    return null;
   }
 
   const proposalTitle = data?.title ?? `Proposal ${id}`;
@@ -110,14 +102,14 @@ export default function ProposalPage(): ReactElement {
 
       {data ? (
         <ProposalStatsRow
-          votingContractName={data.votingContractName}
+          votingContractName={votingContractConfig.name}
           votingContractAddress={votingContractAddress}
           createdBy={data.createdBy}
-          createdTransactionHash={data.createdTransactionHash}
-          endsAtDate={data.endsAtDate}
-          unlockAtDate={data.unlockedAtDate}
+          createdTransactionHash={data.createTransactionHash}
+          endsAtDate={data.votingEndDate}
+          unlockAtDate={data.unlockDate}
           lastCallAtDate={data.lastCallDate}
-          executedTransactionHash={data.executedTransactionHash}
+          executedTransactionHash={data.executeTransactionHash}
           status={data.status}
           className="mb-2"
         />
@@ -155,7 +147,7 @@ export default function ProposalPage(): ReactElement {
               voterEnsRecords={data.voterEnsRecords}
               // The GSC voting contract does not count voting power, you either
               // can or cannot vote and the voting power will always be 1 wei.
-              showVotingPower={!data.isGsc}
+              showVotingPower={!votingContractConfig.isGsc}
             />
           ) : (
             <VotingActivityTableSkeleton />
@@ -169,7 +161,7 @@ export default function ProposalPage(): ReactElement {
             <ProposalVoting
               coreVotingAddress={votingContractAddress}
               proposalId={id}
-              vaults={usedCoreVoting.vaults}
+              vaults={votingContractConfig.vaults}
             />
           ) : (
             <ProposalVotingSkeleton />
@@ -181,124 +173,112 @@ export default function ProposalPage(): ReactElement {
 }
 
 interface ProposalDetailsPageData {
-  proposalExists: boolean;
-  isGsc: boolean;
   status: ProposalStatus;
-  isActive: boolean;
-  votes?: ReadVote[];
+  votes?: Vote[];
   voterEnsRecords: EnsRecords;
-  createdAtBlock: bigint;
   currentQuorum: bigint;
-  createdTransactionHash?: `0x${string}`;
-  votingContractName?: string;
+  createTransactionHash?: Hash;
   requiredQuorum?: bigint;
-  createdBy?: `0x${string}`;
-  createdAtDate?: Date;
-  endsAtDate?: Date;
-  unlockedAtDate?: Date;
+  createdBy?: Address;
+  votingEndDate?: Date;
+  unlockDate?: Date;
   lastCallDate?: Date;
-  accountBallot?: Ballot;
   descriptionURL?: string;
   title?: string;
   paragraphSummary?: string;
-  executedTransactionHash?: `0x${string}`;
+  executeTransactionHash?: Hash;
 }
 
 function useProposalDetailsPageData(
-  coreVotingAddress?: `0x${string}`,
+  coreVotingAddress?: Address,
   id?: bigint,
-  account?: `0x${string}`,
 ): {
-  // proposalExists: boolean;
   data: ProposalDetailsPageData | undefined;
   status: QueryStatus;
 } {
-  const gscVoting = useReadGscVoting();
-  const config = useCouncilConfig();
-  const client = usePublicClient();
-  const { proposal } = useReadProposal({
-    id,
-    coreVoting: coreVotingAddress,
-  });
-
-  const isGsc = coreVotingAddress === gscVoting?.address;
-  const votingConfig = isGsc ? config.gscVoting : config.coreVoting;
-  const votingContractName = votingConfig?.name;
-
-  const enabled = !!proposal;
+  const chainId = useSupportedChainId();
+  const council = useReadCouncil();
+  const enabled = !!coreVotingAddress && !!id;
 
   const { data, status } = useQuery<ProposalDetailsPageData>({
-    queryKey: ["proposalDetailsPage", coreVotingAddress, String(proposal?.id)],
+    queryKey: [
+      "proposalDetailsPage",
+      coreVotingAddress,
+      id?.toString(),
+      chainId,
+    ],
     enabled,
     queryFn: enabled
       ? async (): Promise<ProposalDetailsPageData> => {
-          const createdTransaction = await proposal.getCreatedTransaction();
-          const createdAtDate = proposal.created
-            ? await getBlockDate(proposal.created, client)
-            : undefined;
+          const coreVoting = council.coreVoting(coreVotingAddress);
+          const proposal = await coreVoting.getProposal(id);
+          const [
+            // Dates
+            unlockDate,
+            votingEndDate,
+            lastCallDate,
 
-          const endsAtDate = proposal.expiration
-            ? await getBlockDate(proposal.expiration, client)
-            : undefined;
+            // Status
+            status,
+            votes,
+            results,
 
-          const unlockedAtBlock = await proposal.getUnlockBlock();
-          const unlockedAtDate = unlockedAtBlock
-            ? await getBlockDate(unlockedAtBlock, client)
-            : undefined;
+            // Events
+            createEvents,
+            executedEvents,
+          ] = await Promise.all([
+            // Dates
+            proposal ? getBlockDate(proposal.unlockBlock, chainId) : undefined,
+            proposal
+              ? getBlockDate(proposal.expirationBlock, chainId)
+              : undefined,
+            proposal
+              ? getBlockDate(proposal.lastCallBlock, chainId)
+              : undefined,
 
-          const lastCallBlock = await proposal.getLastCallBlock();
-          const lastCallDate = lastCallBlock
-            ? await getBlockDate(lastCallBlock, client)
-            : undefined;
+            // Status
+            proposal.status ?? coreVoting.getProposalStatus(id),
+            coreVoting.getVotes({ proposalId: id }),
+            coreVoting.getProposalVotingPower(id),
 
-          const votes = await proposal.getVotes();
-          const voterEnsRecords = await getBulkEnsRecords(
-            Array.from(new Set(votes?.map(({ voter }) => voter.address))),
-            client,
+            // Events
+            coreVoting.getProposalCreations(),
+            proposal.status === "executed"
+              ? coreVoting.getProposalExecutions()
+              : undefined,
+          ]);
+
+          const createEvent = createEvents.find(
+            ({ proposalId }) => proposalId === id,
+          );
+          let createTransaction: Transaction | undefined = undefined;
+          if (createEvent) {
+            createTransaction = await council.drift.getTransaction({
+              hash: createEvent.transactionHash,
+            });
+          }
+
+          const executedEvent = executedEvents?.find(
+            ({ proposalId }) => proposalId === id,
           );
 
-          const isExecuted = await proposal.getIsExecuted();
-          const currentQuorum = await proposal.getCurrentQuorum();
-          const requiredQuorum = await proposal.getRequiredQuorum();
-          const results = await proposal.getResults();
-          const isActive = await proposal.getIsActive();
-          const createdBy = await proposal.getCreatedBy();
-
-          const accountBallot = account
-            ? (await proposal.getVote({ account }))?.ballot
-            : undefined;
-
-          const proposalConfig = votingConfig?.proposals[String(id)];
-          const executedTransaction = await proposal.getExecutedTransaction();
+          const voterEnsRecords = await getBulkEnsRecords(
+            Array.from(new Set(votes?.map(({ voter }) => voter))),
+            chainId,
+          );
 
           return {
-            proposalExists: !!proposal,
-            isGsc,
-            votingContractName,
-            status: getProposalStatus({
-              isExecuted,
-              lastCallDate,
-              currentQuorum,
-              requiredQuorum,
-              results,
-            }),
-            isActive: isActive ?? false,
-            currentQuorum,
-            requiredQuorum,
-            createdAtBlock: proposal.created,
-            createdBy: createdBy?.address,
-            createdAtDate,
-            endsAtDate,
-            unlockedAtDate,
+            unlockDate,
+            votingEndDate,
             lastCallDate,
+            status,
             votes,
             voterEnsRecords,
-            createdTransactionHash: createdTransaction?.hash,
-            accountBallot,
-            descriptionURL: proposalConfig?.descriptionURL,
-            paragraphSummary: proposalConfig?.paragraphSummary,
-            title: proposalConfig?.title,
-            executedTransactionHash: executedTransaction?.hash,
+            currentQuorum: results.total,
+            requiredQuorum: proposal.requiredQuorum,
+            createdBy: createTransaction?.from,
+            createTransactionHash: createEvent?.transactionHash,
+            executeTransactionHash: executedEvent?.transactionHash,
           };
           // return "ProposalDetailsPageData";
         }
@@ -313,18 +293,13 @@ function useProposalDetailsPageData(
 }
 
 /**
- * Dedupe a list of votes by only keeping the latest instance.
+ * Dedupe a list of votes by only keeping the latest instance of each voter.
  */
-// TODO: This function breaks the build when only the generic signature is used.
-// The overload signature fixes the build and maintains a strong return type.
-function dedupeVotes<T extends ReadVote[] | undefined>(votes: T): T;
-function dedupeVotes(votes: ReadVote[] | undefined): ReadVote[] | undefined {
-  if (!votes) {
-    return votes;
-  }
-  const byVoterAddress: Record<string, ReadVote> = {};
+function dedupeVotes(votes: Vote[] | undefined): Vote[] | undefined {
+  if (!votes) return;
+  const voteMap = new Map<Address, Vote>();
   for (const vote of votes) {
-    byVoterAddress[vote.voter.address] = vote;
+    voteMap.set(vote.voter, vote);
   }
-  return Object.values(byVoterAddress);
+  return Array.from(voteMap.values());
 }

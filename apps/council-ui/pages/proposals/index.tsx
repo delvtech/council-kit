@@ -94,9 +94,9 @@ function useProposalsPageData(
         allProposals.map(
           async ({ coreVotingAddress, proposalId, expirationBlock }) => {
             const proposalConfig = getProposalConfig({
-              id: proposalId,
               chainId,
-              coreVotingAddress,
+              votingContract: coreVotingAddress,
+              id: proposalId,
             });
 
             const votingContract = council.coreVoting(coreVotingAddress);

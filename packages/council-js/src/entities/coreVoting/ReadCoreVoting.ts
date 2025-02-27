@@ -14,6 +14,7 @@ import {
 import {
   Proposal,
   ProposalCreation,
+  ProposalExecution,
   ProposalStatus,
   Vote,
   VoteResults,
@@ -175,6 +176,32 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
           createdBlock: args.created,
           expirationBlock: args.expiration,
           unlockBlock: args.execution,
+        });
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Get proposal creation events.
+   */
+  async getProposalExecutions(
+    options: {
+      fromBlock?: RangeBlock;
+      toBlock?: RangeBlock;
+    } = {},
+  ): Promise<ProposalExecution[]> {
+    const events = await this.contract.getEvents("ProposalExecuted", options);
+    let result: ProposalExecution[] = [];
+    for (const { args, blockNumber, transactionHash } of events) {
+      // Filter out pending blocks.
+      if (transactionHash && blockNumber !== undefined) {
+        result.push({
+          blockNumber,
+          transactionHash,
+          chainId: await this.drift.getChainId(),
+          coreVotingAddress: this.address,
+          proposalId: args.proposalId,
         });
       }
     }

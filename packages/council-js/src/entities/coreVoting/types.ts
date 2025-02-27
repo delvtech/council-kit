@@ -32,7 +32,7 @@ export type BaseProposalProps = {
 /**
  * The data emitted by the `ProposalCreated` event.
  */
-export type ProposalEventArgs = BaseProposalProps & {
+export type ProposalCreatedArgs = BaseProposalProps & {
   createdBlock: bigint;
   /**
    * The block number after which the proposal can be executed.
@@ -47,7 +47,15 @@ export type ProposalEventArgs = BaseProposalProps & {
 /**
  * A proposal creation event.
  */
-export type ProposalCreation = ProposalEventArgs & {
+export type ProposalCreation = ProposalCreatedArgs & {
+  blockNumber: bigint;
+  transactionHash: Hash;
+};
+
+/**
+ * A proposal execution event.
+ */
+export type ProposalExecution = BaseProposalProps & {
   blockNumber: bigint;
   transactionHash: Hash;
 };
@@ -55,7 +63,7 @@ export type ProposalCreation = ProposalEventArgs & {
 /**
  * A proposal with it's current state.
  */
-export type ProposalWithState = ProposalEventArgs & {
+export type ProposalWithState = ProposalCreatedArgs & {
   proposalHash: Hash;
   /**
    * The amount of voting power required to pass the proposal.
@@ -71,7 +79,7 @@ export type ProposalWithState = ProposalEventArgs & {
 /**
  * An executed proposal that has been deleted from the contract.
  */
-export type ExecutedProposal = ProposalEventArgs & {
+export type ExecutedProposal = ProposalCreatedArgs & {
   proposalHash: typeof EXECUTED_PROPOSAL_HASH;
   status: "executed";
 };
