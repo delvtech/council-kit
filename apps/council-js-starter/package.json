@@ -15,8 +15,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@delvtech/drift": "^0.4.1",
-    "@delvtech/drift-viem": "^0.4.1",
+    "@delvtech/drift": "^0.4.4",
+    "@delvtech/drift-viem": "^0.4.4",
     "@delvtech/council-js": "^0.0.0",
     "viem": "^2.23.1"
   },

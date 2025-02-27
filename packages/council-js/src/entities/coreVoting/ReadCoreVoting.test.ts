@@ -1,5 +1,5 @@
-import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
-import { createMockDrift, MockContract } from "@delvtech/drift/testing";
+import { createMockDrift } from "@delvtech/drift/testing";
+import { coreVotingAbi } from "src/entities/coreVoting/abi";
 import { EXECUTED_PROPOSAL_HASH } from "src/entities/coreVoting/constants";
 import { ReadCoreVoting } from "src/entities/coreVoting/ReadCoreVoting";
 import { VoteResults } from "src/entities/coreVoting/types";
@@ -7,8 +7,11 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 describe("ReadCoreVoting", () => {
   const drift = createMockDrift({ chainId: 0 });
+  const contract = drift.contract({
+    abi: coreVotingAbi,
+    address: "0x123",
+  });
   const coreVoting = new ReadCoreVoting({ address: "0x123", drift });
-  const contract = coreVoting.contract as MockContract<typeof CoreVoting.abi>;
 
   beforeEach(async () => {
     drift.reset();

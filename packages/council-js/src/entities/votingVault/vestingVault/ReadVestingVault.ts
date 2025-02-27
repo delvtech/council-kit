@@ -1,10 +1,10 @@
-import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
 import {
   Adapter,
   Address,
   Bytes,
   Contract,
   ContractReadOptions,
+  RangeBlock,
 } from "@delvtech/drift";
 import { fixed } from "@delvtech/fixed-point-wasm";
 import { ContractEntityConfig } from "src/entities/Entity";
@@ -14,9 +14,12 @@ import {
   VoterPowerBreakdown,
   VoterWithPower,
 } from "src/entities/votingVault/types";
+import {
+  vestingVaultAbi,
+  VestingVaultAbi,
+} from "src/entities/votingVault/vestingVault/abi";
 import { Grant } from "src/entities/votingVault/vestingVault/types";
 import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
-import { Blockish } from "src/utils/types";
 
 /**
  * A VotingVault that gives voting power for receiving grants and applies a
@@ -25,12 +28,12 @@ import { Blockish } from "src/utils/types";
 export class ReadVestingVault<
   A extends Adapter = Adapter,
 > extends ReadVotingVault<A> {
-  readonly vestingVaultContract: Contract<typeof VestingVault.abi, A>;
+  readonly vestingVaultContract: Contract<VestingVaultAbi, A>;
 
   constructor(config: ContractEntityConfig<A>) {
     super(config);
     this.vestingVaultContract = this.drift.contract({
-      abi: VestingVault.abi,
+      abi: vestingVaultAbi,
       address: this.address,
     });
   }
@@ -161,8 +164,8 @@ export class ReadVestingVault<
       fromBlock,
       toBlock,
     }: {
-      fromBlock?: Blockish;
-      toBlock?: Blockish;
+      fromBlock?: RangeBlock;
+      toBlock?: RangeBlock;
     },
   ): Promise<VoterWithPower[]> {
     const breakdown = await this.getVotingPowerBreakdown({
@@ -187,7 +190,7 @@ export class ReadVestingVault<
     options,
   }: {
     voter: Address;
-    block: Blockish;
+    block: RangeBlock;
     extraData?: Bytes;
     options?: ContractReadOptions;
   }): Promise<bigint> {
@@ -215,8 +218,8 @@ export class ReadVestingVault<
     fromBlock,
     toBlock,
   }: {
-    fromBlock?: Blockish;
-    toBlock?: Blockish;
+    fromBlock?: RangeBlock;
+    toBlock?: RangeBlock;
   } = {}): Promise<bigint> {
     const breakdown = await this.getVotingPowerBreakdown({
       fromBlock,
@@ -244,8 +247,8 @@ export class ReadVestingVault<
      * Get a breakdown for a specific account.
      */
     voter?: Address;
-    fromBlock?: Blockish;
-    toBlock?: Blockish;
+    fromBlock?: RangeBlock;
+    toBlock?: RangeBlock;
   } = {}): Promise<VoterPowerBreakdown[]> {
     const voteChangeEvents = await this.vestingVaultContract.getEvents(
       "VoteChange",

@@ -1,12 +1,13 @@
-import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
 import {
   Adapter,
   Address,
   Contract,
   ContractReadOptions,
   EventLog,
+  RangeBlock,
 } from "@delvtech/drift";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
+import { coreVotingAbi, CoreVotingAbi } from "src/entities/coreVoting/abi";
 import {
   BALLOTS,
   EXECUTED_PROPOSAL_HASH,
@@ -17,9 +18,7 @@ import {
   Vote,
   VoteResults,
 } from "src/entities/coreVoting/types";
-import { Blockish } from "src/utils/types";
-
-type CoreVotingAbi = typeof CoreVoting.abi;
+import { convertToRangeBlock } from "src/utils/convertToRangeBlock";
 
 export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
   readonly address: Address;
@@ -29,7 +28,7 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
     super(config);
     this.address = address;
     this.contract = this.drift.contract({
-      abi: CoreVoting.abi,
+      abi: coreVotingAbi,
       address,
     });
   }
@@ -61,8 +60,8 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
    */
   async getProposals(
     options: {
-      fromBlock?: Blockish;
-      toBlock?: Blockish;
+      fromBlock?: RangeBlock;
+      toBlock?: RangeBlock;
     } = {},
   ): Promise<ProposalArgs[]> {
     const createdEvents = await this.contract.getEvents(
@@ -96,7 +95,7 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
     }
 
     const executedEvents = await this.contract.getEvents("ProposalExecuted", {
-      toBlock: options?.block,
+      toBlock: await convertToRangeBlock(options?.block, this.drift),
     });
     return executedEvents.find(({ args }) => args.proposalId === proposalId);
   }
@@ -114,7 +113,7 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
     // have to get the results from vote events.
     if (!proposal) {
       const votes = await this.getVotes({
-        toBlock: options?.block,
+        toBlock: await convertToRangeBlock(options?.block, this.drift),
         proposalId,
       });
       const results: VoteResults = {
@@ -174,8 +173,8 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
   }: {
     proposalId?: bigint;
     voter?: Address;
-    fromBlock?: Blockish;
-    toBlock?: Blockish;
+    fromBlock?: RangeBlock;
+    toBlock?: RangeBlock;
   }): Promise<Vote[]> {
     const voteEvents = await this.contract.getEvents("Voted", {
       filter: { proposalId, voter },

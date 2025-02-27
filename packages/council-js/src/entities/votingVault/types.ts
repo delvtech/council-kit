@@ -1,7 +1,4 @@
-import { IVotingVault } from "@delvtech/council-artifacts/IVotingVault";
 import { Address } from "@delvtech/drift";
-
-export type VotingVaultAbi = typeof IVotingVault.abi;
 
 export type VotingPowerByVoter = {
   [voter: Address]: bigint;

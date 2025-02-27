@@ -1,15 +1,14 @@
-import { IVotingVault } from "@delvtech/council-artifacts/IVotingVault";
 import {
   Adapter,
   Address,
   Bytes,
   Contract,
   ContractReadOptions,
+  RangeBlock,
 } from "@delvtech/drift";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
-import { VotingVaultAbi } from "src/entities/votingVault/types";
+import { votingVaultAbi, VotingVaultAbi } from "src/entities/votingVault/abi";
 import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
-import { Blockish } from "src/utils/types";
 
 /**
  * A vault which stores voting power by address
@@ -22,7 +21,7 @@ export class ReadVotingVault<A extends Adapter = Adapter> extends Entity<A> {
     super(config);
     this.address = address;
     this.contract = this.drift.contract({
-      abi: IVotingVault.abi,
+      abi: votingVaultAbi,
       address,
     });
   }
@@ -44,7 +43,7 @@ export class ReadVotingVault<A extends Adapter = Adapter> extends Entity<A> {
     options,
   }: {
     voter: Address;
-    block?: Blockish;
+    block?: RangeBlock;
     extraData?: Bytes;
     options?: ContractReadOptions;
   }): Promise<bigint> {

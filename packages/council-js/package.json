@@ -19,13 +19,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@delvtech/fixed-point-wasm": "^0.0.7",
-    "@delvtech/council-artifacts": "^0.1.0"
+    "@delvtech/council-artifacts": "^0.1.0",
+    "@delvtech/fixed-point-wasm": "^0.0.7"
   },
   "devDependencies": {
-    "@delvtech/drift": "^0.4.1",
     "@council/eslint-config": "*",
     "@council/tsconfig": "*",
+    "@delvtech/drift": "^0.4.4",
     "@types/sinon": "^17.0.3",
     "sinon": "^17.0.1",
     "tsconfig-paths": "^4.2.0",

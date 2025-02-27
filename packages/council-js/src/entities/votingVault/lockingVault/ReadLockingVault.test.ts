@@ -1,5 +1,5 @@
-import { LockingVault } from "@delvtech/council-artifacts/LockingVault";
 import { createMockDrift } from "@delvtech/drift/testing";
+import { lockingVaultAbi } from "src/entities/votingVault/lockingVault/abi";
 import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLockingVault";
 import { VoterPowerBreakdown } from "src/entities/votingVault/types";
 import { describe, expect, it } from "vitest";
@@ -19,7 +19,7 @@ describe("ReadLockingVault", () => {
     });
     const contract = drift.contract({
       address: lockingVault.address,
-      abi: LockingVault.abi,
+      abi: lockingVaultAbi,
     });
 
     return { lockingVault, contract };

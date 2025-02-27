@@ -1,21 +1,21 @@
-import { Airdrop } from "@delvtech/council-artifacts/Airdrop";
 import {
   Adapter,
   Address,
   Contract,
   ContractReadOptions,
 } from "@delvtech/drift";
+import { airdropAbi, AirdropAbi } from "src/entities/airdrop/abi";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
 import { ReadToken } from "src/entities/token/ReadToken";
 import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLockingVault";
 
 export class ReadAirdrop<A extends Adapter = Adapter> extends Entity<A> {
-  contract: Contract<typeof Airdrop.abi, A>;
+  contract: Contract<AirdropAbi, A>;
 
   constructor({ address, ...config }: ContractEntityConfig<A>) {
     super(config);
     this.contract = this.drift.contract({
-      abi: Airdrop.abi,
+      abi: airdropAbi,
       address,
     });
   }

@@ -1,15 +1,15 @@
 import { Adapter, Contract, ContractReadOptions } from "@delvtech/drift";
-import { erc20 } from "@delvtech/drift/testing";
 import { Address } from "abitype";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
+import { tokenAbi, TokenAbi } from "src/entities/token/abi";
 
 export class ReadToken<A extends Adapter = Adapter> extends Entity<A> {
-  contract: Contract<typeof erc20.abi, A>;
+  contract: Contract<TokenAbi, A>;
 
   constructor({ address, ...config }: ContractEntityConfig<A>) {
     super(config);
     this.contract = this.drift.contract({
-      abi: erc20.abi,
+      abi: tokenAbi,
       address,
     });
   }

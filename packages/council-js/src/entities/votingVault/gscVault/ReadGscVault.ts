@@ -1,14 +1,17 @@
-import { GSCVault } from "@delvtech/council-artifacts/GSCVault";
 import {
   Adapter,
   Address,
   Contract,
   ContractReadOptions,
+  RangeBlock,
 } from "@delvtech/drift";
 import { ContractEntityConfig } from "src/entities/Entity";
+import {
+  gscVaultAbi,
+  GscVaultAbi,
+} from "src/entities/votingVault/gscVault/abi";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
-import { Blockish } from "src/utils/types";
 
 /**
  * A VotingVault for the Governance Steering Council in which each member has a
@@ -18,12 +21,12 @@ import { Blockish } from "src/utils/types";
 export class ReadGscVault<
   A extends Adapter = Adapter,
 > extends ReadVotingVault<A> {
-  readonly gscVaultContract: Contract<typeof GSCVault.abi, A>;
+  readonly gscVaultContract: Contract<GscVaultAbi, A>;
 
   constructor(config: ContractEntityConfig<A>) {
     super(config);
     this.gscVaultContract = this.drift.contract({
-      abi: GSCVault.abi,
+      abi: gscVaultAbi,
       address: this.address,
     });
   }
@@ -43,11 +46,11 @@ export class ReadGscVault<
       /**
        * The block number to start searching for members from.
        */
-      fromBlock?: Blockish;
+      fromBlock?: RangeBlock;
       /**
        * The block number to stop searching for members at.
        */
-      toBlock?: Blockish;
+      toBlock?: RangeBlock;
     } = {},
   ): Promise<Address[]> {
     const latestJoinTimestampByMember: {

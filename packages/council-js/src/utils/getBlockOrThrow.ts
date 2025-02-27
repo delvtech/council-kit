@@ -5,6 +5,7 @@ import {
   GetBlockParams,
 } from "@delvtech/drift";
 import { CouncilSdkError } from "src/error";
+import { isHexString } from "src/utils/isHash";
 
 export type GetBlockOrThrowParams = GetBlockParams | ContractReadOptions;
 
@@ -26,6 +27,8 @@ export async function getBlockOrThrow(
     // The `block` option can either be a block number or a block tag
     if (typeof params.block === "bigint") {
       _options.blockNumber = params.block;
+    } else if (isHexString(params.block)) {
+      _options.blockHash = params.block;
     } else {
       _options.blockTag = params.block;
     }
@@ -36,7 +39,7 @@ export async function getBlockOrThrow(
 
   const block = await drift.getBlock(_options);
 
-  if (!block) {
+  if (!block || !!block.number) {
     const blockLabel =
       _options?.blockHash ?? _options?.blockNumber ?? _options?.blockTag;
     throw new CouncilSdkError(
