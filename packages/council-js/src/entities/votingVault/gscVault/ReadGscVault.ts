@@ -11,7 +11,6 @@ import {
   GscVaultAbi,
 } from "src/entities/votingVault/gscVault/abi";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
-import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
 
 /**
  * A VotingVault for the Governance Steering Council in which each member has a
@@ -80,9 +79,8 @@ export class ReadGscVault<
       // NOTE: the kickEvents store `when` as a block number whereas the
       // joinEvents store `when` as a timestamp, so we must convert the block
       // number to a timestamp so we can compare them.
-      const { timestamp: kickedTimestamp } = await getBlockOrThrow(this.drift, {
-        blockNumber: when,
-      });
+      const { timestamp: kickedTimestamp } =
+        await this.drift.getBlockOrThrow(when);
 
       if (
         latestJoinTimestampByMember[who] &&

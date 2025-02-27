@@ -1,14 +1,7 @@
-import {
-  Adapter,
-  Address,
-  Bytes,
-  Contract,
-  ContractReadOptions,
-  RangeBlock,
-} from "@delvtech/drift";
+import { Adapter, Address, Bytes, Contract, RangeBlock } from "@delvtech/drift";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
 import { votingVaultAbi, VotingVaultAbi } from "src/entities/votingVault/abi";
-import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
+import { convertToBlockNumber } from "src/utils/convertToBlockNumber";
 
 /**
  * A vault which stores voting power by address
@@ -40,27 +33,20 @@ export class ReadVotingVault<A extends Adapter = Adapter> extends Entity<A> {
     block,
     // extraData = "0x00",
     extraData = "0x",
-    options,
   }: {
     voter: Address;
     block?: RangeBlock;
     extraData?: Bytes;
-    options?: ContractReadOptions;
   }): Promise<bigint> {
-    if (typeof block !== "bigint") {
-      const { number } = await getBlockOrThrow(this.drift, options);
+    const blockNumber = await convertToBlockNumber(block, this.drift);
 
-      // No block number available for the requested number, hash, or tag.
-      if (number === undefined) {
-        return 0n;
-      }
-
-      block = number;
+    if (blockNumber === undefined) {
+      return 0n;
     }
 
     return this.contract
       .simulateWrite("queryVotePower", {
-        blockNumber: block,
+        blockNumber,
         extraData,
         user: voter,
       })

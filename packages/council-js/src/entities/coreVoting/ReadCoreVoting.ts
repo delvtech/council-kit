@@ -18,8 +18,8 @@ import {
   Vote,
   VoteResults,
 } from "src/entities/coreVoting/types";
+import { convertToBlockNumber } from "src/utils/convertToBlockNumber";
 import { convertToRangeBlock } from "src/utils/convertToRangeBlock";
-import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
 
 export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
   readonly address: Address;
@@ -174,13 +174,9 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
       return "unknown";
     }
 
-    let currentBlock: bigint;
-
-    if (typeof options?.block === "bigint") {
-      currentBlock = options?.block;
-    } else {
-      const { number } = await getBlockOrThrow(this.drift, options);
-      currentBlock = number;
+    let currentBlock = await convertToBlockNumber(options?.block, this.drift);
+    if (currentBlock === undefined) {
+      currentBlock = await this.drift.getBlockNumber();
     }
 
     if (currentBlock > lastCall) {

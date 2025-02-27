@@ -1,6 +1,7 @@
 import {
   Adapter,
   Address,
+  BlockIdentifier,
   Bytes,
   Contract,
   ContractReadOptions,
@@ -19,7 +20,7 @@ import {
   VestingVaultAbi,
 } from "src/entities/votingVault/vestingVault/abi";
 import { Grant } from "src/entities/votingVault/vestingVault/types";
-import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
+import { convertToBlockNumber } from "src/utils/convertToBlockNumber";
 
 /**
  * A VotingVault that gives voting power for receiving grants and applies a
@@ -120,7 +121,7 @@ export class ReadVestingVault<
     if (typeof options?.block === "bigint") {
       currentBlock = options.block;
     } else {
-      const { number } = await getBlockOrThrow(this.drift, options);
+      const { number } = await this.drift.getBlockOrThrow(options?.block);
       if (number === undefined) {
         return 0n;
       }
@@ -187,27 +188,20 @@ export class ReadVestingVault<
      * proposal.
      */
     block,
-    options,
   }: {
     voter: Address;
-    block: RangeBlock;
+    block?: BlockIdentifier;
     extraData?: Bytes;
-    options?: ContractReadOptions;
   }): Promise<bigint> {
-    if (typeof block !== "bigint") {
-      const { number } = await getBlockOrThrow(this.drift, options);
+    const blockNumber = await convertToBlockNumber(block, this.drift);
 
-      // No block number available for the requested hash or tag.
-      if (number === undefined) {
-        return 0n;
-      }
-
-      block = number;
+    if (blockNumber === undefined) {
+      return 0n;
     }
 
     return this.vestingVaultContract.read("queryVotePowerView", {
       user: voter,
-      blockNumber: block,
+      blockNumber,
     });
   }
 

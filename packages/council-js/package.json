@@ -16,7 +16,8 @@
     "watch:docs": "typedoc --watch",
     "test": "vitest run",
     "test:watch": "vitest --reporter=verbose",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch"
   },
   "dependencies": {
     "@delvtech/council-artifacts": "^0.1.0",

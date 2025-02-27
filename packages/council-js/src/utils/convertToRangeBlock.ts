@@ -1,10 +1,10 @@
 import {
   BlockIdentifier,
   Drift,
+  isHexString,
   MaybePromise,
   RangeBlock,
 } from "@delvtech/drift";
-import { isHexString } from "src/utils/isHash";
 
 /**
  * Converts a {@linkcode BlockIdentifier} to a {@linkcode RangeBlock} by
@@ -14,8 +14,8 @@ export function convertToRangeBlock(
   block: BlockIdentifier | undefined,
   drift: Drift,
 ): MaybePromise<RangeBlock | undefined> {
-  if (!block || typeof block === "bigint" || !isHexString(block)) {
-    return block;
+  if (isHexString(block)) {
+    return drift.getBlock(block).then((block) => block?.number);
   }
-  return drift.getBlock({ blockHash: block }).then((block) => block?.number);
+  return block;
 }

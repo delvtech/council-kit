@@ -17,7 +17,7 @@ import {
   VoterPowerBreakdown,
   VoterWithPower,
 } from "src/entities/votingVault/types";
-import { getBlockOrThrow } from "src/utils/getBlockOrThrow";
+import { convertToBlockNumber } from "src/utils/convertToBlockNumber";
 
 /**
  * A VotingVault that gives voting power for depositing tokens.
@@ -123,20 +123,15 @@ export class ReadLockingVault<
     extraData?: Bytes;
     options?: ContractReadOptions;
   }): Promise<bigint> {
-    if (typeof block !== "bigint") {
-      const { number } = await getBlockOrThrow(this.drift, options);
+    const blockNumber = await convertToBlockNumber(block, this.drift);
 
-      // No block number available for the requested hash or tag.
-      if (number === undefined) {
-        return 0n;
-      }
-
-      block = number;
+    if (blockNumber === undefined) {
+      return 0n;
     }
 
     return this.lockingVaultContract.read("queryVotePowerView", {
       user: voter,
-      blockNumber: block,
+      blockNumber,
     });
   }
 
