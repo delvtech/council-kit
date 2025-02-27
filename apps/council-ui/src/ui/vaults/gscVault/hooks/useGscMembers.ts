@@ -1,9 +1,9 @@
-import { ReadVoter } from "@delvtech/council-viem";
+import { Address } from "@delvtech/drift";
 import { QueryStatus, useQuery } from "@tanstack/react-query";
 import { useReadGscVault } from "./useReadGscVault";
 
 export function useGscMembers(): {
-  gscMembers: ReadVoter[] | undefined;
+  gscMembers: Address[] | undefined;
   status: QueryStatus;
 } {
   const gscVault = useReadGscVault();
