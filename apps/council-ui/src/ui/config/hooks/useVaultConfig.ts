@@ -1,4 +1,4 @@
-import { VaultConfig } from "src/config/CouncilConfig";
+import { VaultConfig } from "src/config/types";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 
 export function useVaultConfig(

@@ -1,4 +1,4 @@
-import { CouncilConfig } from "src/config/CouncilConfig";
+import { CouncilConfig } from "src/config/types";
 import { goerliCouncilConfig } from "src/config/goerli";
 import { localhostCouncilConfig } from "src/config/localhost";
 import { mainnetCouncilConfig } from "src/config/mainnet";

@@ -1,4 +1,4 @@
-import { CouncilConfig } from "src/config/CouncilConfig";
+import { CouncilConfig } from "src/config/types";
 
 export const localhostCouncilConfig: CouncilConfig = {
   version: "",

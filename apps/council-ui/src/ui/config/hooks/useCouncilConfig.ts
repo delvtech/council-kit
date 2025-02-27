@@ -1,5 +1,5 @@
 import { SupportedChainId, councilConfigs } from "src/config/council.config";
-import { CouncilConfig } from "src/config/CouncilConfig";
+import { CouncilConfig } from "src/config/types";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
 export function useCouncilConfig({

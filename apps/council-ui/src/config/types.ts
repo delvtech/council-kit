@@ -1,3 +1,4 @@
+import { Address } from "@delvtech/drift";
 import { ENV } from "@pushprotocol/restapi/src/lib/constants";
 
 export interface CouncilConfig {
@@ -23,13 +24,15 @@ export interface CouncilConfig {
 }
 
 export interface ContractConfig {
-  address: `0x${string}`;
+  address: Address;
 }
 
 export interface BaseVotingContractConfig extends ContractConfig {
   name: string;
   descriptionURL: string;
-  proposals: Record<string /*proposal id*/, ProposalConfig>;
+  proposals: {
+    [proposalId: string]: ProposalConfig;
+  };
 }
 
 export interface CoreVotingContractConfig extends BaseVotingContractConfig {
@@ -46,7 +49,7 @@ export interface VaultConfig extends ContractConfig {
     | "FrozenLockingVault"
     | "VestingVault"
     | "GSCVault"
-    | string;
+    | (string & {});
   name: string;
   /**
    * A short one-liner to show below the vault name.
