@@ -195,18 +195,20 @@ export const mainnetCouncilConfig = {
     name: "GSC",
     address: "0x40309f197e7f94B555904DF0f788a3F48cF326aB",
     descriptionURL: "https://moreinfo.com",
-    vault: {
-      name: "GSC Vault",
-      address: "0xcA870E8aa4FCEa85b5f0c6F4209C8CBA9265B940",
-      type: "GSCVault",
+    vaults: [
+      {
+        name: "GSC Vault",
+        address: "0xcA870E8aa4FCEa85b5f0c6F4209C8CBA9265B940",
+        type: "GSCVault",
 
-      sentenceSummary:
-        "The Governance Steering Council (GSC) vault gives one vote to each member that has reached an established threshold of delegated voting power defined by the DAO.",
-      paragraphSummary:
-        "The Governance Steering Council (GSC) vault gives one vote to each member that has reached an established threshold of delegated voting power defined by the DAO. Council members can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
-      descriptionURL:
-        "https://docs-delv.gitbook.io/element-developer-docs/governance-council/council-protocol-smart-contracts/voting-vaults/governance-steering-council-gsc-vault",
-    },
+        sentenceSummary:
+          "The Governance Steering Council (GSC) vault gives one vote to each member that has reached an established threshold of delegated voting power defined by the DAO.",
+        paragraphSummary:
+          "The Governance Steering Council (GSC) vault gives one vote to each member that has reached an established threshold of delegated voting power defined by the DAO. Council members can create, vote, and execute proposals if the GSC quorum is met, with quorum set by the DAO.",
+        descriptionURL:
+          "https://docs-delv.gitbook.io/element-developer-docs/governance-council/council-protocol-smart-contracts/voting-vaults/governance-steering-council-gsc-vault",
+      },
+    ],
     proposals: {
       0: {
         descriptionURL:

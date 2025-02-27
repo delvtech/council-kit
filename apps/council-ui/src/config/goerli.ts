@@ -50,12 +50,14 @@ export const goerliCouncilConfig = {
     name: "GSC",
     address: "0xd3f84fc6f50e421502e9f8e36b519E0D156BE6C8",
     descriptionURL: "https://moreinfo.com",
-    vault: {
-      name: "GSC Vault",
-      address: "0xCFb73f8D5D29e5d936AdF86A8A739AE12b882E8D",
-      type: "GSCVault",
-      descriptionURL: "https://moreinfo.com",
-    },
+    vaults: [
+      {
+        name: "GSC Vault",
+        address: "0xCFb73f8D5D29e5d936AdF86A8A739AE12b882E8D",
+        type: "GSCVault",
+        descriptionURL: "https://moreinfo.com",
+      },
+    ],
     proposals: {
       0: { descriptionURL: "", targets: [], calldatas: [] },
       1: { descriptionURL: "", targets: [], calldatas: [] },

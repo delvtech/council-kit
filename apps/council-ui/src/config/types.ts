@@ -12,7 +12,7 @@ export interface CouncilConfig {
    */
   chainId: number;
   timelock: ContractConfig;
-  coreVoting: CoreVotingContractConfig;
+  coreVoting: VotingContractConfig;
   gscVoting?: GscVotingContractConfig;
   airdrop?: AirdropConfig;
 
@@ -27,20 +27,20 @@ export interface ContractConfig {
   address: Address;
 }
 
-export interface BaseVotingContractConfig extends ContractConfig {
+export interface VotingContractConfig extends ContractConfig {
   name: string;
   descriptionURL: string;
   proposals: {
     [proposalId: string]: ProposalConfig;
   };
-}
-
-export interface CoreVotingContractConfig extends BaseVotingContractConfig {
   vaults: VaultConfig[];
 }
 
-export interface GscVotingContractConfig extends BaseVotingContractConfig {
-  vault: VaultConfig;
+/**
+ * A GSC Voting Contract with a single vault for membership.
+ */
+export interface GscVotingContractConfig extends VotingContractConfig {
+  vaults: [VaultConfig];
 }
 
 export interface VaultConfig extends ContractConfig {

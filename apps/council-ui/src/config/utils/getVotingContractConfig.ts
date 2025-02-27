@@ -1,8 +1,8 @@
 import { Address, OneOf } from "@delvtech/drift";
 import { SupportedChainId } from "src/config/council.config";
 import {
-  CoreVotingContractConfig,
   GscVotingContractConfig,
+  VotingContractConfig,
 } from "src/config/types";
 import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
 
@@ -17,12 +17,12 @@ export function getVotingContractConfig({
   if (coreVoting.address === address) {
     return { ...coreVoting, isGsc: false };
   }
-  if (gscVoting?.vault.address === address) {
+  if (gscVoting?.address === address) {
     return { ...gscVoting, isGsc: true };
   }
 }
 
 export type AnyVotingContractConfig = OneOf<
-  | (CoreVotingContractConfig & { isGsc: false })
+  | (VotingContractConfig & { isGsc: false })
   | (GscVotingContractConfig & { isGsc: true })
 >;
