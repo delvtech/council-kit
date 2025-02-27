@@ -37,6 +37,14 @@ export type ProposalEventArgs = {
 };
 
 /**
+ * A proposal creation event.
+ */
+export type ProposalCreation = ProposalEventArgs & {
+  blockNumber?: bigint;
+  transactionHash?: Hash;
+};
+
+/**
  * A proposal with it's current state.
  */
 export type ProposalWithState = ProposalEventArgs & {
@@ -82,6 +90,11 @@ export type UnknownProposal = {
 export type Proposal = OneOf<
   ProposalWithState | ExecutedProposal | UnknownProposal
 >;
+
+declare const p: Proposal;
+if (p.status === "active") {
+  const s = p.status;
+}
 
 /**
  * A valid ballot option.

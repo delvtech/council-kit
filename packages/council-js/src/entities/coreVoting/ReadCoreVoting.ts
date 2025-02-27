@@ -3,7 +3,6 @@ import {
   Address,
   Contract,
   ContractReadOptions,
-  EventLog,
   RangeBlock,
 } from "@delvtech/drift";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
@@ -14,6 +13,7 @@ import {
 } from "src/entities/coreVoting/constants";
 import {
   Proposal,
+  ProposalCreation,
   ProposalStatus,
   Vote,
   VoteResults,
@@ -87,6 +87,7 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
       fromBlock,
       toBlock,
     });
+
     return voteEvents.map(({ args: { proposalId, vote, voter } }) => {
       return {
         proposalId,
@@ -139,13 +140,28 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
   /**
    * Get proposal creation events.
    */
-  async getProposalCreatedEvents(
+  async getProposalCreations(
     options: {
       fromBlock?: RangeBlock;
       toBlock?: RangeBlock;
     } = {},
-  ): Promise<EventLog<CoreVotingAbi, "ProposalCreated">[]> {
-    return this.contract.getEvents("ProposalCreated", options);
+  ): Promise<ProposalCreation[]> {
+    const events = await this.contract.getEvents("ProposalCreated", options);
+    let result: ProposalCreation[] = [];
+    for (const { args, blockNumber, transactionHash } of events) {
+      // Filter out pending blocks.
+      if (transactionHash && blockNumber !== undefined) {
+        result.push({
+          blockNumber,
+          transactionHash,
+          proposalId: args.proposalId,
+          createdBlock: args.created,
+          expirationBlock: args.expiration,
+          unlockBlock: args.execution,
+        });
+      }
+    }
+    return result;
   }
 
   /**
@@ -231,25 +247,5 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
       options,
     );
     return { yes, no, maybe, total: yes + no + maybe };
-  }
-
-  /**
-   * Get the `ProposalExecuted` event for a given proposal id.
-   */
-  async getProposalExecution(
-    proposalId: bigint,
-    options?: ContractReadOptions,
-  ): Promise<EventLog<CoreVotingAbi, "ProposalExecuted"> | undefined> {
-    const proposal = await this.getProposal(proposalId, options);
-
-    // Proposals are deleted when they are executed.
-    if (proposal) {
-      return undefined;
-    }
-
-    const executedEvents = await this.contract.getEvents("ProposalExecuted", {
-      toBlock: await convertToRangeBlock(options?.block, this.drift),
-    });
-    return executedEvents.find(({ args }) => args.proposalId === proposalId);
   }
 }
