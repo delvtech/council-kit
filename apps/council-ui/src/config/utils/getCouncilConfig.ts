@@ -1,11 +1,10 @@
 import { councilConfigs, SupportedChainId } from "src/config/council.config";
 import { CouncilConfig } from "src/config/types";
 
-export type Config<C extends SupportedChainId> = CouncilConfig &
-  Extract<(typeof councilConfigs)[number], { chainId: C }>;
-
-export function getCouncilConfig<C extends SupportedChainId>(chainId: C) {
+export function getCouncilConfig(chainId: SupportedChainId) {
   return councilConfigs.find(
     (config) => config.chainId === chainId,
-  ) as Config<C>;
+    // Safe to cast since the `SupportedChainId` type only includes configured
+    // chain IDs.
+  ) as CouncilConfig;
 }
