@@ -1,5 +1,5 @@
-import { BlockNotFoundError } from "viem";
-import { UsePublicClientReturnType } from "wagmi";
+import { BlockIdentifier } from "@delvtech/drift";
+import { getDrift } from "src/lib/drift";
 
 const blockTime = 12n;
 
@@ -7,26 +7,22 @@ const blockTime = 12n;
  * Get the date of a mined block or estimate the date of a future block.
  */
 export async function getBlockDate(
-  blockNumber: bigint,
-  client: UsePublicClientReturnType,
+  blockId: BlockIdentifier | undefined,
+  chainId: number,
 ): Promise<Date | undefined> {
-  if (!client) {
-    return; 
-  }
+  const drift = getDrift({ chainId });
 
-  const block = await client
-    .getBlock({ blockNumber })
-    .catch((error) => {
-      if (error instanceof BlockNotFoundError) {
-        return undefined;
-      }
-    });
+  const block = await drift.getBlock(blockId);
 
   if (block) {
     return new Date(Number(block.timestamp) * 1000);
   }
 
-  const latestBlock = await client.getBlockNumber();
-  const secondsLeft = (blockNumber - latestBlock) * blockTime;
+  if (typeof blockId !== "bigint") {
+    return undefined;
+  }
+
+  const latestBlock = await drift.getBlockNumber();
+  const secondsLeft = (blockId - latestBlock) * blockTime;
   return new Date(Date.now() + Number(secondsLeft) * 1000);
 }
