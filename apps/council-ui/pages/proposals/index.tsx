@@ -1,6 +1,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import { ReactElement } from "react";
+import { getProposalConfig } from "src/config/utils/getProposalConfig";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
@@ -91,14 +92,14 @@ function useProposalsPageData(
 
       return await Promise.all(
         allProposals.map(
-          async ({
-            chainId,
-            coreVotingAddress,
-            proposalId,
-            expirationBlock,
-          }) => {
-            const votingContract = council.coreVoting(coreVotingAddress);
+          async ({ coreVotingAddress, proposalId, expirationBlock }) => {
+            const proposalConfig = getProposalConfig({
+              id: proposalId,
+              chainId,
+              coreVotingAddress,
+            });
 
+            const votingContract = council.coreVoting(coreVotingAddress);
             const [votingEnds, status, vote] = await Promise.all([
               getBlockDate(expirationBlock, chainId),
               votingContract.getProposalStatus(proposalId),
@@ -109,11 +110,6 @@ function useProposalsPageData(
                   })
                 : undefined,
             ]);
-
-            const proposalConfig =
-              coreVotingAddress === config.gscVoting?.address
-                ? config.gscVoting?.proposals[String(proposalId)]
-                : config.coreVoting.proposals[String(proposalId)];
 
             const result: ProposalRowData = {
               id: proposalId,
