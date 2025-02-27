@@ -1,4 +1,4 @@
-import { Address, Bytes, Eval, Hash, OneOf, Replace } from "@delvtech/drift";
+import { Address, Bytes, Eval, Hash, OneOf } from "@delvtech/drift";
 import {
   BALLOTS,
   EXECUTED_PROPOSAL_HASH,
@@ -21,11 +21,18 @@ export type ProposalStatus =
   | "unknown";
 
 /**
+ * The properties required to identify a proposal.
+ */
+export type BaseProposalProps = {
+  chainId: number;
+  coreVotingAddress: Address;
+  proposalId: bigint;
+};
+
+/**
  * The data emitted by the `ProposalCreated` event.
  */
-export type ProposalEventArgs = {
-  coreVoting: Address;
-  proposalId: bigint;
+export type ProposalEventArgs = BaseProposalProps & {
   createdBlock: bigint;
   /**
    * The block number after which the proposal can be executed.
@@ -58,27 +65,21 @@ export type ProposalWithState = ProposalEventArgs & {
    * The block number after which the proposal can no longer be executed.
    */
   lastCallBlock: bigint;
-  status?: "active" | "expired" | "failed";
+  status: "active" | "expired" | "failed" | undefined;
 };
 
 /**
  * An executed proposal that has been deleted from the contract.
  */
-export type ExecutedProposal = Replace<
-  ProposalEventArgs,
-  {
-    proposalId: bigint;
-    proposalHash: typeof EXECUTED_PROPOSAL_HASH;
-    status: "executed";
-  }
->;
+export type ExecutedProposal = ProposalEventArgs & {
+  proposalHash: typeof EXECUTED_PROPOSAL_HASH;
+  status: "executed";
+};
 
 /**
  * An unknown proposal that has no information available.
  */
-export type UnknownProposal = {
-  coreVoting: Address;
-  proposalId: bigint;
+export type UnknownProposal = BaseProposalProps & {
   proposalHash: typeof EXECUTED_PROPOSAL_HASH;
   status: "unknown";
 };
@@ -89,8 +90,12 @@ export type UnknownProposal = {
  * Once a proposal has been executed, it will be deleted from the voting
  * contract and only the event logs will remain.
  */
-export type Proposal = OneOf<
-  ProposalWithState | ExecutedProposal | UnknownProposal
+export type Proposal<
+  T extends ProposalStatus | undefined = ProposalStatus | undefined,
+> = OneOf<
+  (ProposalWithState | ExecutedProposal | UnknownProposal) & {
+    status: T;
+  }
 >;
 
 /**

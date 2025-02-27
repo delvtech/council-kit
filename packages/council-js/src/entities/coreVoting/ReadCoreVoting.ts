@@ -120,16 +120,18 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
         return {
           proposalId,
           proposalHash,
-          coreVoting: this.address,
           status: "unknown",
+          chainId: await this.drift.getChainId(),
+          coreVotingAddress: this.address,
         };
       }
 
       return {
         proposalId,
         proposalHash,
-        coreVoting: this.address,
         status: "executed",
+        chainId: await this.drift.getChainId(),
+        coreVotingAddress: this.address,
         createdBlock: creationEvent?.args.created,
         expirationBlock: creationEvent?.args.expiration,
         unlockBlock: creationEvent?.args.execution,
@@ -139,7 +141,9 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
     return {
       proposalId,
       proposalHash,
-      coreVoting: this.address,
+      status: undefined,
+      chainId: await this.drift.getChainId(),
+      coreVotingAddress: this.address,
       createdBlock: created,
       expirationBlock: expiration,
       lastCallBlock: lastCall,
@@ -165,7 +169,8 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
         result.push({
           blockNumber,
           transactionHash,
-          coreVoting: this.address,
+          chainId: await this.drift.getChainId(),
+          coreVotingAddress: this.address,
           proposalId: args.proposalId,
           createdBlock: args.created,
           expirationBlock: args.expiration,
