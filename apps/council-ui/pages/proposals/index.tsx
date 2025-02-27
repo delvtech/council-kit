@@ -12,8 +12,7 @@ import {
 } from "src/ui/proposals/ProposalTable/ProposalsTable";
 import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalTable/ProposalsTableSkeleton";
 import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
-import { getProposalStatus } from "src/utils/getProposalStatus";
-import { useAccount, usePublicClient } from "wagmi";
+import { useAccount } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {
   const { address } = useAccount();
@@ -73,68 +72,51 @@ function useProposalsPageData(
 ): UseQueryResult<ProposalRowData[]> {
   const chainId = useSupportedChainId();
   const config = useCouncilConfig();
-  const client = usePublicClient();
+  // const client = usePublicClient();
   const council = useReadCouncil();
 
   return useQuery({
     queryKey: ["proposalsPage", account, chainId],
     queryFn: async (): Promise<ProposalRowData[]> => {
-      const coreVoting = council.coreVoting(config.coreVoting.address);
+      const generalVoting = council.coreVoting(config.coreVoting.address);
       const gscVoting = config.gscVoting
         ? council.coreVoting(config.gscVoting.address)
         : undefined;
 
-      const [coreProposals, gscProposals] = await Promise.all([
-        coreVoting.getProposals(),
-        gscVoting?.getProposals(),
+      const [generalProposals, gscProposals] = await Promise.all([
+        generalVoting.getProposalCreations(),
+        gscVoting?.getProposalCreations(),
       ]);
 
-      const allProposals = coreProposals.map((proposal) => {
-        return {
-          ...proposal,
-          votingContract: coreVoting,
-        };
-      });
-
-      if (gscProposals) {
-        allProposals.push(
-          ...gscProposals.map((proposal) => {
-            return {
-              ...proposal,
-              votingContract: gscVoting!,
-            };
-          }),
-        );
-      }
+      const allProposals = generalProposals.concat(gscProposals || []);
 
       return await Promise.all(
         allProposals.map(
-          async ({ expirationBlock, proposalId, votingContract }) => {
-            const [votingEnds, proposal, results, executionEvent, vote] =
-              await Promise.all([
-                getBlockDate(expirationBlock, client),
-                coreVoting.getProposal(proposalId),
-                coreVoting.getProposalVotingPower(proposalId),
-                coreVoting.getProposalExecution(proposalId),
-                account
-                  ? await coreVoting.getVote({ proposalId, voter: account })
-                  : undefined,
-              ]);
+          async ({
+            blockNumber,
+            chainId,
+            coreVotingAddress,
+            proposalId,
+            transactionHash,
+            createdBlock,
+            expirationBlock,
+            unlockBlock,
+          }) => {
+            const votingContract = council.coreVoting(coreVotingAddress);
 
-            const lastCallDate = proposal?.lastCallBlock
-              ? await getBlockDate(proposal?.lastCallBlock, client)
-              : undefined;
-
-            const status = getProposalStatus({
-              isExecuted: !!executionEvent,
-              currentQuorum: results.yes + results.no + results.maybe,
-              lastCallDate,
-              requiredQuorum: proposal?.requiredQuorum,
-              results,
-            });
+            const [votingEnds, status, vote] = await Promise.all([
+              getBlockDate(expirationBlock, chainId),
+              votingContract.getProposalStatus(proposalId),
+              account
+                ? await votingContract.getVote({
+                    proposalId: proposalId,
+                    voter: account,
+                  })
+                : undefined,
+            ]);
 
             const proposalConfig =
-              votingContract.address === gscVoting?.address
+              coreVotingAddress === config.gscVoting?.address
                 ? config.gscVoting?.proposals[String(proposalId)]
                 : config.coreVoting.proposals[String(proposalId)];
 
