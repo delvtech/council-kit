@@ -1,4 +1,4 @@
-import { Ballot, ReadCoreVoting } from "@delvtech/council-js";
+import { Ballot, ProposalStatus, ReadCoreVoting } from "@delvtech/council-js";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import Link from "next/link";
@@ -13,7 +13,6 @@ import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { tooltipByStatus } from "src/ui/proposals/tooltips";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 import { formatTimeLeft } from "src/utils/formatTimeLeft";
-import { ProposalStatus } from "src/utils/getProposalStatus";
 import { useAccount } from "wagmi";
 
 export interface ProposalRowData {
@@ -215,10 +214,10 @@ function StatusBadge({ status }: { status: ProposalStatus }) {
     <Tooltip content={tooltipByStatus[status]}>
       <div
         className={classNames("daisy-badge font-bold", {
-          "daisy-badge-error": status === "FAILED",
-          "daisy-badge-info": status === "IN PROGRESS",
-          "daisy-badge-success": status === "EXECUTED",
-          "daisy-badge-warning": status === "EXPIRED",
+          "daisy-badge-error": status === "failed",
+          "daisy-badge-info": status === "active",
+          "daisy-badge-success": status === "executed",
+          "daisy-badge-warning": status === "expired",
         })}
       >
         {status}
