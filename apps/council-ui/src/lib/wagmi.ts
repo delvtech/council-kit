@@ -10,30 +10,29 @@ import { councilConfigs } from "src/config/council.config";
 import { http } from "wagmi";
 import { Chain, goerli, hardhat, localhost, mainnet } from "wagmi/chains";
 
+const allChains = [mainnet, goerli, hardhat, localhost];
 const configuredChainIds = Object.keys(councilConfigs);
 
-const allChains = [mainnet, goerli, hardhat, localhost];
-const rpcUrlsByChainId: Record<string, string | undefined> = {
+export const chains = Object.values(allChains).filter(({ id }) =>
+  configuredChainIds.includes(id.toString()),
+);
+
+const rpcUrls = {
   1: process.env.NEXT_PUBLIC_MAINNET_RPC_URL,
   5: process.env.NEXT_PUBLIC_GOERLI_RPC_URL,
   1337: process.env.NEXT_PUBLIC_LOCAL_RPC_URL,
   31337: process.env.NEXT_PUBLIC_LOCAL_RPC_URL,
 };
 
-export const chains = Object.values(allChains).filter(({ id }) =>
-  configuredChainIds.includes(String(id)),
-);
-
 export const transports = Object.fromEntries(
   chains.map(({ id }) => {
-    return [id, http(rpcUrlsByChainId[id])];
+    return [id, http(rpcUrls[id])];
   }),
 );
 
-const walletConnectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
 const wallets = [injectedWallet, safeWallet, rainbowWallet, metaMaskWallet];
+const walletConnectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
 
-// WalletConnect
 if (walletConnectId) {
   wallets.push(walletConnectWallet);
 } else if (process.env.NODE_ENV === "development") {
