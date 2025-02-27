@@ -1,4 +1,5 @@
-import { councilConfigs, SupportedChainId } from "src/config/council.config";
+import { SupportedChainId } from "src/config/council.config";
+import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
 
 export interface AirdropData {
   amount: bigint;
@@ -15,7 +16,11 @@ export async function getAirdropData({
   account: string;
   chainId?: SupportedChainId;
 }): Promise<AirdropData | undefined> {
-  const config = councilConfigs[chainId as SupportedChainId]?.airdrop;
+  if (!chainId) {
+    return undefined;
+  }
+
+  const config = getCouncilConfig(chainId).airdrop;
 
   if (!config) {
     return undefined;
