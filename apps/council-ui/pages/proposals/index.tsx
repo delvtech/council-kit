@@ -72,7 +72,6 @@ function useProposalsPageData(
 ): UseQueryResult<ProposalRowData[]> {
   const chainId = useSupportedChainId();
   const config = useCouncilConfig();
-  // const client = usePublicClient();
   const council = useReadCouncil();
 
   return useQuery({

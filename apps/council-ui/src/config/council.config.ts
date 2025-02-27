@@ -9,5 +9,4 @@ export const councilConfigs = [
   localhostCouncilConfig,
 ] satisfies CouncilConfig[];
 
-export type SupportedChainId = (typeof supportedChainIds)[number];
-export const supportedChainIds = councilConfigs.map(({ chainId }) => chainId);
+export type SupportedChainId = (typeof councilConfigs)[number]["chainId"];

@@ -6,29 +6,24 @@ import {
   safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { councilConfigs } from "src/config/council.config";
+import { SupportedChainId } from "src/config/council.config";
+import { HttpTransport } from "viem";
 import { http } from "wagmi";
-import { Chain, goerli, hardhat, localhost, mainnet } from "wagmi/chains";
+import { anvil, Chain, goerli, mainnet } from "wagmi/chains";
 
-const allChains = [mainnet, goerli, hardhat, localhost];
-const configuredChainIds = Object.keys(councilConfigs);
-
-export const chains = Object.values(allChains).filter(({ id }) =>
-  configuredChainIds.includes(id.toString()),
-);
-
-const rpcUrls = {
-  1: process.env.NEXT_PUBLIC_MAINNET_RPC_URL,
-  5: process.env.NEXT_PUBLIC_GOERLI_RPC_URL,
-  1337: process.env.NEXT_PUBLIC_LOCAL_RPC_URL,
-  31337: process.env.NEXT_PUBLIC_LOCAL_RPC_URL,
+export const chains: {
+  [ChainId in SupportedChainId]: Chain & { id: ChainId };
+} = {
+  1: mainnet,
+  5: goerli,
+  31337: anvil,
 };
 
-export const transports = Object.fromEntries(
-  chains.map(({ id }) => {
-    return [id, http(rpcUrls[id])];
-  }),
-);
+export const transports: Record<SupportedChainId, HttpTransport> = {
+  1: http(process.env.NEXT_PUBLIC_MAINNET_RPC_URL),
+  5: http(process.env.NEXT_PUBLIC_GOERLI_RPC_URL),
+  31337: http(process.env.NEXT_PUBLIC_LOCAL_RPC_URL),
+};
 
 const wallets = [injectedWallet, safeWallet, rainbowWallet, metaMaskWallet];
 const walletConnectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
@@ -44,7 +39,7 @@ if (walletConnectId) {
 export const wagmiConfig = getDefaultConfig({
   appName: "Council",
   projectId: walletConnectId || "",
-  chains: allChains as Chain[] as [Chain, ...Chain[]],
+  chains: Object.values(chains) as [Chain, ...Chain[]],
   transports,
   wallets: [
     {
