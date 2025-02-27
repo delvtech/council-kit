@@ -51,9 +51,7 @@ export async function getEventsWithSplitAndRetry<
 
             // Check if the chunk is too small to split
             if (
-              toBlock === 0n ||
-              toBlock === "earliest" ||
-              fromBlock === toBlock ||
+              [0n, "earliest", fromBlock].includes(toBlock) ||
               // Implies the chunk starts at "finalized", "latest", "safe", or "pending"
               (typeof fromBlock === "string" && fromBlock !== "earliest")
             ) {
