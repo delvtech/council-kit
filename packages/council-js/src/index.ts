@@ -1,3 +1,8 @@
+import { initSync, wasmBuffer } from "@delvtech/fixed-point-wasm";
+
+// Initialize fixed-point wasm module
+initSync(wasmBuffer);
+
 // Core voting
 export { coreVotingAbi, type CoreVotingAbi } from "src/entities/coreVoting/abi";
 export {
