@@ -1,12 +1,13 @@
-import { CouncilConfig } from "src/config/types";
 import { goerliCouncilConfig } from "src/config/goerli";
 import { localhostCouncilConfig } from "src/config/localhost";
 import { mainnetCouncilConfig } from "src/config/mainnet";
+import { CouncilConfig } from "src/config/types";
 
-export type SupportedChainId = 1 | 5 | 1337;
+export const councilConfigs = [
+  mainnetCouncilConfig,
+  goerliCouncilConfig,
+  localhostCouncilConfig,
+] satisfies CouncilConfig[];
 
-export const councilConfigs: Record<SupportedChainId, CouncilConfig> = {
-  1: mainnetCouncilConfig,
-  5: goerliCouncilConfig,
-  1337: localhostCouncilConfig,
-};
+export type SupportedChainId = (typeof supportedChainIds)[number];
+export const supportedChainIds = councilConfigs.map(({ chainId }) => chainId);
