@@ -93,14 +93,10 @@ function useProposalsPageData(
       return await Promise.all(
         allProposals.map(
           async ({
-            blockNumber,
             chainId,
             coreVotingAddress,
             proposalId,
-            transactionHash,
-            createdBlock,
             expirationBlock,
-            unlockBlock,
           }) => {
             const votingContract = council.coreVoting(coreVotingAddress);
 
