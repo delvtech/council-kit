@@ -1,13 +1,13 @@
 import { Address } from "@delvtech/drift";
 import {
+  createEnsPublicClient,
   EnsPublicClient,
   UnsupportedChainError,
-  createEnsPublicClient,
 } from "@ensdomains/ensjs";
 import { getName } from "@ensdomains/ensjs/public";
 import chunk from "lodash.chunk";
+import { councilConfigs, SupportedChainId } from "src/config/council.config";
 import { chains, transports } from "src/lib/wagmi";
-import { PublicClient } from "viem";
 
 export type EnsRecords = Record<Address, string | undefined>;
 
@@ -18,10 +18,10 @@ export type EnsRecords = Record<Address, string | undefined>;
  */
 export async function getBulkEnsRecords(
   addresses: `0x${string}`[],
-  client: PublicClient | undefined,
+  chainId?: SupportedChainId,
   options?: { chunkSize?: number },
 ): Promise<EnsRecords> {
-  const chain = client?.chain || chains[0];
+  const chain = chains[chainId || councilConfigs[0].chainId];
   const transport = transports[chain.id];
 
   // TODO @ryangoree: Remove this once tested
