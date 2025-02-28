@@ -32,13 +32,12 @@ export default function AirdropPage(): ReactElement {
   const [delegateAddress, setDelegateAddress] = useState<string>();
 
   // Determine if the user needs to choose a delegate
-  const { airdropVault } = useAirdropVault();
-  const { delegate: currentDelegate } = useDelegate({
-    account: recipientAddress as `0x${string}`,
-    vault: airdropVault,
+  const { data: airdropVault } = useAirdropVault();
+  const { data: currentDelegate } = useDelegate({
+    voter: recipientAddress as `0x${string}`,
+    vault: airdropVault?.address,
   });
-  const needsDelegate =
-    currentDelegate && currentDelegate.address === zeroAddress;
+  const needsDelegate = currentDelegate === zeroAddress;
 
   // Set the recipient and delegate addresses to the connected wallet if they
   // haven't been set yet
@@ -48,7 +47,7 @@ export default function AirdropPage(): ReactElement {
     setDelegateAddress((previousValue) => previousValue || account.address);
   }, [account.address]);
 
-  const { claimableAmount } = useClaimableAirdropAmount();
+  const { data: claimableAmount } = useClaimableAirdropAmount();
   const { claimAirdrop } = useClaimAirdrop();
   const { claimAndDelegateAirdrop } = useClaimAndDelegateAirdrop();
 
