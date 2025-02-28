@@ -1,3 +1,4 @@
+import { Hash } from "@delvtech/drift";
 import {
   MutationStatus,
   useMutation,
@@ -18,39 +19,35 @@ import { usePublicClient } from "wagmi";
  * - Showing toast notifications for transaction status
  * - Invalidating queries on success
  */
-export function useWrite<
-  TFunction extends (...args: any[]) => Promise<`0x${string}`>,
->({
+export function useWrite<TFunction extends (args: any) => Promise<Hash>>({
   writeFn,
   pendingMessage = "Transaction pending...",
   successMessage = "Transaction successful!",
   errorMessage = "Transaction failed.",
 }: {
-  writeFn: TFunction;
+  writeFn: TFunction | undefined;
   pendingMessage?: string;
   successMessage?: string;
   errorMessage?: string;
 }): {
-  write: TFunction;
+  write: TFunction | undefined;
   status: MutationStatus;
-  transactionHash: `0x${string}` | undefined;
+  transactionHash: Hash | undefined;
 } {
-  const [transactionHash, setTransactionHash] = useState<`0x${string}`>();
-
+  const [transactionHash, setTransactionHash] = useState<Hash>();
   const chainId = useSupportedChainId();
   const queryClient = useQueryClient();
   const publicClient = usePublicClient();
-
-  const mutationFn = async (...args: Parameters<TFunction>) => {
-    const hash = await writeFn(...args);
-    setTransactionHash(hash);
-    makeTransactionSubmittedToast(pendingMessage, hash, chainId);
-    await publicClient?.waitForTransactionReceipt({ hash });
-    return hash;
-  };
-
   const { mutate, status } = useMutation({
-    mutationFn: mutationFn as TFunction,
+    mutationFn: writeFn
+      ? async (args: Parameters<TFunction>[0]) => {
+          const hash = await writeFn(args);
+          setTransactionHash(hash);
+          makeTransactionSubmittedToast(pendingMessage, hash, chainId);
+          await publicClient?.waitForTransactionReceipt({ hash });
+          return hash;
+        }
+      : undefined,
     onSuccess: (hash) => {
       makeTransactionSuccessToast(successMessage, hash, chainId);
       // All query cache can be invalidated. The SDK uses it's own cache which
