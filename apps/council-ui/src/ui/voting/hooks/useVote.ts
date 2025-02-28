@@ -1,47 +1,34 @@
-import { ReadVote, ReadVoter } from "@delvtech/council-viem";
-import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
-import { useAccount } from "wagmi";
+import { Address } from "@delvtech/drift";
+import { useQuery } from "@tanstack/react-query";
+import { SupportedChainId } from "src/config/council.config";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
 
 interface UseVoteOptions {
-  coreVotingAddress: `0x${string}`;
+  votingContract: Address;
   proposalId: bigint;
-  account?: ReadVoter | `0x${string}`;
+  account: Address | undefined;
+  chainId?: SupportedChainId;
 }
 
 export function useVote({
-  coreVotingAddress,
+  votingContract,
   proposalId,
   account,
-}: UseVoteOptions): {
-  vote: ReadVote | undefined;
-  status: QueryStatus;
-} {
+  chainId,
+}: UseVoteOptions) {
+  chainId = useSupportedChainId(chainId);
   const council = useReadCouncil();
-  const { address: connectedAccount } = useAccount();
-
-  let accountToUse = account || connectedAccount;
-  if (typeof accountToUse === "string") {
-    accountToUse = council.voter(accountToUse);
-  }
-
-  const enabled = !!accountToUse;
-
-  const { data, status } = useQuery({
-    queryKey: ["vote", String(proposalId), accountToUse],
+  const enabled = !!account && !!chainId;
+  return useQuery({
+    queryKey: ["vote", chainId, votingContract, account, chainId],
     enabled,
     queryFn: enabled
-      ? async () => {
-          const account = accountToUse!;
+      ? () => {
           return council
-            .coreVoting({ address: coreVotingAddress })
-            .getVote({ account, proposalId });
+            .coreVoting(votingContract)
+            .getVote({ proposalId, voter: account });
         }
       : undefined,
   });
-
-  return {
-    vote: data,
-    status: status,
-  };
 }
