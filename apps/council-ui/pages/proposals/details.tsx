@@ -159,9 +159,8 @@ export default function ProposalPage(): ReactElement | null {
 
           {data ? (
             <ProposalVoting
-              coreVotingAddress={votingContractAddress}
+              votingContract={votingContractConfig}
               proposalId={id}
-              vaults={votingContractConfig.vaults}
             />
           ) : (
             <ProposalVotingSkeleton />

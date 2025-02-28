@@ -12,17 +12,27 @@ export function getVotingContractConfig({
 }: {
   address: Address;
   chainId: SupportedChainId;
-}): AnyVotingContractConfig | undefined {
+}): ExtendedVotingContractConfig | undefined {
   const { coreVoting, gscVoting } = getCouncilConfig(chainId);
   if (coreVoting.address === address) {
-    return { ...coreVoting, isGsc: false };
+    return {
+      ...coreVoting,
+      isGsc: false,
+      chainId,
+    };
   }
   if (gscVoting?.address === address) {
-    return { ...gscVoting, isGsc: true };
+    return {
+      ...gscVoting,
+      isGsc: true,
+      chainId,
+    };
   }
 }
 
-export type AnyVotingContractConfig = OneOf<
+export type ExtendedVotingContractConfig = {
+  chainId: SupportedChainId;
+} & OneOf<
   | (VotingContractConfig & { isGsc: false })
   | (GscVotingContractConfig & { isGsc: true })
 >;

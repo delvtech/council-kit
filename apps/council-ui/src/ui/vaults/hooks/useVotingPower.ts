@@ -5,7 +5,7 @@ import { VotingContractConfig } from "src/config/types";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
 
-interface UseVotingPowerByVaultOptions {
+interface UseVotingPowerOptions {
   votingContract: VotingContractConfig;
   account: Address | undefined;
   block?: RangeBlock;
@@ -21,7 +21,7 @@ export default function useVotingPower({
   account,
   block,
   chainId,
-}: UseVotingPowerByVaultOptions) {
+}: UseVotingPowerOptions) {
   chainId = useSupportedChainId(chainId);
   const council = useReadCouncil();
   const enabled = !!account && !!chainId;
@@ -34,11 +34,12 @@ export default function useVotingPower({
           let totalVotingPower = 0n;
           const vaultPowers = await Promise.all(
             votingContract.vaults.map(async (vault) => {
-              const readVault = council.votingVault(vault.address);
-              const votingPower = await readVault.getVotingPower({
-                voter: account,
-                block,
-              });
+              const votingPower = await council
+                .votingVault(vault.address)
+                .getVotingPower({
+                  voter: account,
+                  block,
+                });
               totalVotingPower += votingPower;
 
               return {
