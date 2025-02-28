@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
+import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { Page } from "src/ui/base/Page";
-import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { FrozenLockingVaultDetails } from "src/ui/vaults/frozenLockingVault/FrozenLockingVaultDetails";
 import { GenericVaultDetails } from "src/ui/vaults/genericVault/GenericVaultDetails";
 import { GscVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
@@ -12,8 +13,8 @@ import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDeta
 export default function VaultPage(): ReactElement {
   const { query, replace } = useRouter();
   const address = query.address as `0x${string}` | undefined;
-
-  const vaultConfig = useVaultConfig(address);
+  const chainId = useSupportedChainId();
+  const vaultConfig = address && getVaultConfig({ address, chainId });
 
   if (!address || !vaultConfig) {
     replace("/vaults");

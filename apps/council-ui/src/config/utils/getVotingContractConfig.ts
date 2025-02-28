@@ -30,9 +30,9 @@ export function getVotingContractConfig({
   }
 }
 
-export type ExtendedVotingContractConfig = {
-  chainId: SupportedChainId;
-} & OneOf<
+export type ExtendedVotingContractConfig = OneOf<
   | (VotingContractConfig & { isGsc: false })
   | (GscVotingContractConfig & { isGsc: true })
->;
+> & {
+  chainId: SupportedChainId;
+};
