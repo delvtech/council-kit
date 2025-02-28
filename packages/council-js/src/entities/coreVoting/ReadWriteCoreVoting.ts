@@ -1,8 +1,16 @@
-import { Address, Bytes, Hash, ReadWriteAdapter } from "@delvtech/drift";
+import {
+  Address,
+  Bytes,
+  ContractWriteOptions,
+  Hash,
+  OnMinedParam,
+  ReadWriteAdapter,
+} from "@delvtech/drift";
 import { BALLOTS } from "src/entities/coreVoting/constants";
 import { ReadCoreVoting } from "src/entities/coreVoting/ReadCoreVoting";
 import { Ballot } from "src/entities/coreVoting/types";
 import { EntityWriteParams } from "src/entities/Entity";
+import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 
 export class ReadWriteCoreVoting<
   A extends ReadWriteAdapter = ReadWriteAdapter,
@@ -182,6 +190,79 @@ export class ReadWriteCoreVoting<
         onMined: async (receipt) => {
           if (receipt?.status === "success") {
             await this.contract.invalidateRead("proposals", [proposalId]);
+          }
+          options?.onMined?.(receipt);
+        },
+      },
+    );
+  }
+
+  /**
+   * Vote on this a proposal.
+   */
+  async vote({
+    proposalId,
+    ballot,
+    vaults,
+    extraVaultData,
+    options,
+  }: {
+    proposalId: bigint;
+    ballot: Ballot;
+    /**
+     * The vaults to draw voting power from. Defaults to the `CoreVoting`'s
+     * configured vaults.
+     */
+    vaults: Address[];
+    /**
+     * Extra data given to the vaults to help calculation.
+     */
+    extraVaultData?: Bytes[];
+    options?: ContractWriteOptions & OnMinedParam;
+  }): Promise<Hash> {
+    const voter = await this.contract.getSignerAddress();
+
+    // Filter out vaults with no voting power which would cause a revert.
+    const vaultsWithPower: Address[] = [];
+    const extraDataForVaultsWithPower: Bytes[] = [];
+    await Promise.all(
+      vaults.map(async (address, i) => {
+        const extraData = extraVaultData?.[i] || "0x";
+        const readVault = new ReadVotingVault({
+          address,
+          drift: this.drift,
+        });
+        const power = await readVault.getVotingPower({
+          voter,
+          extraData,
+        });
+
+        if (power > 0n) {
+          vaultsWithPower.push(address);
+          extraDataForVaultsWithPower.push(extraData);
+        }
+      }),
+    );
+
+    return this.contract.write(
+      "vote",
+      {
+        proposalId,
+        ballot: BALLOTS.indexOf(ballot),
+        extraVaultData: extraDataForVaultsWithPower,
+        votingVaults: vaultsWithPower,
+      },
+      {
+        ...options,
+        onMined: async (receipt) => {
+          if (receipt?.status === "success") {
+            await Promise.all([
+              this.contract.invalidateReadsMatching("quorums"),
+              this.contract.invalidateRead("votes", [voter, proposalId]),
+              this.contract.invalidateRead("getProposalVotingPower", {
+                proposalId,
+              }),
+            ]);
           }
           options?.onMined?.(receipt);
         },
