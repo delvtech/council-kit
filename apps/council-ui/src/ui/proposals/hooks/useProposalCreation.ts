@@ -22,7 +22,7 @@ export default function useProposalCreation({
   const council = useReadCouncil();
   const enabled = !!chainId;
   return useQuery({
-    queryKey: ["votingPower", chainId, votingContract, proposalId],
+    queryKey: ["proposalCreation", chainId, votingContract, proposalId],
     enabled,
     queryFn: enabled
       ? async () => {
