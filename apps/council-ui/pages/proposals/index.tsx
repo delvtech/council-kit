@@ -74,57 +74,60 @@ function useProposalsPageData(
   const chainId = useSupportedChainId();
   const config = useCouncilConfig();
   const council = useReadCouncil();
-
+  const enabled = !!council;
   return useQuery({
     queryKey: ["proposalsPage", account, chainId],
-    queryFn: async (): Promise<ProposalRowData[]> => {
-      const generalVoting = council.coreVoting(config.coreVoting.address);
-      const gscVoting = config.gscVoting
-        ? council.coreVoting(config.gscVoting.address)
-        : undefined;
+    enabled,
+    queryFn: enabled
+      ? async (): Promise<ProposalRowData[]> => {
+          const generalVoting = council.coreVoting(config.coreVoting.address);
+          const gscVoting = config.gscVoting
+            ? council.coreVoting(config.gscVoting.address)
+            : undefined;
 
-      const [generalProposals, gscProposals] = await Promise.all([
-        generalVoting.getProposalCreations(),
-        gscVoting?.getProposalCreations(),
-      ]);
+          const [generalProposals, gscProposals] = await Promise.all([
+            generalVoting.getProposalCreations(),
+            gscVoting?.getProposalCreations(),
+          ]);
 
-      const allProposals = generalProposals.concat(gscProposals || []);
+          const allProposals = generalProposals.concat(gscProposals || []);
 
-      return await Promise.all(
-        allProposals.map(
-          async ({ coreVotingAddress, proposalId, expirationBlock }) => {
-            const proposalConfig = getProposalConfig({
-              chainId,
-              votingContract: coreVotingAddress,
-              id: proposalId,
-            });
+          return await Promise.all(
+            allProposals.map(
+              async ({ coreVotingAddress, proposalId, expirationBlock }) => {
+                const proposalConfig = getProposalConfig({
+                  chainId,
+                  votingContract: coreVotingAddress,
+                  id: proposalId,
+                });
 
-            const votingContract = council.coreVoting(coreVotingAddress);
-            const [votingEnds, status, vote] = await Promise.all([
-              getBlockDate(expirationBlock, chainId),
-              votingContract.getProposalStatus(proposalId),
-              account
-                ? await votingContract.getVote({
-                    proposalId: proposalId,
-                    voter: account,
-                  })
-                : undefined,
-            ]);
+                const votingContract = council.coreVoting(coreVotingAddress);
+                const [votingEnds, status, vote] = await Promise.all([
+                  getBlockDate(expirationBlock, chainId),
+                  votingContract.getProposalStatus(proposalId),
+                  account
+                    ? await votingContract.getVote({
+                        proposalId: proposalId,
+                        voter: account,
+                      })
+                    : undefined,
+                ]);
 
-            const result: ProposalRowData = {
-              id: proposalId,
-              title: proposalConfig?.title,
-              sentenceSummary: proposalConfig?.sentenceSummary,
-              status,
-              ballot: vote?.votingPower ? vote.ballot : undefined,
-              votingEnds,
-              votingContract,
-            };
+                const result: ProposalRowData = {
+                  id: proposalId,
+                  title: proposalConfig?.title,
+                  sentenceSummary: proposalConfig?.sentenceSummary,
+                  status,
+                  ballot: vote?.votingPower ? vote.ballot : undefined,
+                  votingEnds,
+                  votingContract,
+                };
 
-            return result;
-          },
-        ),
-      );
-    },
+                return result;
+              },
+            ),
+          );
+        }
+      : undefined,
   });
 }

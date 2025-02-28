@@ -197,7 +197,7 @@ function useProposalDetailsPageData(
 } {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const enabled = !!coreVotingAddress && !!id;
+  const enabled = !!council && !!coreVotingAddress && !!id;
 
   const { data, status } = useQuery<ProposalDetailsPageData>({
     queryKey: [

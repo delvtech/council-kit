@@ -17,17 +17,16 @@ interface UseVotingPowerOptions {
  * contract.
  */
 export default function useVotingPower({
+  chainId,
   votingContract,
   account,
   block,
-  chainId,
 }: UseVotingPowerOptions) {
   chainId = useSupportedChainId(chainId);
   const council = useReadCouncil();
-  const enabled = !!account && !!chainId;
-
+  const enabled = !!account && !!chainId && !!council;
   return useQuery({
-    queryKey: ["votingPower", account, chainId, block],
+    queryKey: ["votingPower", chainId, votingContract.address, account, block],
     enabled,
     queryFn: enabled
       ? async () => {

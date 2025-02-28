@@ -20,7 +20,7 @@ export default function useProposal({
 }: UseProposalCreationOptions) {
   chainId = useSupportedChainId(chainId);
   const council = useReadCouncil();
-  const enabled = !!chainId;
+  const enabled = !!chainId && !!council;
   return useQuery({
     queryKey: ["proposal", chainId, votingContract, proposalId],
     enabled,
