@@ -1,95 +1,52 @@
-import { BlockLike, ReadVotingVault } from "@delvtech/council-js";
-import { FetchStatus, QueryStatus, useQuery } from "@tanstack/react-query";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { Address, RangeBlock } from "@delvtech/drift";
+import { useQuery } from "@tanstack/react-query";
+import { SupportedChainId } from "src/config/council.config";
+import { AnyVotingContractConfig } from "src/config/utils/getVotingContractConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { formatEther } from "viem";
-import { useAccount } from "wagmi";
+import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
 
 interface UseVotingPowerByVaultOptions {
-  vaults: (ReadVotingVault | `0x${string}`)[];
-  account?: `0x${string}`;
-  atBlock?: BlockLike;
+  votingContract: AnyVotingContractConfig;
+  account: Address | undefined;
+  block?: RangeBlock;
+  chainId?: SupportedChainId;
 }
 
 /**
- * Get the voting power of a wallet in all configured vaults.
- * @param account The account to get voting power for. If not provided, the
- * connected account will be used.
+ * Get the voting power of an account in all vaults configured for a voting
+ * contract.
  */
 export default function useVotingPowerByVault({
-  vaults: _vaults,
+  votingContract,
   account,
-  atBlock,
-}: UseVotingPowerByVaultOptions): {
-  votingPowerByVault:
-    | {
-        name: string;
-        address: `0x${string}`;
-        votingPower: bigint;
-        votingPowerFormatted: string;
-      }[]
-    | undefined;
-  status: QueryStatus;
-  fetchStatus: FetchStatus;
-} {
-  const chainId = useSupportedChainId();
+  block,
+  chainId,
+}: UseVotingPowerByVaultOptions) {
+  chainId = useSupportedChainId(chainId);
   const council = useReadCouncil();
-  const config = useCouncilConfig();
+  const enabled = !!account && !!chainId;
 
-  const vaults = _vaults.map((vault) =>
-    typeof vault === "string" ? council.votingVault(vault) : vault,
-  );
-
-  const { address: connectedAccount } = useAccount();
-  const accountToUse = account ?? connectedAccount;
-
-  const enabled = !!accountToUse;
-
-  const { data, status, fetchStatus } = useQuery({
-    queryKey: ["votingPowerByVault", account, chainId, Number(atBlock)],
+  return useQuery({
+    queryKey: ["votingPowerByVault", account, chainId, Number(block)],
     enabled,
     queryFn: enabled
       ? async () => {
           return Promise.all(
-            vaults.map(async (vault) => {
-              let name = vault.name;
-
-              if (vault.address === config.gscVoting?.vault.address) {
-                name = config.gscVoting?.vault.name;
-              }
-
-              const vaultConfig = config.coreVoting.vaults.find(
-                ({ address }) => address === vault.address,
-              );
-
-              if (vaultConfig) {
-                name = vaultConfig.name;
-              }
-
-              const votingPower = await vault.getVotingPower({
-                account: accountToUse,
-                atBlock,
+            votingContract.vaults.map(async (vault) => {
+              const readVault = council.votingVault(vault.address);
+              const votingPower = await readVault.getVotingPower({
+                voter: account,
+                block,
               });
 
               return {
-                name,
-                address: vault.address,
+                vaultName: vault.name,
+                vaultAddress: vault.address,
                 votingPower,
-                /**
-                 * All voting power is formatted as a string with 18 decimal places.
-                 */
-                votingPowerFormatted: formatEther(votingPower),
               };
             }),
           );
         }
       : undefined,
   });
-
-  return {
-    votingPowerByVault: data,
-    status,
-    fetchStatus,
-  };
 }
