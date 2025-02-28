@@ -23,7 +23,7 @@ export default function useVotingPower({
   block,
 }: UseVotingPowerOptions) {
   chainId = useSupportedChainId(chainId);
-  const council = useReadCouncil();
+  const council = useReadCouncil({ chainId });
   const enabled = !!account && !!chainId && !!council;
   return useQuery({
     queryKey: ["votingPower", chainId, votingContract.address, account, block],

@@ -1,57 +1,52 @@
-import { Ballot, ReadVotingVault } from "@delvtech/council-viem";
-import { MutationStatus } from "@tanstack/react-query";
+import { Ballot } from "@delvtech/council-js";
+import { Address, Bytes } from "@delvtech/drift";
+import { SupportedChainId } from "src/config/council.config";
 import { useWrite } from "src/ui/contract/hooks/useWrite";
-import { useReadWriteCouncil } from "src/ui/council/hooks/useReadWriteCouncil";
+import { useReadWriteCouncil } from "src/ui/sdk/hooks/useReadWriteCouncil";
 
-interface SubmitVoteOptions {
-  coreVotingAddress: `0x${string}`;
+export interface useSubmitVoteOptions {
+  votingContract: Address;
   proposalId: bigint;
-  ballot: Ballot;
-  vaults: (ReadVotingVault | `0x${string}`)[];
+  vaults: Address[];
+  extraVaultData?: Bytes[];
+  chainId?: SupportedChainId;
 }
 
-export function useSubmitVote(): {
-  submitVote: ((options: SubmitVoteOptions) => void) | undefined;
-  transactionHash: `0x${string}` | undefined;
-  status: MutationStatus;
-} {
-  const council = useReadWriteCouncil();
+export function useSubmitVote({
+  chainId,
+  votingContract,
+  proposalId,
+  extraVaultData,
+  vaults,
+}: useSubmitVoteOptions) {
+  const council = useReadWriteCouncil({ chainId });
   const enabled = !!council;
 
-  const { write, status, transactionHash } = useWrite({
+  return useWrite({
     pendingMessage: "Submitting vote...",
     successMessage: "Vote submitted!",
     errorMessage: "Failed to submit vote.",
-    writeFn: async ({
-      coreVotingAddress,
-      proposalId,
-      ballot,
-      vaults,
-    }: SubmitVoteOptions) => {
+    writeFn: async (ballot: Ballot) => {
       if (!enabled) {
         throw new Error(
-          "Connection to council not available. Check your wallet connection.",
+          "Unable to submit vote. Ensure that you are connected to the correct network.",
         );
       }
-
-      const coreVoting = council.coreVoting({ address: coreVotingAddress });
-      const proposal = await coreVoting.getProposal({
-        id: proposalId,
-      });
+      const coreVoting = council.coreVoting(votingContract);
+      const proposal = await coreVoting.getProposal(proposalId);
 
       if (!proposal) {
         throw new Error(
-          `Attempted to vote on proposal ${proposalId} from ${coreVotingAddress}, but it does not exist.`,
+          `Unable to submit vote for non-existent proposal with ID ${proposalId} on contract ${votingContract}`,
         );
       }
 
-      return proposal.vote({ ballot, vaults });
+      return coreVoting.vote({
+        proposalId,
+        ballot,
+        vaults,
+        extraVaultData,
+      });
     },
   });
-
-  return {
-    submitVote: enabled ? write : undefined,
-    transactionHash,
-    status,
-  };
 }

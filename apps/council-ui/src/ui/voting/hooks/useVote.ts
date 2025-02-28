@@ -18,7 +18,7 @@ export function useVote({
   chainId,
 }: UseVoteOptions) {
   chainId = useSupportedChainId(chainId);
-  const council = useReadCouncil();
+  const council = useReadCouncil({ chainId });
   const enabled = !!account && !!chainId && !!council;
   return useQuery({
     queryKey: ["vote", chainId, votingContract, account, chainId],
