@@ -6,7 +6,7 @@ import { useClaimableAirdropAmount } from "./useClaimableAirdropAmount";
 
 interface ClaimAndDelegateOptions {
   delegate: `0x${string}`;
-  recipient: `0x${string}`;
+  destination: `0x${string}`;
 }
 
 export function useClaimAndDelegateAirdrop(): {
@@ -17,8 +17,8 @@ export function useClaimAndDelegateAirdrop(): {
   status: MutationStatus;
 } {
   const airdrop = useReadWriteAirdrop();
-  const { airdropData } = useAirdropData();
-  const { claimableAmount } = useClaimableAirdropAmount();
+  const { data: airdropData } = useAirdropData();
+  const { data: claimableAmount } = useClaimableAirdropAmount();
 
   const enabled = !!airdrop && !!claimableAmount && !!airdropData;
 
@@ -26,19 +26,19 @@ export function useClaimAndDelegateAirdrop(): {
     pendingMessage: "Claiming and delegating airdrop...",
     successMessage: "Airdrop claimed and delegated!",
     errorMessage: "Failed to claim and delegate airdrop.",
-    writeFn: ({ delegate, recipient }: ClaimAndDelegateOptions) => {
-      if (!enabled) {
-        throw new Error("No claimable airdrop found");
-      }
-
-      return airdrop.claimAndDelegate({
-        amount: claimableAmount,
-        delegate,
-        merkleProof: airdropData.proof,
-        recipient,
-        totalGrant: airdropData.amount,
-      });
-    },
+    writeFn: enabled
+      ? ({ delegate, destination }: ClaimAndDelegateOptions) => {
+          return airdrop.claimAndDelegate({
+            args: {
+              amount: claimableAmount,
+              delegate,
+              merkleProof: airdropData.proof,
+              destination,
+              totalGrant: airdropData.amount,
+            },
+          });
+        }
+      : undefined,
   });
 
   return {

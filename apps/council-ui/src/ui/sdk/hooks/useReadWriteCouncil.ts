@@ -13,7 +13,7 @@ export function useReadWriteCouncil({
   chainId,
 }: {
   chainId?: SupportedChainId;
-}) {
+} = {}) {
   chainId = useSupportedChainId(chainId);
   const publicClient = usePublicClient({ chainId });
   const { data: walletClient } = useWalletClient({ chainId });

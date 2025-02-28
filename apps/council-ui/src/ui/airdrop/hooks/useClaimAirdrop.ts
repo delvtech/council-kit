@@ -14,8 +14,8 @@ export function useClaimAirdrop(): {
   status: MutationStatus;
 } {
   const airdrop = useReadWriteAirdrop();
-  const { airdropData } = useAirdropData();
-  const { claimableAmount } = useClaimableAirdropAmount();
+  const { data: airdropData } = useAirdropData();
+  const { data: claimableAmount } = useClaimableAirdropAmount();
 
   const enabled = !!airdrop && !!claimableAmount && !!airdropData;
 
@@ -23,18 +23,18 @@ export function useClaimAirdrop(): {
     pendingMessage: "Claiming airdrop...",
     successMessage: "Airdrop claimed!",
     errorMessage: "Failed to claim airdrop.",
-    writeFn: ({ recipient }: ClaimOptions) => {
-      if (!enabled) {
-        throw new Error("No claimable airdrop found");
-      }
-
-      return airdrop.claim({
-        amount: claimableAmount,
-        merkleProof: airdropData.proof,
-        recipient,
-        totalGrant: airdropData.amount,
-      });
-    },
+    writeFn: enabled
+      ? ({ recipient }: ClaimOptions) => {
+          return airdrop.claim({
+            args: {
+              amount: claimableAmount,
+              merkleProof: airdropData.proof,
+              recipient,
+              totalGrant: airdropData.amount,
+            },
+          });
+        }
+      : undefined,
   });
 
   return {

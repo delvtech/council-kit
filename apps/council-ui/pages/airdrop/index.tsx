@@ -6,7 +6,7 @@ import ConfirmClaimStep from "src/ui/airdrop/ConfirmClaimStep";
 import ConfirmDepositStep from "src/ui/airdrop/ConfirmDepositStep";
 import DepositOrClaimStep from "src/ui/airdrop/DepositOrClaimStep";
 import DepositStep from "src/ui/airdrop/DepositStep";
-import { useAirdropVault } from "src/ui/airdrop/hooks/useAirdropLockingVault";
+import { useAirdropVault } from "src/ui/airdrop/hooks/useAirdropVault";
 import { useClaimAirdrop } from "src/ui/airdrop/hooks/useClaimAirdrop";
 import { useClaimAndDelegateAirdrop } from "src/ui/airdrop/hooks/useClaimAndDelegateAirdrop";
 import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
@@ -113,7 +113,7 @@ export default function AirdropPage(): ReactElement {
                   claimAndDelegateAirdrop
                     ? () =>
                         claimAndDelegateAirdrop({
-                          recipient: recipientAddress as `0x${string}`,
+                          destination: recipientAddress as `0x${string}`,
                           delegate: delegateAddress as `0x${string}`,
                         })
                     : undefined

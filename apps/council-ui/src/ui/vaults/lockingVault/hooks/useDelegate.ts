@@ -1,38 +1,22 @@
-import { ReadLockingVault, ReadVoter } from "@delvtech/council-viem";
-import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { Address } from "@delvtech/drift";
+import { useQuery } from "@tanstack/react-query";
+import { SupportedChainId } from "src/config/council.config";
+import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
 
 interface UseDelegateOptions {
-  vault: ReadLockingVault | `0x${string}` | undefined;
-  account: `0x${string}` | undefined;
+  vault: Address | undefined;
+  voter: Address | undefined;
+  chainId?: SupportedChainId;
 }
 
-interface DelegateResult {
-  delegate: ReadVoter;
-  status: QueryStatus;
-}
-
-export function useDelegate({
-  vault,
-  account,
-}: UseDelegateOptions): DelegateResult {
-  const council = useReadCouncil();
-  const enabled = !!vault && !!account;
-
-  const { data, status } = useQuery({
-    queryKey: ["delegate", vault, account],
+export function useDelegate({ vault, voter, chainId }: UseDelegateOptions) {
+  const council = useReadCouncil({ chainId });
+  const enabled = !!vault && !!voter && !!council;
+  return useQuery({
+    queryKey: ["useDelegate", vault, voter, chainId],
     enabled,
     queryFn: enabled
-      ? () => {
-          const _vault =
-            typeof vault === "string" ? council.lockingVault(vault) : vault;
-          return _vault.getDelegate({ account });
-        }
+      ? () => council.lockingVault(vault).getDelegate(voter)
       : undefined,
   });
-
-  return {
-    delegate: data as ReadVoter,
-    status,
-  };
 }
