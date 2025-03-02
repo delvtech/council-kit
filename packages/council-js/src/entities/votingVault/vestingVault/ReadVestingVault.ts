@@ -12,8 +12,8 @@ import { ContractEntityConfig } from "src/entities/Entity";
 import { ReadToken } from "src/entities/token/ReadToken";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 import {
-  VoterPowerBreakdown,
   VoterWithPower,
+  VotingPowerBreakdown,
 } from "src/entities/votingVault/types";
 import {
   vestingVaultAbi,
@@ -243,7 +243,7 @@ export class ReadVestingVault<
     voter?: Address;
     fromBlock?: RangeBlock;
     toBlock?: RangeBlock;
-  } = {}): Promise<VoterPowerBreakdown[]> {
+  } = {}): Promise<VotingPowerBreakdown[]> {
     const voteChangeEvents = await this.vestingVaultContract.getEvents(
       "VoteChange",
       {
@@ -284,7 +284,7 @@ export class ReadVestingVault<
     }
 
     // Convert objects to arrays and filter out voters with no voting power.
-    let breakdowns: VoterPowerBreakdown[] = [];
+    let breakdowns: VotingPowerBreakdown[] = [];
     for (const [
       voter,
       { votingPower, votingPowerFromDelegators, powerByDelegator },

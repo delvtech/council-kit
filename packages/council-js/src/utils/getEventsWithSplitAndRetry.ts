@@ -7,6 +7,9 @@ import {
 } from "@delvtech/drift";
 import { CouncilSdkError } from "src/error";
 
+/**
+ * @internal
+ */
 export async function getEventsWithSplitAndRetry<
   A extends Abi,
   E extends EventName<A>,

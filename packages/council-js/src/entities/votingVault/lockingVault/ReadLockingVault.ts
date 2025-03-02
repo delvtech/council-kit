@@ -1,21 +1,21 @@
 import {
-  Adapter,
-  Address,
-  Bytes,
-  Contract,
-  ContractReadOptions,
-  RangeBlock,
+    Adapter,
+    Address,
+    Bytes,
+    Contract,
+    ContractReadOptions,
+    RangeBlock,
 } from "@delvtech/drift";
 import { ContractEntityConfig } from "src/entities/Entity";
 import { ReadToken } from "src/entities/token/ReadToken";
 import {
-  lockingVaultAbi,
-  LockingVaultAbi,
+    lockingVaultAbi,
+    LockingVaultAbi,
 } from "src/entities/votingVault/lockingVault/abi";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 import {
-  VoterPowerBreakdown,
-  VoterWithPower,
+    VotingPowerBreakdown,
+    VoterWithPower,
 } from "src/entities/votingVault/types";
 import { convertToBlockNumber } from "src/utils/convertToBlockNumber";
 
@@ -173,7 +173,7 @@ export class ReadLockingVault<
     voter?: Address;
     fromBlock?: RangeBlock;
     toBlock?: RangeBlock;
-  } = {}): Promise<VoterPowerBreakdown[]> {
+  } = {}): Promise<VotingPowerBreakdown[]> {
     const voteChangeEvents = await this.lockingVaultContract.getEvents(
       "VoteChange",
       {
@@ -213,7 +213,7 @@ export class ReadLockingVault<
       }
     }
 
-    let breakdowns: VoterPowerBreakdown[] = [];
+    let breakdowns: VotingPowerBreakdown[] = [];
 
     // Convert objects to arrays and filter out voters with no voting power.
     for (const [voter, breakdown] of Object.entries(breakdownByVoter)) {

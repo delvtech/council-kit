@@ -9,6 +9,8 @@ import {
 /**
  * Converts a {@linkcode BlockIdentifier} to a {@linkcode RangeBlock} by
  * fetching the block number from the drift instance if the block is a hash.
+ *
+ * @internal
  */
 export function convertToRangeBlock(
   block: BlockIdentifier | undefined,

@@ -40,10 +40,11 @@ export {
 } from "src/entities/votingVault/abi";
 export { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 export type {
-  VoterPowerBreakdown,
   VoterWithPower,
+  VotingPowerBreakdown,
   VotingPowerByVoter,
 } from "src/entities/votingVault/types";
+export { mergeVotingPowerBreakdowns } from "src/entities/votingVault/utils/mergeVotingPowerBreakdowns";
 
 // GSC vault
 export {

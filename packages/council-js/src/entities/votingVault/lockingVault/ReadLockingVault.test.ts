@@ -1,7 +1,7 @@
 import { createMockDrift } from "@delvtech/drift/testing";
 import { lockingVaultAbi } from "src/entities/votingVault/lockingVault/abi";
 import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLockingVault";
-import { VoterPowerBreakdown } from "src/entities/votingVault/types";
+import { VotingPowerBreakdown } from "src/entities/votingVault/types";
 import { describe, expect, it } from "vitest";
 
 const ALICE = "0x123";
@@ -122,6 +122,6 @@ describe("ReadLockingVault", () => {
           },
         ],
       },
-    ] satisfies VoterPowerBreakdown[]);
+    ] satisfies VotingPowerBreakdown[]);
   });
 });

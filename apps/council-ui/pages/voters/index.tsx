@@ -1,28 +1,27 @@
 import {
-  ReadVotingVault,
-  VoterPowerBreakdown,
-  VoterWithPower,
-} from "@delvtech/council-viem";
+  mergeVotingPowerBreakdowns,
+  VotingPowerBreakdown,
+} from "@delvtech/council-js";
+import { Address } from "@delvtech/drift";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement, useMemo, useState } from "react";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadGscVault } from "src/ui/vaults/gscVault/hooks/useReadGscVault";
+import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
 import { GSCOnlyToggle } from "src/ui/voters/GscOnlyToggle";
-import { useVotersSearch } from "src/ui/voters/hooks/useVotersSearch";
+import { useSearchVoters } from "src/ui/voters/hooks/useVotersSearch";
 import { VoterRowData } from "src/ui/voters/types";
 import { VoterList } from "src/ui/voters/VoterList/VoterList";
 import { VoterListSkeleton } from "src/ui/voters/VoterList/VoterListSkeleton";
 import { getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
-import { usePublicClient } from "wagmi";
 
 const DEFAULT_LIST_SIZE = 100;
 
 export default function VotersPage(): ReactElement {
   const { data: voters, status, error } = useVoterPageData();
-  const { results, search } = useVotersSearch(voters);
+  const { results, search } = useSearchVoters(voters);
   const [listSize, setListSize] = useState(DEFAULT_LIST_SIZE);
   const [gscOnly, setGscOnly] = useState(false);
 
@@ -78,128 +77,61 @@ export default function VotersPage(): ReactElement {
 }
 
 export function useVoterPageData(): UseQueryResult<VoterRowData[]> {
-  const coreVoting = useReadCoreVoting();
-  const gscVault = useReadGscVault();
   const chainId = useSupportedChainId();
-  const publicClient = usePublicClient();
+  const config = useCouncilConfig();
+  const council = useReadCouncil();
 
-  return useQuery<VoterRowData[]>({
+  const enabled = !!council;
+
+  return useQuery({
     queryKey: ["voter-list-page", chainId],
-    queryFn: async () => {
-      const voterPowerBreakdowns: VoterPowerBreakdown[] = [];
-
-      for (const vault of coreVoting.vaults) {
-        if (hasVotingPowerBreakdown(vault)) {
-          const breakdown = await vault.getVotingPowerBreakdown();
-          voterPowerBreakdowns.push(...breakdown);
-        }
-      }
-
-      const mergedBreakdowns = mergeVoterPowerBreakdowns(voterPowerBreakdowns);
-
-      const gscMembers = (await gscVault?.getVoters()) || [];
-      const gscMemberAddresses = gscMembers.map(({ address }) => address);
-      const ensRecords = await getBulkEnsRecords(
-        voterPowerBreakdowns.map(({ voter }) => voter.address),
-        publicClient,
-      );
-
-      console.log({
-        ensRecords,
-      });
-
-      return mergedBreakdowns.map(
-        ({ voter, votingPower, votingPowerByDelegator }) => {
-          return {
-            address: voter.address,
-            ensName: ensRecords[voter.address],
-            votingPower,
-            numberOfDelegators: votingPowerByDelegator.length,
-            isGSCMember: gscMemberAddresses.includes(voter.address),
-          };
-        },
-      );
-    },
-
     // This is an expensive query and do not want to refetch.
     refetchOnWindowFocus: false,
     staleTime: Infinity,
-  });
-}
+    enabled,
+    queryFn: enabled
+      ? async () => {
+          const powerBreakdownsRequests: Promise<VotingPowerBreakdown[]>[] = [];
 
-function hasVotingPowerBreakdown(
-  vault: ReadVotingVault,
-): vault is ReadVotingVault & {
-  getVotingPowerBreakdown: () => Promise<VoterPowerBreakdown[]>;
-} {
-  return (
-    "getVotingPowerBreakdown" in vault &&
-    typeof vault.getVotingPowerBreakdown === "function"
-  );
-}
+          for (const { address, type } of config.coreVoting.vaults) {
+            switch (type) {
+              case "LockingVault":
+              case "FrozenLockingVault":
+                powerBreakdownsRequests.push(
+                  council.lockingVault(address).getVotingPowerBreakdown(),
+                );
+              case "VestingVault":
+                powerBreakdownsRequests.push(
+                  council.vestingVault(address).getVotingPowerBreakdown(),
+                );
+            }
+          }
 
-// TODO: This was a method on the old Voting Contract type, but depended on
-// vaults having an optional method. It seems like a combined voter list would
-// be a common use case, so this might still belong in the SDK somewhere.
-function mergeVoterPowerBreakdowns(
-  breakdowns: VoterPowerBreakdown[],
-): VoterPowerBreakdown[] {
-  // create a temp object to merge unique addresses
-  const breakdownsByVoter: Record<
-    `0x${string}`,
-    VoterWithPower & {
-      fromDelegators: bigint;
-      byDelegator: Record<`0x${string}`, VoterWithPower>;
-    }
-  > = {};
+          const powerBreakdowns = await Promise.all(powerBreakdownsRequests);
+          const mergedBreakdowns = mergeVotingPowerBreakdowns(
+            powerBreakdowns.flat(),
+          );
+          const ensRecords = await getBulkEnsRecords(
+            mergedBreakdowns.map(({ voter }) => voter),
+            chainId,
+          );
 
-  for (const {
-    voter,
-    votingPower,
-    votingPowerByDelegator,
-    votingPowerFromAllDelegators,
-  } of breakdowns) {
-    const breakdown = breakdownsByVoter[voter.address];
+          let gscMembers: Address[] | undefined;
+          if (config.gscVoting) {
+            const { address } = config.gscVoting.vaults[0];
+            gscMembers = await council.gscVault(address).getMembers();
+          }
 
-    if (!breakdown) {
-      // Add a breakdown for this voter in the unique list
-      breakdownsByVoter[voter.address] = {
-        voter,
-        votingPower,
-        fromDelegators: votingPowerFromAllDelegators,
-        // key delegators by their address
-        byDelegator: Object.fromEntries(
-          votingPowerByDelegator.map((delegatorWithPower) => [
-            delegatorWithPower.voter.address,
-            delegatorWithPower,
-          ]),
-        ),
-      };
-    } else {
-      // if a breakdown for this voter already exists, then merge with the
-      // current one.
-      breakdown.votingPower += votingPower;
-      breakdown.fromDelegators += votingPowerFromAllDelegators;
-
-      for (const delegatorWithPower of votingPowerByDelegator) {
-        if (!breakdown.byDelegator[delegatorWithPower.voter.address]) {
-          // Add the delegator with power to the breakdown in the unique list
-          breakdown.byDelegator[delegatorWithPower.voter.address] =
-            delegatorWithPower;
-        } else {
-          breakdown.byDelegator[delegatorWithPower.voter.address].votingPower +=
-            delegatorWithPower.votingPower;
+          return mergedBreakdowns.map(({ voter, votingPower, delegators }) => {
+            return {
+              address: voter,
+              ensName: ensRecords[voter],
+              votingPower,
+              numberOfDelegators: delegators.length,
+              isGSCMember: gscMembers?.includes(voter),
+            };
+          });
         }
-      }
-    }
-  }
-
-  return Object.values(breakdownsByVoter).map(
-    ({ voter, votingPower, fromDelegators, byDelegator }) => ({
-      voter,
-      votingPower,
-      votingPowerFromAllDelegators: fromDelegators,
-      votingPowerByDelegator: Object.values(byDelegator),
-    }),
-  );
+      : undefined,
+  });
 }

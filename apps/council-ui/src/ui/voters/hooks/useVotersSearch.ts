@@ -2,7 +2,7 @@ import Fuse from "fuse.js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { VoterRowData } from "src/ui/voters/types";
 
-const voterSearchFuseOptions = {
+const fuseOptions = {
   threshold: 0.3,
   isCaseSensitive: false,
   ignoreLocation: true,
@@ -15,7 +15,7 @@ interface VoterSearch {
   search: (i: string) => void;
 }
 
-export function useVotersSearch(
+export function useSearchVoters(
   voters: VoterRowData[] | undefined,
 ): VoterSearch {
   const [input, setInput] = useState("");
@@ -30,7 +30,7 @@ export function useVotersSearch(
     if (!input) {
       return voters || [];
     }
-    const fuse = new Fuse(voters || [], voterSearchFuseOptions);
+    const fuse = new Fuse(voters || [], fuseOptions);
 
     if (searchCache.current[input]) {
       return searchCache.current[input];

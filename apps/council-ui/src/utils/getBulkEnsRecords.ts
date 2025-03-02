@@ -6,7 +6,7 @@ import {
 } from "@ensdomains/ensjs";
 import { getName } from "@ensdomains/ensjs/public";
 import chunk from "lodash.chunk";
-import { councilConfigs, SupportedChainId } from "src/config/council.config";
+import { SupportedChainId } from "src/config/council.config";
 import { chains, transports } from "src/lib/wagmi";
 
 export type EnsRecords = Record<Address, string | undefined>;
@@ -18,10 +18,10 @@ export type EnsRecords = Record<Address, string | undefined>;
  */
 export async function getBulkEnsRecords(
   addresses: `0x${string}`[],
-  chainId?: SupportedChainId,
+  chainId: SupportedChainId,
   options?: { chunkSize?: number },
 ): Promise<EnsRecords> {
-  const chain = chains[chainId || councilConfigs[0].chainId];
+  const chain = chains[chainId];
   const transport = transports[chain.id];
 
   // TODO @ryangoree: Remove this once tested

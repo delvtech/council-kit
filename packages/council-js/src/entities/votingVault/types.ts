@@ -9,7 +9,7 @@ export interface VoterWithPower {
   votingPower: bigint;
 }
 
-export interface VoterPowerBreakdown extends VoterWithPower {
+export interface VotingPowerBreakdown extends VoterWithPower {
   /**
    * The total voting power from all wallets delegated to this voter. Does not
    * include self-delegation.

@@ -3,6 +3,8 @@ import { BlockIdentifier, Drift, MaybePromise } from "@delvtech/drift";
 /**
  * Converts a {@linkcode BlockIdentifier} to a block number by
  * fetching it from the drift instance if it's not already a number.
+ *
+ * @internal
  */
 export function convertToBlockNumber(
   block: BlockIdentifier | undefined,

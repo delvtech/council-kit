@@ -1,5 +1,7 @@
+import { Address } from "@delvtech/drift";
+
 export interface VoterRowData {
-  address: `0x${string}`;
+  address: Address;
   ensName: string | null;
   votingPower: bigint;
   numberOfDelegators: number;
