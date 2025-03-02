@@ -1,11 +1,9 @@
-import { ReadLockingVault, ReadVestingVault } from "@delvtech/council-viem";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
-import { useReadGscVoting } from "src/ui/council/hooks/useReadGscVoting";
+import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
 import {
   GenericVaultCard,
   GenericVaultCardSkeleton,
@@ -84,60 +82,68 @@ export default function VaultsPage(): ReactElement {
 interface VaultData {
   address: `0x${string}`;
   name: string;
-  tvp: bigint | undefined;
-  votingPower: bigint | undefined;
-  sentenceSummary: string | undefined;
+  tvp?: bigint;
+  votingPower?: bigint;
+  sentenceSummary?: string;
 }
 
 function useVaultsPageData(
   account: `0x${string}` | undefined,
 ): UseQueryResult<VaultData[]> {
-  const coreVoting = useReadCoreVoting();
-  const gscVoting = useReadGscVoting();
+  const council = useReadCouncil();
   const config = useCouncilConfig();
+  const enabled = !!council;
 
   return useQuery({
     queryKey: ["vaultsPage", account],
-    queryFn: async (): Promise<VaultData[]> => {
-      const data: VaultData[] = [];
+    enabled,
+    queryFn: enabled
+      ? async (): Promise<VaultData[]> => {
+          const vaultDataRequests: Promise<VaultData>[] =
+            config.coreVoting.vaults.map(
+              async ({ address, name, type, sentenceSummary }) => {
+                let tvp: bigint | Promise<bigint> = 0n;
+                switch (type) {
+                  case "LockingVault":
+                  case "FrozenLockingVault":
+                    tvp = council.lockingVault(address).getTotalVotingPower();
+                    break;
+                  case "VestingVault":
+                    tvp = council.vestingVault(address).getTotalVotingPower();
+                    break;
+                }
 
-      // core voting vaults
-      for (const vault of coreVoting.vaults) {
-        const vaultConfig = config.coreVoting.vaults.find(
-          ({ address }) => address === vault.address,
-        );
+                let accountVotingPower = account
+                  ? council
+                      .votingVault(address)
+                      .getVotingPower({ voter: account })
+                  : 0n;
 
-        let tvp: bigint | undefined = undefined;
-        if (
-          vault instanceof ReadLockingVault ||
-          vault instanceof ReadVestingVault
-        ) {
-          tvp = await vault.getTotalVotingPower();
+                return Promise.all([tvp, accountVotingPower]).then(
+                  ([tvp, votingPower]) => ({
+                    address,
+                    name,
+                    tvp,
+                    votingPower,
+                    sentenceSummary,
+                  }),
+                );
+              },
+            );
+
+          if (config.gscVoting) {
+            const vaultConfig = config.gscVoting.vaults[0];
+            vaultDataRequests.push(
+              Promise.resolve({
+                address: vaultConfig.address,
+                name: vaultConfig.name,
+                sentenceSummary: vaultConfig.sentenceSummary,
+              }),
+            );
+          }
+
+          return Promise.all(vaultDataRequests);
         }
-
-        data.push({
-          address: vault.address,
-          name: vaultConfig?.name || vault.name,
-          tvp,
-          votingPower: account && (await vault.getVotingPower({ account })),
-          sentenceSummary: vaultConfig?.sentenceSummary,
-        });
-      }
-
-      // gsc vault
-      if (gscVoting) {
-        for (const vault of gscVoting.vaults) {
-          data.push({
-            address: vault.address,
-            name: config.gscVoting!.vault.name,
-            tvp: undefined,
-            votingPower: account && (await vault.getVotingPower({ account })),
-            sentenceSummary: config.gscVoting!.vault.sentenceSummary,
-          });
-        }
-      }
-
-      return data;
-    },
+      : undefined,
   });
 }

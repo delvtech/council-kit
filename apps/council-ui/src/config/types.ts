@@ -40,7 +40,7 @@ export interface VotingContractConfig extends ContractConfig {
  * A GSC Voting Contract with a single vault for membership.
  */
 export interface GscVotingContractConfig extends VotingContractConfig {
-  vaults: [VaultConfig];
+  vaults: [VaultConfig & { type: "GSCVault" }];
 }
 
 export interface VaultConfig extends ContractConfig {
