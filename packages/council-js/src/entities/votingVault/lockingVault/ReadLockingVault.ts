@@ -89,18 +89,14 @@ export class ReadLockingVault<
    */
   async getDelegatorsTo(
     voter: Address,
-    {
-      fromBlock,
-      toBlock,
-    }: {
+    options?: {
       fromBlock?: RangeBlock;
       toBlock?: RangeBlock;
     },
   ): Promise<VoterWithPower[]> {
     const breakdown = await this.getVotingPowerBreakdown({
       voter,
-      fromBlock,
-      toBlock,
+      ...options,
     });
     return breakdown[0].delegators;
   }
@@ -129,10 +125,14 @@ export class ReadLockingVault<
       return 0n;
     }
 
-    return this.lockingVaultContract.read("queryVotePowerView", {
-      user: voter,
-      blockNumber,
-    });
+    return this.lockingVaultContract.read(
+      "queryVotePowerView",
+      {
+        user: voter,
+        blockNumber,
+      },
+      options,
+    );
   }
 
   /**
