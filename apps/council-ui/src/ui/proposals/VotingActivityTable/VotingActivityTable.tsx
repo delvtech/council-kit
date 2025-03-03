@@ -1,4 +1,4 @@
-import { Ballot, ReadVote } from "@delvtech/council-viem";
+import { Ballot, Vote } from "@delvtech/council-js";
 import { ReactElement, ReactNode, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
@@ -14,7 +14,7 @@ import { EnsRecords } from "src/utils/getBulkEnsRecords";
 type SortField = "votingPower" | "ballot";
 
 interface VotingActivityTableProps {
-  votes: ReadVote[];
+  votes: Vote[];
   voterEnsRecords: EnsRecords;
   /**
    * Whether to show the voting power used by each voter.
@@ -67,20 +67,20 @@ export function VotingActivityTable({
         }
         onSort={setSortOptions}
         cols={cols}
-        rows={sortedData.map(({ voter, power, ballot }, i) => {
+        rows={sortedData.map(({ voter, votingPower, ballot }, i) => {
           const cells: ReactNode[] = [
             <VoterAddress
               key={`${i}-address`}
-              address={voter.address}
-              label={voterEnsRecords[voter.address] || undefined}
+              address={voter}
+              label={voterEnsRecords[voter] || undefined}
             />,
           ];
           if (showVotingPower) {
-            cells.push(formatVotingPower(power));
+            cells.push(formatVotingPower(votingPower));
           }
           cells.push(<FormattedBallot key={`${i}-ballot`} ballot={ballot} />);
           return {
-            href: makeVoterURL(voter.address),
+            href: makeVoterURL(voter),
             cells,
           };
         })}
@@ -96,29 +96,26 @@ const ballotSortIndexes: Record<Ballot, number> = {
   no: 0,
 };
 
-function sortVotes(
-  { key, direction }: SortOptions<SortField>,
-  data: ReadVote[],
-) {
+function sortVotes({ key, direction }: SortOptions<SortField>, data: Vote[]) {
   switch (key) {
     case "votingPower":
       if (direction === "ASC") {
-        return data.slice().sort((a, b) => (a.power >= b.power ? 1 : -1));
-      }
-      return data.slice().sort((a, b) => (b.power >= a.power ? 1 : -1));
-    case "ballot":
-      if (direction === "ASC") {
-        return data
-          .slice()
-          .sort(
-            (a, b) => ballotSortIndexes[a.ballot] - ballotSortIndexes[b.ballot],
-          );
+        return data.toSorted((a, b) =>
+          a.votingPower >= b.votingPower ? 1 : -1,
+        );
       }
       return data
         .slice()
-        .sort(
-          (a, b) => ballotSortIndexes[b.ballot] - ballotSortIndexes[a.ballot],
+        .sort((a, b) => (b.votingPower >= a.votingPower ? 1 : -1));
+    case "ballot":
+      if (direction === "ASC") {
+        return data.toSorted(
+          (a, b) => ballotSortIndexes[a.ballot] - ballotSortIndexes[b.ballot],
         );
+      }
+      return data.toSorted(
+        (a, b) => ballotSortIndexes[b.ballot] - ballotSortIndexes[a.ballot],
+      );
     default:
       return data;
   }

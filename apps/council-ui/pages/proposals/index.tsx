@@ -75,6 +75,7 @@ function useProposalsPageData(
   const config = useCouncilConfig();
   const council = useReadCouncil();
   const enabled = !!council;
+
   return useQuery({
     queryKey: ["proposalsPage", account, chainId],
     enabled,
@@ -96,9 +97,9 @@ function useProposalsPageData(
             allProposals.map(
               async ({ coreVotingAddress, proposalId, expirationBlock }) => {
                 const proposalConfig = getProposalConfig({
-                  chainId,
                   votingContract: coreVotingAddress,
                   id: proposalId,
+                  chainId,
                 });
 
                 const votingContract = council.coreVoting(coreVotingAddress);
