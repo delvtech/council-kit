@@ -9,15 +9,15 @@ import {
  *
  * - `active`: Still open for voting.
  * - `executed`: Executed successfully.
- * - `failed`: Expired before meeting requirements for execution.
  * - `expired`: Met requirements for execution but wasn't executed in time.
+ * - `failed`: Expired before meeting requirements for execution.
  * - `unknown`: No information is available. Possibly non-existent.
  */
 export type ProposalStatus =
   | "active"
   | "executed"
-  | "failed"
   | "expired"
+  | "failed"
   | "unknown";
 
 /**
