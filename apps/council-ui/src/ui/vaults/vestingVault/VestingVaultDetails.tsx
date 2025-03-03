@@ -1,8 +1,10 @@
+import { Address } from "@delvtech/drift";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
+import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
-import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
@@ -11,10 +13,10 @@ import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { GrantCard } from "src/ui/vaults/vestingVault/GrantCard";
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
 import { VestingVaultStatsRow } from "src/ui/vaults/vestingVault/VestingVaultStatsRow";
-import { useAccount, usePublicClient } from "wagmi";
+import { useAccount } from "wagmi";
 
 interface VestingVaultDetailsProps {
-  address: `0x${string}`;
+  address: Address;
 }
 
 export function VestingVaultDetails({
@@ -54,7 +56,7 @@ export function VestingVaultDetails({
             <GrantCard
               vestingVaultAddress={address}
               grantBalance={data.grantBalance}
-              decimals={data.decimals}
+              decimals={data.tokenDecimals}
               grantBalanceWithdrawn={data.grantBalanceWithdrawn}
               expirationDate={data.expirationDate}
               unlockDate={data.unlockDate}
@@ -77,7 +79,7 @@ export function VestingVaultDetails({
 interface VestingVaultDetailsData {
   accountVotingPower: bigint;
   unvestedMultiplier: bigint;
-  decimals: number;
+  tokenDecimals: number;
   delegate?: `0x${string}`;
   delegatedToAccount: number;
   descriptionURL: string | undefined;
@@ -96,47 +98,74 @@ function useVestingVaultDetailsData(
   address: `0x${string}`,
   account: `0x${string}` | undefined,
 ): UseQueryResult<VestingVaultDetailsData> {
+  const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const vaultConfig = useVaultConfig(address);
-  const publicClient = usePublicClient();
+  const vaultConfig = getVaultConfig({ address, chainId });
+  const enabled = !!council && !!vaultConfig;
 
   return useQuery({
     queryKey: ["vestingVaultDetails", address, account],
-    queryFn: async (): Promise<VestingVaultDetailsData> => {
-      const vestingVault = council.vestingVault(address);
-      const token = await vestingVault.getToken();
-      const grant = account
-        ? await vestingVault.getGrant({ account })
-        : undefined;
-      const accountVotingPower = account
-        ? await vestingVault.getVotingPower({ account })
-        : 0n;
+    enabled,
+    queryFn: enabled
+      ? async (): Promise<VestingVaultDetailsData> => {
+          const vestingVault = council.vestingVault(address);
 
-      return {
-        tokenAddress: token.address,
-        tokenSymbol: await token.getSymbol(),
-        decimals: await token.getDecimals(),
-        grantBalance: grant?.allocation || 0n,
-        grantBalanceWithdrawn: grant?.withdrawn || 0n,
-        paragraphSummary: vaultConfig?.paragraphSummary,
-        unlockDate: grant
-          ? await getBlockDate(grant.cliff, publicClient)
-          : undefined,
-        expirationDate: grant
-          ? await getBlockDate(grant.expiration, publicClient)
-          : undefined,
-        delegate: account
-          ? (await vestingVault.getDelegate({ account })).address
-          : undefined,
-        descriptionURL: vaultConfig?.descriptionURL,
-        name: vaultConfig?.name,
-        accountVotingPower,
-        unvestedMultiplier: await vestingVault.getUnvestedMultiplier(),
-        participants: (await vestingVault.getVoters()).length,
-        delegatedToAccount: account
-          ? (await vestingVault.getDelegatorsTo({ account })).length
-          : 0,
-      };
-    },
+          const [
+            token,
+            voters,
+            unvestedMultiplier,
+            grant,
+            accountVotingPower,
+            delegate,
+            delegators,
+          ] = await Promise.all([
+            vestingVault.getToken(),
+            vestingVault.getVoters(),
+            vestingVault.getUnvestedMultiplier(),
+            account ? vestingVault.getGrant(account) : undefined,
+            account ? vestingVault.getVotingPower({ voter: account }) : 0n,
+            account ? vestingVault.getDelegate(account) : undefined,
+            account ? vestingVault.getDelegatorsTo(account) : [],
+          ]);
+
+          const [tokenSymbol, tokenDecimals, tokenBalance, tokenAllowance] =
+            await Promise.all([
+              token.getSymbol(),
+              token.getDecimals(),
+              account ? token.getBalanceOf(account) : 0n,
+              account
+                ? token.getAllowance({
+                    owner: account,
+                    spender: address,
+                  })
+                : 0n,
+            ]);
+
+          const [unlockDate, expirationDate] = await Promise.all([
+            grant ? await getBlockDate(grant.cliffBlock, chainId) : undefined,
+            grant
+              ? await getBlockDate(grant.expirationBlock, chainId)
+              : undefined,
+          ]);
+
+          return {
+            name: vaultConfig?.name,
+            descriptionURL: vaultConfig?.descriptionURL,
+            paragraphSummary: vaultConfig?.paragraphSummary,
+            participants: voters.length,
+            unvestedMultiplier,
+            grantBalance: grant?.allocation || 0n,
+            grantBalanceWithdrawn: grant?.withdrawn || 0n,
+            accountVotingPower,
+            delegate,
+            delegatedToAccount: delegators.length,
+            tokenAddress: token.address,
+            tokenSymbol,
+            tokenDecimals,
+            unlockDate,
+            expirationDate,
+          };
+        }
+      : undefined,
   });
 }

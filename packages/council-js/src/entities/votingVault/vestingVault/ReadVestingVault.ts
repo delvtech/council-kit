@@ -161,18 +161,14 @@ export class ReadVestingVault<
    */
   async getDelegatorsTo(
     voter: Address,
-    {
-      fromBlock,
-      toBlock,
-    }: {
+    options?: {
       fromBlock?: RangeBlock;
       toBlock?: RangeBlock;
     },
   ): Promise<VoterWithPower[]> {
     const breakdown = await this.getVotingPowerBreakdown({
       voter,
-      fromBlock,
-      toBlock,
+      ...options,
     });
     return breakdown[0].delegators;
   }
