@@ -12,6 +12,14 @@ export function getVaultConfig({
 }): ExtendedVaultConfig | undefined {
   const { coreVoting, gscVoting } = getCouncilConfig(chainId);
 
+  if (address === gscVoting?.vaults[0].address) {
+    return {
+      ...gscVoting.vaults[0],
+      isGsc: true,
+      chainId,
+    };
+  }
+
   const foundCoreVotingVault = coreVoting.vaults.find(
     (vault) => vault.address === address,
   );
@@ -19,17 +27,6 @@ export function getVaultConfig({
     return {
       ...foundCoreVotingVault,
       isGsc: false,
-      chainId,
-    };
-  }
-
-  const foundGscVotingVault = gscVoting?.vaults.find(
-    (vault) => vault.address === address,
-  );
-  if (foundGscVotingVault) {
-    return {
-      ...foundGscVotingVault,
-      isGsc: true,
       chainId,
     };
   }

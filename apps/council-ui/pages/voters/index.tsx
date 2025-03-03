@@ -90,23 +90,23 @@ export function useVoterPageData(): UseQueryResult<VoterRowData[]> {
     enabled,
     queryFn: enabled
       ? async () => {
-          const powerBreakdownsRequests: Promise<VotingPowerBreakdown[]>[] = [];
+          const powerBreakdownPromises: Promise<VotingPowerBreakdown[]>[] = [];
 
           for (const { address, type } of config.coreVoting.vaults) {
             switch (type) {
               case "LockingVault":
               case "FrozenLockingVault":
-                powerBreakdownsRequests.push(
+                powerBreakdownPromises.push(
                   council.lockingVault(address).getVotingPowerBreakdown(),
                 );
               case "VestingVault":
-                powerBreakdownsRequests.push(
+                powerBreakdownPromises.push(
                   council.vestingVault(address).getVotingPowerBreakdown(),
                 );
             }
           }
 
-          const powerBreakdowns = await Promise.all(powerBreakdownsRequests);
+          const powerBreakdowns = await Promise.all(powerBreakdownPromises);
           const mergedBreakdowns = mergeVotingPowerBreakdowns(
             powerBreakdowns.flat(),
           );

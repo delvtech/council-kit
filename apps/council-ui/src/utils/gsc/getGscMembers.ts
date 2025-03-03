@@ -1,27 +1,33 @@
-import {
-  ReadGscVault,
-  ReadVoter,
-  ReadVotingVault,
-} from "@delvtech/council-viem";
+import { createCouncil } from "@delvtech/council-js";
+import { Address } from "@delvtech/drift";
+import { SupportedChainId } from "src/config/council.config";
+import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
+import { getDrift } from "src/lib/drift";
 import { getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
-import { PublicClient } from "viem";
 
 export interface GscMemberInfo {
-  member: ReadVoter;
+  member: Address;
   qualifyingVotingPower: bigint;
-  ensName: string | null;
+  ensName: string | undefined;
 }
 
 export async function getGscMembers({
-  client,
-  approvedVaults,
-  gscVault,
+  chainId,
 }: {
-  gscVault: ReadGscVault;
-  approvedVaults: (ReadVotingVault | `0x${string}`)[];
-  client: PublicClient;
+  chainId: SupportedChainId;
 }): Promise<GscMemberInfo[]> {
-  const members = await gscVault.getVoters();
+  const { gscVoting } = getCouncilConfig(chainId);
+
+  if (!gscVoting) {
+    return [];
+  }
+
+  const council = createCouncil({
+    drift: getDrift({ chainId }),
+  });
+
+  const gscVaultAddress = gscVoting.vaults[0].address;
+  const gscVault = council.gscVault(gscVaultAddress);
 
   // TODO: Why did we do this again? Won't this hide kickable members?
   // GSC Members must have enough qualifying voting power in the

@@ -172,10 +172,11 @@ export function useVoterData(
             percentOfTvp: 0,
           };
           let tvp = 0n;
-          // Single list of requests to be awaited in parallel
-          const requests: Promise<any>[] = [];
+          // Single list of promises to be awaited in parallel. This allows viem
+          // to batch the requests.
+          const promises: Promise<any>[] = [];
 
-          requests.push(
+          promises.push(
             // GSC status
             (async () => {
               voterData.gscStatus = await getGscStatus({
@@ -194,7 +195,7 @@ export function useVoterData(
           // Proposals created
           const coreVotingProposals = await coreVoting.getProposalCreations();
           for (const { transactionHash } of coreVotingProposals) {
-            requests.push(
+            promises.push(
               (async () => {
                 const createTransaction = await council.drift.getTransaction({
                   hash: transactionHash,
@@ -208,7 +209,7 @@ export function useVoterData(
 
           // Voting power and TVP
           for (const vault of config.coreVoting.vaults) {
-            requests.push(
+            promises.push(
               (async () => {
                 const vaultVotingPower = await council
                   .votingVault(vault.address)
@@ -224,7 +225,7 @@ export function useVoterData(
             );
           }
 
-          await Promise.all(requests);
+          await Promise.all(promises);
 
           voterData.percentOfTvp = fixed(voterData.votingPower)
             .div(tvp)

@@ -1,12 +1,13 @@
 import { SupportedChainId } from "src/config/council.config";
+import { CouncilConfig } from "src/config/types";
 import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
-export function useCouncilConfig<C extends SupportedChainId>(chainId?: C) {
+export function useCouncilConfig<T extends SupportedChainId>(chainId?: T) {
   chainId = useSupportedChainId(chainId);
   const config = getCouncilConfig(chainId);
   if (!config) {
     throw new Error(`No config for chain ID ${chainId}`);
   }
-  return config;
+  return config as CouncilConfig & { chainId: T };
 }
