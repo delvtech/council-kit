@@ -309,4 +309,18 @@ export class ReadVestingVault<
 
     return breakdowns;
   }
+
+  async getVoters({
+    fromBlock,
+    toBlock,
+  }: {
+    fromBlock?: RangeBlock;
+    toBlock?: RangeBlock;
+  } = {}): Promise<Address[]> {
+    const breakdown = await this.getVotingPowerBreakdown({
+      fromBlock,
+      toBlock,
+    });
+    return breakdown.map(({ voter }) => voter);
+  }
 }

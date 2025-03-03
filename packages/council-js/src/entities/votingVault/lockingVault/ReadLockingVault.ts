@@ -1,21 +1,21 @@
 import {
-    Adapter,
-    Address,
-    Bytes,
-    Contract,
-    ContractReadOptions,
-    RangeBlock,
+  Adapter,
+  Address,
+  Bytes,
+  Contract,
+  ContractReadOptions,
+  RangeBlock,
 } from "@delvtech/drift";
 import { ContractEntityConfig } from "src/entities/Entity";
 import { ReadToken } from "src/entities/token/ReadToken";
 import {
-    lockingVaultAbi,
-    LockingVaultAbi,
+  lockingVaultAbi,
+  LockingVaultAbi,
 } from "src/entities/votingVault/lockingVault/abi";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 import {
-    VotingPowerBreakdown,
-    VoterWithPower,
+  VoterWithPower,
+  VotingPowerBreakdown,
 } from "src/entities/votingVault/types";
 import { convertToBlockNumber } from "src/utils/convertToBlockNumber";
 
@@ -240,5 +240,19 @@ export class ReadLockingVault<
     }
 
     return breakdowns;
+  }
+
+  async getVoters({
+    fromBlock,
+    toBlock,
+  }: {
+    fromBlock?: RangeBlock;
+    toBlock?: RangeBlock;
+  } = {}): Promise<Address[]> {
+    const breakdown = await this.getVotingPowerBreakdown({
+      fromBlock,
+      toBlock,
+    });
+    return breakdown.map(({ voter }) => voter);
   }
 }
