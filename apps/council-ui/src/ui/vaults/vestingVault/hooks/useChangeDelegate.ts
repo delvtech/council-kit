@@ -31,7 +31,7 @@ export function useChangeDelegate(): {
 
       return council
         .vestingVault(vaultAddress)
-        .changeDelegate({ delegate: newDelegate });
+        .changeDelegate({ args: { newDelegate } });
     },
   });
 

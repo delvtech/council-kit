@@ -28,14 +28,14 @@ export class ReadWriteVestingVault<
      * The address to delegate to. Defaults to the signer's
      * address.
      */
-    args: { delegate },
+    args: { newDelegate },
     options,
   }: EntityWriteParams<{
-    delegate: Address;
+    newDelegate: Address;
   }>): Promise<Hash> {
     return this.vestingVaultContract.write(
       "delegate",
-      { _to: delegate },
+      { _to: newDelegate },
       {
         ...options,
         onMined: (receipt) => {
