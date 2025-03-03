@@ -1,3 +1,5 @@
+import { ProposalStatus } from "@delvtech/council-js";
+import { Address, Hash } from "@delvtech/drift";
 import classNames from "classnames";
 import Link from "next/link";
 import { ReactElement } from "react";
@@ -11,17 +13,16 @@ import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 import { makeEtherscanTransactionURL } from "src/utils/etherscan/makeEtherscanTransactionURL";
-import { ProposalStatus } from "src/utils/getProposalStatus";
 
 interface ProposalStatsRowProps {
   votingContractName?: string;
-  votingContractAddress: `0x${string}`;
-  createdBy: `0x${string}` | undefined;
-  createdTransactionHash: `0x${string}` | undefined;
+  votingContractAddress: Address;
+  createdBy: Address | undefined;
+  createdTransactionHash: Hash | undefined;
   endsAtDate: Date | undefined;
   unlockAtDate: Date | undefined;
   lastCallAtDate: Date | undefined;
-  executedTransactionHash: `0x${string}` | undefined;
+  executedTransactionHash: Hash | undefined;
   status: ProposalStatus;
   className?: string;
 }
@@ -91,20 +92,20 @@ export function ProposalStatsRow({
         />
       )}
 
-      {endsAtDate && status !== "EXECUTED" && (
+      {endsAtDate && status !== "executed" && (
         <Stat
-          label={status === "IN PROGRESS" ? "Voting ends" : "Voting ended on"}
+          label={status === "active" ? "Voting ends" : "Voting ended on"}
           value={endsAtDate.toLocaleDateString()}
         />
       )}
 
-      {unlockAtDate && status === "IN PROGRESS" && (
+      {unlockAtDate && status === "active" && (
         <Stat label="Executable on" value={unlockAtDate.toLocaleDateString()} />
       )}
 
-      {lastCallAtDate && status !== "EXECUTED" && (
+      {lastCallAtDate && status !== "executed" && (
         <Stat
-          label={status === "IN PROGRESS" ? "Execution deadline" : "Expired on"}
+          label={status === "active" ? "Execution deadline" : "Expired on"}
           value={lastCallAtDate.toLocaleDateString()}
         />
       )}
