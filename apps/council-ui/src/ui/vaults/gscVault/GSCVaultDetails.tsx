@@ -1,14 +1,13 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
+import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { GscMembersTable } from "src/ui/vaults/gscVault/GscMembersTable";
 import { GSCVaultsStatsRow } from "src/ui/vaults/gscVault/GscVaultStatsRow";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
-
-import { getVaultConfig } from "src/config/utils/getVaultConfig";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
 import { GscMemberInfo } from "src/utils/gsc/getGscMembers";

@@ -1,9 +1,8 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
-import { councilConfigs } from "src/config/council.config";
+import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-
 import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
@@ -54,27 +53,28 @@ function useGenericVaultDetailsData(
   address: `0x${string}`,
   account: `0x${string}` | undefined,
 ): UseQueryResult<GenericVaultDetailsData> {
-  const council = useReadCouncil();
   const chainId = useSupportedChainId();
-  const coreVotingConfig = councilConfigs[chainId].coreVoting;
-  const vaultConfig = coreVotingConfig.vaults.find(
-    (vault) => vault.address === address,
-  );
+  const council = useReadCouncil();
+  const vaultConfig = getVaultConfig({ address, chainId });
+  const enabled = !!council && !!vaultConfig;
 
   return useQuery({
-    queryKey: ["genericVaultDetails", address, account],
-    queryFn: async () => {
-      const vault = council.votingVault(address);
-      const accountVotingPower = account
-        ? await vault.getVotingPower({ account })
-        : 0n;
+    queryKey: ["genericVaultDetails", chainId, address, account],
+    enabled,
+    queryFn: enabled
+      ? async () => {
+          const vault = council.votingVault(address);
+          const accountVotingPower = account
+            ? await vault.getVotingPower({ voter: account })
+            : 0n;
 
-      return {
-        accountVotingPower,
-        descriptionURL: vaultConfig?.descriptionURL,
-        paragraphSummary: vaultConfig?.paragraphSummary,
-        name: vaultConfig?.name,
-      };
-    },
+          return {
+            accountVotingPower,
+            descriptionURL: vaultConfig?.descriptionURL,
+            paragraphSummary: vaultConfig?.paragraphSummary,
+            name: vaultConfig?.name,
+          };
+        }
+      : undefined,
   });
 }
