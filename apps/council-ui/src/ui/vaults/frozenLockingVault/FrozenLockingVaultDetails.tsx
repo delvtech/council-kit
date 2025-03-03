@@ -22,7 +22,7 @@ export function FrozenLockingVaultDetails({
 }: LockingVaultDetailsProps): ReactElement {
   const { data, status, error } = useFrozenLockingVaultDetailsData(address);
 
-  const { changeDelegate } = useChangeDelegate();
+  const { write: changeDelegate } = useChangeDelegate();
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
