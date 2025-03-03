@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
 import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";

@@ -1,29 +1,18 @@
-import { ReadToken } from "@delvtech/council-viem";
-import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { Address } from "@delvtech/drift";
+import { useQuery } from "@tanstack/react-query";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 
 /**
  * Fetch the token name for the given token address.
- * @param token - A ReadToken or the token address to fetch the name for
  */
-export function useTokenName(token: ReadToken | `0x${string}` | undefined): {
-  name: string | undefined;
-  status: QueryStatus;
-} {
+export function useTokenName(tokenAddress: Address | undefined) {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const tokenInstance =
-    typeof token === "string" ? council.token(token) : token;
-
-  const { data, status } = useQuery({
-    queryKey: ["useTokenName", chainId, token],
-    enabled: !!tokenInstance,
-    queryFn: !!tokenInstance ? () => tokenInstance.getName() : undefined,
+  const enabled = !!tokenAddress;
+  return useQuery({
+    queryKey: ["useTokenName", chainId, tokenAddress],
+    enabled,
+    queryFn: enabled ? () => council.token(tokenAddress).getName() : undefined,
   });
-
-  return {
-    name: data,
-    status,
-  };
 }

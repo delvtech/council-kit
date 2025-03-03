@@ -1,7 +1,7 @@
 import { ReadVote } from "@delvtech/council-viem";
 import { QueryStatus, useQuery } from "@tanstack/react-query";
 import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
 import { GscStatus } from "src/utils/gscVault/types";
 

@@ -1,24 +1,22 @@
-import { ReadToken } from "@delvtech/council-viem";
-import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { useReadAirdrop } from "src/ui/airdrop/hooks/useReadAirdrop";
+import { useQuery } from "@tanstack/react-query";
+import { SupportedChainId } from "src/config/council.config";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 
 /**
  * Fetch the token for the configured airdrop.
  */
-export function useAirdropToken(): {
-  airdropToken: ReadToken | undefined;
-  status: QueryStatus;
-} {
-  const airdrop = useReadAirdrop();
-
-  const { data, status } = useQuery({
+export function useAirdropToken({
+  chainId,
+}: { chainId?: SupportedChainId } = {}) {
+  const { airdrop } = useCouncilConfig({ chainId });
+  const council = useReadCouncil({ chainId });
+  const enabled = !!airdrop && !!council;
+  return useQuery({
     queryKey: ["airdropToken", airdrop?.address],
-    enabled: !!airdrop,
-    queryFn: !!airdrop ? () => airdrop.getToken() : undefined,
+    enabled,
+    queryFn: !!airdrop
+      ? () => council.airdrop(airdrop.address).getToken()
+      : undefined,
   });
-
-  return {
-    airdropToken: data,
-    status,
-  };
 }

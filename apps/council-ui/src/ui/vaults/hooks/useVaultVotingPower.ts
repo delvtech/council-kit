@@ -1,6 +1,6 @@
 import { BlockLike } from "@delvtech/council-viem";
 import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 

@@ -9,7 +9,7 @@ import {
   SortOptions,
   SortableGridTable,
 } from "src/ui/base/tables/SortableGridTable";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { tooltipByStatus } from "src/ui/proposals/tooltips";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 import { formatTimeLeft } from "src/utils/formatTimeLeft";

@@ -1,7 +1,7 @@
 import { Address } from "@delvtech/drift";
 import { useQuery } from "@tanstack/react-query";
 import { SupportedChainId } from "src/config/council.config";
-import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 
 interface UseDelegateOptions {
   vault: Address | undefined;

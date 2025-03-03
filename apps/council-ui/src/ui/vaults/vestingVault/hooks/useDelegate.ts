@@ -1,6 +1,6 @@
 import { ReadVestingVault, ReadVoter } from "@delvtech/council-viem";
 import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 
 interface UseDelegateOptions {
   vault: ReadVestingVault | `0x${string}` | undefined;

@@ -4,7 +4,7 @@ import { councilConfigs } from "src/config/council.config";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";

@@ -17,7 +17,7 @@ import { Quorum } from "src/ui/proposals/Quorum/Quorum";
 import { QuorumBarSkeleton } from "src/ui/proposals/Quorum/QuorumSkeleton";
 import { VotingActivityTable } from "src/ui/proposals/VotingActivityTable/VotingActivityTable";
 import { VotingActivityTableSkeleton } from "src/ui/proposals/VotingActivityTable/VotingActivityTableSkeleton";
-import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { useGscMembers } from "src/ui/vaults/gscVault/hooks/useGscMembers";
 import { GSCOnlyToggle } from "src/ui/voters/GscOnlyToggle";
 import { ProposalVoting } from "src/ui/voting/ProposalVoting";

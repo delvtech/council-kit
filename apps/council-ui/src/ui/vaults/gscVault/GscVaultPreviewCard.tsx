@@ -5,7 +5,7 @@ import { ReactElement } from "react";
 import { makeVaultURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { GenericVaultCardSkeleton } from "src/ui/vaults/GenericVaultCard";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
 import { useAccount } from "wagmi";

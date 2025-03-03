@@ -1,4 +1,5 @@
-import { ReadVote, ReadVotingVault } from "@delvtech/council-viem";
+import { Vote } from "@delvtech/council-js";
+import { fixed } from "@delvtech/fixed-point-wasm";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ReactElement } from "react";
@@ -8,11 +9,10 @@ import { Breadcrumbs } from "src/ui/base/Breadcrumbs";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Page } from "src/ui/base/Page";
-import { asyncFilter } from "src/ui/base/utils/asyncFilter";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
 import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";
 import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
@@ -21,15 +21,16 @@ import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton"
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
 import { GscStatus } from "src/utils/gscVault/types";
+import { getTotalVotingPower } from "src/vaults/getTotalVotingPower";
 import { getAddress } from "viem";
 import { useEnsName } from "wagmi";
 
 export default function VoterPage(): ReactElement {
   const { query } = useRouter();
   const { address: account } = query as { address: `0x${string}` | undefined };
-  const coreVoting = useReadCoreVoting();
   const { data, status } = useVoterData(account);
   const displayName = useDisplayName(account);
+  const config = useCouncilConfig();
 
   if (!account) {
     return (
@@ -38,7 +39,7 @@ export default function VoterPage(): ReactElement {
   }
 
   const numVotingVaults =
-    coreVoting.vaults.length +
+    config.coreVoting.vaults.length +
     (["Member", "Idle"].includes(data?.gscStatus as string) ? 1 : 0);
 
   return (
@@ -57,7 +58,7 @@ export default function VoterPage(): ReactElement {
           proposalsCreated={data.proposalsCreated}
           proposalsVoted={data.votingHistory.length}
           votingPower={data.votingPower}
-          percentOfTVP={data.percentOfTVP}
+          percentOfTVP={data.percentOfTvp}
         />
       ) : (
         <VoterStatsRowSkeleton />
@@ -142,52 +143,98 @@ function VoterHeader({ address }: VoterHeaderProps) {
 interface VoterData {
   gscStatus: GscStatus | undefined;
   proposalsCreated: number;
-  votingHistory: ReadVote[];
+  votingHistory: Vote[];
   votingPower: bigint;
-  percentOfTVP: number;
+  percentOfTvp: number;
 }
 
 export function useVoterData(
   account: `0x${string}` | undefined,
 ): UseQueryResult<VoterData> {
-  const coreVoting = useReadCoreVoting();
-  const { gscStatus } = useGscStatus(account);
+  const chainId = useSupportedChainId();
+  const council = useReadCouncil();
+  const config = useCouncilConfig();
+  const enabled = !!account && !!council;
 
-  const queryEnabled = !!account && !!gscStatus;
   return useQuery({
-    queryKey: ["voter-details", account, gscStatus],
-    enabled: queryEnabled,
-    queryFn: queryEnabled
+    queryKey: ["voter-details", chainId, account],
+    enabled,
+    queryFn: enabled
       ? async (): Promise<VoterData> => {
-          // display voting history in reverse chronological order, ie: most
-          // recent proposals first
-          // TODO: Where does GSC Voting history fit in this?
-          const votingHistory = [
-            ...(await coreVoting.getVotes({ account })),
-          ].reverse();
-
-          const votingPower = await coreVoting.getVotingPower({ account });
+          const voterData: VoterData = {
+            gscStatus: undefined,
+            proposalsCreated: 0,
+            votingHistory: [],
+            votingPower: 0n,
+            percentOfTvp: 0,
+          };
           let tvp = 0n;
 
-          for (const vault of coreVoting.vaults) {
-            if (hasTotalVotingPower(vault)) {
-              tvp += await vault.getTotalVotingPower();
-            }
+          const coreVoting = council.coreVoting(config.coreVoting.address);
+          // Single list of requests to be awaited in parallel
+          const requests: Promise<any>[] = [];
+
+          // GSC status
+          if (config.gscVoting) {
+            const gscVaultAddress = config.gscVoting.vaults[0].address;
+            requests.push(
+              council.gscVault(gscVaultAddress).
+            );
           }
 
-          const coreVotingProposals = await coreVoting.getProposals();
-          const proposalsCreatedByAddress = await asyncFilter(
-            coreVotingProposals,
-            async (proposal) => {
-              const createdBy = await proposal.getCreatedBy();
-              return createdBy?.address === account;
-            },
+          // Proposals created
+          const coreVotingProposals = await coreVoting.getProposalCreations();
+          for (const { transactionHash } of coreVotingProposals) {
+            requests.push(
+              council.drift
+                .getTransaction({
+                  hash: transactionHash,
+                })
+                .then(({ from }) => {
+                  if (from === account) {
+                    voterData.proposalsCreated++;
+                  }
+                }),
+            );
+          }
+
+          // Votes
+          requests.push(
+            coreVoting.getVotes({ voter: account }).then((votes) => {
+              voterData.votingHistory = votes.reverse();
+            }),
           );
+
+          // Voting power and TVP
+          for (const vault of config.coreVoting.vaults) {
+            requests.push(
+              council
+                .votingVault(vault.address)
+                .getVotingPower({ voter: account })
+                .then((vp) => {
+                  voterData.votingPower += vp;
+                }),
+            );
+            requests.push(
+              getTotalVotingPower({ vault, council }).then((vaultTvp) => {
+                if (vaultTvp) {
+                  tvp += vaultTvp;
+                }
+              }),
+            );
+          }
+
+          await Promise.all(requests);
+
+          voterData.percentOfTvp = fixed(voterData.votingPower)
+            .div(tvp)
+            .mul(100)
+            .toNumber();
 
           return {
             votingHistory,
             votingPower,
-            percentOfTVP: +((Number(votingPower) / Number(tvp)) * 100).toFixed(
+            percentOfTvp: +((Number(votingPower) / Number(tvp)) * 100).toFixed(
               1,
             ),
             gscStatus,

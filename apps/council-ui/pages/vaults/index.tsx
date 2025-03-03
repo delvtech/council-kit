@@ -2,8 +2,8 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
-import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import {
   GenericVaultCard,
   GenericVaultCardSkeleton,

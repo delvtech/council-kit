@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
 import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";

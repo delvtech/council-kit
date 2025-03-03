@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
 import { GscMembersTable } from "src/ui/vaults/gscVault/GscMembersTable";
 import { GSCVaultsStatsRow } from "src/ui/vaults/gscVault/GscVaultStatsRow";

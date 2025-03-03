@@ -2,30 +2,29 @@ import { createCouncil } from "@delvtech/council-js";
 import { viemAdapter } from "@delvtech/drift-viem";
 import { useMemo } from "react";
 import { SupportedChainId } from "src/config/council.config";
-import { driftCache } from "src/lib/drift";
+import { driftStore } from "src/lib/drift";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { usePublicClient, useWalletClient } from "wagmi";
+import { usePublicClient } from "wagmi";
 
 /**
- * Use a ReadWriteCouncil instance.
+ * Use a ReadCouncil instance.
  */
-export function useReadWriteCouncil({
+export function useReadCouncil({
   chainId,
 }: {
   chainId?: SupportedChainId;
 } = {}) {
   chainId = useSupportedChainId(chainId);
   const publicClient = usePublicClient({ chainId });
-  const { data: walletClient } = useWalletClient({ chainId });
 
   return useMemo(() => {
-    if (!walletClient || !publicClient) {
+    if (!publicClient) {
       return undefined;
     }
     return createCouncil({
-      adapter: viemAdapter({ publicClient, walletClient }),
-      cache: driftCache,
+      adapter: viemAdapter({ publicClient }),
+      store: driftStore,
       chainId,
     });
-  }, [publicClient, walletClient]);
+  }, [publicClient]);
 }

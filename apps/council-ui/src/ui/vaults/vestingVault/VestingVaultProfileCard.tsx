@@ -10,7 +10,7 @@ import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
-import { useReadCouncil } from "src/ui/council/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { DelegatorListModal } from "src/ui/vaults/DelegatorListModal";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";

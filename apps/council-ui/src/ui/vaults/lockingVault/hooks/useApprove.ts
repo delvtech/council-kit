@@ -1,6 +1,6 @@
 import { MutationStatus } from "@tanstack/react-query";
 import { useWrite } from "src/ui/contract/hooks/useWrite";
-import { useReadWriteCouncil } from "src/ui/council/hooks/useReadWriteCouncil";
+import { useReadWriteCouncil } from "src/ui/sdk/useReadWriteCouncil";
 import { maxUint256 } from "viem";
 import { useAccount } from "wagmi";
 

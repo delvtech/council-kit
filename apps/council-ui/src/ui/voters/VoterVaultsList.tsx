@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
 import { GSCVaultProfileCard } from "src/ui/vaults/gscVault/GscVaultProfileCard";
 import { useReadGscVault } from "src/ui/vaults/gscVault/hooks/useReadGscVault";

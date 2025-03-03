@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
-import { useReadWriteCouncil } from "src/ui/council/hooks/useReadWriteCouncil";
+import { useReadWriteCouncil } from "src/ui/sdk/useReadWriteCouncil";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
 import { LockingVaultStatsRow } from "src/ui/vaults/lockingVault/LockingVaultStatsRow";

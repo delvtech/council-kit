@@ -7,9 +7,9 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement, useMemo, useState } from "react";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { GSCOnlyToggle } from "src/ui/voters/GscOnlyToggle";
 import { useSearchVoters } from "src/ui/voters/hooks/useVotersSearch";
 import { VoterRowData } from "src/ui/voters/types";
@@ -80,7 +80,6 @@ export function useVoterPageData(): UseQueryResult<VoterRowData[]> {
   const chainId = useSupportedChainId();
   const config = useCouncilConfig();
   const council = useReadCouncil();
-
   const enabled = !!council;
 
   return useQuery({

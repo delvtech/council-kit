@@ -1,7 +1,7 @@
 import { ReadWriteGscVault } from "@delvtech/council-viem";
 import { useMemo } from "react";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
-import { useReadWriteCouncil } from "src/ui/council/hooks/useReadWriteCouncil";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
+import { useReadWriteCouncil } from "src/ui/sdk/useReadWriteCouncil";
 
 /**
  * Use a ReadWriteGscVault instance for configured GSC vault.

@@ -1,7 +1,7 @@
 import { ReadGscVault } from "@delvtech/council-js";
 import { useMemo } from "react";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
-import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 
 /**
  * Use a ReadGscVault instance for configured GSC vault.

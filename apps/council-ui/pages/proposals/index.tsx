@@ -5,14 +5,14 @@ import { getProposalConfig } from "src/config/utils/getProposalConfig";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
-import { useCouncilConfig } from "src/ui/config/hooks/useCouncilConfig";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
   ProposalRowData,
   ProposalsTable,
 } from "src/ui/proposals/ProposalTable/ProposalsTable";
 import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalTable/ProposalsTableSkeleton";
-import { useReadCouncil } from "src/ui/sdk/hooks/useReadCouncil";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { useAccount } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {
