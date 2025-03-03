@@ -100,50 +100,42 @@ function useFrozenLockingVaultDetailsData(
     queryFn: enabled
       ? async () => {
           const lockingVault = council.lockingVault(address);
-          const token = await lockingVault.getToken();
-          const [
-            voters,
-            // token
-            tokenSymbol,
-            tokenBalance,
-            tokenAllowance,
-            depositBalance,
-            // voting power
-            accountVotingPower,
-            delegate,
-            delegators,
-          ] = await Promise.all([
-            lockingVault.getVoters(),
-            // token
-            token.getSymbol(),
-            account ? token.getBalanceOf(account) : undefined,
-            account
-              ? token.getAllowance({ owner: account, spender: address })
-              : 0n,
-            account ? lockingVault.getBalanceOf(account) : 0n,
-            // voting power
-            account
-              ? lockingVault.getVotingPower({
-                  voter: account,
-                })
-              : 0n,
-            account ? lockingVault.getDelegate(account) : undefined,
-            account ? lockingVault.getDelegatorsTo(account) : [],
-          ]);
+
+          const [token, voters, accountVotingPower, delegate, delegators] =
+            await Promise.all([
+              lockingVault.getToken(),
+              lockingVault.getVoters(),
+              account ? lockingVault.getVotingPower({ voter: account }) : 0n,
+              account ? lockingVault.getDelegate(account) : undefined,
+              account ? lockingVault.getDelegatorsTo(account) : [],
+            ]);
+
+          const [tokenSymbol, tokenBalance, tokenAllowance, depositedBalance] =
+            await Promise.all([
+              token.getSymbol(),
+              account ? token.getBalanceOf(account) : 0n,
+              account
+                ? token.getAllowance({
+                    owner: account,
+                    spender: address,
+                  })
+                : 0n,
+              account ? lockingVault.getBalanceOf(account) : 0n,
+            ]);
 
           return {
             name: vaultConfig?.name,
             descriptionURL: vaultConfig?.descriptionURL,
             paragraphSummary: vaultConfig?.paragraphSummary,
             participants: voters.length,
-            tokenSymbol,
-            tokenAddress: token.address,
-            tokenBalance,
-            tokenAllowance,
-            depositBalance,
             accountVotingPower,
             delegate,
             delegatedToAccount: delegators.length,
+            tokenAddress: token.address,
+            tokenSymbol,
+            tokenBalance,
+            tokenAllowance,
+            depositedBalance,
           };
         }
       : undefined,

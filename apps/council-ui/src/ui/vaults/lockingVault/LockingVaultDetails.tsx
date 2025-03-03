@@ -1,11 +1,10 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
+import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
-import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { DepositAndWithdrawForm } from "src/ui/vaults/DepositAndWithdrawForm";
 import { useApprove } from "src/ui/vaults/lockingVault/hooks/useApprove";
@@ -31,7 +30,8 @@ export function LockingVaultDetails({
   const { data, status, error } = useLockingVaultDetailsData(address, account);
   const publicClient = usePublicClient();
 
-  const { changeDelegate, status: changeDelegateStatus } = useChangeDelegate();
+  const { write: changeDelegate, status: changeDelegateStatus } =
+    useChangeDelegate();
   const { deposit, status: depositStatus } = useDeposit();
   const { withdraw, status: withdrawStatus } = useWithdraw();
   const { approve, status: approveStatus } = useApprove();
@@ -63,7 +63,7 @@ export function LockingVaultDetails({
       );
       return;
     }
-    return changeDelegate?.({
+    changeDelegate?.({
       newDelegate: delegateAddress as `0x${string}`,
       vaultAddress: address,
     });
@@ -108,7 +108,7 @@ export function LockingVaultDetails({
                 vaultAddress: address,
               })
             }
-            decimals={data.decimals}
+            decimals={data.tokenDecimals}
           />
 
           <ChangeDelegateForm
@@ -135,54 +135,69 @@ interface LockingVaultDetailsData {
   tokenAllowance: bigint;
   tokenBalance: bigint;
   tokenSymbol: string;
-  decimals: number;
+  tokenDecimals: number;
 }
 
 function useLockingVaultDetailsData(
   address: `0x${string}`,
   account: `0x${string}` | undefined,
 ): UseQueryResult<LockingVaultDetailsData> {
+  const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const vaultConfig = useVaultConfig(address);
+  const vaultConfig = getVaultConfig({ address, chainId });
+  const enabled = !!council && !!vaultConfig;
 
   return useQuery({
     queryKey: ["lockingVaultDetails", address, account, vaultConfig],
-    queryFn: async (): Promise<LockingVaultDetailsData> => {
-      const lockingVault = council.lockingVault(address);
-      const token = await lockingVault.getToken();
-      const delegate = account
-        ? await lockingVault.getDelegate({ account })
-        : undefined;
-      const accountVotingPower = account
-        ? await lockingVault.getVotingPower({ account })
-        : 0n;
+    enabled,
+    queryFn: enabled
+      ? async (): Promise<LockingVaultDetailsData> => {
+          const lockingVault = council.lockingVault(address);
 
-      return {
-        accountVotingPower,
+          const [token, voters, accountVotingPower, delegate, delegators] =
+            await Promise.all([
+              lockingVault.getToken(),
+              lockingVault.getVoters(),
+              account ? lockingVault.getVotingPower({ voter: account }) : 0n,
+              account ? lockingVault.getDelegate(account) : undefined,
+              account ? lockingVault.getDelegatorsTo(account) : [],
+            ]);
 
-        tokenAddress: token.address,
-        tokenSymbol: await token.getSymbol(),
-        tokenBalance: account ? await token.getBalanceOf({ account }) : 0n,
-        tokenAllowance: account
-          ? await token.getAllowance({
-              owner: account,
-              spender: address,
-            })
-          : 0n,
-        depositedBalance: account
-          ? await lockingVault.getDepositedBalance({ account })
-          : 0n,
+          const [
+            tokenSymbol,
+            tokenDecimals,
+            tokenBalance,
+            tokenAllowance,
+            depositedBalance,
+          ] = await Promise.all([
+            token.getSymbol(),
+            token.getDecimals(),
+            account ? token.getBalanceOf(account) : 0n,
+            account
+              ? token.getAllowance({
+                  owner: account,
+                  spender: address,
+                })
+              : 0n,
+            account ? lockingVault.getBalanceOf(account) : 0n,
+          ]);
 
-        delegate: delegate?.address,
-        descriptionURL: vaultConfig?.descriptionURL,
-        paragraphSummary: vaultConfig?.paragraphSummary,
-        name: vaultConfig?.name,
-        participants: (await lockingVault.getVoters()).length,
-        delegatedToAccount: account
-          ? (await lockingVault.getDelegatorsTo({ account })).length
-          : 0,
-        decimals: await token.getDecimals(),
-      };
-    },
+          return {
+            name: vaultConfig?.name,
+            descriptionURL: vaultConfig?.descriptionURL,
+            paragraphSummary: vaultConfig?.paragraphSummary,
+            participants: voters.length,
+            accountVotingPower,
+            delegate,
+            delegatedToAccount: delegators.length,
+            tokenAddress: token.address,
+            tokenSymbol,
+            tokenDecimals,
+            tokenBalance,
+            tokenAllowance,
+            depositedBalance,
+          };
+        }
+      : undefined,
   });
 }
