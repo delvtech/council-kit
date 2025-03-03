@@ -7,7 +7,7 @@ import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";
-import { getIsGscMember } from "src/utils/gscVault/getGscStatus";
+import { isGscMember } from "src/utils/gsc/getGscStatus";
 import { useReadGscVault } from "./hooks/useReadGscVault";
 
 interface GSCVaultProfileCardProps {
@@ -61,7 +61,7 @@ export function GSCVaultProfileCard({
         text: "Kick Member",
         disabled:
           !gscStatus ||
-          !getIsGscMember(gscStatus) ||
+          !isGscMember(gscStatus) ||
           !isBelowThreshold ||
           !kickGscMember,
         onClick: () => kickGscMember?.(profileAddress),

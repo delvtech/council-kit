@@ -10,7 +10,7 @@ export function makeEtherscanAddressURL(
       return `https://etherscan.io/address/${address}`;
     case 5:
       return `https://goerli.etherscan.io/address/${address}`;
-    case 1337:
+    case 31337:
       return `#`;
     default:
       assertNever(chainId);

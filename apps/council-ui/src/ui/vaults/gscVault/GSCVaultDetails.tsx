@@ -9,9 +9,9 @@ import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
-import { getGscMembers, GscMemberInfo } from "src/utils/gscVault/getGscMembers";
-import { getGscStatus } from "src/utils/gscVault/getGscStatus";
-import { GscStatus } from "src/utils/gscVault/types";
+import { getGscMembers, GscMemberInfo } from "src/utils/gsc/getGscMembers";
+import { getGscStatus } from "src/utils/gsc/getGscStatus";
+import { GscStatus } from "src/utils/gsc/types";
 import { PublicClient } from "viem";
 import { useAccount, usePublicClient } from "wagmi";
 import { useJoinGsc } from "./hooks/useJoinGsc";

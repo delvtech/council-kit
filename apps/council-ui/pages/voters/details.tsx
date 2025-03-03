@@ -20,8 +20,9 @@ import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
 import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
-import { GscStatus } from "src/utils/gscVault/types";
-import { getTotalVotingPower } from "src/vaults/getTotalVotingPower";
+import { getGscStatus } from "src/utils/gsc/getGscStatus";
+import { GscStatus } from "src/utils/gsc/types";
+import { getTotalVotingPower } from "src/utils/vaults/getTotalVotingPower";
 import { getAddress } from "viem";
 import { useEnsName } from "wagmi";
 
@@ -158,9 +159,11 @@ export function useVoterData(
 
   return useQuery({
     queryKey: ["voter-details", chainId, account],
+    refetchOnWindowFocus: false,
     enabled,
     queryFn: enabled
       ? async (): Promise<VoterData> => {
+          const coreVoting = council.coreVoting(config.coreVoting.address);
           const voterData: VoterData = {
             gscStatus: undefined,
             proposalsCreated: 0,
@@ -169,58 +172,55 @@ export function useVoterData(
             percentOfTvp: 0,
           };
           let tvp = 0n;
-
-          const coreVoting = council.coreVoting(config.coreVoting.address);
           // Single list of requests to be awaited in parallel
           const requests: Promise<any>[] = [];
 
-          // GSC status
-          if (config.gscVoting) {
-            const gscVaultAddress = config.gscVoting.vaults[0].address;
-            requests.push(
-              council.gscVault(gscVaultAddress).
-            );
-          }
+          requests.push(
+            // GSC status
+            (async () => {
+              voterData.gscStatus = await getGscStatus({
+                account,
+                chainId,
+              });
+            })(),
+
+            // Votes
+            (async () => {
+              const votes = await coreVoting.getVotes({ voter: account });
+              voterData.votingHistory = votes.reverse();
+            })(),
+          );
 
           // Proposals created
           const coreVotingProposals = await coreVoting.getProposalCreations();
           for (const { transactionHash } of coreVotingProposals) {
             requests.push(
-              council.drift
-                .getTransaction({
+              (async () => {
+                const createTransaction = await council.drift.getTransaction({
                   hash: transactionHash,
-                })
-                .then(({ from }) => {
-                  if (from === account) {
-                    voterData.proposalsCreated++;
-                  }
-                }),
+                });
+                if (createTransaction.from === account) {
+                  voterData.proposalsCreated++;
+                }
+              })(),
             );
           }
-
-          // Votes
-          requests.push(
-            coreVoting.getVotes({ voter: account }).then((votes) => {
-              voterData.votingHistory = votes.reverse();
-            }),
-          );
 
           // Voting power and TVP
           for (const vault of config.coreVoting.vaults) {
             requests.push(
-              council
-                .votingVault(vault.address)
-                .getVotingPower({ voter: account })
-                .then((vp) => {
-                  voterData.votingPower += vp;
-                }),
-            );
-            requests.push(
-              getTotalVotingPower({ vault, council }).then((vaultTvp) => {
+              (async () => {
+                const vaultVotingPower = await council
+                  .votingVault(vault.address)
+                  .getVotingPower({ voter: account });
+                voterData.votingPower += vaultVotingPower;
+              })(),
+              (async () => {
+                const vaultTvp = await getTotalVotingPower({ vault, council });
                 if (vaultTvp) {
                   tvp += vaultTvp;
                 }
-              }),
+              })(),
             );
           }
 
@@ -228,29 +228,11 @@ export function useVoterData(
 
           voterData.percentOfTvp = fixed(voterData.votingPower)
             .div(tvp)
-            .mul(100)
+            .mul(100, 0)
             .toNumber();
 
-          return {
-            votingHistory,
-            votingPower,
-            percentOfTvp: +((Number(votingPower) / Number(tvp)) * 100).toFixed(
-              1,
-            ),
-            gscStatus,
-            proposalsCreated: proposalsCreatedByAddress.length,
-          };
+          return voterData;
         }
       : undefined,
-    refetchOnWindowFocus: false,
   });
-}
-
-function hasTotalVotingPower(
-  vault: ReadVotingVault,
-): vault is ReadVotingVault & { getTotalVotingPower: () => Promise<bigint> } {
-  return (
-    "getTotalVotingPower" in vault &&
-    typeof vault.getTotalVotingPower === "function"
-  );
 }

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Stat } from "src/ui/base/Stat";
-import { GscStatus } from "src/utils/gscVault/types";
+import { GscStatus } from "src/utils/gsc/types";
 
 interface GscMembershipStatusStatProps {
   status: GscStatus;
