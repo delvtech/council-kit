@@ -1,6 +1,7 @@
 import { Address, Bytes, Hash, ReadWriteAdapter } from "@delvtech/drift";
 import { EntityWriteParams } from "src/entities/Entity";
 import { ReadGscVault } from "src/entities/votingVault/gscVault/ReadGscVault";
+import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
 
 export class ReadWriteGscVault<
   A extends ReadWriteAdapter = ReadWriteAdapter,
@@ -37,27 +38,50 @@ export class ReadWriteGscVault<
    * Become a member of this GSC vault.
    * @returns The transaction hash.
    */
-  join({
-    args: { votingVaults, extraVaultData = [] },
+  async join({
+    args: { vaults, extraVaultData = [] },
     options,
   }: EntityWriteParams<{
     /**
-     * The addresses of the approved vaults the joining member has
-     *   voting power in. This is used to prove the joining member meets the
-     *   minimum voting power requirement. If voting power is moved to a different
-     *   vault, the member will become ineligible until they join again with the
-     *   new vault or risk being kicked.
+     * The addresses of the approved vaults the joining member has voting power
+     * in. This is used to prove the joining member meets the minimum voting
+     * power requirement. If voting power is moved to a different vault, the
+     * member will become ineligible until they join again with the new vault or
+     * risk being kicked.
      */
-    votingVaults: Address[];
+    vaults: Address[];
     /**
      * Extra data given to the vaults to help calculation
      */
     extraVaultData?: (Bytes | undefined)[];
   }>): Promise<Hash> {
-    const extraData = votingVaults.map((_, i) => extraVaultData[i] || "0x");
+    // Filter out vaults with no voting power which would cause a revert.
+    const voter = await this.contract.getSignerAddress();
+    const vaultsWithPower: Address[] = [];
+    const extraDataForVaultsWithPower: Bytes[] = [];
+    await Promise.all(
+      vaults.map(async (address, i) => {
+        const extraData = extraVaultData?.[i] || "0x";
+        const readVault = new ReadVotingVault({
+          address,
+          drift: this.drift,
+        });
+        const power = await readVault.getVotingPower({
+          voter,
+          extraData,
+        });
+
+        if (power > 0n) {
+          vaultsWithPower.push(address);
+          extraDataForVaultsWithPower.push(extraData);
+        }
+      }),
+    );
+
+    const extraData = vaults.map((_, i) => extraVaultData[i] || "0x");
     return this.gscVaultContract.write(
       "proveMembership",
-      { votingVaults, extraData },
+      { votingVaults: vaults, extraData },
       {
         ...options,
         onMined: (receipt) => {

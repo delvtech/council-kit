@@ -228,10 +228,7 @@ export class ReadWriteCoreVoting<
     await Promise.all(
       vaults.map(async (address, i) => {
         const extraData = extraVaultData?.[i] || "0x";
-        const readVault = new ReadVotingVault({
-          address,
-          drift: this.drift,
-        });
+        const readVault = new ReadVotingVault({ address, drift: this.drift });
         const power = await readVault.getVotingPower({
           voter,
           extraData,

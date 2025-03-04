@@ -1,5 +1,7 @@
+import { Address } from "@delvtech/drift";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
+import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
@@ -83,6 +85,7 @@ function useGscVaultDetails({
 }): UseQueryResult<GSCVaultDetailsData> {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
+  const config = getCouncilConfig(chainId);
   const vaultConfig = getVaultConfig({
     address: vaultAddress,
     chainId,
@@ -96,25 +99,48 @@ function useGscVaultDetails({
     queryFn: enabled
       ? async (): Promise<GSCVaultDetailsData> => {
           const gscVault = council?.gscVault(vaultAddress);
-          const [requiredVotingPower, members, gscStatus] = await Promise.all([
-            gscVault.getRequiredVotingPower(),
+          const qualifyingVaults = config.coreVoting.vaults.map(({ address }) =>
+            council.votingVault(address),
+          );
+
+          const [members, requiredVotingPower, gscStatus] = await Promise.all([
             gscVault.getMembers(),
+            gscVault.getRequiredVotingPower(),
             getGscStatus({ account, chainId }),
+            ,
           ]);
 
-          const memberENSNames = await getBulkEnsRecords(members, chainId);
+          const [memberENSNames, ...memberVotingPowers] = await Promise.all([
+            getBulkEnsRecords(members, chainId),
+            ...members
+              .map((member) =>
+                qualifyingVaults.map(async (vault) => {
+                  const votingPower = await vault.getVotingPower({
+                    voter: member,
+                  });
+                  return { member, votingPower };
+                }),
+              )
+              .flat(),
+          ]);
+
+          const memberInfoMap: Record<Address, GscMemberInfo> = {};
+          for (const { member, votingPower } of memberVotingPowers) {
+            memberInfoMap[member] ||= {
+              member,
+              ensName: memberENSNames[member],
+              qualifyingVotingPower: 0n,
+            };
+            memberInfoMap[member].qualifyingVotingPower += votingPower;
+          }
 
           return {
-            gscStatus,
+            name: vaultConfig.name,
             descriptionURL: vaultConfig.descriptionURL,
             paragraphSummary: vaultConfig.paragraphSummary,
-            name: vaultConfig.name,
-            members: members.map((member, index) => ({
-              ensName: memberENSNames[member] || undefined,
-              member,
-              qualifyingVotingPower: 0n,
-            })),
+            members: Object.values(memberInfoMap),
             requiredVotingPower,
+            gscStatus,
           };
         }
       : undefined,
