@@ -1,31 +1,19 @@
-import { MutationStatus } from "@tanstack/react-query";
+import { Address } from "@delvtech/drift";
 import { useWrite } from "src/ui/contract/hooks/useWrite";
 import { useReadWriteGscVault } from "./useReadWriteGscVault";
 
-export function useKickGscMember(): {
-  kickGscMember: ((account: `0x${string}`) => void) | undefined;
-  status: MutationStatus;
-  transactionHash: `0x${string}` | undefined;
-} {
+export function useKickGscMember() {
   const gscVault = useReadWriteGscVault();
   const enabled = !!gscVault;
 
-  const { write, status, transactionHash } = useWrite({
+  return useWrite({
     pendingMessage: "Kicking GSC member...",
     successMessage: "GSC member kicked!",
     errorMessage: "Failed to kick GSC member.",
-    writeFn: async (account: `0x${string}`) => {
-      if (!enabled) {
-        throw new Error("GSC Vault not found");
-      }
-
-      return gscVault.kick({ account });
-    },
+    writeFn: enabled
+      ? async (member: Address) => {
+          return gscVault.kick({ args: { member } });
+        }
+      : undefined,
   });
-
-  return {
-    kickGscMember: enabled ? write : undefined,
-    status,
-    transactionHash,
-  };
 }

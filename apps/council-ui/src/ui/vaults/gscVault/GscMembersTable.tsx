@@ -50,7 +50,7 @@ function GSCMembersTableRow({
   member: { member, ensName, qualifyingVotingPower },
   requiredVotingPower,
 }: GSCMembersTableRow) {
-  const { kickGscMember } = useKickGscMember();
+  const { write: kickGscMember } = useKickGscMember();
 
   const isKickButtonDisabled =
     qualifyingVotingPower >= requiredVotingPower && !!kickGscMember;
