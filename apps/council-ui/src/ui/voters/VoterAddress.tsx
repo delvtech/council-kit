@@ -5,9 +5,9 @@ import { Tooltip } from "src/ui/base/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
 import { useIsGscMember } from "src/ui/vaults/gscVault/hooks/useIsGscMember";
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
+import { useAccount } from "wagmi";
 
 interface VoterAddressProps {
   address: `0x${string}`;
@@ -28,19 +28,17 @@ export function VoterAddress({
   iconSize,
 }: VoterAddressProps): ReactElement {
   const { isGscMember } = useIsGscMember(address);
-  const coreVotingVaults = useReadCoreVoting();
-  const { delegatesByVault } = useDelegatesByVault({
-    vaults: coreVotingVaults.vaults,
-  });
   const config = useCouncilConfig();
+  const { address: account } = useAccount();
+  const { data: delegatesByVault } = useDelegatesByVault({ account });
   const allVaults = config.coreVoting.vaults.slice();
   if (config.gscVoting) {
-    allVaults.push(config.gscVoting.vault);
+    allVaults.push(config.gscVoting.vaults[0]);
   }
 
-  const vaultNames = allVaults
+  const delegateVaultNames = allVaults
     .map((vaultConfig) => {
-      if (delegatesByVault?.[vaultConfig.address]?.address === address) {
+      if (delegatesByVault?.[vaultConfig.address] === address) {
         return vaultConfig.name;
       }
     })
@@ -58,13 +56,13 @@ export function VoterAddress({
       {addressLabel}
       {isGscMember && (
         <Tooltip content="GSC Member">
-          <BuildingLibraryIcon className="ml-1 size-5 fill-warning" />
+          <BuildingLibraryIcon className="fill-warning ml-1 size-5" />
         </Tooltip>
       )}
-      {vaultNames.map((vaultName) => {
+      {delegateVaultNames.map((vaultName) => {
         return (
           <Tooltip key={vaultName} content={`Your Delegate (${vaultName})`}>
-            <UserCircleIcon className="ml-1 size-5 fill-accent" />
+            <UserCircleIcon className="fill-accent ml-1 size-5" />
           </Tooltip>
         );
       })}

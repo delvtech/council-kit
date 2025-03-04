@@ -1,21 +1,13 @@
-import {
-  BlockLike,
-  ReadLockingVault,
-  ReadVestingVault,
-  ReadVoter,
-  ReadVotingVault,
-} from "@delvtech/council-viem";
-import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { Address, BlockIdentifier } from "@delvtech/drift";
+import { useQuery } from "@tanstack/react-query";
+import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useAccount } from "wagmi";
+import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 
 interface UseDelegatesByVaultOptions {
-  vaults?: (ReadVotingVault | `0x${string}`)[];
-  account?: `0x${string}`;
-  atBlock?: BlockLike;
+  account: Address | undefined;
+  vaults?: Address[];
+  atBlock?: BlockIdentifier;
 }
 
 /**
@@ -24,72 +16,45 @@ interface UseDelegatesByVaultOptions {
  * connected account will be used.
  */
 export function useDelegatesByVault({
-  vaults: _vaults,
   account,
+  vaults = [],
   atBlock,
-}: UseDelegatesByVaultOptions = {}): {
-  delegatesByVault: Record<`0x${string}`, ReadVoter> | undefined;
-  status: QueryStatus;
-} {
+}: UseDelegatesByVaultOptions) {
   const chainId = useSupportedChainId();
-  const vaultConfigs = useCouncilConfig().coreVoting.vaults;
   const council = useReadCouncil();
-  const coreVoting = useReadCoreVoting();
+  const enabled = !!account && !!council;
 
-  const { address: connectedAccount } = useAccount();
-  const accountToUse = account ?? connectedAccount;
-
-  const enabled = !!accountToUse;
-
-  const { data, status } = useQuery({
-    queryKey: ["delegates-by-vault", accountToUse, chainId],
+  return useQuery({
+    queryKey: ["delegates-by-vault", account, chainId, ...vaults],
     enabled,
     queryFn: enabled
       ? async () => {
-          const delegatesByVault: Record<`0x${string}`, ReadVoter> = {};
+          const delegatesByVault: {
+            [vault: Address]: Address;
+          } = {};
 
-          const vaults =
-            _vaults?.map((vault) =>
-              typeof vault === "string" ? council.votingVault(vault) : vault,
-            ) || coreVoting.vaults;
-
-          for (const vault of vaults) {
-            const config = vaultConfigs.find(
-              ({ address }) => address === vault.address,
-            );
-
-            let typedDelegationVault:
-              | ReadLockingVault
-              | ReadVestingVault
-              | undefined;
-
-            switch (config?.type) {
-              case "FrozenLockingVault":
-              case "LockingVault":
-              case "VestingVault":
-                typedDelegationVault = vault as ReadVestingVault;
-                break;
-              case "GSCVault":
-              // GSCVault does not have delegation, do nothing
-              default:
-            }
-
-            if (typedDelegationVault) {
-              const delegate = await typedDelegationVault.getDelegate({
-                account: accountToUse,
-                atBlock,
-              });
-              delegatesByVault[vault.address] = delegate;
-            }
-          }
+          await Promise.all(
+            vaults.map(async (vault) => {
+              const config = getVaultConfig({ address: vault, chainId });
+              switch (config?.type) {
+                case "FrozenLockingVault":
+                case "LockingVault":
+                  delegatesByVault[vault] = await council
+                    .lockingVault(vault)
+                    .getDelegate(account);
+                  break;
+                case "VestingVault":
+                  delegatesByVault[vault] = await council
+                    .vestingVault(vault)
+                    .getDelegate(account);
+                  break;
+                default:
+              }
+            }),
+          );
 
           return delegatesByVault;
         }
       : undefined,
   });
-
-  return {
-    delegatesByVault: data,
-    status,
-  };
 }
