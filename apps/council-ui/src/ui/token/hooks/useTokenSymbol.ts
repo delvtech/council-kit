@@ -10,7 +10,7 @@ import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 export function useTokenSymbol(tokenAddress: Address | undefined) {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const enabled = !!tokenAddress;
+  const enabled = !!tokenAddress && !!council;
   return useQuery({
     queryKey: ["useTokenSymbol", chainId, tokenAddress],
     enabled,

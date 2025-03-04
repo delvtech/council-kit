@@ -18,9 +18,9 @@ export default function ConfirmClaimStep({
   onBack,
   onConfirm,
 }: ConfirmClaimStepProps): ReactElement {
-  const { claimableAmountFormatted } = useClaimableAirdropAmount();
-  const { airdropToken } = useAirdropToken();
-  const { symbol } = useTokenSymbol(airdropToken?.address);
+  const { data: claimableAmountFormatted } = useClaimableAirdropAmount();
+  const { data: airdropToken } = useAirdropToken();
+  const { data: symbol } = useTokenSymbol(airdropToken?.address);
   const displayName = useDisplayName(recipient);
 
   return (
@@ -38,7 +38,7 @@ export default function ConfirmClaimStep({
         </div>
         <div className="daisy-stat bg-base-200">
           <div className="daisy-stat-title">To</div>
-          <div className=" daisy-stat-value">{displayName}</div>
+          <div className="daisy-stat-value">{displayName}</div>
         </div>
       </div>
       <div className="flex justify-center gap-2 sm:gap-4">

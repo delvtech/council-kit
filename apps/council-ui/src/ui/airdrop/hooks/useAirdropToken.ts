@@ -9,13 +9,13 @@ import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 export function useAirdropToken({
   chainId,
 }: { chainId?: SupportedChainId } = {}) {
-  const { airdrop } = useCouncilConfig({ chainId });
+  const { airdrop } = useCouncilConfig(chainId);
   const council = useReadCouncil({ chainId });
   const enabled = !!airdrop && !!council;
   return useQuery({
     queryKey: ["airdropToken", airdrop?.address],
     enabled,
-    queryFn: !!airdrop
+    queryFn: enabled
       ? () => council.airdrop(airdrop.address).getToken()
       : undefined,
   });
