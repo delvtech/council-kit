@@ -12,7 +12,6 @@ import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
-import { GscMemberInfo } from "src/utils/gsc/getGscMembers";
 import { getGscStatus } from "src/utils/gsc/getGscStatus";
 import { GscStatus } from "src/utils/gsc/types";
 import { useAccount } from "wagmi";
@@ -65,6 +64,12 @@ export function GscVaultDetails({
       }
     />
   );
+}
+
+interface GscMemberInfo {
+  member: Address;
+  qualifyingVotingPower: bigint;
+  ensName: string | undefined;
 }
 
 interface GSCVaultDetailsData {
