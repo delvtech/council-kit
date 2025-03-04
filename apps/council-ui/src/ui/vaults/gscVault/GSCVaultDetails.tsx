@@ -6,7 +6,10 @@ import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
-import { GscMembersTable } from "src/ui/vaults/gscVault/GscMembersTable";
+import {
+  GscMemberInfo,
+  GscMembersTable,
+} from "src/ui/vaults/gscVault/GscMembersTable";
 import { GSCVaultsStatsRow } from "src/ui/vaults/gscVault/GscVaultStatsRow";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
@@ -64,12 +67,6 @@ export function GscVaultDetails({
       }
     />
   );
-}
-
-interface GscMemberInfo {
-  member: Address;
-  qualifyingVotingPower: bigint;
-  ensName: string | undefined;
 }
 
 interface GSCVaultDetailsData {

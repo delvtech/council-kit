@@ -1,3 +1,4 @@
+import { Address } from "@delvtech/drift";
 import { ReactElement } from "react";
 import { makeVoterURL } from "src/routes";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
@@ -5,9 +6,14 @@ import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
 import { GscMembersTableHeader } from "src/ui/vaults/gscVault/GscMembersTableHeader";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
-import { GscMemberInfo } from "src/utils/gsc/getGscMembers";
 
-interface GscMembersTableProps {
+export interface GscMemberInfo {
+  member: Address;
+  qualifyingVotingPower: bigint;
+  ensName: string | undefined;
+}
+
+export interface GscMembersTableProps {
   members: GscMemberInfo[];
   requiredVotingPower: bigint;
 }
@@ -23,7 +29,7 @@ export function GscMembersTable({
       {members.length ? (
         members.map((memberInfo) => (
           <GSCMembersTableRow
-            key={memberInfo.member.address}
+            key={memberInfo.member}
             requiredVotingPower={requiredVotingPower}
             member={memberInfo}
           />
@@ -50,8 +56,8 @@ function GSCMembersTableRow({
     qualifyingVotingPower >= requiredVotingPower && !!kickGscMember;
 
   return (
-    <GridTableRowLink href={makeVoterURL(member.address)}>
-      <VoterAddress address={member.address} ensName={ensName} />
+    <GridTableRowLink href={makeVoterURL(member)}>
+      <VoterAddress address={member} ensName={ensName} />
       <span className="flex items-center">
         {formatVotingPower(qualifyingVotingPower)}
       </span>
@@ -64,7 +70,7 @@ function GSCMembersTableRow({
             // prevent clicking the button from navigating the user to the voter
             // page, since this is a button inside of a link..
             e.preventDefault();
-            kickGscMember?.(member.address);
+            kickGscMember?.(member);
           }}
         >
           Kick Member
