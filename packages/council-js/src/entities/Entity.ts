@@ -31,10 +31,18 @@ export type EntityConfig<A extends Adapter = Adapter> = OneOf<
 export class Entity<A extends Adapter = Adapter> {
   drift: Drift<A>;
 
-  constructor({ drift, earliestBlock, ...driftConfig }: EntityConfig<A> = {}) {
+  constructor({
+    drift,
+    earliestBlock = 0n,
+    ...driftConfig
+  }: EntityConfig<A> = {}) {
     this.drift = drift || createDrift(driftConfig);
     this.drift.extend({
-      getEvents({ fromBlock = earliestBlock, ...restParams }) {
+      getEvents({
+        fromBlock = earliestBlock,
+        toBlock = "latest",
+        ...restParams
+      }) {
         // Overwrite `fromBlock` if earlier than the `earliestBlock` option.
         if (
           earliestBlock &&
@@ -49,6 +57,7 @@ export class Entity<A extends Adapter = Adapter> {
         return getEventsWithSplitAndRetry({
           params: {
             fromBlock,
+            toBlock,
             ...restParams,
           },
           drift: this,

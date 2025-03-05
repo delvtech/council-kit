@@ -7,7 +7,7 @@ import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";
-import { getGscStatus, isGscMember } from "src/utils/gsc/getGscStatus";
+import { getGscStatus, isGscMember } from "src/utils/vaults/gsc/getGscStatus";
 
 interface GSCVaultProfileCardProps {
   address: `0x${string}`;

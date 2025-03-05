@@ -1,8 +1,8 @@
 import { Address } from "@delvtech/drift";
 import { useQuery } from "@tanstack/react-query";
 import { SupportedChainId } from "src/config/council.config";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
 interface UseProposalCreationOptions {
   votingContract: Address;
@@ -22,7 +22,7 @@ export default function useProposal({
   const council = useReadCouncil({ chainId });
   const enabled = !!chainId && !!council;
   return useQuery({
-    queryKey: ["proposal", chainId, votingContract, proposalId],
+    queryKey: ["proposal", chainId, votingContract, proposalId.toString()],
     enabled,
     queryFn: enabled
       ? () => council.coreVoting(votingContract).getProposal(proposalId)

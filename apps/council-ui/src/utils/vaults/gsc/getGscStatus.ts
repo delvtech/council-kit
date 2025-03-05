@@ -1,10 +1,9 @@
-import { createCouncil } from "@delvtech/council-js";
 import { Address } from "@delvtech/drift";
 import { SupportedChainId } from "src/config/council.config";
 import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
-import { getDrift } from "src/lib/drift";
-import { getIsGscEligible } from "src/utils/gsc/getIsGscEligible";
-import { GscStatus } from "src/utils/gsc/types";
+import { getCouncil } from "src/utils/council/getCouncil";
+import { getIsGscEligible } from "src/utils/vaults/gsc/getIsGscEligible";
+import { GscStatus } from "src/utils/vaults/gsc/types";
 
 interface GetGscStatusOptions {
   account: Address | undefined;
@@ -27,10 +26,7 @@ export async function getGscStatus({
     return "N/A";
   }
 
-  const council = createCouncil({
-    drift: getDrift({ chainId }),
-  });
-
+  const council = getCouncil(chainId);
   const gscVaultAddress = gscVoting.vaults[0].address;
   const gscVault = council.gscVault(gscVaultAddress);
 

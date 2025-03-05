@@ -10,9 +10,9 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { Page } from "src/ui/base/Page";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
 import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";
 import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
@@ -20,16 +20,16 @@ import { VoterVaultsListSkeleton } from "src/ui/voters/VoterVaultsListSkeleton";
 import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton";
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
-import { getGscStatus } from "src/utils/gsc/getGscStatus";
-import { GscStatus } from "src/utils/gsc/types";
 import { getTotalVotingPower } from "src/utils/vaults/getTotalVotingPower";
+import { getGscStatus } from "src/utils/vaults/gsc/getGscStatus";
+import { GscStatus } from "src/utils/vaults/gsc/types";
 import { getAddress } from "viem";
-import { useEnsName } from "wagmi";
+import { useEnsName, usePublicClient } from "wagmi";
 
 export default function VoterPage(): ReactElement {
   const { query } = useRouter();
   const { address: account } = query as { address: `0x${string}` | undefined };
-  const { data, status } = useVoterData(account);
+  const { data, status, error } = useVoterData(account);
   const displayName = useDisplayName(account);
   const config = useCouncilConfig();
 
@@ -158,7 +158,8 @@ export function useVoterData(
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
   const config = useCouncilConfig();
-  const enabled = !!account && !!council;
+  const publicClient = usePublicClient();
+  const enabled = !!account && !!council && !!publicClient;
 
   return useQuery({
     queryKey: ["voter-details", chainId, account],
@@ -216,7 +217,10 @@ export function useVoterData(
               (async () => {
                 const vaultVotingPower = await council
                   .votingVault(vault.address)
-                  .getVotingPower({ voter: account });
+                  .getVotingPower({ voter: account })
+                  // Wagmi doesn't decode the uninitialized error, so we simply
+                  // return 0 if the the call fails.
+                  .catch(() => 0n);
                 voterData.votingPower += vaultVotingPower;
               })(),
               (async () => {

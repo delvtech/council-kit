@@ -32,6 +32,9 @@ export function useVaultVotingPower({
           council
             .votingVault(vaultAddress)
             .getVotingPower({ voter: accountToUse, block })
+            // Wagmi doesn't decode the uninitialized error, so we simply
+            // return 0 if the the call fails.
+            .catch(() => 0n)
       : undefined,
   });
 }

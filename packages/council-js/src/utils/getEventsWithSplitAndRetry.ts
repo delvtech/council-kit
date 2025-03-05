@@ -110,6 +110,12 @@ export async function getEventsWithSplitAndRetry<
       return chunkedEvents.flat();
     }
 
+    console.warn(
+      `Failed to fetch '${params.event}' events from ${params.address}. Retrying with ${
+        nextChunkedParams.length
+      } smaller requests.`,
+    );
+
     chunkedParams = nextChunkedParams;
     error = nextError;
     retries--;

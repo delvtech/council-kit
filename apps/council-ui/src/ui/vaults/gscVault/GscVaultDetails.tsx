@@ -15,8 +15,8 @@ import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
-import { getGscStatus } from "src/utils/gsc/getGscStatus";
-import { GscStatus } from "src/utils/gsc/types";
+import { getGscStatus } from "src/utils/vaults/gsc/getGscStatus";
+import { GscStatus } from "src/utils/vaults/gsc/types";
 import { useAccount } from "wagmi";
 
 interface GscVaultDetailsProps {

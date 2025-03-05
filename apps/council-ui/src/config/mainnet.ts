@@ -1,6 +1,6 @@
 import { CouncilConfig } from "src/config/types";
 
-export const mainnetCouncilConfig = {
+export const mainnetCouncilConfig: CouncilConfig = {
   version: "",
   chainId: 1,
   timelock: {
@@ -189,6 +189,76 @@ export const mainnetCouncilConfig = {
         paragraphSummary:
           "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
       },
+      15: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-16: Main Treasury - 3",
+        sentenceSummary: "Revised proposal to unwind the main treasury.",
+        paragraphSummary:
+          "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
+      },
+      16: {
+        targets: [],
+        calldatas: [],
+        title:
+          "EGP-29: Hyperdrive Public Testnet Implementation for Element DAO",
+        sentenceSummary:
+          "DELV is creating this governance proposal to deploy a Hyperdrive Public Testnet Implementation for Element DAO on the Sepolia Ethereum Testnet.",
+        paragraphSummary:
+          "This proposal includes the details for deploying the Public Testnet Implementation to Sepolia Ethereum Testnet and running a Hyperdrive UI for users to learn and get educated about how Hyperdrive works, get familiar with the UX of Hyperdrive, and provide feedback on all aspects of the experience.",
+      },
+      17: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-16: Main Treasury - 4",
+        sentenceSummary: "Revised proposal to unwind the main treasury.",
+        paragraphSummary:
+          "The main treasury  holds approx. 192,000 USDC in assets wound up in Yearn positions. These assets come from affiliate fees via Yearn. A separate proposal manages the unwinding of the GSC treasury, which contains about 60,000 USDC. Following this proposal, two more will be necessary to unwind CRV positions and to consolidate assets into USDC, DAI, and ETH.",
+      },
+      18: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-31: Foundation Update and ELFI Request",
+        paragraphSummary:
+          "This proposal is being submitted by the HyperVue Foundation (Formerly Element Foundation), a Cayman Islands entity created alongside the launch of the Element DAO in 2021 to aid and support the decisions proposed and made by stakeholders and owners of the Element protocol (ELFI holders & community members).\n\n As we begin a new chapter in line with the mainnet deployment of the Hyperdrive, the next version of the Element Protocol, the Foundation gears towards assisting the DAO and protocol to reach their full potential.",
+      },
+      19: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-32: DELV Payment for Milestone 1 of EGP-30",
+        sentenceSummary:
+          "EGP-32 proposes the details for the Element DAO paying DELV as a service provider for Milestone 1 of EPG-30.",
+        paragraphSummary:
+          "This proposal includes the payment details for the following service provisions as described in Milestone 1: The Deployment of Element DAO Instance of Hyperdrive (and Pools) to Ethereum Mainnet - DELV developed, deployed, and launched an Element DAO instance of Hyperdrive with 6-month pools on top of stETH and sDAI on Ethereum Mainnet.",
+      },
+      20: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-33: On-Chain and Snapshot Quorum Raise Proposal",
+        sentenceSummary:
+          "This proposal is to raise the On-Chain and Snapshot quorum from 1.1m voting power to 2.77m voting power.",
+        paragraphSummary:
+          "https://commonwealth.im/element-finance/discussion/25041",
+      },
+      21: {
+        targets: [],
+        calldatas: [],
+        title: "EGP-36: DELV Payment for Milestone 2 of EGP-30",
+        sentenceSummary:
+          "EGP-36 proposes the details for the Element DAO paying DELV as a service provider for Milestone 2 of EPG-30.",
+        paragraphSummary:
+          "https://commonwealth.im/element-finance/discussion/25059",
+      },
+      22: {
+        targets: [],
+        calldatas: [],
+        title:
+          "EGP-37: Payment Proposal for Yield Sources Onboarding & Deployment to Other Chains and L2s (for EGP-34)",
+        sentenceSummary:
+          "EGP-37 proposes the details for the Element DAO paying DELV as a service provider for the 90 days of yield source onboarding and deployments to other chains and L2s performed pursuant to EGP-34.",
+        paragraphSummary:
+          "As mentioned in the ratified EGP-34 proposal, DELV is submitting an onchain proposal to the Element DAO for the completed EGP-34 Services, per the following. (1) Deployer Coordinator Pricing: 100,000 ELFI per deployer coordinator. This pricing reflects DELV's efforts in deploying the relevant yield source or chain / L2 (factory deployments). The Element DAO is not charged for DELV's research, identification, or selection. This means DELV gets paid only for completed deployments under the EGP34 Services. (2) Payment Schedule: At the end of the Service Term, DELV will submit a final onchain payment proposal and will continue services for the remainder of the Service Term if approved and executed. Read more: https://forum.element.fi/discussion/25920",
+      },
     },
   },
   gscVoting: {
@@ -276,6 +346,17 @@ export const mainnetCouncilConfig = {
         paragraphSummary:
           "The GSC treasury is a gnosis safe currently containing 24 different assets in balancer pools. These assets came from protocol fees traded on the Element protocol. In order to unwind the assets, the LP positions are withdrawn from the Balancer pools. After withdrawal, principal tokens are redeemed through the Element protocol. Once redeemed, the base assets are transferred and consolidated to the main treasury.",
       },
+      6: {
+        descriptionURL:
+          "https://docs.google.com/document/d/17tR4ZjibQyfAma3QfklA0FTA4n6S3lGEXXWMzT75K-k/edit",
+        targets: [],
+        calldatas: [],
+        title: "EGP-16: GSC-5",
+        sentenceSummary:
+          "Revised proposal to unwind the GSC treasury, transferring the unwound assets to the main treasury.",
+        paragraphSummary:
+          "This proposal is being submitted by the HyperVue Foundation (Formerly Element Foundation), a Cayman Islands entity created alongside the launch of the Element DAO in 2021 to aid and support the decisions proposed and made by stakeholders and owners of the Element protocol (ELFI holders & community members). \n\n As we begin a new chapter in line with the mainnet deployment of the Hyperdrive, the next version of the Element Protocol, the Foundation gears towards assisting the DAO and protocol to reach their full potential.",
+      },
     },
   },
 
@@ -286,4 +367,4 @@ export const mainnetCouncilConfig = {
     channel: "0x349da2A6825284E9E181D46D664b95aecE86da56",
     env: "prod",
   },
-} as const satisfies CouncilConfig;
+};

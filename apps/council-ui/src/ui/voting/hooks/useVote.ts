@@ -1,8 +1,8 @@
 import { Address } from "@delvtech/drift";
 import { useQuery } from "@tanstack/react-query";
 import { SupportedChainId } from "src/config/council.config";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 
 interface UseVoteOptions {
   votingContract: Address;
@@ -24,10 +24,11 @@ export function useVote({
     queryKey: ["vote", chainId, votingContract, account, chainId],
     enabled,
     queryFn: enabled
-      ? () => {
-          return council
+      ? async () => {
+          const vote = await council
             .coreVoting(votingContract)
             .getVote({ proposalId, voter: account });
+          return vote || null;
         }
       : undefined,
   });

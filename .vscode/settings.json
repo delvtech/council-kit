@@ -1,27 +1,24 @@
 {
-	"eslint.workingDirectories": [
-		"./apps/council-ui"
-	],
-	"dotenv.enableAutocloaking": false,
-	"json.schemas": [
-		{
-			"fileMatch": [
-				"*.deployments.json"
-			],
-			"url": "./packages/council-deploy/src/deployments/deployments.schema.json"
-		}
-	],
-	"markdown.extension.toc.levels": "2..6",
-	"cSpell.words": [
-		"abitype",
-		"calldatas",
-		"Delegators",
-		"delvtech",
-		"merkle",
-		"Timelock",
-		"tsup",
-		"typecheck",
-		"unvested",
-		"Viem"
-	]
+  "eslint.workingDirectories": ["./apps/council-ui"],
+  "dotenv.enableAutocloaking": false,
+  "json.schemas": [
+    {
+      "fileMatch": ["*.deployments.json"],
+      "url": "./packages/council-deploy/src/deployments/deployments.schema.json"
+    }
+  ],
+  "markdown.extension.toc.levels": "2..6",
+  "cSpell.words": [
+    "abitype",
+    "calldatas",
+    "delegators",
+    "delvtech",
+    "merkle",
+    "timelock",
+    "tsup",
+    "typecheck",
+    "unvested",
+    "viem",
+    "wagmi"
+  ]
 }

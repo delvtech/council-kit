@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
-import { GscStatus } from "src/utils/gsc/types";
+import { GscStatus } from "src/utils/vaults/gsc/types";
 import { GscMembershipStatusStat } from "./GscMembershipStatusStat";
 
 interface GSCVaultStatsRowProps {

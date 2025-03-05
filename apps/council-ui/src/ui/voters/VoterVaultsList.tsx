@@ -12,7 +12,7 @@ import { LockingVaultProfileCard } from "src/ui/vaults/lockingVault/LockingVault
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { VestingVaultProfileCard } from "src/ui/vaults/vestingVault/VestingVaultProfileCard";
-import { getIsGscEligible } from "src/utils/gsc/getIsGscEligible";
+import { getIsGscEligible } from "src/utils/vaults/gsc/getIsGscEligible";
 
 interface VoterVaultsListProps {
   account: `0x${string}`;

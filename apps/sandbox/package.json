@@ -20,7 +20,7 @@
     "@delvtech/drift": "^0.6.0",
     "@delvtech/drift-viem": "^0.6.0",
     "@delvtech/council-js": "^0.0.0",
-    "viem": "^2.23.1"
+    "viem": "^2.23.6"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",
