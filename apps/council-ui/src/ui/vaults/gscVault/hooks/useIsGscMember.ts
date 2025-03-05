@@ -1,4 +1,4 @@
-import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useReadGscVault } from "./useReadGscVault";
 
 /**
@@ -6,23 +6,12 @@ import { useReadGscVault } from "./useReadGscVault";
  * lookup, but just checking if someone is a member is cheap. Prefer this
  * instead of the heavier useGSCStatus hook whenever possible.
  */
-export function useIsGscMember(account: `0x${string}` | undefined): {
-  isGscMember: boolean | undefined;
-  status: QueryStatus;
-} {
+export function useIsGscMember(account: `0x${string}` | undefined) {
   const gscVault = useReadGscVault();
   const enabled = !!account;
-
-  const { data, status } = useQuery({
+  return useQuery({
     queryKey: ["useIsGSCMember", account],
     enabled: enabled,
-    queryFn: enabled
-      ? async () => gscVault?.getIsMember({ account })
-      : undefined,
+    queryFn: enabled ? async () => gscVault?.getIsMember(account) : undefined,
   });
-
-  return {
-    isGscMember: data,
-    status,
-  };
 }

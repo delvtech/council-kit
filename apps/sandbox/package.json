@@ -1,11 +1,13 @@
 {
-  "name": "council-js-starter",
+  "name": "sandbox",
   "version": "0.0.4",
   "description": "Boilerplate to get started using council-js fast!",
   "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "tsx -r dotenv/config src/sandbox.ts",
+    "watch": "tsx -r dotenv/config --watch src/sandbox.ts",
     "createProposal": "tsx -r dotenv/config src/scripts/createProposal.ts",
     "executeProposal": "tsx -r dotenv/config src/scripts/executeProposal.ts",
     "setLockDuration": "tsx -r dotenv/config src/scripts/setLockDuration.ts",

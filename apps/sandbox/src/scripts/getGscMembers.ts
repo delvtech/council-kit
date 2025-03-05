@@ -12,9 +12,9 @@ for (const member of members) {
 
   // get the voting vaults that were used to prove the member meets the
   // minimum voting power requirement
-  const votingPowerVaults = await gscVault.getMemberVaults(member);
+  const qualifyingVaults = await gscVault.getMemberVaults(member);
   const votingPowers = await Promise.all(
-    votingPowerVaults.map((vault) => vault.getVotingPower({ voter: member })),
+    qualifyingVaults.map((vault) => vault.getVotingPower({ voter: member })),
   );
 
   memberStats.push({

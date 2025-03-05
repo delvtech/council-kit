@@ -1,28 +1,11 @@
-import { QueryStatus, useQuery } from "@tanstack/react-query";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
-import { useReadGscVault } from "src/ui/vaults/gscVault/hooks/useReadGscVault";
+import { useQuery } from "@tanstack/react-query";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { getGscStatus } from "src/utils/gsc/getGscStatus";
-import { GscStatus } from "src/utils/gsc/types";
 
-export function useGscStatus(account: `0x${string}` | undefined): {
-  gscStatus: GscStatus | undefined;
-  status: QueryStatus;
-} {
-  const coreVoting = useReadCoreVoting();
-  const gscVault = useReadGscVault();
-
-  const { data, status } = useQuery({
+export function useGscStatus(account: `0x${string}` | undefined) {
+  const chainId = useSupportedChainId();
+  return useQuery({
     queryKey: ["gsc-status", account],
-    queryFn: () =>
-      getGscStatus({
-        account,
-        qualifyingVaults: coreVoting.vaults,
-        gscVault,
-      }),
+    queryFn: () => getGscStatus({ account, chainId }),
   });
-
-  return {
-    gscStatus: data,
-    status,
-  };
 }

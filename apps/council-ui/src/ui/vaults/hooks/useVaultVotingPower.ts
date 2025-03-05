@@ -1,13 +1,12 @@
-import { BlockLike } from "@delvtech/council-viem";
-import { QueryStatus, useQuery } from "@tanstack/react-query";
+import { Address, RangeBlock } from "@delvtech/drift";
+import { useQuery } from "@tanstack/react-query";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
-import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 
 interface UseVaultVotingPowerOptions {
-  vaultAddress: `0x${string}`;
-  account?: `0x${string}`;
-  atBlock?: BlockLike;
+  vaultAddress: Address;
+  account?: Address;
+  block?: RangeBlock;
 }
 
 /**
@@ -19,35 +18,20 @@ interface UseVaultVotingPowerOptions {
 export function useVaultVotingPower({
   vaultAddress,
   account,
-  atBlock,
-}: UseVaultVotingPowerOptions): {
-  votingPower: bigint | undefined;
-  votingPowerFormatted: string | undefined;
-  status: QueryStatus;
-} {
+  block,
+}: UseVaultVotingPowerOptions) {
   const council = useReadCouncil();
   const { address: connectedAccount } = useAccount();
   const accountToUse = account ?? connectedAccount;
-
-  const enabled = !!accountToUse;
-
-  const { data, status } = useQuery({
+  const enabled = !!council && !!accountToUse;
+  return useQuery({
     queryKey: ["vaultVotingPower", vaultAddress, account],
     enabled,
     queryFn: enabled
       ? () =>
           council
             .votingVault(vaultAddress)
-            .getVotingPower({ account: accountToUse, atBlock })
+            .getVotingPower({ voter: accountToUse, block })
       : undefined,
   });
-
-  return {
-    votingPower: data,
-    /**
-     * All voting power is formatted as a string with 18 decimal places.
-     */
-    votingPowerFormatted: data !== undefined ? formatEther(data) : undefined,
-    status,
-  };
 }

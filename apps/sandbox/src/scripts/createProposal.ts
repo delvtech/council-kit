@@ -1,5 +1,5 @@
 import { ReadWriteCouncil } from "@delvtech/council-js";
-import { council, publicClient } from "src/client";
+import { council, publicClient, walletClient } from "src/client";
 import type { Address } from "viem";
 
 // approx 90 days in blocks assuming 12 seconds a block
@@ -10,7 +10,11 @@ if (!(council instanceof ReadWriteCouncil)) {
 }
 
 const coreVoting = council.coreVoting("0x"); // <-- replace address
-const walletAddress = await coreVoting.contract.getSignerAddress();
+const walletAddress = walletClient?.account?.address;
+
+if (!walletAddress) {
+  throw Error("Missing private key");
+}
 
 // the vaults from which power will be drawn for the initial ballot
 let votingVaults: Address[] = ["0x", "0x"]; // <-- replace addresses

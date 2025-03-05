@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { getGscVaultConfig } from "src/config/utils/getGscVaultConfig";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
-import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
@@ -74,7 +73,6 @@ function useGSCVaultProfileCardData(
 ) {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const config = useCouncilConfig();
   const enabled = !!council;
 
   return useQuery({
@@ -90,12 +88,12 @@ function useGSCVaultProfileCardData(
           const [requiredVotingPower, qualifyingVaults, gscStatus] =
             await Promise.all([
               gscVault.getRequiredVotingPower(),
-              gscVault.getMemberVaults()
+              gscVault.getMemberVaults(account),
               getGscStatus({ account, chainId }),
             ]);
 
           const votingPowers = await Promise.all(
-            config.coreVoting.vaults.map(({ address }) => {
+            qualifyingVaults.map(({ address }) => {
               return council.votingVault(address).getVotingPower({
                 voter: account,
               });

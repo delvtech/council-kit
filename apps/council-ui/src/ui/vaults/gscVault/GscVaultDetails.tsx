@@ -18,7 +18,6 @@ import { getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
 import { getGscStatus } from "src/utils/gsc/getGscStatus";
 import { GscStatus } from "src/utils/gsc/types";
 import { useAccount } from "wagmi";
-import { useJoinGsc } from "./hooks/useJoinGsc";
 
 interface GscVaultDetailsProps {
   address: `0x${string}`;
@@ -32,7 +31,6 @@ export function GscVaultDetails({
     vaultAddress: address,
     account,
   });
-  const { joinGsc, status: joinGscStatus } = useJoinGsc();
   const chainId = useSupportedChainId();
   const vaultConfig = getVaultConfig({ address, chainId });
   const name = vaultConfig?.name || "Vesing Vault";
@@ -57,7 +55,6 @@ export function GscVaultDetails({
           accountMembership={data.gscStatus}
           membersCount={data.members.length}
           requiredVotingPower={data.requiredVotingPower}
-          onJoin={joinGsc}
         />
       }
       actions={

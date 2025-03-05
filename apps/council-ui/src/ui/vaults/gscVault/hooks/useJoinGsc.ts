@@ -20,9 +20,6 @@ export function useJoinGsc(): {
     errorMessage: "Failed to join GSC.",
     writeFn: enabled
       ? async () => {
-          if (!enabled) {
-            throw new Error("GSC Vault not found");
-          }
           const vaults = config.coreVoting.vaults.map(({ address }) => address);
           return gscVault.join({ args: { vaults } });
         }

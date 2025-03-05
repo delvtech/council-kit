@@ -2,33 +2,32 @@ import { QueryStatus } from "@tanstack/react-query";
 import assertNever from "assert-never";
 import Link from "next/link";
 import { ReactElement } from "react";
+import { getGscVaultConfig } from "src/config/utils/getGscVaultConfig";
 import { makeVaultURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
-import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { GenericVaultCardSkeleton } from "src/ui/vaults/GenericVaultCard";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
 import { useAccount } from "wagmi";
 import { useGscMembers } from "./hooks/useGscMembers";
 
-interface GSCVaultPreviewCardProps {
+interface GscVaultPreviewCardProps {
   vaultAddress: `0x${string}`;
 }
 
-export function GSCVaultPreviewCard({
+export function GscVaultPreviewCard({
   vaultAddress,
-}: GSCVaultPreviewCardProps): ReactElement {
+}: GscVaultPreviewCardProps): ReactElement {
   const { address: account } = useAccount();
+  const chainId = useSupportedChainId();
+  const vaultConfig = getGscVaultConfig({ chainId });
+  const name = vaultConfig?.name;
+  const sentenceSummary = vaultConfig?.sentenceSummary;
 
-  // config
-  const config = useCouncilConfig();
-  const name = config.gscVoting?.vault.name;
-  const sentenceSummary = config.gscVoting?.vault.sentenceSummary;
-
-  // members and status
   const { gscMembers, status: gscMembersQueryStatus } = useGscMembers();
   const {
-    gscStatus: connectedAccountMembershipStatus,
+    data: connectedAccountMembershipStatus,
     status: gscStatusQueryStatus,
   } = useGscStatus(account);
 
@@ -48,10 +47,10 @@ export function GSCVaultPreviewCard({
     case "success": {
       return (
         <Link href={makeVaultURL(vaultAddress)}>
-          <div className="daisy-card h-72 bg-base-200 transition-shadow hover:shadow-xl ">
+          <div className="daisy-card h-72 bg-base-200 transition-shadow hover:shadow-xl">
             <div className="daisy-card-body justify-between">
               <div>
-                <h2 className="daisy-card-title text-2xl ">{name}</h2>
+                <h2 className="daisy-card-title text-2xl">{name}</h2>
                 <Address address={vaultAddress} className="text-lg" />
                 {/* Description */}
                 <span className="mt-4 line-clamp-3" title={sentenceSummary}>

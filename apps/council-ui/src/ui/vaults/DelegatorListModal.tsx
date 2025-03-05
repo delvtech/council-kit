@@ -1,4 +1,4 @@
-import { VoterWithPower } from "@delvtech/council-viem";
+import { VoterWithPower } from "@delvtech/council-js";
 import { ReactElement } from "react";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { WalletIcon } from "src/ui/base/WalletIcon";

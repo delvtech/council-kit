@@ -8,7 +8,7 @@ import {
   GenericVaultCard,
   GenericVaultCardSkeleton,
 } from "src/ui/vaults/GenericVaultCard";
-import { GSCVaultPreviewCard } from "src/ui/vaults/gscVault/GscVaultPreviewCard";
+import { GscVaultPreviewCard } from "src/ui/vaults/gscVault/GscVaultPreviewCard";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
@@ -33,7 +33,7 @@ export default function VaultsPage(): ReactElement {
             switch (vault.name) {
               case "GSC Vault":
                 return (
-                  <GSCVaultPreviewCard
+                  <GscVaultPreviewCard
                     key={vault.address}
                     vaultAddress={vault.address}
                   />

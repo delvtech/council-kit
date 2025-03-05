@@ -27,7 +27,7 @@ export function VoterAddress({
   className,
   iconSize,
 }: VoterAddressProps): ReactElement {
-  const { isGscMember } = useIsGscMember(address);
+  const { data: isGscMember } = useIsGscMember(address);
   const config = useCouncilConfig();
   const { address: account } = useAccount();
   const { data: delegatesByVault } = useDelegatesByVault({ account });
@@ -56,13 +56,13 @@ export function VoterAddress({
       {addressLabel}
       {isGscMember && (
         <Tooltip content="GSC Member">
-          <BuildingLibraryIcon className="fill-warning ml-1 size-5" />
+          <BuildingLibraryIcon className="ml-1 size-5 fill-warning" />
         </Tooltip>
       )}
       {delegateVaultNames.map((vaultName) => {
         return (
           <Tooltip key={vaultName} content={`Your Delegate (${vaultName})`}>
-            <UserCircleIcon className="fill-accent ml-1 size-5" />
+            <UserCircleIcon className="ml-1 size-5 fill-accent" />
           </Tooltip>
         );
       })}
