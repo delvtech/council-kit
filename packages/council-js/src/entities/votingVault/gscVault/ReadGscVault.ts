@@ -157,7 +157,7 @@ export class ReadGscVault<
   async getMemberVaults(
     member: Address,
     options?: ContractReadOptions,
-  ): Promise<ReadVotingVault[]> {
+  ): Promise<ReadVotingVault<A>[]> {
     const vaultAddresses = await this.gscVaultContract.read(
       "getUserVaults",
       { who: member },

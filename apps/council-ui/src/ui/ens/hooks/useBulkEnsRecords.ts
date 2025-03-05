@@ -1,20 +1,20 @@
+import { Address } from "@delvtech/drift";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { EnsRecords, getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
-import { usePublicClient } from "wagmi";
 
 export function useBulkEnsRecords(
-  addresses: `0x${string}`[],
+  addresses: Address[],
 ): UseQueryResult<EnsRecords> {
-  const client = usePublicClient();
-
-  const enabled = !!addresses.length && !!client;
+  const chainId = useSupportedChainId();
+  const enabled = !!addresses.length;
 
   return useQuery({
     queryKey: ["bulkEnsRecords", addresses],
     enabled,
     queryFn: enabled
       ? (): Promise<EnsRecords> => {
-          return getBulkEnsRecords(addresses, client);
+          return getBulkEnsRecords(addresses, chainId);
         }
       : undefined,
     refetchOnWindowFocus: false,

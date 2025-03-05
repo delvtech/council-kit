@@ -7,14 +7,14 @@ import { ReadWriteLockingVault } from "src/entities/votingVault/lockingVault/Rea
 export class ReadWriteAirdrop<
   A extends ReadWriteAdapter = ReadWriteAdapter,
 > extends ReadAirdrop<A> {
-  async getToken(): Promise<ReadWriteToken> {
+  async getToken(): Promise<ReadWriteToken<A>> {
     return new ReadWriteToken({
       address: await this.contract.read("token"),
       drift: this.drift,
     });
   }
 
-  async getLockingVault(): Promise<ReadWriteLockingVault> {
+  async getLockingVault(): Promise<ReadWriteLockingVault<A>> {
     return new ReadWriteLockingVault({
       address: await this.contract.read("lockingVault"),
       drift: this.drift,

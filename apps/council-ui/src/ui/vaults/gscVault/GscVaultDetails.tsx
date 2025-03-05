@@ -1,11 +1,11 @@
 import { Address } from "@delvtech/drift";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
-import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
 import {
   GscMemberInfo,
   GscMembersTable,
@@ -25,14 +25,17 @@ interface GscVaultDetailsProps {
 }
 
 export function GscVaultDetails({
-  address: vaultAddress,
+  address,
 }: GscVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
-  const { data, status, error } = useGscVaultDetails({
-    vaultAddress,
+  const { data, status, error } = useGscVaultDetailsData({
+    vaultAddress: address,
     account,
   });
   const { joinGsc, status: joinGscStatus } = useJoinGsc();
+  const chainId = useSupportedChainId();
+  const vaultConfig = getVaultConfig({ address, chainId });
+  const name = vaultConfig?.name || "Vesing Vault";
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
@@ -44,10 +47,10 @@ export function GscVaultDetails({
 
   return (
     <VaultDetails
-      name={data.name}
-      paragraphSummary={data.paragraphSummary}
+      name={name}
+      paragraphSummary={vaultConfig?.paragraphSummary}
       header={
-        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+        <VaultHeader name={name} descriptionURL={vaultConfig?.descriptionURL} />
       }
       statsRow={
         <GSCVaultsStatsRow
@@ -71,14 +74,11 @@ export function GscVaultDetails({
 
 interface GSCVaultDetailsData {
   gscStatus: GscStatus;
-  paragraphSummary: string | undefined;
-  descriptionURL: string | undefined;
-  name: string | undefined;
   members: GscMemberInfo[];
   requiredVotingPower: bigint;
 }
 
-function useGscVaultDetails({
+function useGscVaultDetailsData({
   vaultAddress,
   account,
 }: {
@@ -87,13 +87,8 @@ function useGscVaultDetails({
 }): UseQueryResult<GSCVaultDetailsData> {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const config = getCouncilConfig(chainId);
-  const vaultConfig = getVaultConfig({
-    address: vaultAddress,
-    chainId,
-  });
-
-  const enabled = !!council && !!vaultConfig;
+  const config = useCouncilConfig();
+  const enabled = !!council;
 
   return useQuery({
     queryKey: ["useGscVaultDetails", chainId, vaultAddress, account],
@@ -101,9 +96,6 @@ function useGscVaultDetails({
     queryFn: enabled
       ? async (): Promise<GSCVaultDetailsData> => {
           const gscVault = council?.gscVault(vaultAddress);
-          const qualifyingVaults = config.coreVoting.vaults.map(({ address }) =>
-            council.votingVault(address),
-          );
 
           const [members, requiredVotingPower, gscStatus] = await Promise.all([
             gscVault.getMembers(),
@@ -112,10 +104,17 @@ function useGscVaultDetails({
             ,
           ]);
 
+          const memberVaults = await Promise.all(
+            members.map(async (member) => {
+              const qualifyingVaults = await gscVault.getMemberVaults(member);
+              return { member, qualifyingVaults };
+            }),
+          );
+
           const [memberENSNames, ...memberVotingPowers] = await Promise.all([
             getBulkEnsRecords(members, chainId),
-            ...members
-              .map((member) =>
+            ...memberVaults
+              .map(({ member, qualifyingVaults }) =>
                 qualifyingVaults.map(async (vault) => {
                   const votingPower = await vault.getVotingPower({
                     voter: member,
@@ -126,21 +125,18 @@ function useGscVaultDetails({
               .flat(),
           ]);
 
-          const memberInfoMap: Record<Address, GscMemberInfo> = {};
+          const memberInfoByAddress: Record<Address, GscMemberInfo> = {};
           for (const { member, votingPower } of memberVotingPowers) {
-            memberInfoMap[member] ||= {
+            memberInfoByAddress[member] ||= {
               member,
               ensName: memberENSNames[member],
               qualifyingVotingPower: 0n,
             };
-            memberInfoMap[member].qualifyingVotingPower += votingPower;
+            memberInfoByAddress[member].qualifyingVotingPower += votingPower;
           }
 
           return {
-            name: vaultConfig.name,
-            descriptionURL: vaultConfig.descriptionURL,
-            paragraphSummary: vaultConfig.paragraphSummary,
-            members: Object.values(memberInfoMap),
+            members: Object.values(memberInfoByAddress),
             requiredVotingPower,
             gscStatus,
           };

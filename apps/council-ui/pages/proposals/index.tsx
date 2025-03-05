@@ -12,7 +12,7 @@ import {
   ProposalsTable,
 } from "src/ui/proposals/ProposalTable/ProposalsTable";
 import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalTable/ProposalsTableSkeleton";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { useAccount } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {

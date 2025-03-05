@@ -12,7 +12,7 @@ import { Page } from "src/ui/base/Page";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { VoterStatsRowSkeleton } from "src/ui/voters/skeletons/VoterStatsRowSkeleton";
 import { VoterStatsRow } from "src/ui/voters/VoterStatsRow";
 import { VoterVaultsList } from "src/ui/voters/VoterVaultsList";
@@ -87,7 +87,10 @@ export default function VoterPage(): ReactElement {
         </h2>
         {status === "success" ? (
           <div className="overflow-x-auto">
-            <VotingHistoryTable history={data.votingHistory} />
+            <VotingHistoryTable
+              votingContract={config.coreVoting}
+              votes={data.votingHistory}
+            />
           </div>
         ) : (
           <VotingHistoryTableSkeleton />

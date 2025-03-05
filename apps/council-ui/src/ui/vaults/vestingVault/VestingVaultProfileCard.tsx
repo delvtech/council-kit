@@ -1,16 +1,17 @@
-import { VoterPowerBreakdown } from "@delvtech/council-viem";
+import { Address } from "@delvtech/drift";
 import { BuildingLibraryIcon } from "@heroicons/react/20/solid";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { ReactElement } from "react";
+import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { makeVoterURL } from "src/routes";
 import { Tooltip } from "src/ui/base/Tooltip";
 import { WalletIcon } from "src/ui/base/WalletIcon";
 import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
-import { useVaultConfig } from "src/ui/config/hooks/useVaultConfig";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { DelegatorListModal } from "src/ui/vaults/DelegatorListModal";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
@@ -29,22 +30,20 @@ export function VestingVaultProfileCard({
   address,
   profileAddress,
 }: VestingVaultProfileCardProps): ReactElement {
-  // data
   const { data } = useVestingVaultProfileCardData(address, profileAddress);
   const profileName = useDisplayName(profileAddress);
-  const delegateName = useDisplayName(data?.delegate.address);
+  const delegateName = useDisplayName(data?.delegate);
+  const chainId = useSupportedChainId();
+  const config = getVaultConfig({ address, chainId });
+  const name = config?.name || "Vesting Vault";
+
   const { address: account } = useAccount();
-  const { delegate: accountDelegate } = useDelegate({
+  const { data: accountDelegate } = useDelegate({
     vault: address,
     account,
   });
 
-  // config
-  const config = useVaultConfig(address);
-  const name = config?.name || "Vesting Vault";
-
-  // delegate transaction
-  const { changeDelegate } = useChangeDelegate();
+  const { write: changeDelegate } = useChangeDelegate();
 
   if (!data) {
     return <VaultProfileCardSkeleton address={address} name={name} />;
@@ -56,7 +55,7 @@ export function VestingVaultProfileCard({
     tokenSymbol,
     votingPowerBreakdown,
     delegate,
-    delegateIsGSCMember,
+    delegateIsGscMember: delegateIsGSCMember,
   } = data || {};
 
   return (
@@ -80,18 +79,14 @@ export function VestingVaultProfileCard({
         {
           label: "Current Delegate",
           value:
-            delegate.address === zeroAddress ? (
+            delegate === zeroAddress ? (
               "None"
             ) : (
               <Link
-                href={makeVoterURL(delegate.address)}
+                href={makeVoterURL(delegate)}
                 className="flex items-center hover:underline"
               >
-                <WalletIcon
-                  className="mr-1"
-                  address={delegate.address}
-                  size={16}
-                />
+                <WalletIcon className="mr-1" address={delegate} size={16} />
                 {delegateName}
                 {delegateIsGSCMember && (
                   <Tooltip content="GSC Member">
@@ -103,17 +98,17 @@ export function VestingVaultProfileCard({
         },
         {
           label: "# of Delegators",
-          value: votingPowerBreakdown?.votingPowerByDelegator.length ? (
+          value: votingPowerBreakdown?.delegators.length ? (
             <>
               <label
                 htmlFor={`delegator-modal-${address}`}
                 className="text-secondary underline hover:cursor-pointer hover:no-underline"
               >
-                {votingPowerBreakdown.votingPowerByDelegator.length}
+                {votingPowerBreakdown.delegators.length}
               </label>
               <DelegatorListModal
                 id={`delegator-modal-${address}`}
-                delegators={votingPowerBreakdown.votingPowerByDelegator}
+                delegators={votingPowerBreakdown.delegators}
                 delegateAddress={profileAddress}
                 delegateName={profileName}
               />
@@ -125,8 +120,7 @@ export function VestingVaultProfileCard({
       ]}
       button={{
         text: "Delegate",
-        disabled:
-          !changeDelegate || accountDelegate?.address === profileAddress,
+        disabled: !changeDelegate || accountDelegate === profileAddress,
         onClick: () =>
           changeDelegate!({
             vaultAddress: address,
@@ -138,41 +132,46 @@ export function VestingVaultProfileCard({
 }
 
 function useVestingVaultProfileCardData(
-  address: `0x${string}`,
-  profileAddress: `0x${string}`,
+  address: Address,
+  profileAddress: Address,
 ) {
   const council = useReadCouncil();
   const gscVault = useReadGscVault();
+  const enabled = !!council;
+
   return useQuery({
     queryKey: ["vesting-vault-profile-card", address, profileAddress],
-    queryFn: async () => {
-      const vestingVault = council.vestingVault(address);
-      const votingPowerBreakdowns = await vestingVault.getVotingPowerBreakdown({
-        account: profileAddress,
-      });
+    enabled,
+    queryFn: enabled
+      ? async () => {
+          const vestingVault = council.vestingVault(address);
 
-      // FIXME: This isn't properly typed. evm-client isn't deriving the
-      // component types correctly.
-      const grant = await vestingVault.getGrant({ account: profileAddress });
-      const token = await vestingVault.getToken();
-      const delegate = await vestingVault.getDelegate({
-        account: profileAddress,
-      });
+          const [token, grant, delegate, [votingPowerBreakdown]] =
+            await Promise.all([
+              vestingVault.getToken(),
+              vestingVault.getGrant(profileAddress),
+              vestingVault.getDelegate(profileAddress),
+              vestingVault.getVotingPowerBreakdown({
+                voter: profileAddress,
+              }),
+            ]);
 
-      grant;
+          const [decimals, tokenSymbol, delegateIsGscMember] =
+            await Promise.all([
+              token.getDecimals(),
+              token.getSymbol(),
+              gscVault?.getIsMember(delegate),
+            ]);
 
-      return {
-        grantSize: grant.allocation,
-        decimals: await token.getDecimals(),
-        tokenSymbol: await token.getSymbol(),
-        votingPowerBreakdown: votingPowerBreakdowns[0] as
-          | VoterPowerBreakdown
-          | undefined,
-        delegate,
-        delegateIsGSCMember:
-          gscVault &&
-          (await gscVault.getIsMember({ account: delegate.address })),
-      };
-    },
+          return {
+            grantSize: grant.allocation,
+            decimals,
+            tokenSymbol,
+            votingPowerBreakdown,
+            delegate,
+            delegateIsGscMember,
+          };
+        }
+      : undefined,
   });
 }

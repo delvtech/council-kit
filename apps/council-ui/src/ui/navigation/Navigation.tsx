@@ -16,12 +16,12 @@ export function Navigation(): ReactElement {
   const { address } = useAccount();
   const { pathname, query } = useRouter();
   const { toggleUserStatus, loading, isSubscribed } = usePushSubscribe();
-  const { claimableAmount } = useClaimableAirdropAmount();
+  const { data: claimableAmount } = useClaimableAirdropAmount();
 
   useWrongNetworkEffect();
 
   return (
-    <div className="daisy-navbar bg-base-200 ">
+    <div className="daisy-navbar bg-base-200">
       <div className="daisy-navbar-start">
         <div className="daisy-dropdown">
           <label tabIndex={0} className="daisy-btn daisy-btn-ghost lg:hidden">

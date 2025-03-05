@@ -1,46 +1,33 @@
-import { MutationStatus } from "@tanstack/react-query";
+import { Address } from "@delvtech/drift";
 import { useWrite } from "src/ui/contract/hooks/useWrite";
-import { useReadWriteCouncil } from "src/ui/sdk/useReadWriteCouncil";
+import { useReadWriteCouncil } from "src/ui/council/useReadWriteCouncil";
 
 export interface DepositOptions {
-  vaultAddress: `0x${string}`;
+  vaultAddress: Address;
   amount: bigint;
-  account?: `0x${string}`;
+  account?: Address;
 }
 
-export function useDeposit(): {
-  deposit: ((options: DepositOptions) => void) | undefined;
-  status: MutationStatus;
-  transactionHash: `0x${string}` | undefined;
-} {
+export function useDeposit() {
   const council = useReadWriteCouncil();
   const enabled = !!council;
-
-  const { write, status, transactionHash } = useWrite({
+  return useWrite({
     pendingMessage: "Depositing...",
     successMessage: "Deposited!",
     errorMessage: "Failed to deposit.",
-    writeFn: ({
-      vaultAddress,
-      amount,
-      account,
-    }: DepositOptions): Promise<`0x${string}`> => {
-      if (!enabled) {
-        throw new Error(
-          "Connection to council not available. Check your wallet connection.",
-        );
-      }
-
-      return council.lockingVault(vaultAddress).deposit({
-        account,
-        amount,
-      });
-    },
+    writeFn: enabled
+      ? ({
+          vaultAddress,
+          amount,
+          account,
+        }: DepositOptions): Promise<`0x${string}`> => {
+          return council.lockingVault(vaultAddress).deposit({
+            args: {
+              account,
+              amount,
+            },
+          });
+        }
+      : undefined,
   });
-
-  return {
-    deposit: enabled ? write : undefined,
-    status,
-    transactionHash,
-  };
 }

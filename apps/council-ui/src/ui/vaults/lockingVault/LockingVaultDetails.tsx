@@ -4,7 +4,7 @@ import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { DepositAndWithdrawForm } from "src/ui/vaults/DepositAndWithdrawForm";
 import { useApprove } from "src/ui/vaults/lockingVault/hooks/useApprove";
@@ -26,15 +26,16 @@ export function LockingVaultDetails({
   address,
 }: LockingVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
-  const chainId = useSupportedChainId();
   const { data, status, error } = useLockingVaultDetailsData(address, account);
-  const publicClient = usePublicClient();
+  const chainId = useSupportedChainId();
+  const vaultConfig = getVaultConfig({ address, chainId });
+  const name = vaultConfig?.name || "Locking Vault";
 
   const { write: changeDelegate, status: changeDelegateStatus } =
     useChangeDelegate();
-  const { deposit, status: depositStatus } = useDeposit();
-  const { withdraw, status: withdrawStatus } = useWithdraw();
-  const { approve, status: approveStatus } = useApprove();
+  const { write: deposit, status: depositStatus } = useDeposit();
+  const { write: withdraw, status: withdrawStatus } = useWithdraw();
+  const { write: approve, status: approveStatus } = useApprove();
 
   const isTransacting = [
     changeDelegateStatus,
@@ -50,6 +51,7 @@ export function LockingVaultDetails({
     return <VaultDetailsSkeleton />;
   }
 
+  const publicClient = usePublicClient();
   async function handleDelegate(delegate: string): Promise<void> {
     let delegateAddress: string | null | undefined = delegate;
     if (!isAddress(delegate)) {
@@ -71,10 +73,10 @@ export function LockingVaultDetails({
 
   return (
     <VaultDetails
-      name={data.name}
-      paragraphSummary={data.paragraphSummary}
+      name={name}
+      paragraphSummary={vaultConfig?.paragraphSummary}
       header={
-        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+        <VaultHeader name={name} descriptionURL={vaultConfig?.descriptionURL} />
       }
       statsRow={
         <LockingVaultStatsRow
@@ -127,9 +129,6 @@ interface LockingVaultDetailsData {
   delegate?: `0x${string}`;
   delegatedToAccount: number;
   depositedBalance: bigint;
-  descriptionURL: string | undefined;
-  paragraphSummary: string | undefined;
-  name: string | undefined;
   participants: number;
   tokenAddress: `0x${string}`;
   tokenAllowance: bigint;
@@ -144,11 +143,10 @@ function useLockingVaultDetailsData(
 ): UseQueryResult<LockingVaultDetailsData> {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const vaultConfig = getVaultConfig({ address, chainId });
-  const enabled = !!council && !!vaultConfig;
+  const enabled = !!council;
 
   return useQuery({
-    queryKey: ["lockingVaultDetails", address, account, vaultConfig],
+    queryKey: ["lockingVaultDetails", address, account],
     enabled,
     queryFn: enabled
       ? async (): Promise<LockingVaultDetailsData> => {
@@ -183,9 +181,6 @@ function useLockingVaultDetailsData(
           ]);
 
           return {
-            name: vaultConfig?.name,
-            descriptionURL: vaultConfig?.descriptionURL,
-            paragraphSummary: vaultConfig?.paragraphSummary,
             participants: voters.length,
             accountVotingPower,
             delegate,

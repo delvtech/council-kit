@@ -1,4 +1,3 @@
-import { Hash } from "@delvtech/drift";
 import {
   MutationStatus,
   useMutation,
@@ -9,6 +8,7 @@ import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErro
 import { makeTransactionSubmittedToast } from "src/ui/base/toast/makeTransactionSubmittedToast";
 import { makeTransactionSuccessToast } from "src/ui/base/toast/makeTransactionSuccessToast";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { Hash } from "viem";
 import { usePublicClient } from "wagmi";
 
 /**

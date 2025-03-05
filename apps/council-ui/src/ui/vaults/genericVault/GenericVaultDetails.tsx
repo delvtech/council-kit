@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";

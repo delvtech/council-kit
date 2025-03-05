@@ -9,7 +9,7 @@ import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { Page } from "src/ui/base/Page";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { GSCOnlyToggle } from "src/ui/voters/GscOnlyToggle";
 import { useSearchVoters } from "src/ui/voters/hooks/useVotersSearch";
 import { VoterRowData } from "src/ui/voters/types";

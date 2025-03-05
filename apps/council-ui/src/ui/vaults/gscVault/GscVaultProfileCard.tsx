@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { ReactElement } from "react";
+import { getGscVaultConfig } from "src/config/utils/getGscVaultConfig";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
-import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";
-import { isGscMember } from "src/utils/gsc/getGscStatus";
-import { useReadGscVault } from "./hooks/useReadGscVault";
+import { getGscStatus, isGscMember } from "src/utils/gsc/getGscStatus";
 
 interface GSCVaultProfileCardProps {
   address: `0x${string}`;
@@ -20,13 +20,11 @@ export function GSCVaultProfileCard({
   profileAddress,
 }: GSCVaultProfileCardProps): ReactElement {
   const { data } = useGSCVaultProfileCardData(address, profileAddress);
+  const chainId = useSupportedChainId();
+  const vaultConfig = getGscVaultConfig({ chainId });
+  const name = vaultConfig?.name || "GSC Vault";
 
-  // config
-  const config = useCouncilConfig();
-  const name = config.gscVoting?.vault?.name || "GSC Vault";
-
-  // kick transaction
-  const { kickGscMember } = useKickGscMember();
+  const { write: kickGscMember } = useKickGscMember();
 
   if (!data) {
     return <VaultProfileCardSkeleton address={address} name={name} />;
@@ -74,10 +72,10 @@ function useGSCVaultProfileCardData(
   vaultAddress: `0x${string}`,
   account: `0x${string}`,
 ) {
-  const coreVoting = useReadCoreVoting();
-  const gscVault = useReadGscVault();
-  const { gscStatus } = useGscStatus(account);
-  const enabled = !!gscVault;
+  const chainId = useSupportedChainId();
+  const council = useReadCouncil();
+  const config = useCouncilConfig();
+  const enabled = !!council;
 
   return useQuery({
     queryKey: [
@@ -87,16 +85,32 @@ function useGSCVaultProfileCardData(
     enabled,
     queryFn: enabled
       ? async () => {
-          const qualifyingVotingPower = await coreVoting.getVotingPower({
-            account,
-          });
-          const requiredVotingPower = await gscVault.getRequiredVotingPower();
-          const isBelowThreshold = qualifyingVotingPower < requiredVotingPower;
+          const gscVault = council?.gscVault(vaultAddress);
+
+          const [requiredVotingPower, qualifyingVaults, gscStatus] =
+            await Promise.all([
+              gscVault.getRequiredVotingPower(),
+              gscVault.getMemberVaults()
+              getGscStatus({ account, chainId }),
+            ]);
+
+          const votingPowers = await Promise.all(
+            config.coreVoting.vaults.map(({ address }) => {
+              return council.votingVault(address).getVotingPower({
+                voter: account,
+              });
+            }),
+          );
+
+          const qualifyingVotingPower = votingPowers.reduce(
+            (total, vaultPower) => total + vaultPower,
+            0n,
+          );
 
           return {
-            isBelowThreshold,
             requiredVotingPower,
             qualifyingVotingPower,
+            isBelowThreshold: qualifyingVotingPower < requiredVotingPower,
             gscStatus,
           };
         }

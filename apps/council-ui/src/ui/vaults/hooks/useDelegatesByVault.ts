@@ -1,13 +1,12 @@
-import { Address, BlockIdentifier } from "@delvtech/drift";
+import { Address } from "@delvtech/drift";
 import { useQuery } from "@tanstack/react-query";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 
 interface UseDelegatesByVaultOptions {
   account: Address | undefined;
   vaults?: Address[];
-  atBlock?: BlockIdentifier;
 }
 
 /**
@@ -18,7 +17,6 @@ interface UseDelegatesByVaultOptions {
 export function useDelegatesByVault({
   account,
   vaults = [],
-  atBlock,
 }: UseDelegatesByVaultOptions) {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();

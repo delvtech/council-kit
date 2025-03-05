@@ -11,7 +11,7 @@ import { ReadLockingVault } from "src/entities/votingVault/lockingVault/ReadLock
 export class ReadWriteLockingVault<
   A extends ReadWriteAdapter = ReadWriteAdapter,
 > extends ReadLockingVault<A> {
-  async getToken(): Promise<ReadWriteToken> {
+  async getToken(): Promise<ReadWriteToken<A>> {
     return new ReadWriteToken({
       address: await this.lockingVaultContract.read("token"),
       drift: this.drift,
@@ -100,18 +100,14 @@ export class ReadWriteLockingVault<
      */
     amount: bigint;
   }>): Promise<Hash> {
-return this.lockingVaultContract.write(
-      "withdraw",
-      args,
-      {
-        ...options,
-        onMined: async (receipt) => {
-          if (receipt?.status === "success") {
-            this.contract.cache.clear();
-          }
-          options?.onMined?.(receipt);
-        },
+    return this.lockingVaultContract.write("withdraw", args, {
+      ...options,
+      onMined: async (receipt) => {
+        if (receipt?.status === "success") {
+          this.contract.cache.clear();
+        }
+        options?.onMined?.(receipt);
       },
-    );
+    });
   }
 }

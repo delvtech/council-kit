@@ -24,11 +24,13 @@ export function getVaultConfig({
     (vault) => vault.address === address,
   );
   if (foundCoreVotingVault) {
-    return {
-      ...foundCoreVotingVault,
-      isGsc: false,
-      chainId,
-    };
+    return (
+      foundCoreVotingVault && {
+        ...foundCoreVotingVault,
+        isGsc: false,
+        chainId,
+      }
+    );
   }
 }
 

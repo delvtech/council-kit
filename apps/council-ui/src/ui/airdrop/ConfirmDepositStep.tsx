@@ -20,9 +20,9 @@ export default function ConfirmDepositStep({
   onBack,
   onConfirm,
 }: ConfirmDepositStepProps): ReactElement {
-  const { claimableAmountFormatted } = useClaimableAirdropAmount();
-  const { airdropToken } = useAirdropToken();
-  const { symbol } = useTokenSymbol(airdropToken);
+  const { data: claimableAmountFormatted } = useClaimableAirdropAmount();
+  const { data: airdropToken } = useAirdropToken();
+  const { data: symbol } = useTokenSymbol(airdropToken?.address);
 
   const displayName = useDisplayName(account);
   const delegateDisplayName = useDisplayName(delegate);
@@ -42,12 +42,12 @@ export default function ConfirmDepositStep({
         </div>
         <div className="daisy-stat bg-base-200">
           <div className="daisy-stat-title">Credited To</div>
-          <div className=" daisy-stat-value">{displayName}</div>
+          <div className="daisy-stat-value">{displayName}</div>
         </div>
         {delegate && (
           <div className="daisy-stat bg-base-200">
             <div className="daisy-stat-title">Voting power delegated to</div>
-            <div className=" daisy-stat-value">{delegateDisplayName}</div>
+            <div className="daisy-stat-value">{delegateDisplayName}</div>
           </div>
         )}
       </div>

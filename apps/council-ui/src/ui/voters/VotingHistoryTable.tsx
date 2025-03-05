@@ -1,21 +1,22 @@
-import { ReadVote } from "@delvtech/council-viem";
+import { Vote } from "@delvtech/council-js";
 import { ReactElement } from "react";
-import { councilConfigs } from "src/config/council.config";
+import { VotingContractConfig } from "src/config/types";
 import { makeProposalURL } from "src/routes";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingHistoryTableProps {
-  history: ReadVote[];
+  votingContract: VotingContractConfig;
+  votes: Vote[];
 }
 
 export function VotingHistoryTable({
-  history,
+  votingContract,
+  votes,
 }: VotingHistoryTableProps): ReactElement {
-  if (history.length === 0) {
+  if (votes.length === 0) {
     return <h2 className="text-lg">No voting history for this account.</h2>;
   }
 
@@ -26,26 +27,29 @@ export function VotingHistoryTable({
         <span>Voting Power</span>
         <span>Vote</span>
       </GridTableHeader>
-      {history.map((vote, i) => (
-        <VoteHistoryRow key={i} vote={vote} />
+      {votes.map((vote, i) => (
+        <VoteHistoryRow key={i} votingContract={votingContract} vote={vote} />
       ))}
     </div>
   );
 }
 
-function VoteHistoryRow({ vote }: { vote: ReadVote }): ReactElement {
-  const chainId = useSupportedChainId();
-  const proposalsConfig = councilConfigs[chainId].coreVoting.proposals;
-  const proposal = vote.proposal;
-  const coreVoting = proposal.coreVoting;
-  const sentenceSummary = proposalsConfig[String(proposal.id)]?.sentenceSummary;
+function VoteHistoryRow({
+  votingContract,
+  vote,
+}: {
+  votingContract: VotingContractConfig;
+  vote: Vote;
+}): ReactElement {
+  const proposalConfig = votingContract.proposals[vote.proposalId.toString()];
+  const sentenceSummary = proposalConfig.sentenceSummary;
   return (
     <GridTableRowLink
       className="grid-cols-[3fr_1fr_1fr]"
-      href={makeProposalURL(coreVoting.address, proposal.id)}
+      href={makeProposalURL(votingContract.address, vote.proposalId)}
     >
       <span>
-        {coreVoting.name} Proposal {String(proposal.id)}
+        {votingContract.name} Proposal {String(vote.proposalId)}
         {sentenceSummary && (
           <p className="text-sm opacity-60">
             {sentenceSummary.length > 80
@@ -54,7 +58,7 @@ function VoteHistoryRow({ vote }: { vote: ReadVote }): ReactElement {
           </p>
         )}
       </span>
-      <span>{formatVotingPower(vote.power)}</span>
+      <span>{formatVotingPower(vote.votingPower)}</span>
       <span>
         <FormattedBallot ballot={vote.ballot} />
       </span>

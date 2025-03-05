@@ -4,17 +4,17 @@ import { ProposalConfig } from "src/config/types";
 import { getVotingContractConfig } from "src/config/utils/getVotingContractConfig";
 
 export function getProposalConfig({
+  chainId,
   votingContract,
   id,
-  chainId,
 }: {
+  chainId: SupportedChainId;
   votingContract: Address;
   id: bigint;
-  chainId: SupportedChainId;
 }): ExtendedProposalConfig | undefined {
   const votingContractConfig = getVotingContractConfig({
-    address: votingContract,
     chainId,
+    address: votingContract,
   });
 
   if (!votingContractConfig) {

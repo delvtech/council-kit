@@ -16,9 +16,9 @@ export default function DepositOrClaimStep({
   onDeposit,
   onClaim,
 }: DepositOrClaimStepProps): ReactElement {
-  const { claimableAmountFormatted } = useClaimableAirdropAmount();
-  const { airdropToken } = useAirdropToken();
-  const { symbol } = useTokenSymbol(airdropToken);
+  const { data: claimableAmountFormatted } = useClaimableAirdropAmount();
+  const { data: airdropToken } = useAirdropToken();
+  const { data: symbol } = useTokenSymbol(airdropToken?.address);
 
   return (
     <>

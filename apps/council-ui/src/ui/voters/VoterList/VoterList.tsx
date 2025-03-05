@@ -9,6 +9,7 @@ import {
 import { useDelegatesByVault } from "src/ui/vaults/hooks/useDelegatesByVault";
 import { VoterRowData } from "src/ui/voters/types";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
+import { useAccount } from "wagmi";
 
 type SortField = "numberOfDelegators" | "votingPower";
 
@@ -27,11 +28,13 @@ export function VoterList({
     key: "votingPower",
     direction: "DESC",
   });
-
-  const { delegatesByVault = {} } = useDelegatesByVault();
+  const { address: account } = useAccount();
+  const { data: delegatesByVault = {} } = useDelegatesByVault({
+    account,
+  });
   // Memoized to prevent invalidating sortedVoters on every render.
   const delegateAddresses = useMemo(
-    () => Object.values(delegatesByVault).map(({ address }) => address),
+    () => Object.values(delegatesByVault),
     [delegatesByVault],
   );
 

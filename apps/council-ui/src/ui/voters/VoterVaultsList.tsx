@@ -3,7 +3,8 @@ import { ReactElement } from "react";
 import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useReadCoreVoting } from "src/ui/council/hooks/useReadCoreVoting";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { GSCVaultProfileCard } from "src/ui/vaults/gscVault/GscVaultProfileCard";
 import { useReadGscVault } from "src/ui/vaults/gscVault/hooks/useReadGscVault";
 import { useVaultVotingPower } from "src/ui/vaults/hooks/useVaultVotingPower";
@@ -20,7 +21,6 @@ interface VoterVaultsListProps {
 export function VoterVaultsList({
   account,
 }: VoterVaultsListProps): ReactElement {
-  const coreVoting = useReadCoreVoting();
   const config = useCouncilConfig();
   const gscVault = useReadGscVault();
   const { data: isGSCRelevant } = useIsGSCRelevant(account);
@@ -28,7 +28,7 @@ export function VoterVaultsList({
   return (
     <div className="grid w-full grid-flow-row grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {/* core voting vaults */}
-      {coreVoting.vaults.map((vault) => {
+      {config.coreVoting.vaults.map((vault) => {
         const vaultConfig = config.coreVoting.vaults.find(
           (v) => v.address === vault.address,
         );
@@ -77,21 +77,23 @@ export function VoterVaultsList({
  * are either a member or eligible.
  */
 function useIsGSCRelevant(account: `0x${string}`): UseQueryResult<boolean> {
+  const chainId = useSupportedChainId();
   const gscVault = useReadGscVault();
-  const coreVoting = useReadCoreVoting();
+  const coreVoting = useReadCouncil();
+  const enabled = !!account && !!gscVault && !!coreVoting;
+
   return useQuery({
     queryKey: ["is-gsc-relevant", account],
     queryFn: async () => {
       if (!gscVault) {
         return false;
       }
-      if (await gscVault.getIsMember({ account })) {
+      if (await gscVault.getIsMember(account)) {
         return true;
       }
       return getIsGscEligible({
         account,
-        gscVault,
-        qualifyingVaults: coreVoting.vaults,
+        chainId,
       });
     },
   });

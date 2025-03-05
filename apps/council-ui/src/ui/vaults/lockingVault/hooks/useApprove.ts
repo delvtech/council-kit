@@ -1,41 +1,24 @@
-import { MutationStatus } from "@tanstack/react-query";
 import { useWrite } from "src/ui/contract/hooks/useWrite";
-import { useReadWriteCouncil } from "src/ui/sdk/useReadWriteCouncil";
+import { useReadWriteCouncil } from "src/ui/council/useReadWriteCouncil";
 import { maxUint256 } from "viem";
-import { useAccount } from "wagmi";
 
-export function useApprove(): {
-  approve: ((vaultAddress: `0x${string}`) => void) | undefined;
-  status: MutationStatus;
-  transactionHash: `0x${string}` | undefined;
-} {
+export function useApprove() {
   const council = useReadWriteCouncil();
-  const { address } = useAccount();
-  const enabled = !!council && !!address;
-
-  const { status, transactionHash, write } = useWrite({
+  const enabled = !!council;
+  return useWrite({
     pendingMessage: "Approving...",
     successMessage: "Approved!",
     errorMessage: "Failed to approve.",
-    writeFn: async (vaultAddress: `0x${string}`) => {
-      if (!enabled) {
-        throw new Error(
-          "Connection to council not available. Check your wallet connection.",
-        );
-      }
-
-      const token = await council.lockingVault(vaultAddress).getToken();
-      return token.approve({
-        amount: maxUint256,
-        owner: address,
-        spender: vaultAddress,
-      });
-    },
+    writeFn: enabled
+      ? async (vaultAddress: `0x${string}`) => {
+          const token = await council.lockingVault(vaultAddress).getToken();
+          return token.approve({
+            args: {
+              amount: maxUint256,
+              spender: vaultAddress,
+            },
+          });
+        }
+      : undefined,
   });
-
-  return {
-    approve: enabled ? write : undefined,
-    status,
-    transactionHash,
-  };
 }

@@ -1,11 +1,10 @@
-import { Address } from "@delvtech/drift";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
@@ -13,6 +12,7 @@ import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { GrantCard } from "src/ui/vaults/vestingVault/GrantCard";
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
 import { VestingVaultStatsRow } from "src/ui/vaults/vestingVault/VestingVaultStatsRow";
+import { Address } from "viem";
 import { useAccount } from "wagmi";
 
 interface VestingVaultDetailsProps {
@@ -24,7 +24,11 @@ export function VestingVaultDetails({
 }: VestingVaultDetailsProps): ReactElement {
   const { address: account } = useAccount();
   const { data, status, error } = useVestingVaultDetailsData(address, account);
-  const { changeDelegate } = useChangeDelegate();
+  const chainId = useSupportedChainId();
+  const vaultConfig = getVaultConfig({ address, chainId });
+  const name = vaultConfig?.name || "Vesting Vault";
+
+  const { write: changeDelegate } = useChangeDelegate();
 
   if (status === "error") {
     return <ErrorMessage error={error} />;
@@ -35,10 +39,10 @@ export function VestingVaultDetails({
   }
   return (
     <VaultDetails
-      name={data.name}
-      paragraphSummary={data.paragraphSummary}
+      name={name}
+      paragraphSummary={vaultConfig?.paragraphSummary}
       header={
-        <VaultHeader name={data.name} descriptionURL={data.descriptionURL} />
+        <VaultHeader name={name} descriptionURL={vaultConfig?.descriptionURL} />
       }
       statsRow={
         <VestingVaultStatsRow
@@ -82,12 +86,9 @@ interface VestingVaultDetailsData {
   tokenDecimals: number;
   delegate?: `0x${string}`;
   delegatedToAccount: number;
-  descriptionURL: string | undefined;
-  paragraphSummary: string | undefined;
   expirationDate: Date | undefined;
   grantBalance: bigint;
   grantBalanceWithdrawn: bigint;
-  name: string | undefined;
   participants: number;
   tokenAddress: `0x${string}`;
   tokenSymbol: string;
@@ -100,8 +101,7 @@ function useVestingVaultDetailsData(
 ): UseQueryResult<VestingVaultDetailsData> {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const vaultConfig = getVaultConfig({ address, chainId });
-  const enabled = !!council && !!vaultConfig;
+  const enabled = !!council;
 
   return useQuery({
     queryKey: ["vestingVaultDetails", address, account],
@@ -149,9 +149,6 @@ function useVestingVaultDetailsData(
           ]);
 
           return {
-            name: vaultConfig?.name,
-            descriptionURL: vaultConfig?.descriptionURL,
-            paragraphSummary: vaultConfig?.paragraphSummary,
             participants: voters.length,
             unvestedMultiplier,
             grantBalance: grant?.allocation || 0n,

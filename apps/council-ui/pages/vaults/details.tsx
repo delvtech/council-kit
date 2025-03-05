@@ -5,7 +5,7 @@ import { Page } from "src/ui/base/Page";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { FrozenLockingVaultDetails } from "src/ui/vaults/frozenLockingVault/FrozenLockingVaultDetails";
 import { GenericVaultDetails } from "src/ui/vaults/genericVault/GenericVaultDetails";
-import { GscVaultDetails } from "src/ui/vaults/gscVault/GSCVaultDetails";
+import { GscVaultDetails } from "src/ui/vaults/gscVault/GscVaultDetails";
 import { LockingVaultDetails } from "src/ui/vaults/lockingVault/LockingVaultDetails";
 import { VestingVaultDetails } from "src/ui/vaults/vestingVault/VestingVaultDetails";
 // import { VestingVaultDetails } from"src/ui/vaults/vestingVault/VestingVaultDetails";

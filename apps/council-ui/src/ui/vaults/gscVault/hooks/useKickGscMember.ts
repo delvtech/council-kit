@@ -5,7 +5,6 @@ import { useReadWriteGscVault } from "./useReadWriteGscVault";
 export function useKickGscMember() {
   const gscVault = useReadWriteGscVault();
   const enabled = !!gscVault;
-
   return useWrite({
     pendingMessage: "Kicking GSC member...",
     successMessage: "GSC member kicked!",

@@ -12,7 +12,7 @@ import { ReadVestingVault } from "src/entities/votingVault/vestingVault/ReadVest
 export class ReadWriteVestingVault<
   A extends ReadWriteAdapter = ReadWriteAdapter,
 > extends ReadVestingVault<A> {
-  async getToken(): Promise<ReadWriteToken> {
+  async getToken(): Promise<ReadWriteToken<A>> {
     return new ReadWriteToken({
       address: await this.vestingVaultContract.read("token"),
       drift: this.drift,

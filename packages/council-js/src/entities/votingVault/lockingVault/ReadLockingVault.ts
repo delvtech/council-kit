@@ -47,7 +47,7 @@ export class ReadLockingVault<
   /**
    * Get the associated token for this LockingVault.
    */
-  async getToken(): Promise<ReadToken> {
+  async getToken(): Promise<ReadToken<A>> {
     return new ReadToken({
       address: await this.lockingVaultContract.read("token"),
       drift: this.drift,

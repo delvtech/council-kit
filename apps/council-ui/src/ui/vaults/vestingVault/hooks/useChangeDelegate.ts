@@ -1,43 +1,24 @@
-import { MutationStatus } from "@tanstack/react-query";
 import { useWrite } from "src/ui/contract/hooks/useWrite";
-import { useReadWriteCouncil } from "src/ui/sdk/useReadWriteCouncil";
+import { useReadWriteCouncil } from "src/ui/council/useReadWriteCouncil";
 
 export interface ChangeDelegateOptions {
   vaultAddress: `0x${string}`;
   newDelegate: `0x${string}`;
 }
 
-export function useChangeDelegate(): {
-  changeDelegate: ((options: ChangeDelegateOptions) => void) | undefined;
-  status: MutationStatus;
-  transactionHash: `0x${string}` | undefined;
-} {
+export function useChangeDelegate() {
   const council = useReadWriteCouncil();
   const enabled = !!council;
-
-  const { write, status, transactionHash } = useWrite({
+  return useWrite({
     pendingMessage: "Changing delegate...",
     successMessage: "Delegate changed!",
     errorMessage: "Failed to change delegate.",
-    writeFn: ({
-      newDelegate,
-      vaultAddress,
-    }: ChangeDelegateOptions): Promise<`0x${string}`> => {
-      if (!enabled) {
-        throw new Error(
-          "Connection to council not available. Check your wallet connection.",
-        );
-      }
-
-      return council
-        .vestingVault(vaultAddress)
-        .changeDelegate({ args: { newDelegate } });
-    },
+    writeFn: enabled
+      ? ({ newDelegate, vaultAddress }: ChangeDelegateOptions) => {
+          return council
+            .vestingVault(vaultAddress)
+            .changeDelegate({ args: { newDelegate } });
+        }
+      : undefined,
   });
-
-  return {
-    changeDelegate: enabled ? write : undefined,
-    status,
-    transactionHash,
-  };
 }

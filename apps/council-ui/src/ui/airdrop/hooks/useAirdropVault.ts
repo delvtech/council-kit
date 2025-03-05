@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { SupportedChainId } from "src/config/council.config";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 
 /**
  * Fetch the locking vault for the configured airdrop.

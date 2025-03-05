@@ -42,7 +42,7 @@ export class ReadAirdrop<A extends Adapter = Adapter> extends Entity<A> {
   /**
    * Get the token that will be paid out.
    */
-  async getToken(): Promise<ReadToken> {
+  async getToken(): Promise<ReadToken<A>> {
     return new ReadToken({
       address: await this.contract.read("token"),
       drift: this.drift,
@@ -63,7 +63,7 @@ export class ReadAirdrop<A extends Adapter = Adapter> extends Entity<A> {
    * Get the address of the locking vault into which tokens will be deposited
    * when someone claims and delegates in a single tx.
    */
-  async getLockingVault(): Promise<ReadLockingVault> {
+  async getLockingVault(): Promise<ReadLockingVault<A>> {
     const address = await this.contract.read("lockingVault");
     return new ReadLockingVault({
       address,

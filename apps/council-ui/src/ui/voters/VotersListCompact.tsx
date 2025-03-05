@@ -1,4 +1,4 @@
-import { VoterWithPower } from "@delvtech/council-viem";
+import { VoterWithPower } from "@delvtech/council-js";
 import { ReactElement, useMemo, useState } from "react";
 import { makeVoterURL } from "src/routes";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
@@ -44,7 +44,7 @@ export function VotersListCompact({
   }, [sortOptions, voters]);
 
   const { data: ensRecords } = useBulkEnsRecords(
-    voters.map(({ voter }) => voter.address),
+    voters.map(({ voter }) => voter),
   );
 
   return (
@@ -63,12 +63,12 @@ export function VotersListCompact({
       onSort={setSortOptions}
       rows={sortedVoters.map(({ voter, votingPower }) => {
         return {
-          href: makeVoterURL(voter.address),
+          href: makeVoterURL(voter),
           cells: [
             <VoterAddress
               key="address"
-              address={voter.address}
-              ensName={ensRecords?.[voter.address]}
+              address={voter}
+              ensName={ensRecords?.[voter]}
             />,
             formatVotingPower(votingPower, 0),
           ],

@@ -1,9 +1,8 @@
 import * as PushAPI from "@pushprotocol/restapi";
 import { SubscribeOptionsType } from "@pushprotocol/restapi/src/lib/channels";
-import { useCallback, useEffect, useState } from "react";
-
 import { ENV } from "@pushprotocol/restapi/src/lib/constants";
-import { councilConfigs } from "src/config/council.config";
+import { useCallback, useEffect, useState } from "react";
+import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useAccount, useSignTypedData } from "wagmi";
 import { UsePushSubscribeType } from "./types";
@@ -11,15 +10,16 @@ import { UsePushSubscribeType } from "./types";
 export function usePushSubscribe(): UsePushSubscribeType {
   const { address } = useAccount();
   const chainId = useSupportedChainId();
+  const config = useCouncilConfig();
   const [loading, setLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const config = councilConfigs[chainId].push || {};
-  const isConfigured = !!councilConfigs[chainId].push;
+  const pushConfig = config.push || {};
+  const isConfigured = !!config.push;
 
   const isUserSubscribed = useCallback(
     async function () {
-      const { env, channel } = config;
+      const { env, channel } = pushConfig;
       const userSubscriptions =
         address &&
         (await PushAPI.user.getSubscriptions({
@@ -65,7 +65,7 @@ export function usePushSubscribe(): UsePushSubscribeType {
   }
 
   function generatePayload(): SubscribeOptionsType {
-    const { env, channel } = config;
+    const { env, channel } = pushConfig;
     const payload: SubscribeOptionsType = {
       signer: { _signTypedData } as any,
       channelAddress: `eip155:${chainId}:${channel}`, // channel address in CAIP

@@ -51,7 +51,7 @@ export class ReadVestingVault<
   /**
    * Get this vault's token.
    */
-  async getToken(): Promise<ReadToken> {
+  async getToken(): Promise<ReadToken<A>> {
     return new ReadToken({
       address: await this.vestingVaultContract.read("token"),
       drift: this.drift,

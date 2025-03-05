@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SupportedChainId } from "src/config/council.config";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { useAccount } from "wagmi";
 import { useAirdropData } from "./useAirdropData";
 

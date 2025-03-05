@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useReadCouncil } from "src/ui/sdk/useReadCouncil";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import {
   GenericVaultCard,
   GenericVaultCardSkeleton,

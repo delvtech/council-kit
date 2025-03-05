@@ -10,7 +10,7 @@ export function makeEtherscanTransactionURL(
       return `https://etherscan.io/tx/${transactionHash}`;
     case 5:
       return `https://goerli.etherscan.io/tx/${transactionHash}`;
-    case 1337:
+    case 31337:
       return `#`;
     default:
       assertNever(chainId);
