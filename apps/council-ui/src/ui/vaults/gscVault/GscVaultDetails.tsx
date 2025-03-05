@@ -15,6 +15,7 @@ import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { getGscStatus } from "src/utils/vaults/gsc/getGscStatus";
 import { GscStatus } from "src/utils/vaults/gsc/types";
 import { useAccount } from "wagmi";
@@ -113,7 +114,9 @@ function useGscVaultDetailsData({
             ...memberVaults
               .map(({ member, qualifyingVaults }) =>
                 qualifyingVaults.map(async (vault) => {
-                  const votingPower = await vault.getVotingPower({
+                  const votingPower = await getVotingPower({
+                    chainId,
+                    vault: vault.address,
                     voter: member,
                   });
                   return { member, votingPower };

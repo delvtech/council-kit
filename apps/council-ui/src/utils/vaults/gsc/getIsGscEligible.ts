@@ -2,6 +2,7 @@ import { Address } from "@delvtech/drift";
 import { SupportedChainId } from "src/config/council.config";
 import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
 import { getCouncil } from "src/utils/council/getCouncil";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 
 interface GetIsGscEligibleOptions {
   account: Address | undefined;
@@ -28,11 +29,11 @@ export async function getIsGscEligible({
   const [requiredVotingPower, ...vaultVotingPowers] = await Promise.all([
     gscVault.getRequiredVotingPower(),
     ...approvedVaults.map((vault) =>
-      vault
-        .getVotingPower({ voter: account })
-        // Wagmi doesn't decode the uninitialized error, so we simply
-        // return 0 if the the call fails.
-        .catch(() => 0n),
+      getVotingPower({
+        chainId,
+        vault: vault.address,
+        voter: account,
+      }),
     ),
   ]);
 

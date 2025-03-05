@@ -98,7 +98,7 @@ export class ReadLockingVault<
       voter,
       ...options,
     });
-    return breakdown[0].delegators;
+    return breakdown[0]?.delegators || [];
   }
 
   /**

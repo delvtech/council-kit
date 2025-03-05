@@ -2,14 +2,15 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { useChangeDelegate } from "src/ui/vaults/lockingVault/hooks/useChangeDelegate";
 import { LockingVaultStatsRow } from "src/ui/vaults/lockingVault/LockingVaultStatsRow";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { zeroAddress } from "viem";
 import { useAccount } from "wagmi";
 
@@ -101,13 +102,19 @@ function useFrozenLockingVaultDetailsData(
       ? async () => {
           const lockingVault = council.lockingVault(address);
 
-          const [token, voters, accountVotingPower, delegate, delegators] =
+          const [token, voters, delegate, delegators, accountVotingPower] =
             await Promise.all([
               lockingVault.getToken(),
               lockingVault.getVoters(),
-              account ? lockingVault.getVotingPower({ voter: account }) : 0n,
               account ? lockingVault.getDelegate(account) : undefined,
               account ? lockingVault.getDelegatorsTo(account) : [],
+              account
+                ? getVotingPower({
+                    chainId,
+                    vault: address,
+                    voter: account,
+                  })
+                : 0n,
             ]);
 
           const [tokenSymbol, tokenBalance, tokenAllowance, depositedBalance] =

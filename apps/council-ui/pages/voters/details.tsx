@@ -21,6 +21,7 @@ import { VotingHistoryTableSkeleton } from "src/ui/voters/VotingHistorySkeleton"
 import { VotingHistoryTable } from "src/ui/voters/VotingHistoryTable";
 import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
 import { getTotalVotingPower } from "src/utils/vaults/getTotalVotingPower";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { getGscStatus } from "src/utils/vaults/gsc/getGscStatus";
 import { GscStatus } from "src/utils/vaults/gsc/types";
 import { getAddress } from "viem";
@@ -215,12 +216,11 @@ export function useVoterData(
           for (const vault of config.coreVoting.vaults) {
             promises.push(
               (async () => {
-                const vaultVotingPower = await council
-                  .votingVault(vault.address)
-                  .getVotingPower({ voter: account })
-                  // Wagmi doesn't decode the uninitialized error, so we simply
-                  // return 0 if the the call fails.
-                  .catch(() => 0n);
+                const vaultVotingPower = await getVotingPower({
+                  chainId,
+                  vault: vault.address,
+                  voter: account,
+                });
                 voterData.votingPower += vaultVotingPower;
               })(),
               (async () => {

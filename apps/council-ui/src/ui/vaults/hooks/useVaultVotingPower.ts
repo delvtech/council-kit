@@ -1,6 +1,7 @@
 import { Address, RangeBlock } from "@delvtech/drift";
 import { useQuery } from "@tanstack/react-query";
-import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { useAccount } from "wagmi";
 
 interface UseVaultVotingPowerOptions {
@@ -20,21 +21,21 @@ export function useVaultVotingPower({
   account,
   block,
 }: UseVaultVotingPowerOptions) {
-  const council = useReadCouncil();
   const { address: connectedAccount } = useAccount();
   const accountToUse = account ?? connectedAccount;
-  const enabled = !!council && !!accountToUse;
+  const enabled = !!accountToUse;
+  const chainId = useSupportedChainId();
   return useQuery({
     queryKey: ["vaultVotingPower", vaultAddress, account],
     enabled,
     queryFn: enabled
       ? () =>
-          council
-            .votingVault(vaultAddress)
-            .getVotingPower({ voter: accountToUse, block })
-            // Wagmi doesn't decode the uninitialized error, so we simply
-            // return 0 if the the call fails.
-            .catch(() => 0n)
+          getVotingPower({
+            chainId,
+            vault: vaultAddress,
+            voter: accountToUse,
+            block,
+          })
       : undefined,
   });
 }

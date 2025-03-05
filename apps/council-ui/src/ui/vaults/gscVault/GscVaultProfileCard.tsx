@@ -7,6 +7,7 @@ import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { getGscStatus, isGscMember } from "src/utils/vaults/gsc/getGscStatus";
 
 interface GSCVaultProfileCardProps {
@@ -93,11 +94,13 @@ function useGSCVaultProfileCardData(
             ]);
 
           const votingPowers = await Promise.all(
-            qualifyingVaults.map(({ address }) => {
-              return council.votingVault(address).getVotingPower({
+            qualifyingVaults.map(({ address }) =>
+              getVotingPower({
+                chainId,
+                vault: address,
                 voter: account,
-              });
-            }),
+              }),
+            ),
           );
 
           const qualifyingVotingPower = votingPowers.reduce(

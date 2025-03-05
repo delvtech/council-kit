@@ -2,11 +2,12 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { ReactElement } from "react";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { useAccount } from "wagmi";
 import { GenericVaultStatsRow } from "./GenericVaultStatsRow";
 
@@ -63,9 +64,12 @@ function useGenericVaultDetailsData(
     enabled,
     queryFn: enabled
       ? async () => {
-          const vault = council.votingVault(address);
           const accountVotingPower = account
-            ? await vault.getVotingPower({ voter: account })
+            ? await getVotingPower({
+                chainId,
+                vault: address,
+                voter: account,
+              })
             : 0n;
 
           return {

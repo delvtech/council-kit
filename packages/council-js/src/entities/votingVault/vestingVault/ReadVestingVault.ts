@@ -170,7 +170,7 @@ export class ReadVestingVault<
       voter,
       ...options,
     });
-    return breakdown[0].delegators;
+    return breakdown[0]?.delegators || [];
   }
 
   /**

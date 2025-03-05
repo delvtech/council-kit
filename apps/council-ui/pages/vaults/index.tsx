@@ -4,16 +4,19 @@ import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import {
   GenericVaultCard,
   GenericVaultCardSkeleton,
 } from "src/ui/vaults/GenericVaultCard";
 import { GscVaultPreviewCard } from "src/ui/vaults/gscVault/GscVaultPreviewCard";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { useAccount } from "wagmi";
 
 export default function VaultsPage(): ReactElement {
   const { address } = useAccount();
-  const { data, status } = useVaultsPageData(address);
+  const { data, status, error } = useVaultsPageData(address);
+  console.log({ data, status, error });
 
   return (
     <Page>
@@ -90,6 +93,7 @@ interface VaultData {
 function useVaultsPageData(
   account: `0x${string}` | undefined,
 ): UseQueryResult<VaultData[]> {
+  const chainId = useSupportedChainId();
   const council = useReadCouncil();
   const config = useCouncilConfig();
   const enabled = !!council;
@@ -114,9 +118,11 @@ function useVaultsPageData(
                 }
 
                 let accountVotingPower = account
-                  ? council
-                      .votingVault(address)
-                      .getVotingPower({ voter: account })
+                  ? getVotingPower({
+                      chainId,
+                      vault: address,
+                      voter: account,
+                    })
                   : 0n;
 
                 return Promise.all([tvp, accountVotingPower]).then(

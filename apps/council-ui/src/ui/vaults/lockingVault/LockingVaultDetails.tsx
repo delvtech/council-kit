@@ -3,8 +3,8 @@ import { ReactElement } from "react";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { DepositAndWithdrawForm } from "src/ui/vaults/DepositAndWithdrawForm";
 import { useApprove } from "src/ui/vaults/lockingVault/hooks/useApprove";
@@ -15,6 +15,7 @@ import { LockingVaultStatsRow } from "src/ui/vaults/lockingVault/LockingVaultSta
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
 import { VaultHeader } from "src/ui/vaults/VaultHeader";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { isAddress } from "viem";
 import { useAccount, usePublicClient } from "wagmi";
 
@@ -25,6 +26,7 @@ interface LockingVaultDetailsProps {
 export function LockingVaultDetails({
   address,
 }: LockingVaultDetailsProps): ReactElement {
+  const publicClient = usePublicClient();
   const { address: account } = useAccount();
   const { data, status, error } = useLockingVaultDetailsData(address, account);
   const chainId = useSupportedChainId();
@@ -51,7 +53,6 @@ export function LockingVaultDetails({
     return <VaultDetailsSkeleton />;
   }
 
-  const publicClient = usePublicClient();
   async function handleDelegate(delegate: string): Promise<void> {
     let delegateAddress: string | null | undefined = delegate;
     if (!isAddress(delegate)) {
@@ -156,7 +157,13 @@ function useLockingVaultDetailsData(
             await Promise.all([
               lockingVault.getToken(),
               lockingVault.getVoters(),
-              account ? lockingVault.getVotingPower({ voter: account }) : 0n,
+              account
+                ? getVotingPower({
+                    chainId,
+                    vault: address,
+                    voter: account,
+                  })
+                : 0n,
               account ? lockingVault.getDelegate(account) : undefined,
               account ? lockingVault.getDelegatorsTo(account) : [],
             ]);

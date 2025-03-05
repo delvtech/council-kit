@@ -3,8 +3,8 @@ import { ReactElement } from "react";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { VaultDetails } from "src/ui/vaults/VaultDetails/VaultDetails";
 import { VaultDetailsSkeleton } from "src/ui/vaults/VaultDetails/VaultDetailsSkeleton";
@@ -12,6 +12,7 @@ import { VaultHeader } from "src/ui/vaults/VaultHeader";
 import { GrantCard } from "src/ui/vaults/vestingVault/GrantCard";
 import { useChangeDelegate } from "src/ui/vaults/vestingVault/hooks/useChangeDelegate";
 import { VestingVaultStatsRow } from "src/ui/vaults/vestingVault/VestingVaultStatsRow";
+import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { Address } from "viem";
 import { useAccount } from "wagmi";
 
@@ -115,38 +116,36 @@ function useVestingVaultDetailsData(
             voters,
             unvestedMultiplier,
             grant,
-            accountVotingPower,
             delegate,
             delegators,
+            accountVotingPower,
           ] = await Promise.all([
             vestingVault.getToken(),
             vestingVault.getVoters(),
             vestingVault.getUnvestedMultiplier(),
             account ? vestingVault.getGrant(account) : undefined,
-            account ? vestingVault.getVotingPower({ voter: account }) : 0n,
             account ? vestingVault.getDelegate(account) : undefined,
             account ? vestingVault.getDelegatorsTo(account) : [],
+            account
+              ? getVotingPower({
+                  chainId,
+                  vault: address,
+                  voter: account,
+                })
+              : 0n,
           ]);
 
-          const [tokenSymbol, tokenDecimals, tokenBalance, tokenAllowance] =
+          const [tokenSymbol, tokenDecimals, unlockDate, expirationDate] =
             await Promise.all([
               token.getSymbol(),
               token.getDecimals(),
-              account ? token.getBalanceOf(account) : 0n,
-              account
-                ? token.getAllowance({
-                    owner: account,
-                    spender: address,
-                  })
-                : 0n,
+              grant ? await getBlockDate(grant.cliffBlock, chainId) : undefined,
+              grant
+                ? await getBlockDate(grant.expirationBlock, chainId)
+                : undefined,
             ]);
 
-          const [unlockDate, expirationDate] = await Promise.all([
-            grant ? await getBlockDate(grant.cliffBlock, chainId) : undefined,
-            grant
-              ? await getBlockDate(grant.expirationBlock, chainId)
-              : undefined,
-          ]);
+          console.log("voters", delegators);
 
           return {
             participants: voters.length,
