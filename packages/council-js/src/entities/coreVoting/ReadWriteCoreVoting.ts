@@ -11,6 +11,7 @@ import { ReadCoreVoting } from "src/entities/coreVoting/ReadCoreVoting";
 import { Ballot } from "src/entities/coreVoting/types";
 import { EntityWriteParams } from "src/entities/Entity";
 import { ReadVotingVault } from "src/entities/votingVault/ReadVotingVault";
+import { CouncilSdkError } from "src/error";
 
 export class ReadWriteCoreVoting<
   A extends ReadWriteAdapter = ReadWriteAdapter,
@@ -175,9 +176,20 @@ export class ReadWriteCoreVoting<
     options,
   }: EntityWriteParams<{
     proposalId: bigint;
-    targets: Address[];
-    calldatas: Bytes[];
+    targets?: Readonly<Address[]>;
+    calldatas?: Readonly<Bytes[]>;
   }>): Promise<Hash> {
+    if (!targets || !calldatas) {
+      const args = await this.getProposalArgs(proposalId);
+      if (!args) {
+        throw new CouncilSdkError(
+          `Missing targets and calldatas to execute proposal ${proposalId}`,
+        );
+      }
+      targets = args.targets;
+      calldatas = args.calldatas;
+    }
+
     return this.contract.write(
       "execute",
       {
@@ -201,12 +213,9 @@ export class ReadWriteCoreVoting<
    * Vote on this a proposal.
    */
   async vote({
-    proposalId,
-    ballot,
-    vaults,
-    extraVaultData,
+    args: { proposalId, ballot, vaults, extraVaultData },
     options,
-  }: {
+  }: EntityWriteParams<{
     proposalId: bigint;
     ballot: Ballot;
     /**
@@ -217,9 +226,9 @@ export class ReadWriteCoreVoting<
     /**
      * Extra data given to the vaults to help calculation.
      */
-    extraVaultData?: Bytes[];
+    extraVaultData?: (Bytes | undefined)[];
     options?: ContractWriteOptions & OnMinedParam;
-  }): Promise<Hash> {
+  }>): Promise<Hash> {
     const voter = await this.contract.getSignerAddress();
 
     // Filter out vaults with no voting power which would cause a revert.

@@ -3,6 +3,7 @@ import {
   Address,
   Contract,
   ContractReadOptions,
+  FunctionArgs,
   RangeBlock,
 } from "@delvtech/drift";
 import { ContractEntityConfig, Entity } from "src/entities/Entity";
@@ -291,5 +292,37 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
       options,
     );
     return { yes, no, maybe, total: yes + no + maybe };
+  }
+
+  /**
+   * Get the array of addresses that will be called (targets) and the data
+   * they'll be called with (calldatas) by a proposal.
+   */
+  async getProposalArgs(
+    proposalId: bigint,
+    options?: ContractReadOptions,
+  ): Promise<FunctionArgs<CoreVotingAbi, "proposal"> | undefined> {
+    const logs = await this.contract.getEvents("ProposalCreated", {
+      toBlock: await convertToRangeBlock(options?.block, this.drift),
+    });
+    const log = logs.find(({ args }) => args.proposalId === proposalId);
+
+    if (!log?.transactionHash) {
+      return undefined;
+    }
+
+    const createTransaction = await this.drift.getTransaction({
+      hash: log.transactionHash,
+    });
+
+    if (!createTransaction?.input) {
+      return undefined;
+    }
+
+    const { args } = this.contract.decodeFunctionData<"proposal">(
+      createTransaction.input,
+    );
+
+    return args;
   }
 }
