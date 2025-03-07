@@ -1,6 +1,6 @@
 import { MutationStatus } from "@tanstack/react-query";
 import { useReadWriteAirdrop } from "src/ui/airdrop/hooks/useReadWriteAirdrop";
-import { useWrite } from "src/ui/contract/hooks/useWrite";
+import { useWrite } from "src/ui/contract/useWrite";
 import { useAirdropData } from "./useAirdropData";
 import { useClaimableAirdropAmount } from "./useClaimableAirdropAmount";
 

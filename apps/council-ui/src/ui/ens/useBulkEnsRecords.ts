@@ -1,6 +1,6 @@
 import { Address } from "@delvtech/drift";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { EnsRecords, getBulkEnsRecords } from "src/utils/getBulkEnsRecords";
 
 export function useBulkEnsRecords(

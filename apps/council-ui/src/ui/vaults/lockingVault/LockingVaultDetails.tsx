@@ -4,7 +4,7 @@ import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { makeTransactionErrorToast } from "src/ui/base/toast/makeTransactionErrorToast";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { ChangeDelegateForm } from "src/ui/vaults/ChangeDelegateForm";
 import { DepositAndWithdrawForm } from "src/ui/vaults/DepositAndWithdrawForm";
 import { useApprove } from "src/ui/vaults/lockingVault/hooks/useApprove";

@@ -6,7 +6,7 @@ import { getGscVaultConfig } from "src/config/utils/getGscVaultConfig";
 import { makeVaultURL } from "src/routes";
 import { Address } from "src/ui/base/Address";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { GenericVaultCardSkeleton } from "src/ui/vaults/GenericVaultCard";
 import { useGscStatus } from "src/ui/vaults/gscVault/hooks/useGscStatus";
 import { useAccount } from "wagmi";

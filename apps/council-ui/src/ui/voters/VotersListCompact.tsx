@@ -6,7 +6,7 @@ import {
   SortOptions,
   SortableGridTable,
 } from "src/ui/base/tables/SortableGridTable";
-import { useBulkEnsRecords } from "src/ui/ens/hooks/useBulkEnsRecords";
+import { useBulkEnsRecords } from "src/ui/ens/useBulkEnsRecords";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 
 interface VotersListCompactProps {

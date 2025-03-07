@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import Skeleton from "react-loading-skeleton";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
-import { useTokenSymbol } from "src/ui/token/hooks/useTokenSymbol";
+import { useTokenSymbol } from "src/ui/token/useTokenSymbol";
 import { useAirdropToken } from "./hooks/useAirdropToken";
 import { useClaimableAirdropAmount } from "./hooks/useClaimableAirdropAmount";
 

@@ -3,7 +3,7 @@ import { viemAdapter } from "@delvtech/drift-viem";
 import { useMemo } from "react";
 import { SupportedChainId } from "src/config/council.config";
 import { driftStore } from "src/lib/drift";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { usePublicClient, useWalletClient } from "wagmi";
 
 /**

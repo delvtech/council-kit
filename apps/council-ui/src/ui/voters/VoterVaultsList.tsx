@@ -4,7 +4,7 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { GSCVaultProfileCard } from "src/ui/vaults/gscVault/GscVaultProfileCard";
 import { useReadGscVault } from "src/ui/vaults/gscVault/hooks/useReadGscVault";
 import { useVaultVotingPower } from "src/ui/vaults/hooks/useVaultVotingPower";

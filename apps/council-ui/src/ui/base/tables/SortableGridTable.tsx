@@ -1,7 +1,9 @@
+import {
+  ChevronDoubleDownIcon,
+  ChevronDoubleUpIcon,
+} from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import { ReactElement, ReactNode, useState } from "react";
-import { SortDirectionStatus } from "src/ui/base/sorting/SortDirectionStatus";
-import { SortDirection } from "src/ui/base/sorting/types";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
 import { GridTableRow } from "src/ui/base/tables/GridTableRow";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
@@ -101,7 +103,7 @@ export function SortableGridTable<K extends string>({
               return (
                 <button
                   key={i}
-                  className="hover:bg-base-300 flex items-center gap-1 text-left"
+                  className="flex items-center gap-1 text-left hover:bg-base-300"
                   onClick={() => handleSortChange(col.sortKey as K)}
                 >
                   {col.cell}
@@ -209,8 +211,27 @@ function nextSortDirection(
 
 function DefaultEmptyTableElement() {
   return (
-    <div className="bg-base-200 rounded-b-lg p-10 text-center">
+    <div className="rounded-b-lg bg-base-200 p-10 text-center">
       <p className="text-lg">Nothing to show.</p>
     </div>
   );
+}
+
+export type SortDirection = "ASC" | "DESC" | undefined;
+
+interface SortDirectionStatusProps {
+  direction: SortDirection | undefined;
+}
+
+export function SortDirectionStatus({
+  direction,
+}: SortDirectionStatusProps): ReactElement | null {
+  switch (direction) {
+    case "ASC":
+      return <ChevronDoubleUpIcon className="h-4" />;
+    case "DESC":
+      return <ChevronDoubleDownIcon className="h-4" />;
+    default:
+      return null;
+  }
 }

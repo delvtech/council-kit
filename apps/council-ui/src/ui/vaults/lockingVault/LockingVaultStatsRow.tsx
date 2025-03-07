@@ -3,7 +3,7 @@ import { Stat } from "src/ui/base/Stat";
 import { DefinitionTooltip } from "src/ui/base/Tooltip";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import ExternalLink from "src/ui/base/links/ExternalLink";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import {
   PARTICIPANTS_TIP,
   WALLETS_DELEGATED_TIP,

@@ -1,7 +1,7 @@
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { useChainId, usePublicClient } from "wagmi";
 
 const TOAST_ID = "wrong-network";

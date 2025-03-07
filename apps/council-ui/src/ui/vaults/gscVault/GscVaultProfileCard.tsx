@@ -3,7 +3,7 @@ import { ReactElement } from "react";
 import { getGscVaultConfig } from "src/config/utils/getGscVaultConfig";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
 import { VaultProfileCardSkeleton } from "src/ui/vaults/VaultProfileCardSkeleton";
 import { useKickGscMember } from "src/ui/vaults/gscVault/hooks/useKickGscMember";

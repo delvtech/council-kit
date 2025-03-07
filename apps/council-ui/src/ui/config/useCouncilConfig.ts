@@ -1,7 +1,7 @@
 import { SupportedChainId } from "src/config/council.config";
 import { CouncilConfig } from "src/config/types";
 import { getCouncilConfig } from "src/config/utils/getCouncilConfig";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 
 export function useCouncilConfig<T extends SupportedChainId>(chainId?: T) {
   chainId = useSupportedChainId(chainId);

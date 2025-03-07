@@ -5,7 +5,7 @@ import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { ErrorMessage } from "src/ui/base/error/ErrorMessage";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import {
   GscMemberInfo,
   GscMembersTable,

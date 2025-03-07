@@ -1,4 +1,4 @@
-import { useWrite } from "src/ui/contract/hooks/useWrite";
+import { useWrite } from "src/ui/contract/useWrite";
 import { useReadWriteCouncil } from "src/ui/council/useReadWriteCouncil";
 import { maxUint256 } from "viem";
 

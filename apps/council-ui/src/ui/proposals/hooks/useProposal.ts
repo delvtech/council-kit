@@ -2,7 +2,7 @@ import { Address } from "@delvtech/drift";
 import { useQuery } from "@tanstack/react-query";
 import { SupportedChainId } from "src/config/council.config";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 
 interface UseProposalCreationOptions {
   votingContract: Address;

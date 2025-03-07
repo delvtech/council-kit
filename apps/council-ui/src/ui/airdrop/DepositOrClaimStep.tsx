@@ -5,7 +5,7 @@ import { useAirdropToken } from "src/ui/airdrop/hooks/useAirdropToken";
 import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
 import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { AirdropIcon } from "src/ui/base/svg/24/AirdropIcon";
-import { useTokenSymbol } from "src/ui/token/hooks/useTokenSymbol";
+import { useTokenSymbol } from "src/ui/token/useTokenSymbol";
 
 interface DepositOrClaimStepProps {
   onDeposit: (() => void) | undefined;

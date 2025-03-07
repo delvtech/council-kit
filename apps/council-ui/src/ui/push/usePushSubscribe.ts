@@ -3,7 +3,7 @@ import { SubscribeOptionsType } from "@pushprotocol/restapi/src/lib/channels";
 import { ENV } from "@pushprotocol/restapi/src/lib/constants";
 import { useCallback, useEffect, useState } from "react";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { useAccount, useSignTypedData } from "wagmi";
 import { UsePushSubscribeType } from "./types";
 

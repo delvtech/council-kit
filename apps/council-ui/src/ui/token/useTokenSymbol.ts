@@ -1,7 +1,7 @@
 import { Address } from "@delvtech/drift";
 import { useQuery } from "@tanstack/react-query";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 
 /**
  * Fetch the token symbol for the given token address.

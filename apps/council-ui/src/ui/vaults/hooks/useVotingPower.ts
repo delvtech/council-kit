@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SupportedChainId } from "src/config/council.config";
 import { VotingContractConfig } from "src/config/types";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { getVotingPower } from "src/utils/vaults/getVotingPower";
 
 interface UseVotingPowerOptions {

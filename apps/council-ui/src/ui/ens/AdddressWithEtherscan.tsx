@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { ReactElement } from "react";
 import { Address } from "src/ui/base/Address";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { makeEtherscanAddressURL } from "src/utils/etherscan/makeEtherscanAddressURL";
 
 interface AddressWithEtherscanProps {

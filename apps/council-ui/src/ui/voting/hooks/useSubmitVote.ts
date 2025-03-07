@@ -1,7 +1,7 @@
 import { Ballot } from "@delvtech/council-js";
 import { Address, Bytes } from "@delvtech/drift";
 import { SupportedChainId } from "src/config/council.config";
-import { useWrite } from "src/ui/contract/hooks/useWrite";
+import { useWrite } from "src/ui/contract/useWrite";
 import { useReadWriteCouncil } from "src/ui/council/useReadWriteCouncil";
 
 export interface useSubmitVoteOptions {

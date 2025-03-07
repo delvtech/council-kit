@@ -1,6 +1,6 @@
 import { Address, RangeBlock } from "@delvtech/drift";
 import { useQuery } from "@tanstack/react-query";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { getVotingPower } from "src/utils/vaults/getVotingPower";
 import { useAccount } from "wagmi";
 

@@ -10,7 +10,7 @@ import { formatAddress } from "src/ui/base/formatting/formatAddress";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
 import { ExternalLinkSVG } from "src/ui/base/svg/ExternalLink";
 import { AddressWithEtherscan } from "src/ui/ens/AdddressWithEtherscan";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { VoterAddress } from "src/ui/voters/VoterAddress";
 import { makeEtherscanTransactionURL } from "src/utils/etherscan/makeEtherscanTransactionURL";
 

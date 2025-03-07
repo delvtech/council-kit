@@ -1,5 +1,5 @@
 import { Address } from "@delvtech/drift";
-import { useWrite } from "src/ui/contract/hooks/useWrite";
+import { useWrite } from "src/ui/contract/useWrite";
 import { useReadWriteGscVault } from "./useReadWriteGscVault";
 
 export function useKickGscMember() {

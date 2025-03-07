@@ -1,6 +1,6 @@
 import { MutationStatus } from "@tanstack/react-query";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useWrite } from "src/ui/contract/hooks/useWrite";
+import { useWrite } from "src/ui/contract/useWrite";
 import { useAccount } from "wagmi";
 import { useReadWriteGscVault } from "./useReadWriteGscVault";
 

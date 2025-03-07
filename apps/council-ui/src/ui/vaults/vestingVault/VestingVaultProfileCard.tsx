@@ -10,7 +10,7 @@ import { WalletIcon } from "src/ui/base/WalletIcon";
 import { formatUnitsBalance } from "src/ui/base/formatting/formatUnitsBalance";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { useDisplayName } from "src/ui/base/formatting/useDisplayName";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { DelegatorListModal } from "src/ui/vaults/DelegatorListModal";
 import { VaultProfileCard } from "src/ui/vaults/VaultProfileCard";
