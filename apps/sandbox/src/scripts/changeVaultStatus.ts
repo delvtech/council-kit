@@ -1,5 +1,5 @@
 import { ReadWriteCouncil } from "@delvtech/council-js";
-import { council, publicClient } from "src/client";
+import { council } from "src/client";
 
 if (!(council instanceof ReadWriteCouncil)) {
   throw new Error("Missing WALLET_PRIVATE_KEY environment variable.");
@@ -12,10 +12,13 @@ const hash = await coreVoting.changeVaultStatus({
     vault: "0x", // <-- replace address
     isValid: true,
   },
+  options: {
+    onMined: (receipt) => {
+      console.log("Transaction receipt:", receipt);
+    },
+  },
 });
-console.log("Transaction submitted:", hash);
 
-const receipt = await publicClient.waitForTransactionReceipt({ hash });
-console.log("Transaction receipt:", receipt);
+console.log("Transaction submitted:", hash);
 
 process.exit();

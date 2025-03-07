@@ -2,8 +2,8 @@ import { ReadWriteCouncil } from "@delvtech/council-js";
 import { council, publicClient, walletClient } from "src/client";
 import type { Address } from "viem";
 
-// approx 90 days in blocks assuming 12 seconds a block
-const FOURTEEN_DAYS_IN_BLOCKS = (14n * 24n * 60n * 60n) / 12n;
+const DAY_SECONDS = 24n * 60n * 60n;
+const DAY_BLOCKS = DAY_SECONDS / 12n; // Assuming 12s block time
 
 if (!(council instanceof ReadWriteCouncil)) {
   throw new Error("Missing WALLET_PRIVATE_KEY environment variable.");
@@ -33,26 +33,30 @@ const targets = [coreVoting.address];
 
 // The data to send in the contract calls
 const calldatas = [
-  coreVoting.contract.encodeFunctionData("setDefaultQuorum", {
-    quorum: 100n,
-  }),
+  coreVoting.contract.encodeFunctionData("setDefaultQuorum", { quorum: 100n }),
 ];
 
 const currentBlock = await publicClient.getBlockNumber();
 
-// the block number after which the proposal can no longer be executed
-const lastCallBlock = currentBlock + FOURTEEN_DAYS_IN_BLOCKS;
-
-// the ballot to cast for the first vote
-const ballot = "yes";
-
 const hash = await coreVoting.createProposal({
-  args: { ballot, calldatas, lastCallBlock, targets, votingVaults },
+  args: {
+    targets,
+    calldatas,
+    votingVaults,
+
+    // the ballot to cast for the first vote
+    ballot: "yes",
+
+    // the block number after which the proposal can no longer be executed
+    lastCallBlock: currentBlock + 14n * DAY_BLOCKS,
+  },
+  options: {
+    onMined: (receipt) => {
+      console.log("Transaction receipt:", receipt);
+    },
+  },
 });
 
 console.log("Transaction submitted:", hash);
-
-const receipt = await publicClient.waitForTransactionReceipt({ hash });
-console.log("Transaction receipt:", receipt);
 
 process.exit();

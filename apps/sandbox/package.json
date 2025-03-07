@@ -8,19 +8,20 @@
   "scripts": {
     "dev": "tsx -r dotenv/config src/sandbox.ts",
     "watch": "tsx -r dotenv/config --watch src/sandbox.ts",
+    "changeVaultStatus": "tsx -r dotenv/config src/scripts/changeVaultStatus.ts",
     "createProposal": "tsx -r dotenv/config src/scripts/createProposal.ts",
     "executeProposal": "tsx -r dotenv/config src/scripts/executeProposal.ts",
-    "setLockDuration": "tsx -r dotenv/config src/scripts/setLockDuration.ts",
-    "changeVaultStatus": "tsx -r dotenv/config src/scripts/changeVaultStatus.ts",
-    "getGSCMembers": "tsx -r dotenv/config ./src/scripts/getGSCMembers.ts",
+    "getGscMembers": "tsx -r dotenv/config src/scripts/getGscMembers.ts",
     "getProposalResults": "tsx -r dotenv/config src/scripts/getProposalResults.ts",
+    "setLockDuration": "tsx -r dotenv/config src/scripts/setLockDuration.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@delvtech/drift": "^0.6.0",
     "@delvtech/drift-viem": "^0.6.0",
+    "@delvtech/fixed-point-wasm": "^0.0.7",
     "@delvtech/council-js": "^0.0.0",
-    "viem": "^2.23.6"
+    "viem": "^2.23.7"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",
