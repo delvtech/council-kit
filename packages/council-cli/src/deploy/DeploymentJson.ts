@@ -1,33 +1,24 @@
-import { JsonStore } from "./utils/config/JsonStore.js";
+import { Address, Bytes, HexString } from "@delvtech/drift";
+import { JsonStore } from "../utils/config/JsonStore.js";
 
-export const DEFAULT_DEPLOYMENTS_DIR = "./deployments";
+export type DeploymentJson = JsonStore<DeploymentInfo>;
 
-export interface ContractInfo {
-  address: string;
-  name: string;
-  deploymentTransactionHash?: string;
-  deploymentArgs?: any[];
-}
-
-export interface DeploymentInfo {
+export function getDeploymentJson({
+  name,
+  chainId,
+  outDir,
+}: {
   name: string;
   chainId: number;
-  timestamp?: number;
-  deployer?: string;
-  contracts: ContractInfo[];
-}
-
-export function getDeploymentStore(
-  name: string,
-  chainId: number,
-  deploymentsDir = DEFAULT_DEPLOYMENTS_DIR,
-): JsonStore<DeploymentInfo> {
+  outDir: string;
+}): DeploymentJson {
   return new JsonStore<DeploymentInfo>({
-    path: deploymentsDir,
-    name: `${name}-${chainId}`,
+    path: outDir,
+    name: `${chainId}-${name}`,
     defaults: {
       name,
       chainId,
+      deployer: "0x",
       contracts: [],
     },
     schema: {
@@ -35,9 +26,6 @@ export function getDeploymentStore(
         type: "string",
       },
       chainId: {
-        type: "number",
-      },
-      timestamp: {
         type: "number",
       },
       deployer: {
@@ -65,4 +53,19 @@ export function getDeploymentStore(
       },
     },
   });
+}
+
+export interface DeploymentInfo {
+  name: string;
+  chainId: number;
+  deployer: Address;
+  contracts: DeployedContractInfo[];
+}
+
+export interface DeployedContractInfo {
+  name: string;
+  address: Address;
+  deployTransaction: HexString;
+  deployArgs: any[];
+  bytecode: Bytes;
 }

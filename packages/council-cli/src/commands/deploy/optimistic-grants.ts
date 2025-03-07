@@ -1,32 +1,25 @@
 import { OptimisticGrants } from "@delvtech/council-artifacts/OptimisticGrants";
 import { command } from "clide-js";
-import signale from "signale";
-import { WriteOptions } from "src/reusable-options/writeOptions.js";
-import { PrivateKeyAccount } from "viem";
-import { Chain } from "viem/chains";
-import {
-  DeployedContract,
-  deployContract,
-} from "../../utils/deployContract.js";
+import { ownerOption } from "../../options/owner.js";
+import { DeployOptions } from "../deploy.js";
 
 export default command({
   description: "Deploy an OptimisticGrants contract",
 
   options: {
-    token: {
-      description: "The address of the ERC20 token to distribute",
-      type: "string",
+    t: {
+      alias: ["token"],
+      description: "The address of the ERC20 token to distribute.",
+      type: "hex",
       required: true,
     },
-    governance: {
-      description:
-        "The governance contract's address for ACL (e.g., a Timelock contract)",
-      type: "string",
-      required: true,
+    g: {
+      ...ownerOption,
+      alias: ["governance", ...ownerOption.alias],
     },
   },
   handler: async ({ data, options, next }) => {
-    const { account, chain, rpcUrl } = data as WriteOptions;
+    const { account, deployer } = data as DeployOptions;
 
     const token = await options.token({
       prompt: "Enter token address",
@@ -36,48 +29,16 @@ export default command({
       prompt: "Enter governance address (e.g., a Timelock contract)",
     });
 
-    signale.pending("Deploying OptimisticGrants...");
-
-    const deployData = await deployOptimisticGrants({
-      token,
-      governance,
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (txHash) => {
-        signale.pending(`OptimisticGrants deployment tx submitted: ${txHash}`);
+    const deployedContract = await deployer.deploy({
+      abi: OptimisticGrants.abi,
+      bytecode: OptimisticGrants.bytecode,
+      name: "OptimisticGrants",
+      args: {
+        _token: token,
+        __governance: governance || account.address,
       },
     });
 
-    signale.success(`OptimisticGrants deployed @ ${deployData.address}`);
-    next(deployData);
+    next(deployedContract);
   },
 });
-
-export interface DeployOptimisticGrantsOptions {
-  token: string;
-  governance: string;
-  account: PrivateKeyAccount;
-  rpcUrl: string;
-  chain: Chain;
-  onSubmitted?: (txHash: string) => void;
-}
-
-export async function deployOptimisticGrants({
-  token,
-  governance,
-  account,
-  rpcUrl,
-  chain,
-  onSubmitted,
-}: DeployOptimisticGrantsOptions): Promise<DeployedContract> {
-  return deployContract({
-    abi: OptimisticGrants.abi,
-    args: [token as `0x${string}`, governance as `0x${string}`],
-    bytecode: OptimisticGrants.bytecode,
-    account,
-    rpcUrl,
-    chain,
-    onSubmitted,
-  });
-}

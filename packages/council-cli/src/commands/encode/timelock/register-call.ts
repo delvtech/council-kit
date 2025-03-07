@@ -1,11 +1,8 @@
 import { Timelock } from "@delvtech/council-artifacts/Timelock";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import {
-  callHashOptions,
-  getCallHash,
-} from "src/reusable-options/call-hash.js";
-import { encodeFunctionData } from "viem";
+import { callHashOptions, getCallHash } from "../../../options/call-hash.js";
 
 export default command({
   description: "Encode call data for Timelock.registerCall",
@@ -19,17 +16,13 @@ export default command({
       options.calldatas,
     );
 
-    const encoded = encodeRegisterCall(callHash);
+    const encoded = encodeFunctionData({
+      abi: Timelock.abi,
+      fn: "registerCall",
+      args: { callHash },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeRegisterCall(callHash: string): string {
-  return encodeFunctionData({
-    abi: Timelock.abi,
-    functionName: "registerCall",
-    args: [callHash as `0x${string}`],
-  });
-}

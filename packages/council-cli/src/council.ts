@@ -1,8 +1,11 @@
 #!/usr/bin/env node
+import { initSync, wasmBuffer } from "@delvtech/fixed-point-wasm";
 import { help, run } from "clide-js";
 import { commandMenu } from "clide-plugin-command-menu";
 import "dotenv/config";
 import signale from "signale";
+
+initSync(wasmBuffer);
 
 run({
   plugins: [
@@ -29,11 +32,15 @@ run({
     },
   },
 
-  afterParse: async ({ parsedOptions, context }) => {
+  afterParse: async ({ parsedOptions, context, setParsedOptions }) => {
+    // Set defaults if --yes is passed
     if (parsedOptions.yes) {
+      console.log("Using default option values...");
+      const newOptions = { ...parsedOptions };
       for (const [key, config] of Object.entries(context.options)) {
-        (parsedOptions[key] as any) = parsedOptions[key] ?? config.default;
+        (newOptions[key] as any) ??= config.default;
       }
+      setParsedOptions(newOptions);
     }
   },
 }).catch((error) => {

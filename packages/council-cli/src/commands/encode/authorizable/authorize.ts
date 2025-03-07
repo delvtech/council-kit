@@ -1,16 +1,16 @@
 import { Authorizable } from "@delvtech/council-artifacts/Authorizable";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for Authorizable.authorize",
 
   options: {
-    address: {
-      alias: ["who"],
+    a: {
+      alias: ["address", "who"],
       description: "The address to authorize",
-      type: "string",
+      type: "hex",
       required: true,
     },
   },
@@ -20,17 +20,13 @@ export default command({
       prompt: "Enter address",
     });
 
-    const encoded = encodeAuthorize(address);
+    const encoded = encodeFunctionData({
+      abi: Authorizable.abi,
+      fn: "authorize",
+      args: { who: address },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeAuthorize(address: string): string {
-  return encodeFunctionData({
-    abi: Authorizable.abi,
-    functionName: "authorize",
-    args: [address as `0x${string}`],
-  });
-}

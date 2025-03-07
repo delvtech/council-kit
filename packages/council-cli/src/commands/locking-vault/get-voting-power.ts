@@ -1,33 +1,30 @@
-import { ReadCouncil } from "@delvtech/council-viem";
+import { createCouncil } from "@delvtech/council-js";
+import { fixed } from "@delvtech/fixed-point-wasm";
 import { command } from "clide-js";
 import signale from "signale";
-import { createPublicClient, http } from "viem";
-import { chainOption, getChain } from "../../reusable-options/chain.js";
-import { rpcUrlOption } from "../../reusable-options/rpc-url.js";
+import { rpcUrlOption } from "../../options/rpc-url.js";
 
 export default command({
   description: "Get the voting power of a given account.",
 
   options: {
-    address: {
+    a: {
+      alias: ["address"],
       description: "The LockingVault contract address",
-      type: "string",
+      type: "hex",
       required: true,
     },
-    account: {
-      alias: ["voter"],
+    v: {
+      alias: ["voter", "account"],
       description: "The account to get the voting power of",
-      type: "string",
+      type: "hex",
       required: true,
     },
-    chain: chainOption,
-    rpc: rpcUrlOption,
+    r: rpcUrlOption,
   },
 
-  handler: async ({ options, context, next }) => {
-    const chain = await getChain(options.chain, context);
-
-    const rpcUrl = await options.rpc({
+  handler: async ({ options, next }) => {
+    const rpcUrl = await options.rpcUrl({
       prompt: "Enter RPC URL",
     });
 
@@ -35,21 +32,16 @@ export default command({
       prompt: "Enter LockingVault contract address",
     });
 
-    const account = await options.account({
+    const voter = await options.voter({
       prompt: "Enter account to get balance of",
     });
 
-    const transport = http(rpcUrl);
-    const publicClient = createPublicClient({ transport, chain });
+    const council = createCouncil({ rpcUrl });
+    const lockingVault = council.lockingVault(address);
+    const power = await lockingVault.getVotingPower({ voter });
+    const formattedPower = fixed(power, 18).format();
 
-    const council = new ReadCouncil({ publicClient });
-    const lockingVault = council.lockingVault(address as `0x${string}`);
-
-    const power = await lockingVault.getVotingPower({
-      account: account as `0x${string}`,
-    });
-
-    signale.info(power);
+    signale.info(formattedPower);
     next(power);
   },
 });

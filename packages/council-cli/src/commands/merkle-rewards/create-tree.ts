@@ -13,38 +13,41 @@ import {
   parseUnits,
 } from "viem";
 import { JsonStore } from "../../utils/config/JsonStore.js";
-import { Schema, validateData } from "../../utils/config/validateData.js";
 import { isNotEmptyList } from "../../utils/validation/isNotEmptyList.js";
 import { isNumberString } from "../../utils/validation/isNumberString.js";
+import { Schema, validateData } from "../../utils/validation/validateData.js";
 
 export default command({
   description:
     "Create a merkle tree for rewards (e.g., airdrop) from a list of addresses and reward amounts. The output is a JSON file with the merkle root and each leaf by address with it's proof.",
 
   options: {
-    "accounts-path": {
+    i: {
+      alias: ["input", "input-path"],
       description:
         'The path to the json file with the addresses and amounts listed as an array of objects with address and amount properties. The amount property is a decimal string that will be scaled based on the decimals option. For example, [{"address": "0x1234...", "amount": "100.5"}, ...].',
       type: "string",
     },
-    addresses: {
+    a: {
+      alias: ["addresses"],
       description:
         "A list of recipient addresses to include in the merkle tree.",
-      type: "array",
+      type: "hexArray",
     },
-    amounts: {
+    A: {
+      alias: ["amounts"],
       description:
         "A list of amounts to reward each address. Must be same length as addresses.",
       type: "array",
     },
-    decimals: {
-      alias: ["token-decimals"],
+    d: {
+      alias: ["decimals", "token-decimals"],
       description:
         "The decimal precision used by the token contract. The amounts will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000.",
       type: "number",
       default: 18,
     },
-    out: {
+    o: {
       alias: ["out-dir"],
       description:
         "The directory to write the merkle tree info to; relative to the current working directory.",
@@ -53,29 +56,29 @@ export default command({
   },
 
   handler: async ({ options, next }) => {
-    const accounts = await getAccounts({
-      accountsPathGetter: options.accountsPath,
+    const leaves = await getLeaves({
+      inputsPathGetter: options.inputPath,
       addressesGetter: options.addresses,
       amountsGetter: options.amounts,
     });
 
     const decimals = await options.decimals();
 
-    const merkleTree = getMerkleTree(accounts, decimals);
+    const merkleTree = createMerkleTree(leaves, decimals);
 
     // Sum all the amounts
-    const amountTotal = accounts.reduce(
+    const amountTotal = leaves.reduce(
       (sum, { amount }) => sum + parseUnits(amount, decimals),
       0n,
     );
 
     // Get the total unique addresses
-    const allAddresses = accounts.map(({ address }) => address);
+    const allAddresses = leaves.map(({ address }) => address);
     const uniqueAddresses = new Set(allAddresses);
 
     // Create object entries for each account with the address as the key which
     // is lowercased since object keys are case sensitive.
-    const accountsEntries = accounts.map(({ address, amount }) => {
+    const accountsEntries = leaves.map(({ address, amount }) => {
       const proof = merkleTree.getHexProof(
         hashAccount({ address, amount }, decimals),
       );
@@ -122,63 +125,56 @@ export default command({
 });
 
 /**
- * A requiredOption wrapper for prompting the user for the accounts to create
+ * A requiredOption wrapper for prompting the user for the leaves to create
  * the merkle tree from.
  */
-async function getAccounts({
-  accountsPathGetter,
+async function getLeaves({
+  inputsPathGetter,
   addressesGetter,
   amountsGetter,
 }: {
-  accountsPathGetter: OptionGetter<string | undefined>;
-  addressesGetter: OptionGetter<string[] | undefined>;
+  inputsPathGetter: OptionGetter<string | undefined>;
+  addressesGetter: OptionGetter<Address[] | undefined>;
   amountsGetter: OptionGetter<string[] | undefined>;
-}): Promise<Account[]> {
-  let accounts: Account[] = [];
+}): Promise<Leaf[]> {
+  const leaves: Leaf[] = [];
 
   let addresses = await addressesGetter();
   let amounts = await amountsGetter();
 
-  // Try to import the accounts from the accounts path if it was passed or
-  // prompt the user for the accounts path if no options were passed.
+  // Try to import the leaves from the input path if it was passed or prompt
+  // the user for the input path if no options were passed.
   if (!addresses && !amounts) {
-    const possibleAccountsPath = await accountsPathGetter({
-      prompt: `Enter the path to the accounts JSON file ${colors.dim(
+    const possibleInputPath = await inputsPathGetter({
+      prompt: `Enter the path to the leaves JSON file ${colors.dim(
         "(Leave blank to enter addresses and amounts manually)",
       )}`,
     });
 
-    // Import and validate the accounts from the accounts path
-    if (possibleAccountsPath) {
-      const fullAccountsPath = path.resolve(
-        process.cwd(),
-        possibleAccountsPath,
+    // Import and validate the leaves from the input path
+    if (possibleInputPath) {
+      const fullInputPath = path.resolve(process.cwd(), possibleInputPath);
+
+      const { default: importedLeafs } = await import(fullInputPath).catch(
+        (err) => {
+          signale.error(err);
+          throw new Error(
+            `The leaves file at ${fullInputPath} could not be found.`,
+          );
+        },
       );
 
-      const { default: importedAccounts } = await import(
-        fullAccountsPath
-      ).catch((err) => {
-        signale.error(err);
-        throw new Error(
-          `The accounts file at ${fullAccountsPath} could not be found.`,
-        );
-      });
+      // Validate the imported leaves
+      validateData(importedLeafs, leavesScema);
 
-      // Validate the imported accounts
-      validateData(importedAccounts, accountsScema);
-
-      // Add the imported accounts to the accounts array
-      accounts = [...accounts, ...importedAccounts];
+      // Add the imported leaves to the leaves array
+      leaves.push(...importedLeafs);
     }
   }
 
-  // Add accounts from the addresses and amounts options if they were passed or
-  // prompt the user for them if accounts is still empty.
-  if (
-    isNotEmptyList(addresses) ||
-    isNotEmptyList(amounts) ||
-    !accounts.length
-  ) {
+  // Add leaves from the addresses and amounts options if they were passed or
+  // prompt the user for them if leaves is still empty.
+  if (isNotEmptyList(addresses) || isNotEmptyList(amounts) || !leaves.length) {
     addresses = await addressesGetter({
       prompt: {
         message: "Enter recipient addresses",
@@ -234,26 +230,26 @@ async function getAccounts({
       );
     }
 
-    const ensuredAccounts = addresses.map((address, i) => {
+    const leavesFromOptions = addresses.map((address, i) => {
       return {
-        address: address as `0x${string}`,
+        address,
         amount: (amounts as `${number}`[])[i],
       };
     });
 
-    // Add the ensured accounts to the accounts array
-    return [...accounts, ...ensuredAccounts];
+    // Add the manually entered leaves to the leaves array
+    leaves.push(...leavesFromOptions);
   }
 
-  return accounts;
+  return leaves;
 }
 
-interface Account {
+interface Leaf {
   address: Address;
   amount: `${number}`;
 }
 
-const accountsScema: Schema<Account[]> = {
+const leavesScema: Schema<Leaf[]> = {
   type: "array",
   items: {
     type: "object",
@@ -271,11 +267,11 @@ const accountsScema: Schema<Account[]> = {
   },
 };
 
-function getMerkleTree(accounts: Account[], tokenDecimals: number) {
-  const leaves = accounts.map((account) => hashAccount(account, tokenDecimals));
+function createMerkleTree(leaves: Leaf[], tokenDecimals: number) {
+  const hashedLeaves = leaves.map((leaf) => hashAccount(leaf, tokenDecimals));
 
   return new MerkleTree.default(
-    leaves,
+    hashedLeaves,
     (bytes: Hex) => {
       const packedData = encodePacked(["bytes"], [bytes]);
       return keccak256(packedData);
@@ -287,7 +283,7 @@ function getMerkleTree(accounts: Account[], tokenDecimals: number) {
   );
 }
 
-function hashAccount({ address, amount }: Account, tokenDecimals: number) {
+function hashAccount({ address, amount }: Leaf, tokenDecimals: number) {
   const packedData = encodePacked(
     ["address", "uint256"],
     [address, parseUnits(amount, tokenDecimals)],

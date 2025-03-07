@@ -1,40 +1,36 @@
-import { ReadWriteMockToken } from "@delvtech/council-viem";
+import { MockERC20 } from "@delvtech/council-artifacts/MockERC20";
 import { command } from "clide-js";
 import signale from "signale";
-import { createPublicClient, createWalletClient, http, parseUnits } from "viem";
-import {
-  getWriteOptions,
-  writeOptions,
-} from "../../reusable-options/writeOptions.js";
+import { parseUnits } from "viem";
+import { getWriteOptions, writeOptions } from "../../options/writeOptions.js";
 
 export default command({
   description: "Mint tokens",
 
   options: {
-    address: {
-      describe: "The token contract address",
+    a: {
+      alias: ["address"],
+      describe: "The token contract address.",
+      type: "hex",
+      required: true,
+    },
+    A: {
+      alias: ["amount"],
+      describe: "The amount of tokens to mint.",
       type: "string",
       required: true,
     },
-    account: {
-      describe: "The account to mint tokens for",
-      type: "string",
-      required: true,
-    },
-    amount: {
-      describe: "The amount of tokens to mint",
-      type: "string",
+    c: {
+      alias: ["account"],
+      describe: "The account to mint tokens for,",
+      type: "hex",
       required: true,
     },
     ...writeOptions,
   },
 
-  handler: async ({ options, context, next }) => {
-    const {
-      account: signerAccount,
-      chain,
-      rpcUrl,
-    } = await getWriteOptions(options, context);
+  handler: async ({ options, client, next }) => {
+    const { drift } = await getWriteOptions(options, client);
 
     const address = await options.address({
       prompt: "Enter token contract address",
@@ -51,27 +47,26 @@ export default command({
       },
     });
 
-    const transport = http(rpcUrl);
-    const publicClient = createPublicClient({ transport, chain });
-    const walletClient = createWalletClient({
-      transport,
-      chain,
-      account: signerAccount,
+    const token = drift.contract({
+      abi: MockERC20.abi,
+      address,
     });
+    const decimals = await token.read("decimals");
 
-    const token = new ReadWriteMockToken({
-      address: address as `0x${string}`,
-      publicClient,
-      walletClient,
-    });
+    const hash = await token.write(
+      "mint",
+      {
+        account,
+        amount: parseUnits(amount, decimals),
+      },
+      {
+        onMined: () => {
+          signale.success(`Transaction success: ${hash}`);
+        },
+      },
+    );
 
-    const decimals = await token.getDecimals();
-    const hash = await token.mint({
-      account: account as `0x${string}`,
-      amount: parseUnits(amount, decimals),
-    });
-
-    signale.success(hash);
+    signale.pending(`Transaction submitted: ${hash}`);
     next(hash);
   },
 });

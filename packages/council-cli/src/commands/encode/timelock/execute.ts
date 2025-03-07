@@ -1,21 +1,23 @@
 import { Timelock } from "@delvtech/council-artifacts/Timelock";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for Timelock.execute",
 
   options: {
-    targets: {
-      description: "A list of target addresses the timelock contract will call",
-      type: "array",
+    t: {
+      alias: ["targets"],
+      description:
+        "A list of target addresses the timelock contract will call.",
+      type: "hexArray",
       required: true,
     },
-    data: {
+    d: {
       alias: ["calldatas"],
-      description: "Encoded call data for each target",
-      type: "array",
+      description: "Encoded call data for each target.",
+      type: "hexArray",
       required: true,
     },
   },
@@ -29,17 +31,13 @@ export default command({
       prompt: "Enter call data for each target",
     });
 
-    const encoded = encodeExecute(targets, calldatas);
+    const encoded = encodeFunctionData({
+      abi: Timelock.abi,
+      fn: "execute",
+      args: { calldatas, targets },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeExecute(targets: string[], calldatas: string[]): string {
-  return encodeFunctionData({
-    abi: Timelock.abi,
-    functionName: "execute",
-    args: [targets as `0x${string}`[], calldatas as `0x${string}`[]],
-  });
-}

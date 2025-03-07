@@ -4197,10 +4197,10 @@ cli-truncate@^4.0.0:
     slice-ansi "^5.0.0"
     string-width "^7.0.0"
 
-clide-js@^0.2.11:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/clide-js/-/clide-js-0.2.11.tgz#82978d9e37f41bc879071c22d408229268b00afb"
-  integrity sha512-z/P0mnePzuw9mUGCeBGFzkBlJ5eCgETUGAbYWqDEtCZd+r8+niqUOZ+vTJs+PfkUmNShtRtUQKZnhIiTAj5XUA==
+clide-js@^0.2.13:
+  version "0.2.13"
+  resolved "https://registry.yarnpkg.com/clide-js/-/clide-js-0.2.13.tgz#2d7e42a2aa6c37d712648754919416c29c625d2f"
+  integrity sha512-wPEwwTk4KZMtI/JG4kXao3J6RNiji8B9oxtt3Q+ruVc6kffLd0lqnZnl3cK1KaZ1oanwCPUfcaaXUW/IhB+kdA==
   dependencies:
     "@types/prompts" "^2.4.9"
     cliui "^8.0.1"
@@ -10601,10 +10601,10 @@ viem@^2.1.1:
     ox "0.6.7"
     ws "8.18.0"
 
-viem@^2.23.6:
-  version "2.23.6"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.23.6.tgz#05d9b49cc0b5130707ecdcd1b5c141f72b68606c"
-  integrity sha512-+yUeK8rktbGFQaLIvY4Tki22HUjian9Z4eKGAUT72RF9bcfkYgK8CJZz9P83tgoeLpiTyX3xcBM4xJZrJyKmsA==
+viem@^2.23.7:
+  version "2.23.7"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.23.7.tgz#6955206c36e9f4ba7fc65790167699178de697a7"
+  integrity sha512-Gbyz0uE3biWDPxECrEyzILWPsnIgDREgfRMuLSWHSSnM6ktefSC/lqQNImnxESdDEixa8/6EWXjmf2H6L9VV0A==
   dependencies:
     "@noble/curves" "1.8.1"
     "@noble/hashes" "1.7.1"

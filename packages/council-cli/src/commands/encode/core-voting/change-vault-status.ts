@@ -1,19 +1,20 @@
 import { CoreVoting } from "@delvtech/council-artifacts/CoreVoting";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for CoreVoting.changeVaultStatus",
 
   options: {
-    vault: {
+    v: {
+      alias: ["vault"],
       description: "The voting vault's address",
-      type: "string",
+      type: "hex",
       required: true,
     },
-    approved: {
-      alias: ["is-valid"],
+    a: {
+      alias: ["approved", "is-valid"],
       description: "Whether or not the vault should be approved",
       type: "boolean",
       required: true,
@@ -25,7 +26,7 @@ export default command({
       prompt: "Enter voting vault address",
     });
 
-    const approved = await options.approved({
+    const isValid = await options.isValid({
       prompt: {
         message: "Enter approval status",
         active: "Approved",
@@ -33,19 +34,13 @@ export default command({
       },
     });
 
-    const encoded = encodeChangeVaultStatus(vault, approved);
+    const encoded = encodeFunctionData({
+      abi: CoreVoting.abi,
+      fn: "changeVaultStatus",
+      args: { isValid, vault },
+    });
+
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeChangeVaultStatus(
-  vault: string,
-  approved: boolean,
-): string {
-  return encodeFunctionData({
-    abi: CoreVoting.abi,
-    functionName: "changeVaultStatus",
-    args: [vault as `0x${string}`, approved],
-  });
-}

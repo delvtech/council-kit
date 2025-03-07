@@ -1,21 +1,18 @@
 import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for VestingVault.acceptGrant",
 
   handler: ({ next }) => {
-    const encoded = encodeAcceptGrant();
+    const encoded = encodeFunctionData({
+      abi: VestingVault.abi,
+      fn: "acceptGrant",
+    });
+
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeAcceptGrant(): string {
-  return encodeFunctionData({
-    abi: VestingVault.abi,
-    functionName: "acceptGrant",
-  });
-}

@@ -1,21 +1,23 @@
 import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for VestingVault.initialize",
 
   options: {
-    manager: {
-      description: "The address that will be able add and remove grants",
-      type: "string",
+    m: {
+      alias: ["manager"],
+      description: "The address that will be able add and remove grants.",
+      type: "hex",
       required: true,
     },
-    timelock: {
+    t: {
+      alias: ["timelock"],
       description:
-        "The address that will be able to change the unvested multiplier, the manager, and the timelock",
-      type: "string",
+        "The address that will be able to change the unvested multiplier, the manager, and the timelock.",
+      type: "hex",
       required: true,
     },
   },
@@ -29,17 +31,16 @@ export default command({
       prompt: "Enter timelock address",
     });
 
-    const encoded = encodeInitialize(manager, timelock);
+    const encoded = encodeFunctionData({
+      abi: VestingVault.abi,
+      fn: "initialize",
+      args: {
+        manager_: manager,
+        timelock_: timelock,
+      },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeInitialize(manager: string, timelock: string): string {
-  return encodeFunctionData({
-    abi: VestingVault.abi,
-    functionName: "initialize",
-    args: [manager as `0x${string}`, timelock as `0x${string}`],
-  });
-}

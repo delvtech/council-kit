@@ -1,36 +1,32 @@
 import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for VestingVault.removeGrant",
 
   options: {
-    address: {
-      alias: ["who"],
-      description: "The grant owner",
-      type: "string",
+    w: {
+      alias: ["who", "address"],
+      description: "The grant owner.",
+      type: "hex",
       required: true,
     },
   },
 
   handler: async ({ options, next }) => {
     const who = await options.who({
-      prompt: "Enter owner address",
+      prompt: "Enter grantee address",
     });
 
-    const encoded = encodeRemoveGrant(who);
+    const encoded = encodeFunctionData({
+      abi: VestingVault.abi,
+      fn: "removeGrant",
+      args: { _who: who },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeRemoveGrant(who: string): string {
-  return encodeFunctionData({
-    abi: VestingVault.abi,
-    functionName: "removeGrant",
-    args: [who as `0x${string}`],
-  });
-}

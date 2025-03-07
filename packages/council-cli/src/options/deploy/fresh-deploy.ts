@@ -1,8 +1,8 @@
-import { OptionConfig } from "clide-js";
+import { option } from "clide-js";
 
-export const freshDeployOption = {
+export const freshDeployOption = option({
   alias: ["fresh-deploy"],
   description: "Deploy all contracts from scratch.",
   type: "boolean",
   default: false,
-} as const satisfies OptionConfig;
+});

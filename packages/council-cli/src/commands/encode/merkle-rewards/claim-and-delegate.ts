@@ -1,44 +1,44 @@
 import { MerkleRewards } from "@delvtech/council-artifacts/MerkleRewards";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData, parseUnits } from "viem";
+import { decimalsOption } from "../../../options/decimals.js";
+import { parseUnits } from "viem";
 
 export default command({
   description: "Encode call data for MerkleRewards.claimAndDelegate",
 
   options: {
-    amount: {
-      description: "The amount of rewards to claim and delegate",
+    a: {
+      alias: ["amount"],
+      description: "The amount of rewards to claim and delegate.",
       type: "string",
       required: true,
     },
-    decimals: {
+    d: decimalsOption,
+    D: {
+      alias: ["delegate"],
       description:
-        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-      type: "number",
-      default: 18,
+        "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate.",
+      type: "hex",
+      required: true,
     },
-    delegate: {
-      description:
-        "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate",
+    g: {
+      alias: ["total-grant"],
+      description: "The total grant amount.",
       type: "string",
       required: true,
     },
-    "total-grant": {
-      description: "The total grant amount",
-      type: "string",
-      required: true,
-    },
-    proof: {
+    p: {
       alias: ["merkle-proof"],
-      description: "The merkle proof for the claim",
-      type: "array",
+      description: "The merkle proof for the claim.",
+      type: "hexArray",
       required: true,
     },
-    recipient: {
-      alias: ["destination"],
-      description: "The address which will be credited with funds",
-      type: "string",
+    r: {
+      alias: ["recipient", "destination"],
+      description: "The address which will be credited with funds.",
+      type: "hex",
       required: true,
     },
   },
@@ -54,52 +54,34 @@ export default command({
 
     const decimals = await options.decimals();
 
-    const proof = await options.proof({
+    const merkleProof = await options.merkleProof({
       prompt: "Enter merkle proof",
     });
 
-    const recipient = await options.recipient({
-      prompt: "Enter recipient address",
+    const destination = await options.destination({
+      prompt: "Enter destination address",
     });
 
     const delegate = await options.delegate({
       prompt: {
         message: "Enter delegate address",
-        initial: recipient,
+        initial: destination,
       },
     });
 
-    const encoded = encodeClaimAndDelegate(
-      amount,
-      decimals,
-      delegate,
-      totalGrant,
-      proof,
-      recipient,
-    );
+    const encoded = encodeFunctionData({
+      abi: MerkleRewards.abi,
+      fn: "claimAndDelegate",
+      args: {
+        amount: parseUnits(amount, decimals),
+        delegate,
+        destination,
+        merkleProof,
+        totalGrant: parseUnits(totalGrant, decimals),
+      },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeClaimAndDelegate(
-  amount: string,
-  decimals: number,
-  delegate: string,
-  totalGrant: string,
-  proof: string[],
-  recipient: string,
-): string {
-  return encodeFunctionData({
-    abi: MerkleRewards.abi,
-    functionName: "claimAndDelegate",
-    args: [
-      parseUnits(amount, decimals),
-      delegate as `0x${string}`,
-      parseUnits(totalGrant, decimals),
-      proof as `0x${string}`[],
-      recipient as `0x${string}`,
-    ],
-  });
-}

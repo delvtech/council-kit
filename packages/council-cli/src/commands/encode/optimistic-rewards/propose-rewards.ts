@@ -1,34 +1,32 @@
 import { OptimisticRewards } from "@delvtech/council-artifacts/OptimisticRewards";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for OptimisticRewards.proposeRewards",
 
   options: {
-    root: {
-      description: "The merkle root of the proposed new rewards",
-      type: "string",
+    r: {
+      alias: ["new-root"],
+      description: "The merkle root of the proposed new rewards.",
+      type: "hex",
       required: true,
     },
   },
 
   handler: async ({ options, next }) => {
-    const root = await options.root({
+    const newRoot = await options.newRoot({
       prompt: "Enter rewards merkle root",
     });
 
-    const encoded = encodeProposeRewards(root);
+    const encoded = encodeFunctionData({
+      abi: OptimisticRewards.abi,
+      fn: "proposeRewards",
+      args: { newRoot },
+    });
+
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeProposeRewards(root: string): string {
-  return encodeFunctionData({
-    abi: OptimisticRewards.abi,
-    functionName: "proposeRewards",
-    args: [root as `0x${string}`],
-  });
-}

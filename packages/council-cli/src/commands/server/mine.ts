@@ -1,7 +1,8 @@
 import { command } from "clide-js";
 import signale from "signale";
-import { Client, createClient, http } from "viem";
-import { rpcUrlOption } from "../../reusable-options/rpc-url.js";
+import { createClient, http } from "viem";
+import { mine } from "../../lib/viem.js";
+import { rpcUrlOption } from "../../options/rpc-url.js";
 
 export default command({
   description: "Mine blocks on the local blockchain",
@@ -34,21 +35,3 @@ export default command({
     next();
   },
 });
-
-interface MineOptions {
-  blocks: number;
-  client: Client;
-}
-
-/**
- * Mine a given number of blocks on the local testnet
- * @param blocks The number of blocks to mine
- * @returns The new current block number
- */
-export async function mine({ blocks, client }: MineOptions): Promise<void> {
-  await client.request({
-    // @ts-expect-error - This is a hardhat method
-    method: "hardhat_mine",
-    params: [`0x${blocks.toString(16)}`],
-  });
-}

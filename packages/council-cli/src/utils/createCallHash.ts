@@ -1,6 +1,7 @@
 import {
   Address,
   encodeAbiParameters,
+  Hash,
   Hex,
   keccak256,
   parseAbiParameters,
@@ -12,7 +13,7 @@ import {
 export function createCallHash(
   targets: string[],
   callDatas: BytesLike[],
-): string {
+): Hash {
   const encoded = encodeAbiParameters(
     parseAbiParameters("address[], bytes[]"),
     [targets as Address[], callDatas as Hex[]],

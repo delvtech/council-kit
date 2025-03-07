@@ -1,7 +1,9 @@
 import { Spender } from "@delvtech/council-artifacts/Spender";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData, parseUnits } from "viem";
+import { parseUnits } from "viem";
+import { decimalsOption } from "../../../options/decimals.js";
 
 export default command({
   description: "Encode call data for a Spender.setLimits",
@@ -25,12 +27,7 @@ export default command({
       type: "string",
       required: true,
     },
-    decimals: {
-      description:
-        "The decimal precision used by the contract. The amount options will be multiplied by (10 ** decimals). For example, if small is 100 and decimals is 18, then the result will be 100000000000000000000",
-      type: "number",
-      default: 18,
-    },
+    d: decimalsOption,
   },
 
   handler: async ({ options, next }) => {
@@ -48,28 +45,19 @@ export default command({
 
     const decimals = await options.decimals();
 
-    const encoded = encodeSetLimits(small, medium, high, decimals);
+    const encoded = encodeFunctionData({
+      abi: Spender.abi,
+      fn: "setLimits",
+      args: {
+        limits: [
+          parseUnits(small, decimals),
+          parseUnits(medium, decimals),
+          parseUnits(high, decimals),
+        ],
+      },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeSetLimits(
-  small: string,
-  medium: string,
-  high: string,
-  decimals: number,
-): string {
-  return encodeFunctionData({
-    abi: Spender.abi,
-    functionName: "setLimits",
-    args: [
-      [
-        parseUnits(small, decimals),
-        parseUnits(medium, decimals),
-        parseUnits(high, decimals),
-      ],
-    ],
-  });
-}

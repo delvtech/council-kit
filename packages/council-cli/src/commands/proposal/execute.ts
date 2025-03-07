@@ -1,23 +1,19 @@
-import { ReadWriteCouncil } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import signale from "signale";
-import { createPublicClient, createWalletClient, http } from "viem";
-import {
-  getWriteOptions,
-  writeOptions,
-} from "../../reusable-options/writeOptions.js";
+import { getWriteOptions, writeOptions } from "../../options/writeOptions.js";
 
 export default command({
   description: "Execute a proposal",
 
   options: {
-    address: {
+    a: {
+      alias: ["address"],
       description: "The voting contract address",
-      type: "string",
+      type: "hex",
       required: true,
     },
-    id: {
-      alias: ["proposal"],
+    p: {
+      alias: ["proposal", "id"],
       description: "The id of the proposal to execute",
       type: "number",
       required: true,
@@ -25,8 +21,8 @@ export default command({
     ...writeOptions,
   },
 
-  handler: async ({ options, context, end, next }) => {
-    const { account, chain, rpcUrl } = await getWriteOptions(options, context);
+  handler: async ({ options, client, next }) => {
+    const { council } = await getWriteOptions(options, client);
 
     const address = await options.address({
       prompt: "Enter voting contract address",
@@ -36,24 +32,18 @@ export default command({
       prompt: "Enter proposal id",
     });
 
-    const transport = http(rpcUrl);
-    const publicClient = createPublicClient({ transport, chain });
-    const walletClient = createWalletClient({ transport, chain, account });
-
-    const council = new ReadWriteCouncil({ publicClient, walletClient });
-    const coreVoting = council.coreVoting({
-      address: address as `0x${string}`,
+    const hash = await council.coreVoting(address).executeProposal({
+      args: {
+        proposalId: BigInt(id),
+      },
+      options: {
+        onMined: () => {
+          signale.success(`Transaction success: ${hash}`);
+        },
+      },
     });
-    const proposal = await coreVoting.getProposal({ id: BigInt(id) });
 
-    if (!proposal) {
-      signale.error(`Proposal ${id} not found`);
-      return end();
-    }
-
-    const hash = await proposal.execute();
-
-    signale.success(hash);
+    signale.pending(`Transaction submitted: ${hash}`);
     next(hash);
   },
 });

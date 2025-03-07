@@ -1,39 +1,34 @@
-import { ReadWriteCouncil } from "@delvtech/council-viem";
+import { parseFixed } from "@delvtech/fixed-point-wasm";
 import { command } from "clide-js";
 import signale from "signale";
-import { createPublicClient, createWalletClient, http, parseUnits } from "viem";
-import {
-  getWriteOptions,
-  writeOptions,
-} from "../../reusable-options/writeOptions.js";
+import { getWriteOptions, writeOptions } from "../../options/writeOptions.js";
 
 export default command({
   description: "Deposit tokens into a LockingVault.",
 
   options: {
-    address: {
-      describe: "The LockingVault contract address",
+    a: {
+      alias: ["address"],
+      describe: "The LockingVault contract address.",
+      type: "hex",
+      required: true,
+    },
+    A: {
+      alias: ["amount"],
+      describe: "The amount of tokens to deposit as a decimal string.",
       type: "string",
       required: true,
     },
-    amount: {
-      describe: "The amount of tokens to deposit",
-      type: "string",
-      required: true,
-    },
-    account: {
-      describe: "The account to credit the deposit to",
-      type: "string",
+    c: {
+      alias: ["account"],
+      describe: "The account to credit the deposit to.",
+      type: "hex",
     },
     ...writeOptions,
   },
 
-  handler: async ({ options, context, next }) => {
-    const {
-      account: signerAccount,
-      chain,
-      rpcUrl,
-    } = await getWriteOptions(options, context);
+  handler: async ({ options, client, next }) => {
+    const { council } = await getWriteOptions(options, client);
 
     const address = await options.address({
       prompt: "Enter Locking Vault address",
@@ -48,28 +43,23 @@ export default command({
 
     const account = await options.account();
 
-    const transport = http(rpcUrl);
-    const publicClient = createPublicClient({ chain, transport });
-    const walletClient = createWalletClient({
-      transport,
-      chain,
-      account: signerAccount,
-    });
-
-    const lockingVault = new ReadWriteCouncil({
-      publicClient,
-      walletClient,
-    }).lockingVault(address as `0x${string}`);
-
+    const lockingVault = council.lockingVault(address);
     const token = await lockingVault.getToken();
     const decimals = await token.getDecimals();
 
     const hash = await lockingVault.deposit({
-      amount: parseUnits(amount, decimals),
-      account: account as `0x${string}` | undefined,
+      args: {
+        amount: parseFixed(amount, decimals).bigint,
+        account,
+      },
+      options: {
+        onMined: () => {
+          signale.success(`Transaction success: ${hash}`);
+        },
+      },
     });
 
-    signale.success(hash);
+    signale.pending(`Transaction submitted: ${hash}`);
     next(hash);
   },
 });

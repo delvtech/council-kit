@@ -1,18 +1,16 @@
 import { Timelock } from "@delvtech/council-artifacts/Timelock";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import {
-  callHashOptions,
-  getCallHash,
-} from "src/reusable-options/call-hash.js";
-import { encodeFunctionData } from "viem";
+import { callHashOptions, getCallHash } from "../../../options/call-hash.js";
 
 export default command({
   description: "Encode call data for Timelock.increaseTime",
 
   options: {
-    time: {
-      description: "The amount of time (in seconds) to increase by",
+    t: {
+      alias: ["time"],
+      description: "The amount of time (in seconds) to increase by.",
       type: "number",
       required: true,
     },
@@ -30,20 +28,16 @@ export default command({
       options.calldatas,
     );
 
-    const encoded = encodeIncreaseTime(timeValue.toString(), callHash);
+    const encoded = encodeFunctionData({
+      abi: Timelock.abi,
+      fn: "increaseTime",
+      args: {
+        callHash,
+        timeValue: BigInt(timeValue),
+      },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeIncreaseTime(
-  timeValue: string,
-  callHash: string,
-): string {
-  return encodeFunctionData({
-    abi: Timelock.abi,
-    functionName: "increaseTime",
-    args: [BigInt(timeValue), callHash as `0x${string}`],
-  });
-}

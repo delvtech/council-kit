@@ -1,146 +1,83 @@
 import { Spender } from "@delvtech/council-artifacts/Spender";
 import { command } from "clide-js";
-import signale from "signale";
-import { PrivateKeyAccount, parseUnits } from "viem";
-import { Chain } from "viem/chains";
-import { WriteOptions } from "../../reusable-options/writeOptions.js";
-import {
-  DeployedContract,
-  deployContract,
-} from "../../utils/deployContract.js";
+import { parseUnits } from "viem";
+import { ownerOption } from "../../options/owner.js";
+import { DeployOptions } from "../deploy.js";
 
 export default command({
   description: "Deploy a Spender contract",
 
   options: {
-    owner: {
-      description: "The contract owner's address (e.g., a Timelock contract)",
-      type: "string",
-    },
-    spender: {
-      description: "The first address authorized to spend tokens",
-      type: "string",
-    },
-    token: {
-      description: "The address of the ERC20 token contract",
-      type: "string",
+    t: {
+      alias: ["token"],
+      description: "The address of the ERC20 token contract.",
+      type: "hex",
       required: true,
     },
-    small: {
+    s: {
       alias: ["small-spend-limit"],
-      description: "The small spend proposal limit",
+      description: "The small spend proposal limit as a decimal string.",
       type: "string",
       required: true,
     },
-    medium: {
+    m: {
       alias: ["medium-spend-limit"],
-      description: "The medium spend proposal limit",
+      description: "The medium spend proposal limit as a decimal string.",
       type: "string",
       required: true,
     },
-    high: {
+    h: {
       alias: ["high-spend-limit"],
-      description: "The high spend proposal limit",
+      description: "The high spend proposal limit as a decimal string.",
       type: "string",
       required: true,
     },
-    decimals: {
+    o: ownerOption,
+    S: {
+      alias: ["spender"],
       description:
-        "The decimal precision to use. The limit options will be multiplied by (10 ** decimals). For example, if the small limit is 100 and decimals is 18, then the result will be 100000000000000000000",
-      type: "number",
-      default: 18,
+        "The first address authorized to spend tokens. Defaults to the owner.",
+      type: "hex",
     },
   },
 
   handler: async ({ data, options, next }) => {
-    const { account, chain, rpcUrl } = data as WriteOptions;
-
-    const owner = (await options.owner()) || account.address;
-
-    const spender = (await options.spender()) || owner;
+    const { council, account, deployer } = data as DeployOptions;
 
     const token = await options.token({
       prompt: "Enter token address",
     });
 
-    const small = await options.small({
+    const small = await options.smallSpendLimit({
       prompt: "Enter small spend limit",
     });
 
-    const medium = await options.medium({
+    const medium = await options.mediumSpendLimit({
       prompt: "Enter medium spend limit",
     });
 
-    const high = await options.high({
+    const high = await options.highSpendLimit({
       prompt: "Enter high spend limit",
     });
 
-    const decimals = await options.decimals();
+    const owner = (await options.owner()) || account.address;
+    const spender = (await options.spender()) || owner;
+    const decimals = await council.token(token).getDecimals();
 
-    signale.pending("Deploying Spender...");
-
-    const deployData = await deploySpender({
-      owner,
-      spender,
-      token,
-      smallSpendLimit: small,
-      mediumSpendLimit: medium,
-      highSpendLimit: high,
-      decimals,
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (txHash) => {
-        signale.pending(`Spender deployment tx submitted: ${txHash}`);
+    const deployedContract = await deployer.deploy({
+      abi: Spender.abi,
+      bytecode: Spender.bytecode,
+      name: "Spender",
+      args: {
+        _highSpendLimit: parseUnits(high, decimals),
+        _mediumSpendLimit: parseUnits(medium, decimals),
+        _smallSpendLimit: parseUnits(small, decimals),
+        _token: token,
+        _owner: owner,
+        _spender: spender,
       },
     });
 
-    signale.success(`Spender deployed @ ${deployData.address}`);
-    next(deployData);
+    next(deployedContract);
   },
 });
-
-export interface DeploySpenderOptions {
-  owner: string;
-  spender: string;
-  token: string;
-  smallSpendLimit: string;
-  mediumSpendLimit: string;
-  highSpendLimit: string;
-  decimals: number;
-  account: PrivateKeyAccount;
-  rpcUrl: string;
-  chain: Chain;
-  onSubmitted?: (txHash: string) => void;
-}
-
-export async function deploySpender({
-  owner,
-  spender,
-  token,
-  smallSpendLimit,
-  mediumSpendLimit,
-  highSpendLimit,
-  decimals,
-  account,
-  rpcUrl,
-  chain,
-  onSubmitted,
-}: DeploySpenderOptions): Promise<DeployedContract> {
-  return deployContract({
-    abi: Spender.abi,
-    args: [
-      owner as `0x${string}`,
-      spender as `0x${string}`,
-      token as `0x${string}`,
-      parseUnits(smallSpendLimit, decimals),
-      parseUnits(mediumSpendLimit, decimals),
-      parseUnits(highSpendLimit, decimals),
-    ],
-    bytecode: Spender.bytecode,
-    account,
-    rpcUrl,
-    chain,
-    onSubmitted,
-  });
-}

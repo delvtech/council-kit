@@ -1,30 +1,32 @@
-import { OptionGetter, OptionsConfig } from "clide-js";
+import { Bytes } from "@delvtech/drift";
+import { OptionGetter, options } from "clide-js";
 import colors from "colors";
+import { Address, Hash } from "viem";
 import { createCallHash } from "../utils/createCallHash.js";
 import { isNotEmptyList } from "../utils/validation/isNotEmptyList.js";
 
-export const callHashOptions = {
+export const callHashOptions = options({
   "call-hash": {
-    description: "The hash entry to increase time for",
-    type: "string",
+    description: "The hash entry to increase time for.",
+    type: "hex",
   },
   targets: {
     description:
       "A list of addresses to call. This will be used with the `--calldatas` option to create a call hash if one isn't provided via the `--call-hash` option.",
-    type: "array",
+    type: "hexArray",
   },
   calldatas: {
     description:
       "Encoded call data for each target. This will be used with the `--targets` option to create a call hash if one isn't provided via the `--call-hash` option.",
-    type: "array",
+    type: "hexArray",
   },
-} as const satisfies OptionsConfig;
+});
 
 export async function getCallHash(
-  callHashGetter: OptionGetter<string | undefined>,
-  targetsGetter: OptionGetter<string[] | undefined>,
-  calldatasGetter: OptionGetter<string[] | undefined>,
-): Promise<string> {
+  callHashGetter: OptionGetter<Hash | undefined>,
+  targetsGetter: OptionGetter<Address[] | undefined>,
+  calldatasGetter: OptionGetter<Bytes[] | undefined>,
+): Promise<Hash> {
   let callHash = await callHashGetter();
   if (callHash) {
     return callHash;

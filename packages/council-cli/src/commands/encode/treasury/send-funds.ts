@@ -1,7 +1,9 @@
 import { Treasury } from "@delvtech/council-artifacts/Treasury";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData, parseUnits } from "viem";
+import { parseUnits } from "viem";
+import { decimalsOption } from "../../../options/decimals.js";
 
 const ETH_CONSTANT = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
@@ -9,25 +11,23 @@ export default command({
   description: "Encode call data for Treasury.sendFunds",
 
   options: {
-    token: {
-      description: `The address of token to send (${ETH_CONSTANT} to send ETH)`,
+    t: {
+      alias: ["token"],
+      description: `The address of token to send (${ETH_CONSTANT} to send ETH).`,
+      type: "hex",
+      required: true,
+    },
+    a: {
+      alias: ["amount"],
+      description: "The amount to send.",
       type: "string",
       required: true,
     },
-    amount: {
-      description: "The amount to send",
-      type: "string",
-      required: true,
-    },
-    decimals: {
-      description:
-        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-      type: "number",
-      default: 18,
-    },
-    recipient: {
-      description: "The address to send the funds to",
-      type: "string",
+    d: decimalsOption,
+    r: {
+      alias: ["recipient"],
+      description: "The address to send the funds to.",
+      type: "hex",
       required: true,
     },
   },
@@ -50,26 +50,17 @@ export default command({
       prompt: "Enter recipient address",
     });
 
-    const encoded = encodeSendFunds(token, amount, decimals, recipient);
+    const encoded = encodeFunctionData({
+      abi: Treasury.abi,
+      fn: "sendFunds",
+      args: {
+        _amount: parseUnits(amount, decimals),
+        _recipient: recipient,
+        _token: token,
+      },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeSendFunds(
-  token: string,
-  amount: string,
-  decimals: number,
-  recipient: string,
-): string {
-  return encodeFunctionData({
-    abi: Treasury.abi,
-    functionName: "sendFunds",
-    args: [
-      token as `0x${string}`,
-      parseUnits(amount, decimals),
-      recipient as `0x${string}`,
-    ],
-  });
-}

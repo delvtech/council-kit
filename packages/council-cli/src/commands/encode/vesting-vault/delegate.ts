@@ -1,36 +1,32 @@
 import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for VestingVault.delegate",
 
   options: {
-    address: {
-      alias: ["to"],
-      description: "The address to delegate to",
-      type: "string",
+    t: {
+      alias: ["to", "address"],
+      description: "The address to delegate to.",
+      type: "hex",
       required: true,
     },
   },
 
   handler: async ({ options, next }) => {
-    const address = await options.address({
+    const to = await options.to({
       prompt: "Enter new delegate address",
     });
 
-    const encoded = encodeDelegate(address);
+    const encoded = encodeFunctionData({
+      abi: VestingVault.abi,
+      fn: "delegate",
+      args: { _to: to },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeDelegate(address: string): string {
-  return encodeFunctionData({
-    abi: VestingVault.abi,
-    functionName: "delegate",
-    args: [address as `0x${string}`],
-  });
-}

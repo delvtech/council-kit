@@ -1,29 +1,26 @@
-import { ReadWriteCouncil } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import signale from "signale";
-import { createPublicClient, createWalletClient, http } from "viem";
-import {
-  getWriteOptions,
-  writeOptions,
-} from "../../reusable-options/writeOptions.js";
+import { getWriteOptions, writeOptions } from "../../options/writeOptions.js";
 
 export default command({
   description: "Change a vault's status in a CoreVoting contract.",
 
   options: {
-    address: {
-      describe: "The CoreVoting contract address",
-      type: "string",
+    a: {
+      alias: ["address"],
+      describe: "The CoreVoting contract address.",
+      type: "hex",
       required: true,
     },
-    vault: {
-      describe: "The vault address",
-      type: "string",
+    v: {
+      alias: ["vault"],
+      describe: "The vault address.",
+      type: "hex",
       required: true,
     },
-    valid: {
-      alias: ["is-valid", "approved"],
-      describe: "Whether or not the vault is valid",
+    V: {
+      alias: ["valid", "approved"],
+      describe: "Whether or not the vault is valid.",
       type: "boolean",
       default: true,
       required: true,
@@ -31,12 +28,8 @@ export default command({
     ...writeOptions,
   },
 
-  handler: async ({ options, context, next }) => {
-    const {
-      account: signerAccount,
-      chain,
-      rpcUrl,
-    } = await getWriteOptions(options, context);
+  handler: async ({ options, client, next }) => {
+    const { council } = await getWriteOptions(options, client);
 
     const address = await options.address({
       prompt: "Enter Core Voting address",
@@ -50,25 +43,16 @@ export default command({
       prompt: "Is the vault valid/approved?",
     });
 
-    const transport = http(rpcUrl);
-    const publicClient = createPublicClient({ chain, transport });
-    const walletClient = createWalletClient({
-      transport,
-      chain,
-      account: signerAccount,
+    const hash = await council.coreVoting(address).changeVaultStatus({
+      args: { vault, isValid },
+      options: {
+        onMined: () => {
+          signale.success(`Transaction success: ${hash}`);
+        },
+      },
     });
 
-    const coreVoting = new ReadWriteCouncil({
-      publicClient,
-      walletClient,
-    }).coreVoting({ address: address as `0x${string}` });
-
-    const hash = await coreVoting.changeVaultStatus({
-      vault: vault as `0x${string}`,
-      isValid,
-    });
-
-    signale.success(hash);
+    signale.pending(`Transaction submitted: ${hash}`);
     next(hash);
   },
 });

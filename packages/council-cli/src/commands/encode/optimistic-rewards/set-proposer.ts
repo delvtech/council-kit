@@ -1,34 +1,32 @@
 import { OptimisticRewards } from "@delvtech/council-artifacts/OptimisticRewards";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for OptimisticRewards.setProposer",
 
   options: {
-    address: {
+    p: {
       alias: ["proposer"],
-      description: "The address of the new proposer",
-      type: "string",
+      description: "The address of the new proposer.",
+      type: "hex",
       required: true,
     },
   },
 
   handler: async ({ options, next }) => {
-    const address = await options.address({
+    const proposer = await options.proposer({
       prompt: "Enter proposer address",
     });
-    const encoded = encodeSetProposer(address);
+
+    const encoded = encodeFunctionData({
+      abi: OptimisticRewards.abi,
+      fn: "setProposer",
+      args: { _proposer: proposer },
+    });
+
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeSetProposer(proposerAddress: string): string {
-  return encodeFunctionData({
-    abi: OptimisticRewards.abi,
-    functionName: "setProposer",
-    args: [proposerAddress as `0x${string}`],
-  });
-}

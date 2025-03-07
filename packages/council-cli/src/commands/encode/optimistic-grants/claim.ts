@@ -1,34 +1,32 @@
 import { OptimisticGrants } from "@delvtech/council-artifacts/OptimisticGrants";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for OptimisticGrants.claim",
 
   options: {
-    recipient: {
-      alias: ["destination"],
-      description: "The address to send the tokens to",
-      type: "string",
+    r: {
+      alias: ["recipient", "destination"],
+      description: "The address to send the tokens to.",
+      type: "hex",
       required: true,
     },
   },
 
   handler: async ({ options, next }) => {
-    const recipient = await options.recipient({
+    const destination = await options.destination({
       prompt: "Enter recipient address",
     });
-    const encoded = encodeClaim(recipient);
+
+    const encoded = encodeFunctionData({
+      abi: OptimisticGrants.abi,
+      fn: "claim",
+      args: { _destination: destination },
+    });
+
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeClaim(recipient: string): string {
-  return encodeFunctionData({
-    abi: OptimisticGrants.abi,
-    functionName: "claim",
-    args: [recipient as `0x${string}`],
-  });
-}

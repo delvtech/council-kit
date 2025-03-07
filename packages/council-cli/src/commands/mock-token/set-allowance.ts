@@ -1,46 +1,43 @@
-import { ReadWriteMockToken } from "@delvtech/council-viem";
+import { MockERC20 } from "@delvtech/council-artifacts/MockERC20";
 import { command } from "clide-js";
 import signale from "signale";
-import { createPublicClient, createWalletClient, http, parseUnits } from "viem";
-import {
-  getWriteOptions,
-  writeOptions,
-} from "../../reusable-options/writeOptions.js";
+import { parseUnits } from "viem";
+import { getWriteOptions, writeOptions } from "../../options/writeOptions.js";
 
 export default command({
   description: "Set an account's token allowance",
 
   options: {
-    address: {
-      description: "The token contract address",
-      type: "string",
+    a: {
+      alias: ["address"],
+      description: "The token contract address.",
+      type: "hex",
       required: true,
     },
-    owner: {
-      description: "The address of the token owner",
-      type: "string",
+    o: {
+      alias: ["owner", "source"],
+      description: "The address of the token owner.",
+      type: "hex",
       required: true,
     },
-    spender: {
-      description: "The address of the token spender",
-      type: "string",
+    s: {
+      alias: ["spender"],
+      description: "The address of the token spender.",
+      type: "hex",
       required: true,
     },
-    allowance: {
+    A: {
+      alias: ["allowance"],
       description:
-        "The amount of tokens the spender is allowed to spend from the owner's account",
+        "The amount of tokens the spender is allowed to spend from the owner's account as a decimals string.",
       type: "string",
       required: true,
     },
     ...writeOptions,
   },
 
-  handler: async ({ options, context, next }) => {
-    const {
-      account: signerAccount,
-      chain,
-      rpcUrl,
-    } = await getWriteOptions(options, context);
+  handler: async ({ options, client, next }) => {
+    const { drift } = await getWriteOptions(options, client);
 
     const address = await options.address({
       prompt: "Enter token contract address",
@@ -62,28 +59,27 @@ export default command({
       },
     });
 
-    const transport = http(rpcUrl);
-    const publicClient = createPublicClient({ transport, chain });
-    const walletClient = createWalletClient({
-      transport,
-      chain,
-      account: signerAccount,
+    const token = drift.contract({
+      abi: MockERC20.abi,
+      address,
     });
+    const decimals = await token.read("decimals");
 
-    const token = new ReadWriteMockToken({
-      address: address as `0x${string}`,
-      publicClient,
-      walletClient,
-    });
+    const hash = await token.write(
+      "setAllowance",
+      {
+        amount: parseUnits(allowance, decimals),
+        source: owner,
+        spender,
+      },
+      {
+        onMined: () => {
+          signale.success(`Transaction success: ${hash}`);
+        },
+      },
+    );
 
-    const decimals = await token.getDecimals();
-    const hash = await token.setAllowance({
-      allowance: parseUnits(allowance, decimals),
-      spender: spender as `0x${string}`,
-      owner: owner as `0x${string}`,
-    });
-
-    signale.success(hash);
+    signale.pending(`Transaction submitted: ${hash}`);
     next(hash);
   },
 });

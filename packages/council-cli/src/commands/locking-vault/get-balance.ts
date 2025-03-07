@@ -1,33 +1,30 @@
-import { ReadCouncil } from "@delvtech/council-viem";
+import { createCouncil } from "@delvtech/council-js";
+import { fixed } from "@delvtech/fixed-point-wasm";
 import { command } from "clide-js";
 import signale from "signale";
-import { createPublicClient, http } from "viem";
-import { chainOption, getChain } from "../../reusable-options/chain.js";
-import { rpcUrlOption } from "../../reusable-options/rpc-url.js";
+import { rpcUrlOption } from "../../options/rpc-url.js";
 
 export default command({
   description: "Get the balance of a given account.",
 
   options: {
-    address: {
-      description: "The LockingVault contract address",
-      type: "string",
+    a: {
+      alias: ["address"],
+      description: "The LockingVault contract address.",
+      type: "hex",
       required: true,
     },
-    account: {
-      alias: ["voter"],
-      description: "The account to get the balance of",
-      type: "string",
+    A: {
+      alias: ["account"],
+      description: "The account to get the balance of.",
+      type: "hex",
       required: true,
     },
-    chain: chainOption,
-    rpc: rpcUrlOption,
+    r: rpcUrlOption,
   },
 
-  handler: async ({ options, context, next }) => {
-    const chain = await getChain(options.chain, context);
-
-    const rpcUrl = await options.rpc({
+  handler: async ({ options, next }) => {
+    const rpcUrl = await options.rpcUrl({
       prompt: "Enter RPC URL",
     });
 
@@ -39,17 +36,15 @@ export default command({
       prompt: "Enter account to get balance of",
     });
 
-    const transport = http(rpcUrl);
-    const publicClient = createPublicClient({ transport, chain });
+    const lockingVault = createCouncil({ rpcUrl }).lockingVault(address);
+    const token = await lockingVault.getToken();
+    const [balance, decimals] = await Promise.all([
+      lockingVault.getBalanceOf(account),
+      token.getDecimals(),
+    ]);
+    const formattedBalance = fixed(balance, decimals).format();
 
-    const council = new ReadCouncil({ publicClient });
-    const lockingVault = council.lockingVault(address as `0x${string}`);
-
-    const balance = await lockingVault.getDepositedBalance({
-      account: account as `0x${string}`,
-    });
-
-    signale.info(balance);
+    signale.info(formattedBalance);
     next(balance);
   },
 });

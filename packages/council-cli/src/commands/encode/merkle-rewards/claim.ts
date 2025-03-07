@@ -1,38 +1,37 @@
 import { MerkleRewards } from "@delvtech/council-artifacts/MerkleRewards";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData, parseUnits } from "viem";
+import { parseUnits } from "viem";
+import { decimalsOption } from "../../../options/decimals.js";
 
 export default command({
   description: "Encode call data for MerkleRewards.claim",
 
   options: {
-    amount: {
+    a: {
+      alias: ["amount"],
       description: "The amount of rewards to claim",
       type: "string",
       required: true,
     },
-    decimals: {
-      description:
-        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-      type: "number",
-      default: 18,
-    },
-    "total-grant": {
-      description: "The total grant amount",
+    d: decimalsOption,
+    g: {
+      alias: ["total-grant"],
+      description: "The total grant amount.",
       type: "string",
       required: true,
     },
-    proof: {
+    p: {
       alias: ["merkle-proof"],
-      description: "The merkle proof for the claim",
-      type: "array",
+      description: "The merkle proof for the claim.",
+      type: "hexArray",
       required: true,
     },
-    recipient: {
-      alias: ["destination"],
-      description: "The address which will be credited with funds",
-      type: "string",
+    r: {
+      alias: ["recipient", "destination"],
+      description: "The address which will be credited with funds.",
+      type: "hex",
       required: true,
     },
   },
@@ -48,36 +47,26 @@ export default command({
 
     const decimals = await options.decimals();
 
-    const proof = await options.proof({
+    const merkleProof = await options.merkleProof({
       prompt: "Enter merkle proof",
     });
 
-    const recipient = await options.recipient({
+    const destination = await options.destination({
       prompt: "Enter recipient address",
     });
 
-    const encoded = encodeClaim(amount, decimals, totalGrant, proof, recipient);
+    const encoded = encodeFunctionData({
+      abi: MerkleRewards.abi,
+      fn: "claim",
+      args: {
+        amount: parseUnits(amount, decimals),
+        destination,
+        merkleProof,
+        totalGrant: parseUnits(totalGrant, decimals),
+      },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeClaim(
-  amount: string,
-  decimals: number,
-  totalGrant: string,
-  proof: string[],
-  recipient: string,
-): string {
-  return encodeFunctionData({
-    abi: MerkleRewards.abi,
-    functionName: "claim",
-    args: [
-      parseUnits(amount, decimals),
-      parseUnits(totalGrant, decimals),
-      proof as `0x${string}`[],
-      recipient as `0x${string}`,
-    ],
-  });
-}

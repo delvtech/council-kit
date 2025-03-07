@@ -3,7 +3,7 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.3",
+        version: "0.8.24",
         settings: {
           optimizer: {
             enabled: true,

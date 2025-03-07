@@ -6,10 +6,10 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "baseUrl": ".",
-    // "module": "NodeNext",
-    // "moduleResolution": "NodeNext",
-    // "target": "ESNext",
+    // "baseUrl": ".",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
     "allowSyntheticDefaultImports": true,
 
     // important to import JSON files from @delvtech/council-artifacts
@@ -20,12 +20,9 @@
     "declarationMap": false,
 
     "lib": ["es2023"],
-    "module": "node16",
-    "target": "es2022",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node16",
-  },
+    "forceConsistentCasingInFileNames": true
+  }
 }

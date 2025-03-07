@@ -1,27 +1,26 @@
 import { Spender } from "@delvtech/council-artifacts/Spender";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData, parseUnits } from "viem";
+import { parseUnits } from "viem";
+import { decimalsOption } from "../../../options/decimals.js";
 
 export default command({
   description: "Encode call data for a Spender.removeToken",
 
   options: {
-    amount: {
+    a: {
+      alias: ["amount"],
       description:
         "The amount of tokens to remove (max uint256 for the full balance)",
-      type: "string",
+      type: "hex",
       required: true,
     },
-    decimals: {
-      description:
-        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-      type: "number",
-      default: 18,
-    },
-    destination: {
-      description: "The address to send the funds to",
-      type: "string",
+    d: decimalsOption,
+    D: {
+      alias: ["destination"],
+      description: "The address to send the funds to.",
+      type: "hex",
       required: true,
     },
   },
@@ -37,21 +36,16 @@ export default command({
       prompt: "Enter destination address",
     });
 
-    const encoded = encodeRemoveToken(amount, decimals, destination);
+    const encoded = encodeFunctionData({
+      abi: Spender.abi,
+      fn: "removeToken",
+      args: {
+        amount: parseUnits(amount, decimals),
+        destination,
+      },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeRemoveToken(
-  amount: string,
-  decimals: number,
-  destination: string,
-): string {
-  return encodeFunctionData({
-    abi: Spender.abi,
-    functionName: "removeToken",
-    args: [parseUnits(amount, decimals), destination as `0x${string}`],
-  });
-}

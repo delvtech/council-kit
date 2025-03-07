@@ -1,14 +1,15 @@
 import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for VestingVault.changeUnvestedMultiplier",
 
   options: {
-    multiplier: {
-      description: "The new multiplier as a percentage",
+    m: {
+      alias: ["multiplier"],
+      description: "The new multiplier as a percentage.",
       type: "number",
       required: true,
     },
@@ -19,17 +20,13 @@ export default command({
       prompt: "Enter new multiplier (%)",
     });
 
-    const encoded = encodeChangeUnvestedMultiplier(multiplier);
+    const encoded = encodeFunctionData({
+      abi: VestingVault.abi,
+      fn: "changeUnvestedMultiplier",
+      args: { _multiplier: BigInt(multiplier) },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeChangeUnvestedMultiplier(multiplier: number): string {
-  return encodeFunctionData({
-    abi: VestingVault.abi,
-    functionName: "changeUnvestedMultiplier",
-    args: [BigInt(multiplier)],
-  });
-}

@@ -13,7 +13,9 @@
   "scripts": {
     "council": "node dist/council.js",
     "dev": "NODE_ENV=development tsx src/council.ts",
+    "dev:watch": "NODE_ENV=development tsx --watch src/council.ts",
     "prod": "tsx src/council.ts",
+    "prod:watch": "tsx --watch src/council.ts",
     "build": "rimraf dist && tsc",
     "watch": "tsc --watch",
     "typecheck": "tsc --noEmit"
@@ -28,11 +30,13 @@
     }
   },
   "dependencies": {
+    "@delvtech/drift": "^0.6.0",
     "@delvtech/drift-viem": "^0.6.0",
     "@delvtech/council-artifacts": "^0.1.0",
     "@delvtech/council-js": "^0.0.0",
+    "@delvtech/fixed-point-wasm": "^0.0.7",
     "ajv": "^8.17.1",
-    "clide-js": "^0.2.11",
+    "clide-js": "^0.2.13",
     "clide-plugin-command-menu": "^0.1.1",
     "colors": "^1.4.0",
     "dotenv": "^16.4.7",
@@ -50,7 +54,7 @@
     "rimraf": "^6.0.1",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
-    "viem": "^2.23.6"
+    "viem": "^2.23.7"
   },
   "publishConfig": {
     "access": "public"

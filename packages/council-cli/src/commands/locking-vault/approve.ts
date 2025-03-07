@@ -1,41 +1,29 @@
-import { ReadWriteCouncil } from "@delvtech/council-viem";
 import { command } from "clide-js";
 import signale from "signale";
-import {
-  createPublicClient,
-  createWalletClient,
-  http,
-  maxUint256,
-  parseUnits,
-} from "viem";
-import {
-  getWriteOptions,
-  writeOptions,
-} from "../../reusable-options/writeOptions.js";
+import { maxUint256, parseUnits } from "viem";
+import { getWriteOptions, writeOptions } from "../../options/writeOptions.js";
 
 export default command({
   description:
     "Give a spending allowance to a LockingVault contract for the tokens it accepts.",
 
   options: {
-    address: {
-      describe: "The LockingVault contract address",
-      type: "string",
+    a: {
+      alias: ["address"],
+      describe: "The LockingVault contract address.",
+      type: "hex",
       required: true,
     },
-    amount: {
-      describe: "The amount of tokens to approve",
+    A: {
+      alias: ["amount"],
+      describe: "The amount of tokens to approve as a decimal string.",
       type: "string",
     },
     ...writeOptions,
   },
 
-  handler: async ({ options, context, next }) => {
-    const {
-      account: signerAccount,
-      chain,
-      rpcUrl,
-    } = await getWriteOptions(options, context);
+  handler: async ({ options, client, next }) => {
+    const { council } = await getWriteOptions(options, client);
 
     const address = await options.address({
       prompt: "Enter Locking Vault address",
@@ -43,28 +31,24 @@ export default command({
 
     const amount = await options.amount();
 
-    const transport = http(rpcUrl);
-    const publicClient = createPublicClient({ chain, transport });
-    const walletClient = createWalletClient({
-      transport,
-      chain,
-      account: signerAccount,
-    });
-
-    const lockingVault = new ReadWriteCouncil({
-      publicClient,
-      walletClient,
-    }).lockingVault(address as `0x${string}`);
-
+    const lockingVault = council.lockingVault(address);
     const token = await lockingVault.getToken();
     const decimals = await token.getDecimals();
 
     const hash = await token.approve({
-      amount: amount !== undefined ? parseUnits(amount, decimals) : maxUint256,
-      spender: lockingVault.address,
+      args: {
+        amount:
+          amount !== undefined ? parseUnits(amount, decimals) : maxUint256,
+        spender: lockingVault.address,
+      },
+      options: {
+        onMined: () => {
+          signale.success(`Transaction success: ${hash}`);
+        },
+      },
     });
 
-    signale.success(hash);
+    signale.pending(`Transaction submitted: ${hash}`);
     next(hash);
   },
 });

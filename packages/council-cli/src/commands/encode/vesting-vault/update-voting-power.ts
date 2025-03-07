@@ -1,16 +1,16 @@
 import { VestingVault } from "@delvtech/council-artifacts/VestingVault";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData } from "viem";
 
 export default command({
   description: "Encode call data for VestingVault.updateVotingPower",
 
   options: {
-    address: {
-      alias: ["who"],
-      description: "The address to update voting power for",
-      type: "string",
+    w: {
+      alias: ["who", "address"],
+      description: "The address to update voting power for.",
+      type: "hex",
       required: true,
     },
   },
@@ -20,17 +20,13 @@ export default command({
       prompt: "Enter voter's address",
     });
 
-    const encoded = encodeUpdateVotingPower(who);
+    const encoded = encodeFunctionData({
+      abi: VestingVault.abi,
+      fn: "updateVotingPower",
+      args: { _who: who },
+    });
 
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeUpdateVotingPower(who: string): string {
-  return encodeFunctionData({
-    abi: VestingVault.abi,
-    functionName: "updateVotingPower",
-    args: [who as `0x${string}`],
-  });
-}

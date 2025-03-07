@@ -1,7 +1,13 @@
 import { command } from "clide-js";
 import { execSync } from "node:child_process";
 import signale from "signale";
-import { parseUnits } from "viem";
+import { parseEther } from "viem";
+import { configuredChains } from "../lib/viem.js";
+
+const DEFAULT_CHAIN = configuredChains.hardhat;
+const DEFAULT_RPC_URL = new URL(
+  configuredChains.hardhat.rpcUrls.default.http[0],
+);
 
 // This command is only available if the optional hardhat peer dependency is
 // installed so we import it dynamically to avoid crashing if it's not
@@ -13,33 +19,44 @@ const hardhat = await import("hardhat").catch((e) => {
 });
 
 export default command({
-  description: "Start a local ethereum node",
+  description: "Start a local ethereum node using",
   isMiddleware: false,
 
   options: {
-    host: {
-      description: "The host to listen on",
+    H: {
+      alias: ["hostname"],
+      description: "The hostname to use.",
       type: "string",
-      default: "127.0.0.1",
+      default: DEFAULT_RPC_URL.hostname,
     },
-    port: {
-      description: "The port to listen on",
-      type: "number",
-      default: 8545,
+    f: {
+      alias: ["fork-url"],
+      description: "A URL to fork from.",
+      type: "string",
     },
-    balance: {
-      description: "The ETH balance to assign to each account",
+    p: {
+      alias: ["port"],
+      description: "The port to listen on.",
       type: "number",
-      default: 1_000,
+      default: +DEFAULT_RPC_URL.port,
     },
-    "block-time": {
-      description: "The blockTime in seconds for automatic mining",
+    b: {
+      alias: ["balance"],
+      description:
+        "The ETH balance to assign to each account as a decimal string.",
+      type: "string",
+      default: "1000",
+    },
+    t: {
+      alias: ["block-time"],
+      description: "The blockTime in seconds for automatic mining.",
       type: "number",
     },
-    "chain-id": {
-      description: "The id to use for the local blockchain",
+    c: {
+      alias: ["chain-id"],
+      description: "The id to use for the local blockchain.",
       type: "number",
-      default: 1337,
+      default: DEFAULT_CHAIN.id,
     },
   },
 
@@ -72,33 +89,40 @@ export default command({
 
     const hre = hardhat.default;
 
-    const host = await options.host();
+    const hostname = await options.hostname();
     const port = await options.port();
     const balance = await options.balance();
     const blockTime = await options.blockTime();
     const chainId = await options.chainId();
+    const forkUrl = await options.forkUrl();
 
-    hre.config.networks.hardhat = {
-      ...hre.config.networks.hardhat,
-      chainId,
-
+    const networks = hre.config.networks;
+    networks.hardhat = {
+      ...networks.hardhat,
       allowUnlimitedContractSize: true,
       accounts: {
-        ...hre.config.networks.hardhat.accounts,
-        accountsBalance: String(parseUnits(String(balance), 18)),
+        ...networks.hardhat.accounts,
+        accountsBalance: String(parseEther(balance)),
       },
+      chainId,
+      forking: forkUrl
+        ? {
+            url: forkUrl,
+            enabled: true,
+          }
+        : undefined,
       mining:
         blockTime !== undefined
           ? {
-              ...hre.config.networks.hardhat.mining,
+              ...networks.hardhat.mining,
               auto: false,
               interval: blockTime * 1_000,
             }
-          : hre.config.networks.hardhat.mining,
+          : networks.hardhat.mining,
     };
 
     hre.run("node", {
-      hostname: host,
+      hostname,
       port,
     });
 

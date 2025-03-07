@@ -1,30 +1,30 @@
 import { OptimisticGrants } from "@delvtech/council-artifacts/OptimisticGrants";
+import { encodeFunctionData } from "@delvtech/drift";
 import { command } from "clide-js";
 import signale from "signale";
-import { encodeFunctionData, parseUnits } from "viem";
+import { parseUnits } from "viem";
+import { decimalsOption } from "../../../options/decimals.js";
 
 export default command({
   description: "Encode call data for a OptimisticGrants.configureGrant",
 
   options: {
-    owner: {
-      description: "The address of the grant owner",
+    o: {
+      alias: ["owner"],
+      description: "The address of the grant owner.",
+      type: "hex",
+      required: true,
+    },
+    a: {
+      alias: ["amount"],
+      description: "The amount of tokens to grant.",
       type: "string",
       required: true,
     },
-    amount: {
-      description: "The amount of tokens to grant",
-      type: "string",
-      required: true,
-    },
-    decimals: {
-      description:
-        "The decimal precision used by the contract. The amount option will be multiplied by (10 ** decimals). For example, if amount is 100 and decimals is 18, then the result will be 100000000000000000000",
-      type: "number",
-      default: 18,
-    },
-    expiration: {
-      description: "The expiration timestamp (in seconds) of the grant",
+    d: decimalsOption,
+    e: {
+      alias: ["expiration"],
+      description: "The expiration timestamp (in seconds) of the grant.",
       type: "number",
       required: true,
     },
@@ -45,25 +45,17 @@ export default command({
       prompt: "Enter expiration timestamp (in seconds)",
     });
 
-    const encoded = encodeConfigureGrant(owner, amount, decimals, expiration);
+    const encoded = encodeFunctionData({
+      abi: OptimisticGrants.abi,
+      fn: "configureGrant",
+      args: {
+        _amount: parseUnits(amount, decimals),
+        _expiration: BigInt(expiration),
+        _owner: owner,
+      },
+    });
+
     signale.success(encoded);
     next(encoded);
   },
 });
-
-export function encodeConfigureGrant(
-  owner: string,
-  amount: string,
-  decimals: number,
-  expiration: number,
-): string {
-  return encodeFunctionData({
-    abi: OptimisticGrants.abi,
-    functionName: "configureGrant",
-    args: [
-      owner as `0x${string}`,
-      parseUnits(amount, decimals),
-      BigInt(expiration),
-    ],
-  });
-}

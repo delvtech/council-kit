@@ -1,32 +1,29 @@
 import { MockERC20 } from "@delvtech/council-artifacts/MockERC20";
 import { command } from "clide-js";
-import signale from "signale";
-import { WriteOptions } from "src/reusable-options/writeOptions.js";
-import { PrivateKeyAccount } from "viem";
-import { Chain } from "viem/chains";
-import {
-  DeployedContract,
-  deployContract,
-} from "../../utils/deployContract.js";
+import { ownerOption } from "../../options/owner.js";
+import { DeployOptions } from "../deploy.js";
 
 export default command({
   description: "Deploy a MockERC20 contract for use as a mock voting token",
 
   options: {
-    name: {
-      description: "The name of the token",
+    n: {
+      alias: ["name"],
+      description: "The name of the token.",
       type: "string",
       required: true,
     },
-    symbol: {
-      description: "The symbol of the token",
+    s: {
+      alias: ["symbol"],
+      description: "The symbol of the token.",
       type: "string",
       required: true,
     },
+    o: ownerOption,
   },
 
   handler: async ({ data, options, next }) => {
-    const { account, chain, rpcUrl } = data as WriteOptions;
+    const { account, deployer } = data as DeployOptions;
 
     const name = await options.name({
       prompt: "Enter token name",
@@ -36,48 +33,19 @@ export default command({
       prompt: "Enter token symbol",
     });
 
-    signale.pending("Deploying MockERC20...");
+    const owner = await options.owner();
 
-    const deployData = await deployMockERC20({
-      tokenName: name,
-      tokenSymbol: symbol,
-      account,
-      rpcUrl,
-      chain,
-      onSubmitted: (txHash) => {
-        signale.pending(`MockERC20 deployment tx submitted: ${txHash}`);
+    const deployedContract = await deployer.deploy({
+      name: "MockERC20",
+      abi: MockERC20.abi,
+      bytecode: MockERC20.bytecode,
+      args: {
+        name_: name,
+        symbol_: symbol,
+        owner_: owner || account.address,
       },
     });
 
-    signale.success(`MockERC20 deployed @ ${deployData.address}`);
-    next(deployData);
+    next(deployedContract);
   },
 });
-
-export interface DeployMockERC20Options {
-  tokenName: string;
-  tokenSymbol: string;
-  account: PrivateKeyAccount;
-  rpcUrl: string;
-  chain: Chain;
-  onSubmitted?: (txHash: string) => void;
-}
-
-export async function deployMockERC20({
-  tokenName,
-  tokenSymbol,
-  account,
-  rpcUrl,
-  chain,
-  onSubmitted,
-}: DeployMockERC20Options): Promise<DeployedContract> {
-  return await deployContract({
-    abi: MockERC20.abi,
-    args: [tokenName, tokenSymbol, account.address],
-    bytecode: MockERC20.bytecode,
-    account,
-    rpcUrl,
-    chain,
-    onSubmitted,
-  });
-}
