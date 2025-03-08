@@ -1,9 +1,9 @@
 import {
   Adapter,
   Address,
-  ClientConfig,
   ContractWriteOptions,
   Drift,
+  DriftConfig,
   OnMinedParam,
   OneOf,
   createDrift,
@@ -17,7 +17,7 @@ export type EntityConfig<A extends Adapter = Adapter> = OneOf<
   | {
       drift?: Drift<A>;
     }
-  | ClientConfig<A>
+  | DriftConfig<A>
 > & {
   /**
    * The earliest block to fetch events from.
