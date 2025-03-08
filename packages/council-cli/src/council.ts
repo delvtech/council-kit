@@ -1,11 +1,8 @@
 #!/usr/bin/env node
-import { initSync, wasmBuffer } from "@delvtech/fixed-point-wasm";
 import { help, run } from "clide-js";
 import { commandMenu } from "clide-plugin-command-menu";
 import "dotenv/config";
 import signale from "signale";
-
-initSync(wasmBuffer);
 
 run({
   plugins: [

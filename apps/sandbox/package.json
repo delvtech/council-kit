@@ -19,7 +19,7 @@
   "dependencies": {
     "@delvtech/drift": "^0.6.0",
     "@delvtech/drift-viem": "^0.6.0",
-    "@delvtech/fixed-point-wasm": "^0.0.7",
+    "@delvtech/fixed-point-wasm": "^0.0.8",
     "@delvtech/council-js": "^0.0.0",
     "viem": "^2.23.7"
   },

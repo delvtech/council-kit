@@ -34,7 +34,7 @@
     "@delvtech/drift-viem": "^0.6.0",
     "@delvtech/council-artifacts": "^0.1.0",
     "@delvtech/council-js": "^0.0.0",
-    "@delvtech/fixed-point-wasm": "^0.0.7",
+    "@delvtech/fixed-point-wasm": "^0.0.8",
     "ajv": "^8.17.1",
     "clide-js": "^0.2.13",
     "clide-plugin-command-menu": "^0.1.1",

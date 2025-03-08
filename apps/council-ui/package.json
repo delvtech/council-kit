@@ -16,7 +16,7 @@
     "@delvtech/council-js": "^0.0.0",
     "@delvtech/drift": "^0.6.0",
     "@delvtech/drift-viem": "^0.6.0",
-    "@delvtech/fixed-point-wasm": "^0.0.7",
+    "@delvtech/fixed-point-wasm": "^0.0.8",
     "@ensdomains/ensjs": "^4.0.2",
     "@heroicons/react": "^2.2.0",
     "@metamask/jazzicon": "^2.0.0",

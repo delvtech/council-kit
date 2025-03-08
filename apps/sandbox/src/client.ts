@@ -1,6 +1,5 @@
 import { createCouncil } from "@delvtech/council-js";
 import { viemAdapter } from "@delvtech/drift-viem";
-import { initSync, wasmBuffer } from "@delvtech/fixed-point-wasm";
 import {
   createPublicClient,
   createWalletClient,
@@ -10,8 +9,6 @@ import {
   type WalletClient,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-
-initSync(wasmBuffer);
 
 export const publicClient: PublicClient = createPublicClient({
   transport: http(process.env.RPC_URL),

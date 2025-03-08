@@ -1,4 +1,3 @@
-import { initSync, wasmBuffer } from "@delvtech/fixed-point-wasm";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
@@ -10,7 +9,6 @@ import { wagmiConfig } from "src/lib/wagmi";
 import { Navigation } from "src/ui/navigation/Navigation";
 import { WagmiProvider } from "wagmi";
 
-initSync(wasmBuffer);
 console.log(councilConfigs);
 
 function App({ Component, pageProps }: AppProps): ReactElement {
