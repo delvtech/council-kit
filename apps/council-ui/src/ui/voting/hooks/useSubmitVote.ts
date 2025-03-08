@@ -43,10 +43,12 @@ export function useSubmitVote({
           }
 
           return coreVoting.vote({
-            proposalId,
-            ballot,
-            vaults,
-            extraVaultData,
+            args: {
+              proposalId,
+              ballot,
+              vaults,
+              extraVaultData,
+            },
           });
         }
       : undefined,

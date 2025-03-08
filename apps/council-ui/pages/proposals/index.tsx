@@ -6,13 +6,13 @@ import { ExternalInfoCard } from "src/ui/base/information/ExternalInfoCard";
 import { Page } from "src/ui/base/Page";
 import { getBlockDate } from "src/ui/base/utils/getBlockDate";
 import { useCouncilConfig } from "src/ui/config/useCouncilConfig";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useReadCouncil } from "src/ui/council/useReadCouncil";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import {
   ProposalRowData,
   ProposalsTable,
 } from "src/ui/proposals/ProposalTable/ProposalsTable";
 import { ProposalsTableSkeleton } from "src/ui/proposals/ProposalTable/ProposalsTableSkeleton";
-import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { useAccount } from "wagmi";
 
 export default function ProposalsPage(): ReactElement {
@@ -35,7 +35,7 @@ export default function ProposalsPage(): ReactElement {
           case "error":
             return (
               <div className="daisy-mockup-code">
-                <code className="text-error block px-6 whitespace-pre-wrap">
+                <code className="block whitespace-pre-wrap px-6 text-error">
                   {error ? String(error) : "Unknown error"}
                 </code>
               </div>

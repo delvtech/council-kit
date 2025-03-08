@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { getVaultConfig } from "src/config/utils/getVaultConfig";
 import { Page } from "src/ui/base/Page";
-import { useSupportedChainId } from "src/ui/network/hooks/useSupportedChainId";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { FrozenLockingVaultDetails } from "src/ui/vaults/frozenLockingVault/FrozenLockingVaultDetails";
 import { GenericVaultDetails } from "src/ui/vaults/genericVault/GenericVaultDetails";
 import { GscVaultDetails } from "src/ui/vaults/gscVault/GscVaultDetails";

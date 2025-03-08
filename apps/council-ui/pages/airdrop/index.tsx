@@ -10,7 +10,7 @@ import { useAirdropVault } from "src/ui/airdrop/hooks/useAirdropVault";
 import { useClaimAirdrop } from "src/ui/airdrop/hooks/useClaimAirdrop";
 import { useClaimAndDelegateAirdrop } from "src/ui/airdrop/hooks/useClaimAndDelegateAirdrop";
 import { useClaimableAirdropAmount } from "src/ui/airdrop/hooks/useClaimableAirdropAmount";
-import useRouterSteps from "src/ui/router/hooks/useRouterSteps";
+import useRouterSteps from "src/ui/router/useRouterSteps";
 import { useDelegate } from "src/ui/vaults/lockingVault/hooks/useDelegate";
 import { zeroAddress } from "viem";
 import { useAccount } from "wagmi";

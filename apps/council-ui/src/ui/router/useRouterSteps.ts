@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useParams } from "src/ui/router/hooks/useParams";
+import { useParams } from "src/ui/router/useParams";
 
 export type StepPosition = "behind" | "current" | "adjacent" | "ahead";
 
