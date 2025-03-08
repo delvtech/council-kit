@@ -1,24 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap");
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-primary: #5e53bf;
+  --color-primary-hover: #473da4;
+  --color-primary-dim: #554cad;
+  --color-primary-20: rgba(183, 176, 244, 0.2);
+  --color-primary-text: #9f95f5;
+  --color-primary-text-light: #b7b0f4;
+  --color-primary-white: #e1deff;
+  --color-dark: #120f1b;
+  --color-black: #0c0916;
+}
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Rubik", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 100;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  font-family: 'Rubik', sans-serif;
-  font-weight: 100;
 }
 
 body {
-  @apply bg-dark
+  background-color: var(--color-dark);
 }
 
 a {

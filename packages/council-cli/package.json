@@ -42,7 +42,6 @@
     "dotenv": "^16.4.7",
     "json-schema-typed": "^8.0.1",
     "merkletreejs": "^0.5.1",
-    "node-fetch-native": "^1.6.6",
     "signale": "^1.4.0"
   },
   "devDependencies": {

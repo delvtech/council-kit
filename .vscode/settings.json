@@ -1,12 +1,5 @@
 {
   "eslint.workingDirectories": ["./apps/council-ui"],
-  "dotenv.enableAutocloaking": false,
-  "json.schemas": [
-    {
-      "fileMatch": ["*.deployments.json"],
-      "url": "./packages/council-deploy/src/deployments/deployments.schema.json"
-    }
-  ],
   "markdown.extension.toc.levels": "2..6",
   "cSpell.words": [
     "abitype",
