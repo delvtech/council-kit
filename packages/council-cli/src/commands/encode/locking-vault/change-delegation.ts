@@ -10,7 +10,8 @@ export default command({
     a: {
       alias: ["address", "new-delegate"],
       description: "The address to delegate to.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

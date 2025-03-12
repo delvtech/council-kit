@@ -56,7 +56,7 @@ export async function mine({
 }): Promise<void> {
   const methodsToTry: any[] = ["hardhat_mine", "anvil_mine"];
   const params: [Hex] = [`0x${blocks.toString(16)}`];
-  let success = true;
+  let success = false;
   let error: unknown;
 
   while (!success && methodsToTry.length) {

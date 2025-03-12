@@ -12,7 +12,8 @@ export default command({
     o: {
       alias: ["owner"],
       description: "The address of the grant owner.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     a: {

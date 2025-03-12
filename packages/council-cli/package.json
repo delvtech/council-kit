@@ -21,8 +21,8 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "viem": ">=2",
-    "hardhat": ">=2"
+    "hardhat": ">=2",
+    "viem": ">=2"
   },
   "peerDependenciesMeta": {
     "hardhat": {
@@ -30,14 +30,14 @@
     }
   },
   "dependencies": {
-    "@delvtech/drift": "^0.6.0",
-    "@delvtech/drift-viem": "^0.6.0",
     "@delvtech/council-artifacts": "^0.1.0",
     "@delvtech/council-js": "^0.0.0",
+    "@delvtech/drift": "^0.6.0",
+    "@delvtech/drift-viem": "^0.6.0",
     "@delvtech/fixed-point-wasm": "^0.0.8",
     "ajv": "^8.17.1",
-    "clide-js": "^0.2.13",
-    "clide-plugin-command-menu": "^0.1.1",
+    "clide-js": "^0.2.14-next.5",
+    "clide-plugin-command-menu": "^0.1.2-next.0",
     "colors": "^1.4.0",
     "dotenv": "^16.4.7",
     "json-schema-typed": "^8.0.1",

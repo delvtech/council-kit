@@ -9,20 +9,22 @@ export default command({
   options: {
     a: {
       alias: ["address"],
-      describe: "The LockingVault contract address.",
-      type: "hex",
+      description: "The LockingVault contract address.",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     A: {
       alias: ["amount"],
-      describe: "The amount of tokens to deposit as a decimal string.",
+      description: "The amount of tokens to deposit as a decimal string.",
       type: "string",
       required: true,
     },
     c: {
       alias: ["account"],
-      describe: "The account to credit the deposit to.",
-      type: "hex",
+      description: "The account to credit the deposit to.",
+      type: "string",
+      customType: "hex",
     },
     ...writeOptions,
   },

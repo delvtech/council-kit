@@ -17,7 +17,7 @@ import { isNotEmptyList } from "../../utils/validation/isNotEmptyList.js";
 import { isNumberString } from "../../utils/validation/isNumberString.js";
 import { Schema, validateData } from "../../utils/validation/validateData.js";
 
-export default command({
+const createTreeCommand = command({
   description:
     "Create a merkle tree for rewards (e.g., airdrop) from a list of addresses and reward amounts. The output is a JSON file with the merkle root and each leaf by address with it's proof.",
 
@@ -32,7 +32,8 @@ export default command({
       alias: ["addresses"],
       description:
         "A list of recipient addresses to include in the merkle tree.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
     },
     A: {
       alias: ["amounts"],
@@ -123,6 +124,7 @@ export default command({
     next(merkleTreeInfo);
   },
 });
+export default createTreeCommand;
 
 /**
  * A requiredOption wrapper for prompting the user for the leaves to create
@@ -133,9 +135,9 @@ async function getLeaves({
   addressesGetter,
   amountsGetter,
 }: {
-  inputsPathGetter: OptionGetter<string | undefined>;
-  addressesGetter: OptionGetter<Address[] | undefined>;
-  amountsGetter: OptionGetter<string[] | undefined>;
+  inputsPathGetter: OptionGetter<{ type: "string"; customType: "hex" }>;
+  addressesGetter: OptionGetter<{ type: "array"; customType: "hexArray" }>;
+  amountsGetter: OptionGetter<{ type: "array" }>;
 }): Promise<Leaf[]> {
   const leaves: Leaf[] = [];
 
@@ -176,22 +178,20 @@ async function getLeaves({
   // prompt the user for them if leaves is still empty.
   if (isNotEmptyList(addresses) || isNotEmptyList(amounts) || !leaves.length) {
     addresses = await addressesGetter({
-      prompt: {
-        message: "Enter recipient addresses",
-        validate: (addresses) => {
-          if (!addresses?.length) {
-            return "Enter valid addresses";
-          }
+      prompt: "Enter recipient addresses",
+      validate: (addresses) => {
+        if (!Array.isArray(addresses) || !addresses?.length) {
+          return "Enter valid addresses";
+        }
 
-          // Validate the addresses
-          for (const address of addresses) {
-            if (!isAddress(address)) {
-              return `Invalid address: ${address}`;
-            }
+        // Validate the addresses
+        for (const address of addresses) {
+          if (!isAddress(address)) {
+            return `Invalid address: ${address}`;
           }
+        }
 
-          return true;
-        },
+        return true;
       },
     });
 
@@ -200,22 +200,20 @@ async function getLeaves({
     }
 
     amounts = await amountsGetter({
-      prompt: {
-        message: "Enter reward amounts",
-        validate: (amounts) => {
-          if (!amounts) {
-            return "Enter valid amounts";
-          }
+      prompt: "Enter reward amounts",
+      validate: (amounts) => {
+        if (!amounts || !Array.isArray(amounts)) {
+          return "Enter valid amounts";
+        }
 
-          // Validate the addresses
-          for (const amount of amounts) {
-            if (!isNumberString(amount)) {
-              return `Invalid amount: ${amount}`;
-            }
+        // Validate the addresses
+        for (const amount of amounts) {
+          if (!isNumberString(amount)) {
+            return `Invalid amount: ${amount}`;
           }
+        }
 
-          return true;
-        },
+        return true;
       },
     });
 

@@ -61,7 +61,7 @@ export class ReadWriteCoreVoting<
       {
         ballot: BALLOTS.indexOf(ballot),
         calldatas,
-        extraVaultData,
+        extraVaultData: votingVaults.map((_, i) => extraVaultData[i] ?? "0x"),
         lastCall: lastCallBlock,
         targets,
         votingVaults: votingVaults,

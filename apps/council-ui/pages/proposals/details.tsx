@@ -197,7 +197,7 @@ function useProposalDetailsPageData(
 } {
   const chainId = useSupportedChainId();
   const council = useReadCouncil();
-  const enabled = !!council && !!coreVotingAddress && !!id;
+  const enabled = !!council && !!coreVotingAddress && id !== undefined;
 
   const { data, status } = useQuery<ProposalDetailsPageData>({
     queryKey: [
@@ -246,6 +246,8 @@ function useProposalDetailsPageData(
               ? coreVoting.getProposalExecutions()
               : undefined,
           ]);
+
+          console.log("unlock block", proposal.unlockBlock);
 
           const createEvent = createEvents.find(
             ({ proposalId }) => proposalId === id,

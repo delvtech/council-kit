@@ -10,7 +10,8 @@ export default command({
     r: {
       alias: ["recipient", "destination"],
       description: "The address to send the tokens to.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

@@ -33,7 +33,7 @@ export default command({
       prompt: "Enter token symbol",
     });
 
-    const owner = await options.owner();
+    const owner = await options.o();
 
     const deployedContract = await deployer.deploy({
       name: "MockERC20",

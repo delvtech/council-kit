@@ -11,13 +11,15 @@ export default command({
     t: {
       alias: ["target"],
       description: "The address to set a custom quorum for",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     f: {
       alias: ["function", "selector"],
       description: "The 4 byte function selector to set a custom quorum for",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     q: {

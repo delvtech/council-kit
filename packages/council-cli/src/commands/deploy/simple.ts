@@ -38,7 +38,8 @@ export default command({
     t: {
       alias: ["token"],
       description: "The address of the token used for voting.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       default: defaults.token,
       conflicts: ["token-name", "token-symbol"],
     },
@@ -91,7 +92,8 @@ export default command({
     T: {
       alias: ["treasury"],
       description: "The address of the treasury contract.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       default: defaults.treasury,
     },
     l: {
@@ -137,9 +139,11 @@ export default command({
 
       const { address } = (await fork({
         commands: [deployMockErc20Command],
+        // FIXME: Known issue with clide-js where optionValues in fork commands
+        // have to be set using the keys of the options object.
         optionValues: {
-          name,
-          symbol,
+          n: name,
+          s: symbol,
         },
       })) as DeployedContractInfo;
 
@@ -160,15 +164,19 @@ export default command({
 
     const coreVotingDeployInfo = (await fork({
       commands: [deployCoreVotingCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        quorum,
-        minProposalPower,
-        vaults: isFreshDeploy ? [] : undefined,
+        q: quorum,
+        p: minProposalPower,
+        v: isFreshDeploy ? [] : undefined,
       },
     })) as DeployedContractInfo;
 
     const coreVoting = council.coreVoting(coreVotingDeployInfo.address);
-    const lockDuration = await options.lockDuration();
+    const lockDuration = await options.lockDuration({
+      prompt: `Enter proposal lock duration ${colors.dim("in blocks")}`,
+    });
 
     // Set the CoreVoting lock duration if provided
     if (lockDuration) {
@@ -190,7 +198,9 @@ export default command({
       signale.pending(`CoreVoting lock duration tx submitted: ${hash}`);
     }
 
-    const extraVotingBlocks = await options.extraVotingBlocks();
+    const extraVotingBlocks = await options.extraVotingBlocks({
+      prompt: `Enter extra voting time ${colors.dim("(in blocks)")}`,
+    });
 
     // Set the CoreVoting extra voting time if provided
     if (extraVotingBlocks) {
@@ -223,38 +233,46 @@ export default command({
     });
 
     if (localChainIds.includes(chain.id)) {
+      const currentBlock = await publicClient.getBlockNumber();
       // Calling queryVotePower on a voting vault that has a stale block lag
       // larger than the current block height will result in an error. To avoid
       // this, we we fast forward the block height.
-      const blocksToMine = staleBlockLag + 1;
+      const blocksToMine = staleBlockLag + 1 - Number(currentBlock);
 
-      signale.pending(
-        `Fast forwarding block height by ${blocksToMine} blocks...`,
-      );
+      if (blocksToMine > 0) {
+        signale.pending(
+          `Fast forwarding block height by ${blocksToMine} blocks...`,
+        );
 
-      const blockNumber = await mine({
-        blocks: blocksToMine,
-        client: publicClient,
-      });
+        const blockNumber = await mine({
+          blocks: blocksToMine,
+          client: publicClient,
+        });
 
-      signale.success(
-        `Successfully fast forwarded block height to ${blockNumber}`,
-      );
+        signale.success(
+          `Successfully fast forwarded block height to ${blockNumber}`,
+        );
+      }
     }
 
+    console.log("!! votingTokenAddress", votingTokenAddress);
     const lockingVaultDeployInfo = (await fork({
       commands: [deployLockingVaultCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        token: votingTokenAddress,
-        staleBlockLag,
+        t: votingTokenAddress,
+        l: staleBlockLag,
       },
     })) as DeployedContractInfo;
 
     const lockVaultProxyDeployInfo = (await fork({
       commands: [deploySimpleProxyCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        owner: coreVotingDeployInfo.address,
-        implementation: lockingVaultDeployInfo.address,
+        g: coreVotingDeployInfo.address,
+        i: lockingVaultDeployInfo.address,
       },
     })) as DeployedContractInfo;
 
@@ -296,8 +314,10 @@ export default command({
     if (!treasury) {
       await fork({
         commands: [deployTreasury],
+        // FIXME: Known issue with clide-js where optionValues in fork commands
+        // have to be set using the keys of the options object.
         optionValues: {
-          owner: coreVotingDeployInfo.address,
+          g: coreVotingDeployInfo.address,
         },
       });
     }

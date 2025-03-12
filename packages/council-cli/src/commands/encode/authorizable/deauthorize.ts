@@ -10,7 +10,8 @@ export default command({
     a: {
       alias: ["address", "who"],
       description: "The address to remove authorization from",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

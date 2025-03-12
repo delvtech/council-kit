@@ -10,7 +10,8 @@ export default command({
     a: {
       alias: ["address", "new-voting"],
       description: "The new core voting contract address.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

@@ -11,7 +11,8 @@ export default command({
     a: {
       alias: ["account", "funded-account"],
       description: "The address to credit this deposit to.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     A: {
@@ -31,7 +32,8 @@ export default command({
       alias: ["delegate", "first-delegation"],
       description:
         "The address to delegate the resulting voting power to if the account doesn't already have a delegate.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

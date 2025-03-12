@@ -20,7 +20,8 @@ export default command({
       alias: ["delegate"],
       description:
         "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     g: {
@@ -32,13 +33,15 @@ export default command({
     p: {
       alias: ["merkle-proof"],
       description: "The merkle proof for the claim.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       required: true,
     },
     r: {
       alias: ["recipient", "destination"],
       description: "The address which will be credited with funds.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

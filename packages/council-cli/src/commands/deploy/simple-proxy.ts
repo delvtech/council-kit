@@ -13,8 +13,9 @@ export default command({
     },
     i: {
       alias: ["implementation"],
-      describe: "The address that calls to the proxy will be forwarded to.",
-      type: "hex",
+      description: "The address that calls to the proxy will be forwarded to.",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

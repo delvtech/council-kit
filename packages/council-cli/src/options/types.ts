@@ -1,7 +1,7 @@
 import { HexString } from "@delvtech/drift";
 
 declare module "clide-js" {
-  export interface OptionPrimitiveTypeMap {
+  export interface OptionCustomTypeMap {
     hex: HexString;
     hexArray: HexString[];
   }

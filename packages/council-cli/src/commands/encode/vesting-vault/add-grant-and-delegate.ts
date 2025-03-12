@@ -12,7 +12,8 @@ export default command({
     w: {
       alias: ["who", "address"],
       description: "The grant recipient",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     a: {
@@ -47,7 +48,8 @@ export default command({
       alias: ["delegate", "delegatee"],
       description:
         "The address to delegate the resulting voting power to if the recipient doesn't already have a delegate.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

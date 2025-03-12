@@ -10,7 +10,8 @@ export default command({
     a: {
       alias: ["address"],
       description: "The LockingVault contract address",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     rpc: rpcUrlOption,

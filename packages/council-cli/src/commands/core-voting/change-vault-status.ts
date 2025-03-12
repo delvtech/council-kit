@@ -8,19 +8,21 @@ export default command({
   options: {
     a: {
       alias: ["address"],
-      describe: "The CoreVoting contract address.",
-      type: "hex",
+      description: "The CoreVoting contract address.",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     v: {
       alias: ["vault"],
-      describe: "The vault address.",
-      type: "hex",
+      description: "The vault address.",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     V: {
       alias: ["valid", "approved"],
-      describe: "Whether or not the vault is valid.",
+      description: "Whether or not the vault is valid.",
       type: "boolean",
       default: true,
       required: true,

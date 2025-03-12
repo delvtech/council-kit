@@ -16,7 +16,8 @@ export default command({
     },
     gsc: {
       description: "The address of the GSC contract.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     g: {

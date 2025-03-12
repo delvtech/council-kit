@@ -10,13 +10,14 @@ export default command({
   options: {
     a: {
       alias: ["address"],
-      describe: "The LockingVault contract address.",
-      type: "hex",
+      description: "The LockingVault contract address.",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     A: {
       alias: ["amount"],
-      describe: "The amount of tokens to approve as a decimal string.",
+      description: "The amount of tokens to approve as a decimal string.",
       type: "string",
     },
     ...writeOptions,

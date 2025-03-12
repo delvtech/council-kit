@@ -10,7 +10,8 @@ export default command({
     t: {
       alias: ["token"],
       description: "The address of the ERC20 token to distribute.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     g: {

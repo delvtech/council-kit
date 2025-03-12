@@ -11,19 +11,22 @@ export default command({
     a: {
       alias: ["address"],
       description: "The token contract address.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     o: {
       alias: ["owner", "source"],
       description: "The address of the token owner.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     s: {
       alias: ["spender"],
       description: "The address of the token spender.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     A: {

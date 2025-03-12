@@ -13,14 +13,16 @@ export default command({
       alias: ["amount"],
       description:
         "The amount of tokens to remove (max uint256 for the full balance)",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     d: decimalsOption,
     D: {
       alias: ["destination"],
       description: "The address to send the funds to.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

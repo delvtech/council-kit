@@ -10,7 +10,8 @@ export default command({
     d: {
       alias: ["to", "new-delegate"],
       description: "The amount of tokens to deposit.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

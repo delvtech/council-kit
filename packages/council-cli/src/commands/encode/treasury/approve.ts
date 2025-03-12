@@ -12,7 +12,8 @@ export default command({
     t: {
       alias: ["token"],
       description: "The address of the token to approve.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     a: {
@@ -25,7 +26,8 @@ export default command({
     s: {
       alias: ["spender"],
       description: "The address to approve.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

@@ -9,7 +9,8 @@ export default command({
     t: {
       alias: ["token"],
       description: "The address of the ERC20 token contract.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     l: {

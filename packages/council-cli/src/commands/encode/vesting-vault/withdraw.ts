@@ -19,7 +19,8 @@ export default command({
     r: {
       alias: ["recipient"],
       description: "The address to withdraw to.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

@@ -1,9 +1,8 @@
+import { fixed } from "@delvtech/fixed-point-wasm";
 import assertNever from "assert-never";
 import classNames from "classnames";
 import { ReactElement, useState } from "react";
-import { formatBalance } from "src/ui/base/formatting/formatBalance";
 import { NumericInput } from "src/ui/base/forms/NumericInput";
-import { formatUnits, parseUnits } from "viem";
 
 interface DepositAndWithdrawFormProps {
   symbol: string;
@@ -29,11 +28,9 @@ export function DepositAndWithdrawForm({
   disabled = false,
 }: DepositAndWithdrawFormProps): ReactElement {
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
-  const [depositAmount, setDepositAmount] = useState("");
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const isApproved = allowance >= parseUnits(depositAmount, decimals);
-  const balanceFormatted = formatUnits(balance, decimals);
-  const depositedBalanceFormatted = formatUnits(depositedBalance, decimals);
+  const [depositAmount, setDepositAmount] = useState(0n);
+  const [withdrawAmount, setWithdrawAmount] = useState(0n);
+  const isApproved = allowance >= depositAmount;
 
   return (
     <div className="daisy-card flex h-fit basis-1/2 flex-col gap-y-4 bg-base-200 p-4">
@@ -64,15 +61,17 @@ export function DepositAndWithdrawForm({
             return (
               <>
                 <NumericInput
+                  decimals={decimals}
                   placeholder="Amount"
                   value={depositAmount}
-                  maxButtonValue={balanceFormatted}
                   onChange={setDepositAmount}
+                  maxButtonValue={balance}
                   infoText={
                     <span className="text-lg">
                       Balance:{" "}
                       <span className="text-lg font-bold">
-                        {formatBalance(balanceFormatted, 4)} {symbol}
+                        {fixed(balance, decimals).format({ decimals: 4 })}{" "}
+                        {symbol}
                       </span>
                     </span>
                   }
@@ -81,9 +80,7 @@ export function DepositAndWithdrawForm({
                 {isApproved ? (
                   <button
                     className="daisy-btn daisy-btn-primary"
-                    onClick={() =>
-                      onDeposit(parseUnits(depositAmount, decimals))
-                    }
+                    onClick={() => onDeposit(depositAmount)}
                     disabled={disabled || !balance || !depositAmount}
                   >
                     Deposit
@@ -105,14 +102,18 @@ export function DepositAndWithdrawForm({
               <>
                 <NumericInput
                   placeholder="Amount"
+                  decimals={decimals}
                   value={withdrawAmount}
-                  maxButtonValue={depositedBalanceFormatted}
                   onChange={setWithdrawAmount}
+                  maxButtonValue={depositedBalance}
                   infoText={
                     <span className="text-lg">
                       Deposited:{" "}
                       <span className="text-lg font-bold">
-                        {formatBalance(depositedBalanceFormatted, 4)} {symbol}
+                        {fixed(depositedBalance, decimals).format({
+                          decimals: 4,
+                        })}{" "}
+                        {symbol}
                       </span>
                     </span>
                   }
@@ -120,9 +121,7 @@ export function DepositAndWithdrawForm({
                 />
                 <button
                   className="daisy-btn daisy-btn-primary"
-                  onClick={() =>
-                    onWithdraw(parseUnits(withdrawAmount, decimals))
-                  }
+                  onClick={() => onWithdraw(withdrawAmount)}
                   disabled={disabled || !depositedBalance}
                 >
                   Withdraw

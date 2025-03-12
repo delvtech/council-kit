@@ -10,13 +10,15 @@ export default command({
     t: {
       alias: ["target"],
       description: `The address of the target contract.`,
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     d: {
       alias: ["calldata", "call-data"],
       description: "The encoded call data.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

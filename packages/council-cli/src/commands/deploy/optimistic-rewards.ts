@@ -10,20 +10,23 @@ export default command({
     s: {
       alias: ["starting-root"],
       description: "The starting merkle root.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     t: {
       alias: ["token"],
       description: "The address of the ERC20 token to distribute.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     v: {
       alias: ["locking-vault"],
       description:
         "The address of the locking vault contract that will be used when calling Airdrop.claimAndDelegate().",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     g: {
@@ -34,13 +37,15 @@ export default command({
       alias: ["proposer"],
       description:
         "The address that can propose new roots. Defaults to governance.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
     },
     r: {
       alias: ["revoker"],
       description:
         "The address that can remove proposed reward roots. Defaults to governance.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
     },
   },
 

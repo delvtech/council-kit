@@ -12,7 +12,7 @@ export async function getBlockDate(
 ): Promise<Date | undefined> {
   const drift = getDrift({ chainId });
 
-  const block = await drift.getBlock(blockId);
+  const block = await drift.getBlock(blockId).catch(() => undefined);
 
   if (block) {
     return new Date(Number(block.timestamp) * 1000);

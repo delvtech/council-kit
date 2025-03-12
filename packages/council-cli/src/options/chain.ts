@@ -2,17 +2,24 @@ import { Client, option, OptionGetter } from "clide-js";
 import { Chain, defineChain } from "viem";
 import { ConfiguredChain, configuredChains } from "../lib/viem.js";
 
+declare module "clide-js" {
+  interface OptionPrimitiveTypeMap {
+    chain: ConfiguredChain | "other" | `other:${number}`;
+  }
+}
+
 export const chainOption = option({
   alias: ["chain"],
   description: "The chain to target.",
   type: "string",
+  customType: "chain",
   required: true,
-  default: process.env.CHAIN || "localhost",
-  choices: [...Object.keys(configuredChains), "other"],
+  default: process.env.CHAIN || "anvil",
+  choices: [...(Object.keys(configuredChains) as ConfiguredChain[]), "other"],
 });
 
 export async function getChain(
-  chainOptionGetter: OptionGetter<string>,
+  chainOptionGetter: OptionGetter<typeof chainOption>,
   client = new Client(),
 ): Promise<Chain> {
   const chosenChain = (await chainOptionGetter({

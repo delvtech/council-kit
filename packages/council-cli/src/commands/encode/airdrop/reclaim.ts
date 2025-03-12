@@ -10,7 +10,8 @@ export default command({
     d: {
       alias: ["destination"],
       description: "The recipient of the reclaimed funds",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

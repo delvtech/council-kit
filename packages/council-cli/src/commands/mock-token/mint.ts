@@ -10,20 +10,22 @@ export default command({
   options: {
     a: {
       alias: ["address"],
-      describe: "The token contract address.",
-      type: "hex",
+      description: "The token contract address.",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     A: {
       alias: ["amount"],
-      describe: "The amount of tokens to mint.",
+      description: "The amount of tokens to mint.",
       type: "string",
       required: true,
     },
     c: {
       alias: ["account"],
-      describe: "The account to mint tokens for,",
-      type: "hex",
+      description: "The account to mint tokens for,",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     ...writeOptions,

@@ -10,14 +10,16 @@ export default command({
     m: {
       alias: ["manager"],
       description: "The address that will be able add and remove grants.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     t: {
       alias: ["timelock"],
       description:
         "The address that will be able to change the unvested multiplier, the manager, and the timelock.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

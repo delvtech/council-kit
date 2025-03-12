@@ -9,9 +9,11 @@ import {
   type WalletClient,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+import { anvil } from "viem/chains";
 
 export const publicClient: PublicClient = createPublicClient({
   transport: http(process.env.RPC_URL),
+  chain: anvil,
 });
 export let walletClient: WalletClient | undefined;
 
@@ -19,6 +21,7 @@ if (process.env.WALLET_PRIVATE_KEY) {
   walletClient = createWalletClient({
     account: privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as Address),
     transport: http(process.env.RPC_URL),
+    chain: anvil,
   });
 }
 

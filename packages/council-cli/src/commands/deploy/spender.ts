@@ -11,7 +11,8 @@ export default command({
     t: {
       alias: ["token"],
       description: "The address of the ERC20 token contract.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     s: {
@@ -37,7 +38,8 @@ export default command({
       alias: ["spender"],
       description:
         "The first address authorized to spend tokens. Defaults to the owner.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
     },
   },
 

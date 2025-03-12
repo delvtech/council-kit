@@ -10,7 +10,8 @@ export default command({
     a: {
       alias: ["address", "who"],
       description: "The address to authorize",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

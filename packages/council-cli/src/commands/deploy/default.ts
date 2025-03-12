@@ -55,7 +55,8 @@ export default command({
     t: {
       alias: ["token"],
       description: "The address of the token used for voting.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       default: defaults.token,
       conflicts: ["token-name", "token-symbol"],
     },
@@ -115,7 +116,8 @@ export default command({
     T: {
       alias: ["treasury"],
       description: "The address of the treasury contract.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       default: defaults.treasury,
     },
     l: {
@@ -161,7 +163,7 @@ export default command({
   },
 
   handler: async ({ data, options, fork, next }) => {
-    const { account, deployer, council, chain, publicClient, walletClient } =
+    const { account, deployer, council, chain, publicClient } =
       data as DeployOptions;
 
     const isFreshDeploy = await options.freshDeploy();
@@ -194,9 +196,11 @@ export default command({
 
       const { address } = (await fork({
         commands: [deployMockErc20Command],
+        // FIXME: Known issue with clide-js where optionValues in fork commands
+        // have to be set using the keys of the options object.
         optionValues: {
-          name,
-          symbol,
+          n: name,
+          s: symbol,
         },
       })) as DeployedContractInfo;
 
@@ -213,10 +217,12 @@ export default command({
 
     const gscCoreVotingDeployInfo = (await fork({
       commands: [deployCoreVotingCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        owner: account.address,
-        quorum: gscQuorum,
-        minProposalPower: "1",
+        t: account.address,
+        q: gscQuorum,
+        p: "1",
       },
     })) as DeployedContractInfo;
 
@@ -279,8 +285,10 @@ export default command({
 
     const timelockDeployInfo = (await fork({
       commands: [deployTimelockCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        waitTime: timelockWaitTime,
+        t: timelockWaitTime,
         gsc: gscCoreVotingDeployInfo.address,
       },
     })) as DeployedContractInfo;
@@ -302,8 +310,10 @@ export default command({
     if (!treasury) {
       await fork({
         commands: [deployTreasury],
+        // FIXME: Known issue with clide-js where optionValues in fork commands
+        // have to be set using the keys of the options object.
         optionValues: {
-          owner: timelockDeployInfo.address,
+          g: timelockDeployInfo.address,
         },
       });
     }
@@ -338,17 +348,21 @@ export default command({
 
     const lockingVaultDeployInfo = (await fork({
       commands: [deployLockingVaultCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        token: votingTokenAddress,
-        staleBlockLag,
+        t: votingTokenAddress,
+        l: staleBlockLag,
       },
     })) as DeployedContractInfo;
 
     const lockVaultProxyDeployInfo = (await fork({
       commands: [deploySimpleProxyCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        owner: timelockDeployInfo.address,
-        implementation: lockingVaultDeployInfo.address,
+        g: timelockDeployInfo.address,
+        i: lockingVaultDeployInfo.address,
       },
     })) as DeployedContractInfo;
 
@@ -366,11 +380,13 @@ export default command({
 
     const coreVotingDeployInfo = (await fork({
       commands: [deployCoreVotingCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        quorum,
-        minProposalPower,
-        gsc: gscCoreVotingDeployInfo.address,
-        vaults: [lockVaultProxyDeployInfo.address],
+        q: quorum,
+        p: minProposalPower,
+        g: gscCoreVotingDeployInfo.address,
+        v: [lockVaultProxyDeployInfo.address],
       },
     })) as DeployedContractInfo;
 
@@ -431,10 +447,12 @@ export default command({
 
     const gscVaultDeployInfo = (await fork({
       commands: [deployGscVaultCommand],
+      // FIXME: Known issue with clide-js where optionValues in fork commands
+      // have to be set using the keys of the options object.
       optionValues: {
-        coreVoting: coreVotingDeployInfo.address,
-        votingPowerBound: gscVotingPowerBound,
-        owner: timelockDeployInfo.address,
+        c: coreVotingDeployInfo.address,
+        b: gscVotingPowerBound,
+        o: timelockDeployInfo.address,
       },
     })) as DeployedContractInfo;
 

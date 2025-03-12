@@ -11,20 +11,23 @@ export default command({
     a: {
       alias: ["address"],
       description: "The voting contract address",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     t: {
       alias: ["targets"],
       description: "A list of addresses to call.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       string: true,
       required: true,
     },
     d: {
       alias: ["data", "calldatas"],
       description: "Encoded call data for each target.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       string: true,
       required: true,
     },
@@ -32,14 +35,16 @@ export default command({
       alias: ["vaults"],
       description:
         "The addresses of the approved voting vaults to draw voting power from. This will be used to verify that the signer has enough voting power to create a proposal.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       string: true,
       required: true,
     },
     D: {
       alias: ["vault-data", "extra-vault-data"],
       description: "The extra data for each vault.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       string: true,
     },
     l: {
@@ -94,8 +99,8 @@ export default command({
       prompt: {
         message: "Enter the last call block",
         initial: String(initialCallBlock + DAY_IN_BLOCKS * 14n),
-        validate: (value) => !isNaN(Number(value)),
       },
+      validate: (value) => !isNaN(Number(value)),
     });
 
     const hash = await council.coreVoting(address).createProposal({

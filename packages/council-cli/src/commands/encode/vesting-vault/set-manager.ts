@@ -10,7 +10,8 @@ export default command({
     m: {
       alias: ["manager", "address"],
       description: "The new manager address.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

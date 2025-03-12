@@ -1,10 +1,10 @@
-import { ReactElement, ReactNode } from "react";
+import { ChangeEvent, ReactElement, ReactNode } from "react";
 
 export interface InputProps {
   disabled?: boolean;
   id?: string;
   infoText?: ReactNode;
-  onChange: (value: string) => void;
+  onChange: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   value: string | number;
 }
@@ -18,19 +18,19 @@ export function Input({
   value,
 }: InputProps): ReactElement {
   return (
-    <div className="w-full mr-2 daisy-form-control">
+    <div className="daisy-form-control mr-2 w-full">
       <input
         id={id}
         type="text"
         placeholder={placeholder}
-        className="w-full text-lg daisy-input-bordered daisy-input"
+        className="daisy-input daisy-input-bordered w-full text-lg"
         value={value}
-        onChange={({ target }) => onChange(target.value)}
+        onChange={(e) => onChange(e.target.value, e)}
         disabled={disabled}
       />
       {infoText && (
         <label className="daisy-label">
-          <span className="select-text daisy-label-text-alt cursor-text">
+          <span className="daisy-label-text-alt cursor-text select-text">
             {infoText}
           </span>
         </label>

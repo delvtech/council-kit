@@ -14,20 +14,23 @@ export default command({
     r: {
       alias: ["root"],
       description: "The merkle root of the airdrop.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     t: {
       alias: ["token"],
       description: "The address of the ERC20 token contract.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     v: {
       alias: ["vault"],
       description:
         "The address of the locking vault contract that will be used when calling OptimisticRewards.claimAndDelegate().",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     e: {

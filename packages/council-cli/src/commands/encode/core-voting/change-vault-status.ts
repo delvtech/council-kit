@@ -10,7 +10,8 @@ export default command({
     v: {
       alias: ["vault"],
       description: "The voting vault's address",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     a: {

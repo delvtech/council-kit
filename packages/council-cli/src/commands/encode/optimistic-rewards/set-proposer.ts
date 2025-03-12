@@ -10,7 +10,8 @@ export default command({
     p: {
       alias: ["proposer"],
       description: "The address of the new proposer.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

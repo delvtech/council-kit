@@ -1,35 +1,57 @@
-import { ReactElement } from "react";
+import { Replace } from "@delvtech/drift";
+import { fixed, parseFixed } from "@delvtech/fixed-point-wasm";
+import { ReactElement, useState } from "react";
 import { Input, InputProps } from "src/ui/base/forms/Input";
 
-export interface NumericInputProps extends InputProps {
-  maxButtonValue?: string | number;
-  decimals?: number;
-}
+export type NumericInputProps = Replace<
+  InputProps,
+  {
+    value: bigint;
+    onChange: (value: bigint) => void;
+    maxButtonValue?: bigint;
+    decimals?: number;
+  }
+>;
 
 export function NumericInput({
   value,
   onChange,
-  id,
-  infoText,
-  placeholder,
+  placeholder = "0.0",
   maxButtonValue,
   decimals,
   disabled,
+  ...rest
 }: NumericInputProps): ReactElement {
+  const [stringValue, setStringValue] = useState(
+    value > 0n ? fixed(value, decimals).format() : "",
+  );
+  const fixedValue = parseFixed(stringValue, decimals);
+  const displayValue =
+    fixedValue.eq(value, decimals) && fixedValue.gte(0n)
+      ? stringValue
+      : fixed(value, decimals).format();
+
   return (
     <div className="flex w-full">
       <Input
-        disabled={disabled}
-        value={numberString(value, decimals)}
-        onChange={(newValue) => onChange(numberString(newValue, decimals))}
-        id={id}
-        infoText={infoText}
+        value={displayValue}
+        onChange={(newValue, e) => {
+          e.preventDefault();
+          try {
+            const parsed = parseFixed(newValue, decimals);
+            if (parsed.gte(0n)) {
+              setStringValue(newValue);
+              onChange(parsed.bigint);
+            }
+          } catch {}
+        }}
         placeholder={placeholder}
+        {...rest}
       />
       {typeof maxButtonValue !== "undefined" && (
         <button
           className="daisy-btn"
-          onClick={() => onChange(numberString(maxButtonValue, decimals))}
+          onClick={() => onChange(maxButtonValue)}
           disabled={disabled}
         >
           Max

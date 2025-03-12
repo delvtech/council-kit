@@ -10,7 +10,8 @@ export default command({
     t: {
       alias: ["timelock", "address"],
       description: "The new timelock address.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

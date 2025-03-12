@@ -99,12 +99,12 @@ export function LockingVaultDetails({
               !account || !deposit || !withdraw || !approve || isTransacting
             }
             onApprove={() => approve?.(address)}
-            onDeposit={(amount) =>
+            onDeposit={(amount) => {
               deposit?.({
                 amount,
                 vaultAddress: address,
-              })
-            }
+              });
+            }}
             onWithdraw={(amount) =>
               withdraw?.({
                 amount,

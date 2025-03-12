@@ -11,9 +11,9 @@ export interface CouncilConfig {
    * The chain id where the contracts are deployed
    */
   chainId: number;
-  timelock: ContractConfig;
   coreVoting: VotingContractConfig;
   gscVoting?: GscVotingContractConfig;
+  timelock?: ContractConfig;
   airdrop?: AirdropConfig;
 
   /**

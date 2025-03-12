@@ -5,3 +5,4 @@ out
 public/.well-known/walletconnect.txt
 
 tsconfig.tsbuildinfo
+deployments

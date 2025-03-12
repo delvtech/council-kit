@@ -145,8 +145,6 @@ function useVestingVaultDetailsData(
                 : undefined,
             ]);
 
-          console.log("voters", delegators);
-
           return {
             participants: voters.length,
             unvestedMultiplier,

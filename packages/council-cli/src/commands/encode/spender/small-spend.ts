@@ -19,7 +19,8 @@ export default command({
     D: {
       alias: ["destination"],
       description: "The address to send the funds to.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

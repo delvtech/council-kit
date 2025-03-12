@@ -11,13 +11,15 @@ export default command({
       alias: ["targets"],
       description:
         "A list of target addresses the timelock contract will call.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       required: true,
     },
     d: {
       alias: ["calldatas"],
       description: "Encoded call data for each target.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       required: true,
     },
   },

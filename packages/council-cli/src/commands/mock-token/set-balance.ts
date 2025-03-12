@@ -11,13 +11,15 @@ export default command({
     a: {
       alias: ["address"],
       description: "The token contract address.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     c: {
       alias: ["account"],
       description: "The account to set balance for.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     b: {

@@ -29,12 +29,14 @@ export default command({
     g: {
       alias: ["gsc"],
       description: "The address of the Governance Steering Committee contract.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
     },
     v: {
       alias: ["vaults"],
       description: "The addresses of the approved voting vaults",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       default: [],
     },
   },
@@ -54,9 +56,10 @@ export default command({
 
     const gsc = (await options.gsc()) || timelock;
 
-    const maybeVaults = await options.vaults({
-      prompt: "Enter approved voting vaults",
-    });
+    const maybeVaults =
+      (await options.vaults({
+        prompt: "Enter approved voting vaults",
+      })) || [];
     const vaults = maybeVaults?.filter((v) => !!v) || [];
 
     const deployedContract = deployer.deploy({

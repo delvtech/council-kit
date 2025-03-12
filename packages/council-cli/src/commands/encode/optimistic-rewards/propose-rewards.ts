@@ -10,7 +10,8 @@ export default command({
     r: {
       alias: ["new-root"],
       description: "The merkle root of the proposed new rewards.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

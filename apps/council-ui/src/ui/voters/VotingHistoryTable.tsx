@@ -1,10 +1,12 @@
 import { Vote } from "@delvtech/council-js";
 import { ReactElement } from "react";
 import { VotingContractConfig } from "src/config/types";
+import { getProposalConfig } from "src/config/utils/getProposalConfig";
 import { makeProposalURL } from "src/routes";
 import { formatVotingPower } from "src/ui/base/formatting/formatVotingPower";
 import { GridTableHeader } from "src/ui/base/tables/GridTableHeader";
 import { GridTableRowLink } from "src/ui/base/tables/GridTableRowLink";
+import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import FormattedBallot from "src/ui/voting/FormattedBallot";
 
 interface VotingHistoryTableProps {
@@ -41,8 +43,13 @@ function VoteHistoryRow({
   votingContract: VotingContractConfig;
   vote: Vote;
 }): ReactElement {
-  const proposalConfig = votingContract.proposals[vote.proposalId.toString()];
-  const sentenceSummary = proposalConfig.sentenceSummary;
+  const chainId = useSupportedChainId();
+  const proposalConfig = getProposalConfig({
+    chainId,
+    votingContract: votingContract.address,
+    id: vote.proposalId,
+  });
+  const sentenceSummary = proposalConfig?.sentenceSummary;
   return (
     <GridTableRowLink
       className="grid-cols-[3fr_1fr_1fr]"

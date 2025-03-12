@@ -11,13 +11,15 @@ export default command({
     a: {
       alias: ["address"],
       description: "The LockingVault contract address.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     A: {
       alias: ["account"],
       description: "The account to get the balance of.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     r: rpcUrlOption,

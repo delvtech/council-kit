@@ -14,7 +14,8 @@ export default command({
     t: {
       alias: ["token"],
       description: `The address of token to send (${ETH_CONSTANT} to send ETH).`,
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     a: {
@@ -27,7 +28,8 @@ export default command({
     r: {
       alias: ["recipient"],
       description: "The address to send the funds to.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

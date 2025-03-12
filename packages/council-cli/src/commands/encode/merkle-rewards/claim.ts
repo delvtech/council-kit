@@ -25,13 +25,15 @@ export default command({
     p: {
       alias: ["merkle-proof"],
       description: "The merkle proof for the claim.",
-      type: "hexArray",
+      type: "array",
+      customType: "hexArray",
       required: true,
     },
     r: {
       alias: ["recipient", "destination"],
       description: "The address which will be credited with funds.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

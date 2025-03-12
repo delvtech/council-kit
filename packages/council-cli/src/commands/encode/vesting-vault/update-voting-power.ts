@@ -10,7 +10,8 @@ export default command({
     w: {
       alias: ["who", "address"],
       description: "The address to update voting power for.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
   },

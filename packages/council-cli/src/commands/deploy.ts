@@ -30,7 +30,7 @@ export default command({
     ...writeOptions,
   },
 
-  handler: async ({ options, client, next }) => {
+  handler: async ({ options, client, next, commands }) => {
     const { walletClient, publicClient, ...rest } = await getWriteOptions(
       options,
       client,
@@ -54,7 +54,8 @@ export default command({
       if (deployer.deployedContracts.length === 1) {
         name = deployer.deployedContracts[0].name;
       } else {
-        name = new Date().toISOString().replace(/:/g, "-");
+        const lastCommandName = commands.at(-1)?.commandName;
+        name = lastCommandName || new Date().toISOString().replace(/:/g, "-");
       }
     }
 

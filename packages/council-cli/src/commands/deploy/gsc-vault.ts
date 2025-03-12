@@ -11,7 +11,8 @@ export default command({
     c: {
       alias: ["core-voting"],
       description: "The address of the CoreVoting contract.",
-      type: "hex",
+      type: "string",
+      customType: "hex",
       required: true,
     },
     b: {
