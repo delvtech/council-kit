@@ -65,7 +65,7 @@ export default command({
   },
 
   handler: async ({ options, client, next }) => {
-    const { drift, council } = await getWriteOptions(options, client);
+    const { council, publicClient } = await getWriteOptions(options, client);
 
     const address = await options.address({
       prompt: "Enter voting contract address",
@@ -92,13 +92,13 @@ export default command({
     const lastCallValue: number | undefined = options.values.lastCall;
     const initialCallBlock =
       lastCallValue === undefined
-        ? await drift.getBlockNumber()
+        ? await publicClient.getBlockNumber()
         : BigInt(lastCallValue);
 
     const lastCall = await options.lastCall({
       prompt: {
         message: "Enter the last call block",
-        initial: String(initialCallBlock + DAY_IN_BLOCKS * 14n),
+        initial: String(Number(initialCallBlock) + DAY_IN_BLOCKS * 14),
       },
       validate: (value) => !isNaN(Number(value)),
     });
@@ -120,6 +120,7 @@ export default command({
     });
 
     signale.pending(`Transaction submitted: ${hash}`);
+    await publicClient.waitForTransactionReceipt({ hash });
     next(hash);
   },
 });

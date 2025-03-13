@@ -2,32 +2,16 @@ import { Address } from "@delvtech/drift";
 import { command } from "clide-js";
 import colors from "colors";
 import signale from "signale";
+import { config } from "../../config.js";
 import { DeployedContractInfo } from "../../deploy/DeploymentJson.js";
 import { localChainIds, mine } from "../../lib/viem.js";
-import { freshDeployOption } from "../../options/deploy/fresh-deploy.js";
-import { DAY_IN_BLOCKS } from "../../utils/constants.js";
+import { freshDeployOption } from "../../options/fresh-deploy.js";
 import { DeployOptions } from "../deploy.js";
 import deployCoreVotingCommand from "./core-voting.js";
 import deployLockingVaultCommand from "./locking-vault.js";
 import deployMockErc20Command from "./mock-erc20.js";
 import deploySimpleProxyCommand from "./simple-proxy.js";
 import deployTreasury from "./treasury.js";
-
-const defaults = {
-  token: process.env.VOTING_TOKEN_ADDRESS,
-  tokenName: process.env.VOTING_TOKEN_NAME || "Mock Voting Token",
-  tokenSymbol: process.env.VOTING_TOKEN_SYMBOL || "MVT",
-  quorum: process.env.BASE_QUORUM || "1000000",
-  minProposalPower: process.env.MIN_PROPOSAL_POWER || "25000",
-  lockDuration: process.env.LOCK_DURATION
-    ? +process.env.LOCK_DURATION
-    : undefined,
-  extraVotingBlocks: process.env.EXTRA_VOTING_BLOCKS
-    ? +process.env.EXTRA_VOTING_BLOCKS
-    : undefined,
-  treasury: process.env.TREASURY_ADDRESS,
-  staleBlockLag: DAY_IN_BLOCKS * 28n,
-};
 
 export default command({
   description:
@@ -40,7 +24,7 @@ export default command({
       description: "The address of the token used for voting.",
       type: "string",
       customType: "hex",
-      default: defaults.token,
+      default: config.get("token"),
       conflicts: ["token-name", "token-symbol"],
     },
     n: {
@@ -48,7 +32,7 @@ export default command({
       description:
         "The name of the mock token to be deployed for voting if no token address is provided.",
       type: "string",
-      default: defaults.tokenName,
+      default: config.get("tokenName"),
       conflicts: ["token"],
     },
     s: {
@@ -56,7 +40,7 @@ export default command({
       description:
         "The symbol of the mock token to be deployed for voting if no token address is provided.",
       type: "string",
-      default: defaults.tokenSymbol,
+      default: config.get("tokenSymbol"),
       conflicts: ["token"],
     },
     q: {
@@ -64,7 +48,7 @@ export default command({
       description:
         "The minimum voting power required for a proposal to pass as a decimal string.",
       type: "string",
-      default: defaults.quorum,
+      default: config.get("quorum"),
       required: true,
     },
     m: {
@@ -72,7 +56,7 @@ export default command({
       description:
         "The minimum voting power required to create a proposal as a decimal string.",
       type: "string",
-      default: defaults.minProposalPower,
+      default: config.get("minProposalPower"),
       required: true,
     },
     d: {
@@ -80,28 +64,28 @@ export default command({
       description:
         "The number of blocks a proposal must wait before it can be executed.",
       type: "number",
-      default: defaults.lockDuration,
+      default: config.get("lockDuration"),
     },
     b: {
       alias: ["extra-voting-blocks"],
       description:
         "The number of blocks for which a proposal can still be voted on after it's unlocked.",
       type: "number",
-      default: defaults.extraVotingBlocks,
+      default: config.get("extraVotingBlocks"),
     },
     T: {
       alias: ["treasury"],
       description: "The address of the treasury contract.",
       type: "string",
       customType: "hex",
-      default: defaults.treasury,
+      default: config.get("treasury"),
     },
     l: {
       alias: ["stale-block-lag"],
       description:
         "The number of blocks before the delegation history is forgotten. Voting power can't be used on proposals that are older than the stale block lag.",
       type: "number",
-      default: Number(defaults.staleBlockLag),
+      default: Number(config.get("staleBlockLag")),
       required: true,
     },
   },
@@ -139,12 +123,7 @@ export default command({
 
       const { address } = (await fork({
         commands: [deployMockErc20Command],
-        // FIXME: Known issue with clide-js where optionValues in fork commands
-        // have to be set using the keys of the options object.
-        optionValues: {
-          n: name,
-          s: symbol,
-        },
+        optionValues: { name, symbol },
       })) as DeployedContractInfo;
 
       votingTokenAddress = address;
@@ -164,12 +143,10 @@ export default command({
 
     const coreVotingDeployInfo = (await fork({
       commands: [deployCoreVotingCommand],
-      // FIXME: Known issue with clide-js where optionValues in fork commands
-      // have to be set using the keys of the options object.
       optionValues: {
-        q: quorum,
-        p: minProposalPower,
-        v: isFreshDeploy ? [] : undefined,
+        quorum,
+        minProposalPower,
+        vaults: isFreshDeploy ? [] : undefined,
       },
     })) as DeployedContractInfo;
 
@@ -196,6 +173,7 @@ export default command({
       });
 
       signale.pending(`CoreVoting lock duration tx submitted: ${hash}`);
+      await publicClient.waitForTransactionReceipt({ hash });
     }
 
     const extraVotingBlocks = await options.extraVotingBlocks({
@@ -222,6 +200,7 @@ export default command({
       });
 
       signale.pending(`CoreVoting extra voting time tx submitted: ${hash}`);
+      await publicClient.waitForTransactionReceipt({ hash });
     }
 
     // =========================================================================
@@ -258,21 +237,17 @@ export default command({
     console.log("!! votingTokenAddress", votingTokenAddress);
     const lockingVaultDeployInfo = (await fork({
       commands: [deployLockingVaultCommand],
-      // FIXME: Known issue with clide-js where optionValues in fork commands
-      // have to be set using the keys of the options object.
       optionValues: {
-        t: votingTokenAddress,
-        l: staleBlockLag,
+        token: votingTokenAddress,
+        staleBlockLag,
       },
     })) as DeployedContractInfo;
 
     const lockVaultProxyDeployInfo = (await fork({
       commands: [deploySimpleProxyCommand],
-      // FIXME: Known issue with clide-js where optionValues in fork commands
-      // have to be set using the keys of the options object.
       optionValues: {
-        g: coreVotingDeployInfo.address,
-        i: lockingVaultDeployInfo.address,
+        governance: coreVotingDeployInfo.address,
+        implementation: lockingVaultDeployInfo.address,
       },
     })) as DeployedContractInfo;
 
@@ -296,6 +271,9 @@ export default command({
     signale.pending(
       `LockingVault SimpleProxy status tx submitted: ${lockingVaultStatusHash}`,
     );
+    await publicClient.waitForTransactionReceipt({
+      hash: lockingVaultStatusHash,
+    });
 
     // =========================================================================
     // 4. Treasury
@@ -314,10 +292,8 @@ export default command({
     if (!treasury) {
       await fork({
         commands: [deployTreasury],
-        // FIXME: Known issue with clide-js where optionValues in fork commands
-        // have to be set using the keys of the options object.
         optionValues: {
-          g: coreVotingDeployInfo.address,
+          governance: coreVotingDeployInfo.address,
         },
       });
     }

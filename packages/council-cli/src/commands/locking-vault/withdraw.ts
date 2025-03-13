@@ -24,7 +24,7 @@ export default command({
   },
 
   handler: async ({ options, client, next }) => {
-    const { council } = await getWriteOptions(options, client);
+    const { council, publicClient } = await getWriteOptions(options, client);
 
     const address = await options.address({
       prompt: "Enter Locking Vault address",
@@ -53,6 +53,7 @@ export default command({
     });
 
     signale.pending(`Transaction submitted: ${hash}`);
+    await publicClient.waitForTransactionReceipt({ hash });
     next(hash);
   },
 });

@@ -81,6 +81,7 @@ export default command({
     });
 
     signale.pending(`Transaction submitted: ${hash}`);
+    await drift.waitForTransaction({ hash });
     next(hash);
   },
 });

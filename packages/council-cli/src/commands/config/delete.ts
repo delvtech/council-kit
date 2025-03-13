@@ -1,6 +1,6 @@
 import { command } from "clide-js";
 import signale from "signale";
-import { config, CouncilCliConfig } from "../../config.js";
+import { config, CouncilCliConfig, settings } from "../../config.js";
 
 export default command({
   description: "Delete a setting",
@@ -10,7 +10,7 @@ export default command({
       type: "array",
       description: "The setting to change",
       required: true,
-      choices: Object.keys(config.schema || {}),
+      choices: settings,
     },
   },
   handler: async ({ options }) => {

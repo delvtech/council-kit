@@ -2,7 +2,6 @@
 import { help, run } from "clide-js";
 import { commandMenu } from "clide-plugin-command-menu";
 import "dotenv/config";
-import signale from "signale";
 
 run({
   plugins: [
@@ -38,6 +37,11 @@ run({
       setParsedOptions(newOptions);
     }
   },
-}).catch((error) => {
-  signale.error(error);
-});
+})
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });

@@ -9,11 +9,9 @@ import {
   Transport,
   WalletClient,
 } from "viem";
+import { config } from "../config.js";
 import { stringifyBigInts } from "../utils/stringifyBigInts.js";
 import { DeployedContractInfo, getDeploymentJson } from "./DeploymentJson.js";
-
-export const DEFAULT_DEPLOYMENTS_DIR =
-  process.env.DEPLOYMENTS_DIR || "./deployments";
 
 export interface DeployerOptions {
   publicClient: PublicClient<Transport, Chain>;
@@ -103,7 +101,7 @@ export class Deployer {
    */
   save({
     name,
-    outDir = DEFAULT_DEPLOYMENTS_DIR,
+    outDir = config.get("deploymentsDir"),
   }: {
     /** The name of the deployment. */
     name: string;

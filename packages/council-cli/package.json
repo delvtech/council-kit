@@ -42,7 +42,9 @@
     "dotenv": "^16.4.7",
     "json-schema-typed": "^8.0.1",
     "merkletreejs": "^0.5.1",
-    "signale": "^1.4.0"
+    "signale": "^1.4.0",
+    "zod": "^3.24.2",
+    "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
     "@council/eslint-config": "*",

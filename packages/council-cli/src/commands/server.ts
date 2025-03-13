@@ -2,11 +2,11 @@ import { command } from "clide-js";
 import { execSync } from "node:child_process";
 import signale from "signale";
 import { parseEther } from "viem";
-import { configuredChains } from "../lib/viem.js";
+import { config } from "../config.js";
+import { ConfiguredChain, configuredChains } from "../lib/viem.js";
 
-const DEFAULT_CHAIN = configuredChains.hardhat;
 const DEFAULT_RPC_URL = new URL(
-  configuredChains.hardhat.rpcUrls.default.http[0],
+  config.get("rpcUrl") || configuredChains.hardhat.rpcUrls.default.http[0],
 );
 
 // This command is only available if the optional hardhat peer dependency is
@@ -19,7 +19,7 @@ const hardhat = await import("hardhat").catch((e) => {
 });
 
 export default command({
-  description: "Start a local ethereum node using",
+  description: "Start a local ethereum node with hardhat.",
   isMiddleware: false,
 
   options: {
@@ -30,9 +30,17 @@ export default command({
       default: DEFAULT_RPC_URL.hostname,
     },
     f: {
+      alias: ["fork"],
+      description:
+        "Whether to fork a network. If this is true and no fork-url is provided, the default from config will be used.",
+      type: "boolean",
+    },
+    F: {
       alias: ["fork-url"],
-      description: "A URL to fork from.",
+      description:
+        "A URL to fork from. Note: this is only used if `fork` is true.",
       type: "string",
+      default: config.get("forkUrl"),
     },
     p: {
       alias: ["port"],
@@ -54,9 +62,9 @@ export default command({
     },
     c: {
       alias: ["chain-id"],
-      description: "The id to use for the local blockchain.",
+      description:
+        "The id to use for the local blockchain. Defaults to the id of either `chain` or `forkChain` depending on the value of `fork`.",
       type: "number",
-      default: DEFAULT_CHAIN.id,
     },
   },
 
@@ -89,12 +97,36 @@ export default command({
 
     const hre = hardhat.default;
 
-    const hostname = await options.hostname();
-    const port = await options.port();
     const balance = await options.balance();
     const blockTime = await options.blockTime();
-    const chainId = await options.chainId();
-    const forkUrl = await options.forkUrl();
+    const hostname = await options.hostname();
+    const port = await options.port();
+
+    const fork = await options.fork();
+    const forkUrl = await options.forkUrl(
+      !fork
+        ? undefined // Don't prompt if not forking
+        : {
+            prompt: "Enter the URL to fork from",
+            validate: (url) => {
+              try {
+                new URL(url as string);
+                return true;
+              } catch {
+                return "Invalid URL";
+              }
+            },
+          },
+    );
+
+    let chainId = await options.chainId();
+    if (chainId === undefined) {
+      const chainName = config.get(fork ? "forkChain" : "chain")?.toLowerCase();
+      chainId =
+        chainName && chainName in configuredChains
+          ? configuredChains[chainName as ConfiguredChain].id
+          : configuredChains.hardhat.id;
+    }
 
     const networks = hre.config.networks;
     networks.hardhat = {
@@ -105,12 +137,13 @@ export default command({
         accountsBalance: String(parseEther(balance)),
       },
       chainId,
-      forking: forkUrl
-        ? {
-            url: forkUrl,
-            enabled: true,
-          }
-        : undefined,
+      forking:
+        fork && forkUrl
+          ? {
+              url: forkUrl,
+              enabled: true,
+            }
+          : undefined,
       mining:
         blockTime !== undefined
           ? {

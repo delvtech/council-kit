@@ -1,6 +1,6 @@
 import { command } from "clide-js";
 import signale from "signale";
-import { CouncilCliConfig, config } from "../../config.js";
+import { CouncilCliConfig, config, settings } from "../../config.js";
 
 export default command({
   description: "Get a setting",
@@ -10,7 +10,7 @@ export default command({
       type: "string",
       description: "The setting to change",
       required: true,
-      choices: Object.keys(config.schema || {}),
+      choices: settings,
     },
   },
   handler: async ({ options, next }) => {

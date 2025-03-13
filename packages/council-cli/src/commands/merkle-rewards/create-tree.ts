@@ -12,7 +12,7 @@ import {
   keccak256,
   parseUnits,
 } from "viem";
-import { JsonStore } from "../../utils/config/JsonStore.js";
+import { JsonStore } from "../../utils/JsonStore.js";
 import { isNotEmptyList } from "../../utils/validation/isNotEmptyList.js";
 import { isNumberString } from "../../utils/validation/isNumberString.js";
 import { Schema, validateData } from "../../utils/validation/validateData.js";

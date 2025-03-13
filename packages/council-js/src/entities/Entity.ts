@@ -45,7 +45,7 @@ export class Entity<A extends Adapter = Adapter> {
       }) {
         // Overwrite `fromBlock` if earlier than the `earliestBlock` option.
         if (
-          earliestBlock &&
+          earliestBlock !== undefined &&
           (fromBlock === "earliest" ||
             (typeof fromBlock === "bigint" && fromBlock < earliestBlock))
         ) {

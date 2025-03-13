@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "deploy": " yarn council deploy simple -y --out-dir=../../apps/council-ui/src/deployments",
-    "council": "yarn workspace @delvtech/council-cli dev",
+    "council": "yarn workspace @delvtech/council-cli prod",
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev --parallel --filter=./apps/*",

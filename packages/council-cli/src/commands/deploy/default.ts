@@ -3,10 +3,10 @@ import { command } from "clide-js";
 import colors from "colors";
 import signale from "signale";
 import { Address } from "viem";
+import { config } from "../../config.js";
 import { DeployedContractInfo } from "../../deploy/DeploymentJson.js";
 import { localChainIds, mine } from "../../lib/viem.js";
-import { freshDeployOption } from "../../options/deploy/fresh-deploy.js";
-import { DAY_IN_BLOCKS, DAY_IN_SECONDS } from "../../utils/constants.js";
+import { freshDeployOption } from "../../options/fresh-deploy.js";
 import { DeployOptions } from "../deploy.js";
 import deployCoreVotingCommand from "./core-voting.js";
 import deployGscVaultCommand from "./gsc-vault.js";
@@ -15,36 +15,6 @@ import deployMockErc20Command from "./mock-erc20.js";
 import deploySimpleProxyCommand from "./simple-proxy.js";
 import deployTimelockCommand from "./timelock.js";
 import deployTreasury from "./treasury.js";
-
-const defaults = {
-  token: process.env.VOTING_TOKEN_ADDRESS,
-  tokenName: process.env.VOTING_TOKEN_NAME || "Mock Voting Token",
-  tokenSymbol: process.env.VOTING_TOKEN_SYMBOL || "MVT",
-  quorum: process.env.BASE_QUORUM || "1000000",
-  minProposalPower: process.env.MIN_PROPOSAL_POWER || "25000",
-  lockDuration: process.env.LOCK_DURATION
-    ? +process.env.LOCK_DURATION
-    : undefined,
-  extraVotingBlocks: process.env.EXTRA_VOTING_BLOCKS
-    ? +process.env.EXTRA_VOTING_BLOCKS
-    : undefined,
-  timelockWaitTime: process.env.TIMELOCK_WAIT_TIME
-    ? +process.env.TIMELOCK_WAIT_TIME
-    : DAY_IN_SECONDS * 3n,
-  treasury: process.env.TREASURY_ADDRESS,
-  staleBlockLag: DAY_IN_BLOCKS * 28n,
-  gscQuorum: process.env.GSC_QUORUM || "3",
-  gscLockDuration: process.env.GSC_LOCK_DURATION
-    ? +process.env.GSC_LOCK_DURATION
-    : undefined,
-  gscExtraVotingBlocks: process.env.GSC_EXTRA_VOTING_BLOCKS
-    ? +process.env.GSC_EXTRA_VOTING_BLOCKS
-    : undefined,
-  gscVotingPowerBound: process.env.GSC_VOTING_POWER_BOUND || "100000",
-  gscIdleDuration: process.env.GSC_IDLE_DURATION
-    ? +process.env.GSC_IDLE_DURATION
-    : undefined,
-};
 
 export default command({
   description:
@@ -57,7 +27,7 @@ export default command({
       description: "The address of the token used for voting.",
       type: "string",
       customType: "hex",
-      default: defaults.token,
+      default: config.get("token"),
       conflicts: ["token-name", "token-symbol"],
     },
     n: {
@@ -65,7 +35,7 @@ export default command({
       description:
         "The name of the mock token to be deployed for voting if no token address is provided.",
       type: "string",
-      default: defaults.tokenName,
+      default: config.get("tokenName"),
       conflicts: ["token"],
     },
     s: {
@@ -73,7 +43,7 @@ export default command({
       description:
         "The symbol of the mock token to be deployed for voting if no token address is provided.",
       type: "string",
-      default: defaults.tokenSymbol,
+      default: config.get("tokenSymbol"),
       conflicts: ["token"],
     },
     q: {
@@ -81,7 +51,7 @@ export default command({
       description:
         "The minimum voting power required for a proposal to pass as a decimal string.",
       type: "string",
-      default: defaults.quorum,
+      default: config.get("quorum"),
       required: true,
     },
     m: {
@@ -89,7 +59,7 @@ export default command({
       description:
         "The minimum voting power required to create a proposal as a decimal string.",
       type: "string",
-      default: defaults.minProposalPower,
+      default: config.get("minProposalPower"),
       required: true,
     },
     d: {
@@ -97,20 +67,20 @@ export default command({
       description:
         "The number of blocks a proposal must wait before it can be executed.",
       type: "number",
-      default: defaults.lockDuration,
+      default: config.get("lockDuration"),
     },
     b: {
       alias: ["extra-voting-blocks"],
       description:
         "The number of blocks for which a proposal can still be voted on after it's unlocked.",
       type: "number",
-      default: defaults.extraVotingBlocks,
+      default: config.get("extraVotingBlocks"),
     },
     "timelock-wait-time": {
       description:
         "The amount of time (in seconds) a proposal must wait in the timelock before it can be executed.",
       type: "number",
-      default: Number(defaults.timelockWaitTime),
+      default: Number(config.get("timelockWaitTime")),
       required: true,
     },
     T: {
@@ -118,47 +88,47 @@ export default command({
       description: "The address of the treasury contract.",
       type: "string",
       customType: "hex",
-      default: defaults.treasury,
+      default: config.get("treasury"),
     },
     l: {
       alias: ["stale-block-lag"],
       description:
         "The number of blocks before the delegation history is forgotten. Voting power can't be used on proposals that are older than the stale block lag.",
       type: "number",
-      default: Number(defaults.staleBlockLag),
+      default: Number(config.get("staleBlockLag")),
       required: true,
     },
     "gsc-quorum": {
       description:
         "The minimum voting power required for a GSC proposal to pass as a decimal string.",
       type: "string",
-      default: defaults.gscQuorum,
+      default: config.get("gscQuorum"),
       required: true,
     },
     "gsc-lock-duration": {
       description:
         "The number of blocks a GSC proposal must wait before it can be executed.",
       type: "number",
-      default: defaults.gscLockDuration,
+      default: config.get("gscLockDuration"),
     },
     "gsc-extra-voting-blocks": {
       description:
         "The number of blocks for which a GSC proposal can still be voted on after it's unlocked.",
       type: "number",
-      default: defaults.gscExtraVotingBlocks,
+      default: config.get("gscExtraVotingBlocks"),
     },
     "gsc-voting-power-bound": {
       description:
         "The minimum voting power required to become a member of the GSC as a decimal string.",
       type: "string",
-      default: defaults.gscVotingPowerBound,
+      default: config.get("gscVotingPowerBound"),
       required: true,
     },
     "gsc-idle-duration": {
       description:
         "The amount of time (in seconds) a new GSC member must wait after joining before they can vote.",
       type: "number",
-      default: defaults.gscIdleDuration,
+      default: config.get("gscIdleDuration"),
     },
   },
 
@@ -249,6 +219,7 @@ export default command({
       });
 
       signale.pending(`GSC CoreVoting lock duration tx submitted: ${hash}`);
+      await publicClient.waitForTransactionReceipt({ hash });
     }
 
     const gscExtraVotingBlocks = await options.gscExtraVotingBlocks();
@@ -273,6 +244,7 @@ export default command({
       });
 
       signale.pending(`GSC CoreVoting extra voting time tx submitted: ${hash}`);
+      await publicClient.waitForTransactionReceipt({ hash });
     }
 
     // =========================================================================
@@ -411,6 +383,7 @@ export default command({
       });
 
       signale.pending(`CoreVoting lock duration tx submitted: ${hash}`);
+      await publicClient.waitForTransactionReceipt({ hash });
     }
 
     const extraVotingBlocks = await options.extraVotingBlocks();
@@ -435,6 +408,7 @@ export default command({
       });
 
       signale.pending(`CoreVoting extra voting time tx submitted: ${hash}`);
+      await publicClient.waitForTransactionReceipt({ hash });
     }
 
     // =========================================================================
@@ -479,6 +453,7 @@ export default command({
       });
 
       signale.pending(`GSCVault idle duration tx submitted: ${hash}`);
+      await publicClient.waitForTransactionReceipt({ hash });
     }
 
     // Approve the GSCVault to be used by the GSC CoreVoting contract
@@ -499,6 +474,7 @@ export default command({
     });
 
     signale.pending(`GSCVault status tx submitted: ${gscVaultStatusHash}`);
+    await publicClient.waitForTransactionReceipt({ hash: gscVaultStatusHash });
 
     // =========================================================================
     // 7. Lock it down
@@ -537,6 +513,7 @@ export default command({
     );
 
     signale.pending(`CoreVoting owner tx submitted: ${coreVotingOwnerHash}`);
+    await publicClient.waitForTransactionReceipt({ hash: coreVotingOwnerHash });
     signale.pending("Setting Timelock owner to CoreVoting...");
 
     const timelockOwnerHash = await council.drift.write({
@@ -552,6 +529,7 @@ export default command({
     });
 
     signale.pending(`Timelock owner tx submitted: ${timelockOwnerHash}`);
+    await publicClient.waitForTransactionReceipt({ hash: timelockOwnerHash });
 
     // =========================================================================
     // DONE!

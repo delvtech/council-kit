@@ -1,5 +1,6 @@
 import { command } from "clide-js";
 import colors from "colors";
+import { config } from "../config.js";
 import { Deployer } from "../deploy/Deployer.js";
 import {
   getWriteOptions,
@@ -23,14 +24,14 @@ export default command({
     "out-dir": {
       alias: ["deployments-dir"],
       description:
-        "The directory to write the contract deployment information to, relative to the current working directory. Defaults to process.env.DEPLOYMENTS_DIR.",
+        "The directory to write the contract deployment information to, relative to the current working directory. Defaults to config.deployments-dir.",
       type: "string",
-      default: process.env.DEPLOYMENTS_DIR,
+      default: config.get("deploymentsDir"),
     },
     ...writeOptions,
   },
 
-  handler: async ({ options, client, next, commands }) => {
+  handler: async ({ options, client, next, end, commands }) => {
     const { walletClient, publicClient, ...rest } = await getWriteOptions(
       options,
       client,
@@ -75,6 +76,8 @@ ${deployer.deployedContracts
   .join("\n")}
 ${thickLine}
 `);
+
+    end();
   },
 });
 

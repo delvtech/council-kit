@@ -1,5 +1,6 @@
 import { command } from "clide-js";
-import { config, CouncilCliConfig } from "../../config.js";
+import signale from "signale";
+import { config, settings } from "../../config.js";
 
 export default command({
   description: "Set a configuration value",
@@ -7,22 +8,27 @@ export default command({
     s: {
       alias: ["setting"],
       type: "string",
-      description: "The setting to change",
+      customType: "setting",
+      description: "The setting to change.",
       required: true,
-      choices: Object.keys(config.schema || {}),
+      choices: settings,
     },
     v: {
       alias: ["value"],
       type: "string",
-      description: "The value to change the setting to",
+      description: "The new value for the setting.",
       required: true,
     },
   },
-  handler: async ({ options }) => {
+  handler: async ({ options, next }) => {
     const [setting, value] = await Promise.all([
       options.setting(),
       options.value(),
     ]);
-    config.set(setting as keyof CouncilCliConfig, value);
+    config.set(setting, value);
+    signale.success(`${setting} set to ${value}`);
+    const newData = { [setting]: value };
+    console.table(newData);
+    next(newData);
   },
 });

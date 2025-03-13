@@ -3,3 +3,4 @@ dist
 coverage
 deployments
 cache
+council-cli.json

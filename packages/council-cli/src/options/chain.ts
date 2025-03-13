@@ -1,9 +1,10 @@
 import { Client, option, OptionGetter } from "clide-js";
 import { Chain, defineChain } from "viem";
+import { config } from "../config.js";
 import { ConfiguredChain, configuredChains } from "../lib/viem.js";
 
 declare module "clide-js" {
-  interface OptionPrimitiveTypeMap {
+  interface OptionCustomTypeMap {
     chain: ConfiguredChain | "other" | `other:${number}`;
   }
 }
@@ -14,7 +15,7 @@ export const chainOption = option({
   type: "string",
   customType: "chain",
   required: true,
-  default: process.env.CHAIN || "anvil",
+  default: config.get("chain"),
   choices: [...(Object.keys(configuredChains) as ConfiguredChain[]), "other"],
 });
 

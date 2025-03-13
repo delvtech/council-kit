@@ -1,7 +1,23 @@
-import { Address, Bytes, HexString } from "@delvtech/drift";
-import { JsonStore } from "../utils/config/JsonStore.js";
+import { z } from "zod";
+import { Hex } from "../lib/zod.js";
+import { JsonStore } from "../utils/JsonStore.js";
 
-export type DeploymentJson = JsonStore<DeploymentInfo>;
+const DeployedContractInfo = z.object({
+  name: z.string(),
+  address: Hex,
+  deployTransaction: Hex,
+  deployArgs: z.array(z.unknown()),
+  bytecode: Hex,
+});
+export type DeployedContractInfo = z.infer<typeof DeployedContractInfo>;
+
+const DeploymentInfo = z.object({
+  name: z.string(),
+  chainId: z.number(),
+  deployer: Hex,
+  contracts: DeployedContractInfo.array(),
+});
+export type DeploymentInfo = z.infer<typeof DeploymentInfo>;
 
 export function getDeploymentJson({
   name,
@@ -11,61 +27,16 @@ export function getDeploymentJson({
   name: string;
   chainId: number;
   outDir: string;
-}): DeploymentJson {
-  return new JsonStore<DeploymentInfo>({
+}) {
+  return new JsonStore({
     path: outDir,
     name: `${chainId}-${name}`,
+    schema: DeploymentInfo,
     defaults: {
       name,
       chainId,
       deployer: "0x",
       contracts: [],
     },
-    schema: {
-      name: {
-        type: "string",
-      },
-      chainId: {
-        type: "number",
-      },
-      deployer: {
-        type: "string",
-      },
-      contracts: {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            name: {
-              type: "string",
-            },
-            address: {
-              type: "string",
-            },
-            deploymentTransactionHash: {
-              type: "string",
-            },
-            deploymentArgs: {
-              type: "array",
-            },
-          },
-        },
-      },
-    },
   });
-}
-
-export interface DeploymentInfo {
-  name: string;
-  chainId: number;
-  deployer: Address;
-  contracts: DeployedContractInfo[];
-}
-
-export interface DeployedContractInfo {
-  name: string;
-  address: Address;
-  deployTransaction: HexString;
-  deployArgs: any[];
-  bytecode: Bytes;
 }
