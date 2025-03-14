@@ -216,20 +216,17 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
     proposalId: bigint,
     options?: ContractReadOptions,
   ): Promise<ProposalStatus> {
-    const { lastCall, proposalHash, quorum } = await this.contract.read(
-      "proposals",
-      [proposalId],
-      options,
-    );
+    const { expiration, lastCall, unlock, proposalHash, quorum } =
+      await this.contract.read("proposals", [proposalId], options);
 
     if (proposalHash === EXECUTED_PROPOSAL_HASH) {
-      const creationEvents = await this.contract.getEvents("ProposalCreated", {
+      const createEvents = await this.contract.getEvents("ProposalCreated", {
         toBlock: await convertToRangeBlock(options?.block, this.drift),
       });
-      const event = creationEvents.find(
+      const hasCreateEvent = createEvents.some(
         ({ args }) => args.proposalId === proposalId,
       );
-      if (event) {
+      if (hasCreateEvent) {
         return "executed";
       }
       return "unknown";
@@ -240,18 +237,32 @@ export class ReadCoreVoting<A extends Adapter = Adapter> extends Entity<A> {
       currentBlock = await this.drift.getBlockNumber();
     }
 
-    if (currentBlock > lastCall) {
-      const { total, yes, no } = await this.getProposalVotingPower(
-        proposalId,
-        options,
-      );
-      if (total >= quorum && yes > no) {
-        return "expired";
-      }
+    // Locked to prevent execution while voting is ongoing.
+    if (currentBlock <= unlock) {
+      return "active";
+    }
+
+    // Unlocked to allow execution, but voting is still ongoing.
+    if (currentBlock <= expiration) {
+      return "unlocked";
+    }
+
+    const { total, yes, no } = await this.getProposalVotingPower(
+      proposalId,
+      options,
+    );
+    const accepted = total >= quorum && yes > no;
+
+    // Voting ended without enough yes votes.
+    if (!accepted) {
       return "failed";
     }
 
-    return "active";
+    if (currentBlock > lastCall) {
+      return "expired";
+    }
+
+    return "closed";
   }
 
   /**

@@ -7,17 +7,26 @@ import {
 /**
  * The status of a proposal.
  *
- * - `active`: Still open for voting.
- * - `executed`: Executed successfully.
- * - `expired`: Met requirements for execution but wasn't executed in time.
- * - `failed`: Expired before meeting requirements for execution.
- * - `unknown`: No information is available. Possibly non-existent.
+ * In the order of the lifecycle of a proposal:
+ *
+ * | | | |
+ * | --- | ---------- | - |
+ * | 1.  | `active`   | Open for voting but not yet executable. |
+ * | 2.  | `unlocked` | Open for voting and executable. |
+ * | 3a. | `closed`   | Voting has ended but the proposal hasn't been executed. |
+ * | 3b. | `failed`   | Voting ended before meeting requirements for execution. |
+ * | 4a. | `executed` | Executed successfully. |
+ * | 4b. | `expired`  | Met requirements for execution but wasn't executed in time. |
+ * | 5.  | `unknown`  | No information is available. Possibly non-existent. |
+ *
  */
 export type ProposalStatus =
   | "active"
+  | "unlocked"
+  | "closed"
+  | "failed"
   | "executed"
   | "expired"
-  | "failed"
   | "unknown";
 
 /**
