@@ -9,7 +9,6 @@ import { Routes } from "src/routes";
 import { Breadcrumbs } from "src/ui/base/Breadcrumbs";
 import { Page } from "src/ui/base/Page";
 import ExternalLink from "src/ui/base/links/ExternalLink";
-import { getBlockDate } from "src/ui/base/utils/getBlockDate";
 import { useReadCouncil } from "src/ui/council/useReadCouncil";
 import { useSupportedChainId } from "src/ui/network/useSupportedChainId";
 import { ProposalStatsRow } from "src/ui/proposals/ProposalStatsRow/ProposalStatsRow";
@@ -104,11 +103,12 @@ export default function ProposalPage(): ReactElement | null {
         <ProposalStatsRow
           votingContractName={votingContractConfig.name}
           votingContractAddress={votingContractAddress}
+          proposalId={id}
           createdBy={data.createdBy}
           createdTransactionHash={data.createTransactionHash}
-          endsAtDate={data.votingEndDate}
-          unlockAtDate={data.unlockDate}
-          lastCallAtDate={data.lastCallDate}
+          votingEndsBlock={data.votingEndsBlock}
+          unlockBlock={data.unlockBlock}
+          lastCallBlock={data.lastCallBlock}
           executedTransactionHash={data.executeTransactionHash}
           status={data.status}
           className="mb-2"
@@ -179,9 +179,9 @@ interface ProposalDetailsPageData {
   createTransactionHash?: Hash;
   requiredQuorum?: bigint;
   createdBy?: Address;
-  votingEndDate?: Date;
-  unlockDate?: Date;
-  lastCallDate?: Date;
+  votingEndsBlock?: bigint;
+  unlockBlock?: bigint;
+  lastCallBlock?: bigint;
   descriptionURL?: string;
   title?: string;
   paragraphSummary?: string;
@@ -212,11 +212,6 @@ function useProposalDetailsPageData(
           const coreVoting = council.coreVoting(coreVotingAddress);
           const proposal = await coreVoting.getProposal(id);
           const [
-            // Dates
-            unlockDate,
-            votingEndDate,
-            lastCallDate,
-
             // Status
             status,
             votes,
@@ -226,15 +221,6 @@ function useProposalDetailsPageData(
             createEvents,
             executedEvents,
           ] = await Promise.all([
-            // Dates
-            proposal ? getBlockDate(proposal.unlockBlock, chainId) : undefined,
-            proposal
-              ? getBlockDate(proposal.expirationBlock, chainId)
-              : undefined,
-            proposal
-              ? getBlockDate(proposal.lastCallBlock, chainId)
-              : undefined,
-
             // Status
             proposal.status ?? coreVoting.getProposalStatus(id),
             coreVoting.getVotes({ proposalId: id }),
@@ -246,8 +232,6 @@ function useProposalDetailsPageData(
               ? coreVoting.getProposalExecutions()
               : undefined,
           ]);
-
-          console.log("unlock block", proposal.unlockBlock);
 
           const createEvent = createEvents.find(
             ({ proposalId }) => proposalId === id,
@@ -269,9 +253,9 @@ function useProposalDetailsPageData(
           );
 
           return {
-            unlockDate,
-            votingEndDate,
-            lastCallDate,
+            unlockBlock: proposal.unlockBlock,
+            votingEndsBlock: proposal.expirationBlock,
+            lastCallBlock: proposal.lastCallBlock,
             status,
             votes,
             voterEnsRecords,
