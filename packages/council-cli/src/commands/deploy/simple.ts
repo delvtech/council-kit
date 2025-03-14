@@ -234,7 +234,6 @@ export default command({
       }
     }
 
-    console.log("!! votingTokenAddress", votingTokenAddress);
     const lockingVaultDeployInfo = (await fork({
       commands: [deployLockingVaultCommand],
       optionValues: {

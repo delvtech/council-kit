@@ -3,12 +3,10 @@ import { help, run } from "clide-js";
 import { commandMenu } from "clide-plugin-command-menu";
 import "dotenv/config";
 
-run({
+await run({
   plugins: [
     // Help generator with --help and -h options
-    help({
-      maxWidth: 100,
-    }),
+    help({ maxWidth: 100 }),
 
     // Interactive prompts for incomplete commands
     commandMenu({
@@ -29,19 +27,16 @@ run({
   },
 
   afterParse: async ({ parsedOptions, context, setParsedOptions }) => {
-    const newOptions = { ...parsedOptions };
-    for (const [key, config] of Object.entries(context.options)) {
-      // Set defaults if --yes is passed
-      if (parsedOptions.yes) (newOptions[key] as any) ??= config.default;
-
+    if (parsedOptions.yes) {
+      const newOptions = { ...parsedOptions };
+      for (const [key, config] of Object.entries(context.options)) {
+        // Set defaults if --yes is passed
+        (newOptions[key] as any) ??= config.default;
+      }
       setParsedOptions(newOptions);
     }
   },
-})
-  .then(() => {
-    process.exit(0);
-  })
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+}).catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

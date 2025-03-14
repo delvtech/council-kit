@@ -1,13 +1,30 @@
 import { z } from "zod";
 
-export const Hex = z
+export const HexString = z
   .string()
-  .refine((s): s is `0x${string}` => s.startsWith("0x"), {
-    message: "must start with 0x",
-  });
-export type Hex = z.infer<typeof Hex>;
+  .refine(
+    (s): s is `0x${string}` => /^0x[a-fA-F0-9]*$/.test(s),
+    "Invalid hex string",
+  );
 
-export const Decimal = z.string().refine((s): s is `${number}` => !isNaN(+s), {
-  message: "must be a decimal number string",
-});
-export type Decimal = z.infer<typeof Decimal>;
+export const Address = z
+  .string()
+  .refine(
+    (s): s is `0x${string}` => /^0x[a-fA-F0-9]{40}$/.test(s),
+    "Invalid address",
+  );
+export type Address = z.infer<typeof Address>;
+
+export const DecimalString = z
+  .string()
+  .refine((s): s is `${number}` => !isNaN(+s), "Invalid decimal string");
+export type DecimalString = z.infer<typeof DecimalString>;
+
+/**
+ * An empty string coerced to `undefined` or `undefined` itself. Useful for
+ * representing empty environment variables.
+ */
+export const Empty = z
+  .literal("")
+  .optional()
+  .transform(() => undefined);

@@ -1,6 +1,6 @@
 import { command } from "clide-js";
 import signale from "signale";
-import { config, CouncilCliConfig, settings } from "../../config.js";
+import { config, Config, settings } from "../../config.js";
 
 export default command({
   description: "Delete a setting",
@@ -15,7 +15,7 @@ export default command({
   },
   handler: async ({ options }) => {
     const settings = await options.settings();
-    config.delete(...(settings as (keyof CouncilCliConfig)[]));
+    config.delete(...(settings as (keyof Config)[]));
     signale.success(`Deleted settings: ${settings.join(", ")}`);
   },
 });

@@ -1,20 +1,20 @@
 import { z } from "zod";
-import { Hex } from "../lib/zod.js";
+import { Address, HexString } from "../lib/zod.js";
 import { JsonStore } from "../utils/JsonStore.js";
 
 const DeployedContractInfo = z.object({
   name: z.string(),
-  address: Hex,
-  deployTransaction: Hex,
+  address: Address,
+  deployTransaction: HexString,
   deployArgs: z.array(z.unknown()),
-  bytecode: Hex,
+  bytecode: HexString,
 });
 export type DeployedContractInfo = z.infer<typeof DeployedContractInfo>;
 
 const DeploymentInfo = z.object({
   name: z.string(),
   chainId: z.number(),
-  deployer: Hex,
+  deployer: Address,
   contracts: DeployedContractInfo.array(),
 });
 export type DeploymentInfo = z.infer<typeof DeploymentInfo>;

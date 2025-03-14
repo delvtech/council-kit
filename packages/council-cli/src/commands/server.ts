@@ -42,13 +42,19 @@ export default command({
       type: "string",
       default: config.get("forkUrl"),
     },
+    b: {
+      alias: ["block"],
+      description:
+        "The fork block number to start at. Note: this is only used if `fork` is true.",
+      type: "number",
+    },
     p: {
       alias: ["port"],
       description: "The port to listen on.",
       type: "number",
       default: +DEFAULT_RPC_URL.port,
     },
-    b: {
+    B: {
       alias: ["balance"],
       description:
         "The ETH balance to assign to each account as a decimal string.",
@@ -99,6 +105,7 @@ export default command({
 
     const balance = await options.balance();
     const blockTime = await options.blockTime();
+    const block = await options.block();
     const hostname = await options.hostname();
     const port = await options.port();
 
@@ -142,6 +149,7 @@ export default command({
           ? {
               url: forkUrl,
               enabled: true,
+              blockNumber: block,
             }
           : undefined,
       mining:

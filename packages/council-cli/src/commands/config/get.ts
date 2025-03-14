@@ -1,6 +1,6 @@
 import { command } from "clide-js";
 import signale from "signale";
-import { CouncilCliConfig, config, settings } from "../../config.js";
+import { Config, config, settings } from "../../config.js";
 
 export default command({
   description: "Get a setting",
@@ -15,7 +15,7 @@ export default command({
   },
   handler: async ({ options, next }) => {
     const setting = await options.setting();
-    const value = config.get(setting as keyof CouncilCliConfig);
+    const value = config.get(setting as keyof Config);
     signale.info(value);
     next(value);
   },

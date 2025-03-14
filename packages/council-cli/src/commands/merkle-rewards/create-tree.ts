@@ -4,7 +4,6 @@ import MerkleTree from "merkletreejs";
 import path from "path";
 import signale from "signale";
 import {
-  Address,
   Hex,
   encodePacked,
   formatUnits,
@@ -12,12 +11,14 @@ import {
   keccak256,
   parseUnits,
 } from "viem";
+import { z } from "zod";
+import { Address as AddressSchema, DecimalString } from "../../lib/zod.js";
 import { JsonStore } from "../../utils/JsonStore.js";
 import { isNotEmptyList } from "../../utils/validation/isNotEmptyList.js";
 import { isNumberString } from "../../utils/validation/isNumberString.js";
-import { Schema, validateData } from "../../utils/validation/validateData.js";
+import { validateData } from "../../utils/validation/validateData.js";
 
-const createTreeCommand = command({
+export default command({
   description:
     "Create a merkle tree for rewards (e.g., airdrop) from a list of addresses and reward amounts. The output is a JSON file with the merkle root and each leaf by address with it's proof.",
 
@@ -124,7 +125,14 @@ const createTreeCommand = command({
     next(merkleTreeInfo);
   },
 });
-export default createTreeCommand;
+
+const Leaves = z.array(
+  z.object({
+    address: AddressSchema,
+    amount: DecimalString,
+  }),
+);
+type Leaves = z.infer<typeof Leaves>;
 
 /**
  * A requiredOption wrapper for prompting the user for the leaves to create
@@ -138,8 +146,8 @@ async function getLeaves({
   inputsPathGetter: OptionGetter<{ type: "string"; customType: "hex" }>;
   addressesGetter: OptionGetter<{ type: "array"; customType: "hexArray" }>;
   amountsGetter: OptionGetter<{ type: "array" }>;
-}): Promise<Leaf[]> {
-  const leaves: Leaf[] = [];
+}): Promise<Leaves> {
+  const leaves: Leaves = [];
 
   let addresses = await addressesGetter();
   let amounts = await amountsGetter();
@@ -167,7 +175,7 @@ async function getLeaves({
       );
 
       // Validate the imported leaves
-      validateData(importedLeafs, leavesScema);
+      validateData(importedLeafs, Leaves);
 
       // Add the imported leaves to the leaves array
       leaves.push(...importedLeafs);
@@ -242,30 +250,7 @@ async function getLeaves({
   return leaves;
 }
 
-interface Leaf {
-  address: Address;
-  amount: `${number}`;
-}
-
-const leavesScema: Schema<Leaf[]> = {
-  type: "array",
-  items: {
-    type: "object",
-    properties: {
-      address: {
-        type: "string",
-        pattern: "^0x[a-fA-F0-9]{40}$",
-      },
-      amount: {
-        type: "string",
-        pattern: "^(\\d*\\.)?\\d+$",
-      },
-    },
-    required: ["address", "amount"],
-  },
-};
-
-function createMerkleTree(leaves: Leaf[], tokenDecimals: number) {
+function createMerkleTree(leaves: Leaves, tokenDecimals: number) {
   const hashedLeaves = leaves.map((leaf) => hashAccount(leaf, tokenDecimals));
 
   return new MerkleTree.default(
@@ -281,7 +266,10 @@ function createMerkleTree(leaves: Leaf[], tokenDecimals: number) {
   );
 }
 
-function hashAccount({ address, amount }: Leaf, tokenDecimals: number) {
+function hashAccount(
+  { address, amount }: Leaves[number],
+  tokenDecimals: number,
+) {
   const packedData = encodePacked(
     ["address", "uint256"],
     [address, parseUnits(amount, tokenDecimals)],
