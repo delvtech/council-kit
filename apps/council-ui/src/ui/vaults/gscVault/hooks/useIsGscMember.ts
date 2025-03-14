@@ -12,6 +12,6 @@ export function useIsGscMember(account: `0x${string}` | undefined) {
   return useQuery({
     queryKey: ["useIsGSCMember", account],
     enabled: enabled,
-    queryFn: enabled ? async () => gscVault?.getIsMember(account) : undefined,
+    queryFn: enabled ? async () => !!gscVault?.getIsMember(account) : undefined,
   });
 }

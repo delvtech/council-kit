@@ -28,21 +28,7 @@ export function useSubmitVote({
     errorMessage: "Failed to submit vote.",
     writeFn: enabled
       ? async (ballot: Ballot) => {
-          if (!enabled) {
-            throw new Error(
-              "Unable to submit vote. Ensure that you are connected to the correct network.",
-            );
-          }
-          const coreVoting = council.coreVoting(votingContract);
-          const proposal = await coreVoting.getProposal(proposalId);
-
-          if (!proposal) {
-            throw new Error(
-              `Unable to submit vote for non-existent proposal with ID ${proposalId} on contract ${votingContract}`,
-            );
-          }
-
-          return coreVoting.vote({
+          return council.coreVoting(votingContract).vote({
             args: {
               proposalId,
               ballot,

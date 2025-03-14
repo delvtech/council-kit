@@ -12,7 +12,9 @@ export function useGscMembers(): {
   const { data, status } = useQuery({
     queryKey: ["gsc-gsc-members", gscVault?.address],
     enabled,
-    queryFn: enabled ? async () => gscVault?.getMembers() : undefined,
+    queryFn: () => {
+      return enabled ? gscVault.getMembers() : [];
+    },
   });
 
   return {

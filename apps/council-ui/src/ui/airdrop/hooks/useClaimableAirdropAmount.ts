@@ -25,16 +25,14 @@ export function useClaimableAirdropAmount({
   return useQuery({
     queryKey: ["useClaimableAirdropAmount", airdrop?.address, account, chainId],
     enabled,
-    queryFn: enabled
-      ? async () => {
-          if (!data.amount) {
-            return 0n;
-          }
-          const claimed = await council
-            .airdrop(airdrop.address)
-            .getClaimedAmount(account);
-          return data.amount - claimed;
-        }
-      : undefined,
+    queryFn: async () => {
+      if (!enabled || !data.amount) {
+        return 0;
+      }
+      const claimed = await council
+        .airdrop(airdrop.address)
+        .getClaimedAmount(account);
+      return data.amount - claimed;
+    },
   });
 }
