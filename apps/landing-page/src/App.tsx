@@ -1,9 +1,16 @@
 import { InformationCircleIcon } from "@heroicons/react/16/solid";
 import { RocketLaunchIcon } from "@heroicons/react/20/solid";
 import { ReactElement } from "react";
+import arcadeDaoLogo from "src/assets/arcadedao-logo.png";
 import cornerLinesLeft from "src/assets/corner-lines-left.svg";
 import cornerLinesRight from "src/assets/corner-lines-right.svg";
+import elementGovernanceBanner from "src/assets/element-governance-banner.jpg";
 import elementLogo from "src/assets/element-logo.svg";
+import gscArticleBanner from "src/assets/gsc-article-banner.png";
+import gyroscopeLogo from "src/assets/gyroscope-logo.png";
+import heroImage from "src/assets/hero-image.png";
+import messariLogo from "src/assets/messari-logo.png";
+import votingVaultsBanner from "src/assets/voting-vaults-banner.png";
 import { LinkButton } from "src/ui/Button";
 import { Navigation } from "src/ui/Navigation";
 import { GitHubIcon } from "src/ui/svg/GitHubIcon";
@@ -81,7 +88,7 @@ function App(): ReactElement {
               </div>
             </div>
             <img
-              src="/hero-image.png"
+              src={heroImage}
               alt="Council hero image"
               className="w-96 lg:w-auto"
             />
@@ -300,7 +307,7 @@ function App(): ReactElement {
                   rel="noreferrer"
                   className="transition-all hover:scale-105 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#fff] rounded-2xl"
                 >
-                  <img src="/arcadedao-logo.png" width={220} alt="ArcadeDAO" />
+                  <img src={arcadeDaoLogo} width={220} alt="ArcadeDAO" />
                 </a>
               </div>
               <div>
@@ -310,7 +317,7 @@ function App(): ReactElement {
                   rel="noreferrer"
                   className="transition-all hover:scale-105 hover:shadow-lg shadow-dark h-44 flex items-center justify-center p-5 bg-[#242833] rounded-2xl"
                 >
-                  <img src="/gyroscope-logo.png" width={180} alt="Gyroscope" />
+                  <img src={gyroscopeLogo} width={180} alt="Gyroscope" />
                 </a>
               </div>
             </div>
@@ -346,11 +353,7 @@ function App(): ReactElement {
                   {/* image effects */}
                   {/* <div className="absolute inset-0 shadow-[inset_0_0_40px_currentColor] text-dark opacity-40 transition-all group-hover:opacity-0"></div> */}
                   {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
-                  <img
-                    src="/messari-logo.png"
-                    alt="Messari"
-                    className="mw-full"
-                  />
+                  <img src={messariLogo} alt="Messari" className="mw-full" />
                 </div>
                 <p className="px-6 pt-4 pb-5 font-semibold">
                   Governor Note: Evolving On-Chain Governance With Element
@@ -370,7 +373,7 @@ function App(): ReactElement {
 
                   <div className="size-full lg:max-w-none lg:w-auto">
                     <img
-                      src="/voting-vaults-banner.png"
+                      src={votingVaultsBanner}
                       alt="Voting vaults banner"
                       className="object-cover size-full lg:max-w-none"
                     />
@@ -393,7 +396,7 @@ function App(): ReactElement {
 
                   <div className="size-full lg:max-w-none lg:w-auto">
                     <img
-                      src="/gsc-article-banner.png"
+                      src={gscArticleBanner}
                       alt="Governance steering council article banner"
                       className="object-cover size-full lg:max-w-none"
                     />
@@ -415,7 +418,7 @@ function App(): ReactElement {
                   {/* <div className="absolute inset-0 opacity-50 bg-primary mix-blend-hue group-hover:opacity-0"></div> */}
                   <div className="size-full lg:max-w-none lg:w-auto">
                     <img
-                      src="/element-governance-banner.jpg"
+                      src={elementGovernanceBanner}
                       alt="element governance banner"
                       className="object-cover size-full lg:max-w-none"
                     />
